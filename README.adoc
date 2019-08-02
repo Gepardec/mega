@@ -1,0 +1,10 @@
+= MEGA
+
+Make End-of-the-month-process Great Again!
+
+== Prerequisites
+
+- Java 11
+- Maven 3.5+
+
+See link:mega-zep-connector/README.adoc[README of ZEP-Connector] for more information.
