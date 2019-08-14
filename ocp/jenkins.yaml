@@ -1,0 +1,413 @@
+kind: "Template"
+apiVersion: "v1"
+metadata:
+  name: "jenkins"
+  annotations:
+    openshift.io/display-name: "Jenkins"
+    description: "Jenkins instance"
+    iconClass: "icon-jenkins"
+    tags: "instant-app,jenkins"
+
+parameters:
+  - name: "SERVICE_NAME"
+    displayName: "Service name"
+    description: "The name of the jenkins service"
+    required: true
+
+  - name: "GIT_URL"
+    displayName: "Git url for jenkins"
+    description: "The http git repository url for building the jenkins service"
+    required: true
+
+  - name: "GIT_REF"
+    displayName: "Git ref for jenkins"
+    description: "The git repository ref for building the jenkins service"
+    required: true
+
+objects:
+  - kind: "ServiceAccount"
+    apiVersion: "v1"
+    metadata:
+      name: "${SERVICE_NAME}"
+      labels:
+        app: "${SERVICE_NAME}"
+
+  - kind: "ImageStream"
+    apiVersion: "v1"
+    metadata:
+      name: "jenkins"
+      labels:
+        app: "${SERVICE_NAME}"
+      annotations:
+        openshift.io/display-name: "Jenkins"
+    spec:
+      tags:
+          - name: "latest"
+            annotations:
+              openshift.io/display-name: "Jenkins (latest)"
+              description: "The jenkins image"
+              iconClass: "icon-jenkins"
+              tags: "jenkins"
+            from:
+              kind: "DockerImage"
+              name: "openshift/jenkins-2-centos7:v3.6"
+
+  - kind: "ImageStream"
+    apiVersion: "v1"
+    metadata:
+      name: "jenkins-custom"
+      labels:
+        app: "${SERVICE_NAME}"
+      annotations:
+        openshift.io/display-name: "Jenkins Custom"
+
+  - kind: "BuildConfig"
+    apiVersion: "v1"
+    metadata:
+      name: "${SERVICE_NAME}"
+      labels:
+        name: "${SERVICE_NAME}"
+        app: "${SERVICE_NAME}"
+    spec:
+      source:
+        type: "Git"
+        contextDir: "services/jenkins/s2i/jenkins-ci"
+        git:
+          uri: "${GIT_URL}"
+          ref: "${GIT_REF}"
+        sourceSecret:
+          name: "${SECRET_GIT}"
+      strategy:
+        type: "Source"
+        sourceStrategy:
+          from:
+            kind: "ImageStreamTag"
+            name: "jenkins:latest"
+      output:
+        to:
+          kind: "ImageStreamTag"
+          name: "jenkins-custom:latest"
+          labels:
+            app: "${SERVICE_NAME}"
+          annotations:
+            openshift.io/display-name: "Jenkins Liwest"
+            description: "The custom jenkins image to use for build"
+      triggers:
+        - type: "Generic"
+          generic:
+            secret: "${JENKINS_SECRET_HOOK}"
+            allowEnv: true
+        - type: "ConfigChange"
+        - type: "ImageChange"
+          imageChange:
+            automatic: true
+            containerNames:
+              - "${SERVICE_NAME}"
+            from:
+              kind: "ImageStreamTag"
+              name: "jenkins:latest"
+
+  - kind: "DeploymentConfig"
+    apiVersion: "v1"
+    metadata:
+      name: "${SERVICE_NAME}"
+      annotations:
+        template.alpha.openshift.io/wait-for-ready: "true"
+      labels:
+        app: "${SERVICE_NAME}"
+    spec:
+      strategy:
+        type: "Recreate"
+        recreateParams:
+          post:
+            failurePolicy: Abort
+            execNewPod:
+              containerName: "${SERVICE_NAME}"
+              command:
+                - "/bin/bash"
+                - "-c"
+                - >
+                  mkdir -p /tmp/jenkins-conf;
+                  cp -H -f /jenkins-conf/jenkins.sh /tmp/jenkins-conf/jenkins.sh;
+                  chmod +x /tmp/jenkins-conf/jenkins.sh;
+
+                  sed -e 's|${LDAP_ADMIN_PASSWORD}|'"${LDAP_ADMIN_PASSWORD}"'|g' \
+                      -e 's|${LDAP_SERVICE}|'"${LDAP_SERVICE}"'|g' \
+                      -e 's|${LDAP_PORT}|'"${LDAP_PORT}"'|g' \
+                      /jenkins-conf/init-security.groovy > /tmp/jenkins-conf/init-security.groovy;
+
+                  /tmp/jenkins-conf/jenkins.sh executeScript /tmp/jenkins-conf/init-security.groovy;
+              volumes:
+                - "${SERVICE_NAME}-conf"
+              env:
+                - name: "JENKINS_URL"
+                  value: "http://${SERVICE_NAME}:8080"
+                - name: "JENKINS_LOCAL_USERNAME"
+                  valueFrom:
+                    secretKeyRef:
+                      name: "${SERVICE_NAME}"
+                      key: "local.admin.username"
+                - name: "JENKINS_LOCAL_PASSWORD"
+                  valueFrom:
+                    secretKeyRef:
+                      name: "${SERVICE_NAME}"
+                      key: "local.admin.password"
+                - name: "JENKINS_LDAP_ADMIN_USERNAME"
+                  valueFrom:
+                    secretKeyRef:
+                      name: "${SERVICE_NAME}"
+                      key: "ldap.user.username"
+                - name: "JENKINS_LDAP_ADMIN_PASSWORD"
+                  valueFrom:
+                    secretKeyRef:
+                      name: "${SERVICE_NAME}"
+                      key: "ldap.user.password"
+                - name: "LDAP_SERVICE"
+                  valueFrom:
+                    secretKeyRef:
+                      name: "${SECRET_LDAP}"
+                      key: "host"
+                - name: "LDAP_ADMIN_USER"
+                  valueFrom:
+                    secretKeyRef:
+                      name: "${SECRET_LDAP}"
+                      key: "admin.username"
+                - name: "LDAP_ADMIN_PASSWORD"
+                  valueFrom:
+                    secretKeyRef:
+                      name: "${SECRET_LDAP}"
+                      key: "admin.password"
+                - name: "LDAP_PORT"
+                  valueFrom:
+                    secretKeyRef:
+                      name: "${SECRET_LDAP}"
+                      key: "port"
+      replicas: "1"
+      selector:
+        name: "${SERVICE_NAME}"
+      triggers:
+        - type: "ConfigChange"
+        - type: "ImageChange"
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - "${SERVICE_NAME}"
+            from:
+              kind: "ImageStreamTag"
+              name: "jenkins-custom:latest"
+      template:
+        metadata:
+          labels:
+            name: "${SERVICE_NAME}"
+        spec:
+          serviceAccountName: "${SERVICE_NAME}"
+          containers:
+            - name: "${SERVICE_NAME}"
+              image: " "
+              imagePullPolicy: IfNotPresent
+              readinessProbe:
+                successThreshold: 1
+                failureThreshold: 10
+                timeoutSeconds: 5
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                httpGet:
+                  path: "/login"
+                  port: 8080
+              livenessProbe:
+                successThreshold: 1
+                failureThreshold: 10
+                timeoutSeconds: 5
+                initialDelaySeconds: 60
+                periodSeconds: 30
+                httpGet:
+                  path: "/login"
+                  port: 8080
+              env:
+                - name: "JENKINS_PASSWORD"
+                  valueFrom:
+                    secretKeyRef:
+                      key: "local.admin.password"
+                      name: "${SERVICE_NAME}"
+                - name: "NEXUS_USER"
+                  valueFrom:
+                    secretKeyRef:
+                      name: "${SECRET_NEXUS}"
+                      key: "username"
+                - name: "NEXUS_PASSWORD"
+                  valueFrom:
+                    secretKeyRef:
+                      name: "${SECRET_NEXUS}"
+                      key: "password"
+                - name: "SERVICE_NAME"
+                  value: "${SERVICE_NAME}"
+                - name: "JNLP_SERVICE_NAME"
+                  value: "${JNLP_SERVICE_NAME}"
+                - name: "NEXUS_MIRROR_PLOSAM"
+                  configMap:
+                    name: "${SERVICE_NAME}"
+                    key: "maven.mirror.plosam"
+                - name: "NEXUS_MIRROR_ESB"
+                  configMap:
+                    name: "${SERVICE_NAME}"
+                    key: "maven.mirror.esb"
+                - name: "NEXUS_REPO_MAVEN_RELEASES"
+                  configMap:
+                    name: "${SERVICE_NAME}"
+                    key: "maven.repo.maven.releases"
+                - name: "NEXUS_REPO_MAVEN_SNAPSHOTS"
+                  configMap:
+                    name: "${SERVICE_NAME}"
+                    key: "maven.repo.maven.snapshots"
+                - name: "KUBERNETES_TRUST_CERTIFICATES"
+                  value: "${KUBERNETES_TRUST_CERTIFICATES}"
+                - name: "KUBERNETES_MASTER"
+                  value: "${KUBERNETES_MASTER}"
+                - name: "OPENSHIFT_JENKINS_JVM_ARCH"
+                  value: "${OPENSHIFT_JENKINS_JVM_ARCH}"
+                - name: "OPENSHIFT_ENABLE_OAUTH"
+                  value: "${OPENSHIFT_ENABLE_OAUTH}"
+                - name: "OPENSHIFT_ENABLE_REDIRECT_PROMPT"
+                  value: "${OPENSHIFT_ENABLE_REDIRECT_PROMPT}"
+                - name: "GIT_SSL_NO_VERIFY"
+                  value: "true"
+                - name: "JAVA_GC_OPTS"
+                  value: "-XX:+UseParallelGC -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -XX:MaxMetaspaceSize=1024m"
+                - name: "JAVA_OPTS"
+                  value: "-Xms128m -Xmx${MAX_MEMORY}g -Dhudson.footerURL=http://liwest.at"
+              # On dedicated nodes we get 'insufficent cpu'
+              #resources:
+              #  requests:
+              #    memory: "${MIN_MEMORY}Mi"
+              #    cpu: "${MIN_CPU}"
+              #  limits:
+              #    memory: "${MAX_MEMORY}Gi"
+              #    cpu: "${MAX_CPU}"
+              volumeMounts:
+                - name: "${SERVICE_NAME}"
+                  mountPath: "/var/lib/jenkins/jobs"
+                - name: "${SERVICE_NAME}-conf"
+                  mountPath: "/jenkins-conf"
+              terminationMessagePath: "/dev/termination.log"
+              capabilities:
+                securityContext:
+                  capabilities:
+                    privileged: false
+          volumes:
+            - name: "${SERVICE_NAME}"
+              persistentVolumeClaim:
+                claimName: ${SERVICE_NAME}
+            - name: "${SERVICE_NAME}-conf"
+              configMap:
+                name: "${SERVICE_NAME}"
+                items:
+                  - key: jenkins.sh
+                    path: ./jenkins.sh
+                  - key: init-security.groovy
+                    path: ./init-security.groovy
+
+  - kind: "DeploymentConfig"
+    apiVersion: "v1"
+    metadata:
+      name: "${SERVICE_NAME}-backup"
+      annotations:
+        template.alpha.openshift.io/wait-for-ready: "true"
+      labels:
+        app: "${SERVICE_NAME}"
+    spec:
+      strategy:
+        type: "Recreate"
+      replicas: "0"
+      selector:
+        name: "${SERVICE_NAME}-backup"
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - "${SERVICE_NAME}-backup"
+            from:
+              kind: ImageStreamTag
+              kind: "ImageStreamTag"
+              name: "${SERVICE_BACKUP}:latest"
+      template:
+        metadata:
+          labels:
+            name: "${SERVICE_NAME}-backup"
+        spec:
+          volumes:
+            - name: "${SERVICE_NAME}-backup"
+            - name: "${SERVICE_NAME}"
+              persistentVolumeClaim:
+                claimName: "${SERVICE_NAME}"
+          containers:
+            - name: "${SERVICE_NAME}-backup"
+              image: " "
+              command:
+                - "/bin/bash"
+                - "-c"
+                - "trap : TERM INT; sleep 3600 & wait"
+              imagePullPolicy: Always
+              volumeMounts:
+                - name: "${SERVICE_NAME}-backup"
+                  mountPath: "/backup"
+                - name: "${SERVICE_NAME}"
+                  mountPath: "/var/lib/jenkins/jobs"
+              capabilities:
+                securityContext:
+                  capabilities:
+                    privileged: false
+
+  - kind: "Route"
+    apiVersion: "v1"
+    metadata:
+      name: "${SERVICE_NAME}"
+      annotations:
+        template.openshift.io/expose-uri: "http://{.spec.host}{.spec.path}"
+      labels:
+        app: "${SERVICE_NAME}"
+    spec:
+      host: "${HOST_JENKINS}"
+      to:
+        kind: "Service"
+        name: "${SERVICE_NAME}"
+      tls:
+        termination: "edge"
+        insecureEdgeTerminationPolicy: "Redirect"
+
+  - kind: "Service"
+    apiVersion: "v1"
+    metadata:
+      name: "${SERVICE_NAME}"
+      labels:
+        app: "${SERVICE_NAME}"
+    spec:
+      ports:
+        - name: "web"
+          protocol: "TCP"
+          port: 8080
+          targetPort: 8080
+          nodePort: 0
+      selector:
+        name:  "${SERVICE_NAME}"
+      type: "ClusterIP"
+      sessionAffinity: "None"
+
+  - kind: "Service"
+    apiVersion: "v1"
+    metadata:
+      name: "${JNLP_SERVICE_NAME}"
+      labels:
+        app: "${SERVICE_NAME}"
+    spec:
+      ports:
+        - name: "agent"
+          protocol: "TCP"
+          port: 50000
+          targetPort: 50000
+          nodePort: 0
+      selector:
+        name:  "${SERVICE_NAME}"
+      type: "ClusterIP"
+      sessionAffinity: "None"

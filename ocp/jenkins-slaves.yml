@@ -1,0 +1,286 @@
+kind: "Template"
+apiVersion: "v1"
+metadata:
+  name: "jenkins-slaves"
+  annotations:
+    openshift.io/display-name: "Jenkins slaves"
+    description: "Jenkins slaves"
+    iconClass: "icon-jenkins"
+    tags: "jenkins"
+
+parameters:
+  - name: "SERVICE_JENKINS_SLAVE"
+    displayName: "App name"
+    description: "The name used for app label"
+    required: true
+
+  - name: "VERSION_MAVEN"
+    displayName: "Maven version"
+    description: "The maven version for the slave to build"
+    required: true
+
+  - name: "JDK_ARTIFACT_ID"
+    displayName: "JDK artifact id"
+    description: "The jdk artifact id in nexus tools repository"
+    required: true
+
+  - name: "JDK_ARTIFACT_VERSION"
+    displayName: "JDK artifact version"
+    description: "The version of the jdk artifact for the jdk slvae"
+    required: true
+
+  - name: "GIT_URL"
+    displayName: "Git url"
+    description: "The git url of the jenkins slave repository"
+    required: true
+
+  - name: "GIT_REF"
+    displayName: "Git ref"
+    description: "The repository ref for the jnkins slave plugin"
+    required: true
+
+  - name: "SECRET_GIT"
+    displayName: "Authentication for Git Repo"
+    required: true
+
+  - name: "SECRET_NEXUS"
+    displayName: "Secret name for nexus"
+    description: "The generic secret for accessing nexus"
+    required: true
+
+  - name: "JENKINS_SECRET_HOOK"
+    displayName: "Secret name for web hook urls"
+    description: "The secret for appending secret to webhook urls"
+    required: true
+
+objects:
+  - kind: "ImageStream"
+    apiVersion: "v1"
+    metadata:
+      name: "jenkins-slave-base"
+      labels:
+        role: "jenkins-slave"
+        app: "${SERVICE_JENKINS_SLAVE}"
+      annotations:
+        openshift.io/display-name: "jenkins-slave-base"
+    spec:
+      tags:
+          - name: "latest"
+            labels:
+              role: "jenkins-slave"
+              app: "${SERVICE_JENKINS_SLAVE}"
+            annotations:
+              openshift.io/display-name: "Jenkins Slave Base"
+              description: "The jenkins slave base"
+              iconClass: "icon-jenkins"
+              tags: "slave-base"
+              version: "3.7.0"
+            from:
+              kind: "DockerImage"
+              name: "registry.hub.docker.com/openshift/jenkins-slave-base-centos7:3.7.0"
+
+
+  ######################
+  # Jenkins JDK8 Slave #
+  ######################
+
+  - kind: "ImageStream"
+    apiVersion: "v1"
+    metadata:
+      name: "jenkins-slave-oracle-jdk8"
+      labels:
+        role: "jenkins-slave"
+        app: "jenkins"
+      annotations:
+        role: "jenkins-slave"
+        openshift.io/display-name: "jenkins-slave-oracle-jdk8"
+
+  - kind: "BuildConfig"
+    apiVersion: "v1"
+    metadata:
+      name: "jenkins-slave-oracle-jdk8"
+      labels:
+        name: "jenkins-slave-oracle-jdk8"
+        app: "${SERVICE_JENKINS_SLAVE}"
+    spec:
+      source:
+        type: "Git"
+        contextDir: "services/jenkins/jenkins-slaves/oracle-jdk8"
+        git:
+          uri: "${GIT_URL}"
+          ref: "${GIT_REF}"
+        sourceSecret:
+          name: "${SECRET_GIT}"
+        secrets:
+          - secret:
+              name: "${SECRET_NEXUS}"
+      strategy:
+        type: "Docker"
+        dockerStrategy:
+          env:
+            - name: "BUILD_LOGLEVEL"
+              value: "5"
+            - name: "JDK_ARTIFACT_ID"
+              value: "${JDK_ARTIFACT_ID}"
+            - name: "JDK_ARTIFACT_VERSION"
+              value: "${JDK_ARTIFACT_VERSION}"
+      output:
+        to:
+          kind: "ImageStreamTag"
+          name: "jenkins-slave-oracle-jdk8:latest"
+          labels:
+            role: "jenkins-slave"
+            app: "${SERVICE_JENKINS_SLAVE}"
+          annotations:
+            openshift.io/display-name: "Jenkins slave oracle-jdk8"
+            description: "The jenkins slave oracle-jdk8 image"
+            iconClass: "icon-jenkins"
+            tags: "slave-oracle-jdk8"
+            role: "jenkins-slave"
+      triggers:
+        - type: "Generic"
+          generic:
+            secret: "${JENKINS_SECRET_HOOK}"
+            allowEnv: true
+        - type: "ConfigChange"
+        - type: "ImageChange"
+          imageChange:
+            from:
+              kind: "ImageStreamTag"
+              name: "jenkins-slave-base:latest"
+
+
+  #######################
+  # Jenkins Maven Slave #
+  #######################
+
+  - kind: "ImageStream"
+    apiVersion: "v1"
+    metadata:
+      name: "jenkins-slave-maven3"
+      labels:
+        role: "jenkins-slave"
+        app: "${SERVICE_JENKINS_SLAVE}"
+      annotations:
+        openshift.io/display-name: "jenkins-slave-maven3"
+
+  - kind: "BuildConfig"
+    apiVersion: "v1"
+    metadata:
+      name: "jenkins-slave-maven3"
+      labels:
+        name: "jenkins-slave-maven3"
+        app: "${SERVICE_JENKINS_SLAVE}"
+    spec:
+      source:
+        type: "Git"
+        contextDir: "services/jenkins/jenkins-slaves/maven3"
+        git:
+          uri: "${GIT_URL}"
+          ref: "${GIT_REF}"
+        sourceSecret:
+          name: "${SECRET_GIT}"
+        secrets:
+          - secret:
+              name: "${SECRET_NEXUS}"
+      strategy:
+        type: "Docker"
+        dockerStrategy:
+          env:
+            - name: "BUILD_LOGLEVEL"
+              value: "5"
+            - name: "VERSION_MAVEN"
+              value: "${VERSION_MAVEN}"
+            - name: "JDK_ARTIFACT_ID"
+              value: "${JDK_ARTIFACT_ID}"
+            - name: "JDK_ARTIFACT_VERSION"
+              value: "${JDK_ARTIFACT_VERSION}"
+      output:
+        to:
+          kind: "ImageStreamTag"
+          name: "jenkins-slave-maven3:latest"
+          labels:
+            role: "jenkins-slave"
+            app: "${SERVICE_JENKINS_SLAVE}"
+          annotations:
+            openshift.io/display-name: "Jenkins slave maven3"
+            description: "The jenkins slave maven3 image"
+            iconClass: "icon-jenkins"
+            tags: "slave-maven3"
+            role: "jenkins-slave"
+      triggers:
+        - type: "Generic"
+          generic:
+            secret: "${JENKINS_SECRET_HOOK}"
+            allowEnv: true
+        - type: "ConfigChange"
+        - type: "ImageChange"
+          imageChange:
+            from:
+              kind: "ImageStreamTag"
+              name: "jenkins-slave-oracle-jdk8:latest"
+
+
+  ########################
+  # Jenkins Newman Slave #
+  ########################
+
+  - kind: "ImageStream"
+    apiVersion: "v1"
+    metadata:
+      name: "jenkins-slave-newman"
+      labels:
+        role: "jenkins-slave"
+        app: "${SERVICE_JENKINS_SLAVE}"
+      annotations:
+        openshift.io/display-name: "jenkins-slave-newman"
+
+  - kind: "BuildConfig"
+    apiVersion: "v1"
+    metadata:
+      name: "jenkins-slave-newman"
+      labels:
+        name: "jenkins-slave-newman"
+        app: "${SERVICE_JENKINS_SLAVE}"
+    spec:
+      source:
+        type: "Git"
+        contextDir: "services/jenkins/jenkins-slaves/newman"
+        git:
+          uri: "${GIT_URL}"
+          ref: "${GIT_REF}"
+        sourceSecret:
+          name: "${SECRET_GIT}"
+        secrets:
+          - secret:
+              name: "${SECRET_NEXUS}"
+      strategy:
+        type: "Docker"
+        dockerStrategy:
+          env:
+            - name: "BUILD_LOGLEVEL"
+              value: "5"
+      output:
+        to:
+          kind: "ImageStreamTag"
+          name: "jenkins-slave-newman:latest"
+          labels:
+            role: "jenkins-slave"
+            app: "${SERVICE_JENKINS_SLAVE}"
+          annotations:
+            openshift.io/display-name: "Jenkins slave newman"
+            description: "The jenkins slave newman image"
+            iconClass: "icon-jenkins"
+            tags: "slave-newman"
+            role: "jenkins-slave"
+      triggers:
+        - type: "Generic"
+          generic:
+            secret: "${JENKINS_SECRET_HOOK}"
+            allowEnv: true
+        - type: "ConfigChange"
+        - type: "ImageChange"
+          imageChange:
+            from:
+              kind: "ImageStreamTag"
+              name: "jenkins-slave-base:latest"
