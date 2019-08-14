@@ -3,7 +3,7 @@
 OUT_DIR=./OUT_DIR
 cd $(pwd)
 
-mkdir ${OUT_DIR}
+mkdir -p ${OUT_DIR}
 
 function _processSwagger {
     oc process -f swagger-ui.yaml -o yaml --param-file=swagger-ui.properties --ignore-unknown-parameters=true > ${OUT_DIR}/swagger-ui.yaml
@@ -17,7 +17,7 @@ function _processJenkins {
 
 function createSwagger {
     _processSwagger
-    oc create -f ${OUT_DIR}/swagger-ui.yaml
+    oc apply -f ${OUT_DIR}/swagger-ui.yaml
 }
 
 function deleteSwagger {

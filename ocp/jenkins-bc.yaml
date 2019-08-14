@@ -49,3 +49,7 @@ objects:
         to:
           kind: ImageStreamTag
           name: jenkins-custom:latest
+      triggers:
+        - type: "ImageChange" 
+        - type: "ConfigChange"
+          imageChange: {}
