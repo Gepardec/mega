@@ -1,4 +1,4 @@
-FROM openshift/jenkins-slave-base-centos7
+FROM openshift3/jenkins-slave-base-rhel7
 
 ARG VERSION
 
