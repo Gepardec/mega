@@ -15,9 +15,12 @@ function _processJenkins {
     oc process -f jenkins.yaml -o yaml --param-file=jenkins.properties --ignore-unknown-parameters=true > ${OUT_DIR}/jenkins.yaml
 }
 
-
 function _processSonarqube {
     oc process -f sonarqube.yaml -o yaml --param-file=sonarqube.properties --ignore-unknown-parameters=true > ${OUT_DIR}/sonarqube.yaml
+}
+
+function createSecret {
+    oc secrets new-sshauth github-ssh --ssh-privatekey="../github_id_rsa"
 }
 
 function createSwagger {
