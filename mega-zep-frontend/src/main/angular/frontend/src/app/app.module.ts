@@ -25,7 +25,7 @@ const googleLoginOptions: LoginOpt = {
 @NgModule({
   declarations: [
     AppComponent,
-    GoogleSigninComponent
+    GoogleSigninComponent,
   ],
   imports: [
     BrowserModule,
