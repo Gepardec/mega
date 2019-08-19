@@ -1,0 +1,9 @@
+#!/bin/bash
+if [ -n "$MAVEN_MIRROR_URL" ]; then
+  xml="    <mirror>\
+    <id>mirror.default</id>\
+    <url>$MAVEN_MIRROR_URL</url>\
+    <mirrorOf>external:*</mirrorOf>\
+  </mirror>"
+  sed -i "s|<\!-- ### configured mirrors ### -->|$xml|" ${M2_HOME}/settings.xml
+fi

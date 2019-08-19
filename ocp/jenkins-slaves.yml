@@ -1,0 +1,112 @@
+kind: "Template"
+apiVersion: "v1"
+metadata:
+  name: "jenkins-slaves"
+  annotations:
+    openshift.io/display-name: "Jenkins slaves"
+    description: "Jenkins slaves"
+    iconClass: "icon-jenkins"
+    tags: "jenkins"
+
+parameters:
+  - name: "GIT_URL"
+    displayName: "Git url"
+    description: "The git url of the repository holding the slave resources"
+    required: true
+
+  - name: "GIT_REF"
+    displayName: "Git ref"
+    description: "The git ref of the repository holding the slave resources"
+    required: true
+
+  - name: "APP"
+    displayName: "App label"
+    description: "The value for the label app"
+    required: true
+
+  - name: "MAVEN_VERSION"
+    displayName: "MAven Version"
+    description: "The maven version to use"
+    required: true
+
+objects:
+  - kind: "ImageStream"
+    apiVersion: "v1"
+    metadata:
+      name: "jenkins-slave-base"
+      labels:
+        role: "jenkins-slave"
+        app: "${APP}"
+    spec:
+      tags:
+        - name: "latest"
+          labels:
+            role: "jenkins-slave"
+            app: "${APP}"
+          annotations:
+            openshift.io/display-name: "Jenkins Slave Base"
+            description: "The jenkins slave base"
+            iconClass: "icon-jenkins"
+            tags: "slave-base"
+            version: "3.7"
+          from:
+            kind: "DockerImage"
+            name: "registry.redhat.io/openshift3/jenkins-slave-base-rhel7:3.7"
+
+
+  ######################
+  # Jenkins JDK8 Slave #
+  ######################
+  - kind: "ImageStream"
+    apiVersion: "v1"
+    metadata:
+      name: "jenkins-slave-oracle-maven"
+      labels:
+        role: "jenkins-slave"
+        app: "${APP}"
+      annotations:
+        role: "jenkins-slave"
+        openshift.io/display-name: "jenkins-slave-oracle-maven"
+
+  - kind: "BuildConfig"
+    apiVersion: "v1"
+    metadata:
+      name: "jenkins-slave-oracle-maven"
+      labels:
+        name: "jenkins-slave-oracle-maven"
+        app: "${APP}"
+    spec:
+      source:
+        type: "Git"
+        contextDir: "docker/jenkins/maven"
+        git:
+          uri: "${GIT_URL}"
+          ref: "${GIT_REF}"
+      strategy:
+        type: "Docker"
+        dockerStrategy:
+          env:
+            - name: "BUILD_LOGLEVEL"
+              value: "5"
+            - name: "VERSION"
+              value: "${MAVEN_VERSION}"
+      output:
+        to:
+          kind: "ImageStreamTag"
+          name: "jenkins-slave-oracle-maven:${MAVEN_VERSION}"
+          labels:
+            role: "jenkins-slave"
+            app: "${APP}"
+          annotations:
+            openshift.io/display-name: "Jenkins slave maven"
+            description: "The jenkins slave maven image"
+            iconClass: "icon-jenkins"
+            tags: "slave-oracle-mvaen"
+            role: "jenkins-slave"
+      triggers:
+        - type: "ConfigChange"
+        - type: "ImageChange"
+          imageChange:
+            from:
+              kind: "ImageStreamTag"
+              name: "jenkins-slave-base:latest"
