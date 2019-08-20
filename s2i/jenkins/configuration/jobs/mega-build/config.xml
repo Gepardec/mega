@@ -30,6 +30,12 @@
     <daysToKeep>30</daysToKeep>
     <numToKeep>20</numToKeep>
   </orphanedItemStrategy>
+   <triggers>
+    <com.cloudbees.hudson.plugins.folder.computed.PeriodicFolderTrigger plugin="cloudbees-folder@6.0.4">
+      <spec>H/12 * * * *</spec>
+      <interval>300000</interval>
+    </com.cloudbees.hudson.plugins.folder.computed.PeriodicFolderTrigger>
+  </triggers>
   <triggers/>
   <sources class="jenkins.branch.MultiBranchProject$BranchSourceList" plugin="branch-api@2.0.9">
     <data>
