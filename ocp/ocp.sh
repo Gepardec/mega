@@ -21,6 +21,16 @@ function _processSonarqube {
 
 function createSecret {
     oc secrets new-sshauth github-ssh --ssh-privatekey="../github_id_rsa"
+    oc label secret github-ssh credential.sync.jenkins.openshift.io=true
+}
+
+function deleteSecret {
+    oc delete secret/github-ssh
+}
+
+function recreateSecret {
+    deleteSecret
+    createSecret
 }
 
 function createSwagger {

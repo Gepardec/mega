@@ -23,6 +23,21 @@ objects:
   - kind: "ImageStream"
     apiVersion: "v1"
     metadata:
+      name: "jenkins-s2i"
+      labels:
+        app: "${APP}"
+      annotations:
+        openshift.io/display-name: "jenkins-s2i"
+    spec:
+      tags:
+        - name: latest
+          from:
+            kind: DockerImage
+            name: openshift3/jenkins-2-rhel7:3.11
+
+  - kind: "ImageStream"
+    apiVersion: "v1"
+    metadata:
       name: "jenkins-custom"
       labels:
         app: "${APP}"
@@ -42,8 +57,7 @@ objects:
         sourceStrategy:
           from:
             kind: ImageStreamTag
-            name: jenkins:latest
-            namespace: openshift
+            name: jenkins-s2i:latest
         type: Source
       output:                       
         to:
