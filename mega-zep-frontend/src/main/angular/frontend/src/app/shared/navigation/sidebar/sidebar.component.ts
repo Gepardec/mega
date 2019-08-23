@@ -15,6 +15,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   readonly login: string = configuration.PAGES.LOGIN;
   readonly home: string = configuration.PAGES.HOME;
   readonly dashboard: string = configuration.PAGES.DASHBOARD;
+  readonly employees: string = configuration.PAGES.EMPLOYEES;
 
   @ViewChild('sidenav', {static: false}) sidenav: MatSidenav;
 

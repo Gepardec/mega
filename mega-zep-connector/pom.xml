@@ -111,6 +111,7 @@
               <wsdlOptions>
                 <wsdlOption>
                   <wsdl>${project.basedir}/src/main/resources/wsdl/Zep_V7.wsdl</wsdl>
+<!--                  <wsdl>https%3A%2F%2Fwww.zep-online.de%2Fzepgepardecservices_test%2Fsync%2Fsoap.php%3Fv%3D7%26wsdl</wsdl>-->
                 </wsdlOption>
               </wsdlOptions>
             </configuration>

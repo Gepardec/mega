@@ -18,12 +18,4 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
   }
 
-  toggleSidenav(): void {
-    this.mainLayoutService.setToggleSidenav(!this.mainLayoutService.toggleSidenav.getValue());
-  }
-
-  logout() {
-    this.authenticationService.signOut();
-  }
-
 }

@@ -2,6 +2,7 @@ export const configuration = {
     PAGES: {
       HOME: "/home",
       DASHBOARD: "/dashboard",
-      LOGIN: "/login"
+      LOGIN: "/login",
+      EMPLOYEES: "/employees"
     }
 };

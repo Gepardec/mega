@@ -11,12 +11,14 @@
       <a mat-list-item [routerLink]="[dashboard]">
         <mat-icon matListIcon (click)="sidenav.toggle()">equalizer</mat-icon>Dashboard
       </a>
-
+      <a mat-list-item [routerLink]="[employees]">
+        <mat-icon matListIcon (click)="sidenav.toggle()">people</mat-icon>Employees
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <app-header></app-header>
-    <div style="height: 88vh;">
+    <div style="height: 88vh; width: 90%">
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>

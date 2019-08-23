@@ -31,7 +31,7 @@ export class MitarbeiterType {
   private _preisgruppe: string;
   private _beschaeftigungszeitListe: BeschaeftigungszeitListeType;
   private _regelarbeitszeitListe: RegelarbeitszeitListeType;
-  private _freigabeDatum: string;
+  private _freigabedatum: string;
   private _titel: string;
   private _internersatzListe: InternersatzListeType;
   private _waehrung: string;
@@ -255,12 +255,12 @@ export class MitarbeiterType {
     this._regelarbeitszeitListe = value;
   }
 
-  get freigabeDatum(): string {
-    return this._freigabeDatum;
+  get freigabedatum(): string {
+    return this._freigabedatum;
   }
 
-  set freigabeDatum(value: string) {
-    this._freigabeDatum = value;
+  set freigabedatum(value: string) {
+    this._freigabedatum = value;
   }
 
   get titel(): string {

@@ -5,6 +5,7 @@ import {GoogleSigninComponent} from "./signin/google-signin/google-signin.compon
 import {DashboardPagesModule} from "./main-pages/dashboard/home/home.module";
 import {HomePagesModule} from "./main-pages/home/home.module";
 import {GoogleUserAuthenticationGuard} from "./shared/guards/google-user-authentication.guard";
+import {EmployeesPagesModule} from "./main-pages/employees/home/home.module";
 
 
 export const routes: Routes = [
@@ -22,9 +23,16 @@ export const routes: Routes = [
     data: { pageTitle: 'Dashboard' },
     canActivate: [GoogleUserAuthenticationGuard]
   },
-  { path: '', component: GoogleSigninComponent },
+  {
+    path: 'employees',
+    component: MainLayoutComponent,
+    loadChildren: () => EmployeesPagesModule,
+    data: { pageTitle: 'Employees' },
+    canActivate: [GoogleUserAuthenticationGuard]
+  },
+  { path: '', redirectTo: 'login', pathMatch: 'full'},
 
-  { path: '#', component: GoogleSigninComponent },
+  { path: '#', redirectTo: 'login' },
 
   { path: 'login', component: GoogleSigninComponent},
 
