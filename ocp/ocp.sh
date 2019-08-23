@@ -3,6 +3,8 @@
 OUT_DIR=./OUT_DIR
 cd $(pwd)
 
+set -u
+
 mkdir -p ${OUT_DIR}
 
 function _processSwagger {
@@ -19,8 +21,30 @@ function _processSonarqube {
     oc process -f sonarqube.yaml -o yaml --param-file=sonarqube.properties --ignore-unknown-parameters=true > ${OUT_DIR}/sonarqube.yaml
 }
 
+function recreateSecret {
+    deleteSecret
+    createSecret
+}
+
 function createSecret {
-    oc secrets new-sshauth github-ssh --ssh-privatekey="../github_id_rsa"
+    oc create secret generic github-ssh \
+        --from-file=ssh-privatekey="../github_id_rsa" \
+        --type=kubernetes.io/ssh-auth
+    oc create secret generic github-login \
+        --from-literal=username="${GITHUB_USERNAME}" \
+        --from-literal=password="${GITHUB_PASSWORD}" \
+        --type=kubernetes.io/basic-auth
+
+    oc annotate secret github-ssh jenkins.openshift.io/secret.name=github-ssh
+    oc annotate secret github-login jenkins.openshift.io/secret.name=github-login
+
+    oc label secret github-ssh credential.sync.jenkins.openshift.io=true
+    oc label secret github-login credential.sync.jenkins.openshift.io=true
+}
+
+function deleteSecret {
+    oc delete secret/github-ssh
+    oc delete secret/github-login
 }
 
 function createSwagger {
