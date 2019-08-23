@@ -1,7 +1,7 @@
-package connector.service.impl;
+package com.gepardec.mega.backend.service.impl;
 
-import connector.rest.model.GoogleUser;
-import connector.service.api.WorkerService;
+import com.gepardec.mega.backend.rest.model.GoogleUser;
+import com.gepardec.mega.backend.service.api.WorkerService;
 import de.provantis.zep.*;
 
 import javax.enterprise.context.ApplicationScoped;

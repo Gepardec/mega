@@ -1,4 +1,4 @@
-package connector.configuration;
+package com.gepardec.mega.backend.configuration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
