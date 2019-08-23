@@ -10,11 +10,78 @@
     <version>0.0.1</version>
   </parent>
 
+<<<<<<< HEAD:mega-zep-connector/pom.xml
+  <artifactId>mega-zep</artifactId>
+  <name>MEGA ZEP-Connector</name>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <properties>
+    <version.thorntail>2.5.0.Final</version.thorntail>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <failOnMissingWebXml>false</failOnMissingWebXml>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.thorntail</groupId>
+        <artifactId>bom-all</artifactId>
+        <version>${version.thorntail}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+=======
   <artifactId>mega-zep-backend</artifactId>
   <name>MEGA ZEP-Backend</name>
   <version>0.0.1</version>
+>>>>>>> master:mega-zep-backend/pom.xml
 
   <dependencies>
+    <!-- Thorntail Fractions -->
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>jaxrs</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>jaxrs-jsonp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>webservices</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>thorntail-runner</artifactId>
+      <version>${version.thorntail}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>microprofile-restclient</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>datasources</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>cdi-config</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>arquillian</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>microprofile-openapi</artifactId>
+    </dependency>
+
     <!-- cxf-codegen-plugin: Following dependencies are required by the WSDL code generator -->
     <dependency>
       <groupId>javax.xml.bind</groupId>
@@ -50,11 +117,26 @@
               <wsdlOptions>
                 <wsdlOption>
                   <wsdl>${project.basedir}/src/main/resources/wsdl/Zep_V7.wsdl</wsdl>
+<!--                  <wsdl>https%3A%2F%2Fwww.zep-online.de%2Fzepgepardecservices_test%2Fsync%2Fsoap.php%3Fv%3D7%26wsdl</wsdl>-->
                 </wsdlOption>
               </wsdlOptions>
             </configuration>
             <goals>
               <goal>wsdl2java</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>io.thorntail</groupId>
+        <artifactId>thorntail-maven-plugin</artifactId>
+        <version>${version.thorntail}</version>
+
+        <executions>
+          <execution>
+            <goals>
+              <goal>package</goal>
             </goals>
           </execution>
         </executions>

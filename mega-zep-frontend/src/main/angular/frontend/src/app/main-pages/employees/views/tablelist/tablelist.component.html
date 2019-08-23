@@ -1,0 +1,35 @@
+<div class="example-container mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource">
+
+    <!-- name Column -->
+    <ng-container matColumnDef="nachname">
+      <mat-header-cell *matHeaderCellDef>Mitarbeiter</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.vorname + " " + element.nachname}} </mat-cell>
+    </ng-container>
+
+    <!-- funktion Column -->
+    <ng-container matColumnDef="abteilung">
+      <mat-header-cell *matHeaderCellDef> Funktion</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.abteilung || "Mitarbeiter"}} </mat-cell>
+    </ng-container>
+
+    <!-- freigabedatum Column -->
+    <ng-container matColumnDef="freigabedatum">
+      <mat-header-cell *matHeaderCellDef>Freigegeben bis</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.freigabedatum}} </mat-cell>
+    </ng-container>
+
+    <!-- select Column -->
+    <ng-container matColumnDef="auswaehlen">
+      <mat-header-cell *matHeaderCellDef>auswählen</mat-header-cell>
+      <mat-cell *matCellDef="let row; let element">
+        <mat-checkbox (click)="selection.toggle(row)"></mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"
+             [ngClass]="{ 'selected': selection.isSelected(row)}"
+    ></mat-row>
+  </mat-table>
+</div>
