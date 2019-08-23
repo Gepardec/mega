@@ -5,6 +5,14 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {AuthServiceConfig, GoogleLoginProvider, LoginOpt, SocialLoginModule} from 'angularx-social-login';
 import {GoogleSigninComponent} from './signin/google-signin/google-signin.component';
+import {HttpClientModule} from "@angular/common/http";
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MainLayoutModule} from "./shared/main-layout/main-layout/main-layout.module";
+import {NavigationModule} from "./shared/navigation/navigation.module";
+import {HomeComponent} from './main-pages/employees/home/home.component';
+import { PaginationComponent } from './main-pages/employees/pagination/pagination.component';
+import { GridlistComponent } from './main-pages/employees/views/gridlist/gridlist.component';
+import { TablelistComponent } from './main-pages/employees/views/tablelist/tablelist.component';
 
 let config = new AuthServiceConfig([
   {
@@ -30,13 +38,27 @@ const googleLoginOptions: LoginOpt = {
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SocialLoginModule
+    SocialLoginModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    NavigationModule,
+    MainLayoutModule
+  ],
+  exports: [
+    BrowserModule,
+    AppRoutingModule,
+    SocialLoginModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    NavigationModule,
+    MainLayoutModule
   ],
   providers: [
+    HttpClientModule,
     {
       provide: AuthServiceConfig,
       useFactory: provideConfig
-    }
+    },
   ],
   bootstrap: [AppComponent]
 })
