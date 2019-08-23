@@ -7,12 +7,12 @@
   <parent>
     <groupId>com.gepardec.mega</groupId>
     <artifactId>mega</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.0.1</version>
   </parent>
 
-  <artifactId>mega-zep</artifactId>
-  <name>MEGA ZEP-Connector</name>
-  <version>1.0.0-SNAPSHOT</version>
+  <artifactId>mega-zep-backend</artifactId>
+  <name>MEGA ZEP-Backend</name>
+  <version>0.0.1</version>
 
   <dependencies>
     <!-- cxf-codegen-plugin: Following dependencies are required by the WSDL code generator -->

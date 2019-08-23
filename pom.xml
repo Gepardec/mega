@@ -4,14 +4,15 @@
 
     <groupId>com.gepardec.mega</groupId>
     <artifactId>mega</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>pom</packaging>
 
     <name>MEGA</name>
     <description>Make End-of-the-month-process Great Again!</description>
 
     <modules>
-        <module>mega-zep-connector</module>
+        <module>mega-zep-backend</module>
+        <module>mega-zep-frontend</module>
     </modules>
 
     <properties>
