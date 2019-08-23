@@ -15,6 +15,7 @@ buildNumber.properties
 
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
+OUT_DIR/
 
 # Angular
 # compiled output
@@ -39,4 +40,3 @@ testem.log
 # e2e
 /e2e/*.js
 /e2e/*.map
-
