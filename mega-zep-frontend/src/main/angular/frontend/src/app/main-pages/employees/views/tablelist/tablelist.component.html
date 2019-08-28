@@ -10,7 +10,7 @@
     <!-- funktion Column -->
     <ng-container matColumnDef="abteilung">
       <mat-header-cell *matHeaderCellDef> Funktion</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.abteilung || "Mitarbeiter"}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{functions[element.preisgruppe]}} </mat-cell>
     </ng-container>
 
     <!-- freigabedatum Column -->
@@ -23,7 +23,7 @@
     <ng-container matColumnDef="auswaehlen">
       <mat-header-cell *matHeaderCellDef>auswählen</mat-header-cell>
       <mat-cell *matCellDef="let row; let element">
-        <mat-checkbox (click)="selection.toggle(row)"></mat-checkbox>
+        <mat-checkbox [disableRipple]="true" style="width: 16px;  height: 16px" (click)="selection.toggle(row)"></mat-checkbox>
       </mat-cell>
     </ng-container>
 

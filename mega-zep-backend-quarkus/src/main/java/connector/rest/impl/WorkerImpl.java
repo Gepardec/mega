@@ -15,7 +15,7 @@ import java.util.List;
 public class WorkerImpl implements WorkerApi {
 
     @Inject
-    private WorkerService workerService;
+    WorkerService workerService;
 
     @Override
     public String hello() {
@@ -23,8 +23,21 @@ public class WorkerImpl implements WorkerApi {
     }
 
     @Override
-    public ReadMitarbeiterResponseType login(GoogleUser user) {
-        return workerService.login(user);
+    public MitarbeiterType get(GoogleUser user) {
+        System.out.println(user.getFirstName());
+        System.out.println(user.getLastName());
+        System.out.println(user.getEmail());
+
+        return workerService.get(user);
+    }
+
+
+    @Override
+    public ReadMitarbeiterResponseType getAll(GoogleUser user) {
+        System.out.println(user.getFirstName());
+        System.out.println(user.getLastName());
+        System.out.println(user.getEmail());
+        return workerService.getAll(user);
     }
 
     @Override

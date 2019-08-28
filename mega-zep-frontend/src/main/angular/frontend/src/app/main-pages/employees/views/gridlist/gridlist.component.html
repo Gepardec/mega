@@ -3,7 +3,7 @@
     <mat-card class="employee-card">
       <mat-card-header class="card-header">
         <mat-card-title>{{employee.vorname + " " + employee.nachname}}</mat-card-title>
-        <mat-card-subtitle>{{employee.abteilung || "Mitarbeiter"}}</mat-card-subtitle>
+        <mat-card-subtitle>{{functions[employee.preisgruppe]}}</mat-card-subtitle>
 
       </mat-card-header>
       <mat-card-content>

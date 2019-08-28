@@ -10,10 +10,9 @@
     <version>0.0.1</version>
   </parent>
 
-<<<<<<< HEAD:mega-zep-connector/pom.xml
-  <artifactId>mega-zep</artifactId>
-  <name>MEGA ZEP-Connector</name>
-  <version>1.0.0-SNAPSHOT</version>
+  <artifactId>mega-zep-backend</artifactId>
+  <name>MEGA ZEP-Backend</name>
+  <version>0.0.1</version>
   <packaging>war</packaging>
 
   <properties>
@@ -35,11 +34,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-=======
-  <artifactId>mega-zep-backend</artifactId>
-  <name>MEGA ZEP-Backend</name>
-  <version>0.0.1</version>
->>>>>>> master:mega-zep-backend/pom.xml
 
   <dependencies>
     <!-- Thorntail Fractions -->

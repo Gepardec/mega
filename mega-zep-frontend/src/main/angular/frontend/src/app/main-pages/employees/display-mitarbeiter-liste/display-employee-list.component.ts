@@ -29,6 +29,9 @@ export class DisplayEmployeeListComponent implements OnInit {
   ngOnInit() {
     this.authenticationService.currentUser.subscribe((user: SocialUser) => {
       this.user = user;
+      console.log(this.user.lastName);
+      console.log(this.user.firstName);
+      console.log(this.user.email);
       this.displayMitarbeiterListeService.getMitarbeiter(this.user)
         .subscribe((mitarbeiter: MitarbeiterResponseType) => {
           this.employees = mitarbeiter;
