@@ -1,7 +1,9 @@
 package connector.rest.impl;
 
+import connector.annotations.Authorization;
 import connector.rest.api.WorkerApi;
 import connector.rest.model.GoogleUser;
+import connector.security.SessionUser;
 import connector.service.api.WorkerService;
 import de.provantis.zep.MitarbeiterType;
 import de.provantis.zep.ReadMitarbeiterResponseType;
@@ -24,23 +26,18 @@ public class WorkerImpl implements WorkerApi {
 
     @Override
     public MitarbeiterType get(GoogleUser user) {
-        System.out.println(user.getFirstName());
-        System.out.println(user.getLastName());
-        System.out.println(user.getEmail());
-
         return workerService.get(user);
     }
 
 
     @Override
+    @Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
     public ReadMitarbeiterResponseType getAll(GoogleUser user) {
-        System.out.println(user.getFirstName());
-        System.out.println(user.getLastName());
-        System.out.println(user.getEmail());
         return workerService.getAll(user);
     }
 
     @Override
+    @Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
     public Response updateWorker(List<MitarbeiterType> employees) {
         return workerService.updateWorker(employees);
     }

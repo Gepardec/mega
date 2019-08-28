@@ -8,7 +8,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class WorkerServiceImpl implements WorkerService {
@@ -25,7 +24,6 @@ public class WorkerServiceImpl implements WorkerService {
         empl.setRequestHeader(requestHeaderType);
 
         return zepSoapPortType.readMitarbeiter(empl);
-
     }
 
     @Override
