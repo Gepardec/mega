@@ -9,7 +9,7 @@
       <mat-card-content>
         <mat-card-actions class="card-actions">
           <button mat-button disabled style="color: black">{{employee.freigabedatum}}</button>
-          <button mat-button>freigeben</button>
+          <button mat-button (click)="releaseEmployee(employee)">freigeben</button>
         </mat-card-actions>
       </mat-card-content>
     </mat-card>

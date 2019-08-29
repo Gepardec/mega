@@ -2,7 +2,9 @@
   <mat-toolbar>
     <mat-toolbar-row>
       <h1 class="title">Geparden</h1>
-      <button *ngIf="!isGridlistActive" mat-button (click)="releaseEmployees()">
+      <button *ngIf="!isGridlistActive" mat-button
+              [disabled]="selectedEmployees?.length == 0"
+              (click)="releaseEmployees()">
         Freigeben
       </button>
       <button mat-icon-button

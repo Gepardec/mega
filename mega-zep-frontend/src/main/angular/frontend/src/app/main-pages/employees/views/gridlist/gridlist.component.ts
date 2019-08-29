@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MitarbeiterResponseType} from "../../../../models/Mitarbeiter/MitarbeiterResponseType";
-import {configuration} from "../../../../../configuration/configuration";
+import {DisplayEmployeeListService} from "../../display-mitarbeiter-liste/display-employee-list.service";
+import {MitarbeiterType} from "../../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
 
 @Component({
   selector: 'app-gridlist',
@@ -9,16 +10,25 @@ import {configuration} from "../../../../../configuration/configuration";
 })
 export class GridlistComponent implements OnInit {
 
-  readonly functions = configuration.EMPLOYEE_FUNCTIONS;
-
   @Input('employees') employees: MitarbeiterResponseType;
   @Input('pageSize') pageSize: number;
   @Input('pageIndex') pageIndex: number;
 
-  constructor() {
+  constructor(
+    private displayEmployeeListService: DisplayEmployeeListService
+  ) {
   }
 
   ngOnInit() {
+  }
+
+  releaseEmployee(employee: MitarbeiterType): void {
+    let employees: Array<MitarbeiterType> = [];
+    employees.push(employee);
+    this.displayEmployeeListService.updateMitarbeiter(employees)
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 
 }

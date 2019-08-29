@@ -10,7 +10,7 @@
     <!-- funktion Column -->
     <ng-container matColumnDef="abteilung">
       <mat-header-cell *matHeaderCellDef> Funktion</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{functions[element.preisgruppe]}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.abteilung || "Mitarbeiter"}} </mat-cell>
     </ng-container>
 
     <!-- freigabedatum Column -->
@@ -19,11 +19,23 @@
       <mat-cell *matCellDef="let element"> {{element.freigabedatum}} </mat-cell>
     </ng-container>
 
-    <!-- select Column -->
+
+
+    <!-- Checkbox Column -->
     <ng-container matColumnDef="auswaehlen">
-      <mat-header-cell *matHeaderCellDef>auswählen</mat-header-cell>
-      <mat-cell *matCellDef="let row; let element">
-        <mat-checkbox [disableRipple]="true" style="width: 16px;  height: 16px" (click)="selection.toggle(row)"></mat-checkbox>
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()">auswählen
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
       </mat-cell>
     </ng-container>
 
