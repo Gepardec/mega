@@ -1,12 +1,16 @@
 package connector.rest.api;
 
 import connector.rest.model.GoogleUser;
-import de.provantis.zep.MitarbeiterType;
+import connector.security.AuthorizationInterceptor;
 
+import javax.interceptor.Interceptors;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -16,5 +20,9 @@ public interface AuthenticationApi {
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    Response login(GoogleUser user);
+    Response login(GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response);
+
+    @POST
+    @Path("/logout")
+    Response logout(@Context HttpServletRequest request, @Context HttpServletResponse response);
 }

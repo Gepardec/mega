@@ -63,6 +63,13 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- cxf-codegen-plugin: Following dependencies are required by the WSDL code generator -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
