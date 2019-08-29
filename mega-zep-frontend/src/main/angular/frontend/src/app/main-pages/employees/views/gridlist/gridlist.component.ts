@@ -1,7 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MitarbeiterResponseType} from "../../../../models/Mitarbeiter/MitarbeiterResponseType";
-import {DisplayEmployeeListService} from "../../display-mitarbeiter-liste/display-employee-list.service";
+import {DisplayEmployeeListService} from "../../display-employee-list/display-employee-list.service";
 import {MitarbeiterType} from "../../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
+import {configuration} from "../../../../../configuration/configuration";
 
 @Component({
   selector: 'app-gridlist',
@@ -9,6 +10,8 @@ import {MitarbeiterType} from "../../../../models/Mitarbeiter/Mitarbeiter/Mitarb
   styleUrls: ['./gridlist.component.scss']
 })
 export class GridlistComponent implements OnInit {
+
+  readonly functions = configuration.EMPLOYEE_FUNCTIONS;
 
   @Input('employees') employees: MitarbeiterResponseType;
   @Input('pageSize') pageSize: number;
