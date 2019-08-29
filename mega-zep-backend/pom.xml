@@ -16,12 +16,8 @@
 
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <surefire-plugin.version>2.22.0</surefire-plugin.version>
+        <surefire-plugin.version>2.22.2</surefire-plugin.version>
         <quarkus.version>0.21.1</quarkus.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
 
     <dependencyManagement>
