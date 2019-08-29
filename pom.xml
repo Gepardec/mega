@@ -13,6 +13,7 @@
     <modules>
         <module>mega-zep-backend</module>
         <module>mega-zep-frontend</module>
+        <module>mega-zep-backend-quarkus</module>
     </modules>
 
     <properties>

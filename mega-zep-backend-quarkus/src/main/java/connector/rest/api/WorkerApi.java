@@ -21,7 +21,13 @@ public interface WorkerApi {
     @Path("/get")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    ReadMitarbeiterResponseType login(GoogleUser user);
+    MitarbeiterType get(GoogleUser user);
+
+    @POST
+    @Path("/getAll")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    ReadMitarbeiterResponseType getAll(GoogleUser user);
 
     @PUT
     @Path("/update")

@@ -8,6 +8,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 public interface WorkerService {
-    ReadMitarbeiterResponseType login(GoogleUser user);
+    MitarbeiterType get(GoogleUser user);
+    ReadMitarbeiterResponseType getAll(GoogleUser user);
     Response updateWorker(List<MitarbeiterType> employees);
 }

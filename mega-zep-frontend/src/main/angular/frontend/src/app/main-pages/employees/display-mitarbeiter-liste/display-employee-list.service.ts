@@ -5,20 +5,22 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {catchError, retry} from 'rxjs/operators';
 import {SelectionChange} from "@angular/cdk/collections";
 import {MitarbeiterType} from "../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
+import {configuration} from "../../../../configuration/configuration";
+import {ErrorHandleService} from "../../error-handle.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DisplayEmployeeListService {
 
-  // Base url
-  baseurl = 'http://localhost:8080';
+  private URL: string = configuration.BASEURL;
 
   private _selectedEmployees: BehaviorSubject<Array<MitarbeiterType>> =
     new BehaviorSubject<Array<MitarbeiterType>>(new Array<MitarbeiterType>());
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private errorHandlService: ErrorHandleService
   ) {
   }
 
@@ -30,36 +32,22 @@ export class DisplayEmployeeListService {
   };
 
   getMitarbeiter(data): Observable<MitarbeiterResponseType> {
-    return this.http.post<MitarbeiterResponseType>(this.baseurl +
-      '/mega-zep-1.0.0-SNAPSHOT/rest-api/worker/get/', JSON.stringify(data), this.httpOptions)
+    return this.http.post<MitarbeiterResponseType>(this.URL +
+      '/worker/getAll/', JSON.stringify(data), this.httpOptions)
       .pipe(
         retry(1),
-        catchError(this.errorHandl)
+        catchError(this.errorHandlService.errorHandl)
       );
   }
 
   updateMitarbeiter(employees: Array<MitarbeiterType>) {
-    return this.http.put(this.baseurl +
-      '/mega-zep-1.0.0-SNAPSHOT/rest-api/worker/update/', JSON.stringify(employees),
+    return this.http.put(this.URL +
+      '/worker/update/', JSON.stringify(employees),
       this.httpOptions)
       .pipe(
         retry(1),
-        catchError(this.errorHandl)
+        catchError(this.errorHandlService.errorHandl)
       );
-  }
-
-  // Error handling
-  errorHandl(error) {
-    let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-      // Get client-side error
-      errorMessage = error.error.message;
-    } else {
-      // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    console.log(errorMessage);
-    return throwError(errorMessage);
   }
 
 

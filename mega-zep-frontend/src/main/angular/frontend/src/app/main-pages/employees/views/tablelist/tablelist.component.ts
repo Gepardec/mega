@@ -3,6 +3,7 @@ import {MatTableDataSource} from "@angular/material";
 import {MitarbeiterType} from "../../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
 import {SelectionChange, SelectionModel} from "@angular/cdk/collections";
 import {DisplayEmployeeListService} from "../../display-mitarbeiter-liste/display-employee-list.service";
+import {configuration} from "../../../../../configuration/configuration";
 
 @Component({
   selector: 'app-tablelist',
@@ -10,6 +11,8 @@ import {DisplayEmployeeListService} from "../../display-mitarbeiter-liste/displa
   styleUrls: ['./tablelist.component.scss']
 })
 export class TablelistComponent implements OnInit {
+
+  readonly functions = configuration.EMPLOYEE_FUNCTIONS;
 
   displayedColumns = ['nachname', 'abteilung', 'freigabedatum', 'auswaehlen'];
   @Input('dataSource') dataSource: MatTableDataSource<MitarbeiterType>;
