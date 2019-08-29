@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {MatTableDataSource} from "@angular/material";
 import {MitarbeiterType} from "../../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
 import {SelectionChange, SelectionModel} from "@angular/cdk/collections";
-import {DisplayEmployeeListService} from "../../display-mitarbeiter-liste/display-employee-list.service";
+import {DisplayEmployeeListService} from "../../display-employee-list/display-employee-list.service";
 import {configuration} from "../../../../../configuration/configuration";
 
 @Component({
