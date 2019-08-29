@@ -3,15 +3,16 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.gepardec.meg</groupId>
-    <artifactId>mega-zep-back</artifactId>
-    <version>1.0-SNAPSHOT</version>
 
     <parent>
         <groupId>com.gepardec.mega</groupId>
         <artifactId>mega</artifactId>
         <version>0.0.1</version>
     </parent>
+
+    <artifactId>mega-zep-backend</artifactId>
+    <name>MEGA ZEP-Backend</name>
+    <version>0.0.1</version>
 
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
