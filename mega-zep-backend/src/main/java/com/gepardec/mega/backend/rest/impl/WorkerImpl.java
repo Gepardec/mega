@@ -1,8 +1,8 @@
-package connector.rest.impl;
+package com.gepardec.mega.backend.rest.impl;
 
-import connector.rest.api.WorkerApi;
-import connector.rest.model.GoogleUser;
-import connector.service.api.WorkerService;
+import com.gepardec.mega.backend.rest.api.WorkerApi;
+import com.gepardec.mega.backend.rest.model.GoogleUser;
+import com.gepardec.mega.backend.service.api.WorkerService;
 import de.provantis.zep.MitarbeiterType;
 import de.provantis.zep.ReadMitarbeiterResponseType;
 

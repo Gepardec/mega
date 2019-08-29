@@ -1,8 +1,7 @@
-package connector.configuration;
+package com.gepardec.mega.backend.configuration;
 
-import connector.filter.CORSResponseFilter;
-import connector.rest.api.WorkerApi;
-import connector.rest.impl.WorkerImpl;
+import com.gepardec.mega.backend.filter.CORSResponseFilter;
+import com.gepardec.mega.backend.rest.impl.WorkerImpl;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.ApplicationPath;

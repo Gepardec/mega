@@ -1,4 +1,4 @@
-package connector.rest.model;
+package com.gepardec.mega.backend.rest.model;
 
 public class GoogleUser {
     private String id;

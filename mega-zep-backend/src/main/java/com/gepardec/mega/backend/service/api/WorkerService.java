@@ -1,6 +1,6 @@
-package connector.service.api;
+package com.gepardec.mega.backend.service.api;
 
-import connector.rest.model.GoogleUser;
+import com.gepardec.mega.backend.rest.model.GoogleUser;
 import de.provantis.zep.MitarbeiterType;
 import de.provantis.zep.ReadMitarbeiterResponseType;
 
