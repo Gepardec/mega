@@ -93,6 +93,17 @@
             <scope>compile</scope>
         </dependency>
         <!-- cxf-codegen-plugin: END -->
+
+        <dependency>
+            <groupId>javax.xml.ws</groupId>
+            <artifactId>jaxws-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>rt</artifactId>
+            <version>2.3.1</version>
+        </dependency>
     </dependencies>
 
     <build>

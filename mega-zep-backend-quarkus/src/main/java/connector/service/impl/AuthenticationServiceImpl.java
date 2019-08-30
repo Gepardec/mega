@@ -59,7 +59,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             System.out.println(request.getQueryString());
             System.out.println(user.getEmail());
             System.out.println(user.getIdToken());
-            request.getSession();
             System.out.println("AFTER request.login");
             LOG.info("Authentication of user with name " + user.getName());
             sessionUser.setId(user.getId());
@@ -90,7 +89,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     private void invalidateSession(HttpServletRequest request){
-        request.getSession().invalidate();
         sessionUser.invalidate();
     }
 }
