@@ -5,14 +5,12 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {AuthServiceConfig, GoogleLoginProvider, LoginOpt, SocialLoginModule} from 'angularx-social-login';
 import {GoogleSigninComponent} from './signin/google-signin/google-signin.component';
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MainLayoutModule} from "./shared/main-layout/main-layout/main-layout.module";
 import {NavigationModule} from "./shared/navigation/navigation.module";
-import {HomeComponent} from './main-pages/employees/home/home.component';
-import { PaginationComponent } from './main-pages/employees/pagination/pagination.component';
-import { GridlistComponent } from './main-pages/employees/views/gridlist/gridlist.component';
-import { TablelistComponent } from './main-pages/employees/views/tablelist/tablelist.component';
+import {ErrorHandleInterceptor} from "./shared/interceptors/ErrorHandleInterceptor";
+
 
 let config = new AuthServiceConfig([
   {
@@ -59,6 +57,9 @@ const googleLoginOptions: LoginOpt = {
       provide: AuthServiceConfig,
       useFactory: provideConfig
     },
+    {
+      provide: HTTP_INTERCEPTORS, useClass: ErrorHandleInterceptor, multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

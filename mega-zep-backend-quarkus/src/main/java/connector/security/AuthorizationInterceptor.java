@@ -12,6 +12,7 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 
 @Authorization
@@ -25,10 +26,7 @@ public class AuthorizationInterceptor {
 
     @AroundInvoke
     public Object intercept(InvocationContext invocationContext) throws Exception {
-        LOG.warn("Session User in Interceptor", sessionUser);
-        System.out.println(sessionUser.getEmail());
-        String methodName = invocationContext.getMethod().getDeclaringClass().getSimpleName() +
-                "." + invocationContext.getMethod().getName();
+
         Authorization authorizationAnnotation = invocationContext.getMethod().getAnnotation(Authorization.class);
 
         if(authorizationAnnotation != null){
@@ -39,9 +37,9 @@ public class AuthorizationInterceptor {
                 }
             }
 
-            LOG.warn("User " + sessionUser.getName() + " has insufficient permissions to call " + methodName);
+            logInsufficientPermission(invocationContext);
+
             HttpServletResponse httpServletResponse = getHttpServletResponse(invocationContext);
-            System.out.println(httpServletResponse);
             if(httpServletResponse != null){
                 httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
@@ -60,5 +58,11 @@ public class AuthorizationInterceptor {
         }
 
         return null;
+    }
+
+    private void logInsufficientPermission(InvocationContext invocationContext){
+        String methodName = invocationContext.getMethod().getDeclaringClass().getSimpleName() +
+                "." + invocationContext.getMethod().getName();
+        LOG.warn("User " + sessionUser.getName() + " has insufficient permissions to call " + methodName);
     }
 }

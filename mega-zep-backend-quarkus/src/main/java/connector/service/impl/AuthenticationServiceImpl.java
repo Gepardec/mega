@@ -8,13 +8,17 @@ import de.provantis.zep.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Response;
 
-@ApplicationScoped
+@RequestScoped
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
@@ -34,34 +38,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return Response.ok(user).build();
         }
 
+        // get ZEP employee
         ReadMitarbeiterRequestType empl = new ReadMitarbeiterRequestType();
-        System.out.print("Empl: ");
-        System.out.println(empl);
         empl.setRequestHeader(requestHeaderType);
 
-
-
         ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(empl);
-        System.out.print("rmrt: ");
-        System.out.println(rmrt);
         MitarbeiterType mt = rmrt.getMitarbeiterListe().getMitarbeiter().stream()
                 .filter(emp -> user.getEmail().equals(emp.getEmail()))
                 .findFirst()
                 .orElse(null);
 
+        // invalidate session when theres no appropriate employee
         if(mt == null){
-            invalidateSession(request);
+            invalidateSession();
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
-        System.out.println("BEFORE request.login");
         try {
-            System.out.println(request.getQueryString());
-            System.out.println(user.getEmail());
-            System.out.println(user.getIdToken());
-            System.out.println("AFTER request.login");
             LOG.info("Authentication of user with name " + user.getName());
-            sessionUser.setId(user.getId());
             sessionUser.setAuthorizationCode(user.getAuthorizationCode());
             sessionUser.setEmail(user.getEmail());
             sessionUser.setAuthToken(user.getAuthToken());
@@ -70,7 +64,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             sessionUser.setRole(mt.getRechte());
         } catch (Exception e){
             LOG.info("Authentication of user with name " + user.getName() + " failed: " + e);
-            invalidateSession(request);
+            invalidateSession();
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
@@ -80,7 +74,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public Response logout(HttpServletRequest request) {
-        invalidateSession(request);
+        invalidateSession();
         return Response.ok().build();
     }
 
@@ -88,7 +82,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return sessionUser.getId() != null;
     }
 
-    private void invalidateSession(HttpServletRequest request){
+    private void invalidateSession(){
         sessionUser.invalidate();
     }
 }

@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {MitarbeiterResponseType} from "../../models/Mitarbeiter/MitarbeiterResponseType";
-import {catchError, retry} from "rxjs/operators";
-import {configuration} from "../../../configuration/configuration";
-import {ErrorHandleService} from "../error-handle.service";
-import {MitarbeiterType} from "../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {retry} from 'rxjs/operators';
+import {configuration} from '../../../configuration/configuration';
+import {MitarbeiterType} from '../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType';
+import {EmployeeService} from "../../zep-services/employee.service";
+import {SocialUser} from "angularx-social-login";
 
 @Injectable({
   providedIn: 'root'
@@ -16,23 +16,11 @@ export class HomeService {
 
   constructor(
     private http: HttpClient,
-    private errorHandlService: ErrorHandleService
+    private employeeService: EmployeeService
   ) {
   }
 
-  // Http Headers
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  };
-
-  getMitarbeiter(data): Observable<MitarbeiterType> {
-    return this.http.post<MitarbeiterType>(this.URL +
-      '/worker/get/', JSON.stringify(data), this.httpOptions)
-      .pipe(
-        retry(1),
-        catchError(this.errorHandlService.errorHandl)
-      );
+  getEmployee(user: SocialUser): Observable<MitarbeiterType> {
+    return this.employeeService.get(user);
   }
 }
