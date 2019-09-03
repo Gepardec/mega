@@ -1,16 +1,18 @@
 package connector.service.impl;
 
 import connector.rest.model.GoogleUser;
+import connector.security.AuthorizationInterceptor;
 import connector.service.api.WorkerService;
 import de.provantis.zep.*;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Response;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@ApplicationScoped
+@Interceptors(AuthorizationInterceptor.class)
+@RequestScoped
 public class WorkerServiceImpl implements WorkerService {
 
     @Inject
@@ -25,7 +27,6 @@ public class WorkerServiceImpl implements WorkerService {
         empl.setRequestHeader(requestHeaderType);
 
         return zepSoapPortType.readMitarbeiter(empl);
-
     }
 
     @Override
@@ -49,6 +50,7 @@ public class WorkerServiceImpl implements WorkerService {
         for(MitarbeiterType mt : employees){
             umrt.setMitarbeiter(mt);
             UpdateMitarbeiterResponseType umrest = zepSoapPortType.updateMitarbeiter(umrt);
+            // TODO handle errors
         }
         return Response.ok().build();
 

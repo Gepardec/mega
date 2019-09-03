@@ -1,75 +1,44 @@
 package connector.rest.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import connector.annotations.Authorization;
 import connector.rest.api.WorkerApi;
 import connector.rest.model.GoogleUser;
+import connector.security.SessionUser;
 import connector.service.api.WorkerService;
 import de.provantis.zep.MitarbeiterType;
 import de.provantis.zep.ReadMitarbeiterResponseType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import org.apache.http.HttpStatus;
 
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.List;
 
-@ApplicationScoped
+@Stateless
 public class WorkerImpl implements WorkerApi {
 
     @Inject
     WorkerService workerService;
 
     @Override
-    public Response status () {
-        final ServiceStatus serviceStatus = new ServiceStatus(HttpStatus.SC_OK, "OK");
-        final ObjectMapper objectMapper = new ObjectMapper();
-        final StringWriter stringWriter = new StringWriter();
-        try {
-            objectMapper.writeValue(stringWriter, serviceStatus);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return Response.status(HttpStatus.SC_OK).entity(stringWriter.toString()).build();
-    }
-
-    @Override
-    public String hello() {
-        return "hello";
-    }
-
-    @Override
-    public MitarbeiterType get(GoogleUser user) {
-        System.out.println(user.getFirstName());
-        System.out.println(user.getLastName());
-        System.out.println(user.getEmail());
-
+    public MitarbeiterType get(GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response) {
         return workerService.get(user);
     }
 
 
     @Override
-    public ReadMitarbeiterResponseType getAll(GoogleUser user) {
-        System.out.println(user.getFirstName());
-        System.out.println(user.getLastName());
-        System.out.println(user.getEmail());
+    @Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
+    public ReadMitarbeiterResponseType getAll(GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response) {
         return workerService.getAll(user);
     }
 
     @Override
-    public Response updateWorker(List<MitarbeiterType> employees) {
+    @Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
+    public Response updateWorker(List<MitarbeiterType> employees, @Context HttpServletRequest request, @Context HttpServletResponse response) {
         return workerService.updateWorker(employees);
-    }
-
-    @AllArgsConstructor
-    @Data
-    private class ServiceStatus {
-        private final int code;
-        private final String message;
     }
 }
