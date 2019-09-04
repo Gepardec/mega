@@ -1,21 +1,15 @@
 package connector.service.impl;
 
 import connector.rest.model.GoogleUser;
-import connector.security.AuthorizationInterceptor;
 import connector.security.SessionUser;
 import connector.service.api.AuthenticationService;
 import de.provantis.zep.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.Stateless;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.interceptor.Interceptors;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Response;
 
 @RequestScoped

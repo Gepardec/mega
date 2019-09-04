@@ -1,16 +1,16 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import {MatSidenav} from "@angular/material";
 import {MainLayoutService} from "../../main-layout/main-layout/main-layout.service";
 import {configuration} from "../../../../configuration/configuration";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit, AfterViewInit {
-
+export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly login: string = configuration.PAGES.LOGIN;
   readonly home: string = configuration.PAGES.HOME;
@@ -20,6 +20,8 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   @ViewChild('sidenav', {static: false}) sidenav: MatSidenav;
 
   showFiller = false;
+
+  private toggleSidenavSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -32,13 +34,17 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.mainLayoutService.toggleSidenav.subscribe(
+    this.toggleSidenavSubscription = this.mainLayoutService.toggleSidenav.subscribe(
       (newState: boolean) => {
         setTimeout(() => {
           this.sidenav.toggle();
         }, 100);
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.toggleSidenavSubscription && this.toggleSidenavSubscription.unsubscribe();
   }
 
   routeTo(location: string): void {

@@ -1,53 +1,33 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, throwError} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {MitarbeiterResponseType} from "../../../models/Mitarbeiter/MitarbeiterResponseType";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {catchError, retry} from 'rxjs/operators';
+import {HttpClient} from "@angular/common/http";
+import {retry} from 'rxjs/operators';
 import {SelectionChange} from "@angular/cdk/collections";
 import {MitarbeiterType} from "../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
 import {configuration} from "../../../../configuration/configuration";
-import {ErrorHandleService} from "../../error-handle.service";
+import {EmployeeService} from "../../../zep-services/employee.service";
+import {SocialUser} from "angularx-social-login";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DisplayEmployeeListService {
 
-  private URL: string = configuration.BASEURL;
-
   private _selectedEmployees: BehaviorSubject<Array<MitarbeiterType>> =
     new BehaviorSubject<Array<MitarbeiterType>>(new Array<MitarbeiterType>());
 
   constructor(
-    private http: HttpClient,
-    private errorHandlService: ErrorHandleService
+    private employeeService: EmployeeService
   ) {
   }
 
-  // Http Headers
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  };
-
-  getMitarbeiter(data): Observable<MitarbeiterResponseType> {
-    return this.http.post<MitarbeiterResponseType>(this.URL +
-      '/worker/getAll/', JSON.stringify(data), this.httpOptions)
-      .pipe(
-        retry(1),
-        catchError(this.errorHandlService.errorHandl)
-      );
+  getEmployees(user: SocialUser): Observable<MitarbeiterResponseType> {
+    return this.employeeService.getAll(user);
   }
 
-  updateMitarbeiter(employees: Array<MitarbeiterType>) {
-    return this.http.put(this.URL +
-      '/worker/update/', JSON.stringify(employees),
-      this.httpOptions)
-      .pipe(
-        retry(1),
-        catchError(this.errorHandlService.errorHandl)
-      );
+  updateEmployee(employees: Array<MitarbeiterType>) {
+    return this.employeeService.updateAll(employees);
   }
 
 

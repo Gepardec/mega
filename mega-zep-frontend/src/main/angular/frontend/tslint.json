@@ -25,13 +25,16 @@
       true,
       "rxjs/Rx"
     ],
+    "no-unused-expression": false,
     "interface-name": false,
     "max-classes-per-file": false,
     "max-line-length": [
       true,
       140
     ],
+    "variable-name": false,
     "member-access": false,
+    "prefer-const": false,
     "member-ordering": [
       true,
       {
@@ -69,13 +72,13 @@
     "object-literal-sort-keys": false,
     "ordered-imports": false,
     "quotemark": [
-      true,
+      false,
       "single"
     ],
     "trailing-comma": false,
     "no-conflicting-lifecycle": true,
     "no-host-metadata-property": true,
-    "no-input-rename": true,
+    "no-input-rename": false,
     "no-inputs-metadata-property": true,
     "no-output-native": true,
     "no-output-on-prefix": true,

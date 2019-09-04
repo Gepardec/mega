@@ -1,3 +1,5 @@
+import {HttpHeaders} from "@angular/common/http";
+
 export const configuration = {
   // Base url
   BASEURL: 'http://localhost:8080',
@@ -20,5 +22,13 @@ export const configuration = {
     '07': 'Ferialpraktikant',
     '08': 'Consultant Senior',
     '99': 'Reisezeiten'
+  },
+
+  // Http Headers
+  httpOptions: {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+    }),
+    withCredentials: true
   }
 };
