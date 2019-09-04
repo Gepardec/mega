@@ -30,5 +30,12 @@ export const configuration = {
       'Content-Type': 'application/json',
     }),
     withCredentials: true
+  },
+
+  EMPLOYEE_ROLES: {
+    USER: 0,
+    ADMINISTRATOR: 1,
+    CONTROLLER: 2,
+    USER_MIT_ZUSATZRECHTEN: 3
   }
 };

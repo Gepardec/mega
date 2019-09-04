@@ -63,7 +63,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         LOG.info("Authentication of user with name " + user.getName() + " successful");
-        return Response.ok(user).build();
+        return Response.ok(mt).build();
     }
 
     @Override
