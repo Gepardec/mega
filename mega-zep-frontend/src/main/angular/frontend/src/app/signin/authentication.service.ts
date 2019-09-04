@@ -18,7 +18,7 @@ export class AuthenticationService implements OnDestroy {
   private readonly HOME_PAGE: string = configuration.PAGES.HOME;
   private readonly LOGIN_PAGE: string = configuration.PAGES.LOGIN;
 
-  private isSignedInWithGoogle = false;
+  private isSignedInWithGoogle: boolean;
 
   private currentUserSubject: BehaviorSubject<SocialUser>;
   public currentUser: Observable<SocialUser>;
@@ -32,15 +32,16 @@ export class AuthenticationService implements OnDestroy {
     private http: HttpClient,
     private authService: AuthService,
   ) {
-    this.currentUserSubject = new BehaviorSubject<SocialUser>(JSON.parse(localStorage.getItem(this.CURRENT_USER)));
+    let user: SocialUser = JSON.parse(localStorage.getItem(this.CURRENT_USER));
+    if (user == null) {
+      this.router.navigate([this.LOGIN_PAGE]);
+    }
+    this.currentUserSubject = new BehaviorSubject<SocialUser>(user);
     this.currentUser = this.currentUserSubject.asObservable();
 
-    this.authServiceSubscription = this.authService.authState.subscribe((user) => {
-      if (user != null) {
-        this.login(user);
-      } else {
-        this.logout();
-      }
+    this.authServiceSubscription = this.authService.authState.subscribe((user: SocialUser) => {
+      this.isSignedInWithGoogle = user != null;
+      user != null ? this.login(user) : this.logout();
     });
   }
 
