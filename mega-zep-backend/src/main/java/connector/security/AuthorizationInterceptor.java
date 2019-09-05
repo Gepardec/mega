@@ -20,7 +20,8 @@ import java.util.Arrays;
 @Interceptor
 public class AuthorizationInterceptor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AuthorizationInterceptor.class);
+    @Inject
+    Logger logger;
 
     @Inject
     SessionUser sessionUser;
@@ -64,6 +65,6 @@ public class AuthorizationInterceptor {
     private void logInsufficientPermission(InvocationContext invocationContext){
         final String methodName = invocationContext.getMethod().getDeclaringClass().getSimpleName() +
                 "." + invocationContext.getMethod().getName();
-        LOG.warn("User " + sessionUser.getName() + " has insufficient permissions to call " + methodName);
+        logger.warn("User " + sessionUser.getName() + " has insufficient permissions to call " + methodName);
     }
 }

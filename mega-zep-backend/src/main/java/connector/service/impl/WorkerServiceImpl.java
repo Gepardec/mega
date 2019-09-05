@@ -5,6 +5,7 @@ import connector.security.AuthorizationInterceptor;
 import connector.service.api.WorkerService;
 import de.provantis.zep.*;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
@@ -12,7 +13,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Interceptors(AuthorizationInterceptor.class)
-@RequestScoped
+@ApplicationScoped
 public class WorkerServiceImpl implements WorkerService {
 
     @Inject
