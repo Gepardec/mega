@@ -5,6 +5,7 @@ import {SocialUser} from "angularx-social-login";
 import {AuthenticationService} from "../../../signin/authentication.service";
 import {MitarbeiterType} from "../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
 import {Subscription} from "rxjs";
+import {SelectionChange} from "@angular/cdk/collections";
 
 @Component({
   selector: 'app-display-employee-list',
@@ -21,6 +22,8 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
 
   employees: MitarbeiterResponseType;
 
+  selectedDate: string = null;
+
   private currentUserSubscription: Subscription;
   private getEmployeeSubscription: Subscription;
   private selectedEmployeesSubscription: Subscription;
@@ -30,18 +33,16 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
     private displayMitarbeiterListeService: DisplayEmployeeListService,
     private authenticationService: AuthenticationService
   ) {
+
   }
 
   ngOnInit() {
     this.currentUserSubscription = this.authenticationService.currentUser.subscribe((user: SocialUser) => {
       this.user = user;
-      if (this.user) {
-        this.getEmployeeSubscription = this.displayMitarbeiterListeService.getEmployees(this.user)
-          .subscribe((mitarbeiter: MitarbeiterResponseType) => {
-            this.employees = mitarbeiter;
-          });
-      }
+      this.getAllEmployees();
     });
+
+    this.selectedDate = null;
 
     this.selectedEmployeesSubscription = this.displayMitarbeiterListeService.selectedEmployees
       .subscribe((selectedEmployees: Array<MitarbeiterType>) => {
@@ -62,11 +63,30 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
   }
 
   releaseEmployees() {
-    console.log(this.selectedEmployees);
-    this.updateEmployeesSubscription = this.displayMitarbeiterListeService.updateEmployee(this.selectedEmployees)
-      .subscribe((res) => {
-        console.log(res);
-      });
+    if (this.selectedDate) {
+      this.updateEmployeesSubscription = this.displayMitarbeiterListeService.updateEmployees(this.selectedEmployees, this.selectedDate)
+        .subscribe((res) => {
+          // refresh employees
+          this.employees = null;
+          this.getAllEmployees();
+        });
+    }
+  }
+
+  getAllEmployees() {
+    if (this.user) {
+      this.getEmployeeSubscription = this.displayMitarbeiterListeService.getEmployees(this.user)
+        .subscribe((mitarbeiter: MitarbeiterResponseType) => {
+          this.employees = mitarbeiter;
+          this.selectedEmployees = new Array<MitarbeiterType>();
+          this.displayMitarbeiterListeService.setSelectedEmployees(null);
+          this.displayMitarbeiterListeService.setResetSelection(true);
+        });
+    }
+  }
+
+  dateChanged(date: string) {
+    this.selectedDate = date;
   }
 
 }

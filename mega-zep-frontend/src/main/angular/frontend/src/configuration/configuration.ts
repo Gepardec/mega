@@ -32,6 +32,7 @@ export const configuration = {
     withCredentials: true
   },
 
+  dateFormat: 'yyyy-MM-dd',
   EMPLOYEE_ROLES: {
     USER: 0,
     ADMINISTRATOR: 1,

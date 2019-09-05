@@ -27,8 +27,8 @@ export class EmployeeService {
       );
   }
 
-  updateAll(employees: Array<MitarbeiterType>) {
-    return this.http.put(this.URL +
+  updateAll(employees: Array<MitarbeiterType>): Observable<Response> {
+    return this.http.put<Response>(this.URL +
       '/worker/update/', JSON.stringify(employees))
       .pipe(
         retry(1)

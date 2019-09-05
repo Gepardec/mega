@@ -56,13 +56,13 @@ public class WorkerServiceImpl implements WorkerService {
         UpdateMitarbeiterRequestType umrt = new UpdateMitarbeiterRequestType();
         umrt.setRequestHeader(requestHeaderType);
 
-
-        for (MitarbeiterType mt : employees) {
+        UpdateMitarbeiterResponseType umrest = null;
+        for(MitarbeiterType mt : employees){
             umrt.setMitarbeiter(mt);
-            UpdateMitarbeiterResponseType umrest = zepSoapPortType.updateMitarbeiter(umrt);
+            umrest = zepSoapPortType.updateMitarbeiter(umrt);
             // TODO handle errors
         }
-        return Response.ok().build();
+        return Response.ok(umrest).build();
 
     }
 
