@@ -8,6 +8,8 @@ import {AngularMaterialModule} from "../../../material-module";
 import {PaginationComponent} from "../pagination/pagination.component";
 import {GridlistComponent} from "../views/gridlist/gridlist.component";
 import {TablelistComponent} from "../views/tablelist/tablelist.component";
+import {UtilModule} from "../../../shared/util/util.module";
+import {DatePickerDialogComponent} from "../views/gridlist/date-picker-dialog/date-picker-dialog.component";
 
 
 @NgModule({
@@ -16,12 +18,17 @@ import {TablelistComponent} from "../views/tablelist/tablelist.component";
     DisplayEmployeeListComponent,
     PaginationComponent,
     GridlistComponent,
-    TablelistComponent
+    TablelistComponent,
+    DatePickerDialogComponent
   ],
   imports: [
     CommonModule,
     homeRouting,
-    AngularMaterialModule
+    AngularMaterialModule,
+    UtilModule
+  ],
+  entryComponents: [
+    DatePickerDialogComponent
   ],
   providers: [
     DisplayEmployeeListService

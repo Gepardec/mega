@@ -26,7 +26,8 @@ export class DisplayEmployeeListService {
     return this.employeeService.getAll(user);
   }
 
-  updateEmployee(employees: Array<MitarbeiterType>) {
+  updateEmployees(employees: Array<MitarbeiterType>, date: string) {
+    employees.forEach(empl => empl.freigabedatum = date);
     return this.employeeService.updateAll(employees);
   }
 

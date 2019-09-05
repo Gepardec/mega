@@ -1,8 +1,13 @@
 package connector.security;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 
+@Data
+@NoArgsConstructor
 @SessionScoped
 public class SessionUser implements Serializable {
     private static final long serialVersionUID = 1L;

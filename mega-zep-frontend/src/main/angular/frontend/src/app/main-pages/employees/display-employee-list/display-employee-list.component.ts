@@ -21,6 +21,8 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
 
   employees: MitarbeiterResponseType;
 
+  selectedDate: string = null;
+
   private currentUserSubscription: Subscription;
   private getEmployeeSubscription: Subscription;
   private selectedEmployeesSubscription: Subscription;
@@ -30,21 +32,18 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
     private displayMitarbeiterListeService: DisplayEmployeeListService,
     private authenticationService: AuthenticationService
   ) {
+    this.selectedDate = null;
   }
 
   ngOnInit() {
     this.currentUserSubscription = this.authenticationService.currentUser.subscribe((user: SocialUser) => {
       this.user = user;
-      if (this.user) {
-        this.getEmployeeSubscription = this.displayMitarbeiterListeService.getEmployees(this.user)
-          .subscribe((mitarbeiter: MitarbeiterResponseType) => {
-            this.employees = mitarbeiter;
-          });
-      }
+      this.getAllEmployees();
     });
 
     this.selectedEmployeesSubscription = this.displayMitarbeiterListeService.selectedEmployees
       .subscribe((selectedEmployees: Array<MitarbeiterType>) => {
+        console.log(selectedEmployees);
         this.selectedEmployees = selectedEmployees;
       });
 
@@ -62,11 +61,27 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
   }
 
   releaseEmployees() {
-    console.log(this.selectedEmployees);
-    this.updateEmployeesSubscription = this.displayMitarbeiterListeService.updateEmployee(this.selectedEmployees)
-      .subscribe((res) => {
-        console.log(res);
-      });
+    if (this.selectedDate) {
+      this.updateEmployeesSubscription = this.displayMitarbeiterListeService.updateEmployees(this.selectedEmployees, this.selectedDate)
+        .subscribe((res) => {
+          // refresh employees
+          this.employees = null;
+          this.getAllEmployees();
+        });
+    }
+  }
+
+  getAllEmployees() {
+    if (this.user) {
+      this.getEmployeeSubscription = this.displayMitarbeiterListeService.getEmployees(this.user)
+        .subscribe((mitarbeiter: MitarbeiterResponseType) => {
+          this.employees = mitarbeiter;
+        });
+    }
+  }
+
+  dateChanged(date: string) {
+    this.selectedDate = date;
   }
 
 }

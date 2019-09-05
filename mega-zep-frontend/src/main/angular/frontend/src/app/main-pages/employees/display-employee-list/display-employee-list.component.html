@@ -2,8 +2,10 @@
   <mat-toolbar>
     <mat-toolbar-row>
       <h1 class="title">Geparden</h1>
+      <app-datepicker *ngIf="!isGridlistActive && selectedEmployees?.length > 0" [date]="selectedDate"
+                      (dateEmitter)="dateChanged($event)"></app-datepicker>
       <button *ngIf="!isGridlistActive" mat-button
-              [disabled]="selectedEmployees?.length == 0"
+              [disabled]="selectedEmployees?.length == 0 || selectedDate == null"
               (click)="releaseEmployees()">
         Freigeben
       </button>

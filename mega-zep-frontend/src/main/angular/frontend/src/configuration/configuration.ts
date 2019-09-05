@@ -30,5 +30,7 @@ export const configuration = {
       'Content-Type': 'application/json',
     }),
     withCredentials: true
-  }
+  },
+
+  dateFormat: 'yyyy-MM-dd'
 };
