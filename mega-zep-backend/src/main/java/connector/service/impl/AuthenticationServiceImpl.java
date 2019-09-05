@@ -33,10 +33,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         // get ZEP employee
-        ReadMitarbeiterRequestType empl = new ReadMitarbeiterRequestType();
+        final ReadMitarbeiterRequestType empl = new ReadMitarbeiterRequestType();
         empl.setRequestHeader(requestHeaderType);
 
-        ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(empl);
+        final ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(empl);
         MitarbeiterType mt = rmrt.getMitarbeiterListe().getMitarbeiter().stream()
                 .filter(emp -> user.getEmail().equals(emp.getEmail()))
                 .findFirst()
