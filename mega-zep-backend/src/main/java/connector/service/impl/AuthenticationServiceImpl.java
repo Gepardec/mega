@@ -64,7 +64,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
-        LOG.info("Authentication of user with name " + user.getName() + " successful");
+        logger.info("Authentication of user with name " + user.getName() + " successful");
         return Response.ok(mt).build();
       
         //logger.info("Authentication of user with name " + user.getName() + " successful");

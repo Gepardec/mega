@@ -53,13 +53,7 @@ public class AuthorizationInterceptor {
     }
 
     private HttpServletResponse getHttpServletResponse(InvocationContext ic){
-        for(Object parameter : ic.getParameters()){
-            if(parameter instanceof HttpServletResponse){
-                return (HttpServletResponse) parameter;
-            }
-        }
-
-        return null;
+        return Arrays.stream(ic.getParameters()).filter(p -> p instanceof HttpServletResponse).map(obj -> (HttpServletResponse) obj).findFirst().orElse(null);
     }
 
     private void logInsufficientPermission(InvocationContext invocationContext){
