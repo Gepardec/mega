@@ -29,7 +29,6 @@ export class PaginationComponent implements OnInit {
   }
 
   updateList(event): void {
-    console.log(event);
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
     this.dataSource.data = this.employees.mitarbeiterListe.mitarbeiter

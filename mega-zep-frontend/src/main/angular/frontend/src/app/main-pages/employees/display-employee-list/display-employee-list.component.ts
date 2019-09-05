@@ -5,6 +5,7 @@ import {SocialUser} from "angularx-social-login";
 import {AuthenticationService} from "../../../signin/authentication.service";
 import {MitarbeiterType} from "../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
 import {Subscription} from "rxjs";
+import {SelectionChange} from "@angular/cdk/collections";
 
 @Component({
   selector: 'app-display-employee-list',
@@ -32,7 +33,7 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
     private displayMitarbeiterListeService: DisplayEmployeeListService,
     private authenticationService: AuthenticationService
   ) {
-    this.selectedDate = null;
+
   }
 
   ngOnInit() {
@@ -41,9 +42,10 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
       this.getAllEmployees();
     });
 
+    this.selectedDate = null;
+
     this.selectedEmployeesSubscription = this.displayMitarbeiterListeService.selectedEmployees
       .subscribe((selectedEmployees: Array<MitarbeiterType>) => {
-        console.log(selectedEmployees);
         this.selectedEmployees = selectedEmployees;
       });
 
@@ -76,6 +78,9 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
       this.getEmployeeSubscription = this.displayMitarbeiterListeService.getEmployees(this.user)
         .subscribe((mitarbeiter: MitarbeiterResponseType) => {
           this.employees = mitarbeiter;
+          this.selectedEmployees = new Array<MitarbeiterType>();
+          this.displayMitarbeiterListeService.setSelectedEmployees(null);
+          this.displayMitarbeiterListeService.setResetSelection(true);
         });
     }
   }

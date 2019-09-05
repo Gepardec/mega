@@ -33,7 +33,6 @@ export class GridlistComponent implements OnInit {
     employees.push(employee);
     this.displayEmployeeListService.updateEmployees(employees, null)
       .subscribe((res) => {
-        console.log(res);
       });
   }
 

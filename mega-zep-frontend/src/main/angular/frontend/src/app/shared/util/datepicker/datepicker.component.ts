@@ -15,7 +15,7 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
 
   @ViewChild('picker', {static: false}) datePicker: MatDatepicker<Date>;
   @Output("dateEmitter") dateEmitterEvent: EventEmitter<string> = new EventEmitter<string>();
-  @Input("date") selectedDate: string;
+  selectedDate: string;
 
   constructor() {
   }
@@ -28,7 +28,6 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
     this.datePicker._datepickerInput._valueChange
       .subscribe((value: Date) => {
         let date: string = formatDate(value, this.format, 'en-US');
-        console.log(date);
         this.emitEvent(date);
       });
   }

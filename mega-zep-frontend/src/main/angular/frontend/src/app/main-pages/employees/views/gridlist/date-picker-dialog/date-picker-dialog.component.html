@@ -1,8 +1,8 @@
 <h2 mat-dialog-title>Zeiten freigeben für {{employee.vorname + " " + employee.nachname}}</h2>
 <mat-dialog-content class="mat-typography">
-  <app-datepicker (dateEmitter)="dateChanged($event)"></app-datepicker>
+  <app-calender (dateEmitter)="dateChanged($event)" [date]="date"></app-calender>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Abbrechen</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Freigeben</button>
+  <button mat-button [mat-dialog-close]="false" cdkFocusInitial (click)="updateEmployee(employee)" [disabled]="!date">Freigeben</button>
 </mat-dialog-actions>

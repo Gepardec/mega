@@ -27,11 +27,15 @@ export class TablelistComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-   this.selectionChangedSubscription = this.selection.changed.subscribe(
+    this.selectionChangedSubscription = this.selection.changed.subscribe(
       (selectedEmployees: SelectionChange<MitarbeiterType>) => {
         this.displayMitarbeiterService.setSelectedEmployees(selectedEmployees);
       }
     );
+
+    this.displayMitarbeiterService.resetSelection.subscribe((resetSelection: boolean) => {
+      this.selection.clear();
+    });
   }
 
   ngOnDestroy(): void {
