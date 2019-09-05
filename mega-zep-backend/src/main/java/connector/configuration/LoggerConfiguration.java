@@ -9,10 +9,6 @@ import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 
-/**
- * @author Thomas Herzog <herzog.thomas81@gmail.com>
- * @since 4/8/18
- */
 @ApplicationScoped
 public class LoggerConfiguration {
 

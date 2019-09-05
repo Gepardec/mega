@@ -7,15 +7,17 @@ import de.provantis.zep.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 
-@RequestScoped
+@ApplicationScoped
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
+    @Inject
+    private Logger logger;
 
     @Inject
     ZepSoapPortType zepSoapPortType;
@@ -33,10 +35,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         // get ZEP employee
-        ReadMitarbeiterRequestType empl = new ReadMitarbeiterRequestType();
+        final ReadMitarbeiterRequestType empl = new ReadMitarbeiterRequestType();
         empl.setRequestHeader(requestHeaderType);
 
-        ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(empl);
+        final ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(empl);
         MitarbeiterType mt = rmrt.getMitarbeiterListe().getMitarbeiter().stream()
                 .filter(emp -> user.getEmail().equals(emp.getEmail()))
                 .findFirst()
@@ -49,7 +51,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         try {
-            LOG.info("Authentication of user with name " + user.getName());
+            logger.info("Authentication of user with name " + user.getName());
             sessionUser.setAuthorizationCode(user.getAuthorizationCode());
             sessionUser.setEmail(user.getEmail());
             sessionUser.setAuthToken(user.getAuthToken());
@@ -57,13 +59,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             sessionUser.setName(user.getName());
             sessionUser.setRole(mt.getRechte());
         } catch (Exception e){
-            LOG.info("Authentication of user with name " + user.getName() + " failed: " + e);
+            logger.info("Authentication of user with name " + user.getName() + " failed: " + e);
             invalidateSession();
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
         LOG.info("Authentication of user with name " + user.getName() + " successful");
         return Response.ok(mt).build();
+      
+        //logger.info("Authentication of user with name " + user.getName() + " successful");
+        //return Response.ok(user).build();
     }
 
     @Override

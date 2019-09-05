@@ -4,6 +4,7 @@ import connector.rest.api.AuthenticationApi;
 import connector.rest.model.GoogleUser;
 import connector.service.api.AuthenticationService;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
-@RequestScoped
+@ApplicationScoped
 public class AuthenticationImpl implements AuthenticationApi {
 
     @Inject
