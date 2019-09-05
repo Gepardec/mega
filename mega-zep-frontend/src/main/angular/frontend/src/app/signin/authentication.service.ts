@@ -5,7 +5,7 @@ import {Router} from "@angular/router";
 import {configuration} from "../../configuration/configuration";
 import {HttpClient} from "@angular/common/http";
 import {retry} from "rxjs/operators";
-import * as HttpStatus from 'http-status-codes';
+import {MitarbeiterType} from "../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +15,7 @@ export class AuthenticationService implements OnDestroy {
   private readonly URL: string = configuration.BASEURL;
 
   private readonly CURRENT_USER: string = 'currentUser';
+  private readonly CURRENT_EMPLOYEE: string = 'currentEmployee';
   private readonly HOME_PAGE: string = configuration.PAGES.HOME;
   private readonly LOGIN_PAGE: string = configuration.PAGES.LOGIN;
 
@@ -22,6 +23,9 @@ export class AuthenticationService implements OnDestroy {
 
   private currentUserSubject: BehaviorSubject<SocialUser>;
   public currentUser: Observable<SocialUser>;
+
+  private currentEmployeeSubject: BehaviorSubject<MitarbeiterType>;
+  public currentEmployee: Observable<MitarbeiterType>;
 
   private authServiceSubscription: Subscription;
   private zepLoginSubscription: Subscription;
@@ -33,11 +37,15 @@ export class AuthenticationService implements OnDestroy {
     private authService: AuthService,
   ) {
     let user: SocialUser = JSON.parse(localStorage.getItem(this.CURRENT_USER));
+    let employee: MitarbeiterType = JSON.parse(localStorage.getItem(this.CURRENT_EMPLOYEE))
     if (user == null) {
       this.router.navigate([this.LOGIN_PAGE]);
     }
     this.currentUserSubject = new BehaviorSubject<SocialUser>(user);
     this.currentUser = this.currentUserSubject.asObservable();
+
+    this.currentEmployeeSubject = new BehaviorSubject<MitarbeiterType>(employee);
+    this.currentEmployee = this.currentEmployeeSubject.asObservable();
 
     this.authServiceSubscription = this.authService.authState.subscribe((user: SocialUser) => {
       this.isSignedInWithGoogle = user != null;
@@ -61,11 +69,11 @@ export class AuthenticationService implements OnDestroy {
       localStorage.setItem(this.CURRENT_USER, JSON.stringify(user));
       this.currentUserSubject.next(user);
       this.zepLoginSubscription = this.zepLogin(user).subscribe(
-        (response: Response) => {
-          if (response.status === HttpStatus.FORBIDDEN) {
-            this.router.navigate([this.LOGIN_PAGE]);
-            this.logout();
-          }
+        (employee: MitarbeiterType) => {
+          this.currentEmployeeSubject = new BehaviorSubject<MitarbeiterType>(employee);
+          this.currentEmployee = this.currentEmployeeSubject.asObservable();
+          localStorage.setItem(this.CURRENT_EMPLOYEE, JSON.stringify(employee));
+          this.router.navigate([this.HOME_PAGE]);
         }
       );
     }
@@ -78,6 +86,7 @@ export class AuthenticationService implements OnDestroy {
     this.zepLogoutSubscription = this.zepLogout(this.currentUserValue).subscribe(
       (response: Response) => {
         localStorage.removeItem(this.CURRENT_USER);
+        localStorage.removeItem(this.CURRENT_EMPLOYEE);
         this.currentUserSubject.next(null);
         this.signOut();
       }
@@ -91,7 +100,6 @@ export class AuthenticationService implements OnDestroy {
       this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then(
         () => {
           this.isSignedInWithGoogle = true;
-          this.router.navigate([this.HOME_PAGE]);
         });
     }
   }
@@ -107,11 +115,11 @@ export class AuthenticationService implements OnDestroy {
   }
 
 
-  zepLogin(user: SocialUser): Observable<Response> {
-    return this.http.post<Response>(this.URL +
+  zepLogin(user: SocialUser): Observable<MitarbeiterType> {
+    return this.http.post<MitarbeiterType>(this.URL +
       '/user/login/', JSON.stringify(user))
       .pipe(
-        retry(1)
+        retry(1),
       );
   }
 
@@ -121,6 +129,27 @@ export class AuthenticationService implements OnDestroy {
       .pipe(
         retry(1)
       );
+  }
+
+  isEmployeeAdmin(): boolean {
+    console.log(this.currentEmployeeSubject);
+    return this.currentEmployeeSubject.getValue().rechte === configuration.EMPLOYEE_ROLES.ADMINISTRATOR;
+  }
+
+  isEmployeeUser(): boolean {
+    return this.currentEmployeeSubject.getValue().rechte === configuration.EMPLOYEE_ROLES.USER;
+  }
+
+  isEmployeeController(): boolean {
+    return this.currentEmployeeSubject.getValue().rechte === configuration.EMPLOYEE_ROLES.CONTROLLER;
+  }
+
+  isEmployeeUserMitZusatzrechten(): boolean {
+    return this.currentEmployeeSubject.getValue().rechte === configuration.EMPLOYEE_ROLES.USER_MIT_ZUSATZRECHTEN;
+  }
+
+  isEmployeeAdminOrController(): boolean {
+    return this.isEmployeeAdmin() || this.isEmployeeController();
   }
 
 

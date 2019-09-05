@@ -4,7 +4,6 @@ import {
   HttpErrorResponse,
   HttpEvent,
   HttpHandler,
-  HttpHeaders,
   HttpInterceptor,
   HttpRequest,
   HttpResponse
@@ -12,7 +11,6 @@ import {
 
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from "rxjs/operators";
-import {Router} from "@angular/router";
 import {configuration} from "../../../configuration/configuration";
 import {AuthenticationService} from "../../signin/authentication.service";
 
@@ -22,7 +20,7 @@ export class ErrorHandleInterceptor implements HttpInterceptor {
   private readonly httpOptions = configuration.httpOptions;
 
   constructor(
-   private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService
   ) {
   }
 
@@ -38,7 +36,9 @@ export class ErrorHandleInterceptor implements HttpInterceptor {
         return event;
       }),
       catchError((error: HttpErrorResponse) => {
-        this.authenticationService.logout();
+        if (error.status === 403) {
+          this.authenticationService.logout();
+        }
         return throwError(error);
       }));
   }

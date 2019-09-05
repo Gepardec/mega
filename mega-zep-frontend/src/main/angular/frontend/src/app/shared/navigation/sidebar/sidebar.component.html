@@ -11,7 +11,7 @@
       <a mat-list-item [routerLink]="[dashboard]">
         <mat-icon matListIcon (click)="sidenav.toggle()">equalizer</mat-icon>Dashboard
       </a>
-      <a mat-list-item [routerLink]="[employees]">
+      <a *ngIf="isEmployeeAdminOrController()" mat-list-item [routerLink]="[employees]">
         <mat-icon matListIcon (click)="sidenav.toggle()">people</mat-icon>Employees
       </a>
     </mat-nav-list>

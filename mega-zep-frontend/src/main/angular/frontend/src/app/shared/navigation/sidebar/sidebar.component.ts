@@ -4,6 +4,7 @@ import {MatSidenav} from "@angular/material";
 import {MainLayoutService} from "../../main-layout/main-layout/main-layout.service";
 import {configuration} from "../../../../configuration/configuration";
 import {Subscription} from "rxjs";
+import {AuthenticationService} from "../../../signin/authentication.service";
 
 @Component({
   selector: 'app-sidebar',
@@ -25,7 +26,8 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private mainLayoutService: MainLayoutService
+    private mainLayoutService: MainLayoutService,
+    private authenticationService: AuthenticationService
   ) {
   }
 
@@ -45,6 +47,10 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.toggleSidenavSubscription && this.toggleSidenavSubscription.unsubscribe();
+  }
+
+  isEmployeeAdminOrController(): boolean {
+    return this.authenticationService.isEmployeeAdminOrController();
   }
 
   routeTo(location: string): void {
