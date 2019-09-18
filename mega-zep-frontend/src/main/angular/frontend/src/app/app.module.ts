@@ -10,8 +10,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MainLayoutModule} from './shared/main-layout/main-layout/main-layout.module';
 import {NavigationModule} from './shared/navigation/navigation.module';
 import {ErrorHandleInterceptor} from './shared/interceptors/ErrorHandleInterceptor';
-import { DatePickerDialogComponent } from './main-pages/employees/views/gridlist/date-picker-dialog/date-picker-dialog.component';
 import {AngularMaterialModule} from "./material-module";
+import {APP_BASE_HREF} from "@angular/common";
 
 
 const config = new AuthServiceConfig([
@@ -56,6 +56,7 @@ const googleLoginOptions: LoginOpt = {
   ],
   providers: [
     HttpClientModule,
+    {provide: APP_BASE_HREF, useValue: '/'},
     {
       provide: AuthServiceConfig,
       useFactory: provideConfig

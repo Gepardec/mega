@@ -25,7 +25,6 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   private toggleSidenavSubscription: Subscription;
 
   constructor(
-    private router: Router,
     private mainLayoutService: MainLayoutService,
     private authenticationService: AuthenticationService
   ) {
@@ -51,9 +50,5 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isEmployeeAdminOrController(): boolean {
     return this.authenticationService.isEmployeeAdminOrController();
-  }
-
-  routeTo(location: string): void {
-    this.router.navigate([location]);
   }
 }

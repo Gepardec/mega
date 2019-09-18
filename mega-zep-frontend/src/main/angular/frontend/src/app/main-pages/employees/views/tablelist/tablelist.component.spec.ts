@@ -1,25 +1,29 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TablelistComponent } from './tablelist.component';
+import {GridlistComponent} from "../gridlist/gridlist.component";
+import {AngularMaterialModule} from "../../../../material-module";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('TablelistComponent', () => {
-  let component: TablelistComponent;
-  let fixture: ComponentFixture<TablelistComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [AngularMaterialModule, HttpClientTestingModule],
       declarations: [ TablelistComponent ]
     })
     .compileComponents();
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(TablelistComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  function setup() {
+    const fixture: ComponentFixture<TablelistComponent> = TestBed.createComponent(TablelistComponent);
+    const app: TablelistComponent = fixture.debugElement.componentInstance;
+
+    return {fixture, app};
+  }
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const {fixture, app} = setup();
+    expect(app).toBeTruthy();
   });
 });

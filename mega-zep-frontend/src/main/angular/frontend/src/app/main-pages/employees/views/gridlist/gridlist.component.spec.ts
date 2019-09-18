@@ -1,25 +1,27 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { GridlistComponent } from './gridlist.component';
+import {GridlistComponent} from './gridlist.component';
+import {AngularMaterialModule} from "../../../../material-module";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('GridlistComponent', () => {
-  let component: GridlistComponent;
-  let fixture: ComponentFixture<GridlistComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GridlistComponent ]
-    })
-    .compileComponents();
+      imports: [AngularMaterialModule, HttpClientTestingModule],
+      declarations: [GridlistComponent]
+    }).compileComponents();
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(GridlistComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  function setup() {
+    const fixture: ComponentFixture<GridlistComponent> = TestBed.createComponent(GridlistComponent);
+    const app: GridlistComponent = fixture.debugElement.componentInstance;
+
+    return {fixture, app};
+  }
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const {fixture, app} = setup();
+    expect(app).toBeTruthy();
   });
 });

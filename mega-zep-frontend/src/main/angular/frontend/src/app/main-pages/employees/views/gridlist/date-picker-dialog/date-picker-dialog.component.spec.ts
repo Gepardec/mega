@@ -1,25 +1,36 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, inject, TestBed} from '@angular/core/testing';
 
-import { DatePickerDialogComponent } from './date-picker-dialog.component';
+import {DatePickerDialogComponent} from './date-picker-dialog.component';
+import {AngularMaterialModule} from "../../../../../material-module";
+import {EmployeesPagesModule} from "../../../home/home.module";
+import {MAT_DIALOG_DATA} from "@angular/material";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+
 
 describe('DatePickerDialogComponent', () => {
-  let component: DatePickerDialogComponent;
-  let fixture: ComponentFixture<DatePickerDialogComponent>;
-
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DatePickerDialogComponent ]
+      imports: [
+        HttpClientTestingModule,
+        AngularMaterialModule,
+        EmployeesPagesModule],
+      declarations: [],
+      providers: [
+        { provide: MAT_DIALOG_DATA, useValue: {} }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(DatePickerDialogComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  function setup() {
+    const fixture: ComponentFixture<DatePickerDialogComponent> = TestBed.createComponent(DatePickerDialogComponent);
+    const app: DatePickerDialogComponent = fixture.debugElement.componentInstance;
+
+    return {fixture, app};
+  }
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+      const {fixture, app} = setup();
+      expect(app).toBeTruthy();
   });
 });

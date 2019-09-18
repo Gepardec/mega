@@ -1,25 +1,30 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { PaginationComponent } from './pagination.component';
+import {PaginationComponent} from './pagination.component';
+import {AngularMaterialModule} from "../../../material-module";
+import {EmployeesPagesModule} from "../home/home.module";
 
 describe('PaginationComponent', () => {
-  let component: PaginationComponent;
-  let fixture: ComponentFixture<PaginationComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PaginationComponent ]
-    })
-    .compileComponents();
+      imports: [
+        AngularMaterialModule,
+        EmployeesPagesModule
+      ],
+      declarations: []
+    }).compileComponents();
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(PaginationComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  function setup() {
+    const fixture: ComponentFixture<PaginationComponent> = TestBed.createComponent(PaginationComponent);
+    const app: PaginationComponent = fixture.debugElement.componentInstance;
+
+    return {fixture, app};
+  }
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const {fixture, app} = setup();
+    expect(app).toBeTruthy();
   });
 });
