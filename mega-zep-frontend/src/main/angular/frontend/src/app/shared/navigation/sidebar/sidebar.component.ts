@@ -36,13 +36,6 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.toggleSidenavSubscription = this.mainLayoutService.toggleSidenav.subscribe(
-      (newState: boolean) => {
-        setTimeout(() => {
-          this.sidenav.toggle();
-        }, 100);
-      }
-    );
   }
 
   ngOnDestroy(): void {

@@ -10,7 +10,7 @@
     <!-- funktion Column -->
     <ng-container matColumnDef="abteilung">
       <mat-header-cell *matHeaderCellDef> Funktion</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.abteilung || "Mitarbeiter"}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{functions[element.preisgruppe]}}</mat-cell>
     </ng-container>
 
     <!-- freigabedatum Column -->
