@@ -8,9 +8,12 @@ import {AuthenticationService} from "../../../signin/authentication.service";
 import {MockAuthenticationService} from "../../../signin/MockAuthenticationService";
 import {AuthService} from "angularx-social-login";
 import {MockAuthService} from "../../../signin/MockAuthService";
-import {NgZone} from "@angular/core";
+import {ActivatedRouteSnapshot, UrlSegment} from "@angular/router";
+import {configuration} from "../../../../configuration/configuration";
+import {MitarbeiterType} from "../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
 
 describe('RolesGuard', () => {
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -25,7 +28,46 @@ describe('RolesGuard', () => {
     });
   });
 
-  it('should ...', inject([RolesGuard], (guard: RolesGuard) => {
+  function setupRoute(): ActivatedRouteSnapshot {
+    let route = new ActivatedRouteSnapshot();
+    route.url = new Array<UrlSegment>();
+    route.url.push(new UrlSegment("/employees", null));
+    route.data = {roles: [configuration.EMPLOYEE_ROLES.ADMINISTRATOR, configuration.EMPLOYEE_ROLES.CONTROLLER]};
+    return route;
+  }
+
+  function setupUser(rights: number): MitarbeiterType {
+    let employee: MitarbeiterType = new MitarbeiterType();
+    employee.vorname = "Max";
+    employee.nachname = "Mustermann";
+    employee.freigabedatum = "2019-01-01";
+    employee.rechte = rights;
+
+    return employee;
+  }
+
+  it('should create', inject([RolesGuard], (guard: RolesGuard) => {
     expect(guard).toBeTruthy();
   }));
+
+  it('should not be activated by user equals null', inject([RolesGuard], (guard: RolesGuard) => {
+    let route = setupRoute();
+    expect(guard.canActivate(route, null)).toEqual(false);
+  }));
+
+  it('should not be activated by user with no rights', inject([RolesGuard], (guard: RolesGuard) => {
+    let route = setupRoute();
+    let employee = setupUser(configuration.EMPLOYEE_ROLES.USER);
+    guard.employee = employee;
+    expect(guard.canActivate(route, null)).toEqual(false);
+  }));
+
+  it('should be activated by user with rights', inject([RolesGuard], (guard: RolesGuard) => {
+    let route = setupRoute();
+    let employee = setupUser(configuration.EMPLOYEE_ROLES.ADMINISTRATOR);
+    guard.employee = employee;
+    expect(guard.canActivate(route, null)).toEqual(true);
+  }));
 });
+
+

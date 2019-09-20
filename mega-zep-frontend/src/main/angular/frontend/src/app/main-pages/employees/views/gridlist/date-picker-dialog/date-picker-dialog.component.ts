@@ -44,7 +44,7 @@ export class DatePickerDialogComponent implements OnInit {
   }
 
   openSnackBar(message: string) {
-    this._snackBar.open(message, null, {
+    return this._snackBar.open(message, null, {
       duration: 3000,
     });
   }

@@ -8,7 +8,7 @@ describe('DisplayEmployeeListService', () => {
     imports: [HttpClientTestingModule]
   }));
 
-  it('should be created', () => {
+  it('should create', () => {
     const service: DisplayEmployeeListService = TestBed.get(DisplayEmployeeListService);
     expect(service).toBeTruthy();
   });

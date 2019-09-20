@@ -8,9 +8,9 @@ describe('CalenderComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [AngularMaterialModule],
-      declarations: [ CalenderComponent ]
+      declarations: [CalenderComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   function setup() {
@@ -23,5 +23,12 @@ describe('CalenderComponent', () => {
   it('should create', () => {
     const {fixture, app} = setup();
     expect(app).toBeTruthy();
+  });
+
+  it('should format the date', () => {
+    const {fixture, app} = setup();
+
+    app.onSelect("01.01.2019");
+    expect(app.selectedDate).toEqual("2019-01-01");
   });
 });

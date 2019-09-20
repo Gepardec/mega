@@ -1,7 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {SidebarComponent} from './sidebar.component';
-import {NgZone, NO_ERRORS_SCHEMA} from "@angular/core";
+import {NO_ERRORS_SCHEMA} from "@angular/core";
 import {RouterTestingModule} from "@angular/router/testing";
 import {MainLayoutModule} from "../../main-layout/main-layout/main-layout.module";
 import {AuthenticationService} from "../../../signin/authentication.service";
@@ -11,7 +11,6 @@ import {MockAuthService} from "../../../signin/MockAuthService";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {routes} from "../../../app-routing.module";
 import {AppModule} from "../../../app.module";
-import {Mock} from "protractor/built/driverProviders";
 import {MockAuthenticationService} from "../../../signin/MockAuthenticationService";
 
 describe('SidebarComponent', () => {
@@ -50,5 +49,9 @@ describe('SidebarComponent', () => {
     const {fixture, app} = setup();
 
     expect(app.sidenav.toggle).toBeDefined();
+    let state = app.sidenav.opened;
+    app.sidenav.toggle();
+    fixture.detectChanges();
+    expect(app.sidenav.opened).not.toEqual(state);
   });
 });

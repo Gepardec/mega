@@ -37,8 +37,8 @@ describe('HomeComponent', () => {
   }));
 
   function setup() {
-    const fixture: ComponentFixture<UserActionsComponent> = TestBed.createComponent(UserActionsComponent);
-    const app: UserActionsComponent = fixture.debugElement.componentInstance;
+    const fixture: ComponentFixture<HomeComponent> = TestBed.createComponent(HomeComponent);
+    const app: HomeComponent = fixture.debugElement.componentInstance;
 
     return {fixture, app};
   }

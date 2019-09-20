@@ -13,8 +13,8 @@ describe('HomeComponent', () => {
   }));
 
   function setup() {
-    const fixture: ComponentFixture<DisplayEmployeeListComponent> = TestBed.createComponent(DisplayEmployeeListComponent);
-    const app: DisplayEmployeeListComponent = fixture.debugElement.componentInstance;
+    const fixture: ComponentFixture<HomeComponent> = TestBed.createComponent(HomeComponent);
+    const app: HomeComponent = fixture.debugElement.componentInstance;
 
     return {fixture, app};
   }

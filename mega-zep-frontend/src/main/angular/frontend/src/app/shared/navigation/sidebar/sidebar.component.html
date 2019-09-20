@@ -6,13 +6,13 @@
       </a>
 
       <a mat-list-item [routerLink]="[home]">
-        <mat-icon matListIcon (click)="sidenav.toggle()">home</mat-icon>Home
+        <mat-icon class="sidenav" matListIcon (click)="sidenav.toggle()">home</mat-icon>Home
       </a>
       <a mat-list-item [routerLink]="[dashboard]">
-        <mat-icon matListIcon (click)="sidenav.toggle()">equalizer</mat-icon>Dashboard
+        <mat-icon class="sidenav" matListIcon (click)="sidenav.toggle()">equalizer</mat-icon>Dashboard
       </a>
       <a *ngIf="isEmployeeAdminOrController()" mat-list-item [routerLink]="[employees]">
-        <mat-icon matListIcon (click)="sidenav.toggle()">people</mat-icon>Employees
+        <mat-icon class="sidenav" matListIcon (click)="sidenav.toggle()">people</mat-icon>Employees
       </a>
     </mat-nav-list>
   </mat-sidenav>
