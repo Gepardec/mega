@@ -10,5 +10,5 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Authorization {
     @Nonbinding
-    public int[] allowedRoles() default {};
+    int[] allowedRoles() default {};
 }
