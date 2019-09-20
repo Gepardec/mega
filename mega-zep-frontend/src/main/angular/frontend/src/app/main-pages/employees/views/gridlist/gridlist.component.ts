@@ -3,7 +3,7 @@ import {MitarbeiterResponseType} from "../../../../models/Mitarbeiter/Mitarbeite
 import {MitarbeiterType} from "../../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
 import {configuration} from "../../../../../configuration/configuration";
 import {DisplayEmployeeListService} from "../../display-employee-list/display-employee-list.service";
-import {MatDialog, MatDialogConfig} from "@angular/material";
+import {MatDialog, MatDialogConfig, MatDialogRef} from "@angular/material";
 import {DatePickerDialogComponent} from "./date-picker-dialog/date-picker-dialog.component";
 
 @Component({
@@ -28,23 +28,15 @@ export class GridlistComponent implements OnInit {
   ngOnInit() {
   }
 
-  releaseEmployee(employee: MitarbeiterType): void {
-    let employees: Array<MitarbeiterType> = [];
-    employees.push(employee);
-    this.displayEmployeeListService.updateEmployees(employees, null)
-      .subscribe((res) => {
-      });
-  }
-
-  openDialog(employee: MitarbeiterType): void {
+  openDialog(employee: MitarbeiterType): MatDialogRef<DatePickerDialogComponent, MatDialogConfig> {
     let config: MatDialogConfig = new MatDialogConfig();
     config.data = employee;
     const dialogRef = this.dialog.open(DatePickerDialogComponent, config);
 
-
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog closed ${result}`);
     });
+    return dialogRef;
   }
 
 

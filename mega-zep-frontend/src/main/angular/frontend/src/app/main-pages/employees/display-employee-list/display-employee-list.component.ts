@@ -16,7 +16,7 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
 
   selectedEmployees: Array<MitarbeiterType> = new Array<MitarbeiterType>();
 
-  protected isGridlistActive: boolean = true;
+  isGridlistActive: boolean = true;
 
   user: SocialUser;
 

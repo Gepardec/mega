@@ -19,7 +19,6 @@ export class PaginationComponent implements OnInit {
   pageSize = 10;
   pageSizeOptions = [5, 10, 20, 50, 100];
 
-
   constructor() {
   }
 
@@ -34,6 +33,4 @@ export class PaginationComponent implements OnInit {
     this.dataSource.data = this.employees.mitarbeiterListe.mitarbeiter
       .slice(this.pageIndex * this.pageSize, (this.pageIndex + 1) * this.pageSize);
   }
-
-
 }
