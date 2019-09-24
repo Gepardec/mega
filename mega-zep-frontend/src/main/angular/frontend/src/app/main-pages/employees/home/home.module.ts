@@ -5,21 +5,15 @@ import {DisplayEmployeeListComponent} from "../display-employee-list/display-emp
 import {DisplayEmployeeListService} from "../display-employee-list/display-employee-list.service";
 import {homeRouting} from "./home.routing";
 import {AngularMaterialModule} from "../../../material-module";
-import {PaginationComponent} from "../pagination/pagination.component";
-import {GridlistComponent} from "../views/gridlist/gridlist.component";
 import {TablelistComponent} from "../views/tablelist/tablelist.component";
 import {UtilModule} from "../../../shared/util/util.module";
-import {DatePickerDialogComponent} from "../views/gridlist/date-picker-dialog/date-picker-dialog.component";
 
 
 @NgModule({
   declarations: [
     HomeComponent,
     DisplayEmployeeListComponent,
-    PaginationComponent,
-    GridlistComponent,
-    TablelistComponent,
-    DatePickerDialogComponent
+    TablelistComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +22,6 @@ import {DatePickerDialogComponent} from "../views/gridlist/date-picker-dialog/da
     UtilModule
   ],
   entryComponents: [
-    DatePickerDialogComponent
   ],
   providers: [
     DisplayEmployeeListService

@@ -16,8 +16,9 @@ export class TablelistComponent implements OnInit, OnDestroy {
   readonly functions = configuration.EMPLOYEE_FUNCTIONS;
 
   displayedColumns = ['nachname', 'abteilung', 'freigabedatum', 'auswaehlen'];
-  @Input('dataSource') dataSource: MatTableDataSource<MitarbeiterType>;
+  dataSource: MatTableDataSource<MitarbeiterType> = new MatTableDataSource<MitarbeiterType>();
   selection = new SelectionModel<MitarbeiterType>(true, null);
+  @Input('employees') employees;
 
   private selectionChangedSubscription: Subscription;
 
@@ -27,6 +28,7 @@ export class TablelistComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.dataSource.data = this.employees.mitarbeiterListe.mitarbeiter;
     this.selectionChangedSubscription = this.selection.changed.subscribe(
       (selectedEmployees: SelectionChange<MitarbeiterType>) => {
         this.displayMitarbeiterService.setSelectedEmployees(selectedEmployees);
@@ -61,4 +63,7 @@ export class TablelistComponent implements OnInit, OnDestroy {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 }

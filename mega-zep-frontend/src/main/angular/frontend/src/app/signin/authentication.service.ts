@@ -132,7 +132,6 @@ export class AuthenticationService implements OnDestroy {
   }
 
   isEmployeeAdmin(): boolean {
-    console.log(this.currentEmployeeSubject);
     return this.currentEmployeeSubject.getValue().rechte === configuration.EMPLOYEE_ROLES.ADMINISTRATOR;
   }
 
