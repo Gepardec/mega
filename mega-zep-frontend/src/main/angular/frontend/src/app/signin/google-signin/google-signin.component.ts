@@ -31,6 +31,8 @@ export class GoogleSigninComponent implements OnInit, OnDestroy {
       // route to home if user is logged in and wants to access login page
       if (this.loggedIn) {
         this.router.navigate([this.HOME]);
+      } else {
+        this.signinWithGoogle();
       }
     });
   }
