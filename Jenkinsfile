@@ -1,5 +1,10 @@
 pipeline {
   agent any
+   
+  options {
+    disableConcurrentBuilds()
+  }
+
   stages {
     stage("Build") {
       steps {
@@ -19,8 +24,8 @@ pipeline {
               git url: "${env.GIT_URL}", branch: "${env.GIT_BRANCH}", credentialsId: 'github-login'
               container('mega-maven-container') {
                   sh 'mvn -B -s jenkins-settings.xml clean install'
-                  stash name: "mega-zep-frontend", include: "mega-zep-frontend-*.jar"
-                  stash name: "mega-zep-backend", include: "mega-zep-backend-*.jar"
+                  stash name: "mega-zep-frontend", includes: "mega-zep-frontend-*.jar"
+                  stash name: "mega-zep-backend", includes: "mega-zep-backend-*.jar"
               }
             }
           }
