@@ -16,16 +16,25 @@ pipeline {
           ]) {
 
             node('mega-maven-pod') {
-              stage('Build a Maven project') {
-                git url: 'https://github.com/cchet-gepardec/mega.git', branch: "${env.GIT_BRANCH}", credentialsId: 'github-login'
-                container('mega-maven-container') {
-                    sh 'mvn -B -s jenkins-settings.xml clean install'
-                }
+              git url: "${env.GIT_URL}", branch: "${env.GIT_BRANCH}", credentialsId: 'github-login'
+              container('mega-maven-container') {
+                  sh 'mvn -B -s jenkins-settings.xml clean install'
               }
             }
           }
         }
       }
     }
+
+    /**stage('Deploy') {
+      steps{
+        openshift.withCluster() {
+          openshift.withProject("mega-dev") {
+              openshift.selector("bc", "tasks").startBuild("--from-file=./target/openshift-tasks.war", "--wait=true")
+              openshift.tag("tasks:latest", "tasks:${devTag}")
+          }
+        }
+      }
+    }*/
   }
 }
