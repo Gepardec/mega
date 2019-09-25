@@ -2,6 +2,11 @@ kind: "Template"
 apiVersion: "v1"
 metadata:
   name: "jenkins-custom"
+  annotations:
+    openshift.io/display-name: "Jenkins slaves"
+    description: "Jenkins slaves"
+    iconClass: "icon-jenkins"
+    tags: "jenkins"
 
 parameters:
   - name: "GIT_URL"

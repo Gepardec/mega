@@ -79,4 +79,3 @@ objects:
           from:
             kind: "DockerImage"
             name: "docker.io/openshift/jenkins-slave-maven-centos7:3.10"
-"
