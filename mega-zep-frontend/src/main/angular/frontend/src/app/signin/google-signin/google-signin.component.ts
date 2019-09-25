@@ -12,7 +12,7 @@ import {Subscription} from 'rxjs';
 })
 export class GoogleSigninComponent implements OnInit, OnDestroy {
 
-  private readonly HOME: string = configuration.PAGES.HOME;
+  private readonly EMPLOYEES: string = configuration.PAGES.EMPLOYEES;
 
   private loggedIn = false;
 
@@ -28,9 +28,9 @@ export class GoogleSigninComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.authenticationServiceSubscription = this.authenticationService.currentUser.subscribe((user: SocialUser) => {
       this.loggedIn = user != null;
-      // route to home if user is logged in and wants to access login page
+      // route to employees if user is logged in and wants to access login page
       if (this.loggedIn) {
-        this.router.navigate([this.HOME]);
+        this.router.navigate([this.EMPLOYEES]);
       } else {
         this.signinWithGoogle();
       }
