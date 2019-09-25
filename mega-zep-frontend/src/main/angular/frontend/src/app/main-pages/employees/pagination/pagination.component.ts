@@ -1,5 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {MitarbeiterResponseType} from "../../../models/Mitarbeiter/MitarbeiterResponseType";
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {MatTableDataSource} from "@angular/material";
 import {MitarbeiterType} from "../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
 
@@ -8,31 +7,47 @@ import {MitarbeiterType} from "../../../models/Mitarbeiter/Mitarbeiter/Mitarbeit
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss']
 })
-export class PaginationComponent implements OnInit {
+export class PaginationComponent implements OnInit, OnChanges {
 
-  @Input('isGridlistActive') isGridlistActive: boolean = true;
+  @Input('isGridlistActive') isGridlistActive: boolean;
 
-  @Input('employees') employees: MitarbeiterResponseType;
+  @Input('employees') employees: Array<MitarbeiterType>;
   public dataSource = new MatTableDataSource<MitarbeiterType>();
 
   pageIndex = 0;
   pageSize = 10;
   pageSizeOptions = [5, 10, 20, 50, 100];
 
-
   constructor() {
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    this.updateDatasource();
+  }
+
   ngOnInit() {
-    this.dataSource.data = this.employees.mitarbeiterListe.mitarbeiter
-      .slice(this.pageIndex * this.pageSize, (this.pageIndex + 1) * this.pageSize);
+    this.updateDatasource();
   }
 
   updateList(event): void {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.dataSource.data = this.employees.mitarbeiterListe.mitarbeiter
-      .slice(this.pageIndex * this.pageSize, (this.pageIndex + 1) * this.pageSize);
+    if (this.isGridlistActive) {
+      this.pageIndex = event.pageIndex;
+      this.pageSize = event.pageSize;
+      this.dataSource.data = this.employees
+        .slice(this.pageIndex * this.pageSize, (this.pageIndex + 1) * this.pageSize);
+    } else {
+      this.dataSource.data = this.employees;
+    }
+
+  }
+
+  updateDatasource() {
+    if (this.isGridlistActive) {
+      this.dataSource.data = this.employees
+        .slice(this.pageIndex * this.pageSize, (this.pageIndex + 1) * this.pageSize);
+    } else {
+      this.dataSource.data = this.employees;
+    }
   }
 
 

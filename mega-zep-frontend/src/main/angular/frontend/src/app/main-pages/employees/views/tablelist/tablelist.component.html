@@ -1,9 +1,5 @@
-<mat-form-field>
-  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-</mat-form-field>
-
 <div class="example-container mat-elevation-z8">
-  <mat-table #table [dataSource]="dataSource">
+  <mat-table #table class="tablelist" scr [dataSource]="dataSource">
 
     <!-- name Column -->
     <ng-container matColumnDef="nachname">
@@ -20,9 +16,10 @@
     <!-- freigabedatum Column -->
     <ng-container matColumnDef="freigabedatum">
       <mat-header-cell *matHeaderCellDef>Freigegeben bis</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.freigabedatum}} </mat-cell>
+      <mat-cell *matCellDef="let element">
+        <p [ngClass]="stringToDate(element.freigabedatum) > date ? 'releaseWarn' : 'releaseSuccess'">{{element.freigabedatum}}</p>
+      </mat-cell>
     </ng-container>
-
 
 
     <!-- Checkbox Column -->
@@ -31,7 +28,7 @@
         <mat-checkbox (change)="$event ? masterToggle() : null"
                       [checked]="selection.hasValue() && isAllSelected()"
                       [indeterminate]="selection.hasValue() && !isAllSelected()"
-                      [aria-label]="checkboxLabel()">auswählen
+                      [aria-label]="checkboxLabel()">
         </mat-checkbox>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
@@ -43,7 +40,7 @@
       </mat-cell>
     </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"
              [ngClass]="{ 'selected': selection.isSelected(row)}"
     ></mat-row>

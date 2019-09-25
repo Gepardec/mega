@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MitarbeiterResponseType} from "../../../../models/Mitarbeiter/MitarbeiterResponseType";
 import {MitarbeiterType} from "../../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
 import {configuration} from "../../../../../configuration/configuration";
 import {DisplayEmployeeListService} from "../../display-employee-list/display-employee-list.service";
@@ -13,13 +12,13 @@ import {DatePickerDialogComponent} from "./date-picker-dialog/date-picker-dialog
 })
 export class GridlistComponent implements OnInit {
 
+  readonly date = new Date();
   readonly functions = configuration.EMPLOYEE_FUNCTIONS;
 
-  @Input('employees') employees: MitarbeiterResponseType;
+  @Input('employees') employees: Array<MitarbeiterType>;
   @Input('pageSize') pageSize: number;
   @Input('pageIndex') pageIndex: number;
 
-  filteredEmployees: Array<MitarbeiterType>;
 
   constructor(
     private displayEmployeeListService: DisplayEmployeeListService,
@@ -28,17 +27,6 @@ export class GridlistComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.employees.mitarbeiterListe && this.employees.mitarbeiterListe.mitarbeiter) {
-      this.filteredEmployees = this.employees.mitarbeiterListe.mitarbeiter;
-    }
-  }
-
-  releaseEmployee(employee: MitarbeiterType): void {
-    let employees: Array<MitarbeiterType> = [];
-    employees.push(employee);
-    this.displayEmployeeListService.updateEmployees(employees, null)
-      .subscribe((res) => {
-      });
   }
 
   openDialog(employee: MitarbeiterType): void {
@@ -52,10 +40,8 @@ export class GridlistComponent implements OnInit {
     });
   }
 
-  applyFilter(filterValue: string) {
-    this.filteredEmployees = this.employees.mitarbeiterListe.mitarbeiter
-      .filter(empl => empl.vorname.toLowerCase().includes(filterValue.toLowerCase())
-        || empl.nachname.toLowerCase().includes(filterValue.toLowerCase()));
+  stringToDate(date: string): Date {
+    return new Date(date);
   }
 
 
