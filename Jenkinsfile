@@ -24,8 +24,7 @@ pipeline {
               git url: "${env.GIT_URL}", branch: "${env.GIT_BRANCH}", credentialsId: 'github-login'
               container('mega-maven-container') {
                   sh 'mvn -B -s jenkins-settings.xml clean install'
-                  stash name: "mega-zep-frontend", includes: "**/mega-zep-frontend-*.jar"
-                  stash name: "mega-zep-backend", includes: "**/mega-zep-backend-*.jar"
+                  stash name: "mega-zep", includes: "**/mega-zep-*.jar"
               }
             }
           }
@@ -39,7 +38,6 @@ pipeline {
           openshift.withCluster() {
             openshift.withProject("mega-dev") {
               unstash: "mega-zep-frontend"
-              unstash: "mega-zep-backend"
               sh 'ls -lrta'
               //openshift.selector("bc", "tasks").startBuild("--from-file=./target/openshift-tasks.war", "--wait=true")
               //openshift.tag("tasks:latest", "tasks:${devTag}")
