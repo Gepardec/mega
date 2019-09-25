@@ -29,14 +29,16 @@ pipeline {
     }
 
     stage('Deploy') {
-      steps{
-        openshift.withCluster() {
-          openshift.withProject("mega-dev") {
-            unstash: "mega-zep-frontend"
-            unstash: "mega-zep-backend"
-            sh 'ls -lrta'
-            //openshift.selector("bc", "tasks").startBuild("--from-file=./target/openshift-tasks.war", "--wait=true")
-            //openshift.tag("tasks:latest", "tasks:${devTag}")
+      steps {
+        script {
+          openshift.withCluster() {
+            openshift.withProject("mega-dev") {
+              unstash: "mega-zep-frontend"
+              unstash: "mega-zep-backend"
+              sh 'ls -lrta'
+              //openshift.selector("bc", "tasks").startBuild("--from-file=./target/openshift-tasks.war", "--wait=true")
+              //openshift.tag("tasks:latest", "tasks:${devTag}")
+            }
           }
         }
       }
