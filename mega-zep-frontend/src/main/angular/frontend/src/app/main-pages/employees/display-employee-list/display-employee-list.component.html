@@ -1,18 +1,23 @@
 <div class="container">
   <mat-toolbar>
     <mat-toolbar-row>
-      <h1 class="title">Geparden</h1><mat-spinner [diameter]="20" *ngIf=" isRefreshingTimes" style="margin-right: 10px;"></mat-spinner>
-      <app-datepicker *ngIf="employees && selectedEmployees?.length > 0"
+      <h1 class="title">Geparden</h1>
+      <app-datepicker *ngIf="!isGridlistActive && employees && selectedEmployees?.length > 0"
                       (dateEmitter)="dateChanged($event)"></app-datepicker>
-      <button mat-button
+      <button *ngIf="!isGridlistActive" mat-button
               [disabled]="selectedEmployees?.length == 0 || selectedDate == null"
               (click)="releaseEmployees()">
         Freigeben
+      </button>
+      <button mat-icon-button
+              (click)="toggleView()">
+        <mat-icon class="swap-view">view_list</mat-icon>
       </button>
     </mat-toolbar-row>
 
 
   </mat-toolbar>
 
-  <app-tablelist *ngIf="employees" [employees]="employees"></app-tablelist>
+  <app-pagination *ngIf="employees" [employees]="employees"
+                  [isGridlistActive]="isGridlistActive"></app-pagination>
 </div>

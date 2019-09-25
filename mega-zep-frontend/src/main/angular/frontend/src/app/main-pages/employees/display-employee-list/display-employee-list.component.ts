@@ -5,6 +5,7 @@ import {SocialUser} from "angularx-social-login";
 import {AuthenticationService} from "../../../signin/authentication.service";
 import {MitarbeiterType} from "../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
 import {Subscription} from "rxjs";
+import {SelectionChange} from "@angular/cdk/collections";
 
 @Component({
   selector: 'app-display-employee-list',
@@ -14,10 +15,14 @@ import {Subscription} from "rxjs";
 export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
 
   selectedEmployees: Array<MitarbeiterType> = new Array<MitarbeiterType>();
+
+  protected isGridlistActive: boolean = true;
+
   user: SocialUser;
+
   employees: MitarbeiterResponseType;
+
   selectedDate: string = null;
-  isRefreshingTimes: boolean = false;
 
   private currentUserSubscription: Subscription;
   private getEmployeeSubscription: Subscription;
@@ -53,14 +58,16 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
     this.updateEmployeesSubscription && this.updateEmployeesSubscription.unsubscribe();
   }
 
+  toggleView(): void {
+    this.isGridlistActive = !this.isGridlistActive;
+  }
+
   releaseEmployees() {
     if (this.selectedDate) {
-      this.isRefreshingTimes = true;
       this.updateEmployeesSubscription = this.displayMitarbeiterListeService.updateEmployees(this.selectedEmployees, this.selectedDate)
         .subscribe((res) => {
           // refresh employees
           this.employees = null;
-          this.isRefreshingTimes = false;
           this.getAllEmployees();
         });
     }
