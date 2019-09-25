@@ -7,10 +7,6 @@ set -u
 
 mkdir -p ${OUT_DIR}
 
-function _processSwagger {
-    oc process -f swagger-ui.yaml -o yaml --param-file=swagger-ui.properties --ignore-unknown-parameters=true > ${OUT_DIR}/swagger-ui.yaml
-}
-
 function _processJenkins {
     oc process -f jenkins-bc.yaml -o yaml --param-file=jenkins.properties --ignore-unknown-parameters=true > ${OUT_DIR}/jenkins-bc.yaml
     oc process -f jenkins-slaves.yaml -o yaml --param-file=jenkins.properties --ignore-unknown-parameters=true > ${OUT_DIR}/jenkins-slaves.yaml
@@ -45,21 +41,6 @@ function createSecret {
 function deleteSecret {
     oc delete secret/github-ssh
     oc delete secret/github-login
-}
-
-function createSwagger {
-    _processSwagger
-    oc apply -f ${OUT_DIR}/swagger-ui.yaml
-}
-
-function deleteSwagger {
-    _processSwagger
-    oc delete -f ${OUT_DIR}/swagger-ui.yaml
-}
-
-function recreateSwagger {
-    deleteSwagger
-    createSwagger
 }
 
 function createJenkins {
@@ -97,19 +78,16 @@ function recreateSonarqube {
 }
 
 function createAll {
-    createSwagger 
     createJenkins
     createSonarqube
 }
 
 function deleteAll {
-    deleteSwagger 
     deleteJenkins
     deleteSonarqube
 }
 
 function recreateAll {
-    recreateSwagger 
     recreateJenkins
     recreateSonarqube
 }
