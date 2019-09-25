@@ -23,23 +23,22 @@ function recreateSecret {
 }
 
 function createSecret {
-    oc create secret generic github-ssh \
-        --from-file=ssh-privatekey="../github_id_rsa" \
-        --type=kubernetes.io/ssh-auth
     oc create secret generic github-login \
         --from-literal=username="${GITHUB_USERNAME}" \
         --from-literal=password="${GITHUB_PASSWORD}" \
         --type=kubernetes.io/basic-auth
 
-    oc annotate secret github-ssh jenkins.openshift.io/secret.name=github-ssh
+    oc create secret generic zep-soap-token \
+        --from-file=zep.soap.token="../zep-soap.token"
+    
+    oc annotate secret zep-soap-token jenkins.openshift.io/secret.name=zep-soap-token
     oc annotate secret github-login jenkins.openshift.io/secret.name=github-login
 
-    oc label secret github-ssh credential.sync.jenkins.openshift.io=true
+    oc label secret zep-soap-token credential.sync.jenkins.openshift.io=true
     oc label secret github-login credential.sync.jenkins.openshift.io=true
 }
 
 function deleteSecret {
-    oc delete secret/github-ssh
     oc delete secret/github-login
 }
 
