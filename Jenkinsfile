@@ -12,13 +12,13 @@ pipeline {
             envVar(key: 'CONTAINER_CORE_LIMIT', value: '1')
           ],
           volumes: [
-            persistentVolumeClaim(claimName: 'jenkins-mvn-repo-cache', mountPath: '/root/.m2')
+            persistentVolumeClaim(claimName: 'jenkins-mvn-repo-cache', mountPath: '/home/jenkins/.m2/repository')
           ]) {
 
             node('mega-maven-pod') {
               stage('Build a Maven project') {
-                git url: 'https://github.com/cchet-gepardec/mega.git', branch: "${env.GIT_BRANCH}", credentialsId: 'github-login'
                 container('mega-maven-container') {
+                    git url: 'https://github.com/cchet-gepardec/mega.git', branch: "${env.GIT_BRANCH}", credentialsId: 'github-login'
                     sh 'mvn -B -s jenkins-settings.xml clean install'
                 }
               }
