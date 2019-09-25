@@ -49,6 +49,4 @@ export class PaginationComponent implements OnInit, OnChanges {
       this.dataSource.data = this.employees;
     }
   }
-
-
 }

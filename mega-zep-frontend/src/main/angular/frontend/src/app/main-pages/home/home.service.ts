@@ -10,10 +10,8 @@ import {MitarbeiterType} from "../../models/Mitarbeiter/Mitarbeiter/MitarbeiterT
   providedIn: 'root'
 })
 export class HomeService {
-  URL: string = configuration.BASEURL;
 
   constructor(
-    private http: HttpClient,
     private employeeService: EmployeeService
   ) {
   }

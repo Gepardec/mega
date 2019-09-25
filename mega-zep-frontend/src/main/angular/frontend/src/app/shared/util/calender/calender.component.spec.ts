@@ -1,25 +1,34 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CalenderComponent } from './calender.component';
+import {CalenderComponent} from './calender.component';
+import {AngularMaterialModule} from "../../../material-module";
 
 describe('CalenderComponent', () => {
-  let component: CalenderComponent;
-  let fixture: ComponentFixture<CalenderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CalenderComponent ]
+      imports: [AngularMaterialModule],
+      declarations: [CalenderComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(CalenderComponent);
-    component = fixture.componentInstance;
+  function setup() {
+    const fixture: ComponentFixture<CalenderComponent> = TestBed.createComponent(CalenderComponent);
+    const app: CalenderComponent = fixture.debugElement.componentInstance;
     fixture.detectChanges();
-  });
+    return {fixture, app};
+  }
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const {fixture, app} = setup();
+    expect(app).toBeTruthy();
+  });
+
+  it('should format the date', () => {
+    const {fixture, app} = setup();
+
+    app.onSelect("01.01.2019");
+    expect(app.selectedDate).toEqual("2019-01-01");
   });
 });

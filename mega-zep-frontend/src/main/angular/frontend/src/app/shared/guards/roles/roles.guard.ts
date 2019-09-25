@@ -9,7 +9,7 @@ import {MitarbeiterType} from "../../../models/Mitarbeiter/Mitarbeiter/Mitarbeit
 })
 export class RolesGuard implements CanActivate {
 
-  private employee: MitarbeiterType;
+  employee: MitarbeiterType;
 
   constructor(
     private authenticationService: AuthenticationService
