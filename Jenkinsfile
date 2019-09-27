@@ -50,19 +50,21 @@ pipeline {
 }
 
 def buildVersionForBranch(String pomLocation="./") {
-    def branch="${env.GIT_BRANCH}"
-    echo "Branch found: ${branch}, ${env.GIT_BRANCH}"
+    def branch="${env.GIT_BRANCH}".trim().toLowerCase()
     if (branch.equals("develop")) {
+        echo "Develop found"
         pom = readMavenPom file: pomLocation + 'pom.xml'
         return pom.properties['revision'] + "-SNAPSHOT"
     }
     else if (branch.startsWith("feature/")) {
+        echo "Feature found"
         return branch.replace("/", "-").toUpperCase() + "-SNAPSHOT"
     }
     else if (branch.startsWith("release/") || branch.startsWith("hotfix/")) {
+        echo "Release or Hotfix found"
         pom = readMavenPom file: pomLocation + 'pom.xml'
         return pom.properties['revision']
+    } else{
+        echo "Nothing found"
     }
-
-    return "undefined-version"
 }
