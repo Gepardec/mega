@@ -39,7 +39,6 @@ pipeline {
           openshift.withCluster() {
             openshift.withProject("mega-dev") {
               unstash: "mega-zep-frontend"
-              sh 'ls -lrta'
               //openshift.selector("bc", "tasks").startBuild("--from-file=./target/openshift-tasks.war", "--wait=true")
               //openshift.tag("tasks:latest", "tasks:${devTag}")
             }
@@ -52,6 +51,7 @@ pipeline {
 
 def buildVersionForBranch(String pomLocation="./") {
     def branch="${env.GIT_BRANCH}"
+    echo "Branch found: ${branch}, ${env.GIT_BRANCH}"
     if (branch.equals("develop")) {
         pom = readMavenPom file: pomLocation + 'pom.xml'
         return pom.properties['revision'] + "-SNAPSHOT"
