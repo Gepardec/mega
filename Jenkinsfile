@@ -33,6 +33,22 @@ pipeline {
       }
     }
 
+    stage('Analysis') {
+        failFast true
+        parallel {
+            stage('backend') {
+                steps {
+                    echo "Analysis Backend..."
+                }
+            }
+            stage('frontend') {
+                steps {
+                    echo "Analysis Frontend..."
+                }
+            }
+        }
+    }
+
     stage('Deploy') {
       steps {
         script {
