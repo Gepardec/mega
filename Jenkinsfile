@@ -64,7 +64,7 @@ def buildVersionForBranch(String pomLocation="./") {
         echo "Release or Hotfix found"
         pom = readMavenPom file: pomLocation + 'pom.xml'
         return pom.properties['revision']
-    } else{
-        echo "Nothing found"
+    } else {
+        error("Branch not detected. branch=${branch}")
     }
 }
