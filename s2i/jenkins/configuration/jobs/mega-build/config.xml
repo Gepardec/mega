@@ -44,7 +44,7 @@
           <credentialsId>github-login</credentialsId>
           <repoOwner>Gepardec</repoOwner>
           <repository>mega</repository>
-          <includes>master feature/* release/*</includes>
+          <includes>master develop feature/* release/* hotfix/* bugfix/*</includes>
           <excludes></excludes>
           <buildOriginBranch>true</buildOriginBranch>
           <buildOriginBranchWithPR>true</buildOriginBranchWithPR>

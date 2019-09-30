@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Inject
-    private Logger logger;
+    Logger logger;
 
     @Inject
     ZepSoapPortType zepSoapPortType;

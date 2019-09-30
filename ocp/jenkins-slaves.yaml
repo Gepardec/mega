@@ -51,7 +51,7 @@ objects:
             version: "3.7"
           from:
             kind: "DockerImage"
-            name: "registry.redhat.io/openshift3/jenkins-slave-base-rhel7:3.7"
+            name: "docker.io/openshift/jenkins-slave-base-centos7:3.10"
 
 
   ######################
@@ -60,53 +60,22 @@ objects:
   - kind: "ImageStream"
     apiVersion: "v1"
     metadata:
-      name: "jenkins-slave-oracle-maven"
+      name: "jenkins-slave-maven"
       labels:
         role: "jenkins-slave"
-        app: "${APP}"
-      annotations:
-        role: "jenkins-slave"
-        openshift.io/display-name: "jenkins-slave-oracle-maven"
-
-  - kind: "BuildConfig"
-    apiVersion: "v1"
-    metadata:
-      name: "jenkins-slave-oracle-maven"
-      labels:
-        name: "jenkins-slave-oracle-maven"
         app: "${APP}"
     spec:
-      source:
-        type: "Git"
-        contextDir: "docker/jenkins/maven"
-        git:
-          uri: "${GIT_URL}"
-          ref: "${GIT_REF}"
-      strategy:
-        type: "Docker"
-        dockerStrategy:
-          env:
-            - name: "BUILD_LOGLEVEL"
-              value: "5"
-            - name: "VERSION"
-              value: "${MAVEN_VERSION}"
-      output:
-        to:
-          kind: "ImageStreamTag"
-          name: "jenkins-slave-oracle-maven:${MAVEN_VERSION}"
+      tags:
+        - name: "latest"
           labels:
             role: "jenkins-slave"
             app: "${APP}"
           annotations:
-            openshift.io/display-name: "Jenkins slave maven"
-            description: "The jenkins slave maven image"
+            openshift.io/display-name: "Jenkins Slave Maven"
+            description: "The jenkins slave maven"
             iconClass: "icon-jenkins"
-            tags: "slave-oracle-mvaen"
-            role: "jenkins-slave"
-      triggers:
-        - type: "ConfigChange"
-        - type: "ImageChange"
-          imageChange:
-            from:
-              kind: "ImageStreamTag"
-              name: "jenkins-slave-base:latest"
+            tags: "slave-maven"
+            version: "3.7"
+          from:
+            kind: "DockerImage"
+            name: "docker.io/openshift/jenkins-slave-maven-centos7:3.10"
