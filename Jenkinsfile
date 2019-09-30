@@ -77,6 +77,10 @@ def buildVersionForBranch(String pomLocation="./") {
         echo "Feature found"
         return branch.replace("/", "-").toUpperCase() + "-SNAPSHOT"
     }
+    else if (branch.startsWith("PR-")) {
+        echo "Pull-Request found"
+        return branch.replace("/", "-").toUpperCase() + "-SNAPSHOT"
+    }
     else if (branch.startsWith("release/") || branch.startsWith("hotfix/")) {
         echo "Release or Hotfix found"
         pom = readMavenPom file: pomLocation + 'pom.xml'
