@@ -77,7 +77,7 @@ def buildVersionForBranch(String pomLocation="./") {
         echo "Feature found"
         return branch.replace("/", "-").toUpperCase() + "-SNAPSHOT"
     }
-    else if (branch.startsWith("PR-")) {
+    else if (branch.startsWith("pr-")) {
         echo "Pull-Request found"
         return branch.replace("/", "-").toUpperCase() + "-SNAPSHOT"
     }
