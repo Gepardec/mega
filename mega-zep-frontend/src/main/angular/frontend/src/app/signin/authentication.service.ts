@@ -16,7 +16,7 @@ export class AuthenticationService implements OnDestroy {
 
   private readonly CURRENT_USER: string = 'currentUser';
   private readonly CURRENT_EMPLOYEE: string = 'currentEmployee';
-  private readonly HOME_PAGE: string = configuration.PAGES.HOME;
+  private readonly EMPLOYEES_PAGE: string = configuration.PAGES.EMPLOYEES;
   private readonly LOGIN_PAGE: string = configuration.PAGES.LOGIN;
 
   private isSignedInWithGoogle: boolean;
@@ -73,7 +73,7 @@ export class AuthenticationService implements OnDestroy {
           this.currentEmployeeSubject = new BehaviorSubject<MitarbeiterType>(employee);
           this.currentEmployee = this.currentEmployeeSubject.asObservable();
           localStorage.setItem(this.CURRENT_EMPLOYEE, JSON.stringify(employee));
-          this.router.navigate([this.HOME_PAGE]);
+          this.router.navigate([this.EMPLOYEES_PAGE]);
         }
       );
     }

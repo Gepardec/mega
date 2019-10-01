@@ -8,19 +8,22 @@ import {GoogleUserAuthenticationGuard} from "./shared/guards/google-user-authent
 import {EmployeesPagesModule} from "./main-pages/employees/home/home.module";
 import {configuration} from "../configuration/configuration";
 
-
+// uncomment when home page or other pages needed
+// for now route to employee site
 export const routes: Routes = [
   {
     path: 'home',
-    component: MainLayoutComponent,
-    loadChildren: () => HomePagesModule,
-    canActivate: [GoogleUserAuthenticationGuard]
+    redirectTo: 'employees'
+    // component: MainLayoutComponent,
+    // loadChildren: () => HomePagesModule,
+    // canActivate: [GoogleUserAuthenticationGuard]
   },
   {
     path: 'dashboard',
-    component: MainLayoutComponent,
-    loadChildren: () => DashboardPagesModule,
-    canActivate: [GoogleUserAuthenticationGuard]
+    redirectTo: 'employees'
+    // component: MainLayoutComponent,
+    // loadChildren: () => DashboardPagesModule,
+    // canActivate: [GoogleUserAuthenticationGuard]
   },
   {
     path: 'employees',

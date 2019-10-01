@@ -27,7 +27,6 @@ export class RolesGuard implements CanActivate {
     }
 
     let roles = route.data.roles as Array<number>;
-    console.log(roles);
     // allow all roles when roles array is empty
     if (roles.length === 0) {
       return true;
