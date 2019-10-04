@@ -9,6 +9,7 @@ pipeline {
     stage("Build") {
       steps {
         script{
+          stash name: "repo", includes: '**'
           podTemplate(cloud: 'openshift', label: 'mega-maven-pod', containers: [
             containerTemplate(name: 'mega-maven-container', image: 'docker.io/maven:3.6.2-jdk-11-slim', ttyEnabled: true, command: 'cat')
           ],
@@ -21,8 +22,8 @@ pipeline {
           ]) {
 
             node('mega-maven-pod') {
-              git url: "${env.GIT_URL}", branch: "${env.GIT_BRANCH}", credentialsId: 'github-login'
               container('mega-maven-container') {
+                  unstash name: "repo"
                   def revision=buildVersionForBranch()
                   sh "mvn -B -s jenkins-settings.xml clean install -Drevision=${revision}"
                   stash name: "mega-zep", includes: "**/mega-zep-*.jar"
@@ -74,6 +75,10 @@ def buildVersionForBranch(String pomLocation="./") {
     }
     else if (branch.startsWith("feature/")) {
         echo "Feature found"
+        return branch.replace("/", "-").toUpperCase() + "-SNAPSHOT"
+    }
+    else if (branch.startsWith("pr-")) {
+        echo "Pull-Request found"
         return branch.replace("/", "-").toUpperCase() + "-SNAPSHOT"
     }
     else if (branch.startsWith("release/") || branch.startsWith("hotfix/")) {
