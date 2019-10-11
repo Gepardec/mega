@@ -4,7 +4,7 @@
 
     <groupId>com.gepardec.mega</groupId>
     <artifactId>mega</artifactId>
-    <version>0.0.1</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
     <name>MEGA</name>
@@ -21,6 +21,32 @@
         <maven.compiler.target>11</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Plugin properties -->
+        <cxf-codegen-plugin.version>3.3.3</cxf-codegen-plugin.version>
+
+        <!-- Dependency properties -->
+        <junit.version>5.1.0</junit.version>
+        <lombock.version>1.18.8</lombock.version>
+
+        <!-- The revision property for CI-friendly builds -->
+        <revision>0.0.1</revision>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombock.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

@@ -10,13 +10,13 @@ import {MitarbeiterType} from "../models/Mitarbeiter/Mitarbeiter/MitarbeiterType
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService implements OnDestroy {
+export class MockAuthenticationService implements OnDestroy {
 
   private readonly URL: string = configuration.BASEURL;
 
   private readonly CURRENT_USER: string = 'currentUser';
   private readonly CURRENT_EMPLOYEE: string = 'currentEmployee';
-  private readonly EMPLOYEES_PAGE: string = configuration.PAGES.EMPLOYEES;
+  private readonly HOME_PAGE: string = configuration.PAGES.HOME;
   private readonly LOGIN_PAGE: string = configuration.PAGES.LOGIN;
 
   private isSignedInWithGoogle: boolean;
@@ -49,7 +49,6 @@ export class AuthenticationService implements OnDestroy {
 
     this.authServiceSubscription = this.authService.authState.subscribe((user: SocialUser) => {
       this.isSignedInWithGoogle = user != null;
-      user != null ? this.login(user) : this.logout();
     });
   }
 
@@ -68,14 +67,6 @@ export class AuthenticationService implements OnDestroy {
       // store user details and token in local storage to keep user logged in between page refreshes
       localStorage.setItem(this.CURRENT_USER, JSON.stringify(user));
       this.currentUserSubject.next(user);
-      this.zepLoginSubscription = this.zepLogin(user).subscribe(
-        (employee: MitarbeiterType) => {
-          this.currentEmployeeSubject = new BehaviorSubject<MitarbeiterType>(employee);
-          this.currentEmployee = this.currentEmployeeSubject.asObservable();
-          localStorage.setItem(this.CURRENT_EMPLOYEE, JSON.stringify(employee));
-          this.router.navigate([this.EMPLOYEES_PAGE]);
-        }
-      );
     }
 
     return user;
@@ -83,14 +74,6 @@ export class AuthenticationService implements OnDestroy {
 
   logout() {
     // remove user from local storage to log user out
-    this.zepLogoutSubscription = this.zepLogout(this.currentUserValue).subscribe(
-      (response: Response) => {
-        localStorage.removeItem(this.CURRENT_USER);
-        localStorage.removeItem(this.CURRENT_EMPLOYEE);
-        this.currentUserSubject.next(null);
-        this.signOut();
-      }
-    );
 
   }
 

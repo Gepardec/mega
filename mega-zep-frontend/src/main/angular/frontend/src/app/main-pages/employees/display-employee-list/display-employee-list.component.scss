@@ -1,8 +1,23 @@
-.title {
-  width:100%;
+.filter {
+  width: 40%;
+}
+
+.toolbar {
+  background-color: white !important;
+  margin-top: 30px;
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
 }
 
 .swap-view {
-  flex: 1;
-  font-size: 40px;
+  font-size: 60px;
+  width: 100%;
+}
+
+.releaseBtn {
+  background-color: rgb(67, 66, 93);
+  border-radius: 5px;
+  color: white !important;
 }

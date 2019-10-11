@@ -1,7 +1,16 @@
-.search {
-  width:80%;
+.toolbar {
+  background-color: rgb(67, 66, 93);
+}
+
+.search > h1 {
+  font-weight: bolder;
+  font-size: 35px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .useraction {
   flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
 }

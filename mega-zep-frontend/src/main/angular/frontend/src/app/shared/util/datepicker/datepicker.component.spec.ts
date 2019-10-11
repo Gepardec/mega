@@ -1,25 +1,28 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { DatepickerComponent } from './datepicker.component';
+import {DatepickerComponent} from './datepicker.component';
+import {AngularMaterialModule} from "../../../material-module";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 describe('DatepickerComponent', () => {
-  let component: DatepickerComponent;
-  let fixture: ComponentFixture<DatepickerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DatepickerComponent ]
-    })
-    .compileComponents();
+      imports: [AngularMaterialModule, BrowserAnimationsModule],
+      declarations: [DatepickerComponent]
+    }).compileComponents();
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(DatepickerComponent);
-    component = fixture.componentInstance;
+  function setup() {
+    const fixture: ComponentFixture<DatepickerComponent> = TestBed.createComponent(DatepickerComponent);
+    const app: DatepickerComponent = fixture.debugElement.componentInstance;
     fixture.detectChanges();
-  });
+    return {fixture, app};
+  }
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const {fixture, app} = setup();
+    expect(app).toBeTruthy();
   });
 });
+

@@ -10,7 +10,7 @@ import {Subscription} from "rxjs";
 })
 export class UserActionsComponent implements OnInit, OnDestroy {
 
-  protected user: SocialUser;
+  user: SocialUser;
 
   private authenticationServiceSubscription: Subscription;
 
@@ -31,7 +31,4 @@ export class UserActionsComponent implements OnInit, OnDestroy {
   logout() {
     this.authenticationService.logout();
   }
-
-
-
 }

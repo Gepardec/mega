@@ -13,6 +13,7 @@ import {DisplayEmployeeListService} from "../../display-employee-list/display-em
 })
 export class TablelistComponent implements OnInit, OnDestroy {
 
+  readonly date = new Date();
   readonly functions = configuration.EMPLOYEE_FUNCTIONS;
 
   displayedColumns = ['nachname', 'abteilung', 'freigabedatum', 'auswaehlen'];
@@ -61,4 +62,7 @@ export class TablelistComponent implements OnInit, OnDestroy {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
+  stringToDate(date: string): Date {
+    return new Date(date);
+  }
 }

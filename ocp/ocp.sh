@@ -7,10 +7,6 @@ set -u
 
 mkdir -p ${OUT_DIR}
 
-function _processSwagger {
-    oc process -f swagger-ui.yaml -o yaml --param-file=swagger-ui.properties --ignore-unknown-parameters=true > ${OUT_DIR}/swagger-ui.yaml
-}
-
 function _processJenkins {
     oc process -f jenkins-bc.yaml -o yaml --param-file=jenkins.properties --ignore-unknown-parameters=true > ${OUT_DIR}/jenkins-bc.yaml
     oc process -f jenkins-slaves.yaml -o yaml --param-file=jenkins.properties --ignore-unknown-parameters=true > ${OUT_DIR}/jenkins-slaves.yaml
@@ -27,39 +23,23 @@ function recreateSecret {
 }
 
 function createSecret {
-    oc create secret generic github-ssh \
-        --from-file=ssh-privatekey="../github_id_rsa" \
-        --type=kubernetes.io/ssh-auth
     oc create secret generic github-login \
         --from-literal=username="${GITHUB_USERNAME}" \
         --from-literal=password="${GITHUB_PASSWORD}" \
         --type=kubernetes.io/basic-auth
 
-    oc annotate secret github-ssh jenkins.openshift.io/secret.name=github-ssh
+    oc create secret generic zep-soap-token \
+        --from-file=zep.soap.token="../zep-soap.token"
+    
+    oc annotate secret zep-soap-token jenkins.openshift.io/secret.name=zep-soap-token
     oc annotate secret github-login jenkins.openshift.io/secret.name=github-login
 
-    oc label secret github-ssh credential.sync.jenkins.openshift.io=true
+    oc label secret zep-soap-token credential.sync.jenkins.openshift.io=true
     oc label secret github-login credential.sync.jenkins.openshift.io=true
 }
 
 function deleteSecret {
-    oc delete secret/github-ssh
     oc delete secret/github-login
-}
-
-function createSwagger {
-    _processSwagger
-    oc apply -f ${OUT_DIR}/swagger-ui.yaml
-}
-
-function deleteSwagger {
-    _processSwagger
-    oc delete -f ${OUT_DIR}/swagger-ui.yaml
-}
-
-function recreateSwagger {
-    deleteSwagger
-    createSwagger
 }
 
 function createJenkins {
@@ -97,19 +77,16 @@ function recreateSonarqube {
 }
 
 function createAll {
-    createSwagger 
     createJenkins
     createSonarqube
 }
 
 function deleteAll {
-    deleteSwagger 
     deleteJenkins
     deleteSonarqube
 }
 
 function recreateAll {
-    recreateSwagger 
     recreateJenkins
     recreateSonarqube
 }

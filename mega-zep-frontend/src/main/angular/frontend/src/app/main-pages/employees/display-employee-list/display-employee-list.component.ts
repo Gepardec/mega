@@ -5,7 +5,7 @@ import {SocialUser} from "angularx-social-login";
 import {AuthenticationService} from "../../../signin/authentication.service";
 import {MitarbeiterType} from "../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
 import {Subscription} from "rxjs";
-import {SelectionChange} from "@angular/cdk/collections";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-display-employee-list',
@@ -15,13 +15,10 @@ import {SelectionChange} from "@angular/cdk/collections";
 export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
 
   selectedEmployees: Array<MitarbeiterType> = new Array<MitarbeiterType>();
-
-  protected isGridlistActive: boolean = true;
-
+  isGridlistActive: boolean = false;
   user: SocialUser;
-
   employees: MitarbeiterResponseType;
-
+  filteredEmployees: Array<MitarbeiterType>;
   selectedDate: string = null;
 
   private currentUserSubscription: Subscription;
@@ -31,7 +28,8 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
 
   constructor(
     private displayMitarbeiterListeService: DisplayEmployeeListService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private snackbar: MatSnackBar
   ) {
 
   }
@@ -69,6 +67,7 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
           // refresh employees
           this.employees = null;
           this.getAllEmployees();
+          this.openSnackBar("Mitarbeiter erfolgreich aktualisiert!");
         });
     }
   }
@@ -78,6 +77,7 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
       this.getEmployeeSubscription = this.displayMitarbeiterListeService.getEmployees(this.user)
         .subscribe((mitarbeiter: MitarbeiterResponseType) => {
           this.employees = mitarbeiter;
+          this.filteredEmployees = this.employees.mitarbeiterListe.mitarbeiter;
           this.selectedEmployees = new Array<MitarbeiterType>();
           this.displayMitarbeiterListeService.setSelectedEmployees(null);
           this.displayMitarbeiterListeService.setResetSelection(true);
@@ -87,6 +87,18 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
 
   dateChanged(date: string) {
     this.selectedDate = date;
+  }
+
+  applyFilter(filterValue: string) {
+    this.filteredEmployees = this.employees.mitarbeiterListe.mitarbeiter
+      .filter(empl => empl.vorname.toLowerCase().includes(filterValue.toLowerCase())
+        || empl.nachname.toLowerCase().includes(filterValue.toLowerCase()));
+  }
+
+  openSnackBar(message: string) {
+    this.snackbar.open(message, null, {
+      duration: 3000,
+    });
   }
 
 }

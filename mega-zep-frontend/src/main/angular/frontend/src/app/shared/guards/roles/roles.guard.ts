@@ -9,7 +9,7 @@ import {MitarbeiterType} from "../../../models/Mitarbeiter/Mitarbeiter/Mitarbeit
 })
 export class RolesGuard implements CanActivate {
 
-  private employee: MitarbeiterType;
+  employee: MitarbeiterType;
 
   constructor(
     private authenticationService: AuthenticationService
@@ -27,7 +27,6 @@ export class RolesGuard implements CanActivate {
     }
 
     let roles = route.data.roles as Array<number>;
-    console.log(roles);
     // allow all roles when roles array is empty
     if (roles.length === 0) {
       return true;

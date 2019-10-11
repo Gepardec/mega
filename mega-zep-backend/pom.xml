@@ -7,22 +7,16 @@
     <parent>
         <groupId>com.gepardec.mega</groupId>
         <artifactId>mega</artifactId>
-        <version>0.0.1</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>mega-zep-backend</artifactId>
     <name>MEGA ZEP-Backend</name>
-    <version>0.0.1</version>
 
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
-        <quarkus.version>0.23.2</quarkus.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-
-        <lombock.version>1.18.8</lombock.version>
-        <cxf-codegen-plugin.version>3.3.3</cxf-codegen-plugin.version>
+        <quarkus.version>0.21.1</quarkus.version>
     </properties>
 
     <dependencyManagement>
@@ -41,6 +35,18 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-resteasy-jsonb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jsonp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-arc</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -76,16 +82,21 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <version>4.4.12</version>
+            <version>4.4.10</version>
             <scope>compile</scope>
         </dependency>
-        <!-- cxf-codegen-plugin: END-->
+        <!-- cxf-codegen-plugin: END -->
+
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>rt</artifactId>
+            <version>2.3.1</version>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombock.version}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -105,6 +116,7 @@
                             <wsdlOptions>
                                 <wsdlOption>
                                     <wsdl>${project.basedir}/src/main/resources/wsdl/Zep_V7.wsdl</wsdl>
+                                    <!--                  <wsdl>https%3A%2F%2Fwww.zep-online.de%2Fzepgepardecservices_test%2Fsync%2Fsoap.php%3Fv%3D7%26wsdl</wsdl>-->
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>

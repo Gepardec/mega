@@ -7,10 +7,10 @@
     <parent>
         <groupId>com.gepardec.mega</groupId>
         <artifactId>mega</artifactId>
-        <version>0.0.1</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>mega-zep-frontend</artifactId>
     <name>MEGA ZEP-Frontend</name>
-    <version>0.0.1</version>
+
 </project>
