@@ -1,6 +1,7 @@
 package com.gepardec.mega;
 
 import io.quarkus.test.junit.QuarkusTest;
+import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -15,7 +16,7 @@ public class StatusTest {
 
         given().when().get("/worker/status")
                 .then()
-                    .statusCode(200)
+                    .statusCode(HttpStatus.SC_OK)
                     .body(is(expectedStatusBody));
     }
 }

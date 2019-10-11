@@ -8,6 +8,8 @@ package connector.filter;
 
 //import org.apache.http.HttpStatus;
 
+import org.apache.http.HttpStatus;
+
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
@@ -25,7 +27,7 @@ public class CORSResponseFilter implements ContainerResponseFilter {
 
         // in case of options for cors-post - return status 200
         if(requestContext.getMethod().equals("OPTIONS")) {
-            responseContext.setStatus(200);
+            responseContext.setStatus(HttpStatus.SC_OK);
         }
     }
 }
