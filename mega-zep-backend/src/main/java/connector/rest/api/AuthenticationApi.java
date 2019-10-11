@@ -1,9 +1,7 @@
 package connector.rest.api;
 
 import connector.rest.model.GoogleUser;
-import connector.security.AuthorizationInterceptor;
 
-import javax.interceptor.Interceptors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -20,7 +18,7 @@ public interface AuthenticationApi {
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    Response login(GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response);
+    Response login (GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response);
 
     @POST
     @Path("/logout")

@@ -5,10 +5,8 @@ import connector.security.SessionUser;
 import connector.service.api.AuthenticationService;
 import de.provantis.zep.*;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
@@ -17,7 +15,7 @@ import javax.ws.rs.core.Response;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Inject
-    private Logger logger;
+    Logger logger;
 
     @Inject
     ZepSoapPortType zepSoapPortType;
@@ -29,7 +27,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     SessionUser sessionUser;
 
     @Override
-    public Response login(GoogleUser user, HttpServletRequest request) {
+    public Response login (GoogleUser user, HttpServletRequest request) {
         if (isUserLoggedIn()) {
             return Response.ok(user).build();
         }
@@ -66,7 +64,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         logger.info("Authentication of user with name " + user.getName() + " successful");
         return Response.ok(mt).build();
-      
+
         //logger.info("Authentication of user with name " + user.getName() + " successful");
         //return Response.ok(user).build();
     }

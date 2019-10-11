@@ -5,7 +5,6 @@ import connector.rest.model.GoogleUser;
 import connector.service.api.AuthenticationService;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,12 +18,12 @@ public class AuthenticationImpl implements AuthenticationApi {
     AuthenticationService authenticationService;
 
     @Override
-    public Response login(GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response) {
+    public Response login (GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response) {
         return authenticationService.login(user, request);
     }
 
     @Override
-    public Response logout(@Context HttpServletRequest request, @Context HttpServletResponse response) {
+    public Response logout (@Context HttpServletRequest request, @Context HttpServletResponse response) {
         return authenticationService.logout(request);
     }
 }

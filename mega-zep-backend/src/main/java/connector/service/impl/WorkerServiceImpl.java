@@ -3,10 +3,17 @@ package connector.service.impl;
 import connector.rest.model.GoogleUser;
 import connector.security.AuthorizationInterceptor;
 import connector.service.api.WorkerService;
-import de.provantis.zep.*;
+import de.provantis.zep.BeschaeftigungszeitType;
+import de.provantis.zep.MitarbeiterListeType;
+import de.provantis.zep.MitarbeiterType;
+import de.provantis.zep.ReadMitarbeiterRequestType;
+import de.provantis.zep.ReadMitarbeiterResponseType;
+import de.provantis.zep.RequestHeaderType;
+import de.provantis.zep.UpdateMitarbeiterRequestType;
+import de.provantis.zep.UpdateMitarbeiterResponseType;
+import de.provantis.zep.ZepSoapPortType;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Response;
@@ -27,7 +34,7 @@ public class WorkerServiceImpl implements WorkerService {
     RequestHeaderType requestHeaderType;
 
     @Override
-    public ReadMitarbeiterResponseType getAll(GoogleUser user) {
+    public ReadMitarbeiterResponseType getAll (GoogleUser user) {
         ReadMitarbeiterRequestType empl = new ReadMitarbeiterRequestType();
         empl.setRequestHeader(requestHeaderType);
 
@@ -38,9 +45,8 @@ public class WorkerServiceImpl implements WorkerService {
         return rmrt;
     }
 
-
     @Override
-    public MitarbeiterType get(GoogleUser user) {
+    public MitarbeiterType get (GoogleUser user) {
         ReadMitarbeiterRequestType empl = new ReadMitarbeiterRequestType();
         empl.setRequestHeader(requestHeaderType);
 
@@ -52,7 +58,7 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public Response updateWorker(List<MitarbeiterType> employees) {
+    public Response updateWorker (List<MitarbeiterType> employees) {
         UpdateMitarbeiterRequestType umrt = new UpdateMitarbeiterRequestType();
         umrt.setRequestHeader(requestHeaderType);
 

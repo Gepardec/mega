@@ -14,21 +14,27 @@ import java.util.List;
 
 @Path("/worker")
 public interface WorkerApi {
+    @GET
+    @Path("/status")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    Response status();
+
     @POST
     @Path("/get")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    MitarbeiterType get(GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response);
+    MitarbeiterType get (GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response);
 
     @POST
     @Path("/getAll")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    ReadMitarbeiterResponseType getAll(GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response);
+    ReadMitarbeiterResponseType getAll (GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response);
 
     @PUT
     @Path("/update")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    Response updateWorker(List<MitarbeiterType> employees, @Context HttpServletRequest request, @Context HttpServletResponse response);
+    Response updateWorker (List<MitarbeiterType> employees, @Context HttpServletRequest request, @Context HttpServletResponse response);
 }

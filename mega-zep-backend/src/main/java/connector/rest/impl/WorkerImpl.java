@@ -9,8 +9,6 @@ import de.provantis.zep.MitarbeiterType;
 import de.provantis.zep.ReadMitarbeiterResponseType;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Dependent;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,20 +23,25 @@ public class WorkerImpl implements WorkerApi {
     WorkerService workerService;
 
     @Override
-    public MitarbeiterType get(GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response) {
+    public Response status () {
+        return Response.status(200).entity("{\"code\":200,\"status\":\"OK\"}").build();
+    }
+
+    @Override
+    public MitarbeiterType get (GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response) {
         return workerService.get(user);
     }
 
 
     @Override
     @Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
-    public ReadMitarbeiterResponseType getAll(GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response) {
+    public ReadMitarbeiterResponseType getAll (GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response) {
         return workerService.getAll(user);
     }
 
     @Override
     @Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
-    public Response updateWorker(List<MitarbeiterType> employees, @Context HttpServletRequest request, @Context HttpServletResponse response) {
+    public Response updateWorker (List<MitarbeiterType> employees, @Context HttpServletRequest request, @Context HttpServletResponse response) {
         return workerService.updateWorker(employees);
     }
 }

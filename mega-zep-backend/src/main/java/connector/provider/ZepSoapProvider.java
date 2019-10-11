@@ -15,18 +15,16 @@ public class ZepSoapProvider {
 
     @Produces
     @Dependent
-    ZepSoapPortType createZepSoapPortType() {
+    ZepSoapPortType createZepSoapPortType () {
         ZepSoap zs = new ZepSoap();
         return zs.getZepSOAP();
     }
 
     @Produces
     @Dependent
-    RequestHeaderType createRequestHeaderType() {
+    RequestHeaderType createRequestHeaderType () {
         RequestHeaderType requestHeaderType = new RequestHeaderType();
         requestHeaderType.setAuthorizationToken(AUTHORIZATION_TOKEN);
         return requestHeaderType;
     }
-
-
 }
