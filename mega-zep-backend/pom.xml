@@ -16,7 +16,13 @@
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
-        <quarkus.version>0.21.1</quarkus.version>
+        <quarkus.version>0.23.2</quarkus.version>
+
+        <!-- Plugin properties -->
+        <cxf-codegen-plugin.version>3.3.3</cxf-codegen-plugin.version>
+
+        <!-- Dependency properties -->
+        <lombock.version>1.18.8</lombock.version>
     </properties>
 
     <dependencyManagement>
@@ -88,15 +94,10 @@
         <!-- cxf-codegen-plugin: END -->
 
         <dependency>
-            <groupId>com.sun.xml.ws</groupId>
-            <artifactId>rt</artifactId>
-            <version>2.3.1</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <scope>provided</scope>
+            <version>${lombock.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -116,7 +117,6 @@
                             <wsdlOptions>
                                 <wsdlOption>
                                     <wsdl>${project.basedir}/src/main/resources/wsdl/Zep_V7.wsdl</wsdl>
-                                    <!--                  <wsdl>https%3A%2F%2Fwww.zep-online.de%2Fzepgepardecservices_test%2Fsync%2Fsoap.php%3Fv%3D7%26wsdl</wsdl>-->
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>
