@@ -1,0 +1,29 @@
+package com.gepardec.mega.zep.rest.impl;
+
+import com.gepardec.mega.model.google.GoogleUser;
+import com.gepardec.mega.zep.service.api.AuthenticationService;
+import com.gepardec.mega.zep.rest.api.AuthenticationApi;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+
+@ApplicationScoped
+public class AuthenticationImpl implements AuthenticationApi {
+
+    @Inject
+    AuthenticationService authenticationService;
+
+    @Override
+    public Response login (GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response) {
+        return authenticationService.login(user, request);
+    }
+
+    @Override
+    public Response logout (@Context HttpServletRequest request, @Context HttpServletResponse response) {
+        return authenticationService.logout(request);
+    }
+}

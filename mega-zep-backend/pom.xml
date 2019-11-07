@@ -16,7 +16,7 @@
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
-        <quarkus.version>0.23.2</quarkus.version>
+        <quarkus.version>1.0.0.CR1</quarkus.version>
 
         <!-- Plugin properties -->
         <cxf-codegen-plugin.version>3.3.3</cxf-codegen-plugin.version>
@@ -29,7 +29,7 @@
         <dependencies>
             <dependency>
                 <groupId>io.quarkus</groupId>
-                <artifactId>quarkus-bom</artifactId>
+                <artifactId>quarkus-universe-bom</artifactId>
                 <version>${quarkus.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -67,6 +67,10 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-smallrye-openapi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-undertow</artifactId>
         </dependency>
 
         <!-- cxf-codegen-plugin: Following dependencies are required by the WSDL code generator -->
