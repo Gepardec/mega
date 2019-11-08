@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 
@@ -15,12 +16,14 @@ import javax.ws.rs.core.Response;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Inject
-    Logger logger;
+    Logger LOG;
 
     @Inject
+    @Named("ZepAuthorizationSOAPPortType")
     ZepSoapPortType zepSoapPortType;
 
     @Inject
+    @Named("ZepAuthorizationRequestHeaderType")
     RequestHeaderType requestHeaderType;
 
     @Inject
@@ -36,37 +39,42 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final ReadMitarbeiterRequestType empl = new ReadMitarbeiterRequestType();
         empl.setRequestHeader(requestHeaderType);
 
-        final ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(empl);
-        final MitarbeiterType mt = rmrt.getMitarbeiterListe().getMitarbeiter().stream()
-                .filter(emp -> user.getEmail().equals(emp.getEmail()))
-                .findFirst()
-                .orElse(null);
+        if(zepSoapPortType != null) {
+            final ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(empl);
+            final MitarbeiterType mt = rmrt.getMitarbeiterListe().getMitarbeiter().stream().filter(emp -> user.getEmail().equals(emp.getEmail())).findFirst().orElse(null);
 
-        // invalidate session when theres no appropriate employee
-        if(mt == null){
-            invalidateSession();
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+            // invalidate session when theres no appropriate employee
+            if (mt == null) {
+                invalidateSession();
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            }
+
+            try {
+                LOG.info("Authentication of user with name " + user.getName());
+                sessionUser.setAuthorizationCode(user.getAuthorizationCode());
+                sessionUser.setEmail(user.getEmail());
+                sessionUser.setAuthToken(user.getAuthToken());
+                sessionUser.setIdToken(user.getIdToken());
+                sessionUser.setName(user.getName());
+                sessionUser.setRole(mt.getRechte());
+            }
+            catch (Exception e) {
+                LOG.info("Authentication of user with name " + user.getName() + " failed: " + e);
+                invalidateSession();
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            }
+
+            LOG.info("Authentication of user with name " + user.getName() + " successful");
+            return Response.ok(mt).build();
+
+            //logger.info("Authentication of user with name " + user.getName() + " successful");
+            //return Response.ok(user).build();
+        } else {
+            LOG.error("Zep connection not possible.");
         }
 
-        try {
-            logger.info("Authentication of user with name " + user.getName());
-            sessionUser.setAuthorizationCode(user.getAuthorizationCode());
-            sessionUser.setEmail(user.getEmail());
-            sessionUser.setAuthToken(user.getAuthToken());
-            sessionUser.setIdToken(user.getIdToken());
-            sessionUser.setName(user.getName());
-            sessionUser.setRole(mt.getRechte());
-        } catch (Exception e){
-            logger.info("Authentication of user with name " + user.getName() + " failed: " + e);
-            invalidateSession();
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
-
-        logger.info("Authentication of user with name " + user.getName() + " successful");
-        return Response.ok(mt).build();
-
-        //logger.info("Authentication of user with name " + user.getName() + " successful");
-        //return Response.ok(user).build();
+        // Return status 500
+        return Response.serverError().build();
     }
 
     @Override

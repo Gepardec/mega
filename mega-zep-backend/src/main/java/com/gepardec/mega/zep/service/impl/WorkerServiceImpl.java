@@ -15,6 +15,7 @@ import de.provantis.zep.ZepSoapPortType;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Response;
 import java.text.ParseException;
@@ -28,9 +29,11 @@ import java.util.List;
 public class WorkerServiceImpl implements WorkerService {
 
     @Inject
+    @Named("ZepAuthorizationSOAPPortType")
     ZepSoapPortType zepSoapPortType;
 
     @Inject
+    @Named("ZepAuthorizationRequestHeaderType")
     RequestHeaderType requestHeaderType;
 
     @Override
@@ -39,10 +42,8 @@ public class WorkerServiceImpl implements WorkerService {
         empl.setRequestHeader(requestHeaderType);
 
         ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(empl);
-        // filter active employees
-        // not active dont need to release times
-        rmrt = filterActiveEmployees(rmrt);
-        return rmrt;
+
+        return filterActiveEmployees(rmrt);
     }
 
     @Override
