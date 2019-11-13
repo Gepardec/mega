@@ -1,5 +1,6 @@
 package com.gepardec.mega;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gepardec.mega.model.google.GoogleUser;
 import de.provantis.zep.MitarbeiterType;
@@ -25,6 +26,15 @@ class AuthTest {
         googleUser.setId("123456879");
         googleUser.setEmail("christoph.ruhsam@gepardec.com");
         googleUser.setAuthToken("987654321");
+
+        try {
+            final String output = objectMapper.writeValueAsString(googleUser);
+            System.out.println(output);
+        }
+        catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Test

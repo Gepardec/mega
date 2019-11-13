@@ -4,17 +4,16 @@ import com.gepardec.mega.model.google.GoogleUser;
 import com.gepardec.mega.security.AuthorizationInterceptor;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import de.provantis.zep.*;
+import org.apache.http.HttpStatus;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.interceptor.Interceptors;
-import javax.ws.rs.core.Response;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Interceptors(AuthorizationInterceptor.class)
 @ApplicationScoped
@@ -28,67 +27,85 @@ public class WorkerServiceImpl implements WorkerService {
     @Named("ZepAuthorizationRequestHeaderType")
     RequestHeaderType requestHeaderType;
 
+    private static final ReadMitarbeiterRequestType readMitarbeiterRequestType = new ReadMitarbeiterRequestType();
+    private static final DateTimeFormatter DEFAULT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault());
+
+    @PostConstruct
+    private void init() {
+        readMitarbeiterRequestType.setRequestHeader(requestHeaderType);
+    }
+
     @Override
-    public ReadMitarbeiterResponseType getAll (GoogleUser user) {
-        ReadMitarbeiterRequestType empl = new ReadMitarbeiterRequestType();
-        empl.setRequestHeader(requestHeaderType);
+    public MitarbeiterType getEmployee (final GoogleUser user) {
+        try {
+            final List<MitarbeiterType> employees = flatMap(zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType));
+            return employees.stream().filter(e -> e.getEmail() != null && e.getEmail().equals(user.getEmail())).findFirst().orElse(null);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(empl);
+        return null;
+    }
 
+    @Override
+    public List<MitarbeiterType> getAllEmployees (final GoogleUser user) {
+        ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType);
         return filterActiveEmployees(rmrt);
     }
 
     @Override
-    public MitarbeiterType get (GoogleUser user) {
-        ReadMitarbeiterRequestType empl = new ReadMitarbeiterRequestType();
-        empl.setRequestHeader(requestHeaderType);
+    public Integer updateEmployees (final List<MitarbeiterType> employees) {
+        final List<Integer> statusCodeList = new LinkedList<>();
 
-        ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(empl);
-        return rmrt.getMitarbeiterListe().getMitarbeiter().stream()
-                .filter(emp -> user.getEmail().equals(emp.getEmail()))
-                .findFirst()
-                .orElse(null);
+        employees.forEach(e -> statusCodeList.add(updateEmployee(e)));
+
+        return statusCodeList.stream().filter(statuscode -> statuscode == HttpStatus.SC_INTERNAL_SERVER_ERROR).findAny().orElse(HttpStatus.SC_OK);
     }
 
     @Override
-    public Response updateWorker (List<MitarbeiterType> employees) {
-        UpdateMitarbeiterRequestType umrt = new UpdateMitarbeiterRequestType();
-        umrt.setRequestHeader(requestHeaderType);
+    public Integer updateEmployee (final MitarbeiterType employee) {
+        try {
+            final UpdateMitarbeiterRequestType umrt = new UpdateMitarbeiterRequestType();
+            umrt.setRequestHeader(requestHeaderType);
+            umrt.setMitarbeiter(employee);
 
-        UpdateMitarbeiterResponseType umrest = null;
-        for(MitarbeiterType mt : employees){
-            umrt.setMitarbeiter(mt);
-            umrest = zepSoapPortType.updateMitarbeiter(umrt);
-            // TODO handle errors
+            final UpdateMitarbeiterResponseType updateMitarbeiterResponseType = zepSoapPortType.updateMitarbeiter(umrt);
+            final ResponseHeaderType responseHeaderType = updateMitarbeiterResponseType != null ? updateMitarbeiterResponseType.getResponseHeader() : null;
+
+            return responseHeaderType != null ? Integer.parseInt(responseHeaderType.getReturnCode()) : HttpStatus.SC_INTERNAL_SERVER_ERROR;
         }
-        return Response.ok(umrest).build();
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        return HttpStatus.SC_INTERNAL_SERVER_ERROR;
     }
 
-    private ReadMitarbeiterResponseType filterActiveEmployees(ReadMitarbeiterResponseType rmrt) {
-        List<MitarbeiterType> activeEmployees = new ArrayList<>();
-        for (MitarbeiterType empl : rmrt.getMitarbeiterListe().getMitarbeiter()) {
-            // only last Beschaeftigungszeit needed, its the latest
-            int lastBeschaeftigungszeitIndex = empl.getBeschaeftigungszeitListe().getBeschaeftigungszeit().size() - 1;
-            BeschaeftigungszeitType beschaeftigungszeitType = empl.getBeschaeftigungszeitListe()
-                    .getBeschaeftigungszeit().get(lastBeschaeftigungszeitIndex);
-            try {
-                if (beschaeftigungszeitType.getEnddatum() == null ||
-                        new SimpleDateFormat("yyyy-mm-dd")
-                                .parse(beschaeftigungszeitType.getEnddatum()).compareTo(new Date()) >= 0) {
-                    activeEmployees.add(empl);
-                }
-            } catch (ParseException e) {
-                // TODO implement error handler
-                e.printStackTrace();
+    private List<MitarbeiterType> filterActiveEmployees(ReadMitarbeiterResponseType readMitarbeiterResponseType) {
+        final List<MitarbeiterType> activeEmployees = new ArrayList<>();
+        final List<MitarbeiterType> allEmployees = flatMap(readMitarbeiterResponseType);
+
+        allEmployees.forEach(employee -> {
+            final BeschaeftigungszeitListeType beschaeftigungszeitListeType = employee.getBeschaeftigungszeitListe();
+            final List<BeschaeftigungszeitType> beschaeftigungszeitTypeList = beschaeftigungszeitListeType.getBeschaeftigungszeit();
+            final BeschaeftigungszeitType last = beschaeftigungszeitTypeList
+                    .stream()
+                    .sorted(Comparator.comparing(BeschaeftigungszeitType::getEnddatum))
+                    .reduce((first, second) -> second)
+                    .orElse(null);
+
+            final LocalDate endDate = LocalDate.parse(Objects.requireNonNull(last).getEnddatum(), DEFAULT_DATE_FORMATTER);
+            if(!endDate.isBefore(LocalDate.now())) {
+                activeEmployees.add(employee);
             }
-        }
+        });
 
-        MitarbeiterListeType mlt = new MitarbeiterListeType();
-        mlt.getMitarbeiter().addAll(activeEmployees);
-        mlt.setLength(activeEmployees.size());
+        return activeEmployees;
+    }
 
-        rmrt.setMitarbeiterListe(mlt);
-        return rmrt;
+    private List<MitarbeiterType> flatMap(final ReadMitarbeiterResponseType readMitarbeiterResponseType) {
+        final MitarbeiterListeType mitarbeiterListeType = readMitarbeiterResponseType.getMitarbeiterListe();
+        return mitarbeiterListeType != null ? mitarbeiterListeType.getMitarbeiter() : new LinkedList<>();
     }
 }

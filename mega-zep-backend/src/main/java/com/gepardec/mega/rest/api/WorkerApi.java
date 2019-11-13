@@ -3,6 +3,7 @@ package com.gepardec.mega.rest.api;
 import com.gepardec.mega.model.google.GoogleUser;
 import de.provantis.zep.MitarbeiterType;
 import de.provantis.zep.ReadMitarbeiterResponseType;
+import org.jboss.resteasy.annotations.Body;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,27 +20,28 @@ import java.util.List;
 
 @Path("/worker")
 public interface WorkerApi {
-    @GET
-    @Path("/status")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    Response status();
 
     @POST
-    @Path("/get")
+    @Path("/employee")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    MitarbeiterType get (GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response);
+    Response employee (final GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response);
 
     @POST
-    @Path("/getAll")
+    @Path("/employees")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    ReadMitarbeiterResponseType getAll (GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response);
+    Response employees(final GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response);
 
     @PUT
-    @Path("/update")
+    @Path("/employees/update")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    Response updateWorker (List<MitarbeiterType> employees, @Context HttpServletRequest request, @Context HttpServletResponse response);
+    Response employeesUpdate (List<MitarbeiterType> employees, @Context HttpServletRequest request, @Context HttpServletResponse response);
+
+    @PUT
+    @Path("/employee/update")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    Response employeesUpdate (MitarbeiterType employee, @Context HttpServletRequest request, @Context HttpServletResponse response);
 }
