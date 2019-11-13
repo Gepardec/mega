@@ -1,4 +1,4 @@
-package com.gepardec.mega.zep.rest.api;
+package com.gepardec.mega.rest.api;
 
 import com.gepardec.mega.model.google.GoogleUser;
 

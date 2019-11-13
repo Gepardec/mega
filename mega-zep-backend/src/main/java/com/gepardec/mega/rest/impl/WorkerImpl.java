@@ -1,10 +1,10 @@
-package com.gepardec.mega.zep.rest.impl;
+package com.gepardec.mega.rest.impl;
 
 import com.gepardec.mega.annotations.Authorization;
 import com.gepardec.mega.model.google.GoogleUser;
+import com.gepardec.mega.rest.api.WorkerApi;
 import com.gepardec.mega.security.SessionUser;
 import com.gepardec.mega.zep.service.api.WorkerService;
-import com.gepardec.mega.zep.rest.api.WorkerApi;
 import de.provantis.zep.MitarbeiterType;
 import de.provantis.zep.ReadMitarbeiterResponseType;
 

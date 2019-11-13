@@ -1,8 +1,8 @@
-package com.gepardec.mega.zep.rest.impl;
+package com.gepardec.mega.rest.impl;
 
 import com.gepardec.mega.model.google.GoogleUser;
+import com.gepardec.mega.rest.api.AuthenticationApi;
 import com.gepardec.mega.zep.service.api.AuthenticationService;
-import com.gepardec.mega.zep.rest.api.AuthenticationApi;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
