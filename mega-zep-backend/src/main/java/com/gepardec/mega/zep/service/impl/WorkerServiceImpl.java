@@ -3,15 +3,7 @@ package com.gepardec.mega.zep.service.impl;
 import com.gepardec.mega.model.google.GoogleUser;
 import com.gepardec.mega.security.AuthorizationInterceptor;
 import com.gepardec.mega.zep.service.api.WorkerService;
-import de.provantis.zep.BeschaeftigungszeitType;
-import de.provantis.zep.MitarbeiterListeType;
-import de.provantis.zep.MitarbeiterType;
-import de.provantis.zep.ReadMitarbeiterRequestType;
-import de.provantis.zep.ReadMitarbeiterResponseType;
-import de.provantis.zep.RequestHeaderType;
-import de.provantis.zep.UpdateMitarbeiterRequestType;
-import de.provantis.zep.UpdateMitarbeiterResponseType;
-import de.provantis.zep.ZepSoapPortType;
+import de.provantis.zep.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
