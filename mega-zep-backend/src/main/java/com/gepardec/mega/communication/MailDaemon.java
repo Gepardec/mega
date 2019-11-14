@@ -22,7 +22,7 @@ public class MailDaemon {
     void sendMailToEmployees() {
         System.out.println("5 seconds past");
 
-        workerService.getAllEmployees()
+        //TODO: implement
 
     }
 
