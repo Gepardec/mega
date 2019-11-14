@@ -43,11 +43,12 @@ pipeline {
                                                     def ocpApp = "mega-zep-bakend-${revision.toLowerCase()}"
                                                     def artifact = "mega-zep-backend-${revision}-runner.jar"
                                                     def label = "version=${ocpApp}"
-                                                    sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait \
-                                                        && oc tag mega-zep-backend:latest mega-zep-backend:${revision}"
-                                                    deleteOcpApp(ocpApp, label, true)
+
                                                     try {
+                                                        deleteOcpApp(ocpApp, label, true)
                                                         sh "oc new-app mega-zep-backend:${revision} \
+                                                                      --allow-missing-images=true \
+                                                                      --allow-missing-imagestream-tags=true \
                                                                       --labels ${label} \
                                                                       --name=${ocpApp} \
                                                                       --env JAVA_MAX_MEM_RATIO=95 \
@@ -55,11 +56,13 @@ pipeline {
                                                                       --env AB_PROMETHEUS_OFF=true \
                                                                       --env JAVA_OPTIONS=-Djava.net.preferIPv4Stack=true \
                                                         && oc set triggers dc/${ocpApp} --remove-all \
-                                                        && oc set probe dc/${ocpApp} --readiness --failure-threshold 5 --initial-delay-seconds 2 --get-url=http://localhost:8080/health/ready \
                                                         && oc expose svc/${ocpApp} --name=${ocpApp} --port=8080 --labels ${label}"
+
+//                                                                && oc set probe dc/${ocpApp} --readiness --failure-threshold 5 --initial-delay-seconds 2 --get-url=http://localhost:8080/health/ready \
+                                                        sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait \
+                                                        && oc tag mega-zep-backend:latest mega-zep-backend:${revision}"
                                                     } catch (exception) {
                                                         error exception.getMessage()
-                                                        deleteOcpApp(ocpApp, label)
                                                     }
                                                 }
                                             }
