@@ -17,7 +17,8 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
   selectedEmployees: Array<MitarbeiterType> = new Array<MitarbeiterType>();
   isGridlistActive: boolean = false;
   user: SocialUser;
-  employees: MitarbeiterResponseType;
+  //employees: MitarbeiterResponseType;
+  employees: Array<MitarbeiterType> = new Array<MitarbeiterType>();
   filteredEmployees: Array<MitarbeiterType>;
   selectedDate: string = null;
 
@@ -75,9 +76,9 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
   getAllEmployees() {
     if (this.user) {
       this.getEmployeeSubscription = this.displayMitarbeiterListeService.getEmployees(this.user)
-        .subscribe((mitarbeiter: MitarbeiterResponseType) => {
+        .subscribe((mitarbeiter: Array<MitarbeiterType>) => {
           this.employees = mitarbeiter;
-          this.filteredEmployees = this.employees.mitarbeiterTypeList;
+          this.filteredEmployees = this.employees;
           this.selectedEmployees = new Array<MitarbeiterType>();
           this.displayMitarbeiterListeService.setSelectedEmployees(null);
           this.displayMitarbeiterListeService.setResetSelection(true);
@@ -90,7 +91,7 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
   }
 
   applyFilter(filterValue: string) {
-    this.filteredEmployees = this.employees.mitarbeiterTypeList
+    this.filteredEmployees = this.employees
       .filter(empl => empl.vorname.toLowerCase().includes(filterValue.toLowerCase())
         || empl.nachname.toLowerCase().includes(filterValue.toLowerCase()));
   }
