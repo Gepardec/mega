@@ -1,9 +1,7 @@
 package com.gepardec.mega.rest.impl;
 
-import com.gepardec.mega.annotations.Authorization;
 import com.gepardec.mega.model.google.GoogleUser;
 import com.gepardec.mega.rest.api.WorkerApi;
-import com.gepardec.mega.security.SessionUser;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import de.provantis.zep.MitarbeiterType;
 
@@ -22,9 +20,14 @@ public class WorkerImpl implements WorkerApi {
     WorkerService workerService;
 
     @Override
+    public Response employee (final HttpServletRequest request, final HttpServletResponse response) {
+        return Response.ok().build();
+    }
+
+    @Override
     public Response employee (final GoogleUser user, final HttpServletRequest request, final HttpServletResponse response) {
         final MitarbeiterType mitarbeiterType = workerService.getEmployee(user);
-        if(mitarbeiterType != null) {
+        if (mitarbeiterType != null) {
             return Response.ok(mitarbeiterType).build();
         }
 
@@ -32,10 +35,15 @@ public class WorkerImpl implements WorkerApi {
     }
 
     @Override
-    @Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
+    public Response employees (final HttpServletRequest request, final HttpServletResponse response) {
+        return Response.ok().build();
+    }
+
+    @Override
+    //@Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
     public Response employees (final GoogleUser user, final HttpServletRequest request, final HttpServletResponse response) {
         final List<MitarbeiterType> mitarbeiterTypeList = workerService.getAllEmployees(user);
-        if(mitarbeiterTypeList != null) {
+        if (mitarbeiterTypeList != null) {
             return Response.ok(mitarbeiterTypeList).build();
         }
 
@@ -43,14 +51,24 @@ public class WorkerImpl implements WorkerApi {
     }
 
     @Override
-    @Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
+    public Response employeesUpdate (final HttpServletRequest request, final HttpServletResponse response) {
+        return Response.ok().build();
+    }
+
+    @Override
+    //@Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
     public Response employeesUpdate (final List<MitarbeiterType> employees, final HttpServletRequest request, final HttpServletResponse response) {
         return Response.status(workerService.updateEmployees(employees)).build();
     }
 
     @Override
-    @Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
-    public Response employeesUpdate (final MitarbeiterType employee, final HttpServletRequest request, final HttpServletResponse response) {
+    public Response employeeUpdate (final HttpServletRequest request, final HttpServletResponse response) {
+        return Response.ok().build();
+    }
+
+    @Override
+    //@Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
+    public Response employeeUpdate (final MitarbeiterType employee, final HttpServletRequest request, final HttpServletResponse response) {
         return Response.status(workerService.updateEmployee(employee)).build();
     }
 }

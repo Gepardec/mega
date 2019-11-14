@@ -7,24 +7,38 @@
 package com.gepardec.mega.filter;
 
 import org.apache.http.HttpStatus;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 
 @Provider
 public class CORSResponseFilter implements ContainerResponseFilter {
+
+//    @ConfigProperty(name = "quarkus.http.cors")
+//    String accessControlAllowCredentials;
+//
+//    @ConfigProperty(name = "quarkus.http.cors.origins")
+//    String accessControlAllowOrigin;
+//
+//    @ConfigProperty(name = "quarkus.http.cors.methods")
+//    String accessControlAllowMethods;
+//
+//    @ConfigProperty(name = "quarkus.http.cors.headers")
+//    String accessControlAllowHeaders;
+
     @Override
-    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
-        responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://localhost:4200");
-        responseContext.getHeaders().add("Access-Control-Allow-Credentials", "true");
-        responseContext.getHeaders().add("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-        responseContext.getHeaders().add("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
+//        responseContext.getHeaders().add("Access-Control-Allow-Credentials", accessControlAllowCredentials);
+//        responseContext.getHeaders().add("Access-Control-Allow-Origin", accessControlAllowOrigin);
+//        responseContext.getHeaders().add("Access-Control-Allow-Methods", accessControlAllowMethods);
+//        responseContext.getHeaders().add("Access-Control-Allow-Headers", accessControlAllowHeaders);
 
         // in case of options for cors-post - return status 200
-        if(requestContext.getMethod().equals("OPTIONS")) {
+        if(requestContext.getMethod().equals(HttpMethod.OPTIONS)) {
             responseContext.setStatus(HttpStatus.SC_OK);
         }
     }
