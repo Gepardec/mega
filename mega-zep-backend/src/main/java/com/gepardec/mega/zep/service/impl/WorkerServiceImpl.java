@@ -31,7 +31,7 @@ public class WorkerServiceImpl implements WorkerService {
     private static final DateTimeFormatter DEFAULT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault());
 
     @PostConstruct
-    private void init() {
+    void init() {
         readMitarbeiterRequestType.setRequestHeader(requestHeaderType);
     }
 

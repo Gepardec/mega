@@ -3,28 +3,20 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>com.gepardec.mega</groupId>
         <artifactId>mega</artifactId>
         <version>${revision}</version>
     </parent>
-
     <artifactId>mega-zep-backend</artifactId>
     <name>MEGA ZEP-Backend</name>
-
     <properties>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
-        <quarkus.version>1.0.0.CR1</quarkus.version>
-
-        <!-- Plugin properties -->
-        <cxf-codegen-plugin.version>3.3.3</cxf-codegen-plugin.version>
-
-        <!-- Dependency properties -->
         <lombock.version>1.18.8</lombock.version>
+        <quarkus.version>1.0.0.CR1</quarkus.version>
+        <cxf-codegen-plugin.version>3.3.3</cxf-codegen-plugin.version>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -36,7 +28,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -72,8 +63,6 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-undertow</artifactId>
         </dependency>
-
-        <!-- cxf-codegen-plugin: Following dependencies are required by the WSDL code generator -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
@@ -100,20 +89,26 @@
             <version>4.4.10</version>
             <scope>compile</scope>
         </dependency>
-        <!-- cxf-codegen-plugin: END -->
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombock.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-health</artifactId>
+        </dependency>
+        <!-- sending mails-->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-mailer</artifactId>
+            <version>1.0.0.CR1</version>
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
-                <!-- Used to generate Java code from ZEP SOAP WSDL -->
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-codegen-plugin</artifactId>
                 <version>${cxf-codegen-plugin.version}</version>
@@ -121,6 +116,9 @@
                     <execution>
                         <id>generate-sources</id>
                         <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsdl2java</goal>
+                        </goals>
                         <configuration>
                             <sourceRoot>${project.build.directory}/generated-sources</sourceRoot>
                             <wsdlOptions>
@@ -129,13 +127,9 @@
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>
-                        <goals>
-                            <goal>wsdl2java</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
@@ -159,7 +153,6 @@
             </plugin>
         </plugins>
     </build>
-
     <profiles>
         <profile>
             <id>native</id>

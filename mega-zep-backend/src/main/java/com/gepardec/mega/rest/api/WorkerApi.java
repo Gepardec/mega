@@ -17,7 +17,6 @@ public interface WorkerApi {
     @OPTIONS
     @Path("/employee")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     Response employee (@Context HttpServletRequest request, @Context HttpServletResponse response);
 
     @POST
@@ -29,7 +28,6 @@ public interface WorkerApi {
     @OPTIONS
     @Path("/employees")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     Response employees (@Context HttpServletRequest request, @Context HttpServletResponse response);
 
     @POST
@@ -41,7 +39,6 @@ public interface WorkerApi {
     @OPTIONS
     @Path("/employees/update")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     Response employeesUpdate (@Context HttpServletRequest request, @Context HttpServletResponse response);
 
     @PUT
@@ -53,7 +50,6 @@ public interface WorkerApi {
     @OPTIONS
     @Path("/employee/update")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     Response employeeUpdate (@Context HttpServletRequest request, @Context HttpServletResponse response);
 
     @PUT

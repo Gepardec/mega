@@ -1,9 +1,10 @@
 import {ResponseHeaderType} from "../ResponseHeaderType";
-import {MitarbeiterListeType} from "./Mitarbeiter/MitarbeiterListeType";
+import {MitarbeiterType} from "./Mitarbeiter/MitarbeiterType";
 
 export class MitarbeiterResponseType {
   private _responseHeader: ResponseHeaderType;
-  private _mitarbeiterListe: MitarbeiterListeType;
+  private _length: number;
+  private _mitarbeiterTypeList: Array<MitarbeiterType>;
 
   get responseHeader(): ResponseHeaderType {
     return this._responseHeader;
@@ -13,11 +14,19 @@ export class MitarbeiterResponseType {
     this._responseHeader = value;
   }
 
-  get mitarbeiterListe(): MitarbeiterListeType {
-    return this._mitarbeiterListe;
+  get length(): number {
+    return this._length;
   }
 
-  set mitarbeiterListe(value: MitarbeiterListeType) {
-    this._mitarbeiterListe = value;
+  set length(value: number) {
+    this._length = value;
+  }
+
+  get mitarbeiterTypeList(): Array<MitarbeiterType> {
+    return this._mitarbeiterTypeList;
+  }
+
+  set mitarbeiterTypeList(value: Array<MitarbeiterType>) {
+    this._mitarbeiterTypeList = value;
   }
 }
