@@ -30,7 +30,8 @@ pipeline {
                                     def revision = buildVersionForBranch()
                                     sh "mvn -B -s jenkins-settings.xml clean install \
                                             -Drevision=${revision} \
-                                            -Dquarkus.package.uber.jar=true"
+                                            -Dquarkus.package.uber.jar=true\
+                                            -DskipTests=true"
                                 }
 
                                 stage('Deploy') {
