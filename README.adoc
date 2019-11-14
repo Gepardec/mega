@@ -8,3 +8,18 @@ Make End-of-the-month-process Great Again!
 - Maven 3.5+
 
 See link:mega-zep-connector/README.adoc[README of ZEP-Connector] for more information.
+
+== Openshift
+
+.Prepare project
+[source,bash]
+----
+# Binary build for backend uber jar
+oc new-build --binary=true --name=mega-zep-backend --docker-image=docker.io/fabric8/s2i-java:3.0-java11 -n 57-mega-dev
+
+# Jenkins Agent for backend build
+oc new-build https://github.com/Gepardec/mega.git#develop --name=quarkus-build-agent --context-dir=docker/agent-quarkus
+
+
+----
+

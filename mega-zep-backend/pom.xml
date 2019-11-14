@@ -17,6 +17,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
         <quarkus.version>0.21.1</quarkus.version>
+        <quarkus.package.uber.jar>false</quarkus.package.uber.jar>
     </properties>
 
     <dependencyManagement>
@@ -136,6 +137,9 @@
                         <goals>
                             <goal>build</goal>
                         </goals>
+                        <configuration>
+                            <uberJar>${quarkus.package.uber.jar}</uberJar>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
