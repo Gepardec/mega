@@ -22,26 +22,6 @@ function recreateSecret {
     createSecret
 }
 
-function createSecret {
-    oc create secret generic github-login \
-        --from-literal=username="${GITHUB_USERNAME}" \
-        --from-literal=password="${GITHUB_PASSWORD}" \
-        --type=kubernetes.io/basic-auth
-
-    oc create secret generic zep-soap-token \
-        --from-file=zep.soap.token="../zep-soap.token"
-    
-    oc annotate secret zep-soap-token jenkins.openshift.io/secret.name=zep-soap-token
-    oc annotate secret github-login jenkins.openshift.io/secret.name=github-login
-
-    oc label secret zep-soap-token credential.sync.jenkins.openshift.io=true
-    oc label secret github-login credential.sync.jenkins.openshift.io=true
-}
-
-function deleteSecret {
-    oc delete secret/github-login
-}
-
 function createJenkins {
     _processJenkins
     oc apply -f ${OUT_DIR}/jenkins-bc.yaml

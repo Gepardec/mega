@@ -20,6 +20,18 @@ oc new-build --binary=true --name=mega-zep-backend --docker-image=docker.io/fabr
 # Jenkins Agent for backend build
 oc new-build https://github.com/Gepardec/mega.git#develop --name=quarkus-build-agent --context-dir=docker/agent-quarkus -n 57-mega-dev
 
+# Create github login secret (username, password are the properties)
+oc create secret generic github-login --from-env-file=github.properties --type=kubernetes.io/basic-auth
 
+# Create soap token secret
+oc create secret generic zep-soap-token --from-file=zep.soap.token=zep-soap.token
+
+# Annotate the secrets which is the name of the Jenkins secret
+oc annotate secret zep-soap-token jenkins.openshift.io/secret.name=zep-soap-token
+oc annotate secret github-login jenkins.openshift.io/secret.name=github-login
+
+# LAbel the secrest so that they are discoverable by Jenkins
+oc label secret zep-soap-token credential.sync.jenkins.openshift.io=true
+oc label secret github-login credential.sync.jenkins.openshift.io=true
 ----
 

@@ -17,7 +17,8 @@ pipeline {
                     ],
                             envVars: [
                                     envVar(key: 'JAVA_MAX_HEAP_PARAM', value: '-Xmx1g'),
-                                    envVar(key: 'CONTAINER_CORE_LIMIT', value: '1')
+                                    envVar(key: 'CONTAINER_CORE_LIMIT', value: '1'),
+                                    secretEnvVar(key: 'ZEP_SOAP_TOKEN', secretName: 'zep-soap-token', secretKey: 'zep.soap.token')
                             ],
                             volumes: [
                                     persistentVolumeClaim(claimName: 'jenkins-mvn-repo-cache', mountPath: '/home/jenkins/.m2/repository')
@@ -30,8 +31,7 @@ pipeline {
                                     def revision = buildVersionForBranch()
                                     sh "mvn -B -s jenkins-settings.xml clean install \
                                             -Drevision=${revision} \
-                                            -Dquarkus.package.uber.jar=true\
-                                            -DskipTests=true"
+                                            -Dquarkus.package.uber.jar=true"
                                 }
 
                                 stage('Deploy') {
@@ -55,7 +55,7 @@ pipeline {
                                                                       --env AB_PROMETHEUS_OFF=true \
                                                                       --env JAVA_OPTIONS=-Djava.net.preferIPv4Stack=true \
                                                         && oc set triggers dc/${ocpApp} --remove-all \
-                                                        && && oc set probe dc/${ocpApp} --readiness --failure-threshold 5 --initial-delay-seconds 2 --get-url=http://localhost:8080/health/ready \
+                                                        && oc set probe dc/${ocpApp} --readiness --failure-threshold 5 --initial-delay-seconds 2 --get-url=http://localhost:8080/health/ready \
                                                         && oc expose svc/${ocpApp} --name=${ocpApp} --port=8080 --labels ${label}"
                                                     } catch (exception) {
                                                         error exception.getMessage()

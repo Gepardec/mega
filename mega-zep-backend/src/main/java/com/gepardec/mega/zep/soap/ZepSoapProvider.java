@@ -27,40 +27,44 @@ public class ZepSoapProvider {
     @Inject
     Logger logger;
 
+    private static final String ENV_ZEP_SOAP_TOKEN = "ZEP_SOAP_TOKEN";
     private static final String ZEP_SOAP_TOKEN_FILE_NAME = "secret.soaptoken";
     private static String authorizationToken;
 
     @PostConstruct
     void initAuthorizationToken() {
-        try {
-            final Path path = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource(ZEP_SOAP_TOKEN_FILE_NAME)).toURI());
-            final Stream<String> lines = Files.lines(path);
-            authorizationToken = lines.collect(Collectors.joining("\n"));
-            lines.close();
-        } catch (IOException e) {
-            String msg = "Error occured while reading file: " + ZEP_SOAP_TOKEN_FILE_NAME;
-            logger.error(msg);
-            throw new TokenFileReadException(msg);
-        } catch (NullPointerException npe) {
-            String msg = "File " + ZEP_SOAP_TOKEN_FILE_NAME + " not found, please put it in mega-zep-backend-resources";
-            logger.error(msg);
-            throw new TokenFileReadException(msg);
-        }
-        catch (URISyntaxException e) {
-            e.printStackTrace();
+        // Get from environment
+        authorizationToken = System.getenv(ENV_ZEP_SOAP_TOKEN);
+        // If not provided by environment try to get file
+        if (authorizationToken == null) {
+            try {
+                authorizationToken = System.getenv(ZEP_SOAP_TOKEN_FILE_NAME);
+                final Path path = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource(ZEP_SOAP_TOKEN_FILE_NAME)).toURI());
+                final Stream<String> lines = Files.lines(path);
+                authorizationToken = lines.collect(Collectors.joining("\n"));
+                lines.close();
+            } catch (IOException e) {
+                String msg = "Error occured while reading file: " + ZEP_SOAP_TOKEN_FILE_NAME;
+                logger.error(msg);
+                throw new TokenFileReadException(msg);
+            } catch (NullPointerException npe) {
+                String msg = "File " + ZEP_SOAP_TOKEN_FILE_NAME + " not found, please put it in mega-zep-backend-resources";
+                logger.error(msg);
+                throw new TokenFileReadException(msg);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
         }
     }
-
 
     @Produces
     @Dependent
     @Named("ZepAuthorizationSOAPPortType")
-    public ZepSoapPortType createZepSoapPortType () {
+    public ZepSoapPortType createZepSoapPortType() {
         try {
             final ZepSoap zs = new ZepSoap();
             return zs.getZepSOAP();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -77,7 +81,7 @@ public class ZepSoapProvider {
     @Produces
     @Dependent
     @Named("ZepAuthorizationRequestHeaderType")
-    public RequestHeaderType createRequestHeaderType () {
+    public RequestHeaderType createRequestHeaderType() {
         RequestHeaderType requestHeaderType = new RequestHeaderType();
         requestHeaderType.setAuthorizationToken(authorizationToken);
         return requestHeaderType;
