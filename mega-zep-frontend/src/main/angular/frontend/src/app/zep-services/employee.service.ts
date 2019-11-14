@@ -21,7 +21,7 @@ export class EmployeeService {
 
   getAll(user: SocialUser): Observable<MitarbeiterResponseType> {
     return this.http.post<MitarbeiterResponseType>(this.URL +
-      '/worker/getAll/', JSON.stringify(user))
+      '/worker/employees/', JSON.stringify(user))
       .pipe(
         retry(1)
       );
@@ -29,7 +29,7 @@ export class EmployeeService {
 
   updateAll(employees: Array<MitarbeiterType>): Observable<Response> {
     return this.http.put<Response>(this.URL +
-      '/worker/update/', JSON.stringify(employees))
+      '/worker/employees/update/', JSON.stringify(employees))
       .pipe(
         retry(1)
       );
@@ -37,7 +37,7 @@ export class EmployeeService {
 
   get(user: SocialUser): Observable<MitarbeiterType> {
     return this.http.post<MitarbeiterType>(this.URL +
-      '/worker/get/', JSON.stringify(user))
+      '/worker/employee/', JSON.stringify(user))
       .pipe(
         retry(1)
       );
