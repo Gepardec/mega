@@ -55,8 +55,8 @@ pipeline {
                                                                       --env AB_PROMETHEUS_OFF=true \
                                                                       --env JAVA_OPTIONS=-Djava.net.preferIPv4Stack=true \
                                                         && oc set triggers dc/${ocpApp} --remove-all \
+                                                        && && oc set probe dc/${ocpApp} --readiness --failure-threshold 5 --initial-delay-seconds 2 --get-url=http://localhost:8080/health/ready \
                                                         && oc expose svc/${ocpApp} --name=${ocpApp} --port=8080 --labels ${label}"
-//                                                                && oc set probe dc/${ocpApp} --readiness --failure-threshold 5 --initial-delay-seconds 2 --get-url=http://localhost:8080/health/ready \
                                                     } catch (exception) {
                                                         error exception.getMessage()
                                                         deleteOcpApp(ocpApp, label)
