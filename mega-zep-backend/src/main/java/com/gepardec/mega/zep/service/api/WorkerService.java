@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface WorkerService {
     MitarbeiterType getEmployee (GoogleUser user);
-    List<MitarbeiterType> getAllEmployees (GoogleUser user);
+    List<MitarbeiterType> getAllEmployees ();
     Integer updateEmployee(MitarbeiterType employee);
     Integer updateEmployees (List<MitarbeiterType> employees);
 }

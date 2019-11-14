@@ -35,14 +35,14 @@ public class WorkerImpl implements WorkerApi {
     }
 
     @Override
-    public Response employees (final HttpServletRequest request, final HttpServletResponse response) {
+    public Response employeesPreFlight (final HttpServletRequest request, final HttpServletResponse response) {
         return Response.ok().build();
     }
 
     @Override
     //@Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
-    public Response employees (final GoogleUser user, final HttpServletRequest request, final HttpServletResponse response) {
-        final List<MitarbeiterType> mitarbeiterTypeList = workerService.getAllEmployees(user);
+    public Response employees (final HttpServletRequest request, final HttpServletResponse response) {
+        final List<MitarbeiterType> mitarbeiterTypeList = workerService.getAllEmployees();
         if (mitarbeiterTypeList != null) {
             return Response.ok(mitarbeiterTypeList).build();
         }

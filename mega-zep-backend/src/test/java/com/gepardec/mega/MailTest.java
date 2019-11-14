@@ -9,10 +9,10 @@ import javax.inject.Inject;
 
 @QuarkusTest
 @Disabled
-public class MailTest {
+class MailTest {
 
     @Inject
-    private MailSender mailSender;
+    MailSender mailSender;
 
     @Test
     void sendMail() {

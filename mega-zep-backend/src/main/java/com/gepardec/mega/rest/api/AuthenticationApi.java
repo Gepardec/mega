@@ -28,7 +28,7 @@ public interface AuthenticationApi {
     @Produces(MediaType.APPLICATION_JSON)
     Response logoutPreFlight (@Context HttpServletRequest request, @Context HttpServletResponse response);
 
-    @POST
+    @GET
     @Path("/logout")
     @Produces(MediaType.APPLICATION_JSON)
     Response logout (@Context HttpServletRequest request, @Context HttpServletResponse response);

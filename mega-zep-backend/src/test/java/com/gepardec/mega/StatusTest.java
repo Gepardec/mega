@@ -8,11 +8,10 @@ import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 
 @QuarkusTest
-@Disabled
-public class StatusTest {
+class StatusTest {
 
     @Test
-    public void testReadyness() {
+    void testReadyness() {
         given().when().get("/health/ready")
                 .then()
                 .statusCode(HttpStatus.SC_OK);
