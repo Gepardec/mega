@@ -26,15 +26,6 @@ class AuthTest {
         googleUser.setId("123456879");
         googleUser.setEmail("christoph.ruhsam@gepardec.com");
         googleUser.setAuthToken("987654321");
-
-        try {
-            final String output = objectMapper.writeValueAsString(googleUser);
-            System.out.println(output);
-        }
-        catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
     }
 
     @Test
