@@ -47,7 +47,7 @@ public class AuthorizationInterceptor {
     }
 
     private HttpServletResponse getHttpServletResponse(InvocationContext ic){
-        return Arrays.stream(ic.getParameters()).filter(p -> p instanceof HttpServletResponse).map(obj -> (HttpServletResponse) obj).findFirst().orElse(null);
+        return Arrays.stream(ic.getParameters()).filter(HttpServletResponse.class::isInstance).map(HttpServletResponse.class::cast).findFirst().orElse(null);
     }
 
     private void logInsufficientPermission(InvocationContext invocationContext){
