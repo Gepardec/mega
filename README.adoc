@@ -18,7 +18,7 @@ See link:mega-zep-connector/README.adoc[README of ZEP-Connector] for more inform
 oc new-build --binary=true --name=mega-zep-backend --docker-image=docker.io/fabric8/s2i-java:3.0-java11 -n 57-mega-dev
 
 # Jenkins Agent for backend build
-oc new-build https://github.com/Gepardec/mega.git#develop --name=quarkus-build-agent --context-dir=docker/agent-quarkus
+oc new-build https://github.com/Gepardec/mega.git#develop --name=quarkus-build-agent --context-dir=docker/agent-quarkus -n 57-mega-dev
 
 
 ----
