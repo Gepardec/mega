@@ -49,7 +49,7 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public List<MitarbeiterType> getAllEmployees (final GoogleUser user) {
+    public List<MitarbeiterType> getAllEmployees () {
         ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType);
         return filterActiveEmployees(rmrt);
     }

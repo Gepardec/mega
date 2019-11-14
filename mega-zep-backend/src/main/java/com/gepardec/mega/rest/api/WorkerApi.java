@@ -28,13 +28,13 @@ public interface WorkerApi {
     @OPTIONS
     @Path("/employees")
     @Produces(MediaType.APPLICATION_JSON)
-    Response employees (@Context HttpServletRequest request, @Context HttpServletResponse response);
+    Response employeesPreFlight (@Context HttpServletRequest request, @Context HttpServletResponse response);
 
     @POST
     @Path("/employees")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    Response employees (final GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response);
+    Response employees (@Context HttpServletRequest request, @Context HttpServletResponse response);
 
     @OPTIONS
     @Path("/employees/update")
