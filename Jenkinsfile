@@ -13,7 +13,7 @@ pipeline {
                 script {
                     stash name: "repo", includes: '**'
                     podTemplate(cloud: 'openshift', label: 'quarkus-build-agent', serviceAccount: 'jenkins', containers: [
-                            containerTemplate(name: 'mega-build', image: 'docker-registry.default.svc:5000/57-mega-dev/mega-build-agent:latest', ttyEnabled: true, command: 'cat', alwaysPullImage: true)
+                            containerTemplate(name: 'quarkus-build', image: 'docker-registry.default.svc:5000/57-mega-dev/mega-build-agent:latest', ttyEnabled: true, command: 'cat', alwaysPullImage: true)
                     ],
                             envVars: [
                                     envVar(key: 'JAVA_MAX_HEAP_PARAM', value: '-Xmx1g'),
@@ -23,8 +23,8 @@ pipeline {
                                     persistentVolumeClaim(claimName: 'jenkins-mvn-repo-cache', mountPath: '/home/jenkins/.m2/repository')
                             ]) {
 
-                        node('mega-agent') {
-                            container('mega-build') {
+                        node('quarkus-build-agent') {
+                            container('quarkus-build') {
                                 unstash name: "repo"
                                 stage('Build') {
                                     def revision = buildVersionForBranch()
