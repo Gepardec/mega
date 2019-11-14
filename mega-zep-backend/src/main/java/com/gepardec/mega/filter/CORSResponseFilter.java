@@ -18,24 +18,24 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class CORSResponseFilter implements ContainerResponseFilter {
 
-    @ConfigProperty(name = "quarkus.http.cors")
-    String accessControlAllowCredentials;
-
-    @ConfigProperty(name = "quarkus.http.cors.origins")
-    String accessControlAllowOrigin;
-
-    @ConfigProperty(name = "quarkus.http.cors.methods")
-    String accessControlAllowMethods;
-
-    @ConfigProperty(name = "quarkus.http.cors.headers")
-    String accessControlAllowHeaders;
+//    @ConfigProperty(name = "quarkus.http.cors")
+//    String accessControlAllowCredentials;
+//
+//    @ConfigProperty(name = "quarkus.http.cors.origins")
+//    String accessControlAllowOrigin;
+//
+//    @ConfigProperty(name = "quarkus.http.cors.methods")
+//    String accessControlAllowMethods;
+//
+//    @ConfigProperty(name = "quarkus.http.cors.headers")
+//    String accessControlAllowHeaders;
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
-        responseContext.getHeaders().add("Access-Control-Allow-Credentials", accessControlAllowCredentials);
-        responseContext.getHeaders().add("Access-Control-Allow-Origin", accessControlAllowOrigin);
-        responseContext.getHeaders().add("Access-Control-Allow-Methods", accessControlAllowMethods);
-        responseContext.getHeaders().add("Access-Control-Allow-Headers", accessControlAllowHeaders);
+//        responseContext.getHeaders().add("Access-Control-Allow-Credentials", accessControlAllowCredentials);
+//        responseContext.getHeaders().add("Access-Control-Allow-Origin", accessControlAllowOrigin);
+//        responseContext.getHeaders().add("Access-Control-Allow-Methods", accessControlAllowMethods);
+//        responseContext.getHeaders().add("Access-Control-Allow-Headers", accessControlAllowHeaders);
 
         // in case of options for cors-post - return status 200
         if(requestContext.getMethod().equals(HttpMethod.OPTIONS)) {

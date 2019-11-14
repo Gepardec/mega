@@ -15,7 +15,6 @@ public interface AuthenticationApi {
     @OPTIONS
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     Response login (@Context HttpServletRequest request, @Context HttpServletResponse response);
 
     @POST
@@ -26,9 +25,11 @@ public interface AuthenticationApi {
 
     @OPTIONS
     @Path("/logout")
+    @Produces(MediaType.APPLICATION_JSON)
     Response logoutPreFlight (@Context HttpServletRequest request, @Context HttpServletResponse response);
 
     @POST
     @Path("/logout")
+    @Produces(MediaType.APPLICATION_JSON)
     Response logout (@Context HttpServletRequest request, @Context HttpServletResponse response);
 }
