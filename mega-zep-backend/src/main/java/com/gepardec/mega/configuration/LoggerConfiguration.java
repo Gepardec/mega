@@ -8,7 +8,6 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
-import java.util.Collections;
 
 @ApplicationScoped
 public class LoggerConfiguration {
