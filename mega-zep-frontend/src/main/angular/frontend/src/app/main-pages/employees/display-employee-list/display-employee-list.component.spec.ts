@@ -14,7 +14,6 @@ import {MockAuthService} from "../../../signin/MockAuthService";
 import {By} from "@angular/platform-browser";
 import {MitarbeiterResponseType} from "../../../models/Mitarbeiter/MitarbeiterResponseType";
 import {MitarbeiterType} from "../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
-import {MitarbeiterListeType} from "../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterListeType";
 import {DebugElement} from "@angular/core";
 
 describe('DisplayEmployeeListComponent', () => {
@@ -51,9 +50,8 @@ describe('DisplayEmployeeListComponent', () => {
     emplType.vorname = "Max";
     emplType.nachname = "Mustermann";
     emplType.email = "max.mustermann@mustermail.com";
-    empl.mitarbeiterListe = new MitarbeiterListeType();
-    empl.mitarbeiterListe.length = 1;
-    empl.mitarbeiterListe.mitarbeiter = new Array<MitarbeiterType>(emplType);
+    empl.mitarbeiterTypeList = Array<MitarbeiterType>(emplType);
+    empl.length = 1;
     return empl;
   }
 

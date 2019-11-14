@@ -77,7 +77,7 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
       this.getEmployeeSubscription = this.displayMitarbeiterListeService.getEmployees(this.user)
         .subscribe((mitarbeiter: MitarbeiterResponseType) => {
           this.employees = mitarbeiter;
-          this.filteredEmployees = this.employees.mitarbeiterListe.mitarbeiter;
+          this.filteredEmployees = this.employees.mitarbeiterTypeList;
           this.selectedEmployees = new Array<MitarbeiterType>();
           this.displayMitarbeiterListeService.setSelectedEmployees(null);
           this.displayMitarbeiterListeService.setResetSelection(true);
@@ -90,7 +90,7 @@ export class DisplayEmployeeListComponent implements OnInit, OnDestroy {
   }
 
   applyFilter(filterValue: string) {
-    this.filteredEmployees = this.employees.mitarbeiterListe.mitarbeiter
+    this.filteredEmployees = this.employees.mitarbeiterTypeList
       .filter(empl => empl.vorname.toLowerCase().includes(filterValue.toLowerCase())
         || empl.nachname.toLowerCase().includes(filterValue.toLowerCase()));
   }
