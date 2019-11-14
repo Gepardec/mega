@@ -18,8 +18,18 @@ public class AuthenticationImpl implements AuthenticationApi {
     AuthenticationService authenticationService;
 
     @Override
+    public Response login (final HttpServletRequest request, final HttpServletResponse response) {
+        return Response.ok().build();
+    }
+
+    @Override
     public Response login (GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response) {
         return authenticationService.login(user, request);
+    }
+
+    @Override
+    public Response logoutPreFlight (final HttpServletRequest request, final HttpServletResponse response) {
+        return Response.ok().build();
     }
 
     @Override

@@ -91,13 +91,20 @@ public class WorkerServiceImpl implements WorkerService {
             final List<BeschaeftigungszeitType> beschaeftigungszeitTypeList = beschaeftigungszeitListeType.getBeschaeftigungszeit();
             final BeschaeftigungszeitType last = beschaeftigungszeitTypeList
                     .stream()
-                    .sorted(Comparator.comparing(BeschaeftigungszeitType::getEnddatum))
+                    .sorted(Comparator.comparing(BeschaeftigungszeitType::getStartdatum))
                     .reduce((first, second) -> second)
                     .orElse(null);
 
-            final LocalDate endDate = LocalDate.parse(Objects.requireNonNull(last).getEnddatum(), DEFAULT_DATE_FORMATTER);
-            if(!endDate.isBefore(LocalDate.now())) {
-                activeEmployees.add(employee);
+            if(last != null) {
+                // if enddatum (sic!) is null => employee is active
+                if(last.getEnddatum() == null) {
+                    activeEmployees.add(employee);
+                } else {
+                    final LocalDate endDate = LocalDate.parse(Objects.requireNonNull(last).getEnddatum(), DEFAULT_DATE_FORMATTER);
+                    if(!endDate.isBefore(LocalDate.now())) {
+                        activeEmployees.add(employee);
+                    }
+                }
             }
         });
 
