@@ -6,19 +6,15 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
 @Disabled
 public class StatusTest {
 
     @Test
-    public void testWorkerStatus() {
-        final String expectedStatusBody = "{\"code\":200,\"status\":\"OK\"}";
-
-        given().when().get("/worker/status")
+    public void testReadyness() {
+        given().when().get("/health/ready")
                 .then()
-                    .statusCode(HttpStatus.SC_OK)
-                    .body(is(expectedStatusBody));
+                .statusCode(HttpStatus.SC_OK);
     }
 }
