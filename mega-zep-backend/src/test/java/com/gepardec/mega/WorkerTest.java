@@ -23,39 +23,27 @@ public class WorkerTest {
 
     @BeforeAll
     static void initTests () {
-        googleUser.setId("123456879");
         googleUser.setEmail("christoph.ruhsam@gepardec.com");
-        googleUser.setAuthToken("987654321");
     }
 
     @Test
-    void testGetOneEmployees() {
+    void testGetOneEmployees () throws IOException {
         final String response = given().contentType(ContentType.JSON).body(googleUser).post("/worker/employee").then().statusCode(HttpStatus.SC_OK).extract().asString();
         assertNotNull(response);
         assertNotEquals("", response);
 
-        try {
-            final MitarbeiterType mitarbeiterType = objectMapper.readValue(response, MitarbeiterType.class);
-            assertNotNull(mitarbeiterType);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        final MitarbeiterType mitarbeiterType = objectMapper.readValue(response, MitarbeiterType.class);
+        assertNotNull(mitarbeiterType);
     }
 
     @Test
-    void testGetAllEmployees() {
+    void testGetAllEmployees () throws IOException {
         final String response = given().contentType(ContentType.JSON).body(googleUser).post("/worker/employees").then().statusCode(HttpStatus.SC_OK).extract().asString();
         assertNotNull(response);
         assertNotEquals("", response);
 
-        try {
-            List<MitarbeiterType> mitarbeiterTypeList = objectMapper.readValue(response, objectMapper.getTypeFactory().constructCollectionType(List.class, MitarbeiterType.class));
-            assertNotNull(mitarbeiterTypeList);
-            assertFalse(mitarbeiterTypeList.isEmpty());
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<MitarbeiterType> mitarbeiterTypeList = objectMapper.readValue(response, objectMapper.getTypeFactory().constructCollectionType(List.class, MitarbeiterType.class));
+        assertNotNull(mitarbeiterTypeList);
+        assertFalse(mitarbeiterTypeList.isEmpty());
     }
 }
