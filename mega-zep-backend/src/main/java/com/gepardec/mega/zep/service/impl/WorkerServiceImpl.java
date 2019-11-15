@@ -1,14 +1,12 @@
 package com.gepardec.mega.zep.service.impl;
 
-import com.gepardec.mega.data.BreakWarning;
-import com.gepardec.mega.data.JourneyWarning;
-import com.gepardec.mega.data.MonthendReport;
 import com.gepardec.mega.model.google.GoogleUser;
+import com.gepardec.mega.monthendreport.MonthendReport;
 import com.gepardec.mega.security.AuthorizationInterceptor;
+import com.gepardec.mega.utils.DateUtils;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import de.provantis.zep.*;
 import org.apache.http.HttpStatus;
-import utils.DateUtils;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -16,10 +14,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.interceptor.Interceptors;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.*;
 
-import static utils.DateUtils.dateToString;
+import static com.gepardec.mega.utils.DateUtils.getFirstDayOfFollowingMonth;
+import static com.gepardec.mega.utils.DateUtils.getLastDayOfFollowingMonth;
 
 @Interceptors(AuthorizationInterceptor.class)
 @ApplicationScoped
@@ -72,65 +70,64 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public MonthendReport getMonthendReport(GoogleUser user) {
-
-        MitarbeiterType mitarbeiter = getEmployee(user);
-        if (mitarbeiter == null) {
-            return Optional.empty();
+        MitarbeiterType employee = getEmployee(user);
+        if (employee == null) {
+            return null;
         }
-        String userId = mitarbeiter.getUserId();
+        MonthendReport monthendReport = new MonthendReport(employee);
 
         ReadProjektzeitenSearchCriteriaType searchCriteria = new ReadProjektzeitenSearchCriteriaType();
 
-        //show last 3 months
-        LocalDate today = DateUtils.now();
-        searchCriteria.setVon(dateToString(today.minus(Period.ofMonths(3))));
-        searchCriteria.setBis(dateToString(today));
+        String releaseDate = employee.getFreigabedatum();
+        searchCriteria.setVon(getFirstDayOfFollowingMonth(releaseDate));
+        searchCriteria.setBis(getLastDayOfFollowingMonth(releaseDate));
 
         UserIdListeType userIdListType = new UserIdListeType();
-        userIdListType.getUserId().add(userId);
+        userIdListType.getUserId().add(employee.getUserId());
         searchCriteria.setUserIdListe(userIdListType);
         projektzeitenRequest.setReadProjektzeitenSearchCriteria(searchCriteria);
 
         ReadProjektzeitenResponseType projektzeitenResponse = zepSoapPortType.readProjektzeiten(projektzeitenRequest);
 
-        return calculateMonthendWarnings(projektzeitenResponse);
+
+        return calcBreakWarnings(projektzeitenResponse, monthendReport);
 
     }
 
-    private static MonthendReport calculateMonthendWarnings(ReadProjektzeitenResponseType projektzeitenResponse) {
 
-        if(projektzeitenResponse == null
-                || projektzeitenResponse.getProjektzeitListe() == null)) {
-            return Optional.empty();
+    private static MonthendReport calcBreakWarnings(ReadProjektzeitenResponseType projektzeitenResponse, MonthendReport monthendReport) {
+
+        if (projektzeitenResponse == null || projektzeitenResponse.getProjektzeitListe() == null) {
+            return null;
         }
 
-        MonthendReport monthendReport = new MonthendReport();
+
+
         //TODO: map to monthendReport
 
-        BreakWarning breakWarning = new BreakWarning();
-        breakWarning.setDate(LocalDate.of(2019, 11,10));
-        breakWarning.setDay("Mo");
-        breakWarning.setTooLessBreak(1.5);
-        breakWarning.setTooMuchWorkTime(2.0);
-        breakWarning.setTooLessRest(3.0);
-
-        JourneyWarning journeyWarning = new JourneyWarning();
-        journeyWarning.setDate(LocalDate.of(2019,11,10));
-        journeyWarning.setDay("Di");
-        journeyWarning.setWarningText("Das ist eine Warnung");
-
-        monthendReport.getBreakWarnings().add(breakWarning);
-        monthendReport.getJourneyWarnings().add(journeyWarning);
+//        BreakWarning breakWarning = new BreakWarning();
+//        breakWarning.setDate(LocalDate.of(2019, 11, 10));
+//        breakWarning.setDay("Mo");
+//        breakWarning.setTooLessBreak(1.5);
+//        breakWarning.setTooMuchWorkTime(2.0);
+//        breakWarning.setTooLessRest(3.0);
+//
+//        JourneyWarning journeyWarning = new JourneyWarning();
+//        journeyWarning.setDate(LocalDate.of(2019, 11, 10));
+//        journeyWarning.setDay("Di");
+//        journeyWarning.setWarningText("Das ist eine Warnung");
+//
+//        monthendReport.getBreakWarnings().add(breakWarning);
+//        monthendReport.getJourneyWarnings().add(journeyWarning);
 
 
 //        projektzeitenResponse.getProjektzeitListe().getProjektzeiten().stream()
+//                .map(projecttime -> )
 //                .filter()
 //                .map();
 
 
-
-
-        return Optional.ofNullable(monthendReport);
+        return monthendReport;
     }
 
     @Override

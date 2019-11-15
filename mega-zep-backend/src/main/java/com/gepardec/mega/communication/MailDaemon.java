@@ -16,10 +16,9 @@ public class MailDaemon {
     private WorkerService workerService;
 
 
-
-
     @Scheduled(every = "5s")
     void sendMailToEmployees() {
+        mailSender.send();
         System.out.println("5 seconds past");
 
         //TODO: implement

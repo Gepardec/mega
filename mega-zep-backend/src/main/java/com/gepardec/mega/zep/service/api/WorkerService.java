@@ -1,7 +1,7 @@
 package com.gepardec.mega.zep.service.api;
 
-import com.gepardec.mega.data.MonthendReport;
 import com.gepardec.mega.model.google.GoogleUser;
+import com.gepardec.mega.monthendreport.MonthendReport;
 import de.provantis.zep.MitarbeiterType;
 
 import java.util.List;

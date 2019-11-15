@@ -1,7 +1,7 @@
 package com.gepardec.mega.rest.impl;
 
-import com.gepardec.mega.data.MonthendReport;
 import com.gepardec.mega.model.google.GoogleUser;
+import com.gepardec.mega.monthendreport.MonthendReport;
 import com.gepardec.mega.rest.api.WorkerApi;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import de.provantis.zep.MitarbeiterType;
@@ -37,9 +37,10 @@ public class WorkerImpl implements WorkerApi {
 
     @Override
     public Response employeeMonthendReport(GoogleUser user, HttpServletRequest request, HttpServletResponse response) {
-        final MonthendReport monthendReport = workerService.getMonthendReport(user)
+        final MonthendReport monthendReport = workerService.getMonthendReport(user);
         return Response.ok(monthendReport).build();
     }
+
 
     @Override
     public Response employees (final HttpServletRequest request, final HttpServletResponse response) {

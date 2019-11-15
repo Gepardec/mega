@@ -9,7 +9,7 @@ import static io.restassured.RestAssured.given;
 
 @QuarkusTest
 @Disabled
-public class StatusTest {
+public class ReadynessTest {
 
     @Test
     public void testReadyness() {

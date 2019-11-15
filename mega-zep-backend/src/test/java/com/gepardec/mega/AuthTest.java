@@ -81,15 +81,6 @@ class AuthTest {
         assertEquals("", response);
     }
 
-    @Test
-    void monthendReport_withUser_shouldShowLast3Month() {
-        final String response = given().contentType(ContentType.JSON)
-                .body(googleUser)
-                .post("/worker/employee/monthendReport")
-                .then()
-                .statusCode(HttpStatus.SC_OK)
-                .extract().asString();
-        assertEquals("", response);
-    }
+
 
 }
