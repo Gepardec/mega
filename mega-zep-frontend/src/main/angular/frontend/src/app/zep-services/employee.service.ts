@@ -20,8 +20,8 @@ export class EmployeeService {
   ) {
   }
 
-  getAll(user: SocialUser): Observable<MitarbeiterResponseType> {
-    return this.http.post<MitarbeiterResponseType>(this.URL +
+  getAll(user: SocialUser): Observable<Array<MitarbeiterType>> {
+    return this.http.post<Array<MitarbeiterType>>(this.URL +
       '/worker/employees/', JSON.stringify(user))
       .pipe(
         retry(1)
