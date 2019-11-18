@@ -1,0 +1,166 @@
+#!groovy
+
+pipeline {
+    agent any
+
+    environment {
+        OCP_PROJECT_NAME = "57-mega-dev"
+        OCP_ROUTE_SUFFIX = "${OCP_PROJECT_NAME}.cloud.itandtel.at"
+    }
+
+    options {
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('Stash') {
+            steps {
+                stash name: "repo", includes: '**'
+            }
+        }
+
+        stage("Build/Deploy") {
+            parallel {
+                stage('frontend') {
+                    steps {
+                        script {
+                            podTemplate(cloud: 'openshift', name: 'nodejs-build-agent', label: 'nodejs-build-agent', serviceAccount: 'jenkins', containers: [
+                                    containerTemplate(name: 'nodejs-container', image: 'docker-registry.default.svc:5000/57-mega-dev/nodejs-build-agent:latest', ttyEnabled: true, command: 'cat', alwaysPullImage: true)
+                            ]) {
+                                node('nodejs-build-agent') {
+                                    container('nodejs-container') {
+                                        unstash name: "repo"
+
+                                        def backendProps = null
+                                        dir('ocp/templates'){
+                                            backendProps = readServiceProperties("mega-zep-backend")
+                                        }
+                                        def service = "http://${backendProps.NAME}:8080"
+
+                                        dir('mega-zep-frontend/src/main/angular/frontend') {
+                                            sh "sed -i -e 's|REPLACE_BACKEND_ORIGIN|${service}|g' src/environments/environment.prod.ts"
+                                            sh "npm install"
+                                            sh "ng build --optimization=true --sourceMap=false --configuration=prod"
+                                        }
+
+                                        dir('ocp/templates') {
+                                            openshift.withCluster() {
+                                                openshift.withProject("${OCP_PROJECT_NAME}") {
+                                                    recreateServiceResources("mega-zep-frontend")
+                                                }
+                                            }
+                                        }
+
+                                        dir('mega-zep-frontend/src/main/angular/frontend') {
+                                            openshift.withCluster() {
+                                                openshift.withProject("${OCP_PROJECT_NAME}") {
+                                                    sh "oc start-build mega-zep-frontend --commit=${env.GIT_COMMIT} \
+                                                                                         --from-dir=dist/frontend \
+                                                                                         --follow \
+                                                                                         --wait"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                stage('backend') {
+                    steps {
+                        script {
+                            podTemplate(cloud: 'openshift', name: 'quarkus-build-agent', label: 'quarkus-build-agent', serviceAccount: 'jenkins', containers: [
+                                    containerTemplate(name: 'quarkus-container', image: 'docker-registry.default.svc:5000/57-mega-dev/quarkus-build-agent:latest', ttyEnabled: true, command: 'cat', alwaysPullImage: true,
+                                            envVars: [
+                                                    envVar(key: 'JAVA_MAX_HEAP_PARAM', value: '-Xmx1g'),
+                                                    envVar(key: 'CONTAINER_CORE_LIMIT', value: '1')
+                                            ])
+                            ],
+                                    volumes: [
+                                            persistentVolumeClaim(claimName: 'jenkins-mvn-repo-cache', mountPath: '/home/jenkins/.m2/repository')
+                                    ]) {
+                                node('quarkus-build-agent') {
+                                    container('quarkus-container') {
+                                        unstash name: "repo"
+
+                                        def revision = buildRevisionForBranch()
+
+                                        sh "mvn -B -s jenkins-settings.xml \
+                                                      clean install \
+                                                   -Drevision=${revision} \
+                                                   -Dquarkus.package.uber.jar=true"
+
+                                        dir('ocp/templates') {
+                                            openshift.withCluster() {
+                                                openshift.withProject("${OCP_PROJECT_NAME}") {
+                                                    recreateServiceResources("mega-zep-backend")
+                                                }
+                                            }
+                                        }
+
+                                        dir('mega-zep-backend/target/') {
+                                            openshift.withCluster() {
+                                                openshift.withProject("${OCP_PROJECT_NAME}") {
+                                                    def artifact = "mega-zep-backend-${revision}-runner.jar"
+
+                                                    sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+def recreateServiceResources(String service, String stage = "") {
+    if (stage != "") {
+        stage = "." + stage
+    }
+    def processedYaml = "${service}.processed.yaml"
+    sh "oc process --filename ${service}.yaml \
+                   --param-file=${service}${stage}.properties \
+                   --output yaml \
+                   > ${processedYaml} \
+        && oc delete --ignore-not-found \
+                     --filename ${processedYaml} \
+        && oc create --filename ${processedYaml}"
+}
+
+def readServiceProperties(String service, String stage = "") {
+    if (stage != "") {
+        stage = "." + stage
+    }
+    def props = readProperties file: "ocp/templates/${service}${stage}.properties"
+    return props
+}
+
+def buildRevisionForBranch(String pomLocation = "./") {
+    def branch = "${env.GIT_BRANCH}".trim().toLowerCase()
+    def revision = "";
+    if (branch.equals("develop")) {
+        pom = readMavenPom file: pomLocation + 'pom.xml'
+        return pom.properties['revision']
+    } else if (branch.startsWith("feature/")) {
+        return branch.replace("/", "-").toUpperCase()
+    } else if (branch.startsWith("pr-")) {
+        return branch.replace("/", "-").toUpperCase()
+    } else if (branch.startsWith("release/") || branch.startsWith("hotfix/")) {
+        pom = readMavenPom file: pomLocation + 'pom.xml'
+        return pom.properties['revision']
+    } else {
+        error("Branch not detected. branch=${branch}")
+    }
+}
+
+def isPullRequest() {
+    def branch = "${env.GIT_BRANCH}".trim().toLowerCase()
+    return branch.startsWith("pr-")
+}

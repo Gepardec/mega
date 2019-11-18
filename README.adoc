@@ -9,29 +9,58 @@ Make End-of-the-month-process Great Again!
 
 See link:mega-zep-connector/README.adoc[README of ZEP-Connector] for more information.
 
+.mega-secrets.properties (externalized configurations)
+[source,properties]
+----
+zep.soap.token=***
+quarkus.mailer.username=<sender_email_username>
+quarkus.mailer.password=***
+quarkus.mailer.from=<sender_email_address>
+----
+
+== Dockerfiles
+
+These are the Dockerfiles used by this project
+
+* link:docker/agent-nodejs/Dockerfile[agent-nodejs/Dockerfile] +
+ The Dockerfile for building the nodejs build agent
+* link:docker/agent-quarkus/Dockerfile[agent-quarkus/Dockerfile] +
+ The Dockerfile for building the quarkus build agent
+
 == Openshift
 
 .Prepare project
 [source,bash]
 ----
+# Persistence Volumes for caching repositories
+oc create -f  .\ocp\maven-pvc.yaml
+
 # Binary build for backend uber jar
 oc new-build --binary=true --name=mega-zep-backend --docker-image=docker.io/fabric8/s2i-java:3.0-java11 -n 57-mega-dev
+oc set triggers bc/mega-zep-backend --remove-all -n 57-mega-dev
 
-# Jenkins Agent for backend build
+# Binary build for frontend html content
+oc new-build httpd:2.4 --binary=true --name=mega-zep-frontend -n 57-mega-dev
+oc set triggers bc/mega-zep-frontend --remove-all -n 57-mega-dev
+
+# Quarkus Build Agent
 oc new-build https://github.com/Gepardec/mega.git#develop --name=quarkus-build-agent --context-dir=docker/agent-quarkus -n 57-mega-dev
+oc set triggers bc/quarkus-build-agent --remove-all -n 57-mega-dev
+
+# Nodejs Build Agent
+oc new-build https://github.com/Gepardec/mega#develop --name=nodejs-build-agent  --context-dir=docker/agent-nodejs -n 57-mega-dev
+oc set triggers bc/nodejs-build-agent --remove-all -n 57-mega-dev
 
 # Create github login secret (username, password are the properties)
 oc create secret generic github-login --from-env-file=github.properties --type=kubernetes.io/basic-auth
-
-# Create soap token secret
-oc create secret generic zep-soap-token --from-file=zep.soap.token=zep-soap.token
-
-# Annotate the secrets which is the name of the Jenkins secret
-oc annotate secret zep-soap-token jenkins.openshift.io/secret.name=zep-soap-token
 oc annotate secret github-login jenkins.openshift.io/secret.name=github-login
-
-# LAbel the secrest so that they are discoverable by Jenkins
-oc label secret zep-soap-token credential.sync.jenkins.openshift.io=true
 oc label secret github-login credential.sync.jenkins.openshift.io=true
+
+# Create mega secret
+oc create secret generic mega-secrets --from-file=application.properties=mega-secrets.properties
 ----
 
+TODOS:
+
+. quarkus-build-agent build config needs to point to develop after merge
+. nodejs-build-agent build config needs to point to develop after merge

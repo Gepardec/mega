@@ -5,6 +5,7 @@ import {retry} from 'rxjs/operators';
 import {MitarbeiterType} from '../models/Mitarbeiter/Mitarbeiter/MitarbeiterType';
 import {HttpClient} from '@angular/common/http';
 import {configuration} from '../../configuration/configuration';
+import {environment} from "../../environments/environment";
 import {SocialUser} from 'angularx-social-login';
 
 @Injectable({
@@ -12,7 +13,7 @@ import {SocialUser} from 'angularx-social-login';
 })
 export class EmployeeService {
 
-  private URL: string = configuration.BASEURL;
+  private URL: string = environment.backendOrigin;
 
   constructor(
     private http: HttpClient

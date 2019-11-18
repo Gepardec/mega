@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  // Base url
+  backendOrigin: 'REPLACE_BACKEND_ORIGIN'
 };

@@ -1,9 +1,6 @@
 import {HttpHeaders} from "@angular/common/http";
 
 export const configuration = {
-  // Base url
-  BASEURL: 'http://localhost:8080',
-
   PAGES: {
     HOME: '/home',
     DASHBOARD: '/dashboard',

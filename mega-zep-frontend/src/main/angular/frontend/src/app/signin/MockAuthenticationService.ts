@@ -3,6 +3,7 @@ import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {AuthService, GoogleLoginProvider, SocialUser} from "angularx-social-login";
 import {Router} from "@angular/router";
 import {configuration} from "../../configuration/configuration";
+import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {retry} from "rxjs/operators";
 import {MitarbeiterType} from "../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
@@ -12,7 +13,7 @@ import {MitarbeiterType} from "../models/Mitarbeiter/Mitarbeiter/MitarbeiterType
 })
 export class MockAuthenticationService implements OnDestroy {
 
-  private readonly URL: string = configuration.BASEURL;
+  private readonly URL: string = environment.backendOrigin;
 
   private readonly CURRENT_USER: string = 'currentUser';
   private readonly CURRENT_EMPLOYEE: string = 'currentEmployee';
