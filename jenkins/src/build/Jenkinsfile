@@ -91,9 +91,10 @@ pipeline {
                                             sh 'mvn clean'
                                             withCredentials([file(credentialsId: 'mega-secrets', variable: 'FILE')]) {
                                                 sh "mkdir -p target/config \
-                                                    && cp -f ${FILE} target/config/application.properties"
+                                                    && cp -L -f ${FILE} target/config/application.properties \
+                                                    && ls target/config/ -lrta && cat target/config/application.properties"
                                             }
-                                            sh "mvn -B -s jenkins-settings.xml \
+                                            sh "mvn -B -s ../jenkins-settings.xml \
                                                    install \
                                                    -Drevision=${revision} \
                                                    -Dquarkus.package.uber.jar=true"
