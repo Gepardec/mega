@@ -75,11 +75,7 @@ pipeline {
                                     containerTemplate(name: 'quarkus-container', image: 'docker-registry.default.svc:5000/57-mega-dev/quarkus-build-agent:latest', ttyEnabled: true, command: 'cat', alwaysPullImage: true,
                                             envVars: [
                                                     envVar(key: 'JAVA_MAX_HEAP_PARAM', value: '-Xmx1g'),
-                                                    envVar(key: 'CONTAINER_CORE_LIMIT', value: '1'),
-                                                    secretEnvVar(key: 'ZEP_TOKEN', secretName: 'mega-secrets', secretKey: 'zep.soap.token'),
-                                                    secretEnvVar(key: 'MAILER_USERNAME', secretName: 'mega-secrets', secretKey: 'quarkus.mailer.username'),
-                                                    secretEnvVar(key: 'MAILER_PASSWORD', secretName: 'mega-secrets', secretKey: 'quarkus.mailer.password'),
-                                                    secretEnvVar(key: 'MAILER_FROM', secretName: 'mega-secrets', secretKey: 'quarkus.mailer.from')
+                                                    envVar(key: 'CONTAINER_CORE_LIMIT', value: '1')
                                             ])
                             ],
                                     volumes: [
@@ -91,14 +87,17 @@ pipeline {
 
                                         def revision = buildRevisionForBranch()
 
-                                        sh "mvn -B -s jenkins-settings.xml \
-                                                      clean install \
+                                        dir('mega-zep-backend') {
+                                            sh 'mvn clean'
+                                            withCredentials([file(credentialsId: 'mega-secrets', variable: 'FILE')]) {
+                                                sh "mkdir -p target/config \
+                                                    && cp -f ${FILE} target/config/application.properties"
+                                            }
+                                            sh "mvn -B -s jenkins-settings.xml \
+                                                   install \
                                                    -Drevision=${revision} \
-                                                   -Dzep.soap.token=${env.ZEP_TOKEN} \
-                                                   -Dquarkus.mailer.username=${env.MAILER_USERNAME} \
-                                                   -Dquarkus.mailer.password=${env.MAILER_PASSWORD} \
-                                                   -Dquarkus.mailer.from=${env.MAILER_FROM} \
                                                    -Dquarkus.package.uber.jar=true"
+                                        }
 
                                         dir('ocp/templates') {
                                             openshift.withCluster() {

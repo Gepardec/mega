@@ -58,6 +58,8 @@ oc label secret github-login credential.sync.jenkins.openshift.io=true
 
 # Create mega secret
 oc create secret generic mega-secrets --from-file=application.properties=mega-secrets.properties
+oc annotate secret mega-secrets jenkins.openshift.io/secret.name=mega-secrets
+oc label secret mega-secrets credential.sync.jenkins.openshift.io=true
 ----
 
 TODOS:
