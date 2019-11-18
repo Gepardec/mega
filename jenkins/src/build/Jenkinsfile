@@ -99,7 +99,6 @@ pipeline {
                                                    -Dquarkus.mailer.from=${props['quarkus.mailer.from']}"
                                         }
 
-
                                         dir('ocp/templates') {
                                             openshift.withCluster() {
                                                 openshift.withProject("${OCP_PROJECT_NAME}") {
