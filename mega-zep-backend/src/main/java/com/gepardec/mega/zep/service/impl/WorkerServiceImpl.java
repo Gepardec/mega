@@ -77,44 +77,35 @@ public class WorkerServiceImpl implements WorkerService {
         }
         MonthendReport monthendReport = new MonthendReport(employee);
 
+        ReadProjektzeitenSearchCriteriaType searchCriteria = createProjectTimeSearchCriteria(monthendReport);
+        projektzeitenRequest.setReadProjektzeitenSearchCriteria(searchCriteria);
+
+        ReadProjektzeitenResponseType projectTimeResponse = zepSoapPortType.readProjektzeiten(projektzeitenRequest);
+
+        return calcWarnings(projectTimeResponse, monthendReport);
+
+    }
+
+    private static ReadProjektzeitenSearchCriteriaType createProjectTimeSearchCriteria(MonthendReport monthendReport) {
         ReadProjektzeitenSearchCriteriaType searchCriteria = new ReadProjektzeitenSearchCriteriaType();
 
-        String releaseDate = employee.getFreigabedatum();
+        String releaseDate = monthendReport.getEmployee().getFreigabedatum();
         searchCriteria.setVon(getFirstDayOfFollowingMonth(releaseDate));
         searchCriteria.setBis(getLastDayOfFollowingMonth(releaseDate));
 
         UserIdListeType userIdListType = new UserIdListeType();
-        userIdListType.getUserId().add(employee.getUserId());
+        userIdListType.getUserId().add(monthendReport.getEmployee().getUserId());
         searchCriteria.setUserIdListe(userIdListType);
-        projektzeitenRequest.setReadProjektzeitenSearchCriteria(searchCriteria);
-
-        ReadProjektzeitenResponseType projektzeitenResponse = zepSoapPortType.readProjektzeiten(projektzeitenRequest);
-
-        ProjectTimeEntries projectTimeEntries = new ProjectTimeEntries(projektzeitenResponse.getProjektzeitListe().getProjektzeiten());
-
-
-        //TODO: add entries into projektzeitenliste
-//        projectTimeEntries.
-
-        return calcBreakWarnings(projektzeitenResponse, monthendReport);
-
+        return searchCriteria;
     }
 
 
-    private static MonthendReport calcBreakWarnings(ReadProjektzeitenResponseType projecttimeResponse, MonthendReport monthendReport) {
-
-        if (projecttimeResponse == null || projecttimeResponse.getProjektzeitListe() == null) {
+    private static MonthendReport calcWarnings(ReadProjektzeitenResponseType projectTimeResponse, MonthendReport monthendReport) {
+        if (projectTimeResponse == null || projectTimeResponse.getProjektzeitListe() == null) {
             return null;
         }
-
-//        projecttimeResponse.getProjektzeitListe().getProjektzeiten().stream()
-//                .map(entry ->
-//        projecttimeResponse.getProjektzeitListe().getProjektzeiten().stream()
-//                .map(projectTimeEntry -> )
-//                .filter()
-//                .map();
-
-
+        monthendReport.setProjectTimeEntries(new ProjectTimeEntries(projectTimeResponse.getProjektzeitListe().getProjektzeiten()));
+        monthendReport.calculateWarnings();
         return monthendReport;
     }
 

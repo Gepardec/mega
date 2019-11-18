@@ -1,11 +1,9 @@
 package com.gepardec.mega.monthendreport;
 
-import lombok.AccessLevel;
+import com.gepardec.mega.utils.DateUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -15,14 +13,11 @@ public class ProjectTimeEntry {
 
     private LocalDateTime fromTime;
     private LocalDateTime toTime;
-
-    @Setter(AccessLevel.NONE)
-    private Duration duration;
     private Task task;
 
 
-    public Duration getDuration() {
-        return Duration.between(fromTime, toTime);
+    public double getDurationInHours() {
+        return DateUtils.calcDiffInHours(fromTime, toTime);
     }
 
     public static ProjectTimeEntry of(LocalDateTime fromTime, LocalDateTime toTime, Task task) {

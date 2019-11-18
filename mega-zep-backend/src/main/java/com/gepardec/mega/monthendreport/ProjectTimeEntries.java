@@ -4,7 +4,7 @@ import de.provantis.zep.ProjektzeitType;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,13 +15,13 @@ import static com.gepardec.mega.utils.DateUtils.toDateTime;
 @Data
 public class ProjectTimeEntries {
 
-    Map<LocalDate, List<ProjectTimeEntry>> entries = new HashMap<>();
+    private Map<LocalDate, List<ProjectTimeEntry>> projectTimeEntries;
 
     public ProjectTimeEntries(List<ProjektzeitType> projectTimes) {
 
-        entries = projectTimes.stream()
-                .map(projectEntry -> toProjectTimeEntry(projectEntry))
-                .sorted((e1, e2) -> e1.getFromTime().compareTo(e2.getFromTime()))
+        projectTimeEntries = projectTimes.stream()
+                .map(ProjectTimeEntries::toProjectTimeEntry)
+                .sorted(Comparator.comparing(ProjectTimeEntry::getFromTime))
                 .collect(Collectors.groupingBy(ProjectTimeEntry::getDate, LinkedHashMap::new, Collectors.toUnmodifiableList()));
     }
 
@@ -32,4 +32,5 @@ public class ProjectTimeEntries {
                 Task.fromString(projektzeitType.getTaetigkeit()).orElse(Task.UNDEFINIERT)
         );
     }
+
 }

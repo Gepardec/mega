@@ -2,13 +2,14 @@ package com.gepardec.mega.utils;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class DateUtilsTest {
+class DateUtilsTest {
 
     @Test
     void getLastDayOfFollowingMonth_normalDate_returnLastDayOfMonth() {
@@ -54,18 +55,27 @@ public class DateUtilsTest {
 
     @Test
     void toDateTime_correctInput_shouldReturnDateTime() {
-        assertEquals(LocalDateTime.of(2019, 11, 18, 10, 11), DateUtils.toDateTime("2019-11-18","10:11"));
+        assertEquals(LocalDateTime.of(2019, 11, 18, 10, 11), DateUtils.toDateTime("2019-11-18", "10:11"));
     }
 
     @Test
     void toDateTime_emptyDate_shouldThrowException() {
-        assertThrows(DateTimeParseException.class, () -> DateUtils.toDateTime("","10:11"));
+        assertThrows(DateTimeParseException.class, () -> DateUtils.toDateTime("", "10:11"));
     }
 
     @Test
     void toDateTime_emptyTime_shouldThrowException() {
-        assertThrows(DateTimeParseException.class, () -> DateUtils.toDateTime("2019-11-18",""));
+        assertThrows(DateTimeParseException.class, () -> DateUtils.toDateTime("2019-11-18", ""));
     }
 
+    @Test
+    void calcDiffInHours_correctInput_shouldReturnHours() {
+        assertEquals(8.75d, DateUtils.calcDiffInHours(LocalDateTime.of(2019, 11, 18, 10, 15), LocalDateTime.of(2019, 11, 18, 19, 0)));
+    }
+
+    @Test
+    void getDayByDate_normalInput_shouldRetornCorrectDay() {
+        assertEquals("Montag", DateUtils.getDayByDate(LocalDate.of(2019,11,18)));
+    }
 
 }
