@@ -97,6 +97,7 @@ pipeline {
                                                    install \
                                                    -Drevision=${revision} \
                                                    -Dquarkus.package.uber.jar=true"
+                                            sh 'mvn clean'
                                         }
 
                                         dir('ocp/templates') {

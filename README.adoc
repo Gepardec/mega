@@ -56,8 +56,8 @@ oc create secret generic github-login --from-env-file=github.properties --type=k
 oc annotate secret github-login jenkins.openshift.io/secret.name=github-login
 oc label secret github-login credential.sync.jenkins.openshift.io=true
 
-# Create mega secret
-oc create secret generic mega-secrets --from-file=application.properties=mega-secrets.properties
+# Create mega secret for service and jenkins
+oc create secret generic mega-secrets --from-file=filename=mega-secrets.properties
 oc annotate secret mega-secrets jenkins.openshift.io/secret.name=mega-secrets
 oc label secret mega-secrets credential.sync.jenkins.openshift.io=true
 ----
