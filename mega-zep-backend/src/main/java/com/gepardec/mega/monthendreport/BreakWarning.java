@@ -38,5 +38,6 @@ public class BreakWarning {
         warning = new StringBuilder(warning)
                 .append(System.lineSeparator())
                 .append(newBreakWarning.getWarning())
-                .toString();    }
+                .toString();
+    }
 }
