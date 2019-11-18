@@ -20,9 +20,7 @@ public class MonthendReportTest {
 
     @BeforeAll
     static void initTests() {
-//        googleUser.setId("123456879");
         googleUser.setEmail("max.mustermann@gepardec.com");
-//        googleUser.setAuthToken("987654321");
 
         try {
             final String output = objectMapper.writeValueAsString(googleUser);

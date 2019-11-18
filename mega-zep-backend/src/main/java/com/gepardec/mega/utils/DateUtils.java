@@ -1,6 +1,7 @@
 package com.gepardec.mega.utils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Locale;
@@ -9,6 +10,7 @@ import java.util.Objects;
 public class DateUtils {
 
     private static final DateTimeFormatter DEFAULT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault());
+    private static final DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-ddHH:mm", Locale.getDefault());
 
     public static LocalDate toLocalDate(String dateAsString) {
         return LocalDate.parse(dateAsString, DEFAULT_DATE_FORMATTER);
@@ -18,6 +20,10 @@ public class DateUtils {
         return date.format(DEFAULT_DATE_FORMATTER);
     }
 
+
+    public static LocalDateTime toDateTime(String dateAsString, String timeAsString) {
+        return LocalDateTime.parse(dateAsString+timeAsString, DEFAULT_DATETIME_FORMATTER);
+    }
 
     /**
      * when we have to secure our tests with specific time, we could set it here

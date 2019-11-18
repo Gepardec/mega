@@ -2,6 +2,7 @@ package com.gepardec.mega.utils;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,6 +50,21 @@ public class DateUtilsTest {
     @Test
     void getFirstDayOfFollowingMonth_emptyDate_returnLastDayOfMonthJanuary() {
         assertThrows(DateTimeParseException.class, () -> DateUtils.getLastDayOfFollowingMonth(""));
+    }
+
+    @Test
+    void toDateTime_correctInput_shouldReturnDateTime() {
+        assertEquals(LocalDateTime.of(2019, 11, 18, 10, 11), DateUtils.toDateTime("2019-11-18","10:11"));
+    }
+
+    @Test
+    void toDateTime_emptyDate_shouldThrowException() {
+        assertThrows(DateTimeParseException.class, () -> DateUtils.toDateTime("","10:11"));
+    }
+
+    @Test
+    void toDateTime_emptyTime_shouldThrowException() {
+        assertThrows(DateTimeParseException.class, () -> DateUtils.toDateTime("2019-11-18",""));
     }
 
 

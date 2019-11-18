@@ -2,6 +2,7 @@ package com.gepardec.mega.zep.service.impl;
 
 import com.gepardec.mega.model.google.GoogleUser;
 import com.gepardec.mega.monthendreport.MonthendReport;
+import com.gepardec.mega.monthendreport.ProjectTimeEntries;
 import com.gepardec.mega.security.AuthorizationInterceptor;
 import com.gepardec.mega.utils.DateUtils;
 import com.gepardec.mega.zep.service.api.WorkerService;
@@ -89,46 +90,34 @@ public class WorkerServiceImpl implements WorkerService {
 
         ReadProjektzeitenResponseType projektzeitenResponse = zepSoapPortType.readProjektzeiten(projektzeitenRequest);
 
+        ProjectTimeEntries projectTimeEntries = new ProjectTimeEntries(projektzeitenResponse.getProjektzeitListe().getProjektzeiten());
+
+
+        //TODO: add entries into projektzeitenliste
+//        projectTimeEntries.
 
         return calcBreakWarnings(projektzeitenResponse, monthendReport);
 
     }
 
 
-    private static MonthendReport calcBreakWarnings(ReadProjektzeitenResponseType projektzeitenResponse, MonthendReport monthendReport) {
+    private static MonthendReport calcBreakWarnings(ReadProjektzeitenResponseType projecttimeResponse, MonthendReport monthendReport) {
 
-        if (projektzeitenResponse == null || projektzeitenResponse.getProjektzeitListe() == null) {
+        if (projecttimeResponse == null || projecttimeResponse.getProjektzeitListe() == null) {
             return null;
         }
 
-
-
-        //TODO: map to monthendReport
-
-//        BreakWarning breakWarning = new BreakWarning();
-//        breakWarning.setDate(LocalDate.of(2019, 11, 10));
-//        breakWarning.setDay("Mo");
-//        breakWarning.setTooLessBreak(1.5);
-//        breakWarning.setTooMuchWorkTime(2.0);
-//        breakWarning.setTooLessRest(3.0);
-//
-//        JourneyWarning journeyWarning = new JourneyWarning();
-//        journeyWarning.setDate(LocalDate.of(2019, 11, 10));
-//        journeyWarning.setDay("Di");
-//        journeyWarning.setWarningText("Das ist eine Warnung");
-//
-//        monthendReport.getBreakWarnings().add(breakWarning);
-//        monthendReport.getJourneyWarnings().add(journeyWarning);
-
-
-//        projektzeitenResponse.getProjektzeitListe().getProjektzeiten().stream()
-//                .map(projecttime -> )
+//        projecttimeResponse.getProjektzeitListe().getProjektzeiten().stream()
+//                .map(entry ->
+//        projecttimeResponse.getProjektzeitListe().getProjektzeiten().stream()
+//                .map(projectTimeEntry -> )
 //                .filter()
 //                .map();
 
 
         return monthendReport;
     }
+
 
     @Override
     public Integer updateEmployee(final MitarbeiterType employee) {
