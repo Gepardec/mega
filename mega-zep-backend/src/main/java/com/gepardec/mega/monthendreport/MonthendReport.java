@@ -22,6 +22,6 @@ public class MonthendReport {
 
     public void calculateWarnings() {
         breakWarnings = warningCalculator.createBreakWarnings(projectTimeEntries);
-        journeyWarnings = warningCalculator.createJoureyWarnings(projectTimeEntries);
+        journeyWarnings = warningCalculator.createJourneyWarnings(projectTimeEntries);
     }
 }
