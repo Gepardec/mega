@@ -43,7 +43,7 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public MitarbeiterType getEmployee(final GoogleUser user) {
+    public MitarbeiterType getEmployee() {
         try {
             final List<MitarbeiterType> employees = flatMap(zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType));
             return employees.stream().filter(e -> e.getEmail() != null && e.getEmail().equals(user.getEmail())).findFirst().orElse(null);
@@ -55,13 +55,13 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public List<MitarbeiterType> getAllEmployees() {
+    public List<MitarbeiterType> getAllEmployees () {
         ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType);
         return filterActiveEmployees(rmrt);
     }
 
     @Override
-    public Integer updateEmployees(final List<MitarbeiterType> employees) {
+    public Integer updateEmployees (final List<MitarbeiterType> employees) {
         final List<Integer> statusCodeList = new LinkedList<>();
 
         employees.forEach(e -> statusCodeList.add(updateEmployee(e)));
@@ -111,7 +111,7 @@ public class WorkerServiceImpl implements WorkerService {
 
 
     @Override
-    public Integer updateEmployee(final MitarbeiterType employee) {
+    public Integer updateEmployee (final MitarbeiterType employee) {
         try {
             final UpdateMitarbeiterRequestType umrt = new UpdateMitarbeiterRequestType();
             umrt.setRequestHeader(requestHeaderType);
@@ -121,7 +121,8 @@ public class WorkerServiceImpl implements WorkerService {
             final ResponseHeaderType responseHeaderType = updateMitarbeiterResponseType != null ? updateMitarbeiterResponseType.getResponseHeader() : null;
 
             return responseHeaderType != null ? Integer.parseInt(responseHeaderType.getReturnCode()) : HttpStatus.SC_INTERNAL_SERVER_ERROR;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -141,9 +142,9 @@ public class WorkerServiceImpl implements WorkerService {
                     .reduce((first, second) -> second)
                     .orElse(null);
 
-            if (last != null) {
+            if(last != null) {
                 // if enddatum (sic!) is null => employee is active
-                if (last.getEnddatum() == null) {
+                if(last.getEnddatum() == null) {
                     activeEmployees.add(employee);
                 } else {
                     final LocalDate endDate = DateUtils.toLocalDate(Objects.requireNonNull(last).getEnddatum());

@@ -21,7 +21,7 @@ export class DisplayEmployeeListService {
   ) {
   }
 
-  getEmployees(user: SocialUser): Observable<MitarbeiterResponseType> {
+  getEmployees(user: SocialUser): Observable<Array<MitarbeiterType>> {
     return this.employeeService.getAll(user);
   }
 

@@ -1,6 +1,5 @@
 package com.gepardec.mega;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gepardec.mega.model.google.GoogleUser;
 import de.provantis.zep.MitarbeiterType;
@@ -13,7 +12,8 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTest
 class AuthTest {
@@ -22,19 +22,8 @@ class AuthTest {
     private final static GoogleUser googleUser = new GoogleUser();
 
     @BeforeAll
-    static void initTests() {
-        googleUser.setId("123456879");
+    static void initTests () {
         googleUser.setEmail("christoph.ruhsam@gepardec.com");
-        googleUser.setAuthToken("987654321");
-
-        try {
-            final String output = objectMapper.writeValueAsString(googleUser);
-            System.out.println(output);
-        }
-        catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
     }
 
     @Test
@@ -58,29 +47,15 @@ class AuthTest {
         assertNotNull(response);
         assertNotEquals("", response);
 
-        try {
-            final MitarbeiterType mt = objectMapper.readValue(response, MitarbeiterType.class);
-            assertNotNull(mt);
-            assertNotEquals("", mt.getEmail());
-            assertNotEquals("", mt.getVorname());
-            assertNotEquals("", mt.getNachname());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        final MitarbeiterType mt = objectMapper.readValue(response, MitarbeiterType.class);
+        assertNotNull(mt);
+        assertNotEquals("", mt.getEmail());
+        assertNotEquals("", mt.getVorname());
+        assertNotEquals("", mt.getNachname());
     }
-
 
     @Test
-    void logout_whenLogout_userDataNull() {
-        final String response = given().contentType(ContentType.JSON)
-                .body(googleUser)
-                .post("/user/logout")
-                .then()
-                .statusCode(HttpStatus.SC_OK)
-                .extract().asString();
-        assertEquals("", response);
+    void logout_whenLogout_userDataNull () {
+        given().get("/user/logout").then().statusCode(HttpStatus.SC_OK);
     }
-
-
-
 }
