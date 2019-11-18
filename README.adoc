@@ -64,3 +64,4 @@ TODOS:
 
 . quarkus-build-agent build config needs to point to develop after merge
 . nodejs-build-agent build config needs to point to develop after merge
+. Only deploy to Openshift if it's the ``develop`` branch
