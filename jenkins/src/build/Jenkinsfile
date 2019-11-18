@@ -87,19 +87,18 @@ pipeline {
 
                                         def revision = buildRevisionForBranch()
 
-                                        dir('mega-zep-backend') {
-                                            sh 'mvn clean'
-                                            withCredentials([file(credentialsId: 'mega-secrets', variable: 'FILE')]) {
-                                                sh "mkdir -p target/config \
-                                                    && cp -L -f ${FILE} target/config/application.properties \
-                                                    && ls target/config/ -lrta && cat target/config/application.properties"
-                                            }
-                                            sh "mvn -B -s ../jenkins-settings.xml \
+                                        withCredentials([file(credentialsId: 'mega-secrets', variable: 'FILE')]) {
+                                            def props = readProperties file: "${FILE}"
+                                            sh "mvn -B -s jenkins-settings.xml \
                                                    install \
                                                    -Drevision=${revision} \
-                                                   -Dquarkus.package.uber.jar=true"
-                                            sh 'mvn clean'
+                                                   -Dquarkus.package.uber.jar=true \
+                                                   -Dzep.soap.token=${props['zep.soap.token']} \
+                                                   -Dquarkus.mailer.username=${props['quarkus.mailer.username']} \
+                                                   -Dquarkus.mailer.password=${props['quarkus.mailer.password']} \
+                                                   -Dquarkus.mailer.from=${props['quarkus.mailer.from']}"
                                         }
+
 
                                         dir('ocp/templates') {
                                             openshift.withCluster() {
