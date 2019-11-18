@@ -32,7 +32,7 @@ pipeline {
                                         unstash name: "repo"
 
                                         def backendProps = null
-                                        dir('ocp/templates'){
+                                        dir('ocp/templates') {
                                             backendProps = readServiceProperties("mega-zep-backend")
                                         }
                                         def service = "http://${backendProps.NAME}:8080"
@@ -75,7 +75,11 @@ pipeline {
                                     containerTemplate(name: 'quarkus-container', image: 'docker-registry.default.svc:5000/57-mega-dev/quarkus-build-agent:latest', ttyEnabled: true, command: 'cat', alwaysPullImage: true,
                                             envVars: [
                                                     envVar(key: 'JAVA_MAX_HEAP_PARAM', value: '-Xmx1g'),
-                                                    envVar(key: 'CONTAINER_CORE_LIMIT', value: '1')
+                                                    envVar(key: 'CONTAINER_CORE_LIMIT', value: '1'),
+                                                    secretEnvVar(key: 'ZEP_TOKEN', secretName: 'mega-secrets', secretKey: 'zep.soap.token'),
+                                                    secretEnvVar(key: 'MAILER_USERNAME', secretName: 'mega-secrets', secretKey: 'quarkus.mailer.username'),
+                                                    secretEnvVar(key: 'MAILER_PASSWORD', secretName: 'mega-secrets', secretKey: 'quarkus.mailer.password'),
+                                                    secretEnvVar(key: 'MAILER_FROM', secretName: 'mega-secrets', secretKey: 'quarkus.mailer.from')
                                             ])
                             ],
                                     volumes: [
@@ -90,6 +94,10 @@ pipeline {
                                         sh "mvn -B -s jenkins-settings.xml \
                                                       clean install \
                                                    -Drevision=${revision} \
+                                                   -Dzep.soap.token=${env.ZEP_TOKEN} \
+                                                   -Dquarkus.mailer.username=${env.MAILER_USERNAME} \
+                                                   -Dquarkus.mailer.password=${env.MAILER_PASSWORD} \
+                                                   -Dquarkus.mailer.from=${env.MAILER_FROM} \
                                                    -Dquarkus.package.uber.jar=true"
 
                                         dir('ocp/templates') {
