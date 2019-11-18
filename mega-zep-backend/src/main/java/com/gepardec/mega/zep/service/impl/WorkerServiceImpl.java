@@ -43,7 +43,7 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public MitarbeiterType getEmployee() {
+    public MitarbeiterType getEmployee(final GoogleUser user) {
         try {
             final List<MitarbeiterType> employees = flatMap(zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType));
             return employees.stream().filter(e -> e.getEmail() != null && e.getEmail().equals(user.getEmail())).findFirst().orElse(null);

@@ -35,7 +35,7 @@ class AuthTest {
     }
 
     @Test
-    void testGoogleAuthenticationDetails() {
+    void testGoogleAuthenticationDetails() throws IOException {
         final String response = given().contentType(ContentType.JSON)
                 .body(googleUser)
                 .post("/user/login")
