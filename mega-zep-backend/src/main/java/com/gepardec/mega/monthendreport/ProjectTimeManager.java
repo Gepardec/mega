@@ -1,28 +1,32 @@
 package com.gepardec.mega.monthendreport;
 
 import de.provantis.zep.ProjektzeitType;
-import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.gepardec.mega.utils.DateUtils.toDateTime;
 
-@Data
-public class ProjectTimeEntries {
+public class ProjectTimeManager {
 
-    private Map<LocalDate, List<ProjectTimeEntry>> projectTimeEntries;
+    @Getter
+    private final Map<LocalDate, List<ProjectTimeEntry>> projectTimeEntries;
 
-    public ProjectTimeEntries(List<ProjektzeitType> projectTimes) {
+    public ProjectTimeManager(List<ProjektzeitType> projectTimes) {
 
         projectTimeEntries = projectTimes.stream()
-                .map(ProjectTimeEntries::toProjectTimeEntry)
+                .map(ProjectTimeManager::toProjectTimeEntry)
                 .sorted(Comparator.comparing(ProjectTimeEntry::getFromTime))
                 .collect(Collectors.groupingBy(ProjectTimeEntry::getDate, LinkedHashMap::new, Collectors.toUnmodifiableList()));
+    }
+
+    public List<ProjectTimeEntry> getEntriesAsList() {
+        return projectTimeEntries.values()
+                .stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
     private static ProjectTimeEntry toProjectTimeEntry(ProjektzeitType projektzeitType) {

@@ -1,27 +1,34 @@
 package com.gepardec.mega.monthendreport;
 
 import de.provantis.zep.MitarbeiterType;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@NoArgsConstructor
 public class MonthendReport {
-    private List<BreakWarning> breakWarnings = new ArrayList<>(0);
+    @Getter
+    private List<TimeWarning> timeWarnings = new ArrayList<>(0);
+    @Getter
     private List<JourneyWarning> journeyWarnings = new ArrayList<>(0);
-    private ProjectTimeEntries projectTimeEntries;
+    @Getter
     private MitarbeiterType employee;
-    private WarningCalculator warningCalculator;
 
-    public MonthendReport(MitarbeiterType employee) {
+    private WarningCalculator warningCalculator;
+    private ProjectTimeManager projectTimeManager;
+
+    public MonthendReport(MitarbeiterType employee, ProjectTimeManager projectTimeManager) {
+        this.projectTimeManager = projectTimeManager;
         this.employee = employee;
         warningCalculator = new WarningCalculator();
     }
 
-
     public void calculateWarnings() {
-        breakWarnings = warningCalculator.createBreakWarnings(projectTimeEntries);
-        journeyWarnings = warningCalculator.createJourneyWarnings(projectTimeEntries);
+        timeWarnings = warningCalculator.determineTimeWarnings(projectTimeManager);
+        journeyWarnings = warningCalculator.createJourneyWarnings(projectTimeManager);
     }
 }
+
+
