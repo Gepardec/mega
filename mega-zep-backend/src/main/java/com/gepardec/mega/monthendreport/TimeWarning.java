@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Data
 public class TimeWarning {
@@ -37,7 +36,7 @@ public class TimeWarning {
 
 
     public void mergeBreakWarnings(TimeWarning newTimeWarning) {
-        if (Objects.nonNull(newTimeWarning.tooLessBreak)) {
+        if (newTimeWarning.tooLessBreak != null) {
             tooLessBreak = newTimeWarning.tooLessBreak;
         }
         if (newTimeWarning.tooLessRest != null) {

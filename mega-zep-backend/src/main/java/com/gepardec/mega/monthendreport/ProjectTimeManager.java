@@ -22,7 +22,7 @@ public class ProjectTimeManager {
                 .collect(Collectors.groupingBy(ProjectTimeEntry::getDate, LinkedHashMap::new, Collectors.toUnmodifiableList()));
     }
 
-    public List<ProjectTimeEntry> getEntriesAsList() {
+    public List<ProjectTimeEntry> getEntriesAsFlatList() {
         return projectTimeEntries.values()
                 .stream()
                 .flatMap(Collection::stream)

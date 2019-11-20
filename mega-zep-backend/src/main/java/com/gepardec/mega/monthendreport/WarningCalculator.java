@@ -24,7 +24,7 @@ class WarningCalculator {
         entries.forEach(e -> checkForBreaksForWorkingDaysWithMoreThan6Hours(e.getValue(), e.getKey()));
 
         //3. check earliest start and latest ending
-        projectTimeManager.getEntriesAsList().forEach(e -> checkForFlexibleWorkFrame(e));
+        projectTimeManager.getEntriesAsFlatList().forEach(e -> checkForFlexibleWorkFrame(e));
 
         //4. check fore enough rest
         checkForRestTime(projectTimeManager);
@@ -115,7 +115,7 @@ class WarningCalculator {
     private void addToTimeWarnings(TimeWarning newTimeWarning) {
         Optional<TimeWarning> breakWarning = timeWarnings.stream()
                 .filter(bw -> bw.getDate().isEqual(newTimeWarning.getDate()))
-                .findFirst();
+                .findAny();
 
         if (breakWarning.isPresent()) {
             breakWarning.get().mergeBreakWarnings(newTimeWarning);
