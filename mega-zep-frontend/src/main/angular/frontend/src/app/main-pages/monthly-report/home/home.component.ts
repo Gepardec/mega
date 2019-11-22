@@ -3,13 +3,13 @@ import {TimeEntry} from "../../../models/MonthlyReport/TimeEntry";
 import {MatTableDataSource} from "@angular/material/table";
 import {SocialUser} from "angularx-social-login";
 import {AuthenticationService} from "../../../signin/authentication.service";
-import {DisplayTimeEntryService} from "../display-time-entry/display-time-entry.service";
+import {TimeEntryService} from "../time-entry.service";
 import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
@@ -20,14 +20,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private authenticationService: AuthenticationService,
-    private displayTimeEntryService: DisplayTimeEntryService
+    private timeEntryService: TimeEntryService
   ) {
   }
 
   ngOnInit() {
     this.currentUserSubscription = this.authenticationService.currentUser.subscribe((user: SocialUser) => {
       this.user = user;
-      this.getAllEmployees();
+      this.getAllTimeEntries();
     });
     this.dataSource.data = this.timeEntries;
   }
@@ -36,9 +36,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.currentUserSubscription && this.currentUserSubscription.unsubscribe();
   }
 
-  getAllEmployees() {
+  getAllTimeEntries() {
     if (this.user) {
-      this.timeEntries = this.displayTimeEntryService.getAll(this.user);
+      this.timeEntries = this.timeEntryService.getAll(this.user);
     }
   }
 

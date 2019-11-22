@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
+import {TimeService} from "../../zep-services/time.service";
 import {SocialUser} from "angularx-social-login";
-import {TimeEntry} from "../../../models/MonthlyReport/TimeEntry";
-import {TimeService} from "../../../zep-services/time.service";
+import {TimeEntry} from "../../models/MonthlyReport/TimeEntry";
 
 @Injectable({
   providedIn: 'root'
 })
-export class DisplayTimeEntryService {
+export class TimeEntryService {
 
   constructor(
     private timeService: TimeService
