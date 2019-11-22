@@ -1,27 +1,31 @@
 package com.gepardec.mega.monthendreport;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum JourneyDirection {
-    TO_AIM(0),
-    FURTHER(1),
-    BACK(2);
+    TO_AIM("0"),
+    FURTHER("1"),
+    BACK("2");
 
-    private Integer direction;
 
-    JourneyDirection(Integer direction) {
+    private String direction;
+
+    JourneyDirection(String direction) {
         this.direction = direction;
     }
 
-    private static Map<Integer, JourneyDirection> enumMap = Stream.of(JourneyDirection.values())
+    private static Map<String, JourneyDirection> enumMap = Stream.of(JourneyDirection.values())
             .collect(Collectors.toMap(journeyDirection -> journeyDirection.direction, Function.identity()));
 
-    public static Optional<JourneyDirection> fromInteger(Integer direction) {
-        return Optional.of(enumMap.get(direction));
+    public static JourneyDirection fromString(String direction) {
+        JourneyDirection journeyDirection = enumMap.get(direction);
+        if(journeyDirection == null) {
+            throw new EnumConverterException(String.format("Error mapping %s to Enum JourneyDirection",direction));
+        }
+        return journeyDirection;
     }
 
 }

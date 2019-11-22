@@ -63,19 +63,19 @@ public class MonthendReportTest {
                 () -> assertEquals(9, monthendReport.getTimeWarnings().size()),
 
                 //more than 10 hourse work, but also journey-time
-                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 5), WARNING_MORE_THAN_10_HOURS),
+                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 5), WARNING_TIME_MORE_THAN_10_HOURS),
                 //more than 10hours, but less than 10 for working
                 () -> assertNull(timeWarningsByDay.get(LocalDate.of(2019, 11, 6))),
 
-                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 7), WARNING_TOO_LESS_BREAK),
+                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 7), WARNING_TIME_TOO_LESS_BREAK),
 
-                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 11), WARNING_MORE_THAN_10_HOURS),
-                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 13), WARNING_TOO_LATE_END),
-                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 14), WARNING_TOO_LESS_REST),
-                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 18), WARNING_TOO_LESS_BREAK, WARNING_MORE_THAN_10_HOURS),
-                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 19), WARNING_TOO_LATE_END),
-                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 20), WARNING_TOO_LESS_REST, WARNING_MORE_THAN_10_HOURS),
-                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 21), WARNING_TOO_LESS_REST, WARNING_TOO_EARLY_START)
+                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 11), WARNING_TIME_MORE_THAN_10_HOURS),
+                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 13), WARNING_TIME_TOO_LATE_END),
+                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 14), WARNING_TIME_TOO_LESS_REST),
+                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 18), WARNING_TIME_TOO_LESS_BREAK, WARNING_TIME_MORE_THAN_10_HOURS),
+                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 19), WARNING_TIME_TOO_LATE_END),
+                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 20), WARNING_TIME_TOO_LESS_REST, WARNING_TIME_MORE_THAN_10_HOURS),
+                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 21), WARNING_TIME_TOO_LESS_REST, WARNING_TIME_TOO_EARLY_START)
 
         );
     }

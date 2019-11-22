@@ -27,7 +27,7 @@ public class MonthendReport {
 
     public void calculateWarnings() {
         timeWarnings = warningCalculator.determineTimeWarnings(projectTimeManager);
-        journeyWarnings = warningCalculator.createJourneyWarnings(projectTimeManager);
+        journeyWarnings = warningCalculator.determineJourneyWarnings(projectTimeManager);
     }
 }
 

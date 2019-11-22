@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Data
@@ -16,5 +18,5 @@ public class JourneyWarning {
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
     private String day;
-    private String warningText;
+    private List<WarningType> warnings = new ArrayList<>(0);
 }
