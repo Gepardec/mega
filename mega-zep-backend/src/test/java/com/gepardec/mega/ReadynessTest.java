@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 
 @QuarkusTest
-class StatusTest {
+class ReadynessTest {
 
     @Test
     void testReadyness() {

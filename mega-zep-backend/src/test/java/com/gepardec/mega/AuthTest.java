@@ -27,13 +27,22 @@ class AuthTest {
     }
 
     @Test
-    void testGoogleAuthentication () {
-        given().contentType(ContentType.JSON).body(googleUser).post("/user/login").then().statusCode(HttpStatus.SC_OK);
+    void testGoogleAuthentication() {
+        given().contentType(ContentType.JSON)
+                .body(googleUser)
+                .post("/user/login")
+                .then().statusCode(HttpStatus.SC_OK);
     }
 
     @Test
-    void testGoogleAuthenticationDetails () throws IOException {
-        final String response = given().contentType(ContentType.JSON).body(googleUser).post("/user/login").then().statusCode(HttpStatus.SC_OK).extract().asString();
+    void testGoogleAuthenticationDetails() throws IOException {
+        final String response = given().contentType(ContentType.JSON)
+                .body(googleUser)
+                .post("/user/login")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .extract().asString();
+
 
         assertNotNull(response);
         assertNotEquals("", response);
