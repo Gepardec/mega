@@ -26,7 +26,9 @@ npm-debug.log
 testem.log
 package-lock.json
 mega-secrets.properties
-github.properties
+megaq-dev-github.properties
+mega-dev.ssh.key
+mega-dev.auth.ssh
 /typings
 
 # e2e

@@ -29,12 +29,35 @@ These are the Dockerfiles used by this project
 
 == Openshift
 
-.Prepare project
+.Secrets
+[source, bash]
+----
+# Create github login secret (username, password are the properties)
+oc create secret generic mega-git-http --from-env-file=megaq-dev-github.properties --type=kubernetes.io/basic-auth
+oc annotate secret mega-git-http jenkins.openshift.io/secret.name=mega-git-http
+oc label secret mega-git-http credential.sync.jenkins.openshift.io=true
+
+# Create mega secret for service and jenkins
+oc create secret generic mega-secrets --from-file=filename=mega-secrets.properties
+oc annotate secret mega-secrets jenkins.openshift.io/secret.name=mega-secrets
+oc label secret mega-secrets credential.sync.jenkins.openshift.io=true
+
+# Create git ssh secret
+oc create secret generic mega-git-ssh --from-file=ssh-privatekey=mega-dev.ssh.key --type=kubernetes.io/ssh-auth -n 57-mega-dev
+oc annotate secret mega-git-ssh jenkins.openshift.io/secret.name=mega-git-ssh
+oc label secret mega-git-ssh credential.sync.jenkins.openshift.io=true
+----
+
+.Persistence Volumes
 [source,bash]
 ----
 # Persistence Volumes for caching repositories
-oc create -f  .\ocp\maven-pvc.yaml
+oc create -f  .\ocp\maven-pvc.yaml -n 57-mega-dev
+----
 
+.Build Configurations
+[source,bash]
+----
 # Binary build for backend uber jar
 oc new-build --binary=true --name=mega-zep-backend --docker-image=docker.io/fabric8/s2i-java:3.0-java11 -n 57-mega-dev
 oc set triggers bc/mega-zep-backend --remove-all -n 57-mega-dev
@@ -44,22 +67,12 @@ oc new-build httpd:2.4 --binary=true --name=mega-zep-frontend -n 57-mega-dev
 oc set triggers bc/mega-zep-frontend --remove-all -n 57-mega-dev
 
 # Quarkus Build Agent
-oc new-build https://github.com/Gepardec/mega.git#develop --name=quarkus-build-agent --context-dir=docker/agent-quarkus -n 57-mega-dev
+oc new-build https://github.com/Gepardec/mega.git#develop --name=quarkus-build-agent --context-dir=docker/agent-quarkus --source-secret=mega-git-http -n 57-mega-dev
 oc set triggers bc/quarkus-build-agent --remove-all -n 57-mega-dev
 
 # Nodejs Build Agent
-oc new-build https://github.com/Gepardec/mega#develop --name=nodejs-build-agent  --context-dir=docker/agent-nodejs -n 57-mega-dev
+oc new-build https://github.com/Gepardec/mega.git#feature/ocp-builds --name=nodejs-build-agent --context-dir=docker/agent-nodejs --source-secret=mega-git-http -n 57-mega-dev
 oc set triggers bc/nodejs-build-agent --remove-all -n 57-mega-dev
-
-# Create github login secret (username, password are the properties)
-oc create secret generic github-login --from-env-file=github.properties --type=kubernetes.io/basic-auth
-oc annotate secret github-login jenkins.openshift.io/secret.name=github-login
-oc label secret github-login credential.sync.jenkins.openshift.io=true
-
-# Create mega secret for service and jenkins
-oc create secret generic mega-secrets --from-file=filename=mega-secrets.properties
-oc annotate secret mega-secrets jenkins.openshift.io/secret.name=mega-secrets
-oc label secret mega-secrets credential.sync.jenkins.openshift.io=true
 ----
 
 TODOS:
@@ -67,3 +80,4 @@ TODOS:
 . quarkus-build-agent build config needs to point to develop after merge
 . nodejs-build-agent build config needs to point to develop after merge
 . Only deploy to Openshift if it's the ``develop`` branch
+. Get jenkins multibranch config.xml and add it to the jenkins s2i build
