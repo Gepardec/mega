@@ -25,6 +25,12 @@ public interface WorkerApi {
     @Consumes(MediaType.APPLICATION_JSON)
     Response employee (final GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response);
 
+    @POST
+    @Path("/employee/monthendReport")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    Response employeeMonthendReport (final GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response);
+
     @OPTIONS
     @Path("/employees")
     @Produces(MediaType.APPLICATION_JSON)

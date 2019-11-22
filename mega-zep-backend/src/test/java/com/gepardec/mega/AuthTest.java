@@ -22,10 +22,8 @@ class AuthTest {
     private final static GoogleUser googleUser = new GoogleUser();
 
     @BeforeAll
-    static void initTests() {
-        googleUser.setId("123456879");
+    static void initTests () {
         googleUser.setEmail("christoph.ruhsam@gepardec.com");
-        googleUser.setAuthToken("987654321");
     }
 
     @Test
@@ -37,7 +35,7 @@ class AuthTest {
     }
 
     @Test
-    void testGoogleAuthenticationDetails() {
+    void testGoogleAuthenticationDetails() throws IOException {
         final String response = given().contentType(ContentType.JSON)
                 .body(googleUser)
                 .post("/user/login")
@@ -49,21 +47,15 @@ class AuthTest {
         assertNotNull(response);
         assertNotEquals("", response);
 
-        try {
-            final MitarbeiterType mt = objectMapper.readValue(response, MitarbeiterType.class);
-            assertNotNull(mt);
-            assertNotEquals("", mt.getEmail());
-            assertNotEquals("", mt.getVorname());
-            assertNotEquals("", mt.getNachname());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        final MitarbeiterType mt = objectMapper.readValue(response, MitarbeiterType.class);
+        assertNotNull(mt);
+        assertNotEquals("", mt.getEmail());
+        assertNotEquals("", mt.getVorname());
+        assertNotEquals("", mt.getNachname());
     }
-
 
     @Test
-    void logout_whenLogout_userDataNull() {
+    void logout_whenLogout_userDataNull () {
         given().get("/user/logout").then().statusCode(HttpStatus.SC_OK);
     }
-
 }
