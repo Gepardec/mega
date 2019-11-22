@@ -7,9 +7,12 @@
     <div class="nav-tabs">
       <nav mat-tab-nav-bar>
         <a mat-tab-link
-           *ngFor="let page of pages"
-           [routerLink]="page.pageUrl">
-          {{page.pageName}}
+           [routerLink]="employeePageData[1]">
+          {{employeePageData[0]}}
+        </a>
+        <a mat-tab-link
+           [routerLink]="monthlyReportPageData[1]">
+          {{monthlyReportPageData[0]}}
         </a>
       </nav>
     </div>

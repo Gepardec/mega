@@ -16,8 +16,7 @@ export class MockAuthenticationService implements OnDestroy {
 
   private readonly CURRENT_USER: string = 'currentUser';
   private readonly CURRENT_EMPLOYEE: string = 'currentEmployee';
-  private readonly HOME_PAGE: string = configuration.PAGES.filter(p => p.pageName == 'HOME')[0].pageUrl;
-  private readonly LOGIN_PAGE: string = configuration.PAGES.filter(p => p.pageName == 'LOGIN')[0].pageUrl;
+  private readonly LOGIN_PAGE: string = configuration.PAGE_URLS.LOGIN;
 
   private isSignedInWithGoogle: boolean;
 

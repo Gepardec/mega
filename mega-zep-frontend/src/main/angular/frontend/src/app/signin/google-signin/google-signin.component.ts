@@ -12,7 +12,7 @@ import {Subscription} from 'rxjs';
 })
 export class GoogleSigninComponent implements OnInit, OnDestroy {
 
-  private readonly EMPLOYEES: string = configuration.PAGES.filter(p => p.pageName == 'EMPLOYEES')[0].pageUrl;
+  private readonly EMPLOYEES: string = configuration.PAGE_URLS.EMPLOYEES;
 
   private loggedIn = false;
 

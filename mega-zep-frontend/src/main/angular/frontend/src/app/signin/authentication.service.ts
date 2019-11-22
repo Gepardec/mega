@@ -16,8 +16,8 @@ export class AuthenticationService implements OnDestroy {
 
   private readonly CURRENT_USER: string = 'currentUser';
   private readonly CURRENT_EMPLOYEE: string = 'currentEmployee';
-  private readonly EMPLOYEES_PAGE: string = configuration.PAGES.filter(p => p.pageName == 'EMPLOYEES')[0].pageUrl;
-  private readonly LOGIN_PAGE: string = configuration.PAGES.filter(p => p.pageName == 'LOGIN')[0].pageUrl;
+  private readonly EMPLOYEES_PAGE: string = configuration.PAGE_URLS.EMPLOYEES;
+  private readonly LOGIN_PAGE: string = configuration.PAGE_URLS.LOGIN;
 
   private isSignedInWithGoogle: boolean;
 

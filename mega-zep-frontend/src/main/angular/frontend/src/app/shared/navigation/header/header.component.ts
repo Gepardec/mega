@@ -8,7 +8,8 @@ import {configuration} from "../../../../configuration/configuration";
 })
 export class HeaderComponent implements OnInit {
 
-  readonly pages = configuration.PAGES;
+  readonly employeePageData = [configuration.PAGE_NAMES.EMPLOYEES, configuration.PAGE_URLS.EMPLOYEES];
+  readonly monthlyReportPageData = [configuration.PAGE_NAMES.MONTHLY_REPORT, configuration.PAGE_URLS.MONTHLY_REPORT];
 
   constructor() {
   }

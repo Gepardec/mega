@@ -5,12 +5,18 @@ export const configuration = {
   BASEURL: 'http://localhost:8080',
 
   //FIXME GAJ: check if key can be assigned to array of objects for finding single URL easier
-  PAGES: [
-    {pageName: 'LOGIN', pageUrl: '/login'},
-    {pageName: 'EMPLOYEES', pageUrl: '/employees'},
-    {pageName: 'MONTHLY-REPORT', pageUrl: '/monthlyReport'},
-  ],
 
+  PAGE_NAMES: {
+    LOGIN: "Login",
+    EMPLOYEES: "Employees",
+    MONTHLY_REPORT : "Monhtly-Report"
+  },
+
+  PAGE_URLS: {
+    LOGIN: "/login",
+    EMPLOYEES: "/employees",
+    MONTHLY_REPORT : "/monthlyReport"
+  },
 
   EMPLOYEE_FUNCTIONS: {
     '01': 'Technischer PL',
