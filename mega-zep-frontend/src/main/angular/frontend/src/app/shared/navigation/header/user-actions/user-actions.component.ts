@@ -16,10 +16,11 @@ export class UserActionsComponent implements OnInit, OnDestroy {
 
   constructor(
     private authenticationService: AuthenticationService
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
-   this.authenticationServiceSubscription = this.authenticationService.currentUser.subscribe((user: SocialUser) => {
+    this.authenticationServiceSubscription = this.authenticationService.currentUser.subscribe((user: SocialUser) => {
       this.user = user;
     });
   }

@@ -7,12 +7,11 @@ import {AuthServiceConfig, GoogleLoginProvider, LoginOpt, SocialLoginModule} fro
 import {GoogleSigninComponent} from './signin/google-signin/google-signin.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MainLayoutModule} from './shared/main-layout/main-layout/main-layout.module';
+import {MainLayoutModule} from './shared/main-layout/main-layout.module';
 import {NavigationModule} from './shared/navigation/navigation.module';
 import {ErrorHandleInterceptor} from './shared/interceptors/ErrorHandleInterceptor';
 import {AngularMaterialModule} from "./material-module";
 import {APP_BASE_HREF} from "@angular/common";
-
 
 const config = new AuthServiceConfig([
   {
@@ -25,15 +24,10 @@ export function provideConfig() {
   return config;
 }
 
-const googleLoginOptions: LoginOpt = {
-  scope: 'profile email'
-};
-
-
 @NgModule({
   declarations: [
     AppComponent,
-    GoogleSigninComponent,
+    GoogleSigninComponent
   ],
   imports: [
     BrowserModule,

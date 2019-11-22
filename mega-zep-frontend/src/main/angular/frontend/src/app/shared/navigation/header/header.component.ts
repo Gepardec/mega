@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {MainLayoutService} from "../../main-layout/main-layout/main-layout.service";
-import {AuthenticationService} from "../../../signin/authentication.service";
+import {configuration} from "../../../../configuration/configuration";
 
 @Component({
   selector: 'app-header',
@@ -9,10 +8,9 @@ import {AuthenticationService} from "../../../signin/authentication.service";
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(
-    private mainLayoutService: MainLayoutService,
-    private authenticationService: AuthenticationService
-  ) {
+  readonly pages = configuration.PAGES;
+
+  constructor() {
   }
 
   ngOnInit() {

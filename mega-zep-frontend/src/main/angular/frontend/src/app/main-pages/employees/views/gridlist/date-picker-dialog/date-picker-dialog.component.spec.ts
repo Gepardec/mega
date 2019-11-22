@@ -5,7 +5,7 @@ import {AngularMaterialModule} from "../../../../../material-module";
 import {EmployeesPagesModule} from "../../../home/home.module";
 import {MAT_DIALOG_DATA} from "@angular/material";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {MitarbeiterType} from "../../../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
+import {Employee} from "../../../../../models/Employee/Employee";
 import {UtilService} from "../../../../../shared/util/util.service";
 import {Observable} from "rxjs";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -13,7 +13,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 describe('DatePickerDialogComponent', () => {
 
-  let employee: MitarbeiterType = new MitarbeiterType();
+  let employee: Employee = new Employee();
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

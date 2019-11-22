@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MitarbeiterType} from "../../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
+import {Employee} from "../../../../models/Employee/Employee";
 import {configuration} from "../../../../../configuration/configuration";
-import {DisplayEmployeeListService} from "../../display-employee-list/display-employee-list.service";
+import {DisplayEmployeesService} from "../../display-employees/display-employees.service";
 import {MatDialog, MatDialogConfig} from "@angular/material";
 import {DatePickerDialogComponent} from "./date-picker-dialog/date-picker-dialog.component";
 
@@ -15,13 +15,13 @@ export class GridlistComponent implements OnInit {
   readonly date = new Date();
   readonly functions = configuration.EMPLOYEE_FUNCTIONS;
 
-  @Input('employees') employees: Array<MitarbeiterType>;
+  @Input('employees') employees: Array<Employee>;
   @Input('pageSize') pageSize: number;
   @Input('pageIndex') pageIndex: number;
 
 
   constructor(
-    private displayEmployeeListService: DisplayEmployeeListService,
+    private displayEmployeeListService: DisplayEmployeesService,
     private dialog: MatDialog
   ) {
   }
@@ -29,7 +29,7 @@ export class GridlistComponent implements OnInit {
   ngOnInit() {
   }
 
-  openDialog(employee: MitarbeiterType): void {
+  openDialog(employee: Employee): void {
     let config: MatDialogConfig = new MatDialogConfig();
     config.data = employee;
     const dialogRef = this.dialog.open(DatePickerDialogComponent, config);

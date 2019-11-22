@@ -7,7 +7,7 @@ import {MockAuthService} from "../../../../signin/MockAuthService";
 import {RouterTestingModule} from "@angular/router/testing";
 import {routes} from "../../../../app-routing.module";
 import {AppModule} from "../../../../app.module";
-import {MainLayoutModule} from "../../../main-layout/main-layout/main-layout.module";
+import {MainLayoutModule} from "../../../main-layout/main-layout.module";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MockAuthenticationService} from "../../../../signin/MockAuthenticationService";

@@ -6,14 +6,12 @@ import {EmployeesPagesModule} from "./home.module";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {RouterTestingModule} from "@angular/router/testing";
 import {routes} from "../../../app-routing.module";
-import {MainLayoutModule} from "../../../shared/main-layout/main-layout/main-layout.module";
+import {MainLayoutModule} from "../../../shared/main-layout/main-layout.module";
 import {AppModule} from "../../../app.module";
 import {AuthenticationService} from "../../../signin/authentication.service";
 import {AuthService} from "angularx-social-login";
 import {MockAuthService} from "../../../signin/MockAuthService";
-import {UserActionsComponent} from "../../../shared/navigation/header/user-actions/user-actions.component";
 import {MockAuthenticationService} from "../../../signin/MockAuthenticationService";
-import {NgZone} from "@angular/core";
 
 describe('HomeComponent', () => {
 

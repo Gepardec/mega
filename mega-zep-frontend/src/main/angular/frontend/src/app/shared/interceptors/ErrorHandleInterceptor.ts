@@ -1,4 +1,3 @@
-// httpSetHeaders.interceptor.ts
 import {Injectable} from '@angular/core';
 import {
   HttpErrorResponse,

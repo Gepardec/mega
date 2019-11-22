@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {MitarbeiterResponseType} from '../models/Mitarbeiter/MitarbeiterResponseType';
 import {retry} from 'rxjs/operators';
-import {MitarbeiterType} from '../models/Mitarbeiter/Mitarbeiter/MitarbeiterType';
+import {Employee} from '../models/Employee/Employee';
 import {HttpClient} from '@angular/common/http';
 import {configuration} from '../../configuration/configuration';
 import {SocialUser} from 'angularx-social-login';
@@ -19,15 +18,15 @@ export class EmployeeService {
   ) {
   }
 
-  getAll(user: SocialUser): Observable<Array<MitarbeiterType>> {
-    return this.http.post<Array<MitarbeiterType>>(this.URL +
+  getAll(user: SocialUser): Observable<Array<Employee>> {
+    return this.http.post<Array<Employee>>(this.URL +
       '/worker/employees/', JSON.stringify(user))
       .pipe(
         retry(1)
       );
   }
 
-  updateAll(employees: Array<MitarbeiterType>): Observable<Response> {
+  updateAll(employees: Array<Employee>): Observable<Response> {
     return this.http.put<Response>(this.URL +
       '/worker/employees/update/', JSON.stringify(employees))
       .pipe(
@@ -35,8 +34,8 @@ export class EmployeeService {
       );
   }
 
-  get(user: SocialUser): Observable<MitarbeiterType> {
-    return this.http.post<MitarbeiterType>(this.URL +
+  get(user: SocialUser): Observable<Employee> {
+    return this.http.post<Employee>(this.URL +
       '/worker/employee/', JSON.stringify(user))
       .pipe(
         retry(1)

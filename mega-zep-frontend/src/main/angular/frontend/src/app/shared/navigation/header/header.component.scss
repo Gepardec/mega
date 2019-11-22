@@ -8,7 +8,11 @@
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.useraction {
+.nav-tabs a {
+  color: white;
+}
+
+.useractions {
   flex: 1;
   display: flex;
   align-items: flex-end;

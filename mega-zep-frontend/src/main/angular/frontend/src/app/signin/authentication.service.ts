@@ -5,7 +5,7 @@ import {Router} from "@angular/router";
 import {configuration} from "../../configuration/configuration";
 import {HttpClient} from "@angular/common/http";
 import {retry} from "rxjs/operators";
-import {MitarbeiterType} from "../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
+import {Employee} from "../models/Employee/Employee";
 
 @Injectable({
   providedIn: 'root'
@@ -16,16 +16,16 @@ export class AuthenticationService implements OnDestroy {
 
   private readonly CURRENT_USER: string = 'currentUser';
   private readonly CURRENT_EMPLOYEE: string = 'currentEmployee';
-  private readonly EMPLOYEES_PAGE: string = configuration.PAGES.EMPLOYEES;
-  private readonly LOGIN_PAGE: string = configuration.PAGES.LOGIN;
+  private readonly EMPLOYEES_PAGE: string = configuration.PAGES.filter(p => p.pageName == 'EMPLOYEES')[0].pageUrl;
+  private readonly LOGIN_PAGE: string = configuration.PAGES.filter(p => p.pageName == 'LOGIN')[0].pageUrl;
 
   private isSignedInWithGoogle: boolean;
 
   private currentUserSubject: BehaviorSubject<SocialUser>;
   public currentUser: Observable<SocialUser>;
 
-  private currentEmployeeSubject: BehaviorSubject<MitarbeiterType>;
-  public currentEmployee: Observable<MitarbeiterType>;
+  private currentEmployeeSubject: BehaviorSubject<Employee>;
+  public currentEmployee: Observable<Employee>;
 
   private authServiceSubscription: Subscription;
   private zepLoginSubscription: Subscription;
@@ -37,14 +37,14 @@ export class AuthenticationService implements OnDestroy {
     private authService: AuthService,
   ) {
     let user: SocialUser = JSON.parse(localStorage.getItem(this.CURRENT_USER));
-    let employee: MitarbeiterType = JSON.parse(localStorage.getItem(this.CURRENT_EMPLOYEE))
+    let employee: Employee = JSON.parse(localStorage.getItem(this.CURRENT_EMPLOYEE))
     if (user == null) {
       this.router.navigate([this.LOGIN_PAGE]);
     }
     this.currentUserSubject = new BehaviorSubject<SocialUser>(user);
     this.currentUser = this.currentUserSubject.asObservable();
 
-    this.currentEmployeeSubject = new BehaviorSubject<MitarbeiterType>(employee);
+    this.currentEmployeeSubject = new BehaviorSubject<Employee>(employee);
     this.currentEmployee = this.currentEmployeeSubject.asObservable();
 
     this.authServiceSubscription = this.authService.authState.subscribe((user: SocialUser) => {
@@ -69,8 +69,8 @@ export class AuthenticationService implements OnDestroy {
       localStorage.setItem(this.CURRENT_USER, JSON.stringify(user));
       this.currentUserSubject.next(user);
       this.zepLoginSubscription = this.zepLogin(user).subscribe(
-        (employee: MitarbeiterType) => {
-          this.currentEmployeeSubject = new BehaviorSubject<MitarbeiterType>(employee);
+        (employee: Employee) => {
+          this.currentEmployeeSubject = new BehaviorSubject<Employee>(employee);
           this.currentEmployee = this.currentEmployeeSubject.asObservable();
           localStorage.setItem(this.CURRENT_EMPLOYEE, JSON.stringify(employee));
           this.router.navigate([this.EMPLOYEES_PAGE]);
@@ -115,8 +115,8 @@ export class AuthenticationService implements OnDestroy {
   }
 
 
-  zepLogin(user: SocialUser): Observable<MitarbeiterType> {
-    return this.http.post<MitarbeiterType>(this.URL +
+  zepLogin(user: SocialUser): Observable<Employee> {
+    return this.http.post<Employee>(this.URL +
       '/user/login/', JSON.stringify(user))
       .pipe(
         retry(1),

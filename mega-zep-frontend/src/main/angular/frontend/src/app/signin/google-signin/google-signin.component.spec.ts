@@ -6,7 +6,7 @@ import {AuthService} from "angularx-social-login";
 import {RouterTestingModule} from "@angular/router/testing";
 import {NgZone, NO_ERRORS_SCHEMA} from "@angular/core";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {MainLayoutModule} from "../../shared/main-layout/main-layout/main-layout.module";
+import {MainLayoutModule} from "../../shared/main-layout/main-layout.module";
 import {routes} from "../../app-routing.module";
 import {APP_BASE_HREF} from "@angular/common";
 import {MockAuthService} from "../MockAuthService";

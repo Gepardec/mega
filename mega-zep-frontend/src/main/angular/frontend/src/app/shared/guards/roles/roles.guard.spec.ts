@@ -10,7 +10,7 @@ import {AuthService} from "angularx-social-login";
 import {MockAuthService} from "../../../signin/MockAuthService";
 import {ActivatedRouteSnapshot, UrlSegment} from "@angular/router";
 import {configuration} from "../../../../configuration/configuration";
-import {MitarbeiterType} from "../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
+import {Employee} from "../../../models/Employee/Employee";
 
 describe('RolesGuard', () => {
 
@@ -36,8 +36,8 @@ describe('RolesGuard', () => {
     return route;
   }
 
-  function setupUser(rights: number): MitarbeiterType {
-    let employee: MitarbeiterType = new MitarbeiterType();
+  function setupUser(rights: number): Employee {
+    let employee: Employee = new Employee();
     employee.vorname = "Max";
     employee.nachname = "Mustermann";
     employee.freigabedatum = "2019-01-01";

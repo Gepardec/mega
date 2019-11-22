@@ -10,7 +10,7 @@ import {configuration} from "../../../configuration/configuration";
 })
 export class GoogleUserAuthenticationGuard implements CanActivate, OnDestroy {
 
-  readonly loginPage: string = configuration.PAGES.LOGIN;
+  readonly loginPage: string = configuration.PAGES.filter(p => p.pageName == 'LOGIN')[0].pageUrl;
 
   user: SocialUser;
   currentUserSubscription: Subscription;

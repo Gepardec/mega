@@ -5,15 +5,16 @@
     </div>
 
     <div class="nav-tabs">
-      <mat-tab-group>
-        <mat-tab label="Auswertung">
-        </mat-tab>
-        <mat-tab label="Freigabe">
-        </mat-tab>
-      </mat-tab-group>
+      <nav mat-tab-nav-bar>
+        <a mat-tab-link
+           *ngFor="let page of pages"
+           [routerLink]="page.pageUrl">
+          {{page.pageName}}
+        </a>
+      </nav>
     </div>
 
-    <div class="useraction">
+    <div class="useractions">
       <app-user-actions></app-user-actions>
     </div>
   </mat-toolbar-row>

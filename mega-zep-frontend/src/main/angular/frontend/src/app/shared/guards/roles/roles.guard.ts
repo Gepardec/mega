@@ -2,20 +2,20 @@ import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree} from '@angular/router';
 import {Observable} from 'rxjs';
 import {AuthenticationService} from "../../../signin/authentication.service";
-import {MitarbeiterType} from "../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
+import {Employee} from "../../../models/Employee/Employee";
 
 @Injectable({
   providedIn: 'root'
 })
 export class RolesGuard implements CanActivate {
 
-  employee: MitarbeiterType;
+  employee: Employee;
 
   constructor(
     private authenticationService: AuthenticationService
   ) {
     this.authenticationService.currentEmployee.subscribe(
-      (employee: MitarbeiterType) => this.employee = employee
+      (employee: Employee) => this.employee = employee
     );
   }
 

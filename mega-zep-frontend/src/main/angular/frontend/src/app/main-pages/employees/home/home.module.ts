@@ -1,11 +1,11 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {HomeComponent} from "./home.component";
-import {DisplayEmployeeListComponent} from "../display-employee-list/display-employee-list.component";
-import {DisplayEmployeeListService} from "../display-employee-list/display-employee-list.service";
+import {DisplayEmployeesComponent} from "../display-employees/display-employees.component";
+import {DisplayEmployeesService} from "../display-employees/display-employees.service";
 import {homeRouting} from "./home.routing";
 import {AngularMaterialModule} from "../../../material-module";
-import {PaginationComponent} from "../pagination/pagination.component";
+import {EmployeeListComponent} from "../employee-list/employee-list.component";
 import {GridlistComponent} from "../views/gridlist/gridlist.component";
 import {TablelistComponent} from "../views/tablelist/tablelist.component";
 import {UtilModule} from "../../../shared/util/util.module";
@@ -15,8 +15,8 @@ import {DatePickerDialogComponent} from "../views/gridlist/date-picker-dialog/da
 @NgModule({
   declarations: [
     HomeComponent,
-    DisplayEmployeeListComponent,
-    PaginationComponent,
+    DisplayEmployeesComponent,
+    EmployeeListComponent,
     GridlistComponent,
     TablelistComponent,
     DatePickerDialogComponent
@@ -31,7 +31,8 @@ import {DatePickerDialogComponent} from "../views/gridlist/date-picker-dialog/da
     DatePickerDialogComponent
   ],
   providers: [
-    DisplayEmployeeListService
+    DisplayEmployeesService
   ]
 })
-export class EmployeesPagesModule { }
+export class EmployeesPagesModule {
+}

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {EmployeeService} from "../../zep-services/employee.service";
-import {MitarbeiterType} from "../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
+import {Employee} from "../../models/Employee/Employee";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -13,7 +13,7 @@ export class UtilService {
   ) {
   }
 
-  updateEmployees(employees: Array<MitarbeiterType>): Observable<Response> {
+  updateEmployees(employees: Array<Employee>): Observable<Response> {
     let response = this.employeeService.updateAll(employees);
     return response;
   }

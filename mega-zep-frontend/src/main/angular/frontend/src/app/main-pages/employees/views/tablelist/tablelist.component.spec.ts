@@ -3,7 +3,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {TablelistComponent} from './tablelist.component';
 import {AngularMaterialModule} from "../../../../material-module";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {MitarbeiterType} from "../../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
+import {Employee} from "../../../../models/Employee/Employee";
 import {SelectionModel} from "@angular/cdk/collections";
 import {MatTableDataSource} from "@angular/material";
 
@@ -24,12 +24,12 @@ describe('TablelistComponent', () => {
     return {fixture, app};
   }
 
-  function setEmployees(): Array<MitarbeiterType> {
-    let employees: Array<MitarbeiterType> = new Array<MitarbeiterType>();
+  function setEmployees(): Array<Employee> {
+    let employees: Array<Employee> = new Array<Employee>();
 
-    let empl1 = new MitarbeiterType();
-    let empl2 = new MitarbeiterType();
-    let empl3 = new MitarbeiterType();
+    let empl1 = new Employee();
+    let empl2 = new Employee();
+    let empl3 = new Employee();
 
     empl1.vorname = "Max";
     empl1.nachname = "Mustermann";
@@ -52,10 +52,10 @@ describe('TablelistComponent', () => {
     return employees;
   }
 
-  function setupList(app: TablelistComponent): Array<MitarbeiterType> {
-    app.selection = new SelectionModel<MitarbeiterType>(true, null);
-    app.dataSource = new MatTableDataSource<MitarbeiterType>();
-    let employees: Array<MitarbeiterType> = setEmployees();
+  function setupList(app: TablelistComponent): Array<Employee> {
+    app.selection = new SelectionModel<Employee>(true, null);
+    app.dataSource = new MatTableDataSource<Employee>();
+    let employees: Array<Employee> = setEmployees();
     app.dataSource.data = employees;
 
     return employees;
@@ -69,7 +69,7 @@ describe('TablelistComponent', () => {
   it('should select all', () => {
     const {fixture, app} = setup();
 
-    let employees: Array<MitarbeiterType> = setupList(app);
+    let employees: Array<Employee> = setupList(app);
     employees.forEach(empl => app.selection.toggle(empl));
     expect(app.isAllSelected()).toEqual(true);
   });

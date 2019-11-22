@@ -10,7 +10,6 @@ import {configuration} from "../../../../configuration/configuration";
 export class CalenderComponent implements OnInit {
 
   private format = configuration.dateFormat;
-  private today: Date = new Date();
 
   @Output("dateEmitter") dateEmitterEvent: EventEmitter<string> = new EventEmitter<string>();
   @Input("date") selectedDate: string;
@@ -27,5 +26,4 @@ export class CalenderComponent implements OnInit {
   emitEvent(date: string): void {
     this.dateEmitterEvent.emit(date);
   }
-
 }

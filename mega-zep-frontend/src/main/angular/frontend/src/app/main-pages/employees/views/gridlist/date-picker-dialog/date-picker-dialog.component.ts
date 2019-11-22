@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatSnackBar} from "@angular/material";
-import {MitarbeiterType} from "../../../../../models/Mitarbeiter/Mitarbeiter/MitarbeiterType";
+import {Employee} from "../../../../../models/Employee/Employee";
 import {UtilService} from "../../../../../shared/util/util.service";
 
 @Component({
@@ -10,7 +10,7 @@ import {UtilService} from "../../../../../shared/util/util.service";
 })
 export class DatePickerDialogComponent implements OnInit {
 
-  employee: MitarbeiterType = null;
+  employee: Employee = null;
   date: string;
 
   constructor(
@@ -24,12 +24,12 @@ export class DatePickerDialogComponent implements OnInit {
     this.employee = this.data;
   }
 
-  updateEmployee(employee: MitarbeiterType) {
-    let employees: Array<MitarbeiterType> = new Array<MitarbeiterType>(employee);
+  updateEmployee(employee: Employee) {
+    let employees: Array<Employee> = new Array<Employee>(employee);
     this.updateEmployees(employees);
   }
 
-  updateEmployees(employees: Array<MitarbeiterType>) {
+  updateEmployees(employees: Array<Employee>) {
     employees.forEach(employee => {
       employee.freigabedatum = this.date;
     });
