@@ -8,6 +8,7 @@ import com.gepardec.mega.utils.DateUtils;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import de.provantis.zep.*;
 import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -19,10 +20,15 @@ import java.util.*;
 
 import static com.gepardec.mega.utils.DateUtils.getFirstDayOfFollowingMonth;
 import static com.gepardec.mega.utils.DateUtils.getLastDayOfFollowingMonth;
+import static com.gepardec.mega.zep.service.ZepStatusCodeMapper.toHttpResponseCode;
+import static java.lang.String.format;
 
 @Interceptors(AuthorizationInterceptor.class)
 @ApplicationScoped
 public class WorkerServiceImpl implements WorkerService {
+
+    @Inject
+    Logger logger;
 
     @Inject
     @Named("ZepAuthorizationSOAPPortType")
@@ -35,23 +41,26 @@ public class WorkerServiceImpl implements WorkerService {
     private static final ReadMitarbeiterRequestType readMitarbeiterRequestType = new ReadMitarbeiterRequestType();
     private static final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
 
-
     @PostConstruct
     void init() {
         readMitarbeiterRequestType.setRequestHeader(requestHeaderType);
         projektzeitenRequest.setRequestHeader(requestHeaderType);
     }
 
+
     @Override
     public MitarbeiterType getEmployee(final GoogleUser user) {
+
         try {
             final List<MitarbeiterType> employees = flatMap(zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType));
-            return employees.stream().filter(e -> e.getEmail() != null && e.getEmail().equals(user.getEmail())).findFirst().orElse(null);
+            return employees.stream()
+                    .filter(e -> e.getEmail() != null && e.getEmail().equals(user.getEmail()))
+                    .findFirst()
+                    .orElse(null);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(format("error getEmployee for user: %s", user.getId()));
+            return null;
         }
-
-        return null;
     }
 
     @Override
@@ -66,7 +75,10 @@ public class WorkerServiceImpl implements WorkerService {
 
         employees.forEach(e -> statusCodeList.add(updateEmployee(e)));
 
-        return statusCodeList.stream().filter(statuscode -> statuscode == HttpStatus.SC_INTERNAL_SERVER_ERROR).findAny().orElse(HttpStatus.SC_OK);
+        return statusCodeList.stream()
+                .filter(statuscode -> statuscode == HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                .findAny()
+                .orElse(HttpStatus.SC_OK);
     }
 
     @Override
@@ -75,8 +87,6 @@ public class WorkerServiceImpl implements WorkerService {
         if (employee == null) {
             return null;
         }
-
-
         ReadProjektzeitenSearchCriteriaType searchCriteria = createProjectTimeSearchCriteria(employee);
         projektzeitenRequest.setReadProjektzeitenSearchCriteria(searchCriteria);
 
@@ -121,12 +131,11 @@ public class WorkerServiceImpl implements WorkerService {
             final UpdateMitarbeiterResponseType updateMitarbeiterResponseType = zepSoapPortType.updateMitarbeiter(umrt);
             final ResponseHeaderType responseHeaderType = updateMitarbeiterResponseType != null ? updateMitarbeiterResponseType.getResponseHeader() : null;
 
-            return responseHeaderType != null ? Integer.parseInt(responseHeaderType.getReturnCode()) : HttpStatus.SC_INTERNAL_SERVER_ERROR;
+            return toHttpResponseCode(responseHeaderType);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(format("Errro updatingEmployee, id: %s", employee.getUserId()));
+            return HttpStatus.SC_INTERNAL_SERVER_ERROR;
         }
-
-        return HttpStatus.SC_INTERNAL_SERVER_ERROR;
     }
 
     private List<MitarbeiterType> filterActiveEmployees(ReadMitarbeiterResponseType readMitarbeiterResponseType) {

@@ -53,6 +53,6 @@ public class AuthorizationInterceptor {
     private void logInsufficientPermission(InvocationContext invocationContext){
         final String methodName = invocationContext.getMethod().getDeclaringClass().getSimpleName() +
                 "." + invocationContext.getMethod().getName();
-        logger.warn("User " + sessionUser.getName() + " has insufficient permissions to call " + methodName);
+        logger.warn("User {} has insufficient permissions to call {}", sessionUser.getName(), methodName);
     }
 }

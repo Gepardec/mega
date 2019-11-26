@@ -21,12 +21,12 @@ public class WorkerImpl implements WorkerApi {
     WorkerService workerService;
 
     @Override
-    public Response employee (final HttpServletRequest request, final HttpServletResponse response) {
+    public Response employee(final HttpServletRequest request, final HttpServletResponse response) {
         return Response.ok().build();
     }
 
     @Override
-    public Response employee (final GoogleUser user, final HttpServletRequest request, final HttpServletResponse response) {
+    public Response employee(final GoogleUser user, final HttpServletRequest request, final HttpServletResponse response) {
         final MitarbeiterType mitarbeiterType = workerService.getEmployee(user);
         if (mitarbeiterType != null) {
             return Response.ok(mitarbeiterType).build();
@@ -38,7 +38,7 @@ public class WorkerImpl implements WorkerApi {
     @Override
     public Response employeeMonthendReport(GoogleUser user, HttpServletRequest request, HttpServletResponse response) {
         final MonthendReport monthendReport = workerService.getMonthendReport(user);
-        if(monthendReport != null) {
+        if (monthendReport != null) {
             return Response.ok(monthendReport).build();
         }
         return Response.serverError().build();
@@ -46,13 +46,13 @@ public class WorkerImpl implements WorkerApi {
 
 
     @Override
-    public Response employeesPreFlight (final HttpServletRequest request, final HttpServletResponse response) {
+    public Response employeesPreFlight(final HttpServletRequest request, final HttpServletResponse response) {
         return Response.ok().build();
     }
 
     @Override
     //@Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
-    public Response employees (final HttpServletRequest request, final HttpServletResponse response) {
+    public Response employees(final HttpServletRequest request, final HttpServletResponse response) {
         final List<MitarbeiterType> mitarbeiterTypeList = workerService.getAllEmployees();
         if (mitarbeiterTypeList != null) {
             return Response.ok(mitarbeiterTypeList).build();
@@ -62,24 +62,26 @@ public class WorkerImpl implements WorkerApi {
     }
 
     @Override
-    public Response employeesUpdate (final HttpServletRequest request, final HttpServletResponse response) {
+    public Response employeesUpdate(final HttpServletRequest request, final HttpServletResponse response) {
         return Response.ok().build();
     }
 
     @Override
     //@Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
-    public Response employeesUpdate (final List<MitarbeiterType> employees, final HttpServletRequest request, final HttpServletResponse response) {
+    public Response employeesUpdate(final List<MitarbeiterType> employees, final HttpServletRequest request, final HttpServletResponse response) {
         return Response.status(workerService.updateEmployees(employees)).build();
     }
 
     @Override
-    public Response employeeUpdate (final HttpServletRequest request, final HttpServletResponse response) {
+    public Response employeeUpdate(final HttpServletRequest request, final HttpServletResponse response) {
         return Response.ok().build();
     }
 
     @Override
     //@Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
-    public Response employeeUpdate (final MitarbeiterType employee, final HttpServletRequest request, final HttpServletResponse response) {
-        return Response.status(workerService.updateEmployee(employee)).build();
+    public Response employeeUpdate(final MitarbeiterType employee, final HttpServletRequest request, final HttpServletResponse response) {
+        return Response.status(workerService.updateEmployee(employee))
+                .build();
+
     }
 }

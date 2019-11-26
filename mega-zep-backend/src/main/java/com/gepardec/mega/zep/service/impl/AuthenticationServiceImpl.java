@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Inject
-    Logger LOG;
+    Logger logger;
 
     @Inject
     @Named("ZepAuthorizationSOAPPortType")
@@ -50,7 +50,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             }
 
             try {
-                LOG.info("Authentication of user with name " + user.getName());
+                logger.info("Authentication of user with name {} ", user.getName());
                 sessionUser.setAuthorizationCode(user.getAuthorizationCode());
                 sessionUser.setEmail(user.getEmail());
                 sessionUser.setAuthToken(user.getAuthToken());
@@ -59,22 +59,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 sessionUser.setRole(mt.getRechte());
             }
             catch (Exception e) {
-                LOG.info("Authentication of user with name " + user.getName() + " failed: " + e);
+                logger.info("Authentication of user with name {} failed: ", user.getName());
+                logger.info(e.getMessage());
                 invalidateSession();
                 return Response.status(Response.Status.UNAUTHORIZED).build();
             }
 
-            LOG.info("Authentication of user with name " + user.getName() + " successful");
+            logger.info("Authentication of user with name {} successful", user.getName());
             return Response.ok(mt).build();
-
-            //logger.info("Authentication of user with name " + user.getName() + " successful");
-            //return Response.ok(user).build();
         } else {
-            LOG.error("Zep connection not possible.");
+            logger.error("ZEP connection not possible.");
+            return Response.serverError().build();
         }
-
-        // Return status 500
-        return Response.serverError().build();
     }
 
     @Override

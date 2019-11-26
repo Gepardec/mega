@@ -14,14 +14,14 @@ public enum WorkingLocation {
     SWITZERLAND("SCHWEIZ"),
     CZECH("CZ");
 
-    private String workingLocation;
+    private String workingLocationCode;
 
-    WorkingLocation(String workingLocation) {
-        this.workingLocation = workingLocation;
+    WorkingLocation(String workingLocationCode) {
+        this.workingLocationCode = workingLocationCode;
     }
 
     private static Map<String, WorkingLocation> enumMap = Stream.of(WorkingLocation.values())
-            .collect(Collectors.toMap(e -> e.workingLocation.toUpperCase(), Function.identity()));
+            .collect(Collectors.toMap(e -> e.workingLocationCode.toUpperCase(), Function.identity()));
 
     public static WorkingLocation fromString(String value) {
         String keyValue = StringUtils.defaultIfBlank(value, "").toUpperCase();

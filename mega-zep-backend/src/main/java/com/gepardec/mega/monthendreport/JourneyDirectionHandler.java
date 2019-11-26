@@ -19,14 +19,12 @@ public class JourneyDirectionHandler {
                 resetHandler();
                 return Optional.of(WarningType.WARNING_JOURNEY_BACK_MISSING);
             }
-            beforeJourneyDirection = TO_AIM;
-        } else if (journeyDirection == FURTHER || journeyDirection == BACK) {
-            if (beforeJourneyDirection == BACK) {
-                resetHandler();
-                return Optional.of(WarningType.WARNING_JOURNEY_TO_AIM_MISSING);
-            }
-            beforeJourneyDirection = FURTHER;
+        } else if ((journeyDirection == FURTHER || journeyDirection == BACK)
+                && beforeJourneyDirection == BACK) {
+            resetHandler();
+            return Optional.of(WarningType.WARNING_JOURNEY_TO_AIM_MISSING);
         }
+        beforeJourneyDirection = journeyDirection;
         return Optional.empty();
     }
 

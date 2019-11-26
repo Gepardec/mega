@@ -32,11 +32,11 @@ public class ZepSoapProvider {
 
     @PostConstruct
     void initAuthorizationToken() {
+        Stream<String> lines = null;
         try {
             final Path path = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource(ZEP_SOAP_TOKEN_FILE_NAME)).toURI());
-            final Stream<String> lines = Files.lines(path);
+            lines = Files.lines(path);
             authorizationToken = lines.collect(Collectors.joining("\n"));
-            lines.close();
         } catch (IOException e) {
             String msg = "Error occured while reading file: " + ZEP_SOAP_TOKEN_FILE_NAME;
             logger.error(msg);
@@ -45,9 +45,12 @@ public class ZepSoapProvider {
             String msg = "File " + ZEP_SOAP_TOKEN_FILE_NAME + " not found, please put it in mega-zep-backend-resources";
             logger.error(msg);
             throw new TokenFileReadException(msg);
-        }
-        catch (URISyntaxException e) {
-            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            logger.error("error read authorizationToken {}", e.getMessage());
+        } finally {
+            if (lines != null) {
+                lines.close();
+            }
         }
     }
 
@@ -55,16 +58,14 @@ public class ZepSoapProvider {
     @Produces
     @Dependent
     @Named("ZepAuthorizationSOAPPortType")
-    public ZepSoapPortType createZepSoapPortType () {
+    public ZepSoapPortType createZepSoapPortType() {
         try {
             final ZepSoap zs = new ZepSoap();
             return zs.getZepSOAP();
+        } catch (Exception e) {
+            logger.error("Error createZepSoapPortType {}", e.getMessage());
+            return null;
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     @Produces
@@ -77,7 +78,7 @@ public class ZepSoapProvider {
     @Produces
     @Dependent
     @Named("ZepAuthorizationRequestHeaderType")
-    public RequestHeaderType createRequestHeaderType () {
+    public RequestHeaderType createRequestHeaderType() {
         RequestHeaderType requestHeaderType = new RequestHeaderType();
         requestHeaderType.setAuthorizationToken(authorizationToken);
         return requestHeaderType;
