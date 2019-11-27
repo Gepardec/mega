@@ -14,6 +14,6 @@ class MailTest {
 
     @Test
     void sendMail() {
-        mailSender.sendMonthlyFriendlyReminder("mario.brandmueller@gepardec.com", "mario");
+        mailSender.sendMonthlyFriendlyReminder("megagepardec@gmail.com", "mario");
     }
 }
