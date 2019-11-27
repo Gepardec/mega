@@ -14,8 +14,6 @@ class MailTest {
 
     @Test
     void sendMail() {
-        String name = "Max";
-        String eMail = "max.mustermann@gepardec.com";
-        mailSender.sendMonthlyFriendlyReminder(name, eMail);
+        mailSender.sendMonthlyFriendlyReminder("mario.brandmueller@gepardec.com", "mario");
     }
 }
