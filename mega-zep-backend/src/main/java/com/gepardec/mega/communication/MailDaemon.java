@@ -17,10 +17,11 @@ public class MailDaemon {
 
     //    @Scheduled(every = "5s")
     void sendMailToEmployees() {
-        mailSender.send();
-        System.out.println("5 seconds past");
 
-        //TODO: implement
+
+//        workerService.getAllEmployees()
+//                .forEach(employee -> mailSender.sendMonthlyFriendlyReminder(employee.getVorname(), employee.getEmail()));
+
 
     }
 

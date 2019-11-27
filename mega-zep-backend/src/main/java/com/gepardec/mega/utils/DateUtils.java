@@ -64,4 +64,5 @@ public class DateUtils {
         return date.getDayOfWeek().getDisplayName(TextStyle.FULL, GERMAN_LOCALE);
     }
 
+
 }
