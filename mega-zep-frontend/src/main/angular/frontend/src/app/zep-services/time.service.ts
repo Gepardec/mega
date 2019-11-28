@@ -46,6 +46,7 @@ export class TimeService {
     third.excessWorkTime = 12.5;
     third.warningMessage = "Test Warning 3";
 
-    return new Array<TimeEntry>(first, second, third);
+    return new Array<TimeEntry>(first, second, third
+    , third, third, third, third, third, third, third, third, third, third, third, third, third, third, third, third, third, third, third, third);
   }
 }

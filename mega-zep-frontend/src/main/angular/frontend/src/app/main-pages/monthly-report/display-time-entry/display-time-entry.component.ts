@@ -15,7 +15,9 @@ export class DisplayTimeEntryComponent implements OnInit {
   constructor() {  }
 
   ngOnInit() {
-    // FIXME GAJ: remove
-    // this.dataSource.data;
+  }
+
+  stringToDate(date: string): Date {
+    return new Date(date);
   }
 }

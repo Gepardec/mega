@@ -1,4 +1,18 @@
+
+.container {
+  height: 95vh;
+  overflow: auto;
+}
+
 .mat-header-row {
   background-color: rgb(245, 246, 250);
   color: rgb(193, 196, 203);
+}
+
+.mat-row {
+  min-height: 65px;
+
+  &.selected {
+    background: #dddddd;
+  }
 }
