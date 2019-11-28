@@ -36,7 +36,7 @@ public class MailSender {
     Logger logger;
 
     @PostConstruct
-    private void readFiles() {
+    void readFiles() {
         try {
             final Path path = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource(REMINDER_1_ST_BUSINESS_DAY_HTML)).toURI());
             try (Stream<String> lines = Files.lines(path)) {

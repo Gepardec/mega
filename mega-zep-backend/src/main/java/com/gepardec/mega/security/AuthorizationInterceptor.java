@@ -26,8 +26,8 @@ public class AuthorizationInterceptor {
         final Authorization authorizationAnnotation = invocationContext.getMethod().getAnnotation(Authorization.class);
 
         if(authorizationAnnotation != null){
-            int[] allowedRoles = authorizationAnnotation.allowedRoles();
-            for(int allowedRole : allowedRoles){
+            Role[] allowedRoles = authorizationAnnotation.allowedRoles();
+            for (Role allowedRole : allowedRoles) {
                 if(allowedRole == sessionUser.getRole()){
                     return invocationContext.proceed();
                 }

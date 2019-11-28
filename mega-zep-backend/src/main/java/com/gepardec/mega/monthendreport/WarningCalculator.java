@@ -91,7 +91,7 @@ class WarningCalculator {
 
         List<ProjectTimeEntry> entries = projectTimeManager.getProjectTimes().values().stream()
                 .flatMap(Collection::stream)
-                .sorted(Comparator.comparing(entry -> entry.getFromTime()))
+                .sorted(Comparator.comparing(ProjectTimeEntry::getFromTime))
                 .collect(Collectors.toList());
 
         for (int i = 0; i < entries.size(); i++) {

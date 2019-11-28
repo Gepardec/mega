@@ -4,6 +4,7 @@ import com.gepardec.mega.model.google.GoogleUser;
 import com.gepardec.mega.monthendreport.MonthendReport;
 import com.gepardec.mega.monthendreport.ProjectTimeManager;
 import com.gepardec.mega.security.AuthorizationInterceptor;
+import com.gepardec.mega.security.Role;
 import com.gepardec.mega.utils.DateUtils;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import de.provantis.zep.*;
@@ -70,6 +71,14 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
+    public List<MitarbeiterType> getEmployeeByType(Role... roles) {
+//        ReadMitarbeiterRequestType readMitarbeiterRequestType = new ReadMitarbeiterRequestType();
+//        readMitarbeiterRequestType.s
+//        zepSoapPortType.readMitarbeiter()
+        return null;
+    }
+
+    @Override
     public Integer updateEmployees(final List<MitarbeiterType> employees) {
         final List<Integer> statusCodeList = new LinkedList<>();
 
@@ -82,7 +91,7 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public MonthendReport getMonthendReport(GoogleUser user) {
+    public MonthendReport getMonthendReportForUser(GoogleUser user) {
         MitarbeiterType employee = getEmployee(user);
         if (employee == null) {
             return null;

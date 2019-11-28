@@ -3,7 +3,6 @@ package com.gepardec.mega.communication.dates;
 import com.gepardec.mega.communication.Reminder;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
@@ -14,9 +13,6 @@ import static java.time.temporal.ChronoField.DAY_OF_MONTH;
 
 @ApplicationScoped
 public class BusinessDayCalculator {
-
-    @Inject
-    AustrianHolidays austrianHolidays;
 
     public Optional<Reminder> getEventForDate(LocalDate actualDate) {
         LocalDate firstWorkingDayOfMonth = calcFirstWorkingDayOfMonthForDate(actualDate);
@@ -90,6 +86,6 @@ public class BusinessDayCalculator {
     private boolean isWorkingDay(LocalDate date) {
         return date.getDayOfWeek() != DayOfWeek.SATURDAY
                 && date.getDayOfWeek() != DayOfWeek.SUNDAY
-                && !austrianHolidays.getHolidates().contains(date);
+                && !AustrianHolidays.getHolidates().contains(date);
     }
 }
