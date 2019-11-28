@@ -1,12 +1,15 @@
 package com.gepardec.mega.communication;
 
 import com.gepardec.mega.communication.dates.BusinessDayCalculator;
+import com.gepardec.mega.security.Role;
 import com.gepardec.mega.utils.DateUtils;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import io.quarkus.scheduler.Scheduled;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static com.gepardec.mega.communication.Reminder.*;
@@ -23,31 +26,36 @@ public class MailDaemon {
     @Inject
     WorkerService workerService;
 
-
     @Scheduled(cron = "0 0 9 ? * MON-FRI")
-    void sendNotifications() {
+    void sendReminder() {
         Optional<Reminder> reminder = businessDayCalculator.getEventForDate(DateUtils.now());
         if (reminder.isPresent()) {
+            //TODO: read from resource
+            List<String> omMailAdresses = new ArrayList<>(0);
+
             switch (reminder.get()) {
                 case USER_CHECK_PROJECTTIMES: {
-//                    workerService.getAllEmployees()
-//                            .forEach(employee -> mailSender.sendMonthlyFriendlyReminder(employee.getVorname(), employee.getEmail()));
+                    sendReminderToUser();
+                    break;
+                }
+                case PL_CHECK_USER_CONTENT: {
+                    sendReminderToPL();
                     break;
                 }
                 case OM_CHECK_USER_CONTENT: {
-                    mailSender.sendMail("", OM_CHECK_USER_CONTENT, "");
+                    sendReminderToOM(omMailAdresses, OM_CHECK_USER_CONTENT);
                     break;
                 }
                 case OM_RELEASE: {
-                    mailSender.sendMail("", OM_RELEASE, "");
+                    sendReminderToOM(omMailAdresses, OM_RELEASE);
                     break;
                 }
                 case OM_SALARY_CHARGING: {
-                    mailSender.sendMail("", OM_SALARY_CHARGING, "");
+                    sendReminderToOM(omMailAdresses, OM_SALARY_CHARGING);
                     break;
                 }
                 case OM_SALARY_TRANSFER: {
-                    mailSender.sendMail("", OM_SALARY_TRANSFER, "");
+                    sendReminderToOM(omMailAdresses, OM_SALARY_TRANSFER);
                     break;
                 }
                 default: {
@@ -55,5 +63,19 @@ public class MailDaemon {
                 }
             }
         }
+    }
+
+    private void sendReminderToPL() {
+        workerService.getEmployeesByRoles(Role.ROLE_CONTROLLER)
+                .forEach(employee -> mailSender.sendMail(employee.getEmail(), PL_CHECK_USER_CONTENT, ""));
+    }
+
+    private void sendReminderToOM(List<String> omMailAdresses, Reminder reminder) {
+        omMailAdresses.forEach(mailAddress -> mailSender.sendMail(mailAddress, reminder, ""));
+    }
+
+    private void sendReminderToUser() {
+        workerService.getAllEmployees()
+                .forEach(employee -> mailSender.sendMonthlyFriendlyReminder(employee.getVorname(), employee.getEmail()));
     }
 }

@@ -18,6 +18,7 @@ import javax.inject.Named;
 import javax.interceptor.Interceptors;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.gepardec.mega.utils.DateUtils.getFirstDayOfFollowingMonth;
 import static com.gepardec.mega.utils.DateUtils.getLastDayOfFollowingMonth;
@@ -71,11 +72,12 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public List<MitarbeiterType> getEmployeeByType(Role... roles) {
-//        ReadMitarbeiterRequestType readMitarbeiterRequestType = new ReadMitarbeiterRequestType();
-//        readMitarbeiterRequestType.s
-//        zepSoapPortType.readMitarbeiter()
-        return null;
+    public List<MitarbeiterType> getEmployeesByRoles(Role... roles) {
+        Set<Role> roleSet = new HashSet(Arrays.asList(roles));
+        List<MitarbeiterType> employees = getAllEmployees();
+        return employees.stream()
+                .filter(employee -> roleSet.contains(Role.fromInt(employee.getRechte())))
+                .collect(Collectors.toList());
     }
 
     @Override

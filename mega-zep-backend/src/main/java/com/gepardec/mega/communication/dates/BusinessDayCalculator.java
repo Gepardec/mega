@@ -43,13 +43,13 @@ public class BusinessDayCalculator {
 
 
     private LocalDate calcFirstWorkingDayOfMonthForDate(LocalDate actual) {
-        LocalDate firstDayOfMonth = actual.with(DAY_OF_MONTH, 1);
 
-        LocalDate firstWorkingDayOfMonth = firstDayOfMonth;
-        while (!isWorkingDay(firstDayOfMonth)) {
-            firstDayOfMonth = firstDayOfMonth.plusDays(1);
+        LocalDate firstWorkingDayOfMonth = actual.with(DAY_OF_MONTH, 1);
+
+        while (!isWorkingDay(firstWorkingDayOfMonth)) {
+            firstWorkingDayOfMonth = firstWorkingDayOfMonth.plusDays(1);
         }
-        return firstDayOfMonth;
+        return firstWorkingDayOfMonth;
     }
 
 
@@ -58,7 +58,8 @@ public class BusinessDayCalculator {
             return date;
         }
         LocalDate resultDate = date;
-        for (int addedDays = 0; addedDays < workdaysToAdd; ) {
+        int addedDays = 0;
+        while (addedDays < workdaysToAdd) {
             resultDate = resultDate.plusDays(1);
             if (isWorkingDay(resultDate)) {
                 ++addedDays;
@@ -73,7 +74,8 @@ public class BusinessDayCalculator {
             workingdaysToRemove *= -1;
         }
         LocalDate resultDate = date.with(TemporalAdjusters.firstDayOfNextMonth());
-        for (int removedDays = 0; removedDays < workingdaysToRemove; ) {
+        int removedDays = 0;
+        while (removedDays < workingdaysToRemove) {
             resultDate = resultDate.minusDays(1);
             if (isWorkingDay(resultDate)) {
                 ++removedDays;

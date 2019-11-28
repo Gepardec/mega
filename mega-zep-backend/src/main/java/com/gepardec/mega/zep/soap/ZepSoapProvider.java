@@ -28,7 +28,7 @@ public class ZepSoapProvider {
     Logger logger;
 
     private static final String ZEP_SOAP_TOKEN_FILE_NAME = "secret.soaptoken";
-    private static String authorizationToken;
+    private String authorizationToken;
 
     @PostConstruct
     void initAuthorizationToken() {

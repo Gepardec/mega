@@ -12,7 +12,7 @@ public interface WorkerService {
 
     List<MitarbeiterType> getAllEmployees ();
 
-    List<MitarbeiterType> getEmployeeByType(Role... roles);
+    List<MitarbeiterType> getEmployeesByRoles(Role... roles);
 
     Integer updateEmployee(MitarbeiterType employee);
 

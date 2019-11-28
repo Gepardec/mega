@@ -1,6 +1,7 @@
 package com.gepardec.mega.security;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,6 +21,6 @@ public enum Role {
     }
 
     public static Role fromInt(Integer roleId) {
-        return enumMap.getOrDefault(roleId, NO_ROLE);
+        return enumMap.getOrDefault(Optional.ofNullable(roleId).orElse(-1), NO_ROLE);
     }
 }

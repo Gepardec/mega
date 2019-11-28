@@ -80,7 +80,6 @@ public class BusinessDayCalculatorTest {
                 () -> assertEmptyForGetEventForDate(2019, 11, 29),
                 () -> assertEmptyForGetEventForDate(2019, 11, 30)
         );
-
     }
 
 
