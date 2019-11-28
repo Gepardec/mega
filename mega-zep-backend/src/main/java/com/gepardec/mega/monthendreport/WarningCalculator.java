@@ -6,39 +6,45 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.gepardec.mega.monthendreport.BreakWarning.*;
+import static com.gepardec.mega.monthendreport.TimeWarning.*;
 
 class WarningCalculator {
 
-    private List<BreakWarning> breakWarnings = new ArrayList<>(0);
+    private List<TimeWarning> timeWarnings = new ArrayList<>(0);
+
+    private List<JourneyWarning> journeyWarnings = new ArrayList<>(0);
 
 
-    public List<BreakWarning> createBreakWarnings(ProjectTimeEntries projectTimeEntries) {
+    public List<TimeWarning> determineTimeWarnings(ProjectTimeManager projectTimeManager) {
+
+        Set<Map.Entry<LocalDate, List<ProjectTimeEntry>>> entries = projectTimeManager.getProjectTimes().entrySet();
 
         //1. more than 10 hours a day
-        projectTimeEntries.getProjectTimeEntries().entrySet()
-                .forEach(e -> checkFor10Hours(e.getValue(), e.getKey()));
+        entries.forEach(e -> checkFor10Hours(e.getValue(), e.getKey()));
 
         //2. no break when more than 6 hours a day
-        projectTimeEntries.getProjectTimeEntries().entrySet()
-                .forEach(e -> checkForBreaksForWorkingDaysWithMoreThan6Hours(e.getValue(), e.getKey()));
+        entries.forEach(e -> checkForBreaksForWorkingDaysWithMoreThan6Hours(e.getValue(), e.getKey()));
 
-        checkForRestTime(projectTimeEntries);
+        //3. check earliest start and latest ending
+        projectTimeManager.getEntriesAsFlatList().forEach(e -> checkForFlexibleWorkFrame(e));
 
-        breakWarnings.sort(Comparator.comparing(BreakWarning::getDate));
-        return breakWarnings;
+        //4. check fore enough rest
+        checkForRestTime(projectTimeManager);
+
+        timeWarnings.sort(Comparator.comparing(TimeWarning::getDate));
+        return timeWarnings;
     }
 
 
     private void checkFor10Hours(List<ProjectTimeEntry> entriesPerDay, LocalDate date) {
         double workDurationOfDay = calcWorkingDurationOfDay(entriesPerDay);
         if (workDurationOfDay > MAX_HOURS_A_DAY) {
-            BreakWarning breakWarning = new BreakWarning();
-            breakWarning.setDate(date);
-            breakWarning.setDay(DateUtils.getDayByDate(date));
-            breakWarning.setTooMuchWorkTime(workDurationOfDay - MAX_HOURS_A_DAY);
-            breakWarning.setWarning(WarningType.WARNING_MORE_THAN_10_HOURS);
-            mergeIntoWarnings(breakWarning);
+            TimeWarning timeWarning = new TimeWarning();
+            timeWarning.setDate(date);
+            timeWarning.setDay(DateUtils.getDayByDate(date));
+            timeWarning.setTooMuchWorkTime(workDurationOfDay - MAX_HOURS_A_DAY);
+            timeWarning.addWarning(WarningType.WARNING_TIME_MORE_THAN_10_HOURS);
+            addToTimeWarnings(timeWarning);
         }
     }
 
@@ -56,19 +62,34 @@ class WarningCalculator {
                 }
             }
             if (breakTime < MIN_REQUIRED_BREAK_TIME) {
-                BreakWarning breakWarning = new BreakWarning();
-                breakWarning.setDate(date);
-                breakWarning.setDay(DateUtils.getDayByDate(date));
-                breakWarning.setTooLessBreak(MIN_REQUIRED_BREAK_TIME - breakTime);
-                breakWarning.setWarning(WarningType.WARNING_TOO_LESS_BREAK);
-                mergeIntoWarnings(breakWarning);
+                TimeWarning timeWarning = new TimeWarning();
+                timeWarning.setDate(date);
+                timeWarning.setDay(DateUtils.getDayByDate(date));
+                timeWarning.setTooLessBreak(MIN_REQUIRED_BREAK_TIME - breakTime);
+                timeWarning.addWarning(WarningType.WARNING_TIME_TOO_LESS_BREAK);
+                addToTimeWarnings(timeWarning);
             }
         }
     }
 
-    private void checkForRestTime(ProjectTimeEntries projectTimeEntries) {
+    private void checkForFlexibleWorkFrame(ProjectTimeEntry projectTimeEntry) {
+        if (projectTimeEntry.getFromTime().toLocalTime().isBefore(EARLIEST_START_TIME)) {
+            TimeWarning timeWarning = new TimeWarning();
+            timeWarning.setDate(projectTimeEntry.getDate());
+            timeWarning.addWarning(WarningType.WARNING_TIME_TOO_EARLY_START);
+            addToTimeWarnings(timeWarning);
+        }
+        if (projectTimeEntry.getToTime().toLocalTime().isAfter(LATEST_END_TIME)) {
+            TimeWarning timeWarning = new TimeWarning();
+            timeWarning.setDate(projectTimeEntry.getDate());
+            timeWarning.addWarning(WarningType.WARNING_TIME_TOO_LATE_END);
+            addToTimeWarnings(timeWarning);
+        }
+    }
 
-        List<ProjectTimeEntry> entries = projectTimeEntries.getProjectTimeEntries().values().stream()
+    private void checkForRestTime(ProjectTimeManager projectTimeManager) {
+
+        List<ProjectTimeEntry> entries = projectTimeManager.getProjectTimes().values().stream()
                 .flatMap(Collection::stream)
                 .sorted(Comparator.comparing(entry -> entry.getFromTime()))
                 .collect(Collectors.toList());
@@ -80,12 +101,12 @@ class WarningCalculator {
                 if (nextEntry.getDate().isEqual(actualEntry.getDate().plusDays(1L))) {
                     double restHours = DateUtils.calcDiffInHours(actualEntry.getToTime(), nextEntry.getFromTime());
                     if (restHours < MIN_REQUIRED_REST_TIME) {
-                        BreakWarning breakWarning = new BreakWarning();
-                        breakWarning.setDate(nextEntry.getDate());
-                        breakWarning.setDay(DateUtils.getDayByDate(nextEntry.getDate()));
-                        breakWarning.setTooLessRest(MIN_REQUIRED_REST_TIME - restHours);
-                        breakWarning.setWarning(WarningType.WARNING_TOO_LESS_REST);
-                        mergeIntoWarnings(breakWarning);
+                        TimeWarning timeWarning = new TimeWarning();
+                        timeWarning.setDate(nextEntry.getDate());
+                        timeWarning.setDay(DateUtils.getDayByDate(nextEntry.getDate()));
+                        timeWarning.setTooLessRest(MIN_REQUIRED_REST_TIME - restHours);
+                        timeWarning.addWarning(WarningType.WARNING_TIME_TOO_LESS_REST);
+                        addToTimeWarnings(timeWarning);
                     }
                 }
             }
@@ -93,15 +114,15 @@ class WarningCalculator {
     }
 
 
-    private void mergeIntoWarnings(BreakWarning newBreakWarning) {
-        Optional<BreakWarning> breakWarning = breakWarnings.stream()
-                .filter(bw -> bw.getDate().isEqual(newBreakWarning.getDate()))
-                .findFirst();
+    private void addToTimeWarnings(TimeWarning newTimeWarning) {
+        Optional<TimeWarning> breakWarning = timeWarnings.stream()
+                .filter(bw -> bw.getDate().isEqual(newTimeWarning.getDate()))
+                .findAny();
 
         if (breakWarning.isPresent()) {
-            breakWarning.get().mergeBreakWarnings(newBreakWarning);
+            breakWarning.get().mergeBreakWarnings(newTimeWarning);
         } else {
-            breakWarnings.add(newBreakWarning);
+            timeWarnings.add(newTimeWarning);
         }
     }
 
@@ -116,7 +137,36 @@ class WarningCalculator {
     }
 
 
-    public List<JourneyWarning> createJourneyWarnings(ProjectTimeEntries projectTimeEntries) {
-        return new ArrayList<>(0);
+    public List<JourneyWarning> determineJourneyWarnings(ProjectTimeManager projectTimeManager) {
+
+        JourneyDirectionHandler journeyDirectionHandler = new JourneyDirectionHandler();
+        for (ProjectTimeEntry projectTimeEntry : projectTimeManager.getEntriesAsFlatList()) {
+
+            if (projectTimeEntry instanceof JourneyEntry) {
+                JourneyEntry journeyEntry = (JourneyEntry) projectTimeEntry;
+                journeyDirectionHandler.moveTo(journeyEntry.getJourneyDirection())
+                        .ifPresent(warningType -> addToJourneyWarnings(journeyEntry, warningType));
+            }
+        }
+        return journeyWarnings;
+    }
+
+
+    private void addToJourneyWarnings(JourneyEntry journeyEntry, WarningType warning) {
+        JourneyWarning newJourneyWarning = new JourneyWarning();
+        newJourneyWarning.setDate(journeyEntry.getDate());
+        newJourneyWarning.setDay(DateUtils.getDayByDate(journeyEntry.getDate()));
+        newJourneyWarning.getWarnings().add(warning);
+
+
+        Optional<JourneyWarning> journeyWarning = journeyWarnings.stream()
+                .filter(warn -> warn.getDate().isEqual(journeyEntry.getDate()))
+                .findAny();
+
+        if (journeyWarning.isPresent()) {
+            journeyWarning.get().getWarnings().addAll(newJourneyWarning.getWarnings());
+        } else {
+            journeyWarnings.add(newJourneyWarning);
+        }
     }
 }
