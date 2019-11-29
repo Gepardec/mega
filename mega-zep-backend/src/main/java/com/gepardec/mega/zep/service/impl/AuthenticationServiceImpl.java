@@ -1,6 +1,7 @@
 package com.gepardec.mega.zep.service.impl;
 
 import com.gepardec.mega.model.google.GoogleUser;
+import com.gepardec.mega.security.Role;
 import com.gepardec.mega.security.SessionUser;
 import com.gepardec.mega.zep.service.api.AuthenticationService;
 import de.provantis.zep.*;
@@ -56,7 +57,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 sessionUser.setAuthToken(user.getAuthToken());
                 sessionUser.setIdToken(user.getIdToken());
                 sessionUser.setName(user.getName());
-                sessionUser.setRole(mt.getRechte());
+                sessionUser.setRole(Role.fromInt(mt.getRechte()));
             }
             catch (Exception e) {
                 logger.info("Authentication of user with name {} failed: ", user.getName());

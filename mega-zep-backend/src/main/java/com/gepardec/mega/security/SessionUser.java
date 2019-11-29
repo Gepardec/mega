@@ -11,18 +11,13 @@ import java.io.Serializable;
 @SessionScoped
 public class SessionUser implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    public static final int ROLE_USER = 0;
-    public static final int ROLE_ADMINISTRATOR = 1;
-    public static final int ROLE_CONTROLLER = 2;
-
     private String id;
     private String email;
     private String name;
     private String authToken;
     private String idToken;
     private String authorizationCode;
-    private int role = -1;
+    private Role role = Role.NO_ROLE;
 
     public void invalidate(){
         id = null;
@@ -31,6 +26,6 @@ public class SessionUser implements Serializable {
         authToken = null;
         idToken = null;
         authorizationCode = null;
-        role = -1;
+        role = Role.NO_ROLE;
     }
 }

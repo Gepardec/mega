@@ -37,7 +37,7 @@ public class WorkerImpl implements WorkerApi {
 
     @Override
     public Response employeeMonthendReport(GoogleUser user, HttpServletRequest request, HttpServletResponse response) {
-        final MonthendReport monthendReport = workerService.getMonthendReport(user);
+        final MonthendReport monthendReport = workerService.getMonthendReportForUser(user);
         if (monthendReport != null) {
             return Response.ok(monthendReport).build();
         }
