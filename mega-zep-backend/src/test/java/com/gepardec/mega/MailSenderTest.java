@@ -29,7 +29,7 @@ class MailSenderTest {
     }
 
     @Test
-    void sendMail() {
+    void sendMail_commonCase_shouldContainExpectedData() {
         mailSender.sendMonthlyFriendlyReminder(TO, "Jamal");
         List<Mail> sent = mailbox.getMessagesSentTo(TO);
         assertAll(
@@ -37,5 +37,15 @@ class MailSenderTest {
                 () -> assertTrue(sent.get(0).getHtml().startsWith("<p>He Jamal")),
                 () -> assertTrue(sent.get(0).getSubject().contains("Friendly Reminder"))
         );
+    }
+
+    @Test
+    void sendMail_sendIt100Times_allMailsShouldBeInMailBox() {
+        for (int i = 0; i < 100; i++) {
+            mailSender.sendMonthlyFriendlyReminder(TO, "Jamal");
+        }
+        List<Mail> sent = mailbox.getMessagesSentTo(TO);
+        assertEquals(100, sent.size());
+
     }
 }
