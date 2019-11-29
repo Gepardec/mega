@@ -25,20 +25,23 @@ pipeline {
                     steps {
                         script {
                             podTemplate(cloud: 'openshift', name: 'nodejs-build-agent', label: 'nodejs-build-agent', serviceAccount: 'jenkins', containers: [
-                                    containerTemplate(name: 'nodejs-container', image: 'docker-registry.default.svc:5000/57-mega-dev/nodejs-build-agent:latest', ttyEnabled: true, command: 'cat', alwaysPullImage: true)
+                                    containerTemplate(name: 'nodejs-container', image: 'docker-registry.default.svc:5000/57-mega-dev/nodejs-build-agent:latest', ttyEnabled: true, command: 'cat', alwaysPullImage: true,
+                                            envVars: [
+                                                    secretEnvVar(key: 'GOOGLE_OAUTH_CLIENT_ID', secretName: 'google-secrets', secretKey: 'oauth.clientId'),
+                                                    envVar(key: 'CONTAINER_CORE_LIMIT', value: '1')
+                                            ])
                             ]) {
                                 node('nodejs-build-agent') {
                                     container('nodejs-container') {
                                         unstash name: "repo"
 
-                                        def backendProps = null
-                                        dir('ocp/templates') {
-                                            backendProps = readServiceProperties("mega-zep-backend")
-                                        }
+                                        def backendProps = readServiceProperties("mega-zep-backend", 'ocp/templates')
                                         def service = "http://${backendProps.NAME}:8080"
 
                                         dir('mega-zep-frontend/src/main/angular/frontend') {
                                             sh "sed -i -e 's|REPLACE_BACKEND_ORIGIN|${service}|g' src/environments/environment.prod.ts"
+                                            sh "sed -i -e 's|REPLACE_OAUTH_CLIENT_ID|${env.GOOGLE_OAUTH_CLIENT_ID}|g' src/environments/environment.prod.ts"
+                                            sh "cat src/environments/environment.prod.ts"
                                             sh "npm install"
                                             sh "ng build --optimization=true --sourceMap=false --configuration=prod"
                                         }
@@ -88,15 +91,12 @@ pipeline {
                                         def revision = buildRevisionForBranch()
 
                                         withCredentials([file(credentialsId: 'mega-secrets', variable: 'FILE')]) {
-                                            def props = readProperties file: "${FILE}"
+                                            sh "mkdir -p ./mega-zep-backend/config"
+                                            sh "cp -f ${FILE} ./mega-zep-backend/config/application.properties"
                                             sh "mvn -B -s jenkins-settings.xml \
                                                    install \
                                                    -Drevision=${revision} \
-                                                   -Dquarkus.package.uber.jar=true \
-                                                   -Dzep.soap.token=${props['zep.soap.token']} \
-                                                   -Dquarkus.mailer.username=${props['quarkus.mailer.username']} \
-                                                   -Dquarkus.mailer.password=${props['quarkus.mailer.password']} \
-                                                   -Dquarkus.mailer.from=${props['quarkus.mailer.from']}"
+                                                   -Dquarkus.package.uber.jar=true"
                                         }
 
                                         dir('ocp/templates') {
@@ -141,7 +141,7 @@ def recreateServiceResources(String service, String stage = "") {
         && oc create --filename ${processedYaml}"
 }
 
-def readServiceProperties(String service, String path =".", String stage = "") {
+def readServiceProperties(String service, String path = ".", String stage = "") {
     if (stage != "") {
         stage = "." + stage
     }

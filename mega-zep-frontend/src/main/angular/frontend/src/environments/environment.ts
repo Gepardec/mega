@@ -5,7 +5,8 @@
 export const environment = {
   production: true,
   // Base url
-  backendOrigin: 'http://localhost:8080'
+  backendOrigin: 'http://localhost:8080',
+  oauthClientId: '60018822787-gkagrsid8bugtlnts2eqfvtf4n6loefu.apps.googleusercontent.com'
 };
 
 /*

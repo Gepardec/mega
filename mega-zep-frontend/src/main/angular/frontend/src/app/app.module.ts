@@ -11,13 +11,14 @@ import {MainLayoutModule} from './shared/main-layout/main-layout/main-layout.mod
 import {NavigationModule} from './shared/navigation/navigation.module';
 import {ErrorHandleInterceptor} from './shared/interceptors/ErrorHandleInterceptor';
 import {AngularMaterialModule} from "./material-module";
+import { environment } from '../environments/environment';
 import {APP_BASE_HREF} from "@angular/common";
 
 
 const config = new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider('259022406161-oi9mt111p3j3ul93dikbf2etfjoo4vjm.apps.googleusercontent.com')
+    provider: new GoogleLoginProvider(environment.oauthClientId)
   },
 ]);
 

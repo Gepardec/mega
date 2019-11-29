@@ -16,7 +16,7 @@ local.properties
 
 package-lock.json
 mega-secrets.properties
-megaq-dev-github.properties
+mega-dev-github.properties
 mega-dev.ssh.key
 mega-dev.auth.ssh
 
