@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @QuarkusTest
 class MailSenderTest {
 
-    private static final String TO = "megagepardec@gmail.com";
+    private static final String TO = "mario.brandmueller@gepardec.com";
 
     @Inject
     MailSender mailSender;
@@ -46,6 +46,5 @@ class MailSenderTest {
         }
         List<Mail> sent = mailbox.getMessagesSentTo(TO);
         assertEquals(100, sent.size());
-
     }
 }
