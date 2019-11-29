@@ -27,8 +27,6 @@ public class MailSender {
     private static final String EOM_WIKI_PLACEHOLDER = "$wiki_eom$";
     private static final String LOGO_PLACEHOLDER = "$mega_logo$";
 
-    private String mailBody = null;
-
     @Inject
     Mailer mailer;
 
@@ -36,7 +34,7 @@ public class MailSender {
     Logger logger;
 
     public void sendMonthlyFriendlyReminder(String eMail, String firstName) {
-        String mailContent = Objects.requireNonNull(mailBody)
+        String mailContent = Objects.requireNonNull(MEGA_REMINDER_1_ST_BUSINESS_DAY_CONTENT)
                 .replace(NAME_PLACEHOLDER, firstName)
                 .replace(EOM_WIKI_PLACEHOLDER, MEGA_WIKI_EOM_URL)
                 .replace(LOGO_PLACEHOLDER, MEGA_IMAGE_LOGO_URL);
