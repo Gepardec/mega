@@ -11,7 +11,7 @@ Make End-of-the-month-process Great Again!
 
 See link:mega-zep-connector/README.adoc[README of ZEP-Connector] for more information.
 
-.mega-secrets.properties (externalized configurations)
+./mega-zep-backend/config/application.properties (externalized configurations)
 [source,properties]
 ----
 zep.soap.token=***
@@ -34,6 +34,22 @@ These are the Dockerfiles used by this project
  The Dockerfile for building the quarkus build agent
 
 == Openshift
+
+.mega-secrets.properties (externalized configurations)
+[source,properties]
+----
+zep.soap.token=***
+quarkus.mailer.username=<sender_email_username>
+quarkus.mailer.password=***
+quarkus.mailer.from=<sender_email_address>
+----
+
+.google-secrets.properties (google related configurations)
+[source,properties]
+----
+# Used by the frontend for two factor authentication
+oauth.clientId=<GOOGLE_OAUTH_CLIENT_ID>
+----
 
 .Secrets
 [source, bash]

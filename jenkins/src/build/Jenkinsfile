@@ -37,7 +37,7 @@ pipeline {
                                         withCredentials([file(credentialsId: 'google-secrets', variable: 'GOOGLE_SECRET_FILE')]) {
                                             def googleProps = readProperties file: "${GOOGLE_SECRET_FILE}"
                                             def backendProps = readServiceProperties("mega-zep-backend", 'ocp/templates')
-                                            def service = "https://${backendProps.NAME}-${env.OCP_ROUTE_SUFFIX}:8080"
+                                            def service = "https://${backendProps.NAME}-${env.OCP_ROUTE_SUFFIX}"
 
                                             dir('mega-zep-frontend/src/main/angular/frontend') {
                                                 sh "sed -i -e 's|REPLACE_BACKEND_ORIGIN|${service}|g' src/environments/environment.prod.ts"
