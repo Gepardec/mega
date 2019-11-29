@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: true,
+  production: false,
   // Base url
   backendOrigin: 'http://localhost:8080',
   oauthClientId: '60018822787-gkagrsid8bugtlnts2eqfvtf4n6loefu.apps.googleusercontent.com'

@@ -43,7 +43,7 @@ pipeline {
                                                 sh "sed -i -e 's|REPLACE_BACKEND_ORIGIN|${service}|g' src/environments/environment.prod.ts"
                                                 sh "sed -i -e 's|REPLACE_OAUTH_CLIENT_ID|${googleProps['oauth.clientId']}|g' src/environments/environment.prod.ts"
                                                 sh "npm install"
-                                                sh "ng build --optimization=true --sourceMap=false --configuration=prod"
+                                                sh "ng build --prod --optimization=true --sourceMap=false"
                                             }
                                         }
 
