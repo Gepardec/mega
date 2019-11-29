@@ -1,26 +1,17 @@
-import {Employee} from "../Employee/Employee";
 
-export class TimeEntry {
-  private _employee: Employee;
-  private _date: string;
+export class TimeWarning {
+
+  private _date: Date;
   private _missingRestTime: number;
   private _missingBreakTime: number;
   private _excessWorkTime: number;
-  private _warningMessage: string;
+  private _warnings: Array<String>;
 
-  get employee(): Employee {
-    return this._employee;
-  }
-
-  set employee(value: Employee) {
-    this._employee = value;
-  }
-
-  get date(): string {
+  get date(): Date {
     return this._date;
   }
 
-  set date(value: string) {
+  set date(value: Date) {
     this._date = value;
   }
 
@@ -48,11 +39,11 @@ export class TimeEntry {
     this._excessWorkTime = value;
   }
 
-  get warningMessage(): string {
-    return this._warningMessage;
+  get warnings(): Array<String> {
+    return this._warnings;
   }
 
-  set warningMessage(value: string) {
-    this._warningMessage = value;
+  set warnings(value: Array<String>) {
+    this._warnings = value;
   }
 }

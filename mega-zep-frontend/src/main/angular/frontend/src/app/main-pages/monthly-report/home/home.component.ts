@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {TimeEntry} from "../../../models/MonthlyReport/TimeEntry";
+import {MonthlyReport} from "../../../models/MonthlyReport/MonthlyReport";
 import {MatTableDataSource} from "@angular/material/table";
 import {SocialUser} from "angularx-social-login";
 import {AuthenticationService} from "../../../signin/authentication.service";
-import {TimeEntryService} from "../time-entry.service";
 import {Subscription} from "rxjs";
+import {MonthlyReportService} from "../../../zep-services/monthly-report.service";
 
 @Component({
   selector: 'app-home',
@@ -15,12 +15,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   user: SocialUser;
   private currentUserSubscription: Subscription;
-  private timeEntries: Array<TimeEntry>;
-  public dataSource = new MatTableDataSource<TimeEntry>();
+  private monthlyReport: MonthlyReport;
 
   constructor(
     private authenticationService: AuthenticationService,
-    private timeEntryService: TimeEntryService
+    private monthlyReportService: MonthlyReportService
   ) {
   }
 
@@ -29,7 +28,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.user = user;
       this.getAllTimeEntries();
     });
-    this.dataSource.data = this.timeEntries;
   }
 
   ngOnDestroy(): void {
@@ -38,7 +36,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   getAllTimeEntries() {
     if (this.user) {
-      this.timeEntries = this.timeEntryService.getAll(this.user);
+      this.monthlyReport = this.monthlyReportService.getAll(this.user);
     }
   }
 

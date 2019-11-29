@@ -1,9 +1,9 @@
-<div class="container mat-elevation-z8">
-  <mat-table #table class="tablelist" [dataSource]="dataSource">
+<div class="container-time-table mat-elevation-z8">
+  <mat-table #timeTable class="tablelist" [dataSource]="datasourceTimeTable">
 
     <ng-container matColumnDef="date">
       <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{stringToDate(element.date) | date}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.date | date:'fullDate'}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="restTime">
@@ -21,12 +21,8 @@
       <mat-cell *matCellDef="let element"> {{element.excessWorkTime}} </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="warning">
-      <mat-header-cell *matHeaderCellDef>Warnung</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.warningMessage}} </mat-cell>
-    </ng-container>
+    <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsTimeTable; sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumnsTimeTable;"></mat-row>
 
-    <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
 </div>

@@ -8,8 +8,8 @@ export const configuration = {
 
   PAGE_NAMES: {
     LOGIN: "Login",
-    EMPLOYEES: "Employees",
-    MONTHLY_REPORT : "Monhtly-Report"
+    EMPLOYEES: "Freigabe",
+    MONTHLY_REPORT : "Monats-Auswertung"
   },
 
   PAGE_URLS: {
@@ -40,6 +40,7 @@ export const configuration = {
   },
 
   dateFormat: 'yyyy-MM-dd',
+
   EMPLOYEE_ROLES: {
     USER: 0,
     ADMINISTRATOR: 1,

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DisplayTimeEntryComponent } from './display-time-entry.component';
+import { DisplayMonthlyReportComponent } from './display-monthly-report.component';
 
 describe('DisplayTimeEntryComponent', () => {
-  let component: DisplayTimeEntryComponent;
-  let fixture: ComponentFixture<DisplayTimeEntryComponent>;
+  let component: DisplayMonthlyReportComponent;
+  let fixture: ComponentFixture<DisplayMonthlyReportComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DisplayTimeEntryComponent ]
+      declarations: [ DisplayMonthlyReportComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DisplayTimeEntryComponent);
+    fixture = TestBed.createComponent(DisplayMonthlyReportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

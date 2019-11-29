@@ -1,6 +1,11 @@
 
-.container {
-  height: 95vh;
+.container-time-table {
+  height: 40vh;
+  overflow: auto;
+}
+
+.container-journey-table {
+  height: 40vh;
   overflow: auto;
 }
 
