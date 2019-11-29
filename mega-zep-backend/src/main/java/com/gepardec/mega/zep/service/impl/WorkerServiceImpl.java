@@ -1,8 +1,8 @@
 package com.gepardec.mega.zep.service.impl;
 
 import com.gepardec.mega.model.google.GoogleUser;
-import com.gepardec.mega.monthendreport.MonthendReport;
-import com.gepardec.mega.monthendreport.ProjectTimeManager;
+import com.gepardec.mega.monthlyreport.MonthlyReport;
+import com.gepardec.mega.monthlyreport.ProjectTimeManager;
 import com.gepardec.mega.security.AuthorizationInterceptor;
 import com.gepardec.mega.security.Role;
 import com.gepardec.mega.utils.DateUtils;
@@ -93,7 +93,7 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public MonthendReport getMonthendReportForUser(GoogleUser user) {
+    public MonthlyReport getMonthendReportForUser(GoogleUser user) {
         MitarbeiterType employee = getEmployee(user);
         if (employee == null) {
             return null;
@@ -121,14 +121,14 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
 
-    private static MonthendReport calcWarnings(ReadProjektzeitenResponseType projectTimeResponse, MitarbeiterType employee) {
+    private static MonthlyReport calcWarnings(ReadProjektzeitenResponseType projectTimeResponse, MitarbeiterType employee) {
         if (projectTimeResponse == null || projectTimeResponse.getProjektzeitListe() == null) {
             return null;
         }
-        MonthendReport monthendReport = new MonthendReport(employee,
+        MonthlyReport monthlyReport = new MonthlyReport(employee,
                 new ProjectTimeManager(projectTimeResponse.getProjektzeitListe().getProjektzeiten()));
-        monthendReport.calculateWarnings();
-        return monthendReport;
+        monthlyReport.calculateWarnings();
+        return monthlyReport;
     }
 
 

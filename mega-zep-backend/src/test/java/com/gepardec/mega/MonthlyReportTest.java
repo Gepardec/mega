@@ -2,10 +2,10 @@ package com.gepardec.mega;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gepardec.mega.model.google.GoogleUser;
-import com.gepardec.mega.monthendreport.JourneyWarning;
-import com.gepardec.mega.monthendreport.MonthendReport;
-import com.gepardec.mega.monthendreport.TimeWarning;
-import com.gepardec.mega.monthendreport.WarningType;
+import com.gepardec.mega.monthlyreport.JourneyWarning;
+import com.gepardec.mega.monthlyreport.MonthlyReport;
+import com.gepardec.mega.monthlyreport.TimeWarning;
+import com.gepardec.mega.monthlyreport.WarningType;
 import com.gepardec.mega.utils.DateUtils;
 import de.provantis.zep.MitarbeiterType;
 import io.quarkus.test.junit.QuarkusTest;
@@ -19,12 +19,12 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.gepardec.mega.monthendreport.WarningType.*;
+import static com.gepardec.mega.monthlyreport.WarningType.*;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
-public class MonthendReportTest {
+public class MonthlyReportTest {
 
     private final static ObjectMapper objectMapper = new ObjectMapper();
     private final static GoogleUser googleUser = new GoogleUser();
@@ -62,16 +62,16 @@ public class MonthendReportTest {
                 .extract()
                 .asString();
 
-        final MonthendReport monthendReport = objectMapper.readValue(response, MonthendReport.class);
+        final MonthlyReport monthlyReport = objectMapper.readValue(response, MonthlyReport.class);
 
-        Map<LocalDate, List<WarningType>> journeyWarningsByDay = monthendReport.getJourneyWarnings().stream()
+        Map<LocalDate, List<WarningType>> journeyWarningsByDay = monthlyReport.getJourneyWarnings().stream()
                 .sorted(Comparator.comparing(JourneyWarning::getDate))
                 .collect(Collectors.toMap(JourneyWarning::getDate, journeyWarning -> new ArrayList(journeyWarning.getWarnings()),
                         (v1, v2) -> v1,
                         LinkedHashMap::new));
 
         assertAll(
-                () -> assertEquals(4, monthendReport.getJourneyWarnings().size()),
+                () -> assertEquals(4, monthlyReport.getJourneyWarnings().size()),
                 () -> assertWarningTypeInWarningOfDay(journeyWarningsByDay, LocalDate.of(2019, 11, 4), WARNING_JOURNEY_TO_AIM_MISSING),
                 () -> assertWarningTypeInWarningOfDay(journeyWarningsByDay, LocalDate.of(2019, 11, 12), WARNING_JOURNEY_TO_AIM_MISSING),
                 () -> assertWarningTypeInWarningOfDay(journeyWarningsByDay, LocalDate.of(2019, 11, 14), WARNING_JOURNEY_TO_AIM_MISSING, WARNING_JOURNEY_BACK_MISSING),
@@ -91,9 +91,9 @@ public class MonthendReportTest {
                 .extract()
                 .asString();
 
-        final MonthendReport monthendReport = objectMapper.readValue(response, MonthendReport.class);
+        final MonthlyReport monthlyReport = objectMapper.readValue(response, MonthlyReport.class);
 
-        Map<LocalDate, List<WarningType>> timeWarningsByDay = monthendReport.getTimeWarnings().stream()
+        Map<LocalDate, List<WarningType>> timeWarningsByDay = monthlyReport.getTimeWarnings().stream()
                 .sorted(Comparator.comparing(TimeWarning::getDate))
                 .collect(Collectors.toMap(TimeWarning::getDate,
                         TimeWarning::getWarnings,
@@ -101,7 +101,7 @@ public class MonthendReportTest {
                         LinkedHashMap::new));
 
         assertAll("Errors in timeWarning-Tests: ",
-                () -> assertEquals(9, monthendReport.getTimeWarnings().size()),
+                () -> assertEquals(9, monthlyReport.getTimeWarnings().size()),
                 //more than 10 hourse work, but also journey-time
                 () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 5), WARNING_TIME_MORE_THAN_10_HOURS),
                 //more than 10hours, but less than 10 for working

@@ -30,9 +30,6 @@ public class MailDaemon {
     void sendReminder() {
         Optional<Reminder> reminder = businessDayCalculator.getEventForDate(DateUtils.now());
         if (reminder.isPresent()) {
-            //TODO: read from resource
-            List<String> omMailAdresses = new ArrayList<>(0);
-
             switch (reminder.get()) {
                 case USER_CHECK_PROJECTTIMES: {
                     sendReminderToUser();
@@ -43,19 +40,19 @@ public class MailDaemon {
                     break;
                 }
                 case OM_CHECK_USER_CONTENT: {
-                    sendReminderToOM(omMailAdresses, OM_CHECK_USER_CONTENT);
+                    sendReminderToOM(OM_CHECK_USER_CONTENT);
                     break;
                 }
                 case OM_RELEASE: {
-                    sendReminderToOM(omMailAdresses, OM_RELEASE);
+                    sendReminderToOM(OM_RELEASE);
                     break;
                 }
                 case OM_SALARY_CHARGING: {
-                    sendReminderToOM(omMailAdresses, OM_SALARY_CHARGING);
+                    sendReminderToOM(OM_SALARY_CHARGING);
                     break;
                 }
                 case OM_SALARY_TRANSFER: {
-                    sendReminderToOM(omMailAdresses, OM_SALARY_TRANSFER);
+                    sendReminderToOM(OM_SALARY_TRANSFER);
                     break;
                 }
                 default: {
@@ -70,7 +67,9 @@ public class MailDaemon {
                 .forEach(employee -> mailSender.sendMail(employee.getEmail(), PL_CHECK_USER_CONTENT, ""));
     }
 
-    private void sendReminderToOM(List<String> omMailAdresses, Reminder reminder) {
+    private void sendReminderToOM(Reminder reminder) {
+        //TODO: read from resource
+        List<String> omMailAdresses = new ArrayList<>(0);
         omMailAdresses.forEach(mailAddress -> mailSender.sendMail(mailAddress, reminder, ""));
     }
 

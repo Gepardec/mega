@@ -1,7 +1,7 @@
 package com.gepardec.mega.zep.service.api;
 
 import com.gepardec.mega.model.google.GoogleUser;
-import com.gepardec.mega.monthendreport.MonthendReport;
+import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.security.Role;
 import de.provantis.zep.MitarbeiterType;
 
@@ -18,5 +18,5 @@ public interface WorkerService {
 
     Integer updateEmployees(List<MitarbeiterType> employees);
 
-    MonthendReport getMonthendReportForUser(GoogleUser user);
+    MonthlyReport getMonthendReportForUser(GoogleUser user);
 }

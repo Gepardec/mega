@@ -1,4 +1,4 @@
-package com.gepardec.mega.monthendreport;
+package com.gepardec.mega.monthlyreport;
 
 import de.provantis.zep.MitarbeiterType;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
-public class MonthendReport {
+public class MonthlyReport {
     @Getter
     private List<TimeWarning> timeWarnings = new ArrayList<>(0);
     @Getter
@@ -19,7 +19,7 @@ public class MonthendReport {
     private WarningCalculator warningCalculator;
     private ProjectTimeManager projectTimeManager;
 
-    public MonthendReport(MitarbeiterType employee, ProjectTimeManager projectTimeManager) {
+    public MonthlyReport(MitarbeiterType employee, ProjectTimeManager projectTimeManager) {
         this.projectTimeManager = projectTimeManager;
         this.employee = employee;
         warningCalculator = new WarningCalculator();
