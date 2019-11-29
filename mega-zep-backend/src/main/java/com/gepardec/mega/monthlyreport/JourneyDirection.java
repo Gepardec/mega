@@ -1,4 +1,4 @@
-package com.gepardec.mega.monthendreport;
+package com.gepardec.mega.monthlyreport;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -22,8 +22,8 @@ public enum JourneyDirection {
 
     public static JourneyDirection fromString(String direction) {
         JourneyDirection journeyDirection = enumMap.get(direction);
-        if(journeyDirection == null) {
-            throw new EnumConverterException(String.format("Error mapping %s to Enum JourneyDirection",direction));
+        if (journeyDirection == null) {
+            throw new EnumConverterException(String.format("Error mapping %s to Enum JourneyDirection", direction));
         }
         return journeyDirection;
     }

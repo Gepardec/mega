@@ -1,4 +1,4 @@
-package com.gepardec.mega.monthendreport;
+package com.gepardec.mega.monthlyreport;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -17,6 +17,5 @@ public class JourneyWarning {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
-    private String day;
     private Set<WarningType> warnings = new HashSet<>(0);
 }

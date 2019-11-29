@@ -1,4 +1,4 @@
-package com.gepardec.mega.monthendreport;
+package com.gepardec.mega.monthlyreport;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -18,16 +18,15 @@ public class TimeWarning {
     static final double MIN_REQUIRED_BREAK_TIME = 0.5d;
     static final double MIN_REQUIRED_REST_TIME = 11d;
     static final LocalTime EARLIEST_START_TIME = LocalTime.of(06, 0);
-    static final LocalTime LATEST_END_TIME = LocalTime.of(22,0);
+    static final LocalTime LATEST_END_TIME = LocalTime.of(22, 0);
 
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
-    private String day;
-    private Double tooLessRest;
-    private Double tooLessBreak;
-    private Double tooMuchWorkTime;
+    private Double missingRestTime;
+    private Double missingBreakTime;
+    private Double excessWorkTime;
     private List<WarningType> warnings = new ArrayList<>(0);
 
     public void addWarning(WarningType warning) {
@@ -36,14 +35,14 @@ public class TimeWarning {
 
 
     public void mergeBreakWarnings(TimeWarning newTimeWarning) {
-        if (newTimeWarning.tooLessBreak != null) {
-            tooLessBreak = newTimeWarning.tooLessBreak;
+        if (newTimeWarning.missingBreakTime != null) {
+            missingBreakTime = newTimeWarning.missingBreakTime;
         }
-        if (newTimeWarning.tooLessRest != null) {
-            tooLessRest = newTimeWarning.tooLessRest;
+        if (newTimeWarning.missingRestTime != null) {
+            missingRestTime = newTimeWarning.missingRestTime;
         }
-        if (newTimeWarning.tooMuchWorkTime != null) {
-            tooMuchWorkTime = newTimeWarning.tooMuchWorkTime;
+        if (newTimeWarning.excessWorkTime != null) {
+            excessWorkTime = newTimeWarning.excessWorkTime;
         }
         warnings.addAll(newTimeWarning.warnings);
     }

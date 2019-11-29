@@ -1,4 +1,4 @@
-package com.gepardec.mega.monthendreport;
+package com.gepardec.mega.monthlyreport;
 
 public enum WarningType {
     WARNING_TIME_MORE_THAN_10_HOURS("Warnung: Sie haben mehr als 10 Stunden eingetragen"),
@@ -10,8 +10,6 @@ public enum WarningType {
 
     WARNING_JOURNEY_BACK_MISSING("Warnung: Rückreise fehlt oder ist nach dem Zeitraum"),
     WARNING_JOURNEY_TO_AIM_MISSING("Warnung: Hinreise fehlt oder ist vor dem Zeitraum");
-
-
 
 
     private String text;

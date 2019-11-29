@@ -1,4 +1,4 @@
-package com.gepardec.mega.monthendreport;
+package com.gepardec.mega.monthlyreport;
 
 import com.gepardec.mega.utils.DateUtils;
 
@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.gepardec.mega.monthendreport.TimeWarning.*;
+import static com.gepardec.mega.monthlyreport.TimeWarning.*;
 
 class WarningCalculator {
 
@@ -41,8 +41,7 @@ class WarningCalculator {
         if (workDurationOfDay > MAX_HOURS_A_DAY) {
             TimeWarning timeWarning = new TimeWarning();
             timeWarning.setDate(date);
-            timeWarning.setDay(DateUtils.getDayByDate(date));
-            timeWarning.setTooMuchWorkTime(workDurationOfDay - MAX_HOURS_A_DAY);
+            timeWarning.setExcessWorkTime(workDurationOfDay - MAX_HOURS_A_DAY);
             timeWarning.addWarning(WarningType.WARNING_TIME_MORE_THAN_10_HOURS);
             addToTimeWarnings(timeWarning);
         }
@@ -64,8 +63,7 @@ class WarningCalculator {
             if (breakTime < MIN_REQUIRED_BREAK_TIME) {
                 TimeWarning timeWarning = new TimeWarning();
                 timeWarning.setDate(date);
-                timeWarning.setDay(DateUtils.getDayByDate(date));
-                timeWarning.setTooLessBreak(MIN_REQUIRED_BREAK_TIME - breakTime);
+                timeWarning.setMissingBreakTime(MIN_REQUIRED_BREAK_TIME - breakTime);
                 timeWarning.addWarning(WarningType.WARNING_TIME_TOO_LESS_BREAK);
                 addToTimeWarnings(timeWarning);
             }
@@ -103,8 +101,7 @@ class WarningCalculator {
                     if (restHours < MIN_REQUIRED_REST_TIME) {
                         TimeWarning timeWarning = new TimeWarning();
                         timeWarning.setDate(nextEntry.getDate());
-                        timeWarning.setDay(DateUtils.getDayByDate(nextEntry.getDate()));
-                        timeWarning.setTooLessRest(MIN_REQUIRED_REST_TIME - restHours);
+                        timeWarning.setMissingRestTime(MIN_REQUIRED_REST_TIME - restHours);
                         timeWarning.addWarning(WarningType.WARNING_TIME_TOO_LESS_REST);
                         addToTimeWarnings(timeWarning);
                     }
@@ -155,7 +152,6 @@ class WarningCalculator {
     private void addToJourneyWarnings(JourneyEntry journeyEntry, WarningType warning) {
         JourneyWarning newJourneyWarning = new JourneyWarning();
         newJourneyWarning.setDate(journeyEntry.getDate());
-        newJourneyWarning.setDay(DateUtils.getDayByDate(journeyEntry.getDate()));
         newJourneyWarning.getWarnings().add(warning);
 
 

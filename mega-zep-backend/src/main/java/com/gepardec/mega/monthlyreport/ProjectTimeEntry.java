@@ -1,4 +1,4 @@
-package com.gepardec.mega.monthendreport;
+package com.gepardec.mega.monthlyreport;
 
 import com.gepardec.mega.utils.DateUtils;
 import lombok.AllArgsConstructor;
