@@ -4,6 +4,8 @@ Make End-of-the-month-process Great Again!
 
 == Prerequisites
 
+=== Project setup
+
 - Java 11
 - Maven 3.5+
 
@@ -17,6 +19,10 @@ quarkus.mailer.username=<sender_email_username>
 quarkus.mailer.password=***
 quarkus.mailer.from=<sender_email_address>
 ----
+
+=== Google OAuth2 client setup
+
+See link:https://developers.google.com/identity/protocols/OAuth2UserAgent[here] for a description how to setup a google oauth client.
 
 == Dockerfiles
 

@@ -121,6 +121,25 @@ objects:
         deploymentconfig: "${NAME}"
       sessionAffinity: None
       type: ClusterIP
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      annotations:
+        openshift.io/host.generated: "true"
+      creationTimestamp: null
+      labels:
+        app: "${APP}"
+      name: "${NAME}"
+    spec:
+      port:
+        targetPort: 8080
+      tls:
+        termination: edge
+      to:
+        kind: Service
+        name: "${NAME}"
+        weight: 100
+      wildcardPolicy: None
 parameters:
   - name: "APP"
     displayName: "The app label"
