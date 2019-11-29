@@ -43,7 +43,9 @@ oc annotate secret mega-secrets jenkins.openshift.io/secret.name=mega-secrets
 oc label secret mega-secrets credential.sync.jenkins.openshift.io=true
 
 # Create google secret for frontend build
-oc create secret generic google-secrets --from-env-file=google-secrets.properties
+oc create secret generic google-secrets --from-file=filename=google-secrets.properties
+oc annotate secret google-secrets jenkins.openshift.io/secret.name=google-secrets
+oc label secret google-secrets credential.sync.jenkins.openshift.io=true
 
 # Create git ssh secret
 oc create secret generic mega-git-ssh --from-file=ssh-privatekey=mega-dev.ssh.key --type=kubernetes.io/ssh-auth -n 57-mega-dev

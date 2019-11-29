@@ -27,7 +27,6 @@ pipeline {
                             podTemplate(cloud: 'openshift', name: 'nodejs-build-agent', label: 'nodejs-build-agent', serviceAccount: 'jenkins', containers: [
                                     containerTemplate(name: 'nodejs-container', image: 'docker-registry.default.svc:5000/57-mega-dev/nodejs-build-agent:latest', ttyEnabled: true, command: 'cat', alwaysPullImage: true,
                                             envVars: [
-                                                    secretEnvVar(key: 'GOOGLE_OAUTH_CLIENT_ID', secretName: 'google-secrets', secretKey: 'oauth.clientId'),
                                                     envVar(key: 'CONTAINER_CORE_LIMIT', value: '1')
                                             ])
                             ]) {
@@ -35,15 +34,17 @@ pipeline {
                                     container('nodejs-container') {
                                         unstash name: "repo"
 
-                                        def backendProps = readServiceProperties("mega-zep-backend", 'ocp/templates')
-                                        def service = "http://${backendProps.NAME}:8080"
+                                        withCredentials([file(credentialsId: 'google-secrets', variable: 'GOOGLE_SECRET_FILE')]) {
+                                            def googleProps = readProperties file: "${GOOGLE_SECRET_FILE}"
+                                            def backendProps = readServiceProperties("mega-zep-backend", 'ocp/templates')
+                                            def service = "http://${backendProps.NAME}:8080"
 
-                                        dir('mega-zep-frontend/src/main/angular/frontend') {
-                                            sh "sed -i -e 's|REPLACE_BACKEND_ORIGIN|${service}|g' src/environments/environment.prod.ts"
-                                            sh "sed -i -e 's|REPLACE_OAUTH_CLIENT_ID|${env.GOOGLE_OAUTH_CLIENT_ID}|g' src/environments/environment.prod.ts"
-                                            sh "cat src/environments/environment.prod.ts"
-                                            sh "npm install"
-                                            sh "ng build --optimization=true --sourceMap=false --configuration=prod"
+                                            dir('mega-zep-frontend/src/main/angular/frontend') {
+                                                sh "sed -i -e 's|REPLACE_BACKEND_ORIGIN|${service}|g' src/environments/environment.prod.ts"
+                                                sh "sed -i -e 's|REPLACE_OAUTH_CLIENT_ID|${googleProps['oauth.clientId']}|g' src/environments/environment.prod.ts"
+                                                sh "npm install"
+                                                sh "ng build --optimization=true --sourceMap=false --configuration=prod"
+                                            }
                                         }
 
                                         dir('ocp/templates') {
