@@ -141,11 +141,11 @@ def recreateServiceResources(String service, String stage = "") {
         && oc create --filename ${processedYaml}"
 }
 
-def readServiceProperties(String service, String stage = "") {
+def readServiceProperties(String service, String path =".", String stage = "") {
     if (stage != "") {
         stage = "." + stage
     }
-    def props = readProperties file: "ocp/templates/${service}${stage}.properties"
+    def props = readProperties file: "${path}/${service}${stage}.properties"
     return props
 }
 
