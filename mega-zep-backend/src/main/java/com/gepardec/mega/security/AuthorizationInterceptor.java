@@ -26,8 +26,8 @@ public class AuthorizationInterceptor {
         final Authorization authorizationAnnotation = invocationContext.getMethod().getAnnotation(Authorization.class);
 
         if(authorizationAnnotation != null){
-            int[] allowedRoles = authorizationAnnotation.allowedRoles();
-            for(int allowedRole : allowedRoles){
+            Role[] allowedRoles = authorizationAnnotation.allowedRoles();
+            for (Role allowedRole : allowedRoles) {
                 if(allowedRole == sessionUser.getRole()){
                     return invocationContext.proceed();
                 }
@@ -53,6 +53,6 @@ public class AuthorizationInterceptor {
     private void logInsufficientPermission(InvocationContext invocationContext){
         final String methodName = invocationContext.getMethod().getDeclaringClass().getSimpleName() +
                 "." + invocationContext.getMethod().getName();
-        logger.warn("User " + sessionUser.getName() + " has insufficient permissions to call " + methodName);
+        logger.warn("User {} has insufficient permissions to call {}", sessionUser.getName(), methodName);
     }
 }

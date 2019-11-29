@@ -1,5 +1,8 @@
 package com.gepardec.mega.utils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,6 +12,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.Locale;
 import java.util.Objects;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DateUtils {
 
     private static final DateTimeFormatter DEFAULT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault());
@@ -59,5 +63,6 @@ public class DateUtils {
     public static String getDayByDate(LocalDate date) {
         return date.getDayOfWeek().getDisplayName(TextStyle.FULL, GERMAN_LOCALE);
     }
+
 
 }

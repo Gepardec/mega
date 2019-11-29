@@ -22,8 +22,8 @@ class AuthTest {
     private final static GoogleUser googleUser = new GoogleUser();
 
     @BeforeAll
-    static void initTests () {
-        googleUser.setEmail("christoph.ruhsam@gepardec.com");
+    static void initTests() {
+        googleUser.setEmail("max.mustermann@gepardec.com");
     }
 
     @Test
@@ -55,7 +55,9 @@ class AuthTest {
     }
 
     @Test
-    void logout_whenLogout_userDataNull () {
-        given().get("/user/logout").then().statusCode(HttpStatus.SC_OK);
+    void logout_whenLogout_userDataNull() {
+        given().get("/user/logout")
+                .then()
+                .statusCode(HttpStatus.SC_OK);
     }
 }
