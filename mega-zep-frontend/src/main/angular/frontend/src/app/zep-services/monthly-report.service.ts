@@ -23,6 +23,7 @@ export class MonthlyReportService {
     let employee = new Employee();
     employee.vorname = "Max";
     employee.nachname = "Mustermann";
+    employee.freigabedatum = new Date().toDateString();
 
     let report = new MonthlyReport();
     report.employee = employee;
@@ -53,11 +54,11 @@ export class MonthlyReportService {
 
     let firstJourneyWarning = new JourneyWarning();
     firstJourneyWarning.date = new Date();
-    firstJourneyWarning.warnings = new Array<String>("Test Warning 1", "Test Warning 2");
+    firstJourneyWarning.warnings = new Array<String>("Test Warning 1", "Test Warning 2", "Test Warning 3");
 
     let secondJourneyWarning = new JourneyWarning();
     secondJourneyWarning.date = new Date();
-    secondJourneyWarning.warnings = new Array<String>("Test Warning 3");
+    secondJourneyWarning.warnings = new Array<String>("Test Warning 4");
 
     report.journeyWarnings = new Array<JourneyWarning>(firstJourneyWarning, secondJourneyWarning);
     report.timeWarnings = new Array<TimeWarning>(firstTimeWarning, secondTimeWarning, thirdTimeWarning, fourthTimeWarning, fifthTimeWarning, sixthTimeWarning);

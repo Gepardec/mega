@@ -1,6 +1,17 @@
+.container {
+  width: 40%;
+  margin: 5px auto 0;
+}
+
+.mat-card-content {
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+}
 .container-mat-table {
   height: 40vh;
   overflow: auto;
+  margin-top: 20px
 }
 
 .table {

@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MonthlyReport} from "../../../models/MonthlyReport/MonthlyReport";
 import {TimeWarning} from "../../../models/MonthlyReport/TimeWarning";
@@ -22,5 +22,11 @@ export class DisplayMonthlyReportComponent implements OnInit {
   ngOnInit() {
     this.datasourceTimeTable.data = this.monthlyReport.timeWarnings;
     this.datasourceJourneyTable.data = this.monthlyReport.journeyWarnings;
+  }
+
+  getDateOfReport(date: string): Date {
+    let reportDate = new Date(date);
+    reportDate.setMonth(reportDate.getMonth() + 1);
+    return reportDate;
   }
 }
