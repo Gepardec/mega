@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {AuthServiceConfig, GoogleLoginProvider, LoginOpt, SocialLoginModule} from 'angularx-social-login';
+import {AuthServiceConfig, GoogleLoginProvider, SocialLoginModule} from 'angularx-social-login';
 import {GoogleSigninComponent} from './signin/google-signin/google-signin.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -12,6 +12,10 @@ import {NavigationModule} from './shared/navigation/navigation.module';
 import {ErrorHandleInterceptor} from './shared/interceptors/ErrorHandleInterceptor';
 import {AngularMaterialModule} from "./material-module";
 import {APP_BASE_HREF} from "@angular/common";
+import {registerLocaleData} from "@angular/common";
+import localeDeAt from "@angular/common/locales/de-AT";
+
+registerLocaleData(localeDeAt, 'de-AT');
 
 const config = new AuthServiceConfig([
   {

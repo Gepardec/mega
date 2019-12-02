@@ -56,8 +56,8 @@ export class MonthlyReportService {
     firstJourneyWarning.warnings = new Array<String>("Test Warning 1", "Test Warning 2");
 
     let secondJourneyWarning = new JourneyWarning();
-    secondTimeWarning.date = new Date();
-    secondTimeWarning.warnings = new Array<String>("Test Warning 3");
+    secondJourneyWarning.date = new Date();
+    secondJourneyWarning.warnings = new Array<String>("Test Warning 3");
 
     report.journeyWarnings = new Array<JourneyWarning>(firstJourneyWarning, secondJourneyWarning);
     report.timeWarnings = new Array<TimeWarning>(firstTimeWarning, secondTimeWarning, thirdTimeWarning, fourthTimeWarning, fifthTimeWarning, sixthTimeWarning);

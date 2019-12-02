@@ -1,28 +1,69 @@
-<div class="container-time-table mat-elevation-z8">
-  <mat-table #timeTable class="tablelist" [dataSource]="datasourceTimeTable">
+<div>
+  <mat-card>
+    <mat-card-title>{{monthlyReport.employee.anrede}} {{monthlyReport.employee.titel}} {{monthlyReport.employee.vorname}} {{monthlyReport.employee.nachname}}</mat-card-title>
+    <mat-card-subtitle>EMPLOYEE FUNCTION GOES HERE!!!</mat-card-subtitle>
+  </mat-card>
 
-    <ng-container matColumnDef="date">
-      <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.date | date:'fullDate'}} </mat-cell>
-    </ng-container>
+  <div class="container-mat-table mat-elevation-z8">
+    <table class="table table-responsive">
 
-    <ng-container matColumnDef="restTime">
-      <mat-header-cell *matHeaderCellDef>zu wenig Ruhezeit</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.missingRestTime}} </mat-cell>
-    </ng-container>
+      <h3>Pausen</h3>
 
-    <ng-container matColumnDef="breakTime">
-      <mat-header-cell *matHeaderCellDef>zu wenig Pausenzeit</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.missingBreakTime}} </mat-cell>
-    </ng-container>
+      <mat-table #timeTable class="tablelist" [dataSource]="datasourceTimeTable">
 
-    <ng-container matColumnDef="workingTime">
-      <mat-header-cell *matHeaderCellDef>zu viel Arbeitszeit</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.excessWorkTime}} </mat-cell>
-    </ng-container>
+        <ng-container matColumnDef="date">
+          <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
+          <mat-cell *matCellDef="let timeEntry"> {{timeEntry.date | date:'fullDate' : '+060' : 'de-AT'}} </mat-cell>
+        </ng-container>
 
-    <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsTimeTable; sticky: true"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumnsTimeTable;"></mat-row>
+        <ng-container matColumnDef="restTime">
+          <mat-header-cell *matHeaderCellDef>zu wenig Ruhezeit</mat-header-cell>
+          <mat-cell *matCellDef="let timeEntry"> {{timeEntry.missingRestTime}} </mat-cell>
+        </ng-container>
 
-  </mat-table>
+        <ng-container matColumnDef="breakTime">
+          <mat-header-cell *matHeaderCellDef>zu wenig Pausenzeit</mat-header-cell>
+          <mat-cell *matCellDef="let timeEntry"> {{timeEntry.missingBreakTime}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="workingTime">
+          <mat-header-cell *matHeaderCellDef>zu viel Arbeitszeit</mat-header-cell>
+          <mat-cell *matCellDef="let timeEntry"> {{timeEntry.excessWorkTime}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsTimeTable; sticky: true"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumnsTimeTable;"></mat-row>
+
+      </mat-table>
+    </table>
+  </div>
+
+  <div class="container-mat-table mat-elevation-z8">
+    <table class="table table-responsive">
+
+      <h3>Reisen</h3>
+
+      <mat-table #journeyTable class="tablelist" [dataSource]="datasourceJourneyTable">
+
+        <ng-container matColumnDef="date">
+          <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
+          <mat-cell
+            *matCellDef="let journeyEntry"> {{journeyEntry.date | date:'fullDate' : '+060' : 'de-AT'}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="warning">
+          <mat-header-cell *matHeaderCellDef>Warnung</mat-header-cell>
+          <mat-cell *matCellDef="let journeyEntry">
+            <mat-cell *ngFor="let warning of journeyEntry.warnings">
+              {{warning}}
+            </mat-cell>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsJourneyTable; sticky: true"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumnsJourneyTable;"></mat-row>
+
+      </mat-table>
+    </table>
+  </div>
 </div>

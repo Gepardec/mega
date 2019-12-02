@@ -1,12 +1,10 @@
-
-.container-time-table {
+.container-mat-table {
   height: 40vh;
   overflow: auto;
 }
 
-.container-journey-table {
-  height: 40vh;
-  overflow: auto;
+.table {
+  background-color: rgb(245, 246, 250);
 }
 
 .mat-header-row {
