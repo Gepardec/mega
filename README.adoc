@@ -14,10 +14,28 @@ See link:mega-zep-connector/README.adoc[README of ZEP-Connector] for more inform
 ./mega-zep-backend/config/application.properties (externalized configurations)
 [source,properties]
 ----
+## COMMON ##
+mega.image.logo.url=<YOUR_LOGO_URL>
+mega.wiki.eom.url=<YOUR_EOM_URL>
+
+## ZEP ##
 zep.soap.token=***
-quarkus.mailer.username=<sender_email_username>
-quarkus.mailer.password=***
-quarkus.mailer.from=<sender_email_address>
+
+## MAIL ##
+quarkus.mailer.auth-methods=DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN
+quarkus.mailer.from=<MAIL_FROM>
+quarkus.mailer.host=<MAIL_HOST>
+quarkus.mailer.port=<MAIL_PORT>
+quarkus.mailer.ssl=<SSL_ENABLED>
+quarkus.mailer.username=<MAIL_ACCOUNT_USERNAME>
+quarkus.mailer.password=<MAIL_ACCOUNT_PASSWORD>
+quarkus.mailer.mock=false
+
+mega.mail.firstbusinessday.reminder=<MAIL_REMINDER_MAIL>
+
+## TEST USER ##
+mega.test.googleuser.email=<USER_EMAIL>
+mega.test.googleuser.id=<USER_ID>
 ----
 
 === Google OAuth2 client setup
@@ -34,15 +52,6 @@ These are the Dockerfiles used by this project
  The Dockerfile for building the quarkus build agent
 
 == Openshift
-
-.mega-secrets.properties (externalized configurations)
-[source,properties]
-----
-zep.soap.token=***
-quarkus.mailer.username=<sender_email_username>
-quarkus.mailer.password=***
-quarkus.mailer.from=<sender_email_address>
-----
 
 .google-secrets.properties (google related configurations)
 [source,properties]

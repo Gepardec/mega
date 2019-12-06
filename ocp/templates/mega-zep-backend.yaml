@@ -149,7 +149,7 @@ parameters:
     required: true
   - name: "JAVA_OPTIONS"
     displayName: "The java options"
-    required: true
+    required: false
   - name: "CPU"
     displayName: "The cpu count to use. E.g.: 500m"
     required: true

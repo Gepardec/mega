@@ -19,6 +19,7 @@ mega-secrets.properties
 mega-dev-github.properties
 mega-dev.ssh.key
 mega-dev.auth.ssh
+google-secrets.properties
 
 # External tool builders
 .externalToolBuilders/
