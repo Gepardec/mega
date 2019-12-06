@@ -1,4 +1,4 @@
-package com.gepardec.mega.monthendreport;
+package com.gepardec.mega.monthlyreport;
 
 import de.provantis.zep.ProjektzeitType;
 import lombok.Getter;
