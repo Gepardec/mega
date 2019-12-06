@@ -1,10 +1,11 @@
 <div class="container">
   <mat-card>
     <mat-card-title>{{monthlyReport.employee.anrede}} {{monthlyReport.employee.titel}} {{monthlyReport.employee.vorname}} {{monthlyReport.employee.nachname}}</mat-card-title>
-    <mat-card-subtitle>EMPLOYEE FUNCTION GOES HERE!!!</mat-card-subtitle>
+    <mat-card-subtitle>{{functions[monthlyReport.employee.preisgruppe]}}</mat-card-subtitle>
     <mat-card-content>{{getDateOfReport(monthlyReport.employee.freigabedatum) | date: 'MMMM yyyy' : '+060' : 'de-AT'}}</mat-card-content>
   </mat-card>
 
+  <!-- FIXME GAJ: header-row is no longer sticky with additional table-->
   <div class="container-mat-table mat-elevation-z8">
     <table class="table table-responsive">
 

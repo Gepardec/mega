@@ -3,6 +3,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MonthlyReport} from "../../../models/MonthlyReport/MonthlyReport";
 import {TimeWarning} from "../../../models/MonthlyReport/TimeWarning";
 import {JourneyWarning} from "../../../models/MonthlyReport/JourneyWarning";
+import {configuration} from "../../../../configuration/configuration";
 
 @Component({
   selector: 'app-display-monthly-report',
@@ -16,6 +17,7 @@ export class DisplayMonthlyReportComponent implements OnInit {
   displayedColumnsJourneyTable = ['date', 'warning'];
   datasourceTimeTable = new MatTableDataSource<TimeWarning>();
   datasourceJourneyTable = new MatTableDataSource<JourneyWarning>();
+  readonly functions = configuration.EMPLOYEE_FUNCTIONS;
 
   constructor() {  }
 

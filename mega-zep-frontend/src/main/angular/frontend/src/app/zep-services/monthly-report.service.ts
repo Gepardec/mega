@@ -23,6 +23,7 @@ export class MonthlyReportService {
     let employee = new Employee();
     employee.vorname = "Max";
     employee.nachname = "Mustermann";
+    employee.preisgruppe = "02";
     employee.freigabedatum = new Date().toDateString();
 
     let report = new MonthlyReport();
@@ -40,18 +41,6 @@ export class MonthlyReportService {
     thirdTimeWarning.date = new Date();
     thirdTimeWarning.excessWorkTime = 10;
 
-    let fourthTimeWarning = new TimeWarning();
-    fourthTimeWarning.date = new Date();
-    fourthTimeWarning.excessWorkTime = 10;
-
-    let fifthTimeWarning = new TimeWarning();
-    fifthTimeWarning.date = new Date();
-    fifthTimeWarning.excessWorkTime = 10;
-
-    let sixthTimeWarning = new TimeWarning();
-    sixthTimeWarning.date = new Date();
-    sixthTimeWarning.excessWorkTime = 10;
-
     let firstJourneyWarning = new JourneyWarning();
     firstJourneyWarning.date = new Date();
     firstJourneyWarning.warnings = new Array<String>("Test Warning 1", "Test Warning 2", "Test Warning 3");
@@ -61,7 +50,7 @@ export class MonthlyReportService {
     secondJourneyWarning.warnings = new Array<String>("Test Warning 4");
 
     report.journeyWarnings = new Array<JourneyWarning>(firstJourneyWarning, secondJourneyWarning);
-    report.timeWarnings = new Array<TimeWarning>(firstTimeWarning, secondTimeWarning, thirdTimeWarning, fourthTimeWarning, fifthTimeWarning, sixthTimeWarning);
+    report.timeWarnings = new Array<TimeWarning>(firstTimeWarning, secondTimeWarning, thirdTimeWarning, thirdTimeWarning, thirdTimeWarning, thirdTimeWarning, thirdTimeWarning, thirdTimeWarning, thirdTimeWarning);
 
     return report;
   }
