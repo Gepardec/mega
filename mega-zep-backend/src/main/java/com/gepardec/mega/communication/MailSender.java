@@ -39,7 +39,7 @@ public class MailSender {
     Logger LOG;
 
     @PostConstruct
-    private void init() {
+    void init() {
         final InputStream logoInputStream = MailSender.class.getClassLoader().getResourceAsStream(MEGA_IMAGE_LOGO_URL);
         if (logoInputStream != null) {
             try {
