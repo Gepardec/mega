@@ -37,7 +37,7 @@ public class DateUtils {
      *
      * @return
      */
-    public static LocalDate now() {
+    public static LocalDate today() {
         return LocalDate.now();
     }
 

@@ -62,8 +62,9 @@ public class MailSender {
                 .replace(EOM_WIKI_PLACEHOLDER, MEGA_WIKI_EOM_URL);
 
         mailer.send(Mail.withHtml(eMail, USER_CHECK_PROJECTTIMES.getText(), mailContent)
-                .addInlineAttachment("LogoMEGAdash.png", logoByteArray, MediaType.PNG.type(), "logomegadash@gepardec.com"));
+                .addInlineAttachment("LogoMEGAdash.png", logoByteArray, MediaType.PNG.type(), "<logomegadash@gepardec.com>"));
     }
+
 
     public void sendMail(String eMail, Reminder reminder, String text) {
         mailer.send(Mail.withText(eMail, reminder.getText(), text));
