@@ -21,7 +21,7 @@ public class BusinessDayCalculatorTest {
 
     @Test
     void getEventForDate_firstDayOfMonthBusinessDay_shouldReturnUserCheckprojecttimes() {
-        assertReminderForDate(USER_CHECK_PROJECTTIMES, 2019, 10, 1);
+        assertReminderForDate(EMPLOYEE_CHECK_PROJECTTIME, 2019, 10, 1);
     }
 
     @Test
@@ -31,7 +31,7 @@ public class BusinessDayCalculatorTest {
 
     @Test
     void getEventForDate_forthDayOfMonthIsFirstBusinessDay_shouldReturnCheckprojecttimes() {
-        assertReminderForDate(USER_CHECK_PROJECTTIMES, 2019, 11, 4);
+        assertReminderForDate(EMPLOYEE_CHECK_PROJECTTIME, 2019, 11, 4);
     }
 
     @Test
@@ -52,9 +52,9 @@ public class BusinessDayCalculatorTest {
                 () -> assertEmptyForGetEventForDate(2019, 11, 1),
                 () -> assertEmptyForGetEventForDate(2019, 11, 2),
                 () -> assertEmptyForGetEventForDate(2019, 11, 3),
-                () -> assertReminderForDate(USER_CHECK_PROJECTTIMES, 2019, 11, 4),
+                () -> assertReminderForDate(EMPLOYEE_CHECK_PROJECTTIME, 2019, 11, 4),
                 () -> assertEmptyForGetEventForDate(2019, 11, 5),
-                () -> assertReminderForDate(OM_CHECK_USER_CONTENT, 2019, 11, 6),
+                () -> assertReminderForDate(OM_CHECK_EMPLOYEES_CONTENT, 2019, 11, 6),
                 () -> assertEmptyForGetEventForDate(2019, 11, 7),
                 () -> assertEmptyForGetEventForDate(2019, 11, 8),
                 () -> assertEmptyForGetEventForDate(2019, 11, 9),

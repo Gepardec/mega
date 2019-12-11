@@ -17,19 +17,19 @@ public class BusinessDayCalculator {
     public Optional<Reminder> getEventForDate(LocalDate actualDate) {
         LocalDate firstWorkingDayOfMonth = calcFirstWorkingDayOfMonthForDate(actualDate);
         if (actualDate.isEqual(firstWorkingDayOfMonth)) {
-            return Optional.of(USER_CHECK_PROJECTTIMES);
+            return Optional.of(EMPLOYEE_CHECK_PROJECTTIME);
         }
 
-        LocalDate userCheckContentWorkingDay = addWorkingdays(firstWorkingDayOfMonth, OM_CHECK_USER_CONTENT.getWorkingDay() - USER_CHECK_PROJECTTIMES.getWorkingDay());
+        LocalDate userCheckContentWorkingDay = addWorkingdays(firstWorkingDayOfMonth, OM_CHECK_EMPLOYEES_CONTENT.getWorkingDay() - EMPLOYEE_CHECK_PROJECTTIME.getWorkingDay());
         if (actualDate.isEqual(userCheckContentWorkingDay)) {
-            return Optional.of(OM_CHECK_USER_CONTENT);
+            return Optional.of(OM_CHECK_EMPLOYEES_CONTENT);
         }
-        LocalDate releaseWorkingDay = addWorkingdays(firstWorkingDayOfMonth, OM_RELEASE.getWorkingDay() - USER_CHECK_PROJECTTIMES.getWorkingDay());
+        LocalDate releaseWorkingDay = addWorkingdays(firstWorkingDayOfMonth, OM_RELEASE.getWorkingDay() - EMPLOYEE_CHECK_PROJECTTIME.getWorkingDay());
         if (actualDate.isEqual(releaseWorkingDay)) {
             return Optional.of(OM_RELEASE);
         }
 
-        LocalDate salaryChargingWorkingDay = addWorkingdays(firstWorkingDayOfMonth, OM_SALARY_CHARGING.getWorkingDay() - USER_CHECK_PROJECTTIMES.getWorkingDay());
+        LocalDate salaryChargingWorkingDay = addWorkingdays(firstWorkingDayOfMonth, OM_SALARY_CHARGING.getWorkingDay() - EMPLOYEE_CHECK_PROJECTTIME.getWorkingDay());
         if (actualDate.isEqual(salaryChargingWorkingDay)) {
             return Optional.of(OM_SALARY_CHARGING);
         }

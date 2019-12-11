@@ -50,7 +50,7 @@ public class MailDaemonTest {
         mailDaemon.sendReminderToPL();
         assertAll(
                 () -> assertEquals(6, mailbox.getTotalMessagesSent()),
-                () -> addresses.forEach(address -> assertEquals(Reminder.PL_CHECK_USER_CONTENT.getText(), mailbox.getMessagesSentTo(address).get(0).getSubject()))
+                () -> addresses.forEach(address -> assertEquals(Reminder.PL_PROJECT_CONTROLLING.getText(), mailbox.getMessagesSentTo(address).get(0).getSubject()))
         );
     }
 }

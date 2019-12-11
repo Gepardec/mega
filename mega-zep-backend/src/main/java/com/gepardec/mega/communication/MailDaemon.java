@@ -31,10 +31,10 @@ public class MailDaemon {
     @Inject
     Logger logger;
 
-    @ConfigProperty(name = "mega.mail.reminder.pl")
+    @ConfigProperty(name = "mega.mail.reminder.pl", defaultValue = "")
     String projectLeadersMailAddresses;
 
-    @ConfigProperty(name = "mega.mail.reminder.om")
+    @ConfigProperty(name = "mega.mail.reminder.om", defaultValue = "")
     String omMailAddresses;
 
     @Scheduled(cron = CRON_CONFIG)
@@ -42,16 +42,16 @@ public class MailDaemon {
         Optional<Reminder> reminder = businessDayCalculator.getEventForDate(DateUtils.today());
         if (reminder.isPresent()) {
             switch (reminder.get()) {
-                case USER_CHECK_PROJECTTIMES: {
+                case EMPLOYEE_CHECK_PROJECTTIME: {
                     sendReminderToUser();
                     break;
                 }
-                case PL_CHECK_USER_CONTENT: {
+                case PL_PROJECT_CONTROLLING: {
                     sendReminderToPL();
                     break;
                 }
-                case OM_CHECK_USER_CONTENT: {
-                    sendReminderToOm(OM_CHECK_USER_CONTENT);
+                case OM_CHECK_EMPLOYEES_CONTENT: {
+                    sendReminderToOm(OM_CHECK_EMPLOYEES_CONTENT);
                     break;
                 }
                 case OM_RELEASE: {
@@ -80,7 +80,7 @@ public class MailDaemon {
             throw new MissingReceiverException(msg);
         }
         Arrays.asList(projectLeadersMailAddresses.split(","))
-                .forEach(mailAddress -> mailSender.sendMail(mailAddress, PL_CHECK_USER_CONTENT, ""));
+                .forEach(mailAddress -> mailSender.sendMail(mailAddress, PL_PROJECT_CONTROLLING, ""));
     }
 
     void sendReminderToOm(Reminder reminder) {
