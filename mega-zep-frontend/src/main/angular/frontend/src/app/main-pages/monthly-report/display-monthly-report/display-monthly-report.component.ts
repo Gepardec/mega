@@ -22,8 +22,10 @@ export class DisplayMonthlyReportComponent implements OnInit {
   constructor() {  }
 
   ngOnInit() {
-    this.datasourceTimeTable.data = this.monthlyReport.timeWarnings;
-    this.datasourceJourneyTable.data = this.monthlyReport.journeyWarnings;
+    if(this.monthlyReport) {
+      this.datasourceTimeTable.data = this.monthlyReport.timeWarnings;
+      this.datasourceJourneyTable.data = this.monthlyReport.journeyWarnings;
+    }
   }
 
   getDateOfReport(date: string): Date {

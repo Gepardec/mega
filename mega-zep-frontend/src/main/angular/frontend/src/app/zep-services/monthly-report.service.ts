@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {configuration} from "../../configuration/configuration";
 import {HttpClient} from "@angular/common/http";
 import {SocialUser} from "angularx-social-login";
@@ -6,6 +6,8 @@ import {MonthlyReport} from "../models/MonthlyReport/MonthlyReport";
 import {Employee} from "../models/Employee/Employee";
 import {TimeWarning} from "../models/MonthlyReport/TimeWarning";
 import {JourneyWarning} from "../models/MonthlyReport/JourneyWarning";
+import {retry} from "rxjs/operators";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,15 @@ export class MonthlyReportService {
   ) {
   }
 
-  getAll(user: SocialUser): MonthlyReport {
+  getAll(user: SocialUser): Observable<MonthlyReport> {
+    return this.http.post<MonthlyReport>(this.URL +
+      '/worker/employee/monthendReport', JSON.stringify(user))
+      .pipe(
+        retry(1)
+      );
+  }
+
+  mockService(): MonthlyReport {
     let employee = new Employee();
     employee.vorname = "Max";
     employee.nachname = "Mustermann";
