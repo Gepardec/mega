@@ -4,8 +4,6 @@ export const configuration = {
   // Base url
   BASEURL: 'http://localhost:8080',
 
-  //FIXME GAJ: check if key can be assigned to array of objects for finding single URL easier
-
   PAGE_NAMES: {
     LOGIN: "Login",
     EMPLOYEES: "Freigabe",

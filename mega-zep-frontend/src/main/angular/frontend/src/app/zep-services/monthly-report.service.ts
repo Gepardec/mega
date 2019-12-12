@@ -22,18 +22,19 @@ export class MonthlyReportService {
   }
 
   getAll(user: SocialUser): Observable<MonthlyReport> {
-    return this.http.post<MonthlyReport>(this.URL +
+      this.http.post<MonthlyReport>(this.URL +
       '/worker/employee/monthendReport', JSON.stringify(user))
       .pipe(
         retry(1)
       );
-
-    // return this.mockService();
+      return this.mockService();
   }
 
   mockService(): Observable<MonthlyReport> {
 
     let employee = new Employee();
+    employee.anrede = "Herr";
+    employee.titel = "Dr.";
     employee.vorname = "Max";
     employee.nachname = "Mustermann";
     employee.preisgruppe = "02";

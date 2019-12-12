@@ -5,7 +5,6 @@ export class TimeWarning {
   private _missingRestTime: number;
   private _missingBreakTime: number;
   private _excessWorkTime: number;
-  // FIXME GAJ: what is stored in this array?!?
   private _warnings: Array<String>;
 
   get date(): Date {

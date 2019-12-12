@@ -5,13 +5,12 @@
     <mat-card-content>{{getDateOfReport(monthlyReport.employee.freigabedatum) | date: 'MMMM yyyy' : '+060' : 'de-AT'}}</mat-card-content>
   </mat-card>
 
-  <!-- FIXME GAJ: header-row is no longer sticky with additional table-->
   <div class="container-mat-table mat-elevation-z8">
-    <table class="table table-responsive">
-
-      <h3>Pausen</h3>
-
       <mat-table #timeTable class="tablelist" [dataSource]="datasourceTimeTable">
+
+        <ng-container matColumnDef="headline">
+          <mat-header-cell class="headline" *matHeaderCellDef>Pausen</mat-header-cell>
+        </ng-container>
 
         <ng-container matColumnDef="date">
           <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
@@ -33,19 +32,21 @@
           <mat-cell *matCellDef="let timeEntry"> {{timeEntry.excessWorkTime}} </mat-cell>
         </ng-container>
 
+        <mat-header-row *matHeaderRowDef="['headline']; sticky: true"></mat-header-row>
         <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsTimeTable; sticky: true"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumnsTimeTable;"></mat-row>
 
       </mat-table>
-    </table>
+
   </div>
 
   <div class="container-mat-table mat-elevation-z8">
-    <table class="table table-responsive">
-
-      <h3>Reisen</h3>
 
       <mat-table #journeyTable class="tablelist" [dataSource]="datasourceJourneyTable">
+
+        <ng-container matColumnDef="headline">
+          <mat-header-cell class="headline" *matHeaderCellDef>Reisen</mat-header-cell>
+        </ng-container>
 
         <ng-container matColumnDef="date">
           <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
@@ -62,10 +63,10 @@
           </mat-cell>
         </ng-container>
 
+        <mat-header-row class="headline" *matHeaderRowDef="['headline']; sticky: true"></mat-header-row>
         <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsJourneyTable; sticky: true"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumnsJourneyTable;"></mat-row>
 
       </mat-table>
-    </table>
   </div>
 </div>

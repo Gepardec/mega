@@ -4,7 +4,6 @@ import {InternalRecord} from "./InternalRecord";
 import {Category} from "./Category";
 import {RegularWorkingTime} from "./RegularWorkingTime";
 
-// FIXME GAJ: does mapping work if rename fields to english
 export class Employee {
   private _userId: string;
   private _nachname: string;

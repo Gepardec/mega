@@ -14,13 +14,14 @@
   margin-top: 20px
 }
 
-.table {
-  background-color: rgb(245, 246, 250);
-}
-
 .mat-header-row {
   background-color: rgb(245, 246, 250);
   color: rgb(193, 196, 203);
+}
+
+.headline {
+  font-weight: bold;
+  font-size: 20px;
 }
 
 .mat-row {
