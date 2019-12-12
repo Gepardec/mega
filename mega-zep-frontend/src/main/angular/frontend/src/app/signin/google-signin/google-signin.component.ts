@@ -12,7 +12,7 @@ import {Subscription} from 'rxjs';
 })
 export class GoogleSigninComponent implements OnInit, OnDestroy {
 
-  private readonly EMPLOYEES: string = configuration.PAGE_URLS.EMPLOYEES;
+  private readonly MONTHLY_REPORT: string = configuration.PAGE_URLS.MONTHLY_REPORT;
 
   private loggedIn = false;
 
@@ -30,7 +30,7 @@ export class GoogleSigninComponent implements OnInit, OnDestroy {
       this.loggedIn = user != null;
       // route to employees if user is logged in and wants to access login page
       if (this.loggedIn) {
-        this.router.navigate([this.EMPLOYEES]);
+        this.router.navigate([this.MONTHLY_REPORT]);
       } else {
         this.signinWithGoogle();
       }
