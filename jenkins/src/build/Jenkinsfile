@@ -3,12 +3,8 @@
 pipeline {
     agent any
 
-    parameters {
-        booleanParam(name: 'prod', defaultValue: false, description: 'True if to release in production environment')
-    }
-
     environment {
-        OCP_PROJECT_NAME = "57-mega-${params.prod ? 'prod' : 'dev'}"
+        OCP_PROJECT_NAME = "57-mega-dev"
         OCP_ROUTE_SUFFIX = "${OCP_PROJECT_NAME}.cloud.itandtel.at"
     }
 
