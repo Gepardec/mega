@@ -1,0 +1,89 @@
+#!groovy
+
+pipeline {
+    agent any
+
+    parameters {
+        choice(name: 'environment', choices: ['dev', 'prod'], description: 'The environment to deploy to')
+        string(name: 'version', defaultValue: 'latest', description: 'The image version to release', trim: true)
+    }
+
+    environment {
+        DEV_PROJECT = "57-mega-dev"
+        PROD_PROJECT = "57-services"
+        TARGET_PROJECT = "${params.environment.equals('prod') ? env.PROD_PROJECT : env.DEV_PROJECT}"
+        OCP_ROUTE_SUFFIX = "${env.TARGET_PROJECT}.cloud.itandtel.at"
+    }
+
+    options {
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('Copy-Image') {
+            when {
+                expression { params.environment.equals("prod") }
+            }
+            steps {
+                script {
+                    openshift.withCluster() {
+                        openshift.withProject("${env.TARGET_PROJECT}") {
+                            openshift.tag("57-mega-dev/mega-zep-frontend:${params.version}", "${env.TARGET_PROJECT}/mega-zep-frontend:${params.version}")
+                            openshift.tag("57-mega-dev/mega-zep-backend:${params.version}", "${env.TARGET_PROJECT}/mega-zep-backend:${params.version}")
+                        }
+                    }
+                }
+            }
+        }
+
+        stage("Release") {
+            parallel {
+                stage("Fronted") {
+                    steps {
+                        script {
+                            dir('ocp/templates') {
+                                openshift.withCluster() {
+                                    openshift.withProject("${env.TARGET_PROJECT}") {
+                                        recreateServiceResources("mega-zep-frontend",
+                                                params.environment,
+                                                "--param=IMAGE_STREAM_TAG='mega-zep-frontend:${params.version}'")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                stage("Backend") {
+                    steps {
+                        script {
+                            dir('ocp/templates') {
+                                openshift.withCluster() {
+                                    openshift.withProject("${env.TARGET_PROJECT}") {
+                                        recreateServiceResources("mega-zep-backend",
+                                                params.environment,
+                                                "--param=IMAGE_STREAM_TAG='mega-zep-backend:${params.version}'")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+def recreateServiceResources(String service, String stage = "", String additionalParams = '') {
+    if (stage != "") {
+        stage = "." + stage
+    }
+    def processedYaml = "${service}.processed.yaml"
+    sh "oc process --filename ${service}.yaml \
+                   --param-file=${service}${stage}.properties ${additionalParams} \
+                   --output yaml \
+                   > ${processedYaml} \
+        && oc delete --ignore-not-found \
+                     --filename ${processedYaml} \
+        && oc create --filename ${processedYaml}"
+}
