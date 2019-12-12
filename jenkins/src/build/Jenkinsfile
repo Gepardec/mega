@@ -25,10 +25,8 @@ pipeline {
                     steps {
                         script {
                             podTemplate(cloud: 'openshift', name: 'nodejs-build-agent', label: 'nodejs-build-agent', serviceAccount: 'jenkins', containers: [
-                                    containerTemplate(name: 'nodejs-container', image: 'docker-registry.default.svc:5000/57-mega-dev/nodejs-build-agent:latest', ttyEnabled: true, command: 'cat', alwaysPullImage: true,
-                                            envVars: [
-                                                    envVar(key: 'CONTAINER_CORE_LIMIT', value: '1')
-                                            ])
+                                    containerTemplate(name: 'nodejs-container', image: 'docker-registry.default.svc:5000/57-mega-dev/nodejs-build-agent:latest',
+                                            ttyEnabled: true, command: 'cat', alwaysPullImage: true, resourceRequestCpu: "1000m", resourceRequestMemory: "1Gi")
                             ]) {
                                 node('nodejs-build-agent') {
                                     container('nodejs-container') {
@@ -43,9 +41,7 @@ pipeline {
                                                 sh "sed -i -e 's|REPLACE_BACKEND_ORIGIN|${service}|g' src/environments/environment.prod.ts"
                                                 sh "sed -i -e 's|REPLACE_OAUTH_CLIENT_ID|${googleProps['oauth.clientId']}|g' src/environments/environment.prod.ts"
                                                 sh "npm install"
-                                                sh "ng build --optimization=true \
-                                                             --sourceMap=false \
-                                                             --configuration=prod"
+                                                sh "ng build --sourceMap=false --configuration=prod"
                                             }
                                         }
 
@@ -79,10 +75,7 @@ pipeline {
                         script {
                             podTemplate(cloud: 'openshift', name: 'quarkus-build-agent', label: 'quarkus-build-agent', serviceAccount: 'jenkins', containers: [
                                     containerTemplate(name: 'quarkus-container', image: 'docker-registry.default.svc:5000/57-mega-dev/quarkus-build-agent:latest', ttyEnabled: true, command: 'cat', alwaysPullImage: true,
-                                            envVars: [
-                                                    envVar(key: 'JAVA_MAX_HEAP_PARAM', value: '-Xmx1g'),
-                                                    envVar(key: 'CONTAINER_CORE_LIMIT', value: '1')
-                                            ])
+                                            resourceRequestCpu: "1000m", resourceRequestMemory: "1Gi")
                             ],
                                     volumes: [
                                             persistentVolumeClaim(claimName: 'jenkins-mvn-repo-cache', mountPath: '/home/jenkins/.m2/repository')
