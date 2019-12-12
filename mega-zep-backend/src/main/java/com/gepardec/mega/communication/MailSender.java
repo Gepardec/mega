@@ -52,7 +52,6 @@ public class MailSender {
     @PostConstruct
     void initLogoAndTemplate() {
         mailTemplateText = fileHelper.readTextOfPath(mailTemplateTextPath)
-                .replace(EOM_WIKI_PLACEHOLDER, MEGA_WIKI_EOM_URL)
                 .replace(MEGA_DASH_URL_PLACEHOLDER, MEGA_DASH_URL);
 
         readLogo();
@@ -88,7 +87,9 @@ public class MailSender {
     private void sendMail(String eMail, String firstName, String subject, String text) {
         String mailContent = mailTemplateText
                 .replace(NAME_PLACEHOLDER, firstName)
-                .replace(TEMPLATE_MAILTEXT_PLACEHOLDER, text);
+                .replace(TEMPLATE_MAILTEXT_PLACEHOLDER, text)
+                .replace(EOM_WIKI_PLACEHOLDER, MEGA_WIKI_EOM_URL);
+
 
         mailer.send(Mail.withHtml(eMail, subject, mailContent)
                 .addInlineAttachment("LogoMEGADash.png", logoByteArray, MediaType.PNG.type(), "<LogoMEGAdash@gepardec.com>"));

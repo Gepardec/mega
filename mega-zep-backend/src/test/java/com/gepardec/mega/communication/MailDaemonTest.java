@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.gepardec.mega.communication.Reminder.OM_RELEASE;
+import static com.gepardec.mega.communication.Reminder.PL_PROJECT_CONTROLLING;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,6 +29,9 @@ public class MailDaemonTest {
     @ConfigProperty(name = "mega.mail.reminder.om")
     String omMailAddresses;
 
+    @Inject
+    NotificationConfig notificationConfig;
+
 
     @BeforeEach
     void init() {
@@ -37,10 +42,10 @@ public class MailDaemonTest {
     @Test
     void sendReminderToOm_mailAddressesAvailable_shouldSendMail() {
         List<String> addresses = Arrays.asList(omMailAddresses.split(","));
-        mailDaemon.sendReminderToOm(Reminder.OM_RELEASE);
+        mailDaemon.sendReminderToOm(OM_RELEASE);
         assertAll(
                 () -> assertEquals(1, mailbox.getTotalMessagesSent()),
-                () -> assertEquals(Reminder.OM_RELEASE.getText(), mailbox.getMessagesSentTo(addresses.get(0)).get(0).getSubject())
+                () -> assertEquals(notificationConfig.getSubjectByReminder(OM_RELEASE), mailbox.getMessagesSentTo(addresses.get(0)).get(0).getSubject())
         );
     }
 
@@ -50,7 +55,7 @@ public class MailDaemonTest {
         mailDaemon.sendReminderToPL();
         assertAll(
                 () -> assertEquals(6, mailbox.getTotalMessagesSent()),
-                () -> addresses.forEach(address -> assertEquals(Reminder.PL_PROJECT_CONTROLLING.getText(), mailbox.getMessagesSentTo(address).get(0).getSubject()))
+                () -> addresses.forEach(address -> assertEquals(notificationConfig.getSubjectByReminder(PL_PROJECT_CONTROLLING), mailbox.getMessagesSentTo(address).get(0).getSubject()))
         );
     }
 }

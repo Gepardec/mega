@@ -82,11 +82,11 @@ public class NotificationConfig {
         String subject = null;
         switch (reminder) {
             case EMPLOYEE_CHECK_PROJECTTIME: {
-                subject = employeePath;
+                subject = employeeSubject;
                 break;
             }
             case PL_PROJECT_CONTROLLING: {
-                subject = plPath;
+                subject = plSubject;
                 break;
             }
             case OM_CONTROL_EMPLOYEES_CONTENT: {
