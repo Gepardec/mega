@@ -31,10 +31,10 @@ public class MailDaemon {
     @Inject
     Logger logger;
 
-    @ConfigProperty(name = "mega.mail.reminder.pl", defaultValue = "")
-    String projectLeadersMailAddresses;
+    @ConfigProperty(name = "mega.mail.reminder.pl")
+    String plMailAddresses;
 
-    @ConfigProperty(name = "mega.mail.reminder.om", defaultValue = "")
+    @ConfigProperty(name = "mega.mail.reminder.om")
     String omMailAddresses;
 
     @Scheduled(cron = CRON_CONFIG)
@@ -74,13 +74,13 @@ public class MailDaemon {
     }
 
     void sendReminderToPL() {
-        if (projectLeadersMailAddresses == null) {
+        if (plMailAddresses == null) {
             String msg = "No mail address for project-leaders available, check value for property 'mega.mail.reminder.pl'!";
             logger.error(msg);
             throw new MissingReceiverException(msg);
         }
-        Arrays.asList(projectLeadersMailAddresses.split(","))
-                .forEach(mailAddress -> mailSender.sendMail(mailAddress, PL_PROJECT_CONTROLLING, ""));
+        Arrays.asList(plMailAddresses.split(","))
+                .forEach(mailAddress -> mailSender.sendReminder(mailAddress, getNameByMail(mailAddress), PL_PROJECT_CONTROLLING));
     }
 
     void sendReminderToOm(Reminder reminder) {
@@ -90,11 +90,16 @@ public class MailDaemon {
             throw new MissingReceiverException(msg);
         }
         Arrays.asList(omMailAddresses.split(","))
-                .forEach(mailAddress -> mailSender.sendMail(mailAddress, reminder, ""));
+                .forEach(mailAddress -> mailSender.sendReminder(mailAddress, getNameByMail(mailAddress), reminder));
     }
 
     void sendReminderToUser() {
         workerService.getAllEmployees()
-                .forEach(employee -> mailSender.sendMonthlyFriendlyReminder(employee.getVorname(), employee.getEmail()));
+                .forEach(employee -> mailSender.sendReminder(employee.getEmail(), employee.getVorname(), EMPLOYEE_CHECK_PROJECTTIME));
+    }
+
+    //TODO: remove immediately when names are available
+    private static String getNameByMail(String eMail) {
+        return eMail.split(".")[0];
     }
 }

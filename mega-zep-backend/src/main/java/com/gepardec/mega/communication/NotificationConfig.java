@@ -45,7 +45,7 @@ public class NotificationConfig {
 
 
     public String getPathByReminder(Reminder reminder) {
-        String path;
+        String path = null;
         switch (reminder) {
             case EMPLOYEE_CHECK_PROJECTTIME: {
                 path = employeePath;
@@ -74,12 +74,12 @@ public class NotificationConfig {
             default: {
                 break;
             }
-            return path;
         }
+        return path;
     }
 
     public String getSubjectByReminder(Reminder reminder) {
-        String subject;
+        String subject = null;
         switch (reminder) {
             case EMPLOYEE_CHECK_PROJECTTIME: {
                 subject = employeePath;
@@ -108,7 +108,7 @@ public class NotificationConfig {
             default: {
                 break;
             }
-            return subject;
         }
+        return subject;
     }
 }
