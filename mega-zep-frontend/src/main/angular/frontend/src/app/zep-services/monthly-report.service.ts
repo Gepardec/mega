@@ -7,7 +7,7 @@ import {Employee} from "../models/Employee/Employee";
 import {TimeWarning} from "../models/MonthlyReport/TimeWarning";
 import {JourneyWarning} from "../models/MonthlyReport/JourneyWarning";
 import {retry} from "rxjs/operators";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -27,9 +27,12 @@ export class MonthlyReportService {
       .pipe(
         retry(1)
       );
+
+    // return this.mockService();
   }
 
-  mockService(): MonthlyReport {
+  mockService(): Observable<MonthlyReport> {
+
     let employee = new Employee();
     employee.vorname = "Max";
     employee.nachname = "Mustermann";
@@ -62,6 +65,6 @@ export class MonthlyReportService {
     report.journeyWarnings = new Array<JourneyWarning>(firstJourneyWarning, secondJourneyWarning);
     report.timeWarnings = new Array<TimeWarning>(firstTimeWarning, secondTimeWarning, thirdTimeWarning, thirdTimeWarning, thirdTimeWarning, thirdTimeWarning, thirdTimeWarning, thirdTimeWarning, thirdTimeWarning);
 
-    return report;
+    return of(report);
   }
 }
