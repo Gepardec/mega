@@ -74,5 +74,8 @@ public class MailSender {
         return null;
     }
 
-    public void sendMail
+
+    public void sendMailToPlForControlling() {
+        String
+    }
 }

@@ -50,20 +50,20 @@ public class MailDaemon {
                     sendReminderToPL();
                     break;
                 }
-                case OM_CHECK_EMPLOYEES_CONTENT: {
-                    sendReminderToOm(OM_CHECK_EMPLOYEES_CONTENT);
+                case OM_CONTROL_EMPLOYEES_CONTENT: {
+                    sendReminderToOm(OM_CONTROL_EMPLOYEES_CONTENT);
                     break;
                 }
                 case OM_RELEASE: {
                     sendReminderToOm(OM_RELEASE);
                     break;
                 }
-                case OM_SALARY_CHARGING: {
-                    sendReminderToOm(OM_SALARY_CHARGING);
+                case OM_ADMINISTRATIVE: {
+                    sendReminderToOm(OM_ADMINISTRATIVE);
                     break;
                 }
-                case OM_SALARY_TRANSFER: {
-                    sendReminderToOm(OM_SALARY_TRANSFER);
+                case OM_SALARY: {
+                    sendReminderToOm(OM_SALARY);
                     break;
                 }
                 default: {
