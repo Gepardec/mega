@@ -42,7 +42,6 @@ class WarningCalculator {
             TimeWarning timeWarning = new TimeWarning();
             timeWarning.setDate(date);
             timeWarning.setExcessWorkTime(workDurationOfDay - MAX_HOURS_A_DAY);
-            timeWarning.addWarning(WarningType.WARNING_TIME_MORE_THAN_10_HOURS);
             addToTimeWarnings(timeWarning);
         }
     }
@@ -64,7 +63,6 @@ class WarningCalculator {
                 TimeWarning timeWarning = new TimeWarning();
                 timeWarning.setDate(date);
                 timeWarning.setMissingBreakTime(MIN_REQUIRED_BREAK_TIME - breakTime);
-                timeWarning.addWarning(WarningType.WARNING_TIME_TOO_LESS_BREAK);
                 addToTimeWarnings(timeWarning);
             }
         }
@@ -74,13 +72,11 @@ class WarningCalculator {
         if (projectTimeEntry.getFromTime().toLocalTime().isBefore(EARLIEST_START_TIME)) {
             TimeWarning timeWarning = new TimeWarning();
             timeWarning.setDate(projectTimeEntry.getDate());
-            timeWarning.addWarning(WarningType.WARNING_TIME_TOO_EARLY_START);
             addToTimeWarnings(timeWarning);
         }
         if (projectTimeEntry.getToTime().toLocalTime().isAfter(LATEST_END_TIME)) {
             TimeWarning timeWarning = new TimeWarning();
             timeWarning.setDate(projectTimeEntry.getDate());
-            timeWarning.addWarning(WarningType.WARNING_TIME_TOO_LATE_END);
             addToTimeWarnings(timeWarning);
         }
     }
@@ -102,7 +98,6 @@ class WarningCalculator {
                         TimeWarning timeWarning = new TimeWarning();
                         timeWarning.setDate(nextEntry.getDate());
                         timeWarning.setMissingRestTime(MIN_REQUIRED_REST_TIME - restHours);
-                        timeWarning.addWarning(WarningType.WARNING_TIME_TOO_LESS_REST);
                         addToTimeWarnings(timeWarning);
                     }
                 }
@@ -152,7 +147,7 @@ class WarningCalculator {
     private void addToJourneyWarnings(JourneyEntry journeyEntry, WarningType warning) {
         JourneyWarning newJourneyWarning = new JourneyWarning();
         newJourneyWarning.setDate(journeyEntry.getDate());
-        newJourneyWarning.getWarnings().add(warning);
+        newJourneyWarning.getWarnings().add(warning.getText());
 
 
         Optional<JourneyWarning> journeyWarning = journeyWarnings.stream()

@@ -8,8 +8,6 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 public class TimeWarning {
@@ -27,11 +25,6 @@ public class TimeWarning {
     private Double missingRestTime;
     private Double missingBreakTime;
     private Double excessWorkTime;
-    private List<WarningType> warnings = new ArrayList<>(0);
-
-    public void addWarning(WarningType warning) {
-        warnings.add(warning);
-    }
 
 
     public void mergeBreakWarnings(TimeWarning newTimeWarning) {
@@ -44,6 +37,5 @@ public class TimeWarning {
         if (newTimeWarning.excessWorkTime != null) {
             excessWorkTime = newTimeWarning.excessWorkTime;
         }
-        warnings.addAll(newTimeWarning.warnings);
     }
 }

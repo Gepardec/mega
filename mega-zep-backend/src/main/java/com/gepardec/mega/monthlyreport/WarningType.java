@@ -18,8 +18,7 @@ public enum WarningType {
         this.text = text;
     }
 
-    @Override
-    public String toString() {
+    public String getText() {
         return text;
     }
 }
