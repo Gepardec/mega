@@ -22,12 +22,12 @@ export class MonthlyReportService {
   }
 
   getAll(user: SocialUser): Observable<MonthlyReport> {
-      this.http.post<MonthlyReport>(this.URL +
+      return this.http.post<MonthlyReport>(this.URL +
       '/worker/employee/monthendReport', JSON.stringify(user))
       .pipe(
         retry(1)
       );
-      return this.mockService();
+      // return this.mockService();
   }
 
   mockService(): Observable<MonthlyReport> {
