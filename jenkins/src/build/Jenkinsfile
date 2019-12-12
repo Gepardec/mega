@@ -95,24 +95,24 @@ pipeline {
                                                    -Dquarkus.package.uber.jar=true"
                                         }
 
-                                        dir('ocp/templates') {
-                                            openshift.withCluster() {
-                                                openshift.withProject("${OCP_PROJECT_NAME}") {
-                                                    def frontendProps = readServiceProperties("mega-zep-frontend")
-                                                    def service = "https://${frontendProps.NAME}-${env.OCP_ROUTE_SUFFIX}"
-                                                    recreateServiceResources("mega-zep-backend",
+                                        openshift.withCluster() {
+                                            openshift.withProject("${OCP_PROJECT_NAME}") {
+                                                def artifact = "mega-zep-backend-${revision}-runner.jar"
+                                                def frontendProps = readServiceProperties("mega-zep-frontend", "ocp/templates")
+                                                def service = "https://${frontendProps.NAME}-${env.OCP_ROUTE_SUFFIX}"
+
+                                                dir('ocp/templates') {
+                                                    deleteServiceResources("mega-zep-backend")
+                                                }
+
+                                                dir('mega-zep-backend/target/') {
+                                                    sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait"
+                                                }
+
+                                                dir('mega-zep-backend/target/') {
+                                                    createServiceResources("mega-zep-backend",
                                                             "",
                                                             "--param=JAVA_OPTIONS='-Djava.net.preferIPv4Stack=true -Dquarkus.http.cors.origins=${service}'")
-                                                }
-                                            }
-                                        }
-
-                                        dir('mega-zep-backend/target/') {
-                                            openshift.withCluster() {
-                                                openshift.withProject("${OCP_PROJECT_NAME}") {
-                                                    def artifact = "mega-zep-backend-${revision}-runner.jar"
-
-                                                    sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait"
                                                 }
                                             }
                                         }
@@ -127,7 +127,7 @@ pipeline {
     }
 }
 
-def recreateServiceResources(String service, String stage = "", String additionalParams = '') {
+def deleteServiceResources(String service, String stage = "") {
     if (stage != "") {
         stage = "." + stage
     }
@@ -135,10 +135,21 @@ def recreateServiceResources(String service, String stage = "", String additiona
     sh "oc process --filename ${service}.yaml \
                    --param-file=${service}${stage}.properties ${additionalParams} \
                    --output yaml \
-                   > ${processedYaml} \
-        && oc delete --ignore-not-found \
-                     --filename ${processedYaml} \
-        && oc create --filename ${processedYaml}"
+                   > ${processedYaml}"
+    sh "oc delete --ignore-not-found \
+                   --filename ${processedYaml}"
+}
+
+def createServiceResources(String service, String stage = "", String additionalParams = '') {
+    if (stage != "") {
+        stage = "." + stage
+    }
+    def processedYaml = "${service}.processed.yaml"
+    sh "oc process --filename ${service}.yaml \
+                   --param-file=${service}${stage}.properties ${additionalParams} \
+                   --output yaml \
+                   > ${processedYaml}"
+    sh "oc create --filename ${processedYaml}"
 }
 
 def readServiceProperties(String service, String path = ".", String stage = "") {
