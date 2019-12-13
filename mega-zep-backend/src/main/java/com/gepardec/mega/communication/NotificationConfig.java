@@ -1,12 +1,12 @@
 package com.gepardec.mega.communication;
 
-import lombok.Data;
+import lombok.Getter;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-@Data
+@Getter
 public class NotificationConfig {
 
     @ConfigProperty(name = "mega.mail.reminder.employee.path")
@@ -46,71 +46,5 @@ public class NotificationConfig {
     String omSalarySubject;
 
 
-    public String getPathByReminder(Reminder reminder) {
-        String path = null;
-        switch (reminder) {
-            case EMPLOYEE_CHECK_PROJECTTIME: {
-                path = employeePath;
-                break;
-            }
-            case PL_PROJECT_CONTROLLING: {
-                path = plPath;
-                break;
-            }
-            case OM_CONTROL_EMPLOYEES_CONTENT: {
-                path = omControlEmployeesDataPath;
-                break;
-            }
-            case OM_RELEASE: {
-                path = omReleasePath;
-                break;
-            }
-            case OM_ADMINISTRATIVE: {
-                path = omAdministrativePath;
-                break;
-            }
-            case OM_SALARY: {
-                path = omSalaryPath;
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-        return path;
-    }
 
-    public String getSubjectByReminder(Reminder reminder) {
-        String subject = null;
-        switch (reminder) {
-            case EMPLOYEE_CHECK_PROJECTTIME: {
-                subject = employeeSubject;
-                break;
-            }
-            case PL_PROJECT_CONTROLLING: {
-                subject = plSubject;
-                break;
-            }
-            case OM_CONTROL_EMPLOYEES_CONTENT: {
-                subject = omControlEmployeesDataSubject;
-                break;
-            }
-            case OM_RELEASE: {
-                subject = omReleaseSubject;
-                break;
-            }
-            case OM_ADMINISTRATIVE: {
-                subject = omAdministrativeSubject;
-                break;
-            }
-            case OM_SALARY: {
-                subject = omSalarySubject;
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-        return subject;
-    }
 }

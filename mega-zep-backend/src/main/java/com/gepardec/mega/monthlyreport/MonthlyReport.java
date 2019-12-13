@@ -1,5 +1,8 @@
 package com.gepardec.mega.monthlyreport;
 
+import com.gepardec.mega.monthlyreport.journey.JourneyWarning;
+import com.gepardec.mega.monthlyreport.warning.TimeWarning;
+import com.gepardec.mega.monthlyreport.warning.WarningCalculator;
 import de.provantis.zep.MitarbeiterType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

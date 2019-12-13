@@ -1,8 +1,10 @@
-package com.gepardec.mega.monthlyreport;
+package com.gepardec.mega.monthlyreport.journey;
+
+import com.gepardec.mega.monthlyreport.warning.Warning;
 
 import java.util.Optional;
 
-import static com.gepardec.mega.monthlyreport.JourneyDirection.*;
+import static com.gepardec.mega.monthlyreport.journey.JourneyDirection.*;
 
 public class JourneyDirectionHandler {
 

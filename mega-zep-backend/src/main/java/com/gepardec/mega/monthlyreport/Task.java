@@ -1,5 +1,6 @@
 package com.gepardec.mega.monthlyreport;
 
+import com.gepardec.mega.monthlyreport.exception.EnumConverterException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;

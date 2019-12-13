@@ -1,5 +1,7 @@
 package com.gepardec.mega.monthlyreport;
 
+import com.gepardec.mega.monthlyreport.journey.JourneyDirection;
+import com.gepardec.mega.monthlyreport.journey.JourneyEntry;
 import de.provantis.zep.ProjektzeitType;
 import lombok.Getter;
 

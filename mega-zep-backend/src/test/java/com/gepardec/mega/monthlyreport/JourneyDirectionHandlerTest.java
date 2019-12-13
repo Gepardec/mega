@@ -1,11 +1,13 @@
 package com.gepardec.mega.monthlyreport;
 
 
+import com.gepardec.mega.monthlyreport.journey.JourneyDirectionHandler;
+import com.gepardec.mega.monthlyreport.warning.Warning;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static com.gepardec.mega.monthlyreport.JourneyDirection.*;
+import static com.gepardec.mega.monthlyreport.journey.JourneyDirection.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

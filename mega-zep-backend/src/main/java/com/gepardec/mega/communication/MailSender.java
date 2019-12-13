@@ -77,19 +77,7 @@ public class MailSender {
         }
     }
 
-    public String getSubjectForReminder(Reminder reminder) {
-        //TODO
-//        switch (reminder)
-//        notificationConfig.getSubjectByReminder(reminder);
-        return null;
-    }
 
-    public String getPathForReminder(Reminder reminder) {
-        //TODO
-//        switch (reminder)
-//        notificationConfig.getSubjectByReminder(reminder);
-        return null;
-    }
 
 
     public void sendReminder(String eMail, String firstName, Reminder reminder) {
@@ -111,5 +99,75 @@ public class MailSender {
                 .addInlineAttachment("LogoMEGADash.png", logoByteArray, MediaType.PNG.type(), "<LogoMEGAdash@gepardec.com>"));
     }
 
+
+    public String getPathForReminder(Reminder reminder) {
+        String path;
+        switch (reminder) {
+            case EMPLOYEE_CHECK_PROJECTTIME: {
+                path = notificationConfig.getEmployeePath();
+                break;
+            }
+            case PL_PROJECT_CONTROLLING: {
+                path = notificationConfig.getPlPath();
+                break;
+            }
+            case OM_CONTROL_EMPLOYEES_CONTENT: {
+                path = notificationConfig.getOmControlEmployeesDataPath();
+                break;
+            }
+            case OM_RELEASE: {
+                path = notificationConfig.getOmReleasePath();
+                break;
+            }
+            case OM_ADMINISTRATIVE: {
+                path = notificationConfig.getOmAdministrativePath();
+                break;
+            }
+            case OM_SALARY: {
+                path = notificationConfig.getOmSalaryPath();
+                break;
+            }
+            default: {
+                path = null;
+                break;
+            }
+        }
+        return path;
+    }
+
+    public String getSubjectForReminder(Reminder reminder) {
+        String subject;
+        switch (reminder) {
+            case EMPLOYEE_CHECK_PROJECTTIME: {
+                subject = notificationConfig.getEmployeeSubject();
+                break;
+            }
+            case PL_PROJECT_CONTROLLING: {
+                subject = notificationConfig.getPlSubject();
+                break;
+            }
+            case OM_CONTROL_EMPLOYEES_CONTENT: {
+                subject = notificationConfig.getOmControlEmployeesDataSubject();
+                break;
+            }
+            case OM_RELEASE: {
+                subject = notificationConfig.getOmReleaseSubject();
+                break;
+            }
+            case OM_ADMINISTRATIVE: {
+                subject = notificationConfig.getOmAdministrativeSubject();
+                break;
+            }
+            case OM_SALARY: {
+                subject = notificationConfig.getOmSalarySubject();
+                break;
+            }
+            default: {
+                subject = null;
+                break;
+            }
+        }
+        return subject;
+    }
 
 }

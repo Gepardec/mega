@@ -19,7 +19,6 @@ public class FileHelper {
     @Inject
     Logger LOG;
 
-
     public String readTextOfPath(String pathToRead) {
         String text = null;
         try {
