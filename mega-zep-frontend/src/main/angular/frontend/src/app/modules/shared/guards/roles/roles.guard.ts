@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree} from '@angular/router';
 import {Observable} from 'rxjs';
-import {AuthenticationService} from "../../../../signin/zep-signin/authentication.service";
+import {ZepSigninService} from "../../services/signin/zep-signin.service";
 import {Employee} from "../../models/Employee/Employee";
 
 @Injectable({
@@ -12,7 +12,7 @@ export class RolesGuard implements CanActivate {
   employee: Employee;
 
   constructor(
-    private authenticationService: AuthenticationService
+    private authenticationService: ZepSigninService
   ) {
     this.authenticationService.currentEmployee.subscribe(
       (employee: Employee) => this.employee = employee

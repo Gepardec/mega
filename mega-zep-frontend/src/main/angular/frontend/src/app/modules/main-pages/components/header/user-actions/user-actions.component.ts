@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthenticationService} from "../../../../../signin/zep-signin/authentication.service";
+import {ZepSigninService} from "../../../../shared/services/signin/zep-signin.service";
 import {SocialUser} from "angularx-social-login";
 import {Subscription} from "rxjs";
 
@@ -15,7 +15,7 @@ export class UserActionsComponent implements OnInit, OnDestroy {
   private authenticationServiceSubscription: Subscription;
 
   constructor(
-    private authenticationService: AuthenticationService
+    private authenticationService: ZepSigninService
   ) {
   }
 

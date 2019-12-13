@@ -11,7 +11,7 @@ import {
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from "rxjs/operators";
 import {configuration} from "../../../../configuration/configuration";
-import {AuthenticationService} from "../../../signin/zep-signin/authentication.service";
+import {ZepSigninService} from "../services/signin/zep-signin.service";
 
 @Injectable()
 export class ErrorHandleInterceptor implements HttpInterceptor {
@@ -19,7 +19,7 @@ export class ErrorHandleInterceptor implements HttpInterceptor {
   private readonly httpOptions = configuration.httpOptions;
 
   constructor(
-    private authenticationService: AuthenticationService
+    private authenticationService: ZepSigninService
   ) {
   }
 

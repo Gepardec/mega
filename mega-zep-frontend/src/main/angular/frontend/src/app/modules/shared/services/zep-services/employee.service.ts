@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {retry} from 'rxjs/operators';
-import {Employee} from '../modules/shared/models/Employee/Employee';
+import {Employee} from '../../models/Employee/Employee';
 import {HttpClient} from '@angular/common/http';
-import {configuration} from '../../configuration/configuration';
+import {configuration} from '../../../../../configuration/configuration';
 import {SocialUser} from 'angularx-social-login';
 
 @Injectable({

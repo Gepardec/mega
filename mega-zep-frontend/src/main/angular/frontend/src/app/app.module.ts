@@ -3,7 +3,6 @@ import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {AuthServiceConfig, GoogleLoginProvider, SocialLoginModule} from 'angularx-social-login';
-import {GoogleSigninComponent} from './signin/google-signin/google-signin.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ErrorHandleInterceptor} from './modules/shared/interceptors/ErrorHandleInterceptor';
@@ -31,7 +30,6 @@ export function provideConfig() {
 @NgModule({
   declarations: [
     AppComponent,
-    GoogleSigninComponent,
     MainPagesContainer
   ],
   imports: [

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {EmployeeService} from "../../../zep-services/employee.service";
+import {EmployeeService} from "../services/zep-services/employee.service";
 import {Employee} from "../models/Employee/Employee";
 import {Observable} from "rxjs";
 

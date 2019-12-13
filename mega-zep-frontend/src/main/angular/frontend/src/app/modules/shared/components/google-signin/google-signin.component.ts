@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {SocialUser} from 'angularx-social-login';
-import {configuration} from '../../../configuration/configuration';
-import {AuthenticationService} from '../zep-signin/authentication.service';
-import {Router} from '@angular/router';
-import {Subscription} from 'rxjs';
+import {configuration} from "../../../../../configuration/configuration";
+import {Subscription} from "rxjs";
+import {ZepSigninService} from "../../services/signin/zep-signin.service";
+import {Router} from "@angular/router";
+import {SocialUser} from "angularx-social-login";
 
 @Component({
   selector: 'app-google-signin',
@@ -19,7 +19,7 @@ export class GoogleSigninComponent implements OnInit, OnDestroy {
   private authenticationServiceSubscription: Subscription;
 
   constructor(
-    private authenticationService: AuthenticationService,
+    private authenticationService: ZepSigninService,
     private router: Router
   ) {
 
@@ -48,5 +48,4 @@ export class GoogleSigninComponent implements OnInit, OnDestroy {
   signOut(): void {
     this.authenticationService.signOut();
   }
-
 }

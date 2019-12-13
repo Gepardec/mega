@@ -1,7 +1,7 @@
 import {Injectable, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
-import {Employee} from "../models/Employee/Employee";
-import {EmployeeService} from "../../../zep-services/employee.service";
+import {Employee} from "../../models/Employee/Employee";
+import {EmployeeService} from "../zep-services/employee.service";
 import {SocialUser} from "angularx-social-login";
 import {SelectionChange} from "@angular/cdk/collections";
 

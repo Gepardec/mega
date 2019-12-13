@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {configuration} from "../../configuration/configuration";
+import {configuration} from "../../../../../configuration/configuration";
 import {HttpClient} from "@angular/common/http";
 import {SocialUser} from "angularx-social-login";
-import {MonthlyReport} from "../modules/shared/models/MonthlyReport/MonthlyReport";
-import {Employee} from "../modules/shared/models/Employee/Employee";
-import {TimeWarning} from "../modules/shared/models/MonthlyReport/TimeWarning";
-import {JourneyWarning} from "../modules/shared/models/MonthlyReport/JourneyWarning";
+import {MonthlyReport} from "../../models/MonthlyReport/MonthlyReport";
+import {Employee} from "../../models/Employee/Employee";
+import {TimeWarning} from "../../models/MonthlyReport/TimeWarning";
+import {JourneyWarning} from "../../models/MonthlyReport/JourneyWarning";
 import {retry} from "rxjs/operators";
 import {Observable, of} from "rxjs";
 

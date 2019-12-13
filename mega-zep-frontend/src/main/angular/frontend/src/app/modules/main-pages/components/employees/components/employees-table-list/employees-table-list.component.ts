@@ -4,7 +4,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {Employee} from "../../../../../shared/models/Employee/Employee";
 import {SelectionChange, SelectionModel} from "@angular/cdk/collections";
 import {Subscription} from "rxjs";
-import {EmployeesService} from "../../../../../shared/services/employees.service";
+import {EmployeesService} from "../../../../../shared/services/employees/employees.service";
 
 @Component({
   selector: 'app-employees-table-list',

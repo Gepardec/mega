@@ -2,8 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MonthlyReport} from "../../../shared/models/MonthlyReport/MonthlyReport";
 import {SocialUser} from "angularx-social-login";
 import {Subscription} from "rxjs";
-import {AuthenticationService} from "../../../../signin/zep-signin/authentication.service";
-import {MonthlyReportService} from "../../../../zep-services/monthly-report.service";
+import {ZepSigninService} from "../../../shared/services/signin/zep-signin.service";
+import {MonthlyReportService} from "../../../shared/services/zep-services/monthly-report.service";
 
 @Component({
   selector: 'app-monthly-report',
@@ -17,7 +17,7 @@ export class MonthlyReportContainer implements OnInit, OnDestroy {
   private monthlyReport: MonthlyReport;
 
   constructor(
-    private authenticationService: AuthenticationService,
+    private authenticationService: ZepSigninService,
     private monthlyReportService: MonthlyReportService
   ) {
   }

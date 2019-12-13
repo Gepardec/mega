@@ -2,7 +2,7 @@ import {Injectable, OnDestroy} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
 import {Observable, Subscription} from 'rxjs';
 import {SocialUser} from "angularx-social-login";
-import {AuthenticationService} from "../../../../signin/zep-signin/authentication.service";
+import {ZepSigninService} from "../../services/signin/zep-signin.service";
 import {configuration} from "../../../../../configuration/configuration";
 
 @Injectable({
@@ -16,7 +16,7 @@ export class GoogleUserAuthenticationGuard implements CanActivate, OnDestroy {
   currentUserSubscription: Subscription;
 
   constructor(
-    private authenticationService: AuthenticationService,
+    private authenticationService: ZepSigninService,
     private router: Router
   ) {
     this.currentUserSubscription = this.authenticationService.currentUser.subscribe((user: SocialUser) => {

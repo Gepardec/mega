@@ -2,9 +2,9 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Employee} from "../../../../../shared/models/Employee/Employee";
 import {SocialUser} from "angularx-social-login";
 import {Subscription} from "rxjs";
-import {AuthenticationService} from "../../../../../../signin/zep-signin/authentication.service";
+import {ZepSigninService} from "../../../../../shared/services/signin/zep-signin.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {EmployeesService} from "../../../../../shared/services/employees.service";
+import {EmployeesService} from "../../../../../shared/services/employees/employees.service";
 
 @Component({
   selector: 'app-display-employees',
@@ -27,7 +27,7 @@ export class DisplayEmployeesComponent  implements OnInit, OnDestroy {
 
   constructor(
     private displayEmployeeListService: EmployeesService,
-    private authenticationService: AuthenticationService,
+    private authenticationService: ZepSigninService,
     private snackbar: MatSnackBar
   ) {
 

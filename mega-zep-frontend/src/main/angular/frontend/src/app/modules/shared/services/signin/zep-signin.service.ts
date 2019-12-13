@@ -1,16 +1,16 @@
 import {Injectable, OnDestroy} from '@angular/core';
+import {configuration} from "../../../../../configuration/configuration";
 import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {AuthService, GoogleLoginProvider, SocialUser} from "angularx-social-login";
+import {Employee} from "../../models/Employee/Employee";
 import {Router} from "@angular/router";
-import {configuration} from "../../../configuration/configuration";
 import {HttpClient} from "@angular/common/http";
 import {retry} from "rxjs/operators";
-import {Employee} from "../../modules/shared/models/Employee/Employee";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService implements OnDestroy {
+export class ZepSigninService implements OnDestroy {
 
   private readonly URL: string = configuration.BASEURL;
 
@@ -150,6 +150,4 @@ export class AuthenticationService implements OnDestroy {
   isEmployeeAdminOrController(): boolean {
     return this.isEmployeeAdmin() || this.isEmployeeController();
   }
-
-
 }
