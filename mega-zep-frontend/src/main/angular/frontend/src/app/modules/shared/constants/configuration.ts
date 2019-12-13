@@ -44,5 +44,17 @@ export const configuration = {
     ADMINISTRATOR: 1,
     CONTROLLER: 2,
     USER_MIT_ZUSATZRECHTEN: 3
-  }
+  },
+
+  LogLevel: {
+    All: 0,
+    Debug: 1,
+    Info: 2,
+    Warn: 3,
+    Error: 4,
+    Fatal: 5,
+    Off: 6
+  },
+
+  logWithDate: true
 };
