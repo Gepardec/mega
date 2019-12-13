@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {configuration} from "../../../../../configuration/configuration";
+import {configuration} from "../../constants/configuration";
 import {HttpClient} from "@angular/common/http";
 import {SocialUser} from "angularx-social-login";
 import {MonthlyReport} from "../../models/MonthlyReport/MonthlyReport";

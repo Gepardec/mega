@@ -9,7 +9,7 @@ import {MockAuthenticationService} from "../../../../signin/MockAuthenticationSe
 import {AuthService} from "angularx-social-login";
 import {MockAuthService} from "../../../../signin/MockAuthService";
 import {ActivatedRouteSnapshot, UrlSegment} from "@angular/router";
-import {configuration} from "../../../../../configuration/configuration";
+import {configuration} from "../../constants/configuration";
 import {Employee} from "../../models/Employee/Employee";
 
 describe('RolesGuard', () => {

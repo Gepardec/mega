@@ -10,7 +10,7 @@ import {
 
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from "rxjs/operators";
-import {configuration} from "../../../../configuration/configuration";
+import {configuration} from "../constants/configuration";
 import {ZepSigninService} from "../services/signin/zep-signin.service";
 
 @Injectable()

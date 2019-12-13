@@ -5,7 +5,7 @@ import {RouterTestingModule} from "@angular/router/testing";
 import {routes} from "../../../../app-routing.module";
 import {AppModule} from "../../../../app.module";
 import {ActivatedRouteSnapshot, UrlSegment} from "@angular/router";
-import {configuration} from "../../../../../configuration/configuration";
+import {configuration} from "../../constants/configuration";
 
 describe('GoogleUserAuthenticationGuard', () => {
 

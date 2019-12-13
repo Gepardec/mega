@@ -1,5 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {configuration} from "../../../../../configuration/configuration";
+import {configuration} from "../../constants/configuration";
 import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {AuthService, GoogleLoginProvider, SocialUser} from "angularx-social-login";
 import {Employee} from "../../models/Employee/Employee";

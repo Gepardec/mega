@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {configuration} from "../../../../../../../configuration/configuration";
+import {configuration} from "../../../../../shared/constants/configuration";
 import {MatTableDataSource} from "@angular/material/table";
 import {Employee} from "../../../../../shared/models/Employee/Employee";
 import {SelectionChange, SelectionModel} from "@angular/cdk/collections";

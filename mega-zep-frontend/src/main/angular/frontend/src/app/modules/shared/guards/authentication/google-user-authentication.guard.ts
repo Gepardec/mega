@@ -3,7 +3,7 @@ import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTre
 import {Observable, Subscription} from 'rxjs';
 import {SocialUser} from "angularx-social-login";
 import {ZepSigninService} from "../../services/signin/zep-signin.service";
-import {configuration} from "../../../../../configuration/configuration";
+import {configuration} from "../../constants/configuration";
 
 @Injectable({
   providedIn: 'root'

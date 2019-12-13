@@ -3,7 +3,7 @@ import {MonthlyReport} from "../../../../shared/models/MonthlyReport/MonthlyRepo
 import {MatTableDataSource} from "@angular/material/table";
 import {TimeWarning} from "../../../../shared/models/MonthlyReport/TimeWarning";
 import {JourneyWarning} from "../../../../shared/models/MonthlyReport/JourneyWarning";
-import {configuration} from "../../../../../../configuration/configuration";
+import {configuration} from "../../../../shared/constants/configuration";
 
 @Component({
   selector: 'app-display-monthly-report',

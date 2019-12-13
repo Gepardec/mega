@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {configuration} from "../../../../../configuration/configuration";
+import {configuration} from "../../constants/configuration";
 import {Subscription} from "rxjs";
 import {ZepSigninService} from "../../services/signin/zep-signin.service";
 import {Router} from "@angular/router";
