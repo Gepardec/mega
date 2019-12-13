@@ -1,26 +1,27 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {MainLayoutComponent} from "./shared/main-layout/main-layout.component";
 import {GoogleSigninComponent} from "./signin/google-signin/google-signin.component";
 import {GoogleUserAuthenticationGuard} from "./shared/guards/google-user-authentication.guard";
-import {EmployeesPagesModule} from "./main-pages/employees/home/home.module";
+import {EmployeesModule} from "./modules/main-pages/components/employees/employees.module";
 import {configuration} from "../configuration/configuration";
-import {MonthlyReportModule} from "./main-pages/monthly-report/home/home.module";
+import {MonthlyReportModule} from "./modules/main-pages/components/monthly-report/monthly-report.module";
+import {MainPagesContainer} from "./modules/main-pages/main-pages.container";
 
 export const routes: Routes = [
   {
     path: 'employees',
-    component: MainLayoutComponent,
-    loadChildren: () => EmployeesPagesModule,
+    component: MainPagesContainer,
+    loadChildren: () => EmployeesModule,
     data: {roles: [configuration.EMPLOYEE_ROLES.ADMINISTRATOR, configuration.EMPLOYEE_ROLES.CONTROLLER]},
     canActivate: [GoogleUserAuthenticationGuard]
   },
   {
     path: 'monthlyReport',
-    component: MainLayoutComponent,
+    component: MainPagesContainer,
     loadChildren: () => MonthlyReportModule,
     canActivate: [GoogleUserAuthenticationGuard]
   },
+
   {path: '', redirectTo: 'login', pathMatch: 'full'},
 
   {path: '#', redirectTo: 'login'},

@@ -14,6 +14,9 @@ import {AngularMaterialModule} from "./material-module";
 import {APP_BASE_HREF} from "@angular/common";
 import {registerLocaleData} from "@angular/common";
 import localeDeAt from "@angular/common/locales/de-AT";
+import { MainPagesContainer } from './modules/main-pages/main-pages.container';
+import {MainPagesModule} from "./modules/main-pages/main-pages.module";
+import {SharedModule} from "./modules/shared/shared.module";
 
 registerLocaleData(localeDeAt, 'de-AT');
 
@@ -31,7 +34,8 @@ export function provideConfig() {
 @NgModule({
   declarations: [
     AppComponent,
-    GoogleSigninComponent
+    GoogleSigninComponent,
+    MainPagesContainer
   ],
   imports: [
     BrowserModule,
@@ -41,7 +45,9 @@ export function provideConfig() {
     BrowserAnimationsModule,
     NavigationModule,
     MainLayoutModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    MainPagesModule,
+    SharedModule
   ],
   exports: [
     BrowserModule,
