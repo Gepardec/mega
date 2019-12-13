@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MonthlyReport} from "../../../../../models/MonthlyReport/MonthlyReport";
+import {MonthlyReport} from "../../../../shared/models/MonthlyReport/MonthlyReport";
 import {MatTableDataSource} from "@angular/material/table";
-import {TimeWarning} from "../../../../../models/MonthlyReport/TimeWarning";
-import {JourneyWarning} from "../../../../../models/MonthlyReport/JourneyWarning";
+import {TimeWarning} from "../../../../shared/models/MonthlyReport/TimeWarning";
+import {JourneyWarning} from "../../../../shared/models/MonthlyReport/JourneyWarning";
 import {configuration} from "../../../../../../configuration/configuration";
 
 @Component({

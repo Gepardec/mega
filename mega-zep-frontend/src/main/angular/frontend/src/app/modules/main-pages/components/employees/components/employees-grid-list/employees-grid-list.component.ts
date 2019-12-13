@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {configuration} from "../../../../../../../configuration/configuration";
-import {Employee} from "../../../../../../models/Employee/Employee";
+import {Employee} from "../../../../../shared/models/Employee/Employee";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {DatePickerDialogComponent} from "../../../../../shared/components/date-picker-dialog/date-picker-dialog.component";
 

@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {configuration} from "../../../../../../../configuration/configuration";
 import {MatTableDataSource} from "@angular/material/table";
-import {Employee} from "../../../../../../models/Employee/Employee";
+import {Employee} from "../../../../../shared/models/Employee/Employee";
 import {SelectionChange, SelectionModel} from "@angular/cdk/collections";
 import {Subscription} from "rxjs";
 import {EmployeesService} from "../../../../../shared/services/employees.service";

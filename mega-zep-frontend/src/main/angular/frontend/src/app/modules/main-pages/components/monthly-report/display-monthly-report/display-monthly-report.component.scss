@@ -1,3 +1,5 @@
+@import "../../../../../styles/variables.scss";
+
 .container {
   width: 40%;
   margin: 5px auto 0;
@@ -15,7 +17,7 @@
 }
 
 .mat-header-row {
-  background-color: rgb(245, 246, 250);
+  background-color: $background-color-grey;
   color: rgb(193, 196, 203);
 }
 

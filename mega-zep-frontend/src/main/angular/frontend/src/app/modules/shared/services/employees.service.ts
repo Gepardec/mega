@@ -1,6 +1,6 @@
 import {Injectable, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
-import {Employee} from "../../../models/Employee/Employee";
+import {Employee} from "../models/Employee/Employee";
 import {EmployeeService} from "../../../zep-services/employee.service";
 import {SocialUser} from "angularx-social-login";
 import {SelectionChange} from "@angular/cdk/collections";
@@ -8,6 +8,7 @@ import {SelectionChange} from "@angular/cdk/collections";
 @Injectable({
   providedIn: 'root'
 })
+// TODO: this logic should be moved to container
 export class EmployeesService implements OnInit {
 
   private _selectedEmployees: BehaviorSubject<Array<Employee>> = new BehaviorSubject<Array<Employee>>(new Array<Employee>());

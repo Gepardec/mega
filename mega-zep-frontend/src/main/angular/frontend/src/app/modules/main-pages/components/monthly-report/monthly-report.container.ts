@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {MonthlyReport} from "../../../../models/MonthlyReport/MonthlyReport";
+import {MonthlyReport} from "../../../shared/models/MonthlyReport/MonthlyReport";
 import {SocialUser} from "angularx-social-login";
 import {Subscription} from "rxjs";
 import {AuthenticationService} from "../../../../signin/authentication.service";

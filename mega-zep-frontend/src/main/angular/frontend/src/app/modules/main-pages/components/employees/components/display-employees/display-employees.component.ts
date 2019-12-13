@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Employee} from "../../../../../../models/Employee/Employee";
+import {Employee} from "../../../../../shared/models/Employee/Employee";
 import {SocialUser} from "angularx-social-login";
 import {Subscription} from "rxjs";
 import {AuthenticationService} from "../../../../../../signin/authentication.service";

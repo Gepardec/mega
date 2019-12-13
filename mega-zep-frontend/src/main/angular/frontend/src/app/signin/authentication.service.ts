@@ -5,7 +5,7 @@ import {Router} from "@angular/router";
 import {configuration} from "../../configuration/configuration";
 import {HttpClient} from "@angular/common/http";
 import {retry} from "rxjs/operators";
-import {Employee} from "../models/Employee/Employee";
+import {Employee} from "../modules/shared/models/Employee/Employee";
 
 @Injectable({
   providedIn: 'root'

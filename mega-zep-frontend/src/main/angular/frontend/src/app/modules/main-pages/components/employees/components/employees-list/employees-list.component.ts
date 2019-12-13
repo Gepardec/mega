@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {Employee} from "../../../../../../models/Employee/Employee";
+import {Employee} from "../../../../../shared/models/Employee/Employee";
 import {MatTableDataSource} from "@angular/material/table";
 
 @Component({
