@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {formatDate} from "@angular/common";
-import {configuration} from "../../../../configuration/configuration";
+import {configuration} from "../../../../../configuration/configuration";
 
 @Component({
   selector: 'app-calender',

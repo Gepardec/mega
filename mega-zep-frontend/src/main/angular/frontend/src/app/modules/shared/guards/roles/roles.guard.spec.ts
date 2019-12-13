@@ -2,15 +2,15 @@ import {inject, TestBed} from '@angular/core/testing';
 
 import {RolesGuard} from './roles.guard';
 import {RouterTestingModule} from "@angular/router/testing";
-import {routes} from "../../../app-routing.module";
-import {AppModule} from "../../../app.module";
-import {AuthenticationService} from "../../../signin/authentication.service";
-import {MockAuthenticationService} from "../../../signin/MockAuthenticationService";
+import {routes} from "../../../../app-routing.module";
+import {AppModule} from "../../../../app.module";
+import {AuthenticationService} from "../../../../signin/zep-signin/authentication.service";
+import {MockAuthenticationService} from "../../../../signin/MockAuthenticationService";
 import {AuthService} from "angularx-social-login";
-import {MockAuthService} from "../../../signin/MockAuthService";
+import {MockAuthService} from "../../../../signin/MockAuthService";
 import {ActivatedRouteSnapshot, UrlSegment} from "@angular/router";
-import {configuration} from "../../../../configuration/configuration";
-import {Employee} from "../../../modules/shared/models/Employee/Employee";
+import {configuration} from "../../../../../configuration/configuration";
+import {Employee} from "../../models/Employee/Employee";
 
 describe('RolesGuard', () => {
 

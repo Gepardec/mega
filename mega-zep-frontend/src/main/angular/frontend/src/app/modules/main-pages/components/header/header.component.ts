@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {configuration} from "../../../../configuration/configuration";
+import {configuration} from "../../../../../configuration/configuration";
 
 @Component({
   selector: 'app-header',

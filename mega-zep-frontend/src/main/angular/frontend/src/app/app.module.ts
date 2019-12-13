@@ -1,15 +1,12 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {AuthServiceConfig, GoogleLoginProvider, SocialLoginModule} from 'angularx-social-login';
 import {GoogleSigninComponent} from './signin/google-signin/google-signin.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MainLayoutModule} from './shared/main-layout/main-layout.module';
-import {NavigationModule} from './shared/navigation/navigation.module';
-import {ErrorHandleInterceptor} from './shared/interceptors/ErrorHandleInterceptor';
+import {ErrorHandleInterceptor} from './modules/shared/interceptors/ErrorHandleInterceptor';
 import {AngularMaterialModule} from "./material-module";
 import {APP_BASE_HREF} from "@angular/common";
 import {registerLocaleData} from "@angular/common";
@@ -43,8 +40,6 @@ export function provideConfig() {
     SocialLoginModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    NavigationModule,
-    MainLayoutModule,
     AngularMaterialModule,
     MainPagesModule,
     SharedModule
@@ -54,9 +49,7 @@ export function provideConfig() {
     AppRoutingModule,
     SocialLoginModule,
     HttpClientModule,
-    BrowserAnimationsModule,
-    NavigationModule,
-    MainLayoutModule
+    BrowserAnimationsModule
   ],
   providers: [
     HttpClientModule,

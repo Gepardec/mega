@@ -2,8 +2,8 @@ import {Injectable, OnDestroy} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
 import {Observable, Subscription} from 'rxjs';
 import {SocialUser} from "angularx-social-login";
-import {AuthenticationService} from "../../signin/authentication.service";
-import {configuration} from "../../../configuration/configuration";
+import {AuthenticationService} from "../../../../signin/zep-signin/authentication.service";
+import {configuration} from "../../../../../configuration/configuration";
 
 @Injectable({
   providedIn: 'root'

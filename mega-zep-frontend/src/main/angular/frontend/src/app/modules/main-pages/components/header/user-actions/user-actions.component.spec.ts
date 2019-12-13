@@ -1,16 +1,16 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {UserActionsComponent} from './user-actions.component';
-import {AuthenticationService} from "../../../../signin/authentication.service";
+import {AuthenticationService} from "../../../../../signin/zep-signin/authentication.service";
 import {AuthService, SocialUser} from "angularx-social-login";
-import {MockAuthService} from "../../../../signin/MockAuthService";
+import {MockAuthService} from "../../../../../signin/MockAuthService";
 import {RouterTestingModule} from "@angular/router/testing";
-import {routes} from "../../../../app-routing.module";
-import {AppModule} from "../../../../app.module";
+import {routes} from "../../../../../app-routing.module";
+import {AppModule} from "../../../../../app.module";
 import {MainLayoutModule} from "../../../main-layout/main-layout.module";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {MockAuthenticationService} from "../../../../signin/MockAuthenticationService";
+import {MockAuthenticationService} from "../../../../../signin/MockAuthenticationService";
 import {By} from "@angular/platform-browser";
 import {DebugElement} from "@angular/core";
 import {MatButton, MatMenu, MatMenuTrigger} from "@angular/material";

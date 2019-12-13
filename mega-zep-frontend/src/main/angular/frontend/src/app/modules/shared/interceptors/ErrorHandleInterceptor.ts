@@ -10,8 +10,8 @@ import {
 
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from "rxjs/operators";
-import {configuration} from "../../../configuration/configuration";
-import {AuthenticationService} from "../../signin/authentication.service";
+import {configuration} from "../../../../configuration/configuration";
+import {AuthenticationService} from "../../../signin/zep-signin/authentication.service";
 
 @Injectable()
 export class ErrorHandleInterceptor implements HttpInterceptor {

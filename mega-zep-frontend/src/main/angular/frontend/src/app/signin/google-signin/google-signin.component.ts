@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SocialUser} from 'angularx-social-login';
 import {configuration} from '../../../configuration/configuration';
-import {AuthenticationService} from '../authentication.service';
+import {AuthenticationService} from '../zep-signin/authentication.service';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 

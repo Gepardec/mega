@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatePickerDialogComponent } from './components/date-picker-dialog/date-picker-dialog.component';
 import {AngularMaterialModule} from "../../material-module";
-import {UtilModule} from "../../shared/util/util.module";
+import {UtilModule} from "./util/util.module";
 
 
 

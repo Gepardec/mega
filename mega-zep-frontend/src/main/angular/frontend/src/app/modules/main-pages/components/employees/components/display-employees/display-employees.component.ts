@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Employee} from "../../../../../shared/models/Employee/Employee";
 import {SocialUser} from "angularx-social-login";
 import {Subscription} from "rxjs";
-import {AuthenticationService} from "../../../../../../signin/authentication.service";
+import {AuthenticationService} from "../../../../../../signin/zep-signin/authentication.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {EmployeesService} from "../../../../../shared/services/employees.service";
 

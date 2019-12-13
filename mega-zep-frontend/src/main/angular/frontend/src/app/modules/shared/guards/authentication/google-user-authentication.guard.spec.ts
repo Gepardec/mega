@@ -2,15 +2,14 @@ import {inject, TestBed} from '@angular/core/testing';
 
 import {GoogleUserAuthenticationGuard} from './google-user-authentication.guard';
 import {RouterTestingModule} from "@angular/router/testing";
-import {routes} from "../../app-routing.module";
-import {MainLayoutModule} from "../main-layout/main-layout.module";
-import {AppModule} from "../../app.module";
-import {AuthenticationService} from "../../signin/authentication.service";
+import {routes} from "../../../../app-routing.module";
+import {AppModule} from "../../../../app.module";
+import {AuthenticationService} from "../../../../signin/zep-signin/authentication.service";
 import {AuthService, SocialUser} from "angularx-social-login";
-import {MockAuthService} from "../../signin/MockAuthService";
-import {MockAuthenticationService} from "../../signin/MockAuthenticationService";
+import {MockAuthService} from "../../../../signin/MockAuthService";
+import {MockAuthenticationService} from "../../../../signin/MockAuthenticationService";
 import {ActivatedRouteSnapshot, UrlSegment} from "@angular/router";
-import {configuration} from "../../../configuration/configuration";
+import {configuration} from "../../../../../configuration/configuration";
 
 describe('GoogleUserAuthenticationGuard', () => {
 

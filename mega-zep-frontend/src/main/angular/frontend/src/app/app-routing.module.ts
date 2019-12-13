@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {GoogleSigninComponent} from "./signin/google-signin/google-signin.component";
-import {GoogleUserAuthenticationGuard} from "./shared/guards/google-user-authentication.guard";
+import {GoogleUserAuthenticationGuard} from "./modules/shared/guards/authentication/google-user-authentication.guard";
 import {EmployeesModule} from "./modules/main-pages/components/employees/employees.module";
 import {configuration} from "../configuration/configuration";
 import {MonthlyReportModule} from "./modules/main-pages/components/monthly-report/monthly-report.module";

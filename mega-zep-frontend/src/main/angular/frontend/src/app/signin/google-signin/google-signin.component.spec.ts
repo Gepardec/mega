@@ -1,7 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {GoogleSigninComponent} from './google-signin.component';
-import {AuthenticationService} from "../authentication.service";
+import {AuthenticationService} from "../zep-signin/authentication.service";
 import {AuthService} from "angularx-social-login";
 import {RouterTestingModule} from "@angular/router/testing";
 import {NgZone, NO_ERRORS_SCHEMA} from "@angular/core";

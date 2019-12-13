@@ -6,7 +6,7 @@ import { EmployeesGridListComponent } from './components/employees-grid-list/emp
 import { EmployeesTableListComponent } from './components/employees-table-list/employees-table-list.component';
 import {CommonModule} from "@angular/common";
 import {AngularMaterialModule} from "../../../../material-module";
-import {UtilModule} from "../../../../shared/util/util.module";
+import {UtilModule} from "../../../shared/util/util.module";
 import {homeRouting} from "./employees.routing";
 
 @NgModule({

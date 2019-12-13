@@ -2,20 +2,21 @@ import {Injectable, OnDestroy} from '@angular/core';
 import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {AuthService, GoogleLoginProvider, SocialUser} from "angularx-social-login";
 import {Router} from "@angular/router";
-import {configuration} from "../../configuration/configuration";
+import {configuration} from "../../../configuration/configuration";
 import {HttpClient} from "@angular/common/http";
 import {retry} from "rxjs/operators";
-import {Employee} from "../modules/shared/models/Employee/Employee";
+import {Employee} from "../../modules/shared/models/Employee/Employee";
 
 @Injectable({
   providedIn: 'root'
 })
-export class MockAuthenticationService implements OnDestroy {
+export class AuthenticationService implements OnDestroy {
 
   private readonly URL: string = configuration.BASEURL;
 
   private readonly CURRENT_USER: string = 'currentUser';
   private readonly CURRENT_EMPLOYEE: string = 'currentEmployee';
+  private readonly MONTHLY_REPORT_PAGE: string = configuration.PAGE_URLS.MONTHLY_REPORT;
   private readonly LOGIN_PAGE: string = configuration.PAGE_URLS.LOGIN;
 
   private isSignedInWithGoogle: boolean;
@@ -48,6 +49,7 @@ export class MockAuthenticationService implements OnDestroy {
 
     this.authServiceSubscription = this.authService.authState.subscribe((user: SocialUser) => {
       this.isSignedInWithGoogle = user != null;
+      user != null ? this.login(user) : this.logout();
     });
   }
 
@@ -66,6 +68,14 @@ export class MockAuthenticationService implements OnDestroy {
       // store user details and token in local storage to keep user logged in between page refreshes
       localStorage.setItem(this.CURRENT_USER, JSON.stringify(user));
       this.currentUserSubject.next(user);
+      this.zepLoginSubscription = this.zepLogin(user).subscribe(
+        (employee: Employee) => {
+          this.currentEmployeeSubject = new BehaviorSubject<Employee>(employee);
+          this.currentEmployee = this.currentEmployeeSubject.asObservable();
+          localStorage.setItem(this.CURRENT_EMPLOYEE, JSON.stringify(employee));
+          this.router.navigate([this.MONTHLY_REPORT_PAGE]);
+        }
+      );
     }
 
     return user;
@@ -73,6 +83,14 @@ export class MockAuthenticationService implements OnDestroy {
 
   logout() {
     // remove user from local storage to log user out
+    this.zepLogoutSubscription = this.zepLogout(this.currentUserValue).subscribe(
+      (response: Response) => {
+        localStorage.removeItem(this.CURRENT_USER);
+        localStorage.removeItem(this.CURRENT_EMPLOYEE);
+        this.currentUserSubject.next(null);
+        this.signOut();
+      }
+    );
 
   }
 

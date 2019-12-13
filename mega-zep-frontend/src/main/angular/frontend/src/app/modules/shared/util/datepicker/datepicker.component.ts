@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {MatDatepicker} from "@angular/material";
 import {formatDate} from "@angular/common";
-import {configuration} from "../../../../configuration/configuration";
+import {configuration} from "../../../../../configuration/configuration";
 
 @Component({
   selector: 'app-datepicker',
