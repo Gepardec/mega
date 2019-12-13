@@ -121,7 +121,7 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
 
-    private static MonthlyReport calcWarnings(ReadProjektzeitenResponseType projectTimeResponse, MitarbeiterType employee) {
+    private MonthlyReport calcWarnings(ReadProjektzeitenResponseType projectTimeResponse, MitarbeiterType employee) {
         if (projectTimeResponse == null || projectTimeResponse.getProjektzeitListe() == null) {
             return null;
         }

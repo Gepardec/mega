@@ -17,6 +17,7 @@ public class MonthlyReport {
     private MitarbeiterType employee;
 
     private WarningCalculator warningCalculator;
+
     private ProjectTimeManager projectTimeManager;
 
     public MonthlyReport(MitarbeiterType employee, ProjectTimeManager projectTimeManager) {
@@ -30,5 +31,3 @@ public class MonthlyReport {
         journeyWarnings = warningCalculator.determineJourneyWarnings(projectTimeManager);
     }
 }
-
-

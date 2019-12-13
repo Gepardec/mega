@@ -1,10 +1,12 @@
 package com.gepardec.mega.communication;
 
+import lombok.Data;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
+@Data
 public class NotificationConfig {
 
     @ConfigProperty(name = "mega.mail.reminder.employee.path")

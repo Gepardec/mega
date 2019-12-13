@@ -1,5 +1,6 @@
 package com.gepardec.mega.communication;
 
+import com.gepardec.mega.communication.exception.MissingLogoException;
 import com.gepardec.mega.utils.FileHelper;
 import com.google.common.net.MediaType;
 import io.quarkus.mailer.Mail;
@@ -76,10 +77,25 @@ public class MailSender {
         }
     }
 
+    public String getSubjectForReminder(Reminder reminder) {
+        //TODO
+//        switch (reminder)
+//        notificationConfig.getSubjectByReminder(reminder);
+        return null;
+    }
+
+    public String getPathForReminder(Reminder reminder) {
+        //TODO
+//        switch (reminder)
+//        notificationConfig.getSubjectByReminder(reminder);
+        return null;
+    }
+
+
     public void sendReminder(String eMail, String firstName, Reminder reminder) {
-        String subject = notificationConfig.getSubjectByReminder(reminder);
+        String subject = getSubjectForReminder(reminder);
         String text = fileHelper.readTextOfPath(
-                notificationConfig.getPathByReminder(reminder));
+                getPathForReminder(reminder));
         sendMail(eMail, firstName, subject, text);
     }
 

@@ -4,32 +4,37 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gepardec.mega.model.google.GoogleUser;
 import com.gepardec.mega.monthlyreport.JourneyWarning;
 import com.gepardec.mega.monthlyreport.MonthlyReport;
-import com.gepardec.mega.monthlyreport.WarningType;
+import com.gepardec.mega.monthlyreport.Warning;
+import com.gepardec.mega.monthlyreport.WarningConfig;
 import com.gepardec.mega.utils.DateUtils;
 import de.provantis.zep.MitarbeiterType;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.gepardec.mega.monthlyreport.WarningType.WARNING_JOURNEY_BACK_MISSING;
-import static com.gepardec.mega.monthlyreport.WarningType.WARNING_JOURNEY_TO_AIM_MISSING;
+import static com.gepardec.mega.monthlyreport.Warning.WARNING_JOURNEY_BACK_MISSING;
+import static com.gepardec.mega.monthlyreport.Warning.WARNING_JOURNEY_TO_AIM_MISSING;
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
-@Disabled
 public class MonthlyReportTest {
 
     private final static ObjectMapper objectMapper = new ObjectMapper();
     private final static GoogleUser googleUser = new GoogleUser();
+
+    @Inject
+    WarningConfig warningConfig;
+
 
     static void initWithUserAndReleaseDate(String email, LocalDate releaseDate) throws IOException {
         googleUser.setEmail(email);
@@ -66,11 +71,10 @@ public class MonthlyReportTest {
 
         final MonthlyReport monthlyReport = objectMapper.readValue(response, MonthlyReport.class);
 
-        Map<LocalDate, List<WarningType>> journeyWarningsByDay = monthlyReport.getJourneyWarnings().stream()
+        Map<LocalDate, List<Warning>> journeyWarningsByDay = monthlyReport.getJourneyWarnings().stream()
                 .sorted(Comparator.comparing(JourneyWarning::getDate))
                 .collect(Collectors.toMap(JourneyWarning::getDate, journeyWarning -> new ArrayList(journeyWarning.getWarnings()),
-                        (v1, v2) -> v1,
-                        LinkedHashMap::new));
+                        (v1, v2) -> v1, LinkedHashMap::new));
 
         assertAll(
                 () -> assertEquals(4, monthlyReport.getJourneyWarnings().size()),
@@ -121,7 +125,8 @@ public class MonthlyReportTest {
     }
 
 
-    private static void assertWarningTypeInWarningOfDay(Map<LocalDate, List<WarningType>> warningsByDate, LocalDate date, WarningType... expectedWarningTypes) {
-        assertTrue(warningsByDate.get(date).containsAll(expectedWarningTypes != null ? Arrays.asList(expectedWarningTypes) : new ArrayList<>(0)));
+    private void assertWarningTypeInWarningOfDay(Map<LocalDate, List<Warning>> warningsByDate, LocalDate date, Warning... expectedWarnings) {
+
+//        assertTrue(warningsByDate.get(date).containsAll(expectedWarnings != null ? Arrays.asList(expectedWarnings).forEach(warning -> warningConfig.getTextByWarning(warning)) : new ArrayList<>(0)));
     }
 }

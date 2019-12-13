@@ -2,6 +2,11 @@ package com.gepardec.mega.monthlyreport;
 
 import com.gepardec.mega.utils.DateUtils;
 
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -10,13 +15,21 @@ import static com.gepardec.mega.monthlyreport.TimeWarning.*;
 
 class WarningCalculator {
 
-    private List<TimeWarning> timeWarnings = new ArrayList<>(0);
+    private List<TimeWarning> timeWarnings;
+    private List<JourneyWarning> journeyWarnings;
 
-    private List<JourneyWarning> journeyWarnings = new ArrayList<>(0);
+    private WarningConfig warningConfig;
 
+    @PostConstruct
+    private void initWarningConfig() {
+        BeanManager bm = CDI.current().getBeanManager();
+        Bean<WarningConfig> bean = (Bean<WarningConfig>) bm.getBeans(WarningConfig.class).iterator().next();
+        CreationalContext<WarningConfig> ctx = bm.createCreationalContext(bean);
+        warningConfig = (WarningConfig) bm.getReference(bean, WarningConfig.class, ctx);
+    }
 
     public List<TimeWarning> determineTimeWarnings(ProjectTimeManager projectTimeManager) {
-
+        timeWarnings = new ArrayList<>(0);
         Set<Map.Entry<LocalDate, List<ProjectTimeEntry>>> entries = projectTimeManager.getProjectTimes().entrySet();
 
         //1. more than 10 hours a day
@@ -130,24 +143,24 @@ class WarningCalculator {
 
 
     public List<JourneyWarning> determineJourneyWarnings(ProjectTimeManager projectTimeManager) {
-
+        journeyWarnings = new ArrayList<>(0);
         JourneyDirectionHandler journeyDirectionHandler = new JourneyDirectionHandler();
         for (ProjectTimeEntry projectTimeEntry : projectTimeManager.getEntriesAsFlatList()) {
 
             if (projectTimeEntry instanceof JourneyEntry) {
                 JourneyEntry journeyEntry = (JourneyEntry) projectTimeEntry;
                 journeyDirectionHandler.moveTo(journeyEntry.getJourneyDirection())
-                        .ifPresent(warningType -> addToJourneyWarnings(journeyEntry, warningType));
+                        .ifPresent(warning -> addToJourneyWarnings(journeyEntry, warning));
             }
         }
         return journeyWarnings;
     }
 
 
-    private void addToJourneyWarnings(JourneyEntry journeyEntry, WarningType warning) {
+    private void addToJourneyWarnings(JourneyEntry journeyEntry, Warning warning) {
         JourneyWarning newJourneyWarning = new JourneyWarning();
         newJourneyWarning.setDate(journeyEntry.getDate());
-        newJourneyWarning.getWarnings().add(warning.getText());
+        newJourneyWarning.getWarnings().add(warningConfig.getTextByWarning(warning));
 
 
         Optional<JourneyWarning> journeyWarning = journeyWarnings.stream()

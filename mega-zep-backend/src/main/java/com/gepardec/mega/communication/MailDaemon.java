@@ -1,6 +1,7 @@
 package com.gepardec.mega.communication;
 
 import com.gepardec.mega.communication.dates.BusinessDayCalculator;
+import com.gepardec.mega.communication.exception.MissingReceiverException;
 import com.gepardec.mega.utils.DateUtils;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import io.quarkus.scheduler.Scheduled;
@@ -17,6 +18,7 @@ import static com.gepardec.mega.communication.Reminder.*;
 @ApplicationScoped
 public class MailDaemon {
 
+    //TODO to property-file
     static final String CRON_CONFIG = "0 0 9 ? * MON-FRI";
 
     @Inject
@@ -100,6 +102,7 @@ public class MailDaemon {
 
     //TODO: remove immediately when names are available
     private static String getNameByMail(String eMail) {
+        //TODO check of nullvalues + split
         return eMail.split(".")[0];
     }
 }

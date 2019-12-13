@@ -1,6 +1,6 @@
 package com.gepardec.mega.utils;
 
-import com.gepardec.mega.communication.FileReadException;
+import com.gepardec.mega.communication.exception.FileReadException;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -23,7 +23,7 @@ public class FileHelper {
     public String readTextOfPath(String pathToRead) {
         String text = null;
         try {
-            final Path path = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource(pathToRead)).toURI());
+            final Path path = Paths.get(Objects.requireNonNull(FileHelper.class.getClassLoader().getResource(pathToRead)).toURI());
             try (Stream<String> lines = Files.lines(path)) {
                 text = lines.collect(Collectors.joining(System.lineSeparator()));
             }

@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 //FIXME set system property surefire
 class MailSenderTest {
 
-    private static final String TO = "werner.bruckmueller@gepardec.com";
+    private static final String TO = "max.mustermann@gepardec.com";
 
     @ConfigProperty(name = "quarkus.mailer.mock")
     boolean mailMockSetting;

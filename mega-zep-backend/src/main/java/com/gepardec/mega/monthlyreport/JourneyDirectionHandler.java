@@ -12,17 +12,17 @@ public class JourneyDirectionHandler {
         beforeJourneyDirection = BACK;
     }
 
-    public Optional<WarningType> moveTo(JourneyDirection journeyDirection) {
+    public Optional<Warning> moveTo(JourneyDirection journeyDirection) {
 
         if (journeyDirection == TO_AIM) {
             if (beforeJourneyDirection == TO_AIM || beforeJourneyDirection == FURTHER) {
                 resetHandler();
-                return Optional.of(WarningType.WARNING_JOURNEY_BACK_MISSING);
+                return Optional.of(Warning.WARNING_JOURNEY_BACK_MISSING);
             }
         } else if ((journeyDirection == FURTHER || journeyDirection == BACK)
                 && beforeJourneyDirection == BACK) {
             resetHandler();
-            return Optional.of(WarningType.WARNING_JOURNEY_TO_AIM_MISSING);
+            return Optional.of(Warning.WARNING_JOURNEY_TO_AIM_MISSING);
         }
         beforeJourneyDirection = journeyDirection;
         return Optional.empty();
