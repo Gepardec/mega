@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatSnackBar, MatSnackBarRef, SimpleSnackBar} from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
+
+  snackBarRef: MatSnackBarRef<SimpleSnackBar>;
 
   constructor(private snackbar: MatSnackBar) {
   }
@@ -14,8 +16,10 @@ export class NotificationService {
   }
 
   showError(message: string): void {
-    // The second parameter is the text in the button.
-    // In the third, we send in the css class for the snack bar.
-    this.snackbar.open(message, 'X', {panelClass: ['error']});
+    if(!this.snackBarRef) {
+      // The second parameter is the text in the button.
+      // In the third, we send in the css class for the snack bar.
+      this.snackBarRef = this.snackbar.open(message, 'X', {panelClass: ['error']});
+    }
   }
 }
