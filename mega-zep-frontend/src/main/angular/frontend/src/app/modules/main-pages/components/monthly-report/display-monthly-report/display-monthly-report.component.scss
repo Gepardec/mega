@@ -1,5 +1,14 @@
 @import "../../../../../styles/variables.scss";
 
+.mat-header-cell {
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mat-cell {
+  text-align: center;
+  justify-content:center;
+}
 .container {
   width: 40%;
   margin: 5px auto 0;
