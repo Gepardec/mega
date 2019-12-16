@@ -11,14 +11,14 @@ export const routes: Routes = [
   {
     path: 'employees',
     component: MainPagesContainer,
-    loadChildren: () => EmployeesModule,
+    loadChildren: './modules/main-pages/components/employees/employees.module#EmployeesModule',
     data: {roles: [configuration.EMPLOYEE_ROLES.ADMINISTRATOR, configuration.EMPLOYEE_ROLES.CONTROLLER]},
     canActivate: [GoogleUserAuthenticationGuard]
   },
   {
     path: 'monthlyReport',
     component: MainPagesContainer,
-    loadChildren: () => MonthlyReportModule,
+    loadChildren: './modules/main-pages/components/monthly-report/monthly-report.module#MonthlyReportModule',
     canActivate: [GoogleUserAuthenticationGuard]
   },
 

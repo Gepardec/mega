@@ -11,7 +11,7 @@ import {configuration} from "../../constants/configuration";
 export class DatepickerComponent implements OnInit, AfterViewInit {
 
   private format = configuration.dateFormat;
-  private today: Date = new Date();
+  today: Date = new Date();
 
   @ViewChild('picker', {static: false}) datePicker: MatDatepicker<Date>;
   @Output("dateEmitter") dateEmitterEvent: EventEmitter<string> = new EventEmitter<string>();

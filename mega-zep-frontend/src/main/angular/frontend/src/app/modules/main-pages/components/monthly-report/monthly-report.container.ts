@@ -14,7 +14,7 @@ export class MonthlyReportContainer implements OnInit, OnDestroy {
   user: SocialUser;
   private currentUserSubscription: Subscription;
   private monthlyReportSubscrition: Subscription;
-  private monthlyReport: MonthlyReport;
+  monthlyReport: MonthlyReport;
 
   constructor(
     private authenticationService: ZepSigninService,
