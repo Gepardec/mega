@@ -7,12 +7,6 @@ set -u
 
 mkdir -p ${OUT_DIR}
 
-function _processJenkins {
-    oc process -f jenkins-bc.yaml -o yaml --param-file=jenkins.properties --ignore-unknown-parameters=true > ${OUT_DIR}/jenkins-bc.yaml
-    oc process -f jenkins-slaves.yaml -o yaml --param-file=jenkins.properties --ignore-unknown-parameters=true > ${OUT_DIR}/jenkins-slaves.yaml
-    oc process -f jenkins.yaml -o yaml --param-file=jenkins.properties --ignore-unknown-parameters=true > ${OUT_DIR}/jenkins.yaml
-}
-
 function _processSonarqube {
     oc process -f sonarqube.yaml -o yaml --param-file=sonarqube.properties --ignore-unknown-parameters=true > ${OUT_DIR}/sonarqube.yaml
 }
@@ -23,17 +17,13 @@ function recreateSecret {
 }
 
 function createJenkins {
-    _processJenkins
-    oc apply -f ${OUT_DIR}/jenkins-bc.yaml
-    oc apply -f ${OUT_DIR}/jenkins-slaves.yaml
-    oc apply -f ${OUT_DIR}/jenkins.yaml
+    oc process -f jenkins-bc.yaml -o yaml --param-file=jenkins.properties --ignore-unknown-parameters=true | oc apply -f -
+    oc process -f jenkins.yaml -o yaml --param-file=jenkins.properties --ignore-unknown-parameters=true | oc apply -f -
 }
 
 function deleteJenkins {
-    _processJenkins
-    oc delete -f ${OUT_DIR}/jenkins-bc.yaml
-    oc delete -f ${OUT_DIR}/jenkins-slaves.yaml
-    oc delete -f ${OUT_DIR}/jenkins.yaml
+    oc process -f jenkins-bc.yaml -o yaml --param-file=jenkins.properties --ignore-unknown-parameters=true | oc delete -f -
+    oc process -f jenkins.yaml -o yaml --param-file=jenkins.properties --ignore-unknown-parameters=true | oc delete -f -
 }
 
 function recreateJenkins {
@@ -42,13 +32,11 @@ function recreateJenkins {
 }
 
 function createSonarqube {
-    _processSonarqube
-    oc apply -f ${OUT_DIR}/sonarqube.yaml
+    oc process -f sonarqube.yaml -o yaml --param-file=sonarqube.properties --ignore-unknown-parameters=true | oc apply -f -
 }
 
 function deleteSonarqube {
-    _processSonarqube
-    oc delete -f ${OUT_DIR}/sonarqube.yaml
+    oc process -f sonarqube.yaml -o yaml --param-file=sonarqube.properties --ignore-unknown-parameters=true | oc delete -f -
 }
 
 function recreateSonarqube {
