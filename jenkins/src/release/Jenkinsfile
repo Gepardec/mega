@@ -22,7 +22,7 @@ pipeline {
     stages {
         stage('Copy-Image') {
             when {
-                expression { params.environment.equals("prod") }
+                expression { !params.environment.equals("dev") }
             }
             steps {
                 script {
@@ -60,7 +60,7 @@ pipeline {
                             dir('ocp/templates') {
                                 openshift.withCluster() {
                                     openshift.withProject("${env.TARGET_PROJECT}") {
-                                        def frontendProps = readServiceProperties("mega-zep-fronted", ".", params.environment)
+                                        def frontendProps = readServiceProperties("mega-zep-frontend", ".", params.environment)
                                         def service = "https://${frontendProps.NAME}-${env.OCP_ROUTE_SUFFIX}"
                                         recreateServiceResources("mega-zep-backend",
                                                 params.environment,
