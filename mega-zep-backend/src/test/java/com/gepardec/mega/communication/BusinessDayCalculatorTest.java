@@ -21,7 +21,7 @@ public class BusinessDayCalculatorTest {
 
     @Test
     void getEventForDate_firstDayOfMonthBusinessDay_shouldReturnUserCheckprojecttimes() {
-        assertReminderForDate(USER_CHECK_PROJECTTIMES, 2019, 10, 1);
+        assertReminderForDate(EMPLOYEE_CHECK_PROJECTTIME, 2019, 10, 1);
     }
 
     @Test
@@ -31,7 +31,7 @@ public class BusinessDayCalculatorTest {
 
     @Test
     void getEventForDate_forthDayOfMonthIsFirstBusinessDay_shouldReturnCheckprojecttimes() {
-        assertReminderForDate(USER_CHECK_PROJECTTIMES, 2019, 11, 4);
+        assertReminderForDate(EMPLOYEE_CHECK_PROJECTTIME, 2019, 11, 4);
     }
 
     @Test
@@ -52,9 +52,9 @@ public class BusinessDayCalculatorTest {
                 () -> assertEmptyForGetEventForDate(2019, 11, 1),
                 () -> assertEmptyForGetEventForDate(2019, 11, 2),
                 () -> assertEmptyForGetEventForDate(2019, 11, 3),
-                () -> assertReminderForDate(USER_CHECK_PROJECTTIMES, 2019, 11, 4),
+                () -> assertReminderForDate(EMPLOYEE_CHECK_PROJECTTIME, 2019, 11, 4),
                 () -> assertEmptyForGetEventForDate(2019, 11, 5),
-                () -> assertReminderForDate(OM_CHECK_USER_CONTENT, 2019, 11, 6),
+                () -> assertReminderForDate(OM_CONTROL_EMPLOYEES_CONTENT, 2019, 11, 6),
                 () -> assertEmptyForGetEventForDate(2019, 11, 7),
                 () -> assertEmptyForGetEventForDate(2019, 11, 8),
                 () -> assertEmptyForGetEventForDate(2019, 11, 9),
@@ -70,12 +70,12 @@ public class BusinessDayCalculatorTest {
                 () -> assertEmptyForGetEventForDate(2019, 11, 19),
                 () -> assertEmptyForGetEventForDate(2019, 11, 20),
                 () -> assertEmptyForGetEventForDate(2019, 11, 21),
-                () -> assertReminderForDate(OM_SALARY_CHARGING, 2019, 11, 22),
+                () -> assertReminderForDate(OM_ADMINISTRATIVE, 2019, 11, 22),
                 () -> assertEmptyForGetEventForDate(2019, 11, 23),
                 () -> assertEmptyForGetEventForDate(2019, 11, 24),
                 () -> assertEmptyForGetEventForDate(2019, 11, 25),
                 () -> assertEmptyForGetEventForDate(2019, 11, 26),
-                () -> assertReminderForDate(OM_SALARY_TRANSFER, 2019, 11, 27),
+                () -> assertReminderForDate(OM_SALARY, 2019, 11, 27),
                 () -> assertEmptyForGetEventForDate(2019, 11, 28),
                 () -> assertEmptyForGetEventForDate(2019, 11, 29),
                 () -> assertEmptyForGetEventForDate(2019, 11, 30)

@@ -24,5 +24,4 @@ public class LoggerConfiguration {
             return LoggerFactory.getLogger("default");
         }
     }
-
 }

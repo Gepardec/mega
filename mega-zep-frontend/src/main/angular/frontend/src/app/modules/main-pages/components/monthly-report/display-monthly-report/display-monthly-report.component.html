@@ -1,0 +1,72 @@
+<div class="container">
+  <mat-card>
+    <mat-card-title>{{monthlyReport.employee.anrede}} {{monthlyReport.employee.titel}} {{monthlyReport.employee.vorname}} {{monthlyReport.employee.nachname}}</mat-card-title>
+    <mat-card-subtitle>{{functions[monthlyReport.employee.preisgruppe]}}</mat-card-subtitle>
+    <mat-card-content>{{getDateOfReport(monthlyReport.employee.freigabedatum) | date: 'MMMM yyyy' : '+060' : 'de-AT'}}</mat-card-content>
+  </mat-card>
+
+  <div class="container-mat-table mat-elevation-z8">
+    <mat-table #timeTable class="tablelist" [dataSource]="datasourceTimeTable">
+
+      <ng-container matColumnDef="headline">
+        <mat-header-cell class="headline" *matHeaderCellDef>Pausen</mat-header-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
+        <mat-cell *matCellDef="let timeEntry"> {{timeEntry.date | date:'fullDate' : '+060' : 'de-AT'}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="restTime">
+        <mat-header-cell *matHeaderCellDef>zu wenig Ruhezeit</mat-header-cell>
+        <mat-cell *matCellDef="let timeEntry"> {{timeEntry.missingRestTime}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="breakTime">
+        <mat-header-cell *matHeaderCellDef>zu wenig Pausenzeit</mat-header-cell>
+        <mat-cell *matCellDef="let timeEntry"> {{timeEntry.missingBreakTime}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="workingTime">
+        <mat-header-cell *matHeaderCellDef>zu viel Arbeitszeit</mat-header-cell>
+        <mat-cell *matCellDef="let timeEntry"> {{timeEntry.excessWorkTime}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="['headline']; sticky: true"></mat-header-row>
+      <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsTimeTable; sticky: true"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumnsTimeTable;"></mat-row>
+
+    </mat-table>
+
+  </div>
+
+  <div class="container-mat-table mat-elevation-z8">
+
+    <mat-table #journeyTable class="tablelist" [dataSource]="datasourceJourneyTable">
+
+      <ng-container matColumnDef="headline">
+        <mat-header-cell class="headline" *matHeaderCellDef>Reisen</mat-header-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
+        <mat-cell
+          *matCellDef="let journeyEntry"> {{journeyEntry.date | date:'fullDate' : '+060' : 'de-AT'}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="warning">
+        <mat-header-cell *matHeaderCellDef>Warnung</mat-header-cell>
+        <mat-cell *matCellDef="let journeyEntry">
+          <mat-cell *ngFor="let warning of journeyEntry.warnings">
+            {{warning}}
+          </mat-cell>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row class="headline" *matHeaderRowDef="['headline']; sticky: true"></mat-header-row>
+      <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsJourneyTable; sticky: true"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumnsJourneyTable;"></mat-row>
+
+    </mat-table>
+  </div>
+</div>

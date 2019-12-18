@@ -1,19 +1,22 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-
+import {ErrorHandler, NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {AuthServiceConfig, GoogleLoginProvider, LoginOpt, SocialLoginModule} from 'angularx-social-login';
-import {GoogleSigninComponent} from './signin/google-signin/google-signin.component';
+import {AuthServiceConfig, GoogleLoginProvider, SocialLoginModule} from 'angularx-social-login';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MainLayoutModule} from './shared/main-layout/main-layout/main-layout.module';
-import {NavigationModule} from './shared/navigation/navigation.module';
-import {ErrorHandleInterceptor} from './shared/interceptors/ErrorHandleInterceptor';
 import {AngularMaterialModule} from "./material-module";
 import { environment } from '../environments/environment';
 import {APP_BASE_HREF} from "@angular/common";
+import {registerLocaleData} from "@angular/common";
+import localeDeAt from "@angular/common/locales/de-AT";
+import { MainPagesContainer } from './modules/main-pages/main-pages.container';
+import {MainPagesModule} from "./modules/main-pages/main-pages.module";
+import {SharedModule} from "./modules/shared/shared.module";
+import {GlobalHttpInterceptorService} from "./modules/shared/interceptors/global-http-interceptor.service";
+import {ErrorHandlerService} from "./modules/shared/services/error/error-handler.service";
 
+registerLocaleData(localeDeAt, 'de-AT');
 
 const config = new AuthServiceConfig([
   {
@@ -26,15 +29,10 @@ export function provideConfig() {
   return config;
 }
 
-const googleLoginOptions: LoginOpt = {
-  scope: 'profile email'
-};
-
-
 @NgModule({
   declarations: [
     AppComponent,
-    GoogleSigninComponent,
+    MainPagesContainer
   ],
   imports: [
     BrowserModule,
@@ -42,29 +40,23 @@ const googleLoginOptions: LoginOpt = {
     SocialLoginModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    NavigationModule,
-    MainLayoutModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    MainPagesModule,
+    SharedModule
   ],
   exports: [
     BrowserModule,
     AppRoutingModule,
     SocialLoginModule,
     HttpClientModule,
-    BrowserAnimationsModule,
-    NavigationModule,
-    MainLayoutModule
+    BrowserAnimationsModule
   ],
   providers: [
     HttpClientModule,
     {provide: APP_BASE_HREF, useValue: '/'},
-    {
-      provide: AuthServiceConfig,
-      useFactory: provideConfig
-    },
-    {
-      provide: HTTP_INTERCEPTORS, useClass: ErrorHandleInterceptor, multi: true
-    }
+    {provide: AuthServiceConfig, useFactory: provideConfig},
+    {provide: ErrorHandler, useClass: ErrorHandlerService},
+    {provide: HTTP_INTERCEPTORS, useClass: GlobalHttpInterceptorService, multi: true}
   ],
   bootstrap: [AppComponent]
 })

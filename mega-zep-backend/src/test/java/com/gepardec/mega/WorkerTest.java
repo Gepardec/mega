@@ -23,7 +23,7 @@ public class WorkerTest {
 
     @BeforeAll
     static void initTests () {
-        googleUser.setEmail("christoph.ruhsam@gepardec.com");
+        googleUser.setEmail("max.mustermann@gepardec.com");
     }
 
     @Test

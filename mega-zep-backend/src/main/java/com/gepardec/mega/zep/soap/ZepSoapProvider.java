@@ -19,8 +19,9 @@ public class ZepSoapProvider {
     Logger logger;
 
     @Inject
-    @ConfigProperty(name = "zep.soap.token")
+    @ConfigProperty(name = "mega.zep.admin.token")
     String authorizationToken;
+
 
     @Produces
     @Dependent
@@ -36,6 +37,13 @@ public class ZepSoapProvider {
         }
 
         return null;
+    }
+
+    @Produces
+    @Dependent
+    @Named("ZepAuthorizationToken")
+    public String zepAuthorizationToken() {
+        return authorizationToken;
     }
 
     @Produces
