@@ -38,7 +38,7 @@ Version: ${params.version}\
             steps {
                 script {
                     openshift.withCluster() {
-                        openshift.withProject("${env.TARGET_PROJECT}") {
+                        openshift.withProject("57-mega-test") {
                             openshift.tag("57-mega-dev/mega-zep-frontend:${params.version}", "${env.TARGET_PROJECT}/mega-zep-frontend:${params.version}")
                             openshift.tag("57-mega-dev/mega-zep-backend:${params.version}", "${env.TARGET_PROJECT}/mega-zep-backend:${params.version}")
                         }
@@ -54,7 +54,7 @@ Version: ${params.version}\
                         script {
                             dir('ocp/templates') {
                                 openshift.withCluster() {
-                                    openshift.withProject("${env.TARGET_PROJECT}") {
+                                    openshift.withProject("57-mega-test") {
                                         recreateServiceResources("mega-zep-frontend",
                                                 params.environment,
                                                 "--param=IMAGE_STREAM_TAG='mega-zep-frontend:${params.version}'")
