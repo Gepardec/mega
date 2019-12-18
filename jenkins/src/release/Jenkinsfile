@@ -20,6 +20,14 @@ pipeline {
     }
 
     stages {
+        stage('Prepare') {
+            script{
+                echo "\
+Project: ${env.TARGET_PROJECT} \n\
+Version: ${params.version}\
+"
+            }
+        }
         stage('Copy-Image') {
             when {
                 expression { !params.environment.equals("dev") }
