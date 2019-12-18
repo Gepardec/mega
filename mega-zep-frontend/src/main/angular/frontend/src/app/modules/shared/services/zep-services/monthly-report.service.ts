@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {configuration} from "../../constants/configuration";
+import {environment} from '../../../../../environments/environment';
 import {HttpClient} from "@angular/common/http";
 import {SocialUser} from "angularx-social-login";
 import {MonthlyReport} from "../../models/MonthlyReport/MonthlyReport";
@@ -14,7 +14,7 @@ import {Observable, of} from "rxjs";
 })
 export class MonthlyReportService {
 
-  private URL: string = configuration.BASEURL;
+  private URL: string = environment.backendOrigin;
 
   constructor(
     private http: HttpClient
@@ -22,12 +22,12 @@ export class MonthlyReportService {
   }
 
   getAll(user: SocialUser): Observable<MonthlyReport> {
-      return this.http.post<MonthlyReport>(this.URL +
+    return this.http.post<MonthlyReport>(this.URL +
       '/worker/employee/monthendReport', JSON.stringify(user))
       .pipe(
         retry(1)
       );
-      // return this.mockService();
+    // return this.mockService();
   }
 
   mockService(): Observable<MonthlyReport> {

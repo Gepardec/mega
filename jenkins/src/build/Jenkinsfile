@@ -45,13 +45,13 @@ pipeline {
                                             }
                                         }
 
-                                        dir('ocp/templates') {
-                                            openshift.withCluster() {
-                                                openshift.withProject("${OCP_PROJECT_NAME}") {
-                                                    recreateServiceResources("mega-zep-frontend")
-                                                }
-                                            }
-                                        }
+//                                        dir('ocp/templates') {
+//                                            openshift.withCluster() {
+//                                                openshift.withProject("${OCP_PROJECT_NAME}") {
+//                                                    recreateServiceResources("mega-zep-frontend")
+//                                                }
+//                                            }
+//                                        }
 
                                         dir('mega-zep-frontend/src/main/angular/frontend') {
                                             openshift.withCluster() {
@@ -92,20 +92,21 @@ pipeline {
                                             sh "mvn -B -s jenkins-settings.xml \
                                                    install \
                                                    -Drevision=${revision} \
+                                                   -DskipTests \
                                                    -Dquarkus.package.uber.jar=true"
                                         }
 
-                                        dir('ocp/templates') {
-                                            openshift.withCluster() {
-                                                openshift.withProject("${OCP_PROJECT_NAME}") {
-                                                    def frontendProps = readServiceProperties("mega-zep-frontend")
-                                                    def service = "https://${frontendProps.NAME}-${env.OCP_ROUTE_SUFFIX}"
-                                                    recreateServiceResources("mega-zep-backend",
-                                                            "",
-                                                            "--param=JAVA_OPTIONS='-Djava.net.preferIPv4Stack=true -Dquarkus.http.cors.origins=${service}'")
-                                                }
-                                            }
-                                        }
+//                                        dir('ocp/templates') {
+//                                            openshift.withCluster() {
+//                                                openshift.withProject("${OCP_PROJECT_NAME}") {
+//                                                    def frontendProps = readServiceProperties("mega-zep-frontend")
+//                                                    def service = "https://${frontendProps.NAME}-${env.OCP_ROUTE_SUFFIX}"
+//                                                    recreateServiceResources("mega-zep-backend",
+//                                                            "",
+//                                                            "--param=JAVA_OPTIONS='-Djava.net.preferIPv4Stack=true -Dquarkus.http.cors.origins=${service}'")
+//                                                }
+//                                            }
+//                                        }
 
                                         dir('mega-zep-backend/target/') {
                                             openshift.withCluster() {

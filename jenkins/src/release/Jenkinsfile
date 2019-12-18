@@ -4,14 +4,14 @@ pipeline {
     agent any
 
     parameters {
-        choice(name: 'environment', choices: ['dev', 'prod'], description: 'The environment to deploy to')
+        choice(name: 'environment', choices: ['dev', 'test', 'prod'], description: 'The environment to deploy to')
         string(name: 'version', defaultValue: 'latest', description: 'The image version to release', trim: true)
     }
 
     environment {
-        DEV_PROJECT = "57-mega-dev"
+        MEGA_PROJECT = "57-mega-"
         PROD_PROJECT = "57-services"
-        TARGET_PROJECT = "${params.environment.equals('prod') ? env.PROD_PROJECT : env.DEV_PROJECT}"
+        TARGET_PROJECT = "${params.environment.equals('prod') ? env.PROD_PROJECT : (env.MEGA_PROJECT + params.environment)}"
         OCP_ROUTE_SUFFIX = "${env.TARGET_PROJECT}.cloud.itandtel.at"
     }
 
@@ -60,8 +60,11 @@ pipeline {
                             dir('ocp/templates') {
                                 openshift.withCluster() {
                                     openshift.withProject("${env.TARGET_PROJECT}") {
+                                        def frontendProps = readServiceProperties("ocp/templates/mega-zep-frontend")
+                                        def service = "https://${frontendProps.NAME}-${env.OCP_ROUTE_SUFFIX}"
                                         recreateServiceResources("mega-zep-backend",
                                                 params.environment,
+                                                "--param=JAVA_OPTIONS='-Djava.net.preferIPv4Stack=true -Dquarkus.http.cors.origins=${service}",
                                                 "--param=IMAGE_STREAM_TAG='mega-zep-backend:${params.version}'")
                                     }
                                 }
