@@ -38,10 +38,9 @@ Version: ${params.version}\
             steps {
                 script {
                     openshift.withCluster() {
-                        openshift.withProject("57-mega-test") {
-                            openshift.tag("57-mega-dev/mega-zep-frontend:${params.version}", "${env.TARGET_PROJECT}/mega-zep-frontend:${params.version}")
-                            openshift.tag("57-mega-dev/mega-zep-backend:${params.version}", "${env.TARGET_PROJECT}/mega-zep-backend:${params.version}")
-                        }
+                        sh "oc project ${env.TARGET_PROJECT}"
+                        openshift.tag("57-mega-dev/mega-zep-frontend:${params.version}", "${env.TARGET_PROJECT}/mega-zep-frontend:${params.version}")
+                        openshift.tag("57-mega-dev/mega-zep-backend:${params.version}", "${env.TARGET_PROJECT}/mega-zep-backend:${params.version}")
                     }
                 }
             }
@@ -54,11 +53,10 @@ Version: ${params.version}\
                         script {
                             dir('ocp/templates') {
                                 openshift.withCluster() {
-                                    openshift.withProject("57-mega-test") {
-                                        recreateServiceResources("mega-zep-frontend",
-                                                params.environment,
-                                                "--param=IMAGE_STREAM_TAG='mega-zep-frontend:${params.version}'")
-                                    }
+                                    sh "oc project ${env.TARGET_PROJECT}"
+                                    recreateServiceResources("mega-zep-frontend",
+                                            params.environment,
+                                            "--param=IMAGE_STREAM_TAG='mega-zep-frontend:${params.version}'")
                                 }
                             }
                         }
@@ -70,14 +68,13 @@ Version: ${params.version}\
                         script {
                             dir('ocp/templates') {
                                 openshift.withCluster() {
-                                    openshift.withProject("${env.TARGET_PROJECT}") {
-                                        def frontendProps = readServiceProperties("mega-zep-frontend", ".", params.environment)
-                                        def service = "https://${frontendProps.NAME}-${env.OCP_ROUTE_SUFFIX}"
-                                        recreateServiceResources("mega-zep-backend",
-                                                params.environment,
-                                                "--param=JAVA_OPTIONS='-Djava.net.preferIPv4Stack=true -Dquarkus.http.cors.origins=${service}' \
+                                    sh "oc project ${env.TARGET_PROJECT}"
+                                    def frontendProps = readServiceProperties("mega-zep-frontend", ".", params.environment)
+                                    def service = "https://${frontendProps.NAME}-${env.OCP_ROUTE_SUFFIX}"
+                                    recreateServiceResources("mega-zep-backend",
+                                            params.environment,
+                                            "--param=JAVA_OPTIONS='-Djava.net.preferIPv4Stack=true -Dquarkus.http.cors.origins=${service}' \
                                                                 --param=IMAGE_STREAM_TAG='mega-zep-backend:${params.version}'")
-                                    }
                                 }
                             }
                         }
