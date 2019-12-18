@@ -64,7 +64,8 @@ pipeline {
                                         def service = "https://${frontendProps.NAME}-${env.OCP_ROUTE_SUFFIX}"
                                         recreateServiceResources("mega-zep-backend",
                                                 params.environment,
-                                                "--param=JAVA_OPTIONS='-Djava.net.preferIPv4Stack=true -Dquarkus.http.cors.origins=${service} --param=IMAGE_STREAM_TAG='mega-zep-backend:${params.version}'")
+                                                "--param=JAVA_OPTIONS='-Djava.net.preferIPv4Stack=true -Dquarkus.http.cors.origins=${service}' \
+                                                                --param=IMAGE_STREAM_TAG='mega-zep-backend:${params.version}'")
                                     }
                                 }
                             }
