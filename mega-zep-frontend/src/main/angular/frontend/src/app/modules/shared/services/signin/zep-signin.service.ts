@@ -4,8 +4,7 @@ import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {AuthService, GoogleLoginProvider, SocialUser} from "angularx-social-login";
 import {Employee} from "../../models/Employee/Employee";
 import {Router} from "@angular/router";
-import {configuration} from "../../configuration/configuration";
-import {environment} from "../../environments/environment";
+import {environment} from "../../../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {retry} from "rxjs/operators";
 

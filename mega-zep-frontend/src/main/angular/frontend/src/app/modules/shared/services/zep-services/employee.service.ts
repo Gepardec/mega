@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 import {retry} from 'rxjs/operators';
 import {Employee} from '../../models/Employee/Employee';
 import {HttpClient} from '@angular/common/http';
-import {environment} from "../../environments/environment";
+import {environment} from "../../../../../environments/environment";
 import {configuration} from '../../constants/configuration';
 import {SocialUser} from 'angularx-social-login';
 
