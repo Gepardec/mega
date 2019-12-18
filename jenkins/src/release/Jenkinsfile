@@ -4,7 +4,7 @@ pipeline {
     agent any
 
     parameters {
-        choice(name: 'environment', choices: ['dev', 'test', 'prod'], description: 'The environment to deploy to')
+        choice(name: 'environment', choices: ['test', 'prod'], description: 'The environment to deploy to')
         string(name: 'version', defaultValue: 'latest', description: 'The image version to release', trim: true)
     }
 

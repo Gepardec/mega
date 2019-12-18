@@ -51,7 +51,7 @@ These are the Dockerfiles used by this project
 * link:docker/agent-quarkus/Dockerfile[agent-quarkus/Dockerfile] +
  The Dockerfile for building the quarkus build agent
 
-== Openshift
+== Openshift Dev Project
 
 .google-secrets.properties (google related configurations)
 [source,properties]
@@ -61,7 +61,7 @@ oauth.clientId=<GOOGLE_OAUTH_CLIENT_ID>
 ----
 
 .Secrets
-[source, bash]
+[source,bash]
 ----
 # Create github login secret (username, password are the properties)
 oc create secret generic mega-git-http --from-env-file=mega-dev-github.properties --type=kubernetes.io/basic-auth
@@ -110,6 +110,23 @@ oc set triggers bc/quarkus-build-agent --remove-all -n 57-mega-dev
 oc new-build https://github.com/Gepardec/mega.git#feature/ocp-builds --name=nodejs-build-agent --context-dir=docker/agent-nodejs --source-secret=mega-git-http -n 57-mega-dev
 oc set triggers bc/nodejs-build-agent --remove-all -n 57-mega-dev
 ----
+
+== Openshift Test/Prod Project
+
+.Secrets
+[source,bash]
+----
+oc create secret generic mega-secrets --from-file=filename=mega-secrets.properties
+----
+
+.Cleanup
+[source,bash]
+----
+oc process --filename mega-zep-backend.yaml --param-file=mega-zep-backend.dev.properties --param=IMAGE_STREAM_TAG=latest | oc delete -f -
+oc process --filename mega-zep-frontend.yaml --param-file=mega-zep-frontend.dev.properties --param=IMAGE_STREAM_TAG=latest | oc delete -f -
+----
+
+WARNING: Ensure that the configuration is properly setup for your environment
 
 TODOS:
 
