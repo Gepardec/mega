@@ -60,7 +60,7 @@ pipeline {
                             dir('ocp/templates') {
                                 openshift.withCluster() {
                                     openshift.withProject("${env.TARGET_PROJECT}") {
-                                        def frontendProps = readServiceProperties("mega-zep-fronted", "ocp/templates/mega-zep-frontend", params.environment)
+                                        def frontendProps = readServiceProperties("mega-zep-fronted", params.environment)
                                         def service = "https://${frontendProps.NAME}-${env.OCP_ROUTE_SUFFIX}"
                                         recreateServiceResources("mega-zep-backend",
                                                 params.environment,
