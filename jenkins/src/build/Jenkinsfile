@@ -127,8 +127,7 @@ def buildFrontendForEnvironment(String environment) {
         dir('mega-zep-frontend/src/main/angular/frontend') {
             sh 'cp -f src/environments/environment.prod.tmp.ts src/environments/environment.prod.ts'
             sh "sed -i -e 's|REPLACE_BACKEND_ORIGIN|${service}|g' src/environments/environment.prod.tmp.ts"
-            sh "sed -i -e 's|REPLACE_OAUTH_CLIENT_ID|${googleProps['oauth.clientId']}|g' src/environments/environment.${environment}.ts"
-            sh "npm install"
+            sh "sed -i -e 's|REPLACE_OAUTH_CLIENT_ID|${googleProps['oauth.clientId']}|g' src/environments/environment.prod.ts"
             sh "ng build --sourceMap=false --configuration=prod"
         }
     }
