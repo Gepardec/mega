@@ -116,7 +116,7 @@ def buildFrontendForEnvironment(String environment) {
     withCredentials([file(credentialsId: 'google-secrets', variable: 'GOOGLE_SECRET_FILE')]) {
         def googleProps = readProperties file: "${GOOGLE_SECRET_FILE}"
         def service;
-        service = "https://${env.MEGA_ZEP_BACKEND_APP_NAME}-57-mega-zep-${environment}.${env.OCP_DOMAIN}"
+        service = "https://${env.MEGA_ZEP_BACKEND_APP_NAME}-57-mega-${environment}.${env.OCP_DOMAIN}"
 
         dir('mega-zep-frontend/src/main/angular/frontend') {
             sh 'rm -f src/environments/environment.prod.ts'
