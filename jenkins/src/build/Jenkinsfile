@@ -32,6 +32,8 @@ pipeline {
                                     container('nodejs-container') {
                                         unstash name: "repo"
 
+                                        def revision = buildRevisionForBranch()
+
                                         withCredentials([file(credentialsId: 'google-secrets', variable: 'GOOGLE_SECRET_FILE')]) {
                                             def googleProps = readProperties file: "${GOOGLE_SECRET_FILE}"
 
@@ -49,6 +51,7 @@ pipeline {
                                                                                          --from-dir=dist/frontend \
                                                                                          --follow \
                                                                                          --wait"
+                                                    openshift.tag("mega-zep-frontend:latest", "mega-zep-frontend:${revision}")
                                                 }
                                             }
                                         }
@@ -90,6 +93,7 @@ pipeline {
                                                     def artifact = "mega-zep-backend-${revision}-runner.jar"
 
                                                     sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait"
+                                                    openshift.tag("mega-zep-backend:latest", "mega-zep-backend:${revision}")
                                                 }
                                             }
                                         }
