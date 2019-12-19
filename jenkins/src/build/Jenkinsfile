@@ -75,13 +75,15 @@ pipeline {
 
                                         def revision = buildRevisionForBranch()
 
-                                        withCredentials([file(credentialsId: 'mega-secrets', variable: 'FILE')]) {
-                                            sh "mkdir -p ./mega-zep-backend/config"
-                                            sh "cp -f ${FILE} ./mega-zep-backend/config/application.properties"
-                                            sh "mvn -B -s jenkins-settings.xml \
+                                        dir('mega-zep-backend/') {
+                                            withCredentials([file(credentialsId: 'mega-secrets', variable: 'FILE')]) {
+                                                sh "mkdir -p ./mega-zep-backend/config"
+                                                sh "cp -f ${FILE} ./mega-zep-backend/config/application.properties"
+                                                sh "mvn -B -s jenkins-settings.xml \
                                                    install \
                                                    -Drevision=${revision} \
                                                    -Dquarkus.package.uber.jar=true"
+                                            }
                                         }
 
                                         dir('mega-zep-backend/target/') {
