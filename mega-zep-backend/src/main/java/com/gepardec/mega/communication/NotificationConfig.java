@@ -43,72 +43,51 @@ public class NotificationConfig {
     @ConfigProperty(name = "mega.mail.reminder.om.salary.subject")
     String omSalarySubject;
 
-
-    public String getPathByReminder(Reminder reminder) {
-        String path = null;
-        switch (reminder) {
-            case EMPLOYEE_CHECK_PROJECTTIME: {
-                path = employeePath;
-                break;
-            }
-            case PL_PROJECT_CONTROLLING: {
-                path = plPath;
-                break;
-            }
-            case OM_CONTROL_EMPLOYEES_CONTENT: {
-                path = omControlEmployeesDataPath;
-                break;
-            }
-            case OM_RELEASE: {
-                path = omReleasePath;
-                break;
-            }
-            case OM_ADMINISTRATIVE: {
-                path = omAdministrativePath;
-                break;
-            }
-            case OM_SALARY: {
-                path = omSalaryPath;
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-        return path;
+    public String getEmployeePath() {
+        return employeePath;
     }
 
-    public String getSubjectByReminder(Reminder reminder) {
-        String subject = null;
-        switch (reminder) {
-            case EMPLOYEE_CHECK_PROJECTTIME: {
-                subject = employeeSubject;
-                break;
-            }
-            case PL_PROJECT_CONTROLLING: {
-                subject = plSubject;
-                break;
-            }
-            case OM_CONTROL_EMPLOYEES_CONTENT: {
-                subject = omControlEmployeesDataSubject;
-                break;
-            }
-            case OM_RELEASE: {
-                subject = omReleaseSubject;
-                break;
-            }
-            case OM_ADMINISTRATIVE: {
-                subject = omAdministrativeSubject;
-                break;
-            }
-            case OM_SALARY: {
-                subject = omSalarySubject;
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-        return subject;
+    public String getEmployeeSubject() {
+        return employeeSubject;
+    }
+
+    public String getPlPath() {
+        return plPath;
+    }
+
+    public String getPlSubject() {
+        return plSubject;
+    }
+
+    public String getOmControlEmployeesDataPath() {
+        return omControlEmployeesDataPath;
+    }
+
+    public String getOmControlEmployeesDataSubject() {
+        return omControlEmployeesDataSubject;
+    }
+
+    public String getOmReleasePath() {
+        return omReleasePath;
+    }
+
+    public String getOmReleaseSubject() {
+        return omReleaseSubject;
+    }
+
+    public String getOmAdministrativePath() {
+        return omAdministrativePath;
+    }
+
+    public String getOmAdministrativeSubject() {
+        return omAdministrativeSubject;
+    }
+
+    public String getOmSalaryPath() {
+        return omSalaryPath;
+    }
+
+    public String getOmSalarySubject() {
+        return omSalarySubject;
     }
 }

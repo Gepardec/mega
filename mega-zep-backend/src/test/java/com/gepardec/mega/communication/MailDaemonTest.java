@@ -1,5 +1,7 @@
 package com.gepardec.mega.communication;
 
+import com.gepardec.mega.zep.service.api.WorkerService;
+import de.provantis.zep.MitarbeiterType;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -9,11 +11,10 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.gepardec.mega.communication.Reminder.OM_RELEASE;
-import static com.gepardec.mega.communication.Reminder.PL_PROJECT_CONTROLLING;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 public class MailDaemonTest {
@@ -29,33 +30,69 @@ public class MailDaemonTest {
     @ConfigProperty(name = "mega.mail.reminder.om")
     String omMailAddresses;
 
+    @ConfigProperty(name = "quarkus.mailer.mock")
+    boolean mailMockSetting;
+
     @Inject
     NotificationConfig notificationConfig;
+
+    @Inject
+    WorkerService workerService;
 
 
     @BeforeEach
     void init() {
+        assertTrue(mailMockSetting);
         mailbox.clear();
     }
 
 
     @Test
+    void getNameByMail_usualInput_shouldReturnFirstName() {
+        assertEquals("John", MailDaemon.getNameByMail("john.doe@gmail.com"));
+    }
+
+    @Test
+    void getNameByMail_EmptyInput_shouldReturnFirstName() {
+        assertEquals("", MailDaemon.getNameByMail(""));
+    }
+
+
+    @Test
     void sendReminderToOm_mailAddressesAvailable_shouldSendMail() {
-        List<String> addresses = Arrays.asList(omMailAddresses.split(","));
+        List<String> mailAddresses = Arrays.asList(omMailAddresses.split("\\,"));
         mailDaemon.sendReminderToOm(OM_RELEASE);
         assertAll(
-                () -> assertEquals(1, mailbox.getTotalMessagesSent()),
-                () -> assertEquals(notificationConfig.getSubjectByReminder(OM_RELEASE), mailbox.getMessagesSentTo(addresses.get(0)).get(0).getSubject())
+                () -> assertEquals(mailAddresses.size(), mailbox.getTotalMessagesSent()),
+                () -> mailAddresses.forEach(mailAddress ->
+                        assertEquals(notificationConfig.getOmReleaseSubject(), mailbox.getMessagesSentTo(mailAddresses.get(0)).get(0).getSubject()))
         );
     }
 
     @Test
     void sendReminderToPl_mailAddressesAvailable_shouldSendMail() {
-        List<String> addresses = Arrays.asList(projectLeadersMailAddresses.split(","));
-        mailDaemon.sendReminderToPL();
+        List<String> mailAddresses = Arrays.asList(projectLeadersMailAddresses.split("\\,"));
+        mailDaemon.sendReminderToPl();
         assertAll(
-                () -> assertEquals(6, mailbox.getTotalMessagesSent()),
-                () -> addresses.forEach(address -> assertEquals(notificationConfig.getSubjectByReminder(PL_PROJECT_CONTROLLING), mailbox.getMessagesSentTo(address).get(0).getSubject()))
+                () -> assertEquals(mailAddresses.size(), mailbox.getTotalMessagesSent()),
+                () -> mailAddresses.forEach(mailAddress ->
+                        assertEquals(notificationConfig.getPlSubject(), mailbox.getMessagesSentTo(mailAddress).get(0).getSubject()))
         );
     }
+
+    @Test
+    void sendReminderToUser() {
+        List<String> addresses = workerService.getAllActiveEmployees().stream()
+                .map(MitarbeiterType::getEmail)
+                .collect(Collectors.toList());
+
+        mailDaemon.sendReminderToUser();
+        assertAll(
+                () -> assertEquals(addresses.size(), mailbox.getTotalMessagesSent()),
+                () -> addresses.forEach(address ->
+                        assertEquals(notificationConfig.getEmployeeSubject(), mailbox.getMessagesSentTo(address).get(0).getSubject()))
+        );
+    }
+
+
 }

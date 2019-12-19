@@ -1,4 +1,6 @@
-package com.gepardec.mega.monthlyreport;
+package com.gepardec.mega.monthlyreport.journey;
+
+import com.gepardec.mega.monthlyreport.exception.EnumConverterException;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -9,7 +11,6 @@ public enum JourneyDirection {
     TO_AIM("0"),
     FURTHER("1"),
     BACK("2");
-
 
     private String direction;
 

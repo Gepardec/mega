@@ -1,5 +1,6 @@
 package com.gepardec.mega.communication;
 
+import com.gepardec.mega.communication.exception.MissingLogoException;
 import com.gepardec.mega.utils.FileHelper;
 import com.google.common.net.MediaType;
 import io.quarkus.mailer.Mail;
@@ -20,17 +21,17 @@ public class MailSender {
     private static final String MEGA_DASH_URL_PLACEHOLDER = "$megaDash$";
     private static final String TEMPLATE_MAILTEXT_PLACEHOLDER = "$mailText$";
 
-    private static byte[] logoByteArray;
+    private byte[] logoByteArray;
 
 
     @ConfigProperty(name = "mega.image.logo.url")
-    String MEGA_IMAGE_LOGO_URL;
+    String megaImageLogoUrl;
 
     @ConfigProperty(name = "mega.wiki.eom.url")
-    String MEGA_WIKI_EOM_URL;
+    String megaWikiEomUrl;
 
     @ConfigProperty(name = "mega.dash.url")
-    String MEGA_DASH_URL;
+    String megaDashUrl;
 
     @ConfigProperty(name = "mega.mail.reminder.template.path")
     String mailTemplateTextPath;
@@ -45,41 +46,42 @@ public class MailSender {
     FileHelper fileHelper;
 
     @Inject
-    Logger LOG;
+    Logger logger;
 
     private String mailTemplateText;
 
     @PostConstruct
     void initLogoAndTemplate() {
         mailTemplateText = fileHelper.readTextOfPath(mailTemplateTextPath)
-                .replace(MEGA_DASH_URL_PLACEHOLDER, MEGA_DASH_URL);
+                .replace(MEGA_DASH_URL_PLACEHOLDER, megaDashUrl);
 
         readLogo();
     }
 
     private void readLogo() {
-        final InputStream logoInputStream = MailSender.class.getClassLoader().getResourceAsStream(MEGA_IMAGE_LOGO_URL);
+        final InputStream logoInputStream = MailSender.class.getClassLoader().getResourceAsStream(megaImageLogoUrl);
         if (logoInputStream != null) {
             try {
                 logoByteArray = new byte[logoInputStream.available()];
                 final int result = logoInputStream.read(logoByteArray);
                 if (result == -1) {
-                    LOG.error("Error while reading image file.");
+                    logger.error("Error while reading image file.");
                 }
             } catch (IOException e) {
-                LOG.error(e.getMessage());
+                logger.error(e.getMessage());
             }
         } else {
-            String msg = String.format("No image found under following Path: %s", MEGA_IMAGE_LOGO_URL);
-            LOG.error(msg);
+            String msg = String.format("No image found under following Path: %s", megaImageLogoUrl);
+            logger.error(msg);
             throw new MissingLogoException(msg);
         }
     }
 
+
     public void sendReminder(String eMail, String firstName, Reminder reminder) {
-        String subject = notificationConfig.getSubjectByReminder(reminder);
+        String subject = getSubjectForReminder(reminder);
         String text = fileHelper.readTextOfPath(
-                notificationConfig.getPathByReminder(reminder));
+                getPathForReminder(reminder));
         sendMail(eMail, firstName, subject, text);
     }
 
@@ -88,12 +90,82 @@ public class MailSender {
         String mailContent = mailTemplateText
                 .replace(NAME_PLACEHOLDER, firstName)
                 .replace(TEMPLATE_MAILTEXT_PLACEHOLDER, text)
-                .replace(EOM_WIKI_PLACEHOLDER, MEGA_WIKI_EOM_URL);
+                .replace(EOM_WIKI_PLACEHOLDER, megaWikiEomUrl);
 
 
         mailer.send(Mail.withHtml(eMail, subject, mailContent)
                 .addInlineAttachment("LogoMEGADash.png", logoByteArray, MediaType.PNG.type(), "<LogoMEGAdash@gepardec.com>"));
     }
 
+
+    public String getPathForReminder(Reminder reminder) {
+        String path;
+        switch (reminder) {
+            case EMPLOYEE_CHECK_PROJECTTIME: {
+                path = notificationConfig.getEmployeePath();
+                break;
+            }
+            case PL_PROJECT_CONTROLLING: {
+                path = notificationConfig.getPlPath();
+                break;
+            }
+            case OM_CONTROL_EMPLOYEES_CONTENT: {
+                path = notificationConfig.getOmControlEmployeesDataPath();
+                break;
+            }
+            case OM_RELEASE: {
+                path = notificationConfig.getOmReleasePath();
+                break;
+            }
+            case OM_ADMINISTRATIVE: {
+                path = notificationConfig.getOmAdministrativePath();
+                break;
+            }
+            case OM_SALARY: {
+                path = notificationConfig.getOmSalaryPath();
+                break;
+            }
+            default: {
+                path = null;
+                break;
+            }
+        }
+        return path;
+    }
+
+    public String getSubjectForReminder(Reminder reminder) {
+        String subject;
+        switch (reminder) {
+            case EMPLOYEE_CHECK_PROJECTTIME: {
+                subject = notificationConfig.getEmployeeSubject();
+                break;
+            }
+            case PL_PROJECT_CONTROLLING: {
+                subject = notificationConfig.getPlSubject();
+                break;
+            }
+            case OM_CONTROL_EMPLOYEES_CONTENT: {
+                subject = notificationConfig.getOmControlEmployeesDataSubject();
+                break;
+            }
+            case OM_RELEASE: {
+                subject = notificationConfig.getOmReleaseSubject();
+                break;
+            }
+            case OM_ADMINISTRATIVE: {
+                subject = notificationConfig.getOmAdministrativeSubject();
+                break;
+            }
+            case OM_SALARY: {
+                subject = notificationConfig.getOmSalarySubject();
+                break;
+            }
+            default: {
+                subject = null;
+                break;
+            }
+        }
+        return subject;
+    }
 
 }

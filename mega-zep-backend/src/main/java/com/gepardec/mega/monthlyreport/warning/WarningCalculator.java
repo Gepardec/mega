@@ -1,22 +1,40 @@
-package com.gepardec.mega.monthlyreport;
+package com.gepardec.mega.monthlyreport.warning;
 
+import com.gepardec.mega.monthlyreport.ProjectTimeEntry;
+import com.gepardec.mega.monthlyreport.ProjectTimeManager;
+import com.gepardec.mega.monthlyreport.Task;
+import com.gepardec.mega.monthlyreport.journey.JourneyDirectionHandler;
+import com.gepardec.mega.monthlyreport.journey.JourneyEntry;
+import com.gepardec.mega.monthlyreport.journey.JourneyWarning;
 import com.gepardec.mega.utils.DateUtils;
 
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.gepardec.mega.monthlyreport.TimeWarning.*;
+import static com.gepardec.mega.monthlyreport.warning.TimeWarning.*;
 
-class WarningCalculator {
-
+public class WarningCalculator {
     private List<TimeWarning> timeWarnings = new ArrayList<>(0);
-
     private List<JourneyWarning> journeyWarnings = new ArrayList<>(0);
+    private WarningConfig warningConfig;
 
+    public WarningCalculator() {
+        initWarningConfig();
+    }
+
+    private void initWarningConfig() {
+        BeanManager bm = CDI.current().getBeanManager();
+        Bean<WarningConfig> bean = (Bean<WarningConfig>) bm.getBeans(WarningConfig.class).iterator().next();
+        CreationalContext<WarningConfig> ctx = bm.createCreationalContext(bean);
+        warningConfig = (WarningConfig) bm.getReference(bean, WarningConfig.class, ctx);
+    }
 
     public List<TimeWarning> determineTimeWarnings(ProjectTimeManager projectTimeManager) {
-
         Set<Map.Entry<LocalDate, List<ProjectTimeEntry>>> entries = projectTimeManager.getProjectTimes().entrySet();
 
         //1. more than 10 hours a day
@@ -130,24 +148,23 @@ class WarningCalculator {
 
 
     public List<JourneyWarning> determineJourneyWarnings(ProjectTimeManager projectTimeManager) {
-
         JourneyDirectionHandler journeyDirectionHandler = new JourneyDirectionHandler();
         for (ProjectTimeEntry projectTimeEntry : projectTimeManager.getEntriesAsFlatList()) {
 
             if (projectTimeEntry instanceof JourneyEntry) {
                 JourneyEntry journeyEntry = (JourneyEntry) projectTimeEntry;
                 journeyDirectionHandler.moveTo(journeyEntry.getJourneyDirection())
-                        .ifPresent(warningType -> addToJourneyWarnings(journeyEntry, warningType));
+                        .ifPresent(warning -> addToJourneyWarnings(journeyEntry, warning));
             }
         }
         return journeyWarnings;
     }
 
 
-    private void addToJourneyWarnings(JourneyEntry journeyEntry, WarningType warning) {
+    private void addToJourneyWarnings(JourneyEntry journeyEntry, Warning warning) {
         JourneyWarning newJourneyWarning = new JourneyWarning();
         newJourneyWarning.setDate(journeyEntry.getDate());
-        newJourneyWarning.getWarnings().add(warning.getText());
+        newJourneyWarning.getWarnings().add(getTextByWarning(warning));
 
 
         Optional<JourneyWarning> journeyWarning = journeyWarnings.stream()
@@ -159,5 +176,45 @@ class WarningCalculator {
         } else {
             journeyWarnings.add(newJourneyWarning);
         }
+    }
+
+
+    public String getTextByWarning(Warning warning) {
+        String warningText;
+        switch (warning) {
+            case WARNING_EXCESS_WORKTIME: {
+                warningText = warningConfig.getExcessWorktime();
+                break;
+            }
+            case WARNING_MISSING_BREAKTIME: {
+                warningText = warningConfig.getMissingBreaktime();
+                break;
+            }
+            case WARNING_TIME_TOO_EARLY_START: {
+                warningText = warningConfig.getTooEarlyStart();
+                break;
+            }
+            case WARNING_TIME_TOO_LATE_END: {
+                warningText = warningConfig.getTooLateEnd();
+                break;
+            }
+            case WARNING_MISSING_RESTTIME: {
+                warningText = warningConfig.getMissingResttime();
+                break;
+            }
+            case WARNING_JOURNEY_BACK_MISSING: {
+                warningText = warningConfig.getMissingJourneyBack();
+                break;
+            }
+            case WARNING_JOURNEY_TO_AIM_MISSING: {
+                warningText = warningConfig.getMissingJourneyToAim();
+                break;
+            }
+            default: {
+                warningText = null;
+                break;
+            }
+        }
+        return warningText;
     }
 }

@@ -1,6 +1,6 @@
 package com.gepardec.mega.utils;
 
-import com.gepardec.mega.communication.FileReadException;
+import com.gepardec.mega.communication.exception.FileReadException;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -16,20 +16,20 @@ import java.util.stream.Stream;
 
 @ApplicationScoped
 public class FileHelper {
-    @Inject
-    Logger LOG;
 
+    @Inject
+    Logger logger;
 
     public String readTextOfPath(String pathToRead) {
         String text = null;
         try {
-            final Path path = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource(pathToRead)).toURI());
+            final Path path = Paths.get(Objects.requireNonNull(FileHelper.class.getClassLoader().getResource(pathToRead)).toURI());
             try (Stream<String> lines = Files.lines(path)) {
                 text = lines.collect(Collectors.joining(System.lineSeparator()));
             }
         } catch (URISyntaxException | IOException e) {
             String msg = String.format("Error reading message Text from File %s", pathToRead);
-            LOG.error(msg);
+            logger.error(msg);
             throw new FileReadException(msg, e);
         }
         return text;

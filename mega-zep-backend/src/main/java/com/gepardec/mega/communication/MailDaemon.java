@@ -1,9 +1,11 @@
 package com.gepardec.mega.communication;
 
 import com.gepardec.mega.communication.dates.BusinessDayCalculator;
+import com.gepardec.mega.communication.exception.MissingReceiverException;
 import com.gepardec.mega.utils.DateUtils;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import io.quarkus.scheduler.Scheduled;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
@@ -16,9 +18,6 @@ import static com.gepardec.mega.communication.Reminder.*;
 
 @ApplicationScoped
 public class MailDaemon {
-
-    static final String CRON_CONFIG = "0 0 9 ? * MON-FRI";
-
     @Inject
     BusinessDayCalculator businessDayCalculator;
 
@@ -37,8 +36,12 @@ public class MailDaemon {
     @ConfigProperty(name = "mega.mail.reminder.om")
     String omMailAddresses;
 
-    @Scheduled(cron = CRON_CONFIG)
+    @ConfigProperty(name = "mega.mail.employees.notification")
+    boolean employeesNotification;
+
+    @Scheduled(cron = "{mega.mail.cron.config}")
     void sendReminder() {
+        logger.info("Mail-Daemon-cron-job started at {}", DateUtils.today().toString());
         Optional<Reminder> reminder = businessDayCalculator.getEventForDate(DateUtils.today());
         if (reminder.isPresent()) {
             switch (reminder.get()) {
@@ -47,7 +50,7 @@ public class MailDaemon {
                     break;
                 }
                 case PL_PROJECT_CONTROLLING: {
-                    sendReminderToPL();
+                    sendReminderToPl();
                     break;
                 }
                 case OM_CONTROL_EMPLOYEES_CONTENT: {
@@ -73,14 +76,15 @@ public class MailDaemon {
         }
     }
 
-    void sendReminderToPL() {
+    void sendReminderToPl() {
         if (plMailAddresses == null) {
             String msg = "No mail address for project-leaders available, check value for property 'mega.mail.reminder.pl'!";
             logger.error(msg);
             throw new MissingReceiverException(msg);
         }
-        Arrays.asList(plMailAddresses.split(","))
+        Arrays.asList(plMailAddresses.split("\\,"))
                 .forEach(mailAddress -> mailSender.sendReminder(mailAddress, getNameByMail(mailAddress), PL_PROJECT_CONTROLLING));
+        logger.info("PL-Notification sent for reminder {}", PL_PROJECT_CONTROLLING.name());
     }
 
     void sendReminderToOm(Reminder reminder) {
@@ -89,17 +93,27 @@ public class MailDaemon {
             logger.error(msg);
             throw new MissingReceiverException(msg);
         }
-        Arrays.asList(omMailAddresses.split(","))
+        Arrays.asList(omMailAddresses.split("\\,"))
                 .forEach(mailAddress -> mailSender.sendReminder(mailAddress, getNameByMail(mailAddress), reminder));
+        logger.info("OM-Notification sent for reminder {}", reminder.name());
     }
 
     void sendReminderToUser() {
-        workerService.getAllEmployees()
-                .forEach(employee -> mailSender.sendReminder(employee.getEmail(), employee.getVorname(), EMPLOYEE_CHECK_PROJECTTIME));
+        if (employeesNotification) {
+            workerService.getAllActiveEmployees()
+                    .forEach(employee -> mailSender.sendReminder(employee.getEmail(), employee.getVorname(), EMPLOYEE_CHECK_PROJECTTIME));
+            logger.info("Reminder to employees sent");
+        }
+        logger.info("NO Reminder to employes sent, cause mega.mail.employees.notification-property is false");
     }
 
-    //TODO: remove immediately when names are available
-    private static String getNameByMail(String eMail) {
-        return eMail.split(".")[0];
+    //TODO: remove immediately when names are available with persistence layer
+    static String getNameByMail(String eMail) {
+        String[] mailParts = StringUtils.defaultIfBlank(eMail, "").split("\\.");
+        if (mailParts != null && !StringUtils.isBlank(mailParts[0])) {
+            String firstName = mailParts[0];
+            return firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+        }
+        return StringUtils.EMPTY;
     }
 }

@@ -2,34 +2,36 @@ package com.gepardec.mega;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gepardec.mega.model.google.GoogleUser;
-import com.gepardec.mega.monthlyreport.JourneyWarning;
 import com.gepardec.mega.monthlyreport.MonthlyReport;
-import com.gepardec.mega.monthlyreport.WarningType;
+import com.gepardec.mega.monthlyreport.journey.JourneyWarning;
+import com.gepardec.mega.monthlyreport.warning.TimeWarning;
+import com.gepardec.mega.monthlyreport.warning.WarningConfig;
 import com.gepardec.mega.utils.DateUtils;
 import de.provantis.zep.MitarbeiterType;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.gepardec.mega.monthlyreport.WarningType.WARNING_JOURNEY_BACK_MISSING;
-import static com.gepardec.mega.monthlyreport.WarningType.WARNING_JOURNEY_TO_AIM_MISSING;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
-@Disabled
 public class MonthlyReportTest {
 
     private final static ObjectMapper objectMapper = new ObjectMapper();
     private final static GoogleUser googleUser = new GoogleUser();
+
+    @Inject
+    WarningConfig warningConfig;
+
 
     static void initWithUserAndReleaseDate(String email, LocalDate releaseDate) throws IOException {
         googleUser.setEmail(email);
@@ -66,18 +68,17 @@ public class MonthlyReportTest {
 
         final MonthlyReport monthlyReport = objectMapper.readValue(response, MonthlyReport.class);
 
-        Map<LocalDate, List<WarningType>> journeyWarningsByDay = monthlyReport.getJourneyWarnings().stream()
+        Map<LocalDate, List<String>> journeyWarningsByDay = monthlyReport.getJourneyWarnings().stream()
                 .sorted(Comparator.comparing(JourneyWarning::getDate))
-                .collect(Collectors.toMap(JourneyWarning::getDate, journeyWarning -> new ArrayList(journeyWarning.getWarnings()),
-                        (v1, v2) -> v1,
-                        LinkedHashMap::new));
+                .collect(Collectors.toMap(JourneyWarning::getDate,
+                        journeyWarning -> new ArrayList(journeyWarning.getWarnings()), (v1, v2) -> v1, LinkedHashMap::new));
 
         assertAll(
                 () -> assertEquals(4, monthlyReport.getJourneyWarnings().size()),
-                () -> assertWarningTypeInWarningOfDay(journeyWarningsByDay, LocalDate.of(2019, 11, 4), WARNING_JOURNEY_TO_AIM_MISSING),
-                () -> assertWarningTypeInWarningOfDay(journeyWarningsByDay, LocalDate.of(2019, 11, 12), WARNING_JOURNEY_TO_AIM_MISSING),
-                () -> assertWarningTypeInWarningOfDay(journeyWarningsByDay, LocalDate.of(2019, 11, 14), WARNING_JOURNEY_TO_AIM_MISSING, WARNING_JOURNEY_BACK_MISSING),
-                () -> assertWarningTypeInWarningOfDay(journeyWarningsByDay, LocalDate.of(2019, 11, 18), WARNING_JOURNEY_BACK_MISSING)
+                () -> assertWarningTypeInWarningOfDay(journeyWarningsByDay, LocalDate.of(2019, 11, 4), warningConfig.getMissingJourneyToAim()),
+                () -> assertWarningTypeInWarningOfDay(journeyWarningsByDay, LocalDate.of(2019, 11, 12), warningConfig.getMissingJourneyToAim()),
+                () -> assertWarningTypeInWarningOfDay(journeyWarningsByDay, LocalDate.of(2019, 11, 14), warningConfig.getMissingJourneyToAim(), warningConfig.getMissingJourneyBack()),
+                () -> assertWarningTypeInWarningOfDay(journeyWarningsByDay, LocalDate.of(2019, 11, 18), warningConfig.getMissingJourneyBack())
         );
     }
 
@@ -95,33 +96,38 @@ public class MonthlyReportTest {
 
         final MonthlyReport monthlyReport = objectMapper.readValue(response, MonthlyReport.class);
 
-        //TODO: fix
-//        Map<LocalDate, List<WarningType>> timeWarningsByDay = monthlyReport.getTimeWarnings().stream()
-//                .sorted(Comparator.comparing(TimeWarning::getDate))
-//                .collect(Collectors.toMap(TimeWarning::getDate,
-//                        TimeWarning::getWarnings,
-//                        (v1, v2) -> v1,
-//                        LinkedHashMap::new));
-//
-//        assertAll("Errors in timeWarning-Tests: ",
-//                () -> assertEquals(9, monthlyReport.getTimeWarnings().size()),
-//                //more than 10 hourse work, but also journey-time
-//                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 5), WARNING_TIME_MORE_THAN_10_HOURS),
-//                //more than 10hours, but less than 10 for working
-//                () -> assertNull(timeWarningsByDay.get(LocalDate.of(2019, 11, 6))),
-//                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 7), WARNING_TIME_TOO_LESS_BREAK),
-//                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 11), WARNING_TIME_MORE_THAN_10_HOURS),
-//                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 13), WARNING_TIME_TOO_LATE_END),
-//                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 14), WARNING_TIME_TOO_LESS_REST),
-//                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 18), WARNING_TIME_TOO_LESS_BREAK, WARNING_TIME_MORE_THAN_10_HOURS),
-//                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 19), WARNING_TIME_TOO_LATE_END),
-//                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 20), WARNING_TIME_TOO_LESS_REST, WARNING_TIME_MORE_THAN_10_HOURS),
-//                () -> assertWarningTypeInWarningOfDay(timeWarningsByDay, LocalDate.of(2019, 11, 21), WARNING_TIME_TOO_LESS_REST, WARNING_TIME_TOO_EARLY_START)
-//        );
+
+        Map<LocalDate, TimeWarning> timeWarningsByDay = monthlyReport.getTimeWarnings()
+                .stream().collect(Collectors.toMap(TimeWarning::getDate, timeWarning -> timeWarning, (v1, v2) -> v1, LinkedHashMap::new));
+
+        assertAll("Errors in timeWarning-Tests: ",
+                () -> assertEquals(9, monthlyReport.getTimeWarnings().size()),
+                //more than 10 hourse work, but also journey-time
+                () -> assertTimeWarning(timeWarningsByDay, TimeWarning.of(LocalDate.of(2019, 11, 5), null, null, 0.25)),
+                //more than 10hours, but less than 10 for working
+                () -> assertNull(timeWarningsByDay.get(LocalDate.of(2019, 11, 6))),
+                () -> assertTimeWarning(timeWarningsByDay, TimeWarning.of(LocalDate.of(2019, 11, 7), null, 0.5, null)),
+                () -> assertTimeWarning(timeWarningsByDay, TimeWarning.of(LocalDate.of(2019, 11, 11), null, null, 1.5)),
+//              () -> assertTimeWarning(timeWarningsByDay, TimeWarning.of(LocalDate.of(2019, 11, 13), WARNING_TIME_TOO_LATE_END),
+                () -> assertTimeWarning(timeWarningsByDay, TimeWarning.of(LocalDate.of(2019, 11, 14), 3.5, null, null)),
+                () -> assertTimeWarning(timeWarningsByDay, TimeWarning.of(LocalDate.of(2019, 11, 18), null, 0.5, 6d)),
+//              () -> assertTimeWarning(timeWarningsByDay, TimeWarning.of(LocalDate.of(2019, 11, 19), WARNING_TIME_TOO_LATE_END),
+                () -> assertTimeWarning(timeWarningsByDay, TimeWarning.of(LocalDate.of(2019, 11, 20), 4.75, null, 5.5)),
+                () -> assertTimeWarning(timeWarningsByDay, TimeWarning.of(LocalDate.of(2019, 11, 21), 4.0, null, null))
+        );
     }
 
 
-    private static void assertWarningTypeInWarningOfDay(Map<LocalDate, List<WarningType>> warningsByDate, LocalDate date, WarningType... expectedWarningTypes) {
-        assertTrue(warningsByDate.get(date).containsAll(expectedWarningTypes != null ? Arrays.asList(expectedWarningTypes) : new ArrayList<>(0)));
+    private void assertWarningTypeInWarningOfDay(Map<LocalDate, List<String>> warningsByDate, LocalDate date, String... expectedWarnings) {
+        assertTrue(warningsByDate.get(date).containsAll(expectedWarnings != null ? Arrays.asList(expectedWarnings) : new ArrayList<>(0)));
+    }
+
+    private void assertTimeWarning(Map<LocalDate, TimeWarning> timeWarningByDay, TimeWarning expectedTimeWarning) {
+        TimeWarning actualTimeWarning = timeWarningByDay.get(expectedTimeWarning.getDate());
+        assertAll(
+                () -> assertEquals(actualTimeWarning.getExcessWorkTime(), expectedTimeWarning.getExcessWorkTime()),
+                () -> assertEquals(actualTimeWarning.getMissingBreakTime(), expectedTimeWarning.getMissingBreakTime()),
+                () -> assertEquals(actualTimeWarning.getMissingRestTime(), expectedTimeWarning.getMissingRestTime())
+        );
     }
 }
