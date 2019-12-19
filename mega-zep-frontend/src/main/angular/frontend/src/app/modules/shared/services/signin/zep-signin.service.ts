@@ -7,13 +7,12 @@ import {Router} from "@angular/router";
 import {environment} from "../../../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {retry} from "rxjs/operators";
+import {ConfigService} from "../config/config.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ZepSigninService implements OnDestroy {
-
-  private readonly URL: string = environment.backendOrigin;
 
   private readonly CURRENT_USER: string = 'currentUser';
   private readonly CURRENT_EMPLOYEE: string = 'currentEmployee';
@@ -36,6 +35,7 @@ export class ZepSigninService implements OnDestroy {
     private router: Router,
     private http: HttpClient,
     private authService: AuthService,
+    private config: ConfigService
   ) {
     let user: SocialUser = JSON.parse(localStorage.getItem(this.CURRENT_USER));
     let employee: Employee = JSON.parse(localStorage.getItem(this.CURRENT_EMPLOYEE))
@@ -117,7 +117,7 @@ export class ZepSigninService implements OnDestroy {
 
 
   zepLogin(user: SocialUser): Observable<Employee> {
-    return this.http.post<Employee>(this.URL +
+    return this.http.post<Employee>(this.config.getBackendUrl() +
       '/user/login/', JSON.stringify(user))
       .pipe(
         retry(1),
@@ -125,7 +125,7 @@ export class ZepSigninService implements OnDestroy {
   }
 
   zepLogout(user: SocialUser): Observable<Response> {
-    return this.http.post<Response>(this.URL +
+    return this.http.post<Response>(this.config.getBackendUrl() +
       '/user/logout/', JSON.stringify(user))
       .pipe(
         retry(1)

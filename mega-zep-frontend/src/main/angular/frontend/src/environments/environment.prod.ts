@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   // Base url
-  backendOrigin: 'REPLACE_BACKEND_ORIGIN',
+  frontendOriginSegment: "mega-zep-frontend",
+  backendOriginSegment: "mega-zep-backend",
   oauthClientId: 'REPLACE_OAUTH_CLIENT_ID'
 };
