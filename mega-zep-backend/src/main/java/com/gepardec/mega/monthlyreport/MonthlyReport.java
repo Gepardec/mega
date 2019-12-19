@@ -3,6 +3,7 @@ package com.gepardec.mega.monthlyreport;
 import com.gepardec.mega.monthlyreport.journey.JourneyWarning;
 import com.gepardec.mega.monthlyreport.warning.TimeWarning;
 import com.gepardec.mega.monthlyreport.warning.WarningCalculator;
+import com.gepardec.mega.monthlyreport.warning.WarningConfig;
 import de.provantis.zep.MitarbeiterType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,10 +24,11 @@ public class MonthlyReport {
 
     private ProjectTimeManager projectTimeManager;
 
-    public MonthlyReport(MitarbeiterType employee, ProjectTimeManager projectTimeManager) {
+
+    public MonthlyReport(MitarbeiterType employee, ProjectTimeManager projectTimeManager, WarningConfig warningConfig) {
         this.projectTimeManager = projectTimeManager;
         this.employee = employee;
-        warningCalculator = new WarningCalculator();
+        warningCalculator = new WarningCalculator(warningConfig);
     }
 
     public void calculateWarnings() {
