@@ -36,7 +36,7 @@ pipeline {
 
                                         dir('mega-zep-frontend/src/main/angular/frontend') {
                                             sh "npm install"
-                                            sh 'mv -f src/environments/environment.prod.ts src/environments/environment.prod.tmp.ts'
+                                            sh 'cp -f src/environments/environment.prod.ts src/environments/environment.prod.tmp.ts'
                                         }
 
                                         buildFrontendForEnvironment('prod')
@@ -125,6 +125,7 @@ def buildFrontendForEnvironment(String environment) {
         def service = "https://${env.MEGA_ZEP_BACKEND_APP_NAME}-${env.OCP_ROUTE_SUFFIX}"
 
         dir('mega-zep-frontend/src/main/angular/frontend') {
+            sh 'rm -f src/environments/environment.prod.ts'
             sh 'cp -f src/environments/environment.prod.tmp.ts src/environments/environment.prod.ts'
             sh "sed -i -e 's|REPLACE_BACKEND_ORIGIN|${service}|g' src/environments/environment.prod.tmp.ts"
             sh "sed -i -e 's|REPLACE_OAUTH_CLIENT_ID|${googleProps['oauth.clientId']}|g' src/environments/environment.prod.ts"
