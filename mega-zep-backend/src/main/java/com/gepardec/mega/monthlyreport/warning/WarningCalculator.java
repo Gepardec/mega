@@ -8,10 +8,6 @@ import com.gepardec.mega.monthlyreport.journey.JourneyEntry;
 import com.gepardec.mega.monthlyreport.journey.JourneyWarning;
 import com.gepardec.mega.utils.DateUtils;
 
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.CDI;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,16 +19,10 @@ public class WarningCalculator {
     private List<JourneyWarning> journeyWarnings = new ArrayList<>(0);
     private WarningConfig warningConfig;
 
-    public WarningCalculator() {
-        initWarningConfig();
+    public WarningCalculator(WarningConfig warningConfig) {
+        this.warningConfig = warningConfig;
     }
 
-    private void initWarningConfig() {
-        BeanManager bm = CDI.current().getBeanManager();
-        Bean<WarningConfig> bean = (Bean<WarningConfig>) bm.getBeans(WarningConfig.class).iterator().next();
-        CreationalContext<WarningConfig> ctx = bm.createCreationalContext(bean);
-        warningConfig = (WarningConfig) bm.getReference(bean, WarningConfig.class, ctx);
-    }
 
     public List<TimeWarning> determineTimeWarnings(ProjectTimeManager projectTimeManager) {
         Set<Map.Entry<LocalDate, List<ProjectTimeEntry>>> entries = projectTimeManager.getProjectTimes().entrySet();

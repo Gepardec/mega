@@ -3,6 +3,7 @@ package com.gepardec.mega.zep.service.impl;
 import com.gepardec.mega.model.google.GoogleUser;
 import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.monthlyreport.ProjectTimeManager;
+import com.gepardec.mega.monthlyreport.warning.WarningConfig;
 import com.gepardec.mega.security.AuthorizationInterceptor;
 import com.gepardec.mega.utils.DateUtils;
 import com.gepardec.mega.zep.service.api.WorkerService;
@@ -37,6 +38,9 @@ public class WorkerServiceImpl implements WorkerService {
     @Inject
     @Named("ZepAuthorizationRequestHeaderType")
     RequestHeaderType requestHeaderType;
+
+    @Inject
+    WarningConfig warningConfig;
 
     private static final ReadMitarbeiterRequestType readMitarbeiterRequestType = new ReadMitarbeiterRequestType();
     private static final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
@@ -115,7 +119,7 @@ public class WorkerServiceImpl implements WorkerService {
             return null;
         }
         MonthlyReport monthlyReport = new MonthlyReport(employee,
-                new ProjectTimeManager(projectTimeResponse.getProjektzeitListe().getProjektzeiten()));
+                new ProjectTimeManager(projectTimeResponse.getProjektzeitListe().getProjektzeiten()), warningConfig);
         monthlyReport.calculateWarnings();
         return monthlyReport;
     }
