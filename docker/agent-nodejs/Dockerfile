@@ -11,8 +11,9 @@ RUN curl -sL https://rpm.nodesource.com/setup_12.x | bash - \
     && npm install -g @angular/cli \
     && yum clean all -y \
     && rm -rf /var/cache/yum \
-    && mkdir -p /home/jenkins/.npm \
-    && chown 1001:0 -R /npm \
-    && chown 1001:0 -R /home/jenkins
+    && chown -R 1001:0 /npm \
+    && chown -R 1001:0 /home/jenkins \
+    && chmod -R 770 /npm \
+    && chmod -R 770 /home/jenkins
 
 USER 1001

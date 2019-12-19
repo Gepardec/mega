@@ -12,6 +12,8 @@ RUN yum remove -y java-1.8.0-openjdk* \
     && rm -rf /var/cache/yum \
     && mkdir /maven \
     && curl -L --silent --show-error --fail https://archive.apache.org/dist/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.tar.gz \
-         | tar --strip-components=1 -zx -C /maven
+         | tar --strip-components=1 -zx -C /maven \
+    && chown -R 1001:0 /home/jenkins \
+    && chmod -R 770 /home/jenkins
 
 USER 1001
