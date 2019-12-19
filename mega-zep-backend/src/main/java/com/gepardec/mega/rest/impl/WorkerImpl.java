@@ -53,7 +53,7 @@ public class WorkerImpl implements WorkerApi {
     @Override
     //@Authorization(allowedRoles = {SessionUser.ROLE_ADMINISTRATOR, SessionUser.ROLE_CONTROLLER})
     public Response employees(final HttpServletRequest request, final HttpServletResponse response) {
-        final List<MitarbeiterType> mitarbeiterTypeList = workerService.getAllEmployees();
+        final List<MitarbeiterType> mitarbeiterTypeList = workerService.getAllActiveEmployees();
         if (mitarbeiterTypeList != null) {
             return Response.ok(mitarbeiterTypeList).build();
         }

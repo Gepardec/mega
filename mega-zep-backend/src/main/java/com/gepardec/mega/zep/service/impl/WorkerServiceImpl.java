@@ -4,7 +4,6 @@ import com.gepardec.mega.model.google.GoogleUser;
 import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.monthlyreport.ProjectTimeManager;
 import com.gepardec.mega.security.AuthorizationInterceptor;
-import com.gepardec.mega.security.Role;
 import com.gepardec.mega.utils.DateUtils;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import de.provantis.zep.*;
@@ -18,7 +17,6 @@ import javax.inject.Named;
 import javax.interceptor.Interceptors;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.gepardec.mega.utils.DateUtils.getFirstDayOfFollowingMonth;
 import static com.gepardec.mega.utils.DateUtils.getLastDayOfFollowingMonth;
@@ -66,18 +64,9 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public List<MitarbeiterType> getAllEmployees() {
+    public List<MitarbeiterType> getAllActiveEmployees() {
         ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType);
         return filterActiveEmployees(rmrt);
-    }
-
-    @Override
-    public List<MitarbeiterType> getEmployeesByRoles(Role... roles) {
-        Set<Role> roleSet = new HashSet(Arrays.asList(roles));
-        List<MitarbeiterType> employees = getAllEmployees();
-        return employees.stream()
-                .filter(employee -> roleSet.contains(Role.fromInt(employee.getRechte())))
-                .collect(Collectors.toList());
     }
 
     @Override

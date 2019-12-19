@@ -25,13 +25,13 @@ public class MailSender {
 
 
     @ConfigProperty(name = "mega.image.logo.url")
-    String MEGA_IMAGE_LOGO_URL;
+    String megaImageLogoUrl;
 
     @ConfigProperty(name = "mega.wiki.eom.url")
-    String MEGA_WIKI_EOM_URL;
+    String megaWikiEomUrl;
 
     @ConfigProperty(name = "mega.dash.url")
-    String MEGA_DASH_URL;
+    String megaDashUrl;
 
     @ConfigProperty(name = "mega.mail.reminder.template.path")
     String mailTemplateTextPath;
@@ -53,13 +53,13 @@ public class MailSender {
     @PostConstruct
     void initLogoAndTemplate() {
         mailTemplateText = fileHelper.readTextOfPath(mailTemplateTextPath)
-                .replace(MEGA_DASH_URL_PLACEHOLDER, MEGA_DASH_URL);
+                .replace(MEGA_DASH_URL_PLACEHOLDER, megaDashUrl);
 
         readLogo();
     }
 
     private void readLogo() {
-        final InputStream logoInputStream = MailSender.class.getClassLoader().getResourceAsStream(MEGA_IMAGE_LOGO_URL);
+        final InputStream logoInputStream = MailSender.class.getClassLoader().getResourceAsStream(megaImageLogoUrl);
         if (logoInputStream != null) {
             try {
                 logoByteArray = new byte[logoInputStream.available()];
@@ -71,13 +71,11 @@ public class MailSender {
                 LOG.error(e.getMessage());
             }
         } else {
-            String msg = String.format("No image found under following Path: %s", MEGA_IMAGE_LOGO_URL);
+            String msg = String.format("No image found under following Path: %s", megaImageLogoUrl);
             LOG.error(msg);
             throw new MissingLogoException(msg);
         }
     }
-
-
 
 
     public void sendReminder(String eMail, String firstName, Reminder reminder) {
@@ -92,7 +90,7 @@ public class MailSender {
         String mailContent = mailTemplateText
                 .replace(NAME_PLACEHOLDER, firstName)
                 .replace(TEMPLATE_MAILTEXT_PLACEHOLDER, text)
-                .replace(EOM_WIKI_PLACEHOLDER, MEGA_WIKI_EOM_URL);
+                .replace(EOM_WIKI_PLACEHOLDER, megaWikiEomUrl);
 
 
         mailer.send(Mail.withHtml(eMail, subject, mailContent)

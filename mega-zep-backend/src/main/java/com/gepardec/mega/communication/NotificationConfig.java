@@ -1,12 +1,10 @@
 package com.gepardec.mega.communication;
 
-import lombok.Getter;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-@Getter
 public class NotificationConfig {
 
     @ConfigProperty(name = "mega.mail.reminder.employee.path")
@@ -45,6 +43,51 @@ public class NotificationConfig {
     @ConfigProperty(name = "mega.mail.reminder.om.salary.subject")
     String omSalarySubject;
 
+    public String getEmployeePath() {
+        return employeePath;
+    }
 
+    public String getEmployeeSubject() {
+        return employeeSubject;
+    }
 
+    public String getPlPath() {
+        return plPath;
+    }
+
+    public String getPlSubject() {
+        return plSubject;
+    }
+
+    public String getOmControlEmployeesDataPath() {
+        return omControlEmployeesDataPath;
+    }
+
+    public String getOmControlEmployeesDataSubject() {
+        return omControlEmployeesDataSubject;
+    }
+
+    public String getOmReleasePath() {
+        return omReleasePath;
+    }
+
+    public String getOmReleaseSubject() {
+        return omReleaseSubject;
+    }
+
+    public String getOmAdministrativePath() {
+        return omAdministrativePath;
+    }
+
+    public String getOmAdministrativeSubject() {
+        return omAdministrativeSubject;
+    }
+
+    public String getOmSalaryPath() {
+        return omSalaryPath;
+    }
+
+    public String getOmSalarySubject() {
+        return omSalarySubject;
+    }
 }
