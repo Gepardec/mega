@@ -8,21 +8,21 @@ import {TimeWarning} from "../../models/MonthlyReport/TimeWarning";
 import {JourneyWarning} from "../../models/MonthlyReport/JourneyWarning";
 import {retry} from "rxjs/operators";
 import {Observable, of} from "rxjs";
+import {ConfigService} from "../config/config.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MonthlyReportService {
 
-  private URL: string = environment.backendOrigin;
-
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private config: ConfigService
   ) {
   }
 
   getAll(user: SocialUser): Observable<MonthlyReport> {
-    return this.http.post<MonthlyReport>(this.URL +
+    return this.http.post<MonthlyReport>(this.config.getBackendUrl() +
       '/worker/employee/monthendReport', JSON.stringify(user))
       .pipe(
         retry(1)

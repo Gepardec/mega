@@ -6,21 +6,21 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from "../../../../../environments/environment";
 import {configuration} from '../../constants/configuration';
 import {SocialUser} from 'angularx-social-login';
+import {ConfigService} from "../config/config.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmployeeService {
 
-  private URL: string = environment.backendOrigin;
-
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private config: ConfigService
   ) {
   }
 
   getAll(user: SocialUser): Observable<Array<Employee>> {
-    return this.http.post<Array<Employee>>(this.URL +
+    return this.http.post<Array<Employee>>(this.config.getBackendUrl() +
       '/worker/employees/', JSON.stringify(user))
       .pipe(
         retry(1)
@@ -28,7 +28,7 @@ export class EmployeeService {
   }
 
   updateAll(employees: Array<Employee>): Observable<Response> {
-    return this.http.put<Response>(this.URL +
+    return this.http.put<Response>(this.config.getBackendUrl() +
       '/worker/employees/update/', JSON.stringify(employees))
       .pipe(
         retry(1)
@@ -36,7 +36,7 @@ export class EmployeeService {
   }
 
   get(user: SocialUser): Observable<Employee> {
-    return this.http.post<Employee>(this.URL +
+    return this.http.post<Employee>(this.config.getBackendUrl() +
       '/worker/employee/', JSON.stringify(user))
       .pipe(
         retry(1)
