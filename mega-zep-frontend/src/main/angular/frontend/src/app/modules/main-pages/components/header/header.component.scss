@@ -1,0 +1,20 @@
+.toolbar {
+  background-color: rgb(67, 66, 93);
+}
+
+.header-caption h1 {
+  font-weight: bolder;
+  font-size: 35px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.nav-tabs a {
+  color: white;
+}
+
+.useractions {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}

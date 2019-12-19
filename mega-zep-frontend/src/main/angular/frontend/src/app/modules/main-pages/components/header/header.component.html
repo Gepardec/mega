@@ -1,0 +1,24 @@
+<mat-toolbar class="toolbar" color="primary">
+  <mat-toolbar-row>
+    <div class="header-caption">
+      <h1 [routerLink]="loginPageUrl[1]">MEGA</h1>
+    </div>
+
+    <div class="nav-tabs">
+      <nav mat-tab-nav-bar>
+        <a mat-tab-link
+           [routerLink]="monthlyReportPageData[1]">
+          {{monthlyReportPageData[0]}}
+        </a>
+        <a mat-tab-link
+           [routerLink]="employeePageData[1]">
+          {{employeePageData[0]}}
+        </a>
+      </nav>
+    </div>
+
+    <div class="useractions">
+      <app-user-actions></app-user-actions>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>

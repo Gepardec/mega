@@ -1,9 +1,0 @@
-<app-gridlist *ngIf="isGridlistActive" [employees]="employees" [pageIndex]="pageIndex" [pageSize]="pageSize"></app-gridlist>
-<app-tablelist *ngIf="!isGridlistActive" [dataSource]="dataSource"></app-tablelist>
-
-<mat-paginator #paginator *ngIf="isGridlistActive" showFirstLastButtons
-               [length]="employees.length"
-               [pageSize]="this.pageSize"
-               [pageSizeOptions]="this.pageSizeOptions"
-               (page)="updateList($event)">
-</mat-paginator>
