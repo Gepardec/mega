@@ -116,13 +116,12 @@ def buildRevisionForBranch(String pomLocation = "./") {
 def buildFrontendForEnvironment(String environment) {
     withCredentials([file(credentialsId: 'google-secrets', variable: 'GOOGLE_SECRET_FILE')]) {
         def googleProps = readProperties file: "${GOOGLE_SECRET_FILE}"
-        def routeSuffix;
+        def service;
         if ("prod".equals(environment)) {
-            routeSuffix = "${env.MEGA_ZEP_BACKEND_APP_NAME}-57-services.${env.OCP_DOMAIN}"
+            service = "https://${env.MEGA_ZEP_BACKEND_APP_NAME}-57-services.${env.OCP_DOMAIN}"
         } else {
-            routeSuffix = "${env.MEGA_ZEP_BACKEND_APP_NAME}-57-mega-zep-${environment}.${env.OCP_DOMAIN}"
+            service = "https://${env.MEGA_ZEP_BACKEND_APP_NAME}-57-mega-zep-${environment}.${env.OCP_DOMAIN}"
         }
-        def service = "https://${env.MEGA_ZEP_BACKEND_APP_NAME}-${env.OCP_ROUTE_SUFFIX}"
 
         dir('mega-zep-frontend/src/main/angular/frontend') {
             sh 'rm -f src/environments/environment.prod.ts'
