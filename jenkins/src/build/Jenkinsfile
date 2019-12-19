@@ -116,17 +116,14 @@ def buildFrontendForEnvironment(String environment) {
     withCredentials([file(credentialsId: 'google-secrets', variable: 'GOOGLE_SECRET_FILE')]) {
         def googleProps = readProperties file: "${GOOGLE_SECRET_FILE}"
         def service;
-        if ("prod".equals(environment)) {
-            service = "https://${env.MEGA_ZEP_BACKEND_APP_NAME}-57-services.${env.OCP_DOMAIN}"
-        } else {
-            service = "https://${env.MEGA_ZEP_BACKEND_APP_NAME}-57-mega-zep-${environment}.${env.OCP_DOMAIN}"
-        }
+        service = "https://${env.MEGA_ZEP_BACKEND_APP_NAME}-57-mega-zep-${environment}.${env.OCP_DOMAIN}"
 
         dir('mega-zep-frontend/src/main/angular/frontend') {
             sh 'rm -f src/environments/environment.prod.ts'
             sh 'cp -f src/environments/environment.prod.tmp.ts src/environments/environment.prod.ts'
-            sh "sed -i -e 's|REPLACE_BACKEND_ORIGIN|${service}|g' src/environments/environment.prod.tmp.ts"
+            sh "sed -i -e 's|REPLACE_BACKEND_ORIGIN|${service}|g' src/environments/environment.prod.ts"
             sh "sed -i -e 's|REPLACE_OAUTH_CLIENT_ID|${googleProps['oauth.clientId']}|g' src/environments/environment.prod.ts"
+            sh 'cat src/environments/environment.prod.ts'
             sh "ng build --sourceMap=false --configuration=prod"
         }
     }
