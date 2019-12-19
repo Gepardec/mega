@@ -6,8 +6,7 @@ pipeline {
     environment {
         MEGA_ZEP_BACKEND_APP_NAME = 'mega-zep-backend'
         OCP_PROJECT_NAME = "57-mega-dev"
-        OCP_DOMAIN = 'cloud.itandtel.at'
-        OCP_ROUTE_SUFFIX = "${env.OCP_PROJECT_NAME}.${env.OCP_DOMAIN}"
+        OCP_ROUTE_SUFFIX = "${OCP_PROJECT_NAME}.cloud.itandtel.at"
     }
 
     options {
@@ -34,13 +33,28 @@ pipeline {
                                     container('nodejs-container') {
                                         unstash name: "repo"
 
-                                        dir('mega-zep-frontend/src/main/angular/frontend') {
-                                            sh "npm install"
-                                            sh 'cp -f src/environments/environment.prod.ts src/environments/environment.prod.tmp.ts'
+                                        withCredentials([file(credentialsId: 'google-secrets', variable: 'GOOGLE_SECRET_FILE')]) {
+                                            def googleProps = readProperties file: "${GOOGLE_SECRET_FILE}"
+                                            def service = "https://${env.MEGA_ZEP_BACKEND_APP_NAME}-${env.OCP_ROUTE_SUFFIX}"
+
+                                            dir('mega-zep-frontend/src/main/angular/frontend') {
+                                                sh "sed -i -e 's|REPLACE_BACKEND_ORIGIN|${service}|g' src/environments/environment.prod.ts"
+                                                sh "sed -i -e 's|REPLACE_OAUTH_CLIENT_ID|${googleProps['oauth.clientId']}|g' src/environments/environment.prod.ts"
+                                                sh "npm install"
+                                                sh "ng build --sourceMap=false --configuration=prod"
+                                            }
                                         }
 
-                                        buildFrontendForEnvironment('prod')
-                                        buildFrontendForEnvironment('test')
+                                        dir('mega-zep-frontend/src/main/angular/frontend') {
+                                            openshift.withCluster() {
+                                                openshift.withProject("${OCP_PROJECT_NAME}") {
+                                                    sh "oc start-build mega-zep-frontend --commit=${env.GIT_COMMIT} \
+                                                                                         --from-dir=dist/frontend \
+                                                                                         --follow \
+                                                                                         --wait"
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -109,34 +123,5 @@ def buildRevisionForBranch(String pomLocation = "./") {
         return pom.properties['revision']
     } else {
         error("Branch not detected. branch=${branch}")
-    }
-}
-
-def buildFrontendForEnvironment(String environment) {
-    withCredentials([file(credentialsId: 'google-secrets', variable: 'GOOGLE_SECRET_FILE')]) {
-        def googleProps = readProperties file: "${GOOGLE_SECRET_FILE}"
-        def service;
-        service = "https://${env.MEGA_ZEP_BACKEND_APP_NAME}-57-mega-${environment}.${env.OCP_DOMAIN}"
-
-        dir('mega-zep-frontend/src/main/angular/frontend') {
-            sh 'rm -f src/environments/environment.prod.ts'
-            sh 'cp -f src/environments/environment.prod.tmp.ts src/environments/environment.prod.ts'
-            sh "sed -i -e 's|REPLACE_BACKEND_ORIGIN|${service}|g' src/environments/environment.prod.ts"
-            sh "sed -i -e 's|REPLACE_OAUTH_CLIENT_ID|${googleProps['oauth.clientId']}|g' src/environments/environment.prod.ts"
-            sh 'cat src/environments/environment.prod.ts'
-            sh "ng build --sourceMap=false --configuration=prod"
-        }
-    }
-
-    dir('mega-zep-frontend/src/main/angular/frontend') {
-        openshift.withCluster() {
-            openshift.withProject("${OCP_PROJECT_NAME}") {
-                sh "oc start-build mega-zep-frontend --commit=${env.GIT_COMMIT} \
-                     --from-dir=dist/frontend \
-                     --follow \
-                     --wait"
-                openshift.tag("mega-zep-frontend:latest", "mega-zep-frontend:latest-${environment}")
-            }
-        }
     }
 }
