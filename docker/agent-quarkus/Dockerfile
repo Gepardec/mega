@@ -13,3 +13,5 @@ RUN yum remove -y java-1.8.0-openjdk* \
     && mkdir /maven \
     && curl -L --silent --show-error --fail https://archive.apache.org/dist/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.tar.gz \
          | tar --strip-components=1 -zx -C /maven
+
+USER 1001

@@ -5,17 +5,14 @@ ENV NPM_CONFIG_PREFIX=/npm/.npm-global \
 
 USER root
 
-WORKDIR /
-
 # Install NodeJS
 RUN curl -sL https://rpm.nodesource.com/setup_12.x | bash - \
     && yum install -y gcc c++ make nodejs-12.5.0 \
     && npm install -g @angular/cli \
     && yum clean all -y \
     && rm -rf /var/cache/yum \
+    && mkdir -p /home/jenkins/.npm \
     && chown 1001:0 -R /npm \
     && chown 1001:0 -R /home/jenkins
-
-WORKDIR /home/jenkins
 
 USER 1001
