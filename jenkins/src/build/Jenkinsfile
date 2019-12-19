@@ -4,8 +4,10 @@ pipeline {
     agent any
 
     environment {
+        MEGA_ZEP_BACKEND_APP_NAME = 'mega-zep-backend'
         OCP_PROJECT_NAME = "57-mega-dev"
-        OCP_ROUTE_SUFFIX = "${OCP_PROJECT_NAME}.cloud.itandtel.at"
+        OCP_DOMAIN = 'cloud.itandtel.at'
+        OCP_ROUTE_SUFFIX = "${env.OCP_PROJECT_NAME}.${env.OCP_DOMAIN}"
     }
 
     options {
@@ -32,29 +34,14 @@ pipeline {
                                     container('nodejs-container') {
                                         unstash name: "repo"
 
-                                        withCredentials([file(credentialsId: 'google-secrets', variable: 'GOOGLE_SECRET_FILE')]) {
-                                            def googleProps = readProperties file: "${GOOGLE_SECRET_FILE}"
-                                            def backendProps = readServiceProperties("mega-zep-backend", 'ocp/templates')
-                                            def service = "https://${backendProps.NAME}-${env.OCP_ROUTE_SUFFIX}"
-
-                                            dir('mega-zep-frontend/src/main/angular/frontend') {
-                                                sh "sed -i -e 's|REPLACE_BACKEND_ORIGIN|${service}|g' src/environments/environment.prod.ts"
-                                                sh "sed -i -e 's|REPLACE_OAUTH_CLIENT_ID|${googleProps['oauth.clientId']}|g' src/environments/environment.prod.ts"
-                                                sh "npm install"
-                                                sh "ng build --sourceMap=false --configuration=prod"
-                                            }
-                                        }
-
                                         dir('mega-zep-frontend/src/main/angular/frontend') {
-                                            openshift.withCluster() {
-                                                openshift.withProject("${OCP_PROJECT_NAME}") {
-                                                    sh "oc start-build mega-zep-frontend --commit=${env.GIT_COMMIT} \
-                                                                                         --from-dir=dist/frontend \
-                                                                                         --follow \
-                                                                                         --wait"
-                                                }
-                                            }
+                                            sh "npm install"
+                                            sh 'mv -f src/environments/environment.prod.ts src/environments/environment.prod.tmp.ts'
                                         }
+
+                                        buildFrontendForEnvironment('prod')
+                                        buildFrontendForEnvironment('dev')
+                                        buildFrontendForEnvironment('test')
                                     }
                                 }
                             }
@@ -108,14 +95,6 @@ pipeline {
     }
 }
 
-def readServiceProperties(String service, String path = ".", String stage = "") {
-    if (stage != "") {
-        stage = "." + stage
-    }
-    def props = readProperties file: "${path}/${service}${stage}.properties"
-    return props
-}
-
 def buildRevisionForBranch(String pomLocation = "./") {
     def branch = "${env.GIT_BRANCH}".trim().toLowerCase()
     def revision = "";
@@ -131,5 +110,38 @@ def buildRevisionForBranch(String pomLocation = "./") {
         return pom.properties['revision']
     } else {
         error("Branch not detected. branch=${branch}")
+    }
+}
+
+def buildFrontendForEnvironment(String environment) {
+    withCredentials([file(credentialsId: 'google-secrets', variable: 'GOOGLE_SECRET_FILE')]) {
+        def googleProps = readProperties file: "${GOOGLE_SECRET_FILE}"
+        def routeSuffix;
+        if ("prod".equals(environment)) {
+            routeSuffix = "${env.MEGA_ZEP_BACKEND_APP_NAME}-57-services.${env.OCP_DOMAIN}"
+        } else {
+            routeSuffix = "${env.MEGA_ZEP_BACKEND_APP_NAME}-57-mega-zep-${environment}.${env.OCP_DOMAIN}"
+        }
+        def service = "https://${env.MEGA_ZEP_BACKEND_APP_NAME}-${env.OCP_ROUTE_SUFFIX}"
+
+        dir('mega-zep-frontend/src/main/angular/frontend') {
+            sh 'cp -f src/environments/environment.prod.tmp.ts src/environments/environment.prod.ts'
+            sh "sed -i -e 's|REPLACE_BACKEND_ORIGIN|${service}|g' src/environments/environment.prod.tmp.ts > "
+            sh "sed -i -e 's|REPLACE_OAUTH_CLIENT_ID|${googleProps['oauth.clientId']}|g' src/environments/environment.${environment}.ts"
+            sh "npm install"
+            sh "ng build --sourceMap=false --configuration=prod"
+        }
+    }
+
+    dir('mega-zep-frontend/src/main/angular/frontend') {
+        openshift.withCluster() {
+            openshift.withProject("${OCP_PROJECT_NAME}") {
+                sh "oc start-build mega-zep-frontend --commit=${env.GIT_COMMIT} \
+                     --from-dir=dist/frontend \
+                     --follow \
+                     --wait"
+                openshift.tag("mega-zep-frontend:latest", "mega-zep-frontend:latest-${environment}")
+            }
+        }
     }
 }
