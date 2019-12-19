@@ -41,7 +41,7 @@ public class MailDaemon {
 
     @Scheduled(cron = "{mega.mail.cron.config}")
     void sendReminder() {
-        logger.info(String.format("Mail-Daemon-cron-job started at %s", DateUtils.today().toString()));
+        logger.info("Mail-Daemon-cron-job started at {}", DateUtils.today().toString());
         Optional<Reminder> reminder = businessDayCalculator.getEventForDate(DateUtils.today());
         if (reminder.isPresent()) {
             switch (reminder.get()) {
@@ -84,6 +84,7 @@ public class MailDaemon {
         }
         Arrays.asList(plMailAddresses.split("\\,"))
                 .forEach(mailAddress -> mailSender.sendReminder(mailAddress, getNameByMail(mailAddress), PL_PROJECT_CONTROLLING));
+        logger.info("PL-Notification sent for reminder {}", PL_PROJECT_CONTROLLING.name());
     }
 
     void sendReminderToOm(Reminder reminder) {
@@ -94,18 +95,19 @@ public class MailDaemon {
         }
         Arrays.asList(omMailAddresses.split("\\,"))
                 .forEach(mailAddress -> mailSender.sendReminder(mailAddress, getNameByMail(mailAddress), reminder));
+        logger.info("OM-Notification sent for reminder {}", reminder.name());
     }
 
     void sendReminderToUser() {
         if (employeesNotification) {
-            logger.info("Reminder to employees sent");
             workerService.getAllActiveEmployees()
                     .forEach(employee -> mailSender.sendReminder(employee.getEmail(), employee.getVorname(), EMPLOYEE_CHECK_PROJECTTIME));
+            logger.info("Reminder to employees sent");
         }
         logger.info("NO Reminder to employes sent, cause mega.mail.employees.notification-property is false");
     }
 
-    //TODO: remove immediately when names are available in
+    //TODO: remove immediately when names are available with persistence layer
     static String getNameByMail(String eMail) {
         String[] mailParts = StringUtils.defaultIfBlank(eMail, "").split("\\.");
         if (mailParts != null && !StringUtils.isBlank(mailParts[0])) {

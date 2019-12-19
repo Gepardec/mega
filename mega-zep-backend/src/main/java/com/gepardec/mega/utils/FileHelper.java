@@ -16,8 +16,9 @@ import java.util.stream.Stream;
 
 @ApplicationScoped
 public class FileHelper {
+
     @Inject
-    Logger LOG;
+    Logger logger;
 
     public String readTextOfPath(String pathToRead) {
         String text = null;
@@ -28,7 +29,7 @@ public class FileHelper {
             }
         } catch (URISyntaxException | IOException e) {
             String msg = String.format("Error reading message Text from File %s", pathToRead);
-            LOG.error(msg);
+            logger.error(msg);
             throw new FileReadException(msg, e);
         }
         return text;

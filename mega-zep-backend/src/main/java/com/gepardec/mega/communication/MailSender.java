@@ -21,7 +21,7 @@ public class MailSender {
     private static final String MEGA_DASH_URL_PLACEHOLDER = "$megaDash$";
     private static final String TEMPLATE_MAILTEXT_PLACEHOLDER = "$mailText$";
 
-    private static byte[] logoByteArray;
+    private byte[] logoByteArray;
 
 
     @ConfigProperty(name = "mega.image.logo.url")
@@ -46,7 +46,7 @@ public class MailSender {
     FileHelper fileHelper;
 
     @Inject
-    Logger LOG;
+    Logger logger;
 
     private String mailTemplateText;
 
@@ -65,14 +65,14 @@ public class MailSender {
                 logoByteArray = new byte[logoInputStream.available()];
                 final int result = logoInputStream.read(logoByteArray);
                 if (result == -1) {
-                    LOG.error("Error while reading image file.");
+                    logger.error("Error while reading image file.");
                 }
             } catch (IOException e) {
-                LOG.error(e.getMessage());
+                logger.error(e.getMessage());
             }
         } else {
             String msg = String.format("No image found under following Path: %s", megaImageLogoUrl);
-            LOG.error(msg);
+            logger.error(msg);
             throw new MissingLogoException(msg);
         }
     }
