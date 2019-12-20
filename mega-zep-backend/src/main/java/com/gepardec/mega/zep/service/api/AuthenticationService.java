@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 
 public interface AuthenticationService {
-    Response login (GoogleUser user, HttpServletRequest request);
+    Response login(GoogleUser user);
+
     Response logout(HttpServletRequest request);
 }

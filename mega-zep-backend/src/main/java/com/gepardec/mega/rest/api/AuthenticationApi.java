@@ -11,22 +11,16 @@ import javax.ws.rs.core.Response;
 
 @Path("/user")
 public interface AuthenticationApi {
-
-    @OPTIONS
-    @Path("/login")
-    @Produces(MediaType.APPLICATION_JSON)
-    Response login (@Context HttpServletRequest request, @Context HttpServletResponse response);
-
     @POST
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    Response login (GoogleUser user, @Context HttpServletRequest request, @Context HttpServletResponse response);
+    Response login(GoogleUser user);
 
     @OPTIONS
     @Path("/logout")
     @Produces(MediaType.APPLICATION_JSON)
-    Response logoutPreFlight (@Context HttpServletRequest request, @Context HttpServletResponse response);
+    Response logoutPreFlight();
 
     @GET
     @Path("/logout")

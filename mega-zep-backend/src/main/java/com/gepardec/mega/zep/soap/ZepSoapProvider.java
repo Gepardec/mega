@@ -4,54 +4,53 @@ import de.provantis.zep.RequestHeaderType;
 import de.provantis.zep.ZepSoap;
 import de.provantis.zep.ZepSoapPortType;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.inject.Named;
+import javax.xml.ws.BindingProvider;
+import java.util.concurrent.TimeUnit;
 
 @ApplicationScoped
 public class ZepSoapProvider {
-
-    @Inject
-    Logger logger;
-
     @Inject
     @ConfigProperty(name = "mega.zep.admin.token")
     String authorizationToken;
 
 
+    @Inject
+    @ConfigProperty(name = "mega.zep.admin.endpoint")
+    String zepUrl;
+
     @Produces
     @Dependent
-    @Named("ZepAuthorizationSOAPPortType")
-    public ZepSoapPortType createZepSoapPortType() {
-        try {
-            final ZepSoap zs = new ZepSoap(Thread.currentThread()
-                    .getContextClassLoader()
-                    .getResource("wsdl/Zep_V7.wsdl"));
-            return zs.getZepSOAP();
-        } catch (Exception e) {
-            logger.error("Could not create zep soap port", e);
-        }
-
-        return null;
+    public ZepSoapPortType createZepSoapPortType() throws Exception {
+        final ZepSoap zs = new ZepSoap(Thread.currentThread()
+                .getContextClassLoader()
+                .getResource("wsdl/Zep_V7.wsdl"));
+        final ZepSoapPortType port = zs.getZepSOAP();
+        configureWebserviceClient((BindingProvider) port, zepUrl, 30, TimeUnit.SECONDS);
+        return port;
     }
 
     @Produces
     @Dependent
-    @Named("ZepAuthorizationToken")
-    public String zepAuthorizationToken() {
-        return authorizationToken;
-    }
-
-    @Produces
-    @Dependent
-    @Named("ZepAuthorizationRequestHeaderType")
     public RequestHeaderType createRequestHeaderType() {
         RequestHeaderType requestHeaderType = new RequestHeaderType();
         requestHeaderType.setAuthorizationToken(authorizationToken);
         return requestHeaderType;
+    }
+
+    private void configureWebserviceClient(final BindingProvider bindingProvider, final String endpoint, final Integer timeout, final TimeUnit timeoutUnit) {
+        bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
+        setTimeouts(bindingProvider, timeout, timeoutUnit);
+    }
+
+    private void setTimeouts(final BindingProvider bindingProvider, final Integer timeout, final TimeUnit timeoutUnit) {
+        final long timeoutMilis = TimeUnit.MILLISECONDS.convert(timeout, timeoutUnit);
+        //TODO: check com.sun.xml.ws - SOAP timeouts
+        bindingProvider.getRequestContext().put("com.sun.xml.ws.request.timeout", timeoutMilis);
+        bindingProvider.getRequestContext().put("javax.xml.ws.client.receiveTimeout", timeoutMilis);
     }
 }

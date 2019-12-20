@@ -6,15 +6,14 @@ import com.gepardec.mega.rest.api.WorkerApi;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import de.provantis.zep.MitarbeiterType;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@SuppressWarnings("unused")
-@ApplicationScoped
+@RequestScoped
 public class WorkerImpl implements WorkerApi {
 
     @Inject

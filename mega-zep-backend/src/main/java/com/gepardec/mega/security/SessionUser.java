@@ -19,7 +19,7 @@ public class SessionUser implements Serializable {
     private String authorizationCode;
     private Role role;
 
-    public void invalidate(){
+    public void invalidate() {
         id = null;
         email = null;
         name = null;
@@ -27,5 +27,9 @@ public class SessionUser implements Serializable {
         idToken = null;
         authorizationCode = null;
         role = null;
+    }
+
+    public boolean isLoggedIn() {
+        return id != null;
     }
 }
