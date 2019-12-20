@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.interceptor.Interceptors;
 import java.time.LocalDate;
 import java.util.*;
@@ -31,9 +32,11 @@ public class WorkerServiceImpl implements WorkerService {
     Logger logger;
 
     @Inject
+    @Named("ZepAuthorizationSOAPPortType")
     ZepSoapPortType zepSoapPortType;
 
     @Inject
+    @Named("ZepAuthorizationRequestHeaderType")
     RequestHeaderType requestHeaderType;
 
     @Inject

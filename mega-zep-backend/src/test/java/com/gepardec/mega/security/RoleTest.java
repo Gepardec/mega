@@ -9,7 +9,7 @@ public class RoleTest {
 
     @Test
     void fromInt_when0_shouldReturnRoleUser() {
-        assertEquals(Role.ROLE_USER, Role.fromInt(0).get());
+        assertEquals(Role.USER, Role.fromInt(0).get());
     }
 
     @Test

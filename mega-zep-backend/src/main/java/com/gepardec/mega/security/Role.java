@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum Role {
-    ROLE_USER(0),
-    ROLE_ADMINISTRATOR(1),
-    ROLE_CONTROLLER(2);
+    USER(0),
+    ADMINISTRATOR(1),
+    CONTROLLER(2);
 
     private static Map<Integer, Role> enumMap = Stream.of(values())
             .collect(Collectors.toMap(role -> role.roleId, role -> role));
@@ -19,6 +19,7 @@ public enum Role {
         this.roleId = roleId;
     }
 
+    //TODO: return list of roles, ADMIN = user+controler+admin, controller=user+contorler, user=user
     public static Optional<Role> fromInt(Integer roleId) {
         return Optional.of(enumMap.get(roleId));
     }

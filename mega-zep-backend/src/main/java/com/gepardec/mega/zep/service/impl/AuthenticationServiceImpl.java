@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 
@@ -19,21 +20,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     Logger logger;
 
     @Inject
+    @Named("ZepAuthorizationSOAPPortType")
     ZepSoapPortType zepSoapPortType;
 
     @Inject
+    @Named("ZepAuthorizationRequestHeaderType")
     RequestHeaderType requestHeaderType;
+
 
     @Inject
     SessionUser sessionUser;
 
-    //TODO: do we really need 2 different return types
     @Override
     public Response login(GoogleUser user) {
         if (user == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Google user missing").build();
         }
-        //TODO: is google user really the logged in user, if user is logged in
         if (sessionUser.isLoggedIn()) {
             return Response.ok(user).build();
         }
@@ -47,6 +49,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final MitarbeiterType mt = rmrt.getMitarbeiterListe().getMitarbeiter().stream()
                 .filter(emp -> user.getEmail().equals(emp.getEmail()))
                 .findFirst().orElse(null);
+        //TODO: mapping to new Response-Object
 
         // invalidate session when theres no appropriate employee
         if (mt == null) {
@@ -61,6 +64,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         sessionUser.setRole(Role.fromInt(mt.getRechte()).orElse(null));
 
         logger.info("Authentication of user with name {} successful", user.getName());
+        //TODO: translate Mitarbeitertype to GoogleUser
         return Response.ok(mt).build();
     }
 

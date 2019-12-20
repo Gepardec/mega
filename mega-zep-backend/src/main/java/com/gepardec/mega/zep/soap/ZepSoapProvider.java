@@ -9,6 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.ws.BindingProvider;
 import java.util.concurrent.TimeUnit;
 
@@ -25,32 +26,34 @@ public class ZepSoapProvider {
 
     @Produces
     @Dependent
+    @Named("ZepAuthorizationSOAPPortType")
     public ZepSoapPortType createZepSoapPortType() throws Exception {
         final ZepSoap zs = new ZepSoap(Thread.currentThread()
                 .getContextClassLoader()
                 .getResource("wsdl/Zep_V7.wsdl"));
         final ZepSoapPortType port = zs.getZepSOAP();
-        configureWebserviceClient((BindingProvider) port, zepUrl, 30, TimeUnit.SECONDS);
+        configureWebserviceClient((BindingProvider) port, zepUrl, 30L, TimeUnit.SECONDS);
         return port;
     }
 
     @Produces
     @Dependent
+    @Named("ZepAuthorizationRequestHeaderType")
     public RequestHeaderType createRequestHeaderType() {
         RequestHeaderType requestHeaderType = new RequestHeaderType();
         requestHeaderType.setAuthorizationToken(authorizationToken);
         return requestHeaderType;
     }
 
-    private void configureWebserviceClient(final BindingProvider bindingProvider, final String endpoint, final Integer timeout, final TimeUnit timeoutUnit) {
+    private void configureWebserviceClient(final BindingProvider bindingProvider, final String endpoint, final Long timeout, final TimeUnit timeoutUnit) {
         bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
         setTimeouts(bindingProvider, timeout, timeoutUnit);
     }
 
-    private void setTimeouts(final BindingProvider bindingProvider, final Integer timeout, final TimeUnit timeoutUnit) {
-        final long timeoutMilis = TimeUnit.MILLISECONDS.convert(timeout, timeoutUnit);
+    private void setTimeouts(final BindingProvider bindingProvider, final Long timeout, final TimeUnit timeoutUnit) {
+        final long timeoutMillis = TimeUnit.MILLISECONDS.convert(timeout, timeoutUnit);
         //TODO: check com.sun.xml.ws - SOAP timeouts
-        bindingProvider.getRequestContext().put("com.sun.xml.ws.request.timeout", timeoutMilis);
-        bindingProvider.getRequestContext().put("javax.xml.ws.client.receiveTimeout", timeoutMilis);
+        bindingProvider.getRequestContext().put("com.sun.xml.ws.request.timeout", timeoutMillis);
+        bindingProvider.getRequestContext().put("javax.xml.ws.client.receiveTimeout", timeoutMillis);
     }
 }
