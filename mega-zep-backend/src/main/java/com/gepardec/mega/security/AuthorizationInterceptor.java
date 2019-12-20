@@ -1,58 +1,33 @@
 package com.gepardec.mega.security;
 
-import com.gepardec.mega.annotations.Authorization;
-import org.slf4j.Logger;
-
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Stream;
 
-@Authorization
+@Authorization(allowedRoles = Role.ROLE_USER)
 @Interceptor
 public class AuthorizationInterceptor {
-
-    @Inject
-    Logger logger;
-
     @Inject
     SessionUser sessionUser;
 
     @AroundInvoke
     public Object intercept(InvocationContext invocationContext) throws Exception {
 
-        final Authorization authorizationAnnotation = invocationContext.getMethod().getAnnotation(Authorization.class);
-
-        if(authorizationAnnotation != null){
-            Role[] allowedRoles = authorizationAnnotation.allowedRoles();
-            for (Role allowedRole : allowedRoles) {
-                if(allowedRole == sessionUser.getRole()){
-                    return invocationContext.proceed();
-                }
-            }
-
-            logInsufficientPermission(invocationContext);
-
-            final HttpServletResponse httpServletResponse = getHttpServletResponse(invocationContext);
-            if(httpServletResponse != null){
-                httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
-            }
-
-            return null;
-        } else {
-            return invocationContext.proceed();
+        Authorization authorizationAnnotation = invocationContext.getMethod().getAnnotation(Authorization.class);
+        if (authorizationAnnotation == null) {
+            authorizationAnnotation = invocationContext.getTarget().getClass().getAnnotation(Authorization.class);
         }
-    }
 
-    private HttpServletResponse getHttpServletResponse(InvocationContext ic){
-        return Arrays.stream(ic.getParameters()).filter(HttpServletResponse.class::isInstance).map(HttpServletResponse.class::cast).findFirst().orElse(null);
-    }
+        Objects.requireNonNull(authorizationAnnotation, "Could not resolve Authorizaion annotation. Do you use Stereotype annotations, which are currently not supported?");
 
-    private void logInsufficientPermission(InvocationContext invocationContext){
-        final String methodName = invocationContext.getMethod().getDeclaringClass().getSimpleName() +
-                "." + invocationContext.getMethod().getName();
-        logger.warn("User {} has insufficient permissions to call {}", sessionUser.getName(), methodName);
+        Role[] allowedRoles = authorizationAnnotation.allowedRoles();
+        if (Stream.of(allowedRoles).anyMatch(role -> role.equals(sessionUser.getRole()))) {
+            return invocationContext.proceed();
+        } else {
+            throw new SecurityException(String.format("user has insufficient role %s", sessionUser.getRole()));
+        }
     }
 }

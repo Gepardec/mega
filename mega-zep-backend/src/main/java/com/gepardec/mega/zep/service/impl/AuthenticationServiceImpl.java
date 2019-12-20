@@ -57,7 +57,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 sessionUser.setAuthToken(user.getAuthToken());
                 sessionUser.setIdToken(user.getIdToken());
                 sessionUser.setName(user.getName());
-                sessionUser.setRole(Role.fromInt(mt.getRechte()));
+                sessionUser.setRole(Role.fromInt(mt.getRechte()).orElse(null));
             }
             catch (Exception e) {
                 logger.info("Authentication of user with name {} failed: ", user.getName());

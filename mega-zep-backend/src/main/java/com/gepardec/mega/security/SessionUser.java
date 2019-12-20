@@ -17,7 +17,7 @@ public class SessionUser implements Serializable {
     private String authToken;
     private String idToken;
     private String authorizationCode;
-    private Role role = Role.NO_ROLE;
+    private Role role;
 
     public void invalidate(){
         id = null;
@@ -26,6 +26,6 @@ public class SessionUser implements Serializable {
         authToken = null;
         idToken = null;
         authorizationCode = null;
-        role = Role.NO_ROLE;
+        role = null;
     }
 }
