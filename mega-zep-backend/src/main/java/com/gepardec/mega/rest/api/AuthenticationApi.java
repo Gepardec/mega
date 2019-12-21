@@ -3,7 +3,6 @@ package com.gepardec.mega.rest.api;
 import com.gepardec.mega.model.google.GoogleUser;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -17,13 +16,8 @@ public interface AuthenticationApi {
     @Consumes(MediaType.APPLICATION_JSON)
     Response login(GoogleUser user);
 
-    @OPTIONS
+    @POST
     @Path("/logout")
     @Produces(MediaType.APPLICATION_JSON)
-    Response logoutPreFlight();
-
-    @GET
-    @Path("/logout")
-    @Produces(MediaType.APPLICATION_JSON)
-    Response logout (@Context HttpServletRequest request, @Context HttpServletResponse response);
+    Response logout(@Context HttpServletRequest request);
 }

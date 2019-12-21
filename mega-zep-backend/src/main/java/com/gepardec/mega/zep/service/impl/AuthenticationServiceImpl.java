@@ -1,17 +1,19 @@
 package com.gepardec.mega.zep.service.impl;
 
-import com.gepardec.mega.model.google.GoogleUser;
-import com.gepardec.mega.security.Role;
 import com.gepardec.mega.security.SessionUser;
+import com.gepardec.mega.security.UnauthorizedException;
 import com.gepardec.mega.zep.service.api.AuthenticationService;
-import de.provantis.zep.*;
+import com.gepardec.mega.zep.soap.ZepSoapProvider;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import de.provantis.zep.MitarbeiterType;
+import de.provantis.zep.ReadMitarbeiterRequestType;
+import de.provantis.zep.ReadMitarbeiterResponseType;
+import de.provantis.zep.ZepSoapPortType;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Response;
+import java.security.GeneralSecurityException;
 
 @RequestScoped
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -20,57 +22,49 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     Logger logger;
 
     @Inject
-    @Named("ZepAuthorizationSOAPPortType")
     ZepSoapPortType zepSoapPortType;
 
     @Inject
-    @Named("ZepAuthorizationRequestHeaderType")
-    RequestHeaderType requestHeaderType;
+    GoogleIdTokenVerifier tokenVerifier;
 
+    @Inject
+    ZepSoapProvider zepSoapProvider;
 
     @Inject
     SessionUser sessionUser;
 
     @Override
-    public Response login(GoogleUser user) {
-        if (user == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Google user missing").build();
-        }
+    public MitarbeiterType login(String email, String idToken) {
         if (sessionUser.isLoggedIn()) {
-            return Response.ok(user).build();
+            return null;
+        }
+
+        try {
+            tokenVerifier.verify(idToken);
+        } catch (GeneralSecurityException e) {
+            throw new UnauthorizedException(String.format("IdToken of user '%s' is invalid", email));
+        } catch (Exception e) {
+            throw new IllegalStateException(String.format("Could not verify idToken for user '%s'", email));
         }
 
         // get ZEP employee
         final ReadMitarbeiterRequestType empl = new ReadMitarbeiterRequestType();
-        empl.setRequestHeader(requestHeaderType);
+        empl.setRequestHeader(zepSoapProvider.createRequestHeaderType());
 
         final ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(empl);
         //TODO: contact ZEP for enabling search-criteria for mail-address
         final MitarbeiterType mt = rmrt.getMitarbeiterListe().getMitarbeiter().stream()
-                .filter(emp -> user.getEmail().equals(emp.getEmail()))
+                .filter(emp -> email.equals(emp.getEmail()))
                 .findFirst().orElse(null);
-        //TODO: mapping to new Response-Object
 
         // invalidate session when theres no appropriate employee
         if (mt == null) {
-            throw new SecurityException(String.format("employee with id %s not found in ZEP", user.getEmail()));
+            throw new SecurityException(String.format("employee with id %s not found in ZEP", email));
         }
 
-        sessionUser.setAuthorizationCode(user.getAuthorizationCode());
-        sessionUser.setEmail(user.getEmail());
-        sessionUser.setAuthToken(user.getAuthToken());
-        sessionUser.setIdToken(user.getIdToken());
-        sessionUser.setName(user.getName());
-        sessionUser.setRole(Role.fromInt(mt.getRechte()).orElse(null));
+        sessionUser.init(email, idToken, mt.getRechte());
 
-        logger.info("Authentication of user with name {} successful", user.getName());
-        //TODO: translate Mitarbeitertype to GoogleUser
-        return Response.ok(mt).build();
-    }
-
-    @Override
-    public Response logout(HttpServletRequest request) {
-        request.getSession().invalidate();
-        return Response.ok().build();
+        logger.info("User '{}' logged in", email);
+        return mt;
     }
 }

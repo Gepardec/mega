@@ -20,7 +20,7 @@ public enum Role {
     }
 
     //TODO: return list of roles, ADMIN = user+controler+admin, controller=user+contorler, user=user
-    public static Optional<Role> fromInt(Integer roleId) {
+    public static Optional<Role> forId(Integer roleId) {
         return Optional.of(enumMap.get(roleId));
     }
 }

@@ -4,18 +4,15 @@ import com.gepardec.mega.model.google.GoogleUser;
 import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.monthlyreport.ProjectTimeManager;
 import com.gepardec.mega.monthlyreport.warning.WarningConfig;
-import com.gepardec.mega.security.AuthorizationInterceptor;
 import com.gepardec.mega.utils.DateUtils;
 import com.gepardec.mega.zep.service.api.WorkerService;
+import com.gepardec.mega.zep.soap.ZepSoapProvider;
 import de.provantis.zep.*;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
-import javax.interceptor.Interceptors;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -24,7 +21,6 @@ import static com.gepardec.mega.utils.DateUtils.getLastDayOfFollowingMonth;
 import static com.gepardec.mega.zep.service.ZepStatusCodeMapper.toHttpResponseCode;
 import static java.lang.String.format;
 
-@Interceptors(AuthorizationInterceptor.class)
 @RequestScoped
 public class WorkerServiceImpl implements WorkerService {
 
@@ -32,30 +28,20 @@ public class WorkerServiceImpl implements WorkerService {
     Logger logger;
 
     @Inject
-    @Named("ZepAuthorizationSOAPPortType")
     ZepSoapPortType zepSoapPortType;
 
     @Inject
-    @Named("ZepAuthorizationRequestHeaderType")
-    RequestHeaderType requestHeaderType;
+    ZepSoapProvider zepSoapProvider;
 
     @Inject
     WarningConfig warningConfig;
-
-    private static final ReadMitarbeiterRequestType readMitarbeiterRequestType = new ReadMitarbeiterRequestType();
-    private static final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
-
-    @PostConstruct
-    void init() {
-        readMitarbeiterRequestType.setRequestHeader(requestHeaderType);
-        projektzeitenRequest.setRequestHeader(requestHeaderType);
-    }
-
 
     @Override
     public MitarbeiterType getEmployee(final GoogleUser user) {
 
         try {
+            final ReadMitarbeiterRequestType readMitarbeiterRequestType = new ReadMitarbeiterRequestType();
+            readMitarbeiterRequestType.setRequestHeader(zepSoapProvider.createRequestHeaderType());
             final List<MitarbeiterType> employees = flatMap(zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType));
             return employees.stream()
                     .filter(e -> e.getEmail() != null && e.getEmail().equals(user.getEmail()))
@@ -69,6 +55,8 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public List<MitarbeiterType> getAllActiveEmployees() {
+        final ReadMitarbeiterRequestType readMitarbeiterRequestType = new ReadMitarbeiterRequestType();
+        readMitarbeiterRequestType.setRequestHeader(zepSoapProvider.createRequestHeaderType());
         ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType);
         return filterActiveEmployees(rmrt);
     }
@@ -91,6 +79,8 @@ public class WorkerServiceImpl implements WorkerService {
         if (employee == null) {
             return null;
         }
+        final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
+        projektzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
         ReadProjektzeitenSearchCriteriaType searchCriteria = createProjectTimeSearchCriteria(employee);
         projektzeitenRequest.setReadProjektzeitenSearchCriteria(searchCriteria);
 
@@ -129,7 +119,7 @@ public class WorkerServiceImpl implements WorkerService {
     public Integer updateEmployee(final MitarbeiterType employee) {
         try {
             final UpdateMitarbeiterRequestType umrt = new UpdateMitarbeiterRequestType();
-            umrt.setRequestHeader(requestHeaderType);
+            umrt.setRequestHeader(zepSoapProvider.createRequestHeaderType());
             umrt.setMitarbeiter(employee);
 
             final UpdateMitarbeiterResponseType updateMitarbeiterResponseType = zepSoapPortType.updateMitarbeiter(umrt);

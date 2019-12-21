@@ -5,31 +5,27 @@ import lombok.NoArgsConstructor;
 
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
 @SessionScoped
 public class SessionUser implements Serializable {
-    private static final long serialVersionUID = 1L;
     private String id;
     private String email;
-    private String name;
-    private String authToken;
     private String idToken;
-    private String authorizationCode;
     private Role role;
+    private boolean logged;
 
-    public void invalidate() {
-        id = null;
-        email = null;
-        name = null;
-        authToken = null;
-        idToken = null;
-        authorizationCode = null;
-        role = null;
+    public void init(final String email, final String idToken, final int recht) {
+        this.email = Objects.requireNonNull(email, "SessionUser must have an email");
+        this.idToken = Objects.requireNonNull(idToken, "SessionUser must have an idToken");
+        this.role = Role.forId(recht).orElse(null);
+        this.logged = true;
     }
 
     public boolean isLoggedIn() {
-        return id != null;
+        return logged;
     }
+
 }

@@ -3,8 +3,9 @@ package com.gepardec.mega.rest.impl;
 import com.gepardec.mega.model.google.GoogleUser;
 import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.rest.api.WorkerApi;
-import com.gepardec.mega.security.Authorization;
+import com.gepardec.mega.security.RolesAllowed;
 import com.gepardec.mega.security.Role;
+import com.gepardec.mega.security.Secured;
 import com.gepardec.mega.security.SessionUser;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import de.provantis.zep.MitarbeiterType;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 @RequestScoped
+@Secured
 public class WorkerImpl implements WorkerApi {
 
     @Inject
@@ -45,7 +47,7 @@ public class WorkerImpl implements WorkerApi {
 
 
     @Override
-    @Authorization(allowedRoles = {Role.ADMINISTRATOR})
+    @RolesAllowed(allowedRoles = {Role.ADMINISTRATOR})
     public Response employees() {
         final List<MitarbeiterType> mitarbeiterTypeList = workerService.getAllActiveEmployees();
         if (mitarbeiterTypeList != null) {
@@ -56,14 +58,14 @@ public class WorkerImpl implements WorkerApi {
 
 
     @Override
-    @Authorization(allowedRoles = {Role.ADMINISTRATOR})
+    @RolesAllowed(allowedRoles = {Role.ADMINISTRATOR})
     public Response employeesUpdate(final List<MitarbeiterType> employees) {
         return Response.status(workerService.updateEmployees(employees)).build();
     }
 
 
     @Override
-    @Authorization(allowedRoles = {Role.ADMINISTRATOR, Role.USER})
+    @RolesAllowed(allowedRoles = {Role.ADMINISTRATOR, Role.USER})
     public Response employeeUpdate(final MitarbeiterType employee) {
         if (Role.USER.equals(sessionUser.getRole()) && !sessionUser.getEmail().equals(employee.getEmail())) {
             throw new SecurityException("User with userrole can not update other users");
