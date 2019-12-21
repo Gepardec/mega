@@ -1,5 +1,6 @@
 package com.gepardec.mega.zep.service.impl;
 
+import com.gepardec.mega.security.ForbiddenException;
 import com.gepardec.mega.security.SessionUser;
 import com.gepardec.mega.security.UnauthorizedException;
 import com.gepardec.mega.zep.service.api.AuthenticationService;
@@ -9,17 +10,13 @@ import de.provantis.zep.MitarbeiterType;
 import de.provantis.zep.ReadMitarbeiterRequestType;
 import de.provantis.zep.ReadMitarbeiterResponseType;
 import de.provantis.zep.ZepSoapPortType;
-import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import java.security.GeneralSecurityException;
+import java.util.Optional;
 
 @RequestScoped
 public class AuthenticationServiceImpl implements AuthenticationService {
-
-    @Inject
-    Logger logger;
 
     @Inject
     ZepSoapPortType zepSoapPortType;
@@ -34,17 +31,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     SessionUser sessionUser;
 
     @Override
-    public MitarbeiterType login(String email, String idToken) {
-        if (sessionUser.isLoggedIn()) {
-            return null;
-        }
+    public MitarbeiterType login(String idToken) {
+        String email;
 
         try {
-            tokenVerifier.verify(idToken);
-        } catch (GeneralSecurityException e) {
-            throw new UnauthorizedException(String.format("IdToken of user '%s' is invalid", email));
+            email = Optional.ofNullable(tokenVerifier.verify(idToken))
+                    .orElseThrow(() -> new UnauthorizedException("IdToken was invalid"))
+                    .getPayload()
+                    .getEmail();
         } catch (Exception e) {
-            throw new IllegalStateException(String.format("Could not verify idToken for user '%s'", email));
+            throw new IllegalStateException("Could not verify idToken", e);
         }
 
         // get ZEP employee
@@ -57,14 +53,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .filter(emp -> email.equals(emp.getEmail()))
                 .findFirst().orElse(null);
 
-        // invalidate session when theres no appropriate employee
         if (mt == null) {
-            throw new SecurityException(String.format("employee with id %s not found in ZEP", email));
+            throw new ForbiddenException(String.format("'%s' is not an employee in ZEP", email));
         }
 
+        // Could be re-logged in with different user within the same session
         sessionUser.init(email, idToken, mt.getRechte());
 
-        logger.info("User '{}' logged in", email);
         return mt;
     }
 }

@@ -1,6 +1,6 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.security.PermissionDeniedException;
+import com.gepardec.mega.security.ForbiddenException;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -11,14 +11,14 @@ import javax.ws.rs.ext.Provider;
 
 @ApplicationScoped
 @Provider
-public class PermissionDeniedExceptionMapper implements ExceptionMapper<PermissionDeniedException> {
+public class ForbiddenExceptionMapper implements ExceptionMapper<ForbiddenException> {
 
     @Inject
     Logger logger;
 
     @Override
-    public Response toResponse(PermissionDeniedException exception) {
-        logger.warn("Permission denied detected. {}", exception.getMessage());
+    public Response toResponse(ForbiddenException exception) {
+        logger.warn("Forbidden resource access. {}", exception.getMessage());
         return Response.accepted().status(Response.Status.FORBIDDEN).entity(exception.getMessage()).build();
     }
 }

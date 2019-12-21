@@ -27,7 +27,7 @@ public class RolesAllowedInterceptor {
         if (sessionUser.isLoggedIn() && Stream.of(allowedRoles).anyMatch(role -> role.equals(sessionUser.getRole()))) {
             return invocationContext.proceed();
         } else {
-            throw new PermissionDeniedException(String.format("User has insufficient role %s", sessionUser.getRole()));
+            throw new ForbiddenException(String.format("User has insufficient role %s", sessionUser.getRole()));
         }
     }
 }

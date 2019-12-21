@@ -28,9 +28,19 @@ public class AuthenticationImpl implements AuthenticationApi {
 
     @Override
     public Response login(GoogleUser user) {
-        // TODO: Only provide email and idToken, nothing more is needed
+        // TODO: Only provide idToken, nothing more is needed
         Objects.requireNonNull(user, "No GoogleUser object provided for login endpoint");
-        final MitarbeiterType mt = authenticationService.login(user.getEmail(), user.getIdToken());
+        final String oldEmail = sessionUser.getEmail();
+        final MitarbeiterType mt = authenticationService.login(user.getIdToken());
+
+        if (oldEmail == null) {
+            log.info("User '{}' logged in", sessionUser.getEmail());
+        } else if (!oldEmail.equals(mt.getEmail())) {
+            log.info("Logged user '{}' out and logged user '{}' in", sessionUser.getEmail(), oldEmail);
+        } else {
+            log.info("User '{}' already logged in", sessionUser.getEmail());
+        }
+
         // TODO: Translate the service result to view result object
         return Response.ok(mt).build();
     }
@@ -40,6 +50,8 @@ public class AuthenticationImpl implements AuthenticationApi {
         if (sessionUser.isLoggedIn()) {
             log.info("User '{}' logged out", sessionUser.getEmail());
             request.getSession().invalidate();
+        } else {
+            log.info("No user session found");
         }
         return Response.ok().build();
     }
