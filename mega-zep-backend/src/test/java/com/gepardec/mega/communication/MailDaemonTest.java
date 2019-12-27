@@ -6,6 +6,7 @@ import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
@@ -80,6 +81,7 @@ public class MailDaemonTest {
         );
     }
 
+    @Disabled("till userNotifaction is enabled")
     @Test
     void sendReminderToUser() {
         List<String> addresses = workerService.getAllActiveEmployees().stream()

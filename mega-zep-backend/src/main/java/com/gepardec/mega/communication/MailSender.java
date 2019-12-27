@@ -94,7 +94,7 @@ public class MailSender {
 
 
         mailer.send(Mail.withHtml(eMail, subject, mailContent)
-                .addInlineAttachment("LogoMEGADash.png", logoByteArray, MediaType.PNG.type(), "<LogoMEGAdash@gepardec.com>"));
+                .addInlineAttachment("LogoMEGAdash.png", logoByteArray, MediaType.PNG.type(), "<LogoMEGAdash@gepardec.com>"));
     }
 
 
