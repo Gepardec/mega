@@ -13,6 +13,8 @@ export const configuration = {
     MONTHLY_REPORT : "/monthlyReport"
   },
 
+  SPREADSHEET_URL: 'https://docs.google.com/spreadsheets/d/1PmJ9wnYk-OJL91iwMzMBE_DTifHdhaa35HrOMtmEfgs/edit#gid=1076534321',
+
   EMPLOYEE_FUNCTIONS: {
     '01': 'Technischer PL',
     '02': 'Softwareentwickler',
