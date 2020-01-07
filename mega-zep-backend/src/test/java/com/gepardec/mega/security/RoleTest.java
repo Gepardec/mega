@@ -9,16 +9,16 @@ public class RoleTest {
 
     @Test
     void fromInt_when0_shouldReturnRoleUser() {
-        assertEquals(Role.USER, Role.fromInt(0).get());
+        assertEquals(Role.USER, Role.fromValue(0).get());
     }
 
     @Test
     void fromInt_whenNull_shouldReturnNoRole() {
-        assertFalse(Role.fromInt(null).isPresent());
+        assertFalse(Role.fromValue(null).isPresent());
     }
 
     @Test
     void fromInt_whenMinus100_shouldReturnNoRole() {
-        assertFalse(Role.fromInt(-100).isPresent());
+        assertFalse(Role.fromValue(-100).isPresent());
     }
 }

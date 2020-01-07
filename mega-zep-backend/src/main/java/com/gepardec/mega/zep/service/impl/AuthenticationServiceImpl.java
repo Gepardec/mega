@@ -61,7 +61,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         sessionUser.setAuthToken(user.getAuthToken());
         sessionUser.setIdToken(user.getIdToken());
         sessionUser.setName(user.getName());
-        sessionUser.setRole(Role.fromInt(mt.getRechte()).orElse(null));
+        sessionUser.setRole(Role.fromValue(mt.getRechte()).orElse(null));
 
         logger.info("Authentication of user with name {} successful", user.getName());
         //TODO: translate Mitarbeitertype to GoogleUser

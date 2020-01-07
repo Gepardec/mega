@@ -1,7 +1,6 @@
 package com.gepardec.mega.security;
 
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,8 +18,29 @@ public enum Role {
         this.roleId = roleId;
     }
 
-    //TODO: return list of roles, ADMIN = user+controler+admin, controller=user+contorler, user=user
-    public static Optional<Role> fromInt(Integer roleId) {
+    public static Optional<Role> fromValue(Integer roleId) {
         return Optional.of(enumMap.get(roleId));
+    }
+
+    static List<Role> getCoherentRolesByValue(Role role) {
+        List<Role> coherentRoles;
+        switch (role) {
+            case USER: {
+                coherentRoles = Arrays.asList(USER);
+                break;
+            }
+            case CONTROLLER: {
+                coherentRoles = Arrays.asList(USER, CONTROLLER);
+                break;
+            }
+            case ADMINISTRATOR: {
+                coherentRoles = Arrays.asList(USER, CONTROLLER, ADMINISTRATOR);
+                break;
+            }
+            default:
+                coherentRoles = Collections.EMPTY_LIST;
+                break;
+        }
+        return coherentRoles;
     }
 }

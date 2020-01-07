@@ -9,12 +9,12 @@ import com.gepardec.mega.security.SessionUser;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import de.provantis.zep.MitarbeiterType;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@RequestScoped
+@ApplicationScoped
 public class WorkerImpl implements WorkerApi {
 
     @Inject
@@ -33,9 +33,9 @@ public class WorkerImpl implements WorkerApi {
     }
 
     @Override
-    //TODO: add restriction for user
+    @Authorization(allowedRoles = {Role.USER})
     public Response employeeMonthendReport(GoogleUser user) {
-        //TODO: check if user = sessionuser
+        sessionUser.checkForSameUser(user.getEmail());
         final MonthlyReport monthlyReport = workerService.getMonthendReportForUser(user);
         if (monthlyReport != null) {
             return Response.ok(monthlyReport).build();
@@ -63,11 +63,9 @@ public class WorkerImpl implements WorkerApi {
 
 
     @Override
-    @Authorization(allowedRoles = {Role.ADMINISTRATOR, Role.USER})
+    @Authorization(allowedRoles = {Role.ADMINISTRATOR})
     public Response employeeUpdate(final MitarbeiterType employee) {
-        if (Role.USER.equals(sessionUser.getRole()) && !sessionUser.getEmail().equals(employee.getEmail())) {
-            throw new SecurityException("User with userrole can not update other users");
-        }
+        sessionUser.checkForSameUser(employee.getEmail());
         return Response.status(workerService.updateEmployee(employee))
                 .build();
     }

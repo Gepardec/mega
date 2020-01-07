@@ -19,17 +19,13 @@ public class SessionUser implements Serializable {
     private String authorizationCode;
     private Role role;
 
-    public void invalidate() {
-        id = null;
-        email = null;
-        name = null;
-        authToken = null;
-        idToken = null;
-        authorizationCode = null;
-        role = null;
-    }
-
     public boolean isLoggedIn() {
         return id != null;
+    }
+
+    public void checkForSameUser(String eMail) {
+        if (Role.USER.equals(this.getRole()) && !this.getEmail().equals(eMail)) {
+            throw new SecurityException("User with userrole can not update other users");
+        }
     }
 }

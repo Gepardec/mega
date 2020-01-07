@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -21,10 +22,12 @@ public class AuthorizationInterceptor {
             authorizationAnnotation = invocationContext.getTarget().getClass().getAnnotation(Authorization.class);
         }
 
-        Objects.requireNonNull(authorizationAnnotation, "Could not resolve Authorizaion annotation. Do you use Stereotype annotations, which are currently not supported?");
+        Objects.requireNonNull(authorizationAnnotation, "Could not resolve Authorization annotation. Do you use Stereotype annotations, which are currently not supported?");
 
         Role[] allowedRoles = authorizationAnnotation.allowedRoles();
-        if (sessionUser.isLoggedIn() && Stream.of(allowedRoles).anyMatch(role -> role.equals(sessionUser.getRole()))) {
+        List<Role> userRoles = Role.getCoherentRolesByValue(sessionUser.getRole());
+        if (sessionUser.isLoggedIn() && Stream.of(allowedRoles)
+                .anyMatch(role -> userRoles.contains(role))) {
             return invocationContext.proceed();
         } else {
             throw new SecurityException(String.format("user has insufficient role %s", sessionUser.getRole()));

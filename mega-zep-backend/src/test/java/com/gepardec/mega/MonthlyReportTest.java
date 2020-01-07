@@ -33,7 +33,7 @@ public class MonthlyReportTest {
     WarningConfig warningConfig;
 
 
-    static void initWithUserAndReleaseDate(String email, LocalDate releaseDate) throws IOException {
+    void initWithUserAndReleaseDate(String email, LocalDate releaseDate) throws IOException {
         googleUser.setEmail(email);
         final String response = given().contentType(MediaType.APPLICATION_JSON)
                 .body(googleUser)
