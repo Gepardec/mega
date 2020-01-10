@@ -1,6 +1,5 @@
 package com.gepardec.mega.zep.service.impl;
 
-import com.gepardec.mega.model.google.GoogleUser;
 import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.monthlyreport.ProjectTimeManager;
 import com.gepardec.mega.monthlyreport.warning.WarningConfig;
@@ -8,6 +7,7 @@ import com.gepardec.mega.utils.DateUtils;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import com.gepardec.mega.zep.soap.ZepSoapProvider;
 import de.provantis.zep.*;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 
@@ -37,18 +37,18 @@ public class WorkerServiceImpl implements WorkerService {
     WarningConfig warningConfig;
 
     @Override
-    public MitarbeiterType getEmployee(final GoogleUser user) {
+    public MitarbeiterType getEmployee(final String eMail) {
 
         try {
             final ReadMitarbeiterRequestType readMitarbeiterRequestType = new ReadMitarbeiterRequestType();
             readMitarbeiterRequestType.setRequestHeader(zepSoapProvider.createRequestHeaderType());
             final List<MitarbeiterType> employees = flatMap(zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType));
             return employees.stream()
-                    .filter(e -> e.getEmail() != null && e.getEmail().equals(user.getEmail()))
+                    .filter(e -> e.getEmail() != null && e.getEmail().equals(eMail))
                     .findFirst()
                     .orElse(null);
         } catch (Exception e) {
-            logger.error(format("error getEmployee for user: %s", user.getEmail()));
+            logger.error(format("error getEmployee for user: %s", eMail));
             return null;
         }
     }
@@ -62,10 +62,10 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public Integer updateEmployees(final List<MitarbeiterType> employees) {
+    public Integer updateEmployeesReleaseDate(final List<Pair<String, String>> pairs) {
         final List<Integer> statusCodeList = new LinkedList<>();
 
-        employees.forEach(e -> statusCodeList.add(updateEmployee(e)));
+        pairs.forEach(e -> statusCodeList.add(updateEmployeeReleaseDate(e.getLeft(), e.getRight())));
 
         return statusCodeList.stream()
                 .filter(statuscode -> statuscode == HttpStatus.SC_INTERNAL_SERVER_ERROR)
@@ -74,8 +74,8 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public MonthlyReport getMonthendReportForUser(GoogleUser user) {
-        MitarbeiterType employee = getEmployee(user);
+    public MonthlyReport getMonthendReportForUser(final String eMail) {
+        MitarbeiterType employee = getEmployee(eMail);
         if (employee == null) {
             return null;
         }
@@ -116,10 +116,16 @@ public class WorkerServiceImpl implements WorkerService {
 
 
     @Override
-    public Integer updateEmployee(final MitarbeiterType employee) {
+    public Integer updateEmployeeReleaseDate(final String eMail, final String releaseDate) {
         try {
             final UpdateMitarbeiterRequestType umrt = new UpdateMitarbeiterRequestType();
             umrt.setRequestHeader(zepSoapProvider.createRequestHeaderType());
+
+//            TODO: check api
+//            umrt.getMitarbeiter().setFreigabedatum(releaseDate);
+
+            MitarbeiterType employee = getEmployee(eMail);
+            employee.setFreigabedatum(releaseDate);
             umrt.setMitarbeiter(employee);
 
             final UpdateMitarbeiterResponseType updateMitarbeiterResponseType = zepSoapPortType.updateMitarbeiter(umrt);
@@ -127,7 +133,7 @@ public class WorkerServiceImpl implements WorkerService {
 
             return toHttpResponseCode(responseHeaderType);
         } catch (Exception e) {
-            logger.error(format("Errro updatingEmployee, id: %s", employee.getUserId()));
+            logger.error(format("Errro updatingEmployee, id: %s", eMail));
             return HttpStatus.SC_INTERNAL_SERVER_ERROR;
         }
     }
