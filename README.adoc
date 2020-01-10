@@ -37,3 +37,10 @@ mega.mail.firstbusinessday.reminder=<MAIL_REMINDER_MAIL>
 mega.test.googleuser.email=<USER_EMAIL>
 mega.test.googleuser.id=<USER_ID>
 ----
+
+## TODO
+
+- Remove google-secrets not needed anymore
+- Recreate newly introduced secrets
+- Modify frontend template to map secret 'asset/config.json' into html root where the clientId and backendOrigin is defined
+- Jenkins build pipeline does not need to replace client_id anymore
