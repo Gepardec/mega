@@ -3,6 +3,7 @@ package com.gepardec.mega.zep.service.impl;
 import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.monthlyreport.ProjectTimeManager;
 import com.gepardec.mega.monthlyreport.warning.WarningConfig;
+import com.gepardec.mega.rest.EmployeeAdapter;
 import com.gepardec.mega.utils.DateUtils;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import com.gepardec.mega.zep.soap.ZepSoapProvider;
@@ -104,11 +105,11 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
 
-    private MonthlyReport calcWarnings(ReadProjektzeitenResponseType projectTimeResponse, MitarbeiterType employee) {
+    private MonthlyReport calcWarnings(ReadProjektzeitenResponseType projectTimeResponse, MitarbeiterType mitarbeiterType) {
         if (projectTimeResponse == null || projectTimeResponse.getProjektzeitListe() == null) {
             return null;
         }
-        MonthlyReport monthlyReport = new MonthlyReport(employee,
+        MonthlyReport monthlyReport = new MonthlyReport(EmployeeAdapter.toEmployee(mitarbeiterType).orElse(null),
                 new ProjectTimeManager(projectTimeResponse.getProjektzeitListe().getProjektzeiten()), warningConfig);
         monthlyReport.calculateWarnings();
         return monthlyReport;
