@@ -19,7 +19,7 @@ public enum Role {
     }
 
     public static Optional<Role> forId(Integer roleId) {
-        return Optional.of(enumMap.get(roleId));
+        return Optional.ofNullable(enumMap.get(roleId));
     }
 
 
