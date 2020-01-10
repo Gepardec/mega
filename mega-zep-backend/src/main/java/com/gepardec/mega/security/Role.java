@@ -18,17 +18,23 @@ public enum Role {
         this.roleId = roleId;
     }
 
-    public static Optional<Role> fromValue(Integer roleId) {
-        return Optional.of(enumMap.get(roleId));
-    }
+<<<<<<<HEAD
 
-    static List<Role> getCoherentRolesByValue(Role role) {
-        List<Role> coherentRoles;
-        switch (role) {
-            case USER: {
-                coherentRoles = Arrays.asList(USER);
-                break;
-            }
+    public static Optional<Role> fromValue(Integer roleId) {
+=======
+        //TODO: return list of roles, ADMIN = user+controler+admin, controller=user+contorler, user=user
+        public static Optional<Role> forId (Integer roleId){
+>>>>>>>origin / feature / backend - refactoring
+            return Optional.of(enumMap.get(roleId));
+        }
+
+        static List<Role> getCoherentRolesByValue (Role role){
+            List<Role> coherentRoles;
+            switch (role) {
+                case USER: {
+                    coherentRoles = Arrays.asList(USER);
+                    break;
+                }
             case CONTROLLER: {
                 coherentRoles = Arrays.asList(USER, CONTROLLER);
                 break;

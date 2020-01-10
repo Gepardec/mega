@@ -11,7 +11,6 @@ import java.util.List;
 @Path("/worker")
 public interface WorkerApi {
 
-
     @POST
     @Path("/employee")
     @Produces(MediaType.APPLICATION_JSON)

@@ -1,10 +1,9 @@
 package com.gepardec.mega.communication;
 
 import com.gepardec.mega.communication.dates.BusinessDayCalculator;
-import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -12,12 +11,14 @@ import static com.gepardec.mega.communication.Reminder.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@QuarkusTest
-public class BusinessDayCalculatorTest {
+class BusinessDayCalculatorTest {
 
-
-    @Inject
     BusinessDayCalculator businessDayCalculator;
+
+    @BeforeEach
+    void beforeEach() {
+        businessDayCalculator = new BusinessDayCalculator();
+    }
 
     @Test
     void getEventForDate_firstDayOfMonthBusinessDay_shouldReturnUserCheckprojecttimes() {

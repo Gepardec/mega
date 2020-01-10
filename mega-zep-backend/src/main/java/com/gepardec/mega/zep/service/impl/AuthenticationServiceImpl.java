@@ -1,61 +1,63 @@
 package com.gepardec.mega.zep.service.impl;
 
-import com.gepardec.mega.model.google.GoogleUser;
-import com.gepardec.mega.security.Role;
+import com.gepardec.mega.security.ForbiddenException;
 import com.gepardec.mega.security.SessionUser;
+import com.gepardec.mega.security.UnauthorizedException;
 import com.gepardec.mega.zep.service.api.AuthenticationService;
-import de.provantis.zep.*;
-import org.slf4j.Logger;
+import com.gepardec.mega.zep.soap.ZepSoapProvider;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import de.provantis.zep.MitarbeiterType;
+import de.provantis.zep.ReadMitarbeiterRequestType;
+import de.provantis.zep.ReadMitarbeiterResponseType;
+import de.provantis.zep.ZepSoapPortType;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Response;
+import java.util.Optional;
 
 @RequestScoped
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Inject
-    Logger logger;
-
-    @Inject
-    @Named("ZepAuthorizationSOAPPortType")
     ZepSoapPortType zepSoapPortType;
 
     @Inject
-    @Named("ZepAuthorizationRequestHeaderType")
-    RequestHeaderType requestHeaderType;
+    GoogleIdTokenVerifier tokenVerifier;
 
+    @Inject
+    ZepSoapProvider zepSoapProvider;
 
     @Inject
     SessionUser sessionUser;
 
     @Override
-    public Response login(GoogleUser user) {
-        if (user == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Google user missing").build();
-        }
-        if (sessionUser.isLoggedIn()) {
-            return Response.ok(user).build();
+    public MitarbeiterType login(String idToken) {
+        String email;
+
+        try {
+            email = Optional.ofNullable(tokenVerifier.verify(idToken))
+                    .orElseThrow(() -> new UnauthorizedException("IdToken was invalid"))
+                    .getPayload()
+                    .getEmail();
+        } catch (Exception e) {
+            throw new IllegalStateException("Could not verify idToken", e);
         }
 
         // get ZEP employee
         final ReadMitarbeiterRequestType empl = new ReadMitarbeiterRequestType();
-        empl.setRequestHeader(requestHeaderType);
+        empl.setRequestHeader(zepSoapProvider.createRequestHeaderType());
 
         final ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(empl);
         //TODO: contact ZEP for enabling search-criteria for mail-address
         final MitarbeiterType mt = rmrt.getMitarbeiterListe().getMitarbeiter().stream()
-                .filter(emp -> user.getEmail().equals(emp.getEmail()))
+                .filter(emp -> email.equals(emp.getEmail()))
                 .findFirst().orElse(null);
-        //TODO: mapping to new Response-Object
 
-        // invalidate session when theres no appropriate employee
         if (mt == null) {
-            throw new SecurityException(String.format("employee with id %s not found in ZEP", user.getEmail()));
+            throw new ForbiddenException(String.format("'%s' is not an employee in ZEP", email));
         }
 
+<<<<<<<HEAD
         sessionUser.setAuthorizationCode(user.getAuthorizationCode());
         sessionUser.setEmail(user.getEmail());
         sessionUser.setAuthToken(user.getAuthToken());
@@ -67,10 +69,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         //TODO: translate Mitarbeitertype to GoogleUser
         return Response.ok(mt).build();
     }
+=======
+        // Could be re-logged in with different user within the same session
+        sessionUser.init(email,idToken,mt.getRechte());
+>>>>>>>origin/feature/backend-refactoring
 
-    @Override
-    public Response logout(HttpServletRequest request) {
-        request.getSession().invalidate();
-        return Response.ok().build();
-    }
+        return mt;
+}
 }

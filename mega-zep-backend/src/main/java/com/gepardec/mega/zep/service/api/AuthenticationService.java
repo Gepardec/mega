@@ -1,12 +1,7 @@
 package com.gepardec.mega.zep.service.api;
 
-import com.gepardec.mega.model.google.GoogleUser;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Response;
+import de.provantis.zep.MitarbeiterType;
 
 public interface AuthenticationService {
-    Response login(GoogleUser user);
-
-    Response logout(HttpServletRequest request);
+    MitarbeiterType login(String token);
 }
