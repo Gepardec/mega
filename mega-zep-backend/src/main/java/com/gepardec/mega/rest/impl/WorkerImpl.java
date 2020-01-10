@@ -2,7 +2,7 @@ package com.gepardec.mega.rest.impl;
 
 import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.rest.Employee;
-import com.gepardec.mega.rest.EmployeeAdapter;
+import com.gepardec.mega.rest.EmployeeTranslator;
 import com.gepardec.mega.rest.api.WorkerApi;
 import com.gepardec.mega.security.Role;
 import com.gepardec.mega.security.RolesAllowed;
@@ -16,7 +16,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequestScoped
@@ -31,9 +30,9 @@ public class WorkerImpl implements WorkerApi {
 
     @Override
     public Response employee(final String eMail) {
-        final Optional<Employee> employee = EmployeeAdapter.toEmployee(workerService.getEmployee(eMail));
-        if (employee.isPresent()) {
-            return Response.ok(employee.get()).build();
+        final Employee employee = EmployeeTranslator.toEmployee(workerService.getEmployee(eMail));
+        if (employee != null) {
+            return Response.ok(employee).build();
         }
         return Response.serverError().build();
     }
@@ -60,7 +59,7 @@ public class WorkerImpl implements WorkerApi {
     public Response employees() {
         final List<MitarbeiterType> mitarbeiterTypeList = workerService.getAllActiveEmployees();
         List<Employee> employees = mitarbeiterTypeList.stream()
-                .map(mitarbeiterType -> EmployeeAdapter.toEmployee(mitarbeiterType).orElse(null))
+                .map(mitarbeiterType -> EmployeeTranslator.toEmployee(mitarbeiterType))
                 .collect(Collectors.toList());
 
         if (mitarbeiterTypeList != null) {

@@ -1,10 +1,10 @@
 package com.gepardec.mega.rest.impl;
 
-import com.gepardec.mega.model.google.GoogleUser;
+import com.gepardec.mega.rest.Employee;
+import com.gepardec.mega.rest.EmployeeTranslator;
 import com.gepardec.mega.rest.api.AuthenticationApi;
 import com.gepardec.mega.security.SessionUser;
 import com.gepardec.mega.zep.service.api.AuthenticationService;
-import de.provantis.zep.MitarbeiterType;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -27,22 +27,21 @@ public class AuthenticationImpl implements AuthenticationApi {
     AuthenticationService authenticationService;
 
     @Override
-    public Response login(GoogleUser user) {
-        // TODO: Only provide idToken, nothing more is needed
-        Objects.requireNonNull(user, "No GoogleUser object provided for login endpoint");
+    public Response login(String idToken) {
+        Objects.requireNonNull(idToken, "No GoogleUser object provided for login endpoint");
+        final Employee employee = EmployeeTranslator.toEmployee(authenticationService.login(idToken));
         final String oldEmail = sessionUser.getEmail();
-        final MitarbeiterType mt = authenticationService.login(user.getIdToken());
+
 
         if (oldEmail == null) {
             log.info("User '{}' logged in", sessionUser.getEmail());
-        } else if (!oldEmail.equals(mt.getEmail())) {
+        } else if (!oldEmail.equals(employee.getEMail())) {
             log.info("Logged user '{}' out and logged user '{}' in", sessionUser.getEmail(), oldEmail);
         } else {
             log.info("User '{}' already logged in", sessionUser.getEmail());
         }
 
-        // TODO: Translate the service result to view result object
-        return Response.ok(mt).build();
+        return Response.ok(employee).build();
     }
 
     @Override

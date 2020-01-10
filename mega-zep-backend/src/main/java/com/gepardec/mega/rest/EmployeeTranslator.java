@@ -2,11 +2,9 @@ package com.gepardec.mega.rest;
 
 import de.provantis.zep.MitarbeiterType;
 
-import java.util.Optional;
+public class EmployeeTranslator {
 
-public class EmployeeAdapter {
-
-    public static Optional<Employee> toEmployee(MitarbeiterType mitarbeiterType) {
+    public static Employee toEmployee(MitarbeiterType mitarbeiterType) {
         Employee employee = null;
         if (mitarbeiterType != null) {
             employee = new Employee();
@@ -20,6 +18,6 @@ public class EmployeeAdapter {
             employee.setWorkDescription(mitarbeiterType.getPreisgruppe());
             employee.setRole(mitarbeiterType.getRechte());
         }
-        return Optional.ofNullable(employee);
+        return employee;
     }
 }
