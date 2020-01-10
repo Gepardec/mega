@@ -1,7 +1,5 @@
 package com.gepardec.mega.rest.api;
 
-import com.gepardec.mega.model.google.GoogleUser;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -17,7 +15,7 @@ public interface AuthenticationApi {
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    Response login(GoogleUser user);
+    Response login(String idToken);
 
     @POST
     @Path("/logout")
