@@ -19,7 +19,7 @@ public class SecuredInterceptor {
 
     @AroundInvoke
     public Object invoke(final InvocationContext ic) throws Exception {
-        if (!sessionUser.isLoggedIn()) {
+        if (!sessionUser.isLogged()) {
             throw new UnauthorizedException("Anonymous user tried to access a secured resource");
         }
 

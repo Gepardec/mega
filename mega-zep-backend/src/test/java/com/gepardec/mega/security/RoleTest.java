@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class RoleTest {
+class RoleTest {
 
     @Test
     void forId_when0_shouldReturnRoleUser() {

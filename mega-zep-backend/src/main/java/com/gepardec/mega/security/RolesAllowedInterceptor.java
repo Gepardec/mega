@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 @RolesAllowed(allowedRoles = Role.USER)
 @Interceptor
 public class RolesAllowedInterceptor {
+
     @Inject
     SessionUser sessionUser;
 
@@ -24,7 +25,7 @@ public class RolesAllowedInterceptor {
         Objects.requireNonNull(rolesAllowedAnnotation, "Could not resolve Authorizaion annotation. Do you use Stereotype annotations, which are currently not supported?");
 
         Role[] allowedRoles = rolesAllowedAnnotation.allowedRoles();
-        if (sessionUser.isLoggedIn() && Stream.of(allowedRoles).anyMatch(role -> role.equals(sessionUser.getRole()))) {
+        if (sessionUser.isLogged() && Stream.of(allowedRoles).anyMatch(role -> role.equals(sessionUser.getRole()))) {
             return invocationContext.proceed();
         } else {
             throw new ForbiddenException(String.format("User has insufficient role %s", sessionUser.getRole()));

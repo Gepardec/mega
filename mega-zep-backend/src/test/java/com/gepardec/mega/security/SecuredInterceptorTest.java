@@ -12,11 +12,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import javax.interceptor.InvocationContext;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@Disabled
 class SecuredInterceptorTest {
 
     @Mock
@@ -46,9 +44,12 @@ class SecuredInterceptorTest {
     }
 
     @Test
-    void invoke_userLoggedAndTokenValid_throwUnauthorizedException() throws Exception {
+    void invoke_userLoggedAndTokenValid_callsProceed() throws Exception {
         when(sessionUser.isLogged()).thenReturn(true);
+        when(sessionUser.getIdToken()).thenReturn("idToken");
         when(tokenVerifier.verify(anyString())).thenReturn(idToken);
-        assertThrows(UnauthorizedException.class, () -> securedInterceptor.invoke(invocationContext));
+        securedInterceptor.invoke(invocationContext);
+
+        verify(invocationContext, times(1)).proceed();
     }
 }
