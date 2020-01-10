@@ -8,17 +8,17 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class RoleTest {
 
     @Test
-    void fromInt_when0_shouldReturnRoleUser() {
+    void forId_when0_shouldReturnRoleUser() {
         assertEquals(Role.USER, Role.forId(0).get());
     }
 
     @Test
-    void fromInt_whenNull_shouldReturnNoRole() {
+    void forId_whenNull_shouldReturnNoRole() {
         assertFalse(Role.forId(null).isPresent());
     }
 
     @Test
-    void fromInt_whenMinus100_shouldReturnNoRole() {
+    void forId_whenMinus100_shouldReturnNoRole() {
         assertFalse(Role.forId(-100).isPresent());
     }
 }
