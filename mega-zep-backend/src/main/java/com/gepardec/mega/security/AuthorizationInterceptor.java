@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-@Authorization(allowedRoles = Role.USER)
+@RolesAllowed(allowedRoles = Role.USER)
 @Interceptor
 public class AuthorizationInterceptor {
     @Inject
@@ -17,9 +17,9 @@ public class AuthorizationInterceptor {
     @AroundInvoke
     public Object intercept(InvocationContext invocationContext) throws Exception {
 
-        Authorization authorizationAnnotation = invocationContext.getMethod().getAnnotation(Authorization.class);
+        RolesAllowed authorizationAnnotation = invocationContext.getMethod().getAnnotation(RolesAllowed.class);
         if (authorizationAnnotation == null) {
-            authorizationAnnotation = invocationContext.getTarget().getClass().getAnnotation(Authorization.class);
+            authorizationAnnotation = invocationContext.getTarget().getClass().getAnnotation(RolesAllowed.class);
         }
 
         Objects.requireNonNull(authorizationAnnotation, "Could not resolve Authorization annotation. Do you use Stereotype annotations, which are currently not supported?");

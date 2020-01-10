@@ -10,18 +10,13 @@ import com.gepardec.mega.security.SessionUser;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import de.provantis.zep.MitarbeiterType;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-<<<<<<<HEAD
-@ApplicationScoped
-=======
 @RequestScoped
 @Secured
->>>>>>>origin/feature/backend-refactoring
-
 public class WorkerImpl implements WorkerApi {
 
     @Inject
@@ -40,9 +35,10 @@ public class WorkerImpl implements WorkerApi {
     }
 
     @Override
-    @Authorization(allowedRoles = {Role.USER})
+    @RolesAllowed(allowedRoles = {Role.USER, Role.ADMINISTRATOR})
     public Response employeeMonthendReport(GoogleUser user) {
-        sessionUser.checkForSameUser(user.getEmail());
+//       TODO:  if(Role.ADMINISTRATOR.equals(sessionUser.getRole()))
+        //TODO: set user
         final MonthlyReport monthlyReport = workerService.getMonthendReportForUser(user);
         if (monthlyReport != null) {
             return Response.ok(monthlyReport).build();
@@ -70,14 +66,11 @@ public class WorkerImpl implements WorkerApi {
 
 
     @Override
-<<<<<<<HEAD
-    @Authorization(allowedRoles = {Role.ADMINISTRATOR})
-=======
     @RolesAllowed(allowedRoles = {Role.ADMINISTRATOR, Role.USER})
->>>>>>>origin/feature/backend-refactoring
-
     public Response employeeUpdate(final MitarbeiterType employee) {
-        sessionUser.checkForSameUser(employee.getEmail());
+        if (Role.USER.equals(sessionUser.getRole()) && !sessionUser.getEmail().equals(employee.getEmail())) {
+            throw new SecurityException("User with userrole can not update other users");
+        }
         return Response.status(workerService.updateEmployee(employee))
                 .build();
     }

@@ -18,9 +18,6 @@ public class SessionUser implements Serializable {
     private Role role;
     private boolean logged;
 
-<<<<<<<HEAD
-=======
-
     public void init(final String email, final String idToken, final int recht) {
         this.email = Objects.requireNonNull(email, "SessionUser must have an email");
         this.idToken = Objects.requireNonNull(idToken, "SessionUser must have an idToken");
@@ -28,19 +25,13 @@ public class SessionUser implements Serializable {
         this.logged = true;
     }
 
->>>>>>>origin/feature/backend-refactoring
-
     public boolean isLoggedIn() {
         return logged;
     }
-
-<<<<<<<HEAD
 
     public void checkForSameUser(String eMail) {
         if (Role.USER.equals(this.getRole()) && !this.getEmail().equals(eMail)) {
             throw new SecurityException("User with userrole can not update other users");
         }
     }
-=======
-        >>>>>>>origin/feature/backend-refactoring
 }

@@ -57,23 +57,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new ForbiddenException(String.format("'%s' is not an employee in ZEP", email));
         }
 
-<<<<<<<HEAD
-        sessionUser.setAuthorizationCode(user.getAuthorizationCode());
-        sessionUser.setEmail(user.getEmail());
-        sessionUser.setAuthToken(user.getAuthToken());
-        sessionUser.setIdToken(user.getIdToken());
-        sessionUser.setName(user.getName());
-        sessionUser.setRole(Role.fromValue(mt.getRechte()).orElse(null));
-
-        logger.info("Authentication of user with name {} successful", user.getName());
-        //TODO: translate Mitarbeitertype to GoogleUser
-        return Response.ok(mt).build();
-    }
-=======
         // Could be re-logged in with different user within the same session
-        sessionUser.init(email,idToken,mt.getRechte());
->>>>>>>origin/feature/backend-refactoring
+        sessionUser.init(email, idToken, mt.getRechte());
 
         return mt;
-}
+    }
 }
