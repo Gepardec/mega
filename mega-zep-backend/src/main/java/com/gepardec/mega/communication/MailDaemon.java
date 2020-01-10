@@ -70,6 +70,7 @@ public class MailDaemon {
                     break;
                 }
                 default: {
+                    logger.info("No notification sent today");
                     break;
                 }
             }
