@@ -25,10 +25,6 @@ public class SessionUser implements Serializable {
         this.logged = true;
     }
 
-    public boolean isLoggedIn() {
-        return logged;
-    }
-
     public void checkForSameUser(String eMail) {
         if (Role.USER.equals(this.getRole()) && !this.getEmail().equals(eMail)) {
             throw new SecurityException("User with userrole can not update other users");

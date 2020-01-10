@@ -26,7 +26,7 @@ public class AuthorizationInterceptor {
 
         Role[] allowedRoles = authorizationAnnotation.allowedRoles();
         List<Role> userRoles = Role.getCoherentRolesByValue(sessionUser.getRole());
-        if (sessionUser.isLoggedIn() && Stream.of(allowedRoles)
+        if (sessionUser.isLogged() && Stream.of(allowedRoles)
                 .anyMatch(role -> userRoles.contains(role))) {
             return invocationContext.proceed();
         } else {

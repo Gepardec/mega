@@ -47,7 +47,7 @@ public class AuthenticationImpl implements AuthenticationApi {
 
     @Override
     public Response logout(@Context HttpServletRequest request) {
-        if (sessionUser.isLoggedIn()) {
+        if (sessionUser.isLogged()) {
             log.info("User '{}' logged out", sessionUser.getEmail());
             request.getSession().invalidate();
         } else {
