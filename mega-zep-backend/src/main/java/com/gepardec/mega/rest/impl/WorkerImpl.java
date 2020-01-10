@@ -59,8 +59,12 @@ public class WorkerImpl implements WorkerApi {
     @RolesAllowed(allowedRoles = {Role.ADMINISTRATOR})
     public Response employees() {
         final List<MitarbeiterType> mitarbeiterTypeList = workerService.getAllActiveEmployees();
+        List<Employee> employees = mitarbeiterTypeList.stream()
+                .map(mitarbeiterType -> EmployeeAdapter.toEmployee(mitarbeiterType).orElse(null))
+                .collect(Collectors.toList());
+
         if (mitarbeiterTypeList != null) {
-            return Response.ok(mitarbeiterTypeList).build();
+            return Response.ok(employees).build();
         }
         return Response.serverError().build();
     }
