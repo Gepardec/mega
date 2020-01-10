@@ -48,7 +48,7 @@ public class WorkerServiceImpl implements WorkerService {
                     .findFirst()
                     .orElse(null);
         } catch (Exception e) {
-            logger.error(format("error getEmployee for user: %s", user.getId()));
+            logger.error(format("error getEmployee for user: %s", user.getEmail()));
             return null;
         }
     }

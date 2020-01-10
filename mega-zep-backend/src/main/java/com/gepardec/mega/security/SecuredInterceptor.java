@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-import java.security.GeneralSecurityException;
 
 @Interceptor
 @Secured
@@ -24,10 +23,9 @@ public class SecuredInterceptor {
         if (!sessionUser.isLoggedIn()) {
             throw new UnauthorizedException("Anonymous user tried to access a secured resource");
         }
-        try {
-            tokenVerifier.verify(sessionUser.getIdToken());
-        } catch (GeneralSecurityException e) {
-            throw new UnauthorizedException(String.format("Google session has been expired for user '%s'", sessionUser.getEmail()));
+
+        if (tokenVerifier.verify(sessionUser.getIdToken()) == null) {
+            throw new UnauthorizedException("IdToken was invalid");
         }
 
         return ic.proceed();

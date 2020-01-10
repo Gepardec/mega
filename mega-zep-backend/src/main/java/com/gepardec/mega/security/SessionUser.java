@@ -14,6 +14,7 @@ public class SessionUser implements Serializable {
     private String id;
     private String email;
     private String idToken;
+    // TODO: User can have more than one role
     private Role role;
     private boolean logged;
 
