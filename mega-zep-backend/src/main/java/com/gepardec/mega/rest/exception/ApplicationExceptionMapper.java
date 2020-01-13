@@ -1,4 +1,4 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.exception;
 
 import org.slf4j.Logger;
 

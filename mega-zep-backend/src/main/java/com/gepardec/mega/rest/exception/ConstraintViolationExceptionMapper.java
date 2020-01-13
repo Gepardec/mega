@@ -1,5 +1,6 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.exception;
 
+import com.gepardec.mega.rest.ConstraintViolationResponse;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 

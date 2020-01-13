@@ -1,12 +1,15 @@
 package com.gepardec.mega.security;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+import javax.ws.rs.Priorities;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+@Priority(Priorities.AUTHENTICATION)
 @RolesAllowed(allowedRoles = Role.USER)
 @Interceptor
 public class RolesAllowedInterceptor {
