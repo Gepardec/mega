@@ -14,13 +14,15 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RequestScoped
 @Secured
-public class WorkerImpl implements WorkerApi {
+public class WorkerResource implements WorkerApi {
 
     @Inject
     WorkerService workerService;
@@ -29,8 +31,8 @@ public class WorkerImpl implements WorkerApi {
     SessionUser sessionUser;
 
     @Override
-    public Response employee(final String eMail) {
-        final Employee employee = EmployeeTranslator.toEmployee(workerService.getEmployee(eMail));
+    public Response employee(@NotEmpty(message = "workerResource.email.notEmpty") final String email) {
+        final Employee employee = EmployeeTranslator.toEmployee(workerService.getEmployee(email));
         if (employee != null) {
             return Response.ok(employee).build();
         }
@@ -39,7 +41,7 @@ public class WorkerImpl implements WorkerApi {
 
     @Override
     @RolesAllowed(allowedRoles = {Role.USER, Role.ADMINISTRATOR})
-    public Response employeeMonthendReport(final String eMail) {
+    public Response employeeMonthendReport(@NotEmpty(message = "workerResource.email.notEmpty") final String eMail) {
         MonthlyReport monthlyReport;
         if (Role.ADMINISTRATOR.equals(sessionUser.getRole())) {
             monthlyReport = workerService.getMonthendReportForUser(eMail);
@@ -71,26 +73,24 @@ public class WorkerImpl implements WorkerApi {
 
     @Override
     @RolesAllowed(allowedRoles = {Role.ADMINISTRATOR})
-    public Response employeesUpdate(final List<Employee> employees) {
+    public Response employeesUpdate(@NotEmpty(message = "{workerResource.employees.notEmpty}") final List<Employee> employees) {
         List<Pair<String, String>> pairsMailReleaseDate = employees.stream()
                 .map(this::toPair)
                 .collect(Collectors.toList());
         return Response.status(workerService.updateEmployeesReleaseDate(pairsMailReleaseDate)).build();
     }
 
-
-    private Pair<String, String> toPair(Employee employee) {
-        return Pair.of(employee.getEMail(), employee.getReleaseDate());
-    }
-
-
     @Override
     @RolesAllowed(allowedRoles = {Role.ADMINISTRATOR, Role.USER})
-    public Response employeeUpdate(final Employee employee) {
+    public Response employeeUpdate(@NotNull(message = "{workerResource.employee.notNull}") final Employee employee) {
         if (Role.USER.equals(sessionUser.getRole()) && !sessionUser.getEmail().equals(employee.getEMail())) {
             throw new SecurityException("User with userrole can not update other users");
         }
         return Response.status(workerService.updateEmployeeReleaseDate(employee.getEMail(), employee.getReleaseDate()))
                 .build();
+    }
+
+    private Pair<String, String> toPair(Employee employee) {
+        return Pair.of(employee.getEMail(), employee.getReleaseDate());
     }
 }
