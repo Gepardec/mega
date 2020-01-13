@@ -13,7 +13,7 @@ public class ConstraintViolationResponse extends BaseResponse {
     }
 
     ConstraintViolationResponse(String message, Set<? extends ConstraintViolation<?>> violations) {
-        super(message, false);
+        super(message, 1);
         this.violations = violations.stream()
                 .map(javax.validation.ConstraintViolation::getMessage)
                 .collect(Collectors.toList());

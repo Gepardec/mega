@@ -31,7 +31,7 @@ public class WorkerResource implements WorkerApi {
     SessionUser sessionUser;
 
     @Override
-    public Response employee(@NotEmpty(message = "workerResource.email.notEmpty") final String email) {
+    public Response employee(@NotEmpty(message = "{workerResource.email.notEmpty}") final String email) {
         final Employee employee = EmployeeTranslator.toEmployee(workerService.getEmployee(email));
         if (employee != null) {
             return Response.ok(employee).build();
@@ -41,7 +41,7 @@ public class WorkerResource implements WorkerApi {
 
     @Override
     @RolesAllowed(allowedRoles = {Role.USER, Role.ADMINISTRATOR})
-    public Response employeeMonthendReport(@NotEmpty(message = "workerResource.email.notEmpty") final String eMail) {
+    public Response employeeMonthendReport(@NotEmpty(message = "{workerResource.email.notEmpty}") final String eMail) {
         MonthlyReport monthlyReport;
         if (Role.ADMINISTRATOR.equals(sessionUser.getRole())) {
             monthlyReport = workerService.getMonthendReportForUser(eMail);
