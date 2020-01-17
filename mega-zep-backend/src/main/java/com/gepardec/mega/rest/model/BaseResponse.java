@@ -1,9 +1,9 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.model;
 
 public class BaseResponse {
 
     private String message;
-    private boolean success;
+    private boolean success = true;
     private int error = 0;
 
     BaseResponse() {

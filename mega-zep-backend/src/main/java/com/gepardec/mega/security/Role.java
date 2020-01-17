@@ -7,7 +7,8 @@ import java.util.stream.Stream;
 public enum Role {
     USER(0),
     ADMINISTRATOR(1),
-    CONTROLLER(2);
+    CONTROLLER(2),
+    USER_MIT_ZUSATZRECHTEN(3);
 
     private static Map<Integer, Role> enumMap = Stream.of(values())
             .collect(Collectors.toMap(role -> role.roleId, role -> role));

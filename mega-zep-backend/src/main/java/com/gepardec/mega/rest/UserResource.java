@@ -1,12 +1,11 @@
-package com.gepardec.mega.rest.impl;
+package com.gepardec.mega.rest;
 
-import com.gepardec.mega.rest.Employee;
-import com.gepardec.mega.rest.EmployeeTranslator;
+import com.gepardec.mega.rest.model.User;
+import com.gepardec.mega.rest.translator.UserTranslator;
 import com.gepardec.mega.security.SessionUser;
-import com.gepardec.mega.zep.service.api.AuthenticationService;
+import com.gepardec.mega.zep.service.api.UserService;
 import org.slf4j.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +18,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * Handles the User actions.
+ */
 @RequestScoped
-public class AuthenticationResource {
+@Path("/user")
+public class UserResource {
 
     @Inject
     Logger log;
@@ -29,7 +32,7 @@ public class AuthenticationResource {
     SessionUser sessionUser;
 
     @Inject
-    AuthenticationService authenticationService;
+    UserService userService;
 
     @Context
     HttpServletRequest request;
@@ -39,18 +42,18 @@ public class AuthenticationResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(@NotNull(message = "{authenticationResource.google.idToken.notNull}") String idToken) {
-        final Employee employee = EmployeeTranslator.toEmployee(authenticationService.login(idToken));
+        final User user = UserTranslator.translate(userService.login(idToken));
         final String oldEmail = sessionUser.getEmail();
 
         if (oldEmail == null) {
             log.info("User '{}' logged in", sessionUser.getEmail());
-        } else if (!oldEmail.equals(employee.getEMail())) {
+        } else if (!oldEmail.equals(user.getEmail())) {
             log.info("Logged user '{}' out and logged user '{}' in", sessionUser.getEmail(), oldEmail);
         } else {
             log.info("User '{}' already logged in", sessionUser.getEmail());
         }
 
-        return Response.ok(employee).build();
+        return Response.ok(user).build();
     }
 
     @POST

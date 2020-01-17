@@ -1,7 +1,6 @@
 package com.gepardec.mega.rest.exception;
 
-import com.gepardec.mega.rest.ConstraintViolationResponse;
-import com.gepardec.mega.security.ForbiddenException;
+import com.gepardec.mega.rest.model.ConstraintViolationResponse;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
-import javax.validation.ConstraintDeclarationException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.core.Response;

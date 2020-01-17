@@ -24,6 +24,6 @@ public class ForbiddenExceptionMapper implements ExceptionMapper<ForbiddenExcept
     @Override
     public Response toResponse(ForbiddenException exception) {
         logger.warn("Forbidden access on resource: '{}' with message: '{}'", uriInfo.getPath(), exception.getMessage());
-        return Response.status(Response.Status.FORBIDDEN).entity(exception.getMessage()).build();
+        return Response.status(Response.Status.FORBIDDEN).build();
     }
 }

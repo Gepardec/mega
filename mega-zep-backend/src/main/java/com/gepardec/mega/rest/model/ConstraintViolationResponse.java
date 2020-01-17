@@ -1,4 +1,4 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.model;
 
 import javax.validation.ConstraintViolation;
 import java.util.List;

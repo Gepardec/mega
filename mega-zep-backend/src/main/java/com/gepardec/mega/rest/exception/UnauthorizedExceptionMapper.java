@@ -24,6 +24,6 @@ public class UnauthorizedExceptionMapper implements ExceptionMapper<Unauthorized
     @Override
     public Response toResponse(UnauthorizedException exception) {
         logger.warn("Unauthorized access on resource: '{}' with message: '{}'", uriInfo.getPath(), exception.getMessage());
-        return Response.status(Response.Status.UNAUTHORIZED).entity(exception.getMessage()).build();
+        return Response.status(Response.Status.UNAUTHORIZED).build();
     }
 }

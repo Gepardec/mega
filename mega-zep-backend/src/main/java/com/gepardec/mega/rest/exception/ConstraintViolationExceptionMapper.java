@@ -1,10 +1,10 @@
 package com.gepardec.mega.rest.exception;
 
-import com.gepardec.mega.rest.ConstraintViolationResponse;
+import com.gepardec.mega.rest.model.ConstraintViolationResponse;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.core.Context;
@@ -13,7 +13,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-@RequestScoped
+@ApplicationScoped
 @Provider
 public class ConstraintViolationExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
 

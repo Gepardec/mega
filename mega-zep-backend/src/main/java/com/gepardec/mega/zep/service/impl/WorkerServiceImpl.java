@@ -3,7 +3,7 @@ package com.gepardec.mega.zep.service.impl;
 import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.monthlyreport.ProjectTimeManager;
 import com.gepardec.mega.monthlyreport.warning.WarningConfig;
-import com.gepardec.mega.rest.EmployeeTranslator;
+import com.gepardec.mega.rest.translator.EmployeeTranslator;
 import com.gepardec.mega.utils.DateUtils;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import com.gepardec.mega.zep.soap.ZepSoapProvider;
@@ -39,7 +39,6 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public MitarbeiterType getEmployee(final String email) {
-
         try {
             final ReadMitarbeiterRequestType readMitarbeiterRequestType = new ReadMitarbeiterRequestType();
             readMitarbeiterRequestType.setRequestHeader(zepSoapProvider.createRequestHeaderType());
