@@ -11,6 +11,7 @@ import de.provantis.zep.MitarbeiterType;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
@@ -53,6 +54,7 @@ public class MonthlyReportTest {
                 .extract().asString();
     }
 
+    @Disabled
     @Test
     void monthendReport_withUserGiselaGewissenhaft_shouldShowJourneyWarnings() throws IOException {
         initWithUserAndReleaseDate("gisela.gewissenhaft@gepardec.com", LocalDate.of(2019, 10, 31));
@@ -82,6 +84,7 @@ public class MonthlyReportTest {
         );
     }
 
+    @Disabled
     @Test
     void monthendReport_withUserMaxMustermann_shouldShowTimeWarnings() throws IOException {
         initWithUserAndReleaseDate("max.mustermann@gepardec.com", LocalDate.of(2019, 10, 31));

@@ -7,6 +7,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class WorkerTest {
         googleUser.setEmail("max.mustermann@gepardec.com");
     }
 
+    @Disabled("make integration-tests with GUI")
     @Test
     void testGetOneEmployees () throws IOException {
         final String response = given().contentType(ContentType.JSON).body(googleUser).post("/worker/employee").then().statusCode(HttpStatus.SC_OK).extract().asString();
@@ -36,6 +38,7 @@ public class WorkerTest {
         assertNotNull(mitarbeiterType);
     }
 
+    @Disabled("make integrations-tests with GUI")
     @Test
     void testGetAllEmployees () throws IOException {
         final String response = given().contentType(ContentType.JSON).body(googleUser).post("/worker/employees").then().statusCode(HttpStatus.SC_OK).extract().asString();
