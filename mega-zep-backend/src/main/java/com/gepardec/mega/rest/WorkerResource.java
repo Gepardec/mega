@@ -36,7 +36,7 @@ public class WorkerResource {
     @POST
     @Path("/employee")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN})
     public Response employee(@NotEmpty(message = "{workerResource.email.notEmpty}") final String email) {
         final MitarbeiterType mitarbeiter = workerService.getEmployee(email);
         if (mitarbeiter != null) {

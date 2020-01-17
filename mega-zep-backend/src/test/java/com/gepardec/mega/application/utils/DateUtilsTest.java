@@ -1,4 +1,4 @@
-package com.gepardec.mega.utils;
+package com.gepardec.mega.application.utils;
 
 import com.gepardec.mega.aplication.utils.DateUtils;
 import org.junit.jupiter.api.Test;

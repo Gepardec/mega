@@ -13,7 +13,7 @@ public enum Role {
     private static Map<Integer, Role> enumMap = Stream.of(values())
             .collect(Collectors.toMap(role -> role.roleId, role -> role));
 
-    private Integer roleId;
+    public final Integer roleId;
 
     Role(Integer roleId) {
         this.roleId = roleId;
@@ -22,7 +22,6 @@ public enum Role {
     public static Optional<Role> forId(Integer roleId) {
         return Optional.ofNullable(enumMap.get(roleId));
     }
-
 
     static List<Role> getCoherentRolesByValue(Role role) {
         List<Role> coherentRoles;

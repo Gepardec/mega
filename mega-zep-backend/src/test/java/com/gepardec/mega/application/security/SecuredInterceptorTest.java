@@ -1,4 +1,4 @@
-package com.gepardec.mega.security;
+package com.gepardec.mega.application.security;
 
 import com.gepardec.mega.aplication.security.SecuredInterceptor;
 import com.gepardec.mega.aplication.security.SessionUser;
