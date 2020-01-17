@@ -33,4 +33,7 @@ public enum WorkingLocation {
         return workingLocation;
     }
 
+    public String getWorkingLocationCode() {
+        return workingLocationCode;
+    }
 }
