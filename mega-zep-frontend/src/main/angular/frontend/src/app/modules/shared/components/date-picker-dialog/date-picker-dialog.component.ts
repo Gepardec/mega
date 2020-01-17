@@ -32,7 +32,7 @@ export class DatePickerDialogComponent  implements OnInit {
 
   updateEmployees(employees: Array<Employee>) {
     employees.forEach(employee => {
-      employee.freigabedatum = this.date;
+      employee.releaseDate = this.date;
     });
 
     this.utilService.updateEmployees(employees).subscribe((response: Response) => {

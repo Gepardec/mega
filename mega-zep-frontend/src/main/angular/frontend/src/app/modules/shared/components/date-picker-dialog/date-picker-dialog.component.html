@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Zeiten freigeben für {{employee.vorname + " " + employee.nachname}}</h2>
+<h2 mat-dialog-title>Zeiten freigeben für {{employee.firstName + " " + employee.sureName}}</h2>
 <mat-dialog-content class="mat-typography">
   <app-calender (dateEmitter)="dateChanged($event)" [date]="date"></app-calender>
 </mat-dialog-content>

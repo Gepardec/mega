@@ -2,12 +2,11 @@ import {Injectable, OnDestroy} from '@angular/core';
 import {configuration} from "../../constants/configuration";
 import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {AuthService, GoogleLoginProvider, SocialUser} from "angularx-social-login";
-import {Employee} from "../../models/Employee/Employee";
 import {Router} from "@angular/router";
-import {environment} from "../../../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {retry} from "rxjs/operators";
 import {ConfigService} from "../config/config.service";
+import {User} from "../../models/User/User";
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +23,8 @@ export class ZepSigninService implements OnDestroy {
   private currentUserSubject: BehaviorSubject<SocialUser>;
   public currentUser: Observable<SocialUser>;
 
-  private currentEmployeeSubject: BehaviorSubject<Employee>;
-  public currentEmployee: Observable<Employee>;
+  private currentEmployeeSubject: BehaviorSubject<User>;
+  public currentEmployee: Observable<User>;
 
   private authServiceSubscription: Subscription;
   private zepLoginSubscription: Subscription;
@@ -38,14 +37,14 @@ export class ZepSigninService implements OnDestroy {
     private config: ConfigService
   ) {
     let user: SocialUser = JSON.parse(localStorage.getItem(this.CURRENT_USER));
-    let employee: Employee = JSON.parse(localStorage.getItem(this.CURRENT_EMPLOYEE))
+    let employee: User = JSON.parse(localStorage.getItem(this.CURRENT_EMPLOYEE))
     if (user == null) {
       this.router.navigate([this.LOGIN_PAGE]);
     }
     this.currentUserSubject = new BehaviorSubject<SocialUser>(user);
     this.currentUser = this.currentUserSubject.asObservable();
 
-    this.currentEmployeeSubject = new BehaviorSubject<Employee>(employee);
+    this.currentEmployeeSubject = new BehaviorSubject<User>(employee);
     this.currentEmployee = this.currentEmployeeSubject.asObservable();
 
     this.authServiceSubscription = this.authService.authState.subscribe((user: SocialUser) => {
@@ -70,8 +69,8 @@ export class ZepSigninService implements OnDestroy {
       localStorage.setItem(this.CURRENT_USER, JSON.stringify(user));
       this.currentUserSubject.next(user);
       this.zepLoginSubscription = this.zepLogin(user).subscribe(
-        (employee: Employee) => {
-          this.currentEmployeeSubject = new BehaviorSubject<Employee>(employee);
+        (employee: User) => {
+          this.currentEmployeeSubject = new BehaviorSubject<User>(employee);
           this.currentEmployee = this.currentEmployeeSubject.asObservable();
           localStorage.setItem(this.CURRENT_EMPLOYEE, JSON.stringify(employee));
           this.router.navigate([this.MONTHLY_REPORT_PAGE]);
@@ -116,9 +115,9 @@ export class ZepSigninService implements OnDestroy {
   }
 
 
-  zepLogin(user: SocialUser): Observable<Employee> {
-    return this.http.post<Employee>(this.config.getBackendUrl() +
-      '/user/login/', JSON.stringify(user))
+  zepLogin(user: SocialUser): Observable<User> {
+    return this.http.post<User>(this.config.getBackendUrl() +
+      '/user/login/', user.idToken)
       .pipe(
         retry(1),
       );
@@ -126,26 +125,26 @@ export class ZepSigninService implements OnDestroy {
 
   zepLogout(user: SocialUser): Observable<Response> {
     return this.http.post<Response>(this.config.getBackendUrl() +
-      '/user/logout/', JSON.stringify(user))
+      '/user/logout/', null)
       .pipe(
         retry(1)
       );
   }
 
   isEmployeeAdmin(): boolean {
-    return this.currentEmployeeSubject.getValue().rechte === configuration.EMPLOYEE_ROLES.ADMINISTRATOR;
+    return this.currentEmployeeSubject.getValue().role === configuration.EMPLOYEE_ROLES.ADMINISTRATOR;
   }
 
   isEmployeeUser(): boolean {
-    return this.currentEmployeeSubject.getValue().rechte === configuration.EMPLOYEE_ROLES.USER;
+    return this.currentEmployeeSubject.getValue().role === configuration.EMPLOYEE_ROLES.USER;
   }
 
   isEmployeeController(): boolean {
-    return this.currentEmployeeSubject.getValue().rechte === configuration.EMPLOYEE_ROLES.CONTROLLER;
+    return this.currentEmployeeSubject.getValue().role === configuration.EMPLOYEE_ROLES.CONTROLLER;
   }
 
   isEmployeeUserMitZusatzrechten(): boolean {
-    return this.currentEmployeeSubject.getValue().rechte === configuration.EMPLOYEE_ROLES.USER_MIT_ZUSATZRECHTEN;
+    return this.currentEmployeeSubject.getValue().role === configuration.EMPLOYEE_ROLES.USER_MIT_ZUSATZRECHTEN;
   }
 
   isEmployeeAdminOrController(): boolean {

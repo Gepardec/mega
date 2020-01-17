@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Location} from "@angular/common";
 import {environment} from "../../../../../environments/environment";
 
 @Injectable({
@@ -7,7 +6,7 @@ import {environment} from "../../../../../environments/environment";
 })
 export class ConfigService {
 
-  constructor(private location: Location) {
+  constructor() {
   }
 
   getBackendUrl(): string {

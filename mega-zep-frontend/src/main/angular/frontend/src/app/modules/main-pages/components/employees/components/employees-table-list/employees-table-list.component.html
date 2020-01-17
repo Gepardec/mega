@@ -4,20 +4,20 @@
     <!-- name Column -->
     <ng-container matColumnDef="nachname">
       <mat-header-cell *matHeaderCellDef>Mitarbeiter</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.vorname + " " + element.nachname}} </mat-cell>
+      <mat-cell *matCellDef="let element">{{element.firstName + " " + element.sureName}} </mat-cell>
     </ng-container>
 
     <!-- funktion Column -->
     <ng-container matColumnDef="abteilung">
       <mat-header-cell *matHeaderCellDef> Funktion</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{functions[element.preisgruppe]}}</mat-cell>
+      <mat-cell *matCellDef="let element"> {{functions[element.workDescription]}}</mat-cell>
     </ng-container>
 
     <!-- freigabedatum Column -->
     <ng-container matColumnDef="freigabedatum">
       <mat-header-cell *matHeaderCellDef>Freigegeben bis</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <p [ngClass]="stringToDate(element.freigabedatum) > date ? 'releaseWarn' : 'releaseSuccess'">{{element.freigabedatum}}</p>
+        <p [ngClass]="stringToDate(element) > date ? 'releaseWarn' : 'releaseSuccess'">{{element.releaseDate}}</p>
       </mat-cell>
     </ng-container>
 

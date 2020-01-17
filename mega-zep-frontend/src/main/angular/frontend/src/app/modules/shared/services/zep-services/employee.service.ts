@@ -19,9 +19,9 @@ export class EmployeeService {
   ) {
   }
 
-  getAll(user: SocialUser): Observable<Array<Employee>> {
+  getAll(): Observable<Array<Employee>> {
     return this.http.post<Array<Employee>>(this.config.getBackendUrl() +
-      '/worker/employees/', JSON.stringify(user))
+      '/worker/employees/', null)
       .pipe(
         retry(1)
       );

@@ -2,9 +2,7 @@ import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {GoogleSigninComponent} from "./modules/shared/components/google-signin/google-signin.component";
 import {GoogleUserAuthenticationGuard} from "./modules/shared/guards/authentication/google-user-authentication.guard";
-import {EmployeesModule} from "./modules/main-pages/components/employees/employees.module";
 import {configuration} from "./modules/shared/constants/configuration";
-import {MonthlyReportModule} from "./modules/main-pages/components/monthly-report/monthly-report.module";
 import {MainPagesContainer} from "./modules/main-pages/main-pages.container";
 
 export const routes: Routes = [
