@@ -1,6 +1,6 @@
 package com.gepardec.mega.monthlyreport;
 
-import com.gepardec.mega.utils.DateUtils;
+import com.gepardec.mega.aplication.utils.DateUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

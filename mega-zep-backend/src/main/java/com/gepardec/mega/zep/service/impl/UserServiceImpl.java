@@ -1,8 +1,8 @@
 package com.gepardec.mega.zep.service.impl;
 
-import com.gepardec.mega.security.ForbiddenException;
-import com.gepardec.mega.security.SessionUser;
-import com.gepardec.mega.security.UnauthorizedException;
+import com.gepardec.mega.aplication.security.ForbiddenException;
+import com.gepardec.mega.aplication.security.SessionUser;
+import com.gepardec.mega.aplication.security.UnauthorizedException;
 import com.gepardec.mega.zep.service.api.UserService;
 import com.gepardec.mega.zep.soap.ZepSoapProvider;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;

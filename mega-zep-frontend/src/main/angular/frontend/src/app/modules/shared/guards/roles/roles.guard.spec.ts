@@ -38,10 +38,10 @@ describe('RolesGuard', () => {
 
   function setupUser(rights: number): Employee {
     let employee: Employee = new Employee();
-    employee.vorname = "Max";
-    employee.nachname = "Mustermann";
-    employee.freigabedatum = "2019-01-01";
-    employee.rechte = rights;
+    employee.firstName = "Max";
+    employee.sureName = "Mustermann";
+    employee.releaseDate = "2019-01-01";
+    employee.role = rights;
 
     return employee;
   }

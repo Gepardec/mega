@@ -1,6 +1,6 @@
 package com.gepardec.mega.rest.exception;
 
-import com.gepardec.mega.security.ForbiddenException;
+import com.gepardec.mega.aplication.security.ForbiddenException;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;

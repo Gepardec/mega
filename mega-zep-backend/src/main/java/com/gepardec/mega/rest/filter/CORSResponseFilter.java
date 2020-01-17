@@ -14,6 +14,7 @@ import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.ext.Provider;
 
+// TODO: Should be obsolete. Configure quarkus cors properly
 @Provider
 public class CORSResponseFilter implements ContainerResponseFilter {
 
@@ -21,7 +22,7 @@ public class CORSResponseFilter implements ContainerResponseFilter {
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
 
         // in case of options for cors-post - return status 200
-        if(requestContext.getMethod().equals(HttpMethod.OPTIONS)) {
+        if (requestContext.getMethod().equals(HttpMethod.OPTIONS)) {
             responseContext.setStatus(HttpStatus.SC_OK);
         }
     }

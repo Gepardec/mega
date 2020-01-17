@@ -3,19 +3,20 @@ import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree} from 
 import {Observable} from 'rxjs';
 import {ZepSigninService} from "../../services/signin/zep-signin.service";
 import {Employee} from "../../models/Employee/Employee";
+import {User} from "../../models/User/User";
 
 @Injectable({
   providedIn: 'root'
 })
 export class RolesGuard implements CanActivate {
 
-  employee: Employee;
+  employee: User;
 
   constructor(
     private authenticationService: ZepSigninService
   ) {
     this.authenticationService.currentEmployee.subscribe(
-      (employee: Employee) => this.employee = employee
+      (employee: User) => this.employee = employee
     );
   }
 
@@ -26,14 +27,14 @@ export class RolesGuard implements CanActivate {
       return false;
     }
 
-    let roles = route.data.roles as Array<number>;
+    let roles = route.data.roles as Array<string>;
     // allow all roles when roles array is empty
     if (roles.length === 0) {
       return true;
     }
 
     for (let role of roles) {
-      if (role === this.employee.rechte) {
+      if (role === this.employee.role) {
         return true;
       }
     }

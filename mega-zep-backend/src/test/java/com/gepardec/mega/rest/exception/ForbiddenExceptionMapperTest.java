@@ -1,7 +1,6 @@
 package com.gepardec.mega.rest.exception;
 
-import com.gepardec.mega.security.ForbiddenException;
-import com.gepardec.mega.security.UnauthorizedException;
+import com.gepardec.mega.aplication.security.ForbiddenException;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

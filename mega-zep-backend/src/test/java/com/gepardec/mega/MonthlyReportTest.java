@@ -5,7 +5,7 @@ import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.monthlyreport.journey.JourneyWarning;
 import com.gepardec.mega.monthlyreport.warning.TimeWarning;
 import com.gepardec.mega.monthlyreport.warning.WarningConfig;
-import com.gepardec.mega.utils.DateUtils;
+import com.gepardec.mega.aplication.utils.DateUtils;
 import de.provantis.zep.MitarbeiterType;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
@@ -45,7 +45,7 @@ public class MonthlyReportTest {
                 .extract().asString();
 
         final MitarbeiterType mitarbeiterType = objectMapper.readValue(response, MitarbeiterType.class);
-        mitarbeiterType.setFreigabedatum(DateUtils.dateToString(releaseDate));
+        mitarbeiterType.setFreigabedatum(DateUtils.formatDate(releaseDate));
 
         given().contentType(MediaType.APPLICATION_JSON)
                 .body(mitarbeiterType)

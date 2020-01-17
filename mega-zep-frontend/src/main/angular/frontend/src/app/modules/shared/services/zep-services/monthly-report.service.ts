@@ -23,7 +23,7 @@ export class MonthlyReportService {
 
   getAll(user: SocialUser): Observable<MonthlyReport> {
     return this.http.post<MonthlyReport>(this.config.getBackendUrl() +
-      '/worker/employee/monthendReport', JSON.stringify(user))
+      '/worker/employee/monthendReport', null)
       .pipe(
         retry(1)
       );
@@ -33,12 +33,12 @@ export class MonthlyReportService {
   mockService(): Observable<MonthlyReport> {
 
     let employee = new Employee();
-    employee.anrede = "Herr";
-    employee.titel = "Dr.";
-    employee.vorname = "Max";
-    employee.nachname = "Mustermann";
-    employee.preisgruppe = "02";
-    employee.freigabedatum = new Date().toDateString();
+    employee.salutation = "Herr";
+    employee.title = "Dr.";
+    employee.firstName = "Max";
+    employee.sureName = "Mustermann";
+    employee.workDescription = "02";
+    employee.releaseDate = new Date().toDateString();
 
     let report = new MonthlyReport();
     report.employee = employee;

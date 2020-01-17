@@ -2,7 +2,7 @@ package com.gepardec.mega.communication;
 
 import com.gepardec.mega.communication.dates.BusinessDayCalculator;
 import com.gepardec.mega.communication.exception.MissingReceiverException;
-import com.gepardec.mega.utils.DateUtils;
+import com.gepardec.mega.aplication.utils.DateUtils;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.lang3.StringUtils;
