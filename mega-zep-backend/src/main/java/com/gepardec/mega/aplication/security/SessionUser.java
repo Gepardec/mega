@@ -1,4 +1,4 @@
-package com.gepardec.mega.security;
+package com.gepardec.mega.aplication.security;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

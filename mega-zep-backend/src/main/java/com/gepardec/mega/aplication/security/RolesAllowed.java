@@ -1,4 +1,4 @@
-package com.gepardec.mega.security;
+package com.gepardec.mega.aplication.security;
 
 import javax.enterprise.util.Nonbinding;
 import javax.interceptor.InterceptorBinding;

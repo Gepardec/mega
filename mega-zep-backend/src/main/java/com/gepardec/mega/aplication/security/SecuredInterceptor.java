@@ -1,4 +1,4 @@
-package com.gepardec.mega.security;
+package com.gepardec.mega.aplication.security;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 

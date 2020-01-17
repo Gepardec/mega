@@ -1,4 +1,4 @@
-package com.gepardec.mega;
+package com.gepardec.mega.rest.probes;
 
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
@@ -8,10 +8,10 @@ import javax.enterprise.context.ApplicationScoped;
 
 @Readiness
 @ApplicationScoped
-public class ReadynessChecker implements HealthCheck{
+public class ReadynessProbe implements HealthCheck {
 
     @Override
     public HealthCheckResponse call() {
-        return HealthCheckResponse.up("Test, container 100% ready!");
+        return HealthCheckResponse.up("up");
     }
 }

@@ -1,8 +1,9 @@
 package com.gepardec.mega.monthlyreport.journey;
 
-import com.gepardec.mega.monthlyreport.exception.EnumConverterException;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -21,12 +22,8 @@ public enum JourneyDirection {
     private static Map<String, JourneyDirection> enumMap = Stream.of(JourneyDirection.values())
             .collect(Collectors.toMap(journeyDirection -> journeyDirection.direction, Function.identity()));
 
-    public static JourneyDirection fromString(String direction) {
-        JourneyDirection journeyDirection = enumMap.get(direction);
-        if (journeyDirection == null) {
-            throw new EnumConverterException(String.format("Error mapping %s to Enum JourneyDirection", direction));
-        }
-        return journeyDirection;
+    public static Optional<JourneyDirection> fromString(String direction) {
+        return Optional.ofNullable(enumMap.get(StringUtils.defaultIfEmpty(direction, StringUtils.EMPTY).toUpperCase()));
     }
 
 }

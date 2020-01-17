@@ -1,4 +1,4 @@
-package com.gepardec.mega.utils;
+package com.gepardec.mega.aplication.utils;
 
 import com.gepardec.mega.communication.exception.FileReadException;
 import org.slf4j.Logger;

@@ -1,5 +1,6 @@
 package com.gepardec.mega.utils;
 
+import com.gepardec.mega.aplication.utils.DateUtils;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -55,17 +56,17 @@ class DateUtilsTest {
 
     @Test
     void toDateTime_correctInput_shouldReturnDateTime() {
-        assertEquals(LocalDateTime.of(2019, 11, 18, 10, 11), DateUtils.toDateTime("2019-11-18", "10:11"));
+        assertEquals(LocalDateTime.of(2019, 11, 18, 10, 11), DateUtils.parseDateTime("2019-11-18", "10:11"));
     }
 
     @Test
     void toDateTime_emptyDate_shouldThrowException() {
-        assertThrows(DateTimeParseException.class, () -> DateUtils.toDateTime("", "10:11"));
+        assertThrows(DateTimeParseException.class, () -> DateUtils.parseDateTime("", "10:11"));
     }
 
     @Test
     void toDateTime_emptyTime_shouldThrowException() {
-        assertThrows(DateTimeParseException.class, () -> DateUtils.toDateTime("2019-11-18", ""));
+        assertThrows(DateTimeParseException.class, () -> DateUtils.parseDateTime("2019-11-18", ""));
     }
 
     @Test

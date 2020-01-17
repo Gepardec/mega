@@ -1,4 +1,4 @@
-package com.gepardec.mega.security;
+package com.gepardec.mega.aplication.security;
 
 public class ForbiddenException extends SecurityException {
     public ForbiddenException() {

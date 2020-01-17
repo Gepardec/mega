@@ -1,8 +1,10 @@
 package com.gepardec.mega.security;
 
+import com.gepardec.mega.aplication.security.SecuredInterceptor;
+import com.gepardec.mega.aplication.security.SessionUser;
+import com.gepardec.mega.aplication.security.UnauthorizedException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,6 +1,6 @@
 package com.gepardec.mega.rest.exception;
 
-import com.gepardec.mega.security.UnauthorizedException;
+import com.gepardec.mega.aplication.security.UnauthorizedException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +15,6 @@ import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 

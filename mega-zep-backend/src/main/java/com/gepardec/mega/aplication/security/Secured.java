@@ -1,4 +1,4 @@
-package com.gepardec.mega.security;
+package com.gepardec.mega.aplication.security;
 
 import javax.interceptor.InterceptorBinding;
 import java.lang.annotation.ElementType;

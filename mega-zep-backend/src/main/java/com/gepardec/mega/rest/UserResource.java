@@ -2,7 +2,7 @@ package com.gepardec.mega.rest;
 
 import com.gepardec.mega.rest.model.User;
 import com.gepardec.mega.rest.translator.UserTranslator;
-import com.gepardec.mega.security.SessionUser;
+import com.gepardec.mega.aplication.security.SessionUser;
 import com.gepardec.mega.zep.service.api.UserService;
 import org.slf4j.Logger;
 

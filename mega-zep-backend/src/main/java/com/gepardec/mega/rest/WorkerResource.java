@@ -3,11 +3,11 @@ package com.gepardec.mega.rest;
 import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.rest.model.Employee;
 import com.gepardec.mega.rest.translator.EmployeeTranslator;
-import com.gepardec.mega.security.ForbiddenException;
-import com.gepardec.mega.security.Role;
-import com.gepardec.mega.security.RolesAllowed;
-import com.gepardec.mega.security.Secured;
-import com.gepardec.mega.security.SessionUser;
+import com.gepardec.mega.aplication.security.ForbiddenException;
+import com.gepardec.mega.aplication.security.Role;
+import com.gepardec.mega.aplication.security.RolesAllowed;
+import com.gepardec.mega.aplication.security.Secured;
+import com.gepardec.mega.aplication.security.SessionUser;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import de.provantis.zep.MitarbeiterType;
 

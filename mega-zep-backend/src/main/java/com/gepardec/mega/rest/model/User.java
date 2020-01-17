@@ -1,6 +1,6 @@
 package com.gepardec.mega.rest.model;
 
-import com.gepardec.mega.security.Role;
+import com.gepardec.mega.aplication.security.Role;
 
 /**
  * Represents the logged user in mega.

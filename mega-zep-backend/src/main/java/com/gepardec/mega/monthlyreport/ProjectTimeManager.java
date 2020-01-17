@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.gepardec.mega.utils.DateUtils.toDateTime;
+import static com.gepardec.mega.aplication.utils.DateUtils.parseDateTime;
 
 public class ProjectTimeManager {
 
@@ -33,13 +33,16 @@ public class ProjectTimeManager {
 
 
     private static ProjectTimeEntry toProjectTimeEntry(ProjektzeitType projektzeitType) {
-        LocalDateTime fromTime = toDateTime(projektzeitType.getDatum(), projektzeitType.getVon());
-        LocalDateTime toTime = toDateTime(projektzeitType.getDatum(), projektzeitType.getBis());
-        Task task = Task.fromString(projektzeitType.getTaetigkeit());
-        WorkingLocation workingLocation = WorkingLocation.fromString(projektzeitType.getOrt());
+        LocalDateTime fromTime = parseDateTime(projektzeitType.getDatum(), projektzeitType.getVon());
+        LocalDateTime toTime = parseDateTime(projektzeitType.getDatum(), projektzeitType.getBis());
+        Task task = Task.fromString(projektzeitType.getTaetigkeit())
+                .orElseThrow(() -> new IllegalArgumentException("ProjektzeitType.getTaetigkeit could not be converted to Task enum"));
+        WorkingLocation workingLocation = WorkingLocation.fromString(projektzeitType.getOrt())
+                .orElseThrow(() -> new IllegalArgumentException("ProjektzeitType.getOrt could not be converted to WorkingLocation enum"));
 
         if (Task.isJourney(task)) {
-            JourneyDirection journeyDirection = JourneyDirection.fromString(projektzeitType.getReiseRichtung());
+            JourneyDirection journeyDirection = JourneyDirection.fromString(projektzeitType.getReiseRichtung())
+                    .orElseThrow(() -> new IllegalArgumentException("ProjektzeitType.getReiseRichtung could not be converted to JourneyDirection enum"));
             return new JourneyEntry(fromTime, toTime, task, workingLocation, journeyDirection);
         } else {
             return new ProjectTimeEntry(fromTime, toTime, task, workingLocation);

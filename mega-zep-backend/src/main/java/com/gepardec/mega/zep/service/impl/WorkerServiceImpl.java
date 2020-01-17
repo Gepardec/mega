@@ -4,7 +4,7 @@ import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.monthlyreport.ProjectTimeManager;
 import com.gepardec.mega.monthlyreport.warning.WarningConfig;
 import com.gepardec.mega.rest.translator.EmployeeTranslator;
-import com.gepardec.mega.utils.DateUtils;
+import com.gepardec.mega.aplication.utils.DateUtils;
 import com.gepardec.mega.zep.exception.ZepServiceException;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import com.gepardec.mega.zep.soap.ZepSoapProvider;
@@ -16,8 +16,8 @@ import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.*;
 
-import static com.gepardec.mega.utils.DateUtils.getFirstDayOfFollowingMonth;
-import static com.gepardec.mega.utils.DateUtils.getLastDayOfFollowingMonth;
+import static com.gepardec.mega.aplication.utils.DateUtils.getFirstDayOfFollowingMonth;
+import static com.gepardec.mega.aplication.utils.DateUtils.getLastDayOfFollowingMonth;
 import static java.lang.String.format;
 
 @RequestScoped
@@ -154,7 +154,7 @@ public class WorkerServiceImpl implements WorkerService {
                 if (last.getEnddatum() == null) {
                     activeEmployees.add(employee);
                 } else {
-                    final LocalDate endDate = DateUtils.toLocalDate(Objects.requireNonNull(last).getEnddatum());
+                    final LocalDate endDate = DateUtils.parseDate(Objects.requireNonNull(last).getEnddatum());
                     if (!endDate.isBefore(LocalDate.now())) {
                         activeEmployees.add(employee);
                     }

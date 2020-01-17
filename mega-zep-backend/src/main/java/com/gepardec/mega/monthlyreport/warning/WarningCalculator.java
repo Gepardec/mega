@@ -6,7 +6,7 @@ import com.gepardec.mega.monthlyreport.Task;
 import com.gepardec.mega.monthlyreport.journey.JourneyDirectionHandler;
 import com.gepardec.mega.monthlyreport.journey.JourneyEntry;
 import com.gepardec.mega.monthlyreport.journey.JourneyWarning;
-import com.gepardec.mega.utils.DateUtils;
+import com.gepardec.mega.aplication.utils.DateUtils;
 
 import java.time.LocalDate;
 import java.util.*;
