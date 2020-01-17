@@ -5,6 +5,7 @@ import {Subscription} from "rxjs";
 import {ZepSigninService} from "../../../../../shared/services/signin/zep-signin.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {EmployeesService} from "../../../../../shared/services/employees/employees.service";
+import {User} from "../../../../../shared/models/User/User";
 
 @Component({
   selector: 'app-display-employees',
@@ -15,7 +16,7 @@ export class DisplayEmployeesComponent  implements OnInit, OnDestroy {
 
   selectedEmployees: Array<Employee> = new Array<Employee>();
   isGridlistActive: boolean = false;
-  user: SocialUser;
+  user: User;
   employees: Array<Employee> = new Array<Employee>();
   filteredEmployees: Array<Employee>;
   selectedDate: string = null;
@@ -34,7 +35,7 @@ export class DisplayEmployeesComponent  implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.currentUserSubscription = this.authenticationService.currentUser.subscribe((user: SocialUser) => {
+    this.currentUserSubscription = this.authenticationService.currentEmployee.subscribe((user: User) => {
       this.user = user;
       this.getAllEmployees();
     });
@@ -73,7 +74,7 @@ export class DisplayEmployeesComponent  implements OnInit, OnDestroy {
 
   getAllEmployees() {
     if (this.user) {
-      this.getEmployeeSubscription = this.displayEmployeeListService.getEmployees(this.user)
+      this.getEmployeeSubscription = this.displayEmployeeListService.getEmployees()
         .subscribe((employee: Array<Employee>) => {
           this.employees = employee;
           this.filteredEmployees = this.employees;
@@ -90,8 +91,8 @@ export class DisplayEmployeesComponent  implements OnInit, OnDestroy {
 
   applyFilter(filterValue: string) {
     this.filteredEmployees = this.employees
-      .filter(empl => empl.vorname.toLowerCase().includes(filterValue.toLowerCase())
-        || empl.nachname.toLowerCase().includes(filterValue.toLowerCase()));
+      .filter(empl => empl.firstName.toLowerCase().includes(filterValue.toLowerCase())
+        || empl.sureName.toLowerCase().includes(filterValue.toLowerCase()));
   }
 
   openSnackBar(message: string) {

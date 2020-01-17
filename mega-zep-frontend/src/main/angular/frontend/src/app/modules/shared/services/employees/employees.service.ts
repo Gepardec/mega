@@ -20,12 +20,12 @@ export class EmployeesService implements OnInit {
   ) {
   }
 
-  getEmployees(user: SocialUser): Observable<Array<Employee>> {
-    return this.employeeService.getAll(user);
+  getEmployees(): Observable<Array<Employee>> {
+    return this.employeeService.getAll();
   }
 
   updateEmployees(employees: Array<Employee>, date: string) {
-    employees.forEach(empl => empl.freigabedatum = date);
+    employees.forEach(empl => empl.releaseDate = date);
     return this.employeeService.updateAll(employees);
   }
 
