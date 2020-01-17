@@ -5,11 +5,10 @@ import com.gepardec.mega.monthlyreport.ProjectTimeManager;
 import com.gepardec.mega.monthlyreport.warning.WarningConfig;
 import com.gepardec.mega.rest.translator.EmployeeTranslator;
 import com.gepardec.mega.utils.DateUtils;
+import com.gepardec.mega.zep.exception.ZepServiceException;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import com.gepardec.mega.zep.soap.ZepSoapProvider;
 import de.provantis.zep.*;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
@@ -19,7 +18,6 @@ import java.util.*;
 
 import static com.gepardec.mega.utils.DateUtils.getFirstDayOfFollowingMonth;
 import static com.gepardec.mega.utils.DateUtils.getLastDayOfFollowingMonth;
-import static com.gepardec.mega.zep.service.ZepStatusCodeMapper.toHttpResponseCode;
 import static java.lang.String.format;
 
 @RequestScoped
@@ -62,15 +60,18 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public Integer updateEmployeesReleaseDate(final List<Pair<String, String>> pairs) {
-        final List<Integer> statusCodeList = new LinkedList<>();
+    public List<String> updateEmployeesReleaseDate(final Map<String, String> emailReleaseDates) {
+        final List<String> failedEmails = new LinkedList<>();
 
-        pairs.forEach(e -> statusCodeList.add(updateEmployeeReleaseDate(e.getLeft(), e.getRight())));
+        for (final Map.Entry<String, String> entry : emailReleaseDates.entrySet()) {
+            try {
+                updateEmployeeReleaseDate(entry.getKey(), entry.getValue());
+            } catch (Exception e) {
+                failedEmails.add(entry.getKey());
+            }
+        }
 
-        return statusCodeList.stream()
-                .filter(statuscode -> statuscode == HttpStatus.SC_INTERNAL_SERVER_ERROR)
-                .findAny()
-                .orElse(HttpStatus.SC_OK);
+        return failedEmails;
     }
 
     @Override
@@ -116,25 +117,22 @@ public class WorkerServiceImpl implements WorkerService {
 
 
     @Override
-    public Integer updateEmployeeReleaseDate(final String eMail, final String releaseDate) {
-        try {
-            final UpdateMitarbeiterRequestType umrt = new UpdateMitarbeiterRequestType();
-            umrt.setRequestHeader(zepSoapProvider.createRequestHeaderType());
+    public void updateEmployeeReleaseDate(final String eMail, final String releaseDate) {
+        final UpdateMitarbeiterRequestType umrt = new UpdateMitarbeiterRequestType();
+        umrt.setRequestHeader(zepSoapProvider.createRequestHeaderType());
 
 //            TODO: check api
 //            umrt.getMitarbeiter().setFreigabedatum(releaseDate);
 
-            MitarbeiterType employee = getEmployee(eMail);
-            employee.setFreigabedatum(releaseDate);
-            umrt.setMitarbeiter(employee);
+        MitarbeiterType employee = getEmployee(eMail);
+        employee.setFreigabedatum(releaseDate);
+        umrt.setMitarbeiter(employee);
 
-            final UpdateMitarbeiterResponseType updateMitarbeiterResponseType = zepSoapPortType.updateMitarbeiter(umrt);
-            final ResponseHeaderType responseHeaderType = updateMitarbeiterResponseType != null ? updateMitarbeiterResponseType.getResponseHeader() : null;
+        final UpdateMitarbeiterResponseType updateMitarbeiterResponseType = zepSoapPortType.updateMitarbeiter(umrt);
+        final ResponseHeaderType responseHeaderType = updateMitarbeiterResponseType != null ? updateMitarbeiterResponseType.getResponseHeader() : null;
 
-            return toHttpResponseCode(responseHeaderType);
-        } catch (Exception e) {
-            logger.error(format("Errro updatingEmployee, id: %s", eMail));
-            return HttpStatus.SC_INTERNAL_SERVER_ERROR;
+        if (responseHeaderType != null && Integer.parseInt(responseHeaderType.getReturnCode()) == 0) {
+            throw new ZepServiceException("updateEmployeeReleaseDate failed with code: " + responseHeaderType.getReturnCode());
         }
     }
 
