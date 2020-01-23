@@ -1,0 +1,12 @@
+<button id="userBtn" mat-button [matMenuTriggerFor]="menu">{{user?.firstname + " " + user?.lastname}}
+  <mat-icon matListIcon>keyboard_arrow_down</mat-icon>
+</button>
+
+<!-- FIXME GAJ: where to get photoUrl -->
+<!--<img class="avatar" src="{{user?.photoUrl}}"/>-->
+
+<mat-menu id="menu" #menu>
+  <button id="logoutBtn" mat-menu-item (click)="doLogout()">Logout</button>
+</mat-menu>
+
+

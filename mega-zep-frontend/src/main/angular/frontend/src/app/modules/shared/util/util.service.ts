@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {EmployeeService} from "../services/zep-services/employee.service";
-import {Employee} from "../models/Employee/Employee";
+import {EmployeeService} from "../../employees/services/employee.service";
+import {Employee} from "../../employees/models/Employee";
 import {Observable} from "rxjs";
 
 @Injectable({
