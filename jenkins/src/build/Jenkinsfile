@@ -79,7 +79,6 @@ pipeline {
                                             sh "mvn -B -s jenkins-settings.xml \
                                                    install \
                                                    -Drevision=${revision} \
-                                                   -DskipTests=true \
                                                    -Dquarkus.package.uber.jar=true"
                                         }
 
