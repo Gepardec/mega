@@ -2,7 +2,7 @@ package com.gepardec.mega.rest.model;
 
 public class Employee {
     private String userId;
-    private String eMail;
+    private String email;
     private String title;
     private String firstName;
     private String sureName;
@@ -10,6 +10,9 @@ public class Employee {
     private String releaseDate;
     private String workDescription;
     private Integer role;
+
+    public Employee() {
+    }
 
     public String getUserId() {
         return userId;
@@ -19,12 +22,12 @@ public class Employee {
         this.userId = userId;
     }
 
-    public String getEMail() {
-        return eMail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEMail(String eMail) {
-        this.eMail = eMail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getTitle() {

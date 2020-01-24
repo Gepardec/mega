@@ -2,6 +2,7 @@ package com.gepardec.mega.rest.exception;
 
 import com.gepardec.mega.aplication.security.ForbiddenException;
 import org.apache.http.HttpStatus;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,8 +35,6 @@ class ForbiddenExceptionMapperTest {
         final Response response = exceptionMapper.toResponse(exception);
 
         verify(log, times(1)).warn(anyString(), any(Object.class), any(Object.class));
-        assertAll(
-                () -> assertEquals(HttpStatus.SC_FORBIDDEN, response.getStatus(), "status"),
-                () -> assertTrue(response.getEntity().toString().contains(exception.getMessage()), "entity"));
+        Assertions.assertEquals(HttpStatus.SC_FORBIDDEN, response.getStatus(), "status");
     }
 }

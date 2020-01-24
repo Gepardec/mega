@@ -37,8 +37,6 @@ class UnauthorizedExceptionMapperTest {
         final Response response = exceptionMapper.toResponse(exception);
 
         verify(log, times(1)).warn(anyString(), any(Object.class), any(Object.class));
-        assertAll(
-                () -> assertEquals(HttpStatus.SC_UNAUTHORIZED, response.getStatus(), "status"),
-                () -> assertTrue(response.getEntity().toString().contains(exception.getMessage()), "entity"));
+        assertEquals(HttpStatus.SC_UNAUTHORIZED, response.getStatus(), "status");
     }
 }
