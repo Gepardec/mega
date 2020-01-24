@@ -6,6 +6,7 @@ import { UserService } from './modules/shared/services/user/user.service';
 import { ConfigService } from './modules/shared/services/config/config.service';
 import { Config } from './modules/shared/models/Config';
 import { Subscription } from 'rxjs';
+import { configuration } from './modules/shared/constants/configuration';
 
 @Component({
   selector: 'app-root',
@@ -34,6 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.oAuthService.tokenValidationHandler = new JwksValidationHandler();
 
       this.oAuthService.loadDiscoveryDocumentAndTryLogin().then((result: boolean) => {
+        this.router.navigate([configuration.PAGE_URLS.LOGIN]);
         if (this.userService.loggedInWithGoogle()) {
           this.userService.loginUser();
         }
