@@ -6,22 +6,22 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 @Dependent
-public class GoogleConfig {
+public class OAuthConfig {
 
     @Inject
-    @ConfigProperty(name = "google.frontend.clientId")
-    String frontendClientId;
+    @ConfigProperty(name = "oauth.clientId")
+    String clientId;
 
     @Inject
-    @ConfigProperty(name = "google.oauth.issuer")
+    @ConfigProperty(name = "oauth.issuer")
     String issuer;
 
     @Inject
-    @ConfigProperty(name = "google.oauth.scope")
+    @ConfigProperty(name = "oauth.scope")
     String scope;
 
-    public String getFrontendClientId() {
-        return frontendClientId;
+    public String getClientId() {
+        return clientId;
     }
 
     public String getIssuer() {

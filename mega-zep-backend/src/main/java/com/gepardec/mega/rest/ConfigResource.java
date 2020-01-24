@@ -1,8 +1,7 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.aplication.configuration.GoogleConfig;
+import com.gepardec.mega.aplication.configuration.OAuthConfig;
 import com.gepardec.mega.rest.model.Config;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -18,12 +17,12 @@ import javax.ws.rs.core.Response;
 public class ConfigResource {
 
     @Inject
-    GoogleConfig googleConfig;
+    OAuthConfig oauthConfig;
 
     @Path("/")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response get() {
-        return Response.ok(new Config(googleConfig.getFrontendClientId(), googleConfig.getIssuer(), googleConfig.getScope())).build();
+        return Response.ok(new Config(oauthConfig.getClientId(), oauthConfig.getIssuer(), oauthConfig.getScope())).build();
     }
 }
