@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Employee } from "../../models/Employee";
-import { Subscription } from "rxjs";
-import { EmployeesService } from "../../services/employees.service";
+import { Employee } from '../../models/Employee';
+import { Subscription } from 'rxjs';
+import { EmployeesService } from '../../services/employees.service';
 import { NotificationService } from '../../../shared/services/notification/notification.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { NotificationService } from '../../../shared/services/notification/notif
 export class DisplayEmployeesComponent implements OnInit, OnDestroy {
 
   selectedEmployees: Array<Employee> = new Array<Employee>();
-  isGridlistActive: boolean = false;
+  isGridlistActive = false;
   employees: Array<Employee> = new Array<Employee>();
   filteredEmployees: Array<Employee>;
   selectedDate: string = null;
@@ -38,9 +38,15 @@ export class DisplayEmployeesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.selectedEmployeesSubscription && this.selectedEmployeesSubscription.unsubscribe();
-    this.getEmployeeSubscription && this.getEmployeeSubscription.unsubscribe();
-    this.updateEmployeesSubscription && this.updateEmployeesSubscription.unsubscribe();
+    if (this.selectedEmployeesSubscription) {
+      this.selectedEmployeesSubscription.unsubscribe();
+    }
+    if (this.getEmployeeSubscription) {
+      this.getEmployeeSubscription.unsubscribe();
+    }
+    if (this.updateEmployeesSubscription) {
+      this.updateEmployeesSubscription.unsubscribe();
+    }
   }
 
   toggleView(): void {

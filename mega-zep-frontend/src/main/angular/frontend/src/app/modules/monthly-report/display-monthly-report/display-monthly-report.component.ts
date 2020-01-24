@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MonthlyReport } from "../models/MonthlyReport";
-import { MatTableDataSource } from "@angular/material/table";
-import { TimeWarning } from "../models/TimeWarning";
-import { JourneyWarning } from "../models/JourneyWarning";
-import { configuration } from "../../shared/constants/configuration";
+import { MonthlyReport } from '../models/MonthlyReport';
+import { MatTableDataSource } from '@angular/material/table';
+import { TimeWarning } from '../models/TimeWarning';
+import { JourneyWarning } from '../models/JourneyWarning';
+import { configuration } from '../../shared/constants/configuration';
 
 @Component({
   selector: 'app-display-monthly-report',
@@ -12,7 +12,7 @@ import { configuration } from "../../shared/constants/configuration";
 })
 export class DisplayMonthlyReportComponent implements OnInit {
 
-  @Input('monthlyReport') monthlyReport: MonthlyReport;
+  @Input() monthlyReport: MonthlyReport;
   displayedColumnsTimeTable = ['date', 'restTime', 'breakTime', 'workingTime'];
   displayedColumnsJourneyTable = ['date', 'warning'];
   datasourceTimeTable = new MatTableDataSource<TimeWarning>();
@@ -30,7 +30,7 @@ export class DisplayMonthlyReportComponent implements OnInit {
   }
 
   getDateOfReport(date: string): Date {
-    let reportDate = new Date(date);
+    const reportDate = new Date(date);
     reportDate.setMonth(reportDate.getMonth() + 1);
     return reportDate;
   }

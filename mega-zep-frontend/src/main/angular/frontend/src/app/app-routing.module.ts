@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { configuration } from "./modules/shared/constants/configuration";
-import { LoginComponent } from "./modules/shared/components/login/login.component";
-import { LoginGuard } from "./modules/shared/guards/login.guard";
-import { EmployeesComponent } from "./modules/employees/employees.component";
-import { MonthlyReportComponent } from "./modules/monthly-report/monthly-report.component";
+import { configuration } from './modules/shared/constants/configuration';
+import { LoginComponent } from './modules/shared/components/login/login.component';
+import { LoginGuard } from './modules/shared/guards/login.guard';
+import { EmployeesComponent } from './modules/employees/employees.component';
+import { MonthlyReportComponent } from './modules/monthly-report/monthly-report.component';
 
 
 export const routes: Routes = [

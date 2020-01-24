@@ -1,9 +1,9 @@
 import {Injectable, Injector, ErrorHandler} from '@angular/core';
-import {LoggingService} from "../logging/logging.service";
-import {NotificationService} from "../notification/notification.service";
-import {ErrorService} from "./error.service";
-import {HttpErrorResponse} from "@angular/common/http";
-import {configuration} from "../../constants/configuration";
+import {LoggingService} from '../logging/logging.service';
+import {NotificationService} from '../notification/notification.service';
+import {ErrorService} from './error.service';
+import {HttpErrorResponse} from '@angular/common/http';
+import {configuration} from '../../constants/configuration';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,6 @@ export class ErrorHandlerService implements ErrorHandler {
     const notifier = this.injector.get(NotificationService);
 
     let message;
-    let stackTrace;
 
     if (error instanceof HttpErrorResponse) {
       // Server Error

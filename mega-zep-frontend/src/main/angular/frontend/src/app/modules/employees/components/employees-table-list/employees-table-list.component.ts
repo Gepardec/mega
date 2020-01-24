@@ -1,10 +1,10 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {configuration} from "../../../shared/constants/configuration";
-import {MatTableDataSource} from "@angular/material/table";
-import {Employee} from "../../models/Employee";
-import {SelectionChange, SelectionModel} from "@angular/cdk/collections";
-import {Subscription} from "rxjs";
-import {EmployeesService} from "../../services/employees.service";
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { configuration } from '../../../shared/constants/configuration';
+import { MatTableDataSource } from '@angular/material/table';
+import { Employee } from '../../models/Employee';
+import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
+import { Subscription } from 'rxjs';
+import { EmployeesService } from '../../services/employees.service';
 
 @Component({
   selector: 'app-employees-table-list',
@@ -16,8 +16,8 @@ export class EmployeesTableListComponent implements OnInit, OnDestroy {
   readonly date = new Date();
   readonly functions = configuration.EMPLOYEE_FUNCTIONS;
 
+  @Input() dataSource: MatTableDataSource<Employee>;
   displayedColumns = ['nachname', 'abteilung', 'freigabedatum', 'auswaehlen'];
-  @Input('dataSource') dataSource: MatTableDataSource<Employee>;
   selection = new SelectionModel<Employee>(true, null);
 
   private selectionChangedSubscription: Subscription;
@@ -41,7 +41,9 @@ export class EmployeesTableListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.selectionChangedSubscription && this.selectionChangedSubscription.unsubscribe();
+    if (this.selectionChangedSubscription) {
+      this.selectionChangedSubscription.unsubscribe();
+    }
   }
 
   isAllSelected() {
