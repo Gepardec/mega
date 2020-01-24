@@ -8,6 +8,18 @@ Make End-of-the-month-process Great Again!
 
 - Java 11
 - Maven 3.5+
+- node.js 12+
+- npm 6+
+
+==== Frontend Setup
+
+install node.js
+
+npm install -g @angular/cli
+
+cd mega-zep-frontend/src/main/angular/frontend
+npm install
+npx ng serve
 
 See link:mega-zep-connector/README.adoc[README of ZEP-Connector] for more information.
 
