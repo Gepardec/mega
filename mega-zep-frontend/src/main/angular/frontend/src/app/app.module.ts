@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { APP_BASE_HREF, HashLocationStrategy, LocationStrategy, registerLocaleData } from '@angular/common';
+import { APP_BASE_HREF, registerLocaleData } from '@angular/common';
 import localeDeAt from '@angular/common/locales/de-AT';
 import { SharedModule } from './modules/shared/shared.module';
 import { OAuthModule, OAuthModuleConfig } from 'angular-oauth2-oidc';
@@ -32,7 +32,6 @@ registerLocaleData(localeDeAt, 'de-AT');
     MonthlyReportModule
   ],
   providers: [
-    {provide: LocationStrategy, useClass: HashLocationStrategy},
     {provide: APP_BASE_HREF, useValue: '/'},
     {provide: ErrorHandler, useClass: ErrorHandlerService},
     {provide: OAuthModuleConfig, useFactory: authConfigFactory, deps: [ConfigService]},
