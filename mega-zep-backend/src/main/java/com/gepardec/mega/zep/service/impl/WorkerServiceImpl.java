@@ -2,6 +2,9 @@ package com.gepardec.mega.zep.service.impl;
 
 import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.monthlyreport.ProjectTimeManager;
+import com.gepardec.mega.monthlyreport.journey.JourneyWarning;
+import com.gepardec.mega.monthlyreport.warning.TimeWarning;
+import com.gepardec.mega.monthlyreport.warning.WarningCalculator;
 import com.gepardec.mega.monthlyreport.warning.WarningConfig;
 import com.gepardec.mega.rest.translator.EmployeeTranslator;
 import com.gepardec.mega.aplication.utils.DateUtils;
@@ -109,10 +112,12 @@ public class WorkerServiceImpl implements WorkerService {
         if (projectTimeResponse == null || projectTimeResponse.getProjektzeitListe() == null) {
             return null;
         }
-        MonthlyReport monthlyReport = new MonthlyReport(EmployeeTranslator.toEmployee(mitarbeiterType),
-                new ProjectTimeManager(projectTimeResponse.getProjektzeitListe().getProjektzeiten()), warningConfig);
-        monthlyReport.calculateWarnings();
-        return monthlyReport;
+        final ProjectTimeManager projectTimeManager = new ProjectTimeManager(projectTimeResponse.getProjektzeitListe().getProjektzeiten());
+        final WarningCalculator warningCalculator = new WarningCalculator(warningConfig);
+        final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(projectTimeManager);
+        final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectTimeManager);
+
+        return new MonthlyReport(timeWarnings, journeyWarnings, mitarbeiterType);
     }
 
 
