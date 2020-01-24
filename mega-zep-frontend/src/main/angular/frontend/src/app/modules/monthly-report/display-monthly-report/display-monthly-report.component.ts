@@ -1,9 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {MonthlyReport} from "../models/MonthlyReport";
-import {MatTableDataSource} from "@angular/material/table";
-import {TimeWarning} from "../models/TimeWarning";
-import {JourneyWarning} from "../models/JourneyWarning";
-import {configuration} from "../../shared/constants/configuration";
+import { Component, Input, OnInit } from '@angular/core';
+import { MonthlyReport } from "../models/MonthlyReport";
+import { MatTableDataSource } from "@angular/material/table";
+import { TimeWarning } from "../models/TimeWarning";
+import { JourneyWarning } from "../models/JourneyWarning";
+import { configuration } from "../../shared/constants/configuration";
 
 @Component({
   selector: 'app-display-monthly-report',
@@ -19,10 +19,11 @@ export class DisplayMonthlyReportComponent implements OnInit {
   datasourceJourneyTable = new MatTableDataSource<JourneyWarning>();
   readonly functions = configuration.EMPLOYEE_FUNCTIONS;
 
-  constructor() {  }
+  constructor() {
+  }
 
   ngOnInit() {
-    if(this.monthlyReport) {
+    if (this.monthlyReport) {
       this.datasourceTimeTable.data = this.monthlyReport.timeWarnings;
       this.datasourceJourneyTable.data = this.monthlyReport.journeyWarnings;
     }

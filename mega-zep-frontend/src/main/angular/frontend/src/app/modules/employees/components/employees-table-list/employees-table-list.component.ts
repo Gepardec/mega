@@ -45,9 +45,13 @@ export class EmployeesTableListComponent implements OnInit, OnDestroy {
   }
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    if (this.dataSource) {
+      const numSelected = this.selection.selected.length;
+      const numRows = this.dataSource.data.length;
+      return numSelected === numRows;
+    } else {
+      return false;
+    }
   }
 
   masterToggle() {

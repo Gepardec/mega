@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EmployeesGridListComponent } from './employees-grid-list.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('EmployeesGridListComponent', () => {
   let component: EmployeesGridListComponent;
@@ -8,9 +10,13 @@ describe('EmployeesGridListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EmployeesGridListComponent ]
+      declarations: [EmployeesGridListComponent],
+      imports: [
+        MatDialogModule
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
