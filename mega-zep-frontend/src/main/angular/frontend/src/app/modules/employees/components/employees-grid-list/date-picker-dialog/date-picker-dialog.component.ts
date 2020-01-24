@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Employee } from "../../../models/Employee";
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { UtilService } from "../../../../shared/util/util.service";
+import { Employee } from '../../../models/Employee';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { UtilService } from '../../../../shared/util/util.service';
 import { NotificationService } from '../../../../shared/services/notification/notification.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class DatePickerDialogComponent implements OnInit {
   }
 
   updateEmployee(employee: Employee) {
-    let employees: Array<Employee> = new Array<Employee>(employee);
+    const employees: Array<Employee> = new Array<Employee>(employee);
     this.updateEmployees(employees);
   }
 

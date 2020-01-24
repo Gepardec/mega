@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
-import { User } from "../models/User";
+import { User } from '../models/User';
 import { UserService } from '../services/user/user.service';
 
 @Injectable({
@@ -15,19 +15,19 @@ export class RolesGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
     Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    let user: User = this.userService.user.value;
+    const user: User = this.userService.user.value;
 
     if (!user) {
       return false;
     }
 
-    let roles = route.data.roles as Array<string>;
+    const roles = route.data.roles as Array<string>;
     // allow all roles when roles array is empty
     if (roles.length === 0) {
       return true;
     }
 
-    for (let role of roles) {
+    for (const role of roles) {
       if (role === user.role) {
         return true;
       }

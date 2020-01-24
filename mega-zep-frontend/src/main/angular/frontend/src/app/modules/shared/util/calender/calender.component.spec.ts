@@ -1,7 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {CalenderComponent} from './calender.component';
-import {AngularMaterialModule} from "../../../../material-module";
+import {AngularMaterialModule} from '../../../../material-module';
 
 describe('CalenderComponent', () => {
 
@@ -28,7 +28,7 @@ describe('CalenderComponent', () => {
   it('should format the date', () => {
     const {fixture, app} = setup();
 
-    app.onSelect("01.01.2019");
-    expect(app.selectedDate).toEqual("2019-01-01");
+    app.onSelect('01.01.2019');
+    expect(app.date).toEqual('2019-01-01');
   });
 });

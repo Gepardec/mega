@@ -1,19 +1,18 @@
 import {Injectable, OnInit} from '@angular/core';
-import {BehaviorSubject, Observable} from "rxjs";
-import {Employee} from "../models/Employee";
-import {EmployeeService} from "./employee.service";
-import {SelectionChange} from "@angular/cdk/collections";
+import {BehaviorSubject, Observable} from 'rxjs';
+import {Employee} from '../models/Employee';
+import {EmployeeService} from './employee.service';
+import {SelectionChange} from '@angular/cdk/collections';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 // TODO: this logic should be moved to container
-export class EmployeesService implements OnInit {
+export class EmployeesService {
 
-  private _selectedEmployees: BehaviorSubject<Array<Employee>> = new BehaviorSubject<Array<Employee>>(new Array<Employee>());
-
-  private _resetSelection: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  selectedEmployees: BehaviorSubject<Array<Employee>> = new BehaviorSubject<Array<Employee>>(new Array<Employee>());
+  resetSelection: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(
     private employeeService: EmployeeService
@@ -29,21 +28,16 @@ export class EmployeesService implements OnInit {
     return this.employeeService.updateAll(employees);
   }
 
-
-  get selectedEmployees(): BehaviorSubject<Array<Employee>> {
-    return this._selectedEmployees;
-  }
-
   setSelectedEmployees(value: SelectionChange<Employee>) {
-    let employees: Array<Employee> = this.selectedEmployees.getValue();
+    const employees: Array<Employee> = this.selectedEmployees.getValue();
 
     if (value != null) {
-      for (let employee of value.added) {
+      for (const employee of value.added) {
         employees.push(employee);
       }
 
-      for (let empl of value.removed) {
-        let index = employees.findIndex(d => d.userId === empl.userId);
+      for (const empl of value.removed) {
+        const index = employees.findIndex(d => d.userId === empl.userId);
         // remove element from array
         employees.splice(index, 1);
       }
@@ -51,15 +45,8 @@ export class EmployeesService implements OnInit {
     this.selectedEmployees.next(employees);
   }
 
-  get resetSelection(): BehaviorSubject<boolean> {
-    return this._resetSelection;
-  }
-
   setResetSelection(value: boolean) {
-    this._resetSelection.next(value);
+    this.resetSelection.next(value);
     this.selectedEmployees.next(new Array<Employee>());
-  }
-
-  ngOnInit(): void {
   }
 }

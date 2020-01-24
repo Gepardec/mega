@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MonthlyReport } from "./models/MonthlyReport";
-import { Subscription } from "rxjs";
-import { MonthlyReportService } from "./services/monthly-report.service";
+import { MonthlyReport } from './models/MonthlyReport';
+import { Subscription } from 'rxjs';
+import { MonthlyReportService } from './services/monthly-report.service';
 
 @Component({
   selector: 'app-monthly-report',
@@ -20,7 +20,9 @@ export class MonthlyReportComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.monthlyReportSubscrition && this.monthlyReportSubscrition.unsubscribe();
+    if (this.monthlyReportSubscrition) {
+      this.monthlyReportSubscrition.unsubscribe();
+    }
   }
 
   getAllTimeEntries() {

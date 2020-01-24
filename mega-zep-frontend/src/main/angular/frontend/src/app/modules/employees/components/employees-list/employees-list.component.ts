@@ -1,6 +1,6 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {Employee} from "../../models/Employee";
-import {MatTableDataSource} from "@angular/material/table";
+import {Employee} from '../../models/Employee';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-employees-list',
@@ -9,9 +9,9 @@ import {MatTableDataSource} from "@angular/material/table";
 })
 export class EmployeesListComponent implements OnInit, OnChanges {
 
-  @Input('isGridlistActive') isGridlistActive: boolean;
+  @Input() isGridlistActive: boolean;
 
-  @Input('employees') employees: Array<Employee>;
+  @Input() employees: Array<Employee>;
   public dataSource = new MatTableDataSource<Employee>();
 
   pageIndex = 0;

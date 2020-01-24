@@ -1,5 +1,5 @@
 import {RouterModule, Routes} from '@angular/router';
-import {MonthlyReportComponent} from "./monthly-report.component";
+import {MonthlyReportComponent} from './monthly-report.component';
 import {ModuleWithProviders} from '@angular/core';
 
 export const homeRoutes: Routes = [

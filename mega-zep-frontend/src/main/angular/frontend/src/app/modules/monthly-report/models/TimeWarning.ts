@@ -3,5 +3,5 @@ export class TimeWarning {
   missingRestTime: number;
   missingBreakTime: number;
   excessWorkTime: number;
-  warnings: Array<String>;
+  warnings: Array<string>;
 }

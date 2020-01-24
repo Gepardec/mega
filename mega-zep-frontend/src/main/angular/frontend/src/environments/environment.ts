@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   // Base url
-  frontendOriginSegment: "4200",
-  backendOriginSegment: "8080",
+  frontendOriginSegment: '4200',
+  backendOriginSegment: '8080',
 };
 
 /*

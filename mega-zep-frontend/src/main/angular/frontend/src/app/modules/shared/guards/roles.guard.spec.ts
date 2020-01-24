@@ -1,12 +1,12 @@
 import {inject, TestBed} from '@angular/core/testing';
 
 import {RolesGuard} from './roles.guard';
-import {RouterTestingModule} from "@angular/router/testing";
-import {routes} from "../../../app-routing.module";
-import {AppModule} from "../../../app.module";
-import {ActivatedRouteSnapshot, UrlSegment} from "@angular/router";
-import {configuration} from "../constants/configuration";
-import {Employee} from "../../employees/models/Employee";
+import {RouterTestingModule} from '@angular/router/testing';
+import {routes} from '../../../app-routing.module';
+import {AppModule} from '../../../app.module';
+import {ActivatedRouteSnapshot, UrlSegment} from '@angular/router';
+import {configuration} from '../constants/configuration';
+import {Employee} from '../../employees/models/Employee';
 
 describe('RolesGuard', () => {
 

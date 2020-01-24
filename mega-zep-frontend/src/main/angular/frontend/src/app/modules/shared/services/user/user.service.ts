@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { ConfigService } from "../config/config.service";
-import { OAuthService } from "angular-oauth2-oidc";
-import { User } from "../../models/User";
+import { HttpClient } from '@angular/common/http';
+import { ConfigService } from '../config/config.service';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { User } from '../../models/User';
 import { configuration } from '../../constants/configuration';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -12,8 +12,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class UserService {
 
-  private SESSION_STORAGE_KEY: string = 'MEGA_USER';
-  private SESSION_STORAGE_KEY_STARTPAGE_OVERRIDE: string = 'MEGA_USER_STARTPAGE';
+  private SESSION_STORAGE_KEY = 'MEGA_USER';
+  private SESSION_STORAGE_KEY_STARTPAGE_OVERRIDE = 'MEGA_USER_STARTPAGE';
 
   user: BehaviorSubject<User> = new BehaviorSubject(undefined);
 
@@ -66,7 +66,7 @@ export class UserService {
   }
 
   private navigateToStartpage() {
-    let startpage = this.getStartpageOverride() ? this.getStartpageOverride() : configuration.PAGE_URLS.MONTHLY_REPORT;
+    const startpage = this.getStartpageOverride() ? this.getStartpageOverride() : configuration.PAGE_URLS.MONTHLY_REPORT;
     this.setStartpageOverride(undefined);
     this.router.navigate([startpage]);
   }
