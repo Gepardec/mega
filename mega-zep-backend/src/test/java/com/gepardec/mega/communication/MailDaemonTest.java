@@ -34,6 +34,9 @@ public class MailDaemonTest {
     @ConfigProperty(name = "quarkus.mailer.mock")
     boolean mailMockSetting;
 
+    @ConfigProperty(name = "mega.mail.subjectPrefix", defaultValue = "")
+    String subjectPrefix;
+
     @Inject
     NotificationConfig notificationConfig;
 
@@ -66,7 +69,7 @@ public class MailDaemonTest {
         assertAll(
                 () -> assertEquals(mailAddresses.size(), mailbox.getTotalMessagesSent()),
                 () -> mailAddresses.forEach(mailAddress ->
-                        assertEquals(notificationConfig.getOmReleaseSubject(), mailbox.getMessagesSentTo(mailAddresses.get(0)).get(0).getSubject()))
+                        assertEquals(buildSubject(notificationConfig.getOmReleaseSubject()), mailbox.getMessagesSentTo(mailAddresses.get(0)).get(0).getSubject()))
         );
     }
 
@@ -77,7 +80,7 @@ public class MailDaemonTest {
         assertAll(
                 () -> assertEquals(mailAddresses.size(), mailbox.getTotalMessagesSent()),
                 () -> mailAddresses.forEach(mailAddress ->
-                        assertEquals(notificationConfig.getPlSubject(), mailbox.getMessagesSentTo(mailAddress).get(0).getSubject()))
+                        assertEquals(buildSubject(notificationConfig.getPlSubject()), mailbox.getMessagesSentTo(mailAddress).get(0).getSubject()))
         );
     }
 
@@ -92,8 +95,12 @@ public class MailDaemonTest {
         assertAll(
                 () -> assertEquals(addresses.size(), mailbox.getTotalMessagesSent()),
                 () -> addresses.forEach(address ->
-                        assertEquals(notificationConfig.getEmployeeSubject(), mailbox.getMessagesSentTo(address).get(0).getSubject()))
+                        assertEquals(buildSubject(notificationConfig.getEmployeeSubject()), mailbox.getMessagesSentTo(address).get(0).getSubject()))
         );
+    }
+
+    private String buildSubject(final String subject){
+        return subjectPrefix + subject;
     }
 
 

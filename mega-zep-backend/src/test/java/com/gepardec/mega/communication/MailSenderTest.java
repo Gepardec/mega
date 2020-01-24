@@ -23,6 +23,9 @@ class MailSenderTest {
     @ConfigProperty(name = "quarkus.mailer.mock")
     boolean mailMockSetting;
 
+    @ConfigProperty(name = "mega.mail.subjectPrefix", defaultValue = "")
+    String subjectPrefix;
+
     @Inject
     MailSender mailSender;
 
@@ -85,6 +88,6 @@ class MailSenderTest {
         assertAll(
                 () -> assertEquals(1, sent.size()),
                 () -> assertTrue(sent.get(0).getHtml().startsWith("<p>Hallo " + name)),
-                () -> assertTrue(sent.get(0).getSubject().contains(expectedSubject)));
+                () -> assertTrue(sent.get(0).getSubject().equals(subjectPrefix + expectedSubject)));
     }
 }
