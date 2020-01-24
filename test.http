@@ -6,3 +6,7 @@ POST http://localhost:8080/user/login
 Content-Type: application/json
 
 ###
+GET http://localhost:8080/config
+Content-Type: application/json
+
+###

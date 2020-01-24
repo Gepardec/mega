@@ -1,5 +1,6 @@
 package com.gepardec.mega.aplication.security;
 
+import com.gepardec.mega.aplication.configuration.GoogleConfig;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -9,16 +10,16 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import java.util.Collections;
 
-@ApplicationScoped
+@RequestScoped
 public class GoogleVerifierProducer {
 
     @Inject
-    @ConfigProperty(name = "google.frontend.clientId")
-    String frontendClientId;
+    GoogleConfig googleConfig;
 
     @Produces
     @Dependent
@@ -36,7 +37,8 @@ public class GoogleVerifierProducer {
     @Dependent
     public GoogleIdTokenVerifier createGoogleTokenVerifier(final HttpTransport httpTransport, final JsonFactory jsonFactory) {
         return new GoogleIdTokenVerifier.Builder(httpTransport, jsonFactory)
-                .setAudience(Collections.singletonList(frontendClientId))
+                .setAudience(Collections.singletonList(googleConfig.getFrontendClientId()))
+                .setIssuer(googleConfig.getIssuer())
                 .build();
     }
 }
