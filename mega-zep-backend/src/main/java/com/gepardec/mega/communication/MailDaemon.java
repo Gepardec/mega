@@ -1,8 +1,8 @@
 package com.gepardec.mega.communication;
 
+import com.gepardec.mega.aplication.utils.DateUtils;
 import com.gepardec.mega.communication.dates.BusinessDayCalculator;
 import com.gepardec.mega.communication.exception.MissingReceiverException;
-import com.gepardec.mega.aplication.utils.DateUtils;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.lang3.StringUtils;
@@ -75,6 +75,7 @@ public class MailDaemon {
                 }
             }
         }
+        logger.info("not notification sent today");
     }
 
     void sendReminderToPl() {
@@ -104,8 +105,9 @@ public class MailDaemon {
             workerService.getAllActiveEmployees()
                     .forEach(employee -> mailSender.sendReminder(employee.getEmail(), employee.getVorname(), EMPLOYEE_CHECK_PROJECTTIME));
             logger.info("Reminder to employees sent");
+        } else {
+            logger.info("NO Reminder to employes sent, cause mega.mail.employees.notification-property is false");
         }
-        logger.info("NO Reminder to employes sent, cause mega.mail.employees.notification-property is false");
     }
 
     //TODO: remove immediately when names are available with persistence layer
