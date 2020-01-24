@@ -2,7 +2,6 @@ package com.gepardec.mega;
 
 import com.gepardec.mega.aplication.security.Role;
 import com.gepardec.mega.aplication.security.SessionUser;
-import com.gepardec.mega.rest.model.User;
 import com.gepardec.mega.zep.service.impl.UserServiceImpl;
 import de.provantis.zep.MitarbeiterType;
 import io.quarkus.test.Mock;

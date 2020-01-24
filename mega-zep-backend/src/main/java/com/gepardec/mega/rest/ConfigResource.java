@@ -1,5 +1,6 @@
 package com.gepardec.mega.rest;
 
+import com.gepardec.mega.aplication.configuration.GoogleConfig;
 import com.gepardec.mega.rest.model.Config;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -17,13 +18,12 @@ import javax.ws.rs.core.Response;
 public class ConfigResource {
 
     @Inject
-    @ConfigProperty(name = "google.frontend.clientId")
-    String frontendClientId;
+    GoogleConfig googleConfig;
 
     @Path("/")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response get() {
-        return Response.ok(new Config(frontendClientId)).build();
+        return Response.ok(new Config(googleConfig.getFrontendClientId(), googleConfig.getIssuer(), googleConfig.getScope())).build();
     }
 }

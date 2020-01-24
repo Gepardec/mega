@@ -34,14 +34,9 @@ pipeline {
 
                                         def revision = buildRevisionForBranch()
 
-                                        withCredentials([file(credentialsId: 'google-secrets', variable: 'GOOGLE_SECRET_FILE')]) {
-                                            def googleProps = readProperties file: "${GOOGLE_SECRET_FILE}"
-
-                                            dir('mega-zep-frontend/src/main/angular/frontend') {
-                                                sh "sed -i -e 's|REPLACE_OAUTH_CLIENT_ID|${googleProps['oauth.clientId']}|g' src/environments/environment.prod.ts"
-                                                sh "npm install"
-                                                sh "ng build --sourceMap=false --configuration=production"
-                                            }
+                                        dir('mega-zep-frontend/src/main/angular/frontend') {
+                                            sh "npm install"
+                                            sh "ng build --sourceMap=false --configuration=production"
                                         }
 
                                         dir('mega-zep-frontend/src/main/angular/frontend') {
@@ -84,6 +79,7 @@ pipeline {
                                             sh "mvn -B -s jenkins-settings.xml \
                                                    install \
                                                    -Drevision=${revision} \
+                                                   -DskipTests=true \
                                                    -Dquarkus.package.uber.jar=true"
                                         }
 
