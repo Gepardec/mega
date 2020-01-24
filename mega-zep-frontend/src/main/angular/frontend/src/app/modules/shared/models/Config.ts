@@ -1,3 +1,5 @@
 export class Config {
-  oauthClientId: string;
+  clientId: string;
+  issuer: string;
+  scope: string;
 }
