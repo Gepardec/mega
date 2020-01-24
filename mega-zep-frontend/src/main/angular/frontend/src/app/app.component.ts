@@ -26,7 +26,9 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.configServiceSubscription = this.configService.getConfig().subscribe((config: Config) => {
       this.oAuthService.configure({
-        clientId: config.oauthClientId,
+        clientId: config.clientId,
+        issuer: config.issuer,
+        scope: config.scope,
         ...authConfig
       });
       this.oAuthService.tokenValidationHandler = new JwksValidationHandler();
