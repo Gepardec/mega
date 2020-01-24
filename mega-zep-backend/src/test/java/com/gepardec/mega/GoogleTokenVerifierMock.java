@@ -10,25 +10,31 @@ import io.quarkus.test.Mock;
 import javax.enterprise.context.ApplicationScoped;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.function.Function;
 
 @ApplicationScoped
 @Mock
 public class GoogleTokenVerifierMock extends GoogleIdTokenVerifier {
 
-    private Function<String, GoogleIdToken> answer;
+    private GoogleIdTokenVerifier delegate;
 
     public GoogleTokenVerifierMock() {
         super(new Builder(new NetHttpTransport(), new JacksonFactory()));
     }
 
+    @Override
+    public boolean verify(GoogleIdToken googleIdToken) throws GeneralSecurityException, IOException {return delegate.verify(googleIdToken);}
 
     @Override
-    public GoogleIdToken verify(String idToken) throws GeneralSecurityException, IOException {
-        return answer.apply(idToken);
-    }
+    public GoogleIdToken verify(String idTokenString) throws GeneralSecurityException, IOException {return delegate.verify(idTokenString);}
 
-    public void setAnswer(Function<String, GoogleIdToken> answer) {
-        this.answer = answer;
+    @Override
+    @Deprecated
+    public GoogleIdTokenVerifier loadPublicCerts() throws GeneralSecurityException, IOException {return delegate.loadPublicCerts();}
+
+    @Override
+    public boolean verify(IdToken idToken) {return delegate.verify(idToken);}
+
+    public void setDelegate(GoogleIdTokenVerifier delegate) {
+        this.delegate = delegate;
     }
 }

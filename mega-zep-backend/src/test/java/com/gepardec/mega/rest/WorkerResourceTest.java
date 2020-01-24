@@ -10,6 +10,7 @@ import com.gepardec.mega.rest.model.MonthlyReport;
 import com.gepardec.mega.rest.model.TimeWarning;
 import com.gepardec.mega.zep.service.impl.WorkerServiceImpl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import de.provantis.zep.MitarbeiterType;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
@@ -44,6 +45,9 @@ public class WorkerResourceTest {
     @Mock
     private WorkerServiceImpl workerService;
 
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+    private GoogleIdTokenVerifier googleIdTokenVerifier;
+
     @Inject
     SessionUserMock sessionUserMock;
 
@@ -54,9 +58,10 @@ public class WorkerResourceTest {
     GoogleTokenVerifierMock googleTokenVerifierMock;
 
     @BeforeEach
-    void beforeEach() {
+    void beforeEach() throws Exception {
         final String email = "thomas.herzog@gepardec.com";
-        googleTokenVerifierMock.setAnswer((idToken) -> googleIdToken);
+        Mockito.when(googleIdTokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
+        googleTokenVerifierMock.setDelegate(googleIdTokenVerifier);
         sessionUserMock.init(email, "", Role.ADMINISTRATOR.roleId);
         workerServiceMock.setDelegate(workerService);
     }
