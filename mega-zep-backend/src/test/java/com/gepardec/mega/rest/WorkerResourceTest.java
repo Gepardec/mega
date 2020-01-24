@@ -4,7 +4,6 @@ import com.gepardec.mega.GoogleTokenVerifierMock;
 import com.gepardec.mega.SessionUserMock;
 import com.gepardec.mega.WorkerServiceMock;
 import com.gepardec.mega.aplication.security.Role;
-import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.rest.model.Employee;
 import com.gepardec.mega.zep.service.impl.WorkerServiceImpl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -15,7 +14,6 @@ import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
@@ -24,7 +22,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.inject.Inject;
-
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -33,7 +32,6 @@ import static io.restassured.RestAssured.given;
 
 @ExtendWith(MockitoExtension.class)
 @QuarkusTest
-@Disabled
 public class WorkerResourceTest {
 
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
@@ -56,6 +54,7 @@ public class WorkerResourceTest {
         final String email = "thomas.herzog@gepardec.com";
         googleTokenVerifierMock.setAnswer((idToken) -> googleIdToken);
         sessionUserMock.init(email, "", Role.ADMINISTRATOR.roleId);
+        workerServiceMock.setDelegate(workerService);
     }
 
     @Test
@@ -95,7 +94,6 @@ public class WorkerResourceTest {
         assertEmployee(actual, mitarbeiter);
     }
 
-
     @Test
     void employees_withGET_returnsMethodNotAllowed() {
         given().get("/worker/employees")
@@ -118,10 +116,85 @@ public class WorkerResourceTest {
         }
     }
 
-    // TODO:We need to refactore the Monthly report to a value model, contains to much löogic and is returned as a response.
-//    @Test
-//    void employeeMonthendReport_withLoggedUserEmail_returnsMonthlyReport() {
-//    }
+    @Test
+    void employeesUpdate_withGET_returnsMethodNotAllowed() {
+        given().contentType(ContentType.JSON)
+                .get("/worker/employees/update")
+                .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
+    }
+
+    @Test
+    void employeesUpdate_withEmptyBody_returnsBadRequest() {
+        given().contentType(ContentType.JSON)
+                .put("/worker/employees/update")
+                .then().statusCode(HttpStatus.SC_BAD_REQUEST);
+    }
+
+    @Test
+    void employeesUpdate_withEmptyArray_returnsBadRequest() {
+        given().contentType(ContentType.JSON)
+                .body(new ArrayList<>())
+                .put("/worker/employees/update")
+                .then().statusCode(HttpStatus.SC_BAD_REQUEST);
+    }
+
+    @Test
+    void employeesUpdate_withInvalidEmployees_returnsInvalidEmails() {
+        final List<Employee> employees = IntStream.range(1, 11).mapToObj(i -> createEmployee("Thomas_" + i)).collect(Collectors.toList());
+        final List<String> expected = employees.subList(0, 5).stream().map(Employee::getEmail).collect(Collectors.toList());
+        Mockito.when(workerService.updateEmployeesReleaseDate(Mockito.anyMap())).thenReturn(expected);
+        workerServiceMock.setDelegate(workerService);
+
+        final List<String> actual = given().contentType(ContentType.JSON)
+                .body(employees)
+                .put("/worker/employees/update")
+                .then().assertThat().statusCode(HttpStatus.SC_OK)
+                .extract().as(new TypeRef<List<String>>() {});
+
+        Assertions.assertEquals(expected.size(), actual.size());
+        Assertions.assertTrue(actual.containsAll(expected));
+    }
+
+    @Test
+    void employeesUpdate_withAllValidEmployees_returnsNothing() {
+        final List<Employee> employees = IntStream.range(1, 11).mapToObj(i -> createEmployee("Thomas_" + i)).collect(Collectors.toList());
+        Mockito.when(workerService.updateEmployeesReleaseDate(Mockito.anyMap())).thenReturn(Collections.emptyList());
+        workerServiceMock.setDelegate(workerService);
+
+        final List<String> actual = given().contentType(ContentType.JSON)
+                .body(employees)
+                .put("/worker/employees/update")
+                .then().assertThat().statusCode(HttpStatus.SC_OK)
+                .extract().as(new TypeRef<List<String>>() {});
+
+        Assertions.assertTrue(actual.isEmpty());
+    }
+
+    @Test
+    void employeeUpdate_withGET_returnsMethodNotAllowed() {
+        given().contentType(ContentType.JSON)
+                .get("/worker/employee/update")
+                .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
+    }
+
+    @Test
+    void employeeUpdate_withEmptyBody_returnsBadRequest() {
+        given().contentType(ContentType.JSON)
+                .put("/worker/employee/update")
+                .then().statusCode(HttpStatus.SC_BAD_REQUEST);
+    }
+
+    @Test
+    void employeeUpdate_withValidEmployee_returnsNothing() {
+        final Employee employee = createEmployee("Thomas");
+
+        given().contentType(ContentType.JSON)
+                .body(employee)
+                .put("/worker/employee/update")
+                .then().statusCode(HttpStatus.SC_OK);
+    }
+
+    // TODO:We need to refactor the Monthly report to a value model, contains to much löogic and is returned as a response.
 
     private MitarbeiterType createMitarbeiter(final String name) {
         final MitarbeiterType mitarbeiter = new MitarbeiterType();
@@ -134,6 +207,21 @@ public class WorkerResourceTest {
         mitarbeiter.setPreisgruppe("ARCHITEKT");
         mitarbeiter.setFreigabedatum("2020-01-01");
         mitarbeiter.setRechte(Role.USER.roleId);
+
+        return mitarbeiter;
+    }
+
+    private Employee createEmployee(final String name) {
+        final Employee mitarbeiter = new Employee();
+        mitarbeiter.setEmail(name + "@gepardec.com");
+        mitarbeiter.setFirstName(name);
+        mitarbeiter.setSureName(name + "_Nachname");
+        mitarbeiter.setTitle("Ing.");
+        mitarbeiter.setUserId("1");
+        mitarbeiter.setSalutation("Herr");
+        mitarbeiter.setWorkDescription("ARCHITEKT");
+        mitarbeiter.setReleaseDate("2020-01-01");
+        mitarbeiter.setRole(Role.USER.roleId);
 
         return mitarbeiter;
     }
