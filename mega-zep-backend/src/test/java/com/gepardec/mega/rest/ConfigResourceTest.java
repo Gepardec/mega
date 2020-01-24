@@ -1,10 +1,14 @@
 package com.gepardec.mega.rest;
 
+import com.gepardec.mega.aplication.configuration.OAuthConfig;
+import com.gepardec.mega.rest.model.Config;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import javax.inject.Inject;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -12,12 +16,8 @@ import static org.hamcrest.Matchers.equalTo;
 @QuarkusTest
 public class ConfigResourceTest {
 
-    private static final String CLIENT_ID = "my-client-id";
-
-    @BeforeAll
-    static void beforeAll() {
-        System.setProperty("google.frontend.clientId", CLIENT_ID);
-    }
+    @Inject
+    OAuthConfig oAuthConfig;
 
     @Test
     void get_withPOST_returnsMethodNotallowed() {
@@ -31,6 +31,8 @@ public class ConfigResourceTest {
         given().contentType(ContentType.TEXT)
                 .get("/config")
                 .then().statusCode(HttpStatus.SC_OK)
-                .body("oauthClientId", equalTo(CLIENT_ID));
+                .body("clientId", equalTo(oAuthConfig.getClientId()))
+                .body("issuer", equalTo(oAuthConfig.getIssuer()))
+                .body("scope", equalTo(oAuthConfig.getScope()));
     }
 }
