@@ -145,7 +145,7 @@
                             <sourceRoot>${project.build.directory}/generated-sources</sourceRoot>
                             <wsdlOptions>
                                 <wsdlOption>
-                                    <wsdl>${project.basedir}/src/main/resources/wsdl/Zep_V7.wsdl</wsdl>
+                                    <wsdl>${project.basedir}/src/main/resources/wsdl/zep_v7.wsdl</wsdl>
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>
