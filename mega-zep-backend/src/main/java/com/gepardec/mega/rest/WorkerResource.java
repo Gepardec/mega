@@ -93,7 +93,7 @@ public class WorkerResource {
         if (Role.USER.equals(sessionUser.getRole()) && !sessionUser.getEmail().equals(employee.getEmail())) {
             throw new ForbiddenException("User with role 'USER' can not update other users");
         }
-        workerService.updateEmployeeReleaseDate(employee.getEmail(), employee.getReleaseDate());
+        workerService.updateEmployeeReleaseDate(employee.getUserId(), employee.getReleaseDate());
         return Response.ok().build();
     }
 }
