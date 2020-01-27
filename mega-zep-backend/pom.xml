@@ -146,6 +146,9 @@
                             <wsdlOptions>
                                 <wsdlOption>
                                     <wsdl>${project.basedir}/src/main/resources/wsdl/zep_v7.wsdl</wsdl>
+                                    <bindingFiles>
+                                        <bindingFile>${project.basedir}/src/main/resources/wsdl/zep-bindings.xml</bindingFile>
+                                    </bindingFiles>
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>
