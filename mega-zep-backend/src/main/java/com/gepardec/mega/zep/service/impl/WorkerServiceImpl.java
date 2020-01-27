@@ -125,10 +125,7 @@ public class WorkerServiceImpl implements WorkerService {
         final UpdateMitarbeiterRequestType umrt = new UpdateMitarbeiterRequestType();
         umrt.setRequestHeader(zepSoapProvider.createRequestHeaderType());
 
-//            TODO: check api
-//            umrt.getMitarbeiter().setFreigabedatum(releaseDate);
-
-        MitarbeiterType mitarbeiter = new MitarbeiterType();//getEmployee(eMail);
+        final MitarbeiterType mitarbeiter = new MitarbeiterType();//getEmployee(eMail);
         mitarbeiter.setUserId(id);
         mitarbeiter.setFreigabedatum(releaseDate);
         umrt.setMitarbeiter(mitarbeiter);
