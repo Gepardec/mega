@@ -41,13 +41,11 @@ pipeline {
 
                                         dir('mega-zep-frontend/src/main/angular/frontend') {
                                             openshift.withCluster() {
-                                                openshift.withProject("${OCP_PROJECT_NAME}") {
-                                                    sh "oc start-build mega-zep-frontend --commit=${env.GIT_COMMIT} \
+                                                sh "oc start-build mega-zep-frontend --commit=${env.GIT_COMMIT} \
                                                                                          --from-dir=dist/frontend \
                                                                                          --follow \
                                                                                          --wait"
-                                                    openshift.tag("mega-zep-frontend:latest", "mega-zep-frontend:${revision}")
-                                                }
+                                                openshift.tag("mega-zep-frontend:latest", "mega-zep-frontend:${revision}")
                                             }
                                         }
                                     }
@@ -84,12 +82,10 @@ pipeline {
 
                                         dir('mega-zep-backend/target/') {
                                             openshift.withCluster() {
-                                                openshift.withProject("${OCP_PROJECT_NAME}") {
-                                                    def artifact = "mega-zep-backend-${revision}-runner.jar"
+                                                def artifact = "mega-zep-backend-${revision}-runner.jar"
 
-                                                    sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait"
-                                                    openshift.tag("mega-zep-backend:latest", "mega-zep-backend:${revision}")
-                                                }
+                                                sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait"
+                                                openshift.tag("mega-zep-backend:latest", "mega-zep-backend:${revision}")
                                             }
                                         }
                                     }
