@@ -90,7 +90,7 @@ public class WorkerResourceTest {
 
     @Test
     void employee_withValidEmail_returnsEmployee() {
-        final MitarbeiterType mitarbeiter = createMitarbeiter("Thomas");
+        final MitarbeiterType mitarbeiter = createMitarbeiter(0);
         Mockito.when(workerService.getEmployee(mitarbeiter.getEmail())).thenReturn(mitarbeiter);
         workerServiceMock.setDelegate(workerService);
 
@@ -111,13 +111,14 @@ public class WorkerResourceTest {
 
     @Test
     void employees_withValidRequest_returnsActiveEmployees() {
-        final List<MitarbeiterType> mitarbeiter = IntStream.range(1, 10).mapToObj(i -> createMitarbeiter("Thomas_" + i)).collect(Collectors.toList());
+        final List<MitarbeiterType> mitarbeiter = IntStream.range(1, 10).mapToObj(this::createMitarbeiter).collect(Collectors.toList());
         Mockito.when(workerService.getAllActiveEmployees()).thenReturn(mitarbeiter);
         workerServiceMock.setDelegate(workerService);
 
         final List<Employee> actual = given().post("/worker/employees")
                 .then().assertThat().statusCode(HttpStatus.SC_OK)
-                .extract().as(new TypeRef<List<Employee>>() {});
+                .extract().as(new TypeRef<>() {
+                });
 
         Assertions.assertEquals(mitarbeiter.size(), actual.size());
         for (int i = 0; i < mitarbeiter.size(); i++) {
@@ -149,7 +150,7 @@ public class WorkerResourceTest {
 
     @Test
     void employeesUpdate_withInvalidEmployees_returnsInvalidEmails() {
-        final List<Employee> employees = IntStream.range(1, 11).mapToObj(i -> createEmployee("Thomas_" + i)).collect(Collectors.toList());
+        final List<Employee> employees = IntStream.range(1, 11).mapToObj(this::createEmployee).collect(Collectors.toList());
         final List<String> expected = employees.subList(0, 5).stream().map(Employee::getEmail).collect(Collectors.toList());
         Mockito.when(workerService.updateEmployeesReleaseDate(Mockito.anyMap())).thenReturn(expected);
         workerServiceMock.setDelegate(workerService);
@@ -158,7 +159,8 @@ public class WorkerResourceTest {
                 .body(employees)
                 .put("/worker/employees/update")
                 .then().assertThat().statusCode(HttpStatus.SC_OK)
-                .extract().as(new TypeRef<List<String>>() {});
+                .extract().as(new TypeRef<>() {
+                });
 
         Assertions.assertEquals(expected.size(), actual.size());
         Assertions.assertTrue(actual.containsAll(expected));
@@ -166,7 +168,7 @@ public class WorkerResourceTest {
 
     @Test
     void employeesUpdate_withAllValidEmployees_returnsNothing() {
-        final List<Employee> employees = IntStream.range(1, 11).mapToObj(i -> createEmployee("Thomas_" + i)).collect(Collectors.toList());
+        final List<Employee> employees = IntStream.range(1, 11).mapToObj(this::createEmployee).collect(Collectors.toList());
         Mockito.when(workerService.updateEmployeesReleaseDate(Mockito.anyMap())).thenReturn(Collections.emptyList());
         workerServiceMock.setDelegate(workerService);
 
@@ -174,7 +176,8 @@ public class WorkerResourceTest {
                 .body(employees)
                 .put("/worker/employees/update")
                 .then().assertThat().statusCode(HttpStatus.SC_OK)
-                .extract().as(new TypeRef<List<String>>() {});
+                .extract().as(new TypeRef<>() {
+                });
 
         Assertions.assertTrue(actual.isEmpty());
     }
@@ -195,7 +198,7 @@ public class WorkerResourceTest {
 
     @Test
     void employeeUpdate_withValidEmployee_returnsNothing() {
-        final Employee employee = createEmployee("Thomas");
+        final Employee employee = createEmployee(0);
 
         given().contentType(ContentType.JSON)
                 .body(employee)
@@ -219,7 +222,7 @@ public class WorkerResourceTest {
 
     @Test
     void employeeMonthendReport_withReport_returnsReport() {
-        final MitarbeiterType mitarbeiter = createMitarbeiter("Thomas");
+        final MitarbeiterType mitarbeiter = createMitarbeiter(0);
         final com.gepardec.mega.monthlyreport.MonthlyReport expected = createZepMonthlyReport(mitarbeiter);
         Mockito.when(workerService.getMonthendReportForUser(Mockito.anyString())).thenReturn(expected);
 
@@ -240,13 +243,15 @@ public class WorkerResourceTest {
         return new com.gepardec.mega.monthlyreport.MonthlyReport(timeWarnings, journeyWarnings, mitarbeiter);
     }
 
-    private MitarbeiterType createMitarbeiter(final String name) {
+    private MitarbeiterType createMitarbeiter(final int userId) {
         final MitarbeiterType mitarbeiter = new MitarbeiterType();
+        final String name = "Thomas_" + userId;
+
         mitarbeiter.setEmail(name + "@gepardec.com");
         mitarbeiter.setVorname(name);
         mitarbeiter.setNachname(name + "_Nachname");
         mitarbeiter.setTitel("Ing.");
-        mitarbeiter.setUserId("1");
+        mitarbeiter.setUserId(String.valueOf(userId));
         mitarbeiter.setAnrede("Herr");
         mitarbeiter.setPreisgruppe("ARCHITEKT");
         mitarbeiter.setFreigabedatum("2020-01-01");
@@ -255,13 +260,15 @@ public class WorkerResourceTest {
         return mitarbeiter;
     }
 
-    private Employee createEmployee(final String name) {
+    private Employee createEmployee(final int userId) {
         final Employee mitarbeiter = new Employee();
+        final String name = "Thomas_" + userId;
+
         mitarbeiter.setEmail(name + "@gepardec.com");
         mitarbeiter.setFirstName(name);
         mitarbeiter.setSureName(name + "_Nachname");
         mitarbeiter.setTitle("Ing.");
-        mitarbeiter.setUserId("1");
+        mitarbeiter.setUserId(String.valueOf(userId));
         mitarbeiter.setSalutation("Herr");
         mitarbeiter.setWorkDescription("ARCHITEKT");
         mitarbeiter.setReleaseDate("2020-01-01");
