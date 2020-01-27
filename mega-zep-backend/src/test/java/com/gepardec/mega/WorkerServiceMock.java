@@ -30,7 +30,7 @@ public class WorkerServiceMock extends WorkerServiceImpl {
     public MonthlyReport getMonthendReportForUser(String eMail) {return delegate.getMonthendReportForUser(eMail);}
 
     @Override
-    public void updateEmployeeReleaseDate(String eMail, String releaseDate) {delegate.updateEmployeeReleaseDate(eMail, releaseDate);}
+    public void updateEmployeeReleaseDate(String id, String releaseDate) {delegate.updateEmployeeReleaseDate(id, releaseDate);}
 
     public void setDelegate(WorkerServiceImpl delegate) {
         this.delegate = delegate;

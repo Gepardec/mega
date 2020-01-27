@@ -6,7 +6,6 @@ import com.gepardec.mega.monthlyreport.journey.JourneyWarning;
 import com.gepardec.mega.monthlyreport.warning.TimeWarning;
 import com.gepardec.mega.monthlyreport.warning.WarningCalculator;
 import com.gepardec.mega.monthlyreport.warning.WarningConfig;
-import com.gepardec.mega.rest.translator.EmployeeTranslator;
 import com.gepardec.mega.aplication.utils.DateUtils;
 import com.gepardec.mega.zep.exception.ZepServiceException;
 import com.gepardec.mega.zep.service.api.WorkerService;
@@ -122,16 +121,17 @@ public class WorkerServiceImpl implements WorkerService {
 
 
     @Override
-    public void updateEmployeeReleaseDate(final String eMail, final String releaseDate) {
+    public void updateEmployeeReleaseDate(final String id, final String releaseDate) {
         final UpdateMitarbeiterRequestType umrt = new UpdateMitarbeiterRequestType();
         umrt.setRequestHeader(zepSoapProvider.createRequestHeaderType());
 
 //            TODO: check api
 //            umrt.getMitarbeiter().setFreigabedatum(releaseDate);
 
-        MitarbeiterType employee = getEmployee(eMail);
-        employee.setFreigabedatum(releaseDate);
-        umrt.setMitarbeiter(employee);
+        MitarbeiterType mitarbeiter = new MitarbeiterType();//getEmployee(eMail);
+        mitarbeiter.setUserId(id);
+        mitarbeiter.setFreigabedatum(releaseDate);
+        umrt.setMitarbeiter(mitarbeiter);
 
         final UpdateMitarbeiterResponseType updateMitarbeiterResponseType = zepSoapPortType.updateMitarbeiter(umrt);
         final ResponseHeaderType responseHeaderType = updateMitarbeiterResponseType != null ? updateMitarbeiterResponseType.getResponseHeader() : null;

@@ -79,7 +79,7 @@ public class WorkerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response employeesUpdate(@NotEmpty(message = "{workerResource.employees.notEmpty}") final List<Employee> employees) {
         Map<String, String> emailReleaseDates = employees.stream()
-                .collect(Collectors.toMap(Employee::getEmail, Employee::getReleaseDate));
+                .collect(Collectors.toMap(Employee::getUserId, Employee::getReleaseDate));
         final List<String> failedEmails = workerService.updateEmployeesReleaseDate(emailReleaseDates);
         return Response.ok().entity(failedEmails).build();
     }

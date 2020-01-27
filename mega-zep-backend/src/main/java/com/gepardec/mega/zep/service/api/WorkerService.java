@@ -11,7 +11,7 @@ public interface WorkerService {
 
     List<MitarbeiterType> getAllActiveEmployees();
 
-    void updateEmployeeReleaseDate(final String eMail, final String releaseDate);
+    void updateEmployeeReleaseDate(final String id, final String releaseDate);
 
     List<String> updateEmployeesReleaseDate(final Map<String, String> pairs);
 
