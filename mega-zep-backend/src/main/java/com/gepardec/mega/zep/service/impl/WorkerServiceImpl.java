@@ -38,17 +38,20 @@ public class WorkerServiceImpl implements WorkerService {
     WarningConfig warningConfig;
 
     @Override
-    public MitarbeiterType getEmployee(final String email) {
+    public MitarbeiterType getEmployee(final String userId) {
         try {
             final ReadMitarbeiterRequestType readMitarbeiterRequestType = new ReadMitarbeiterRequestType();
             readMitarbeiterRequestType.setRequestHeader(zepSoapProvider.createRequestHeaderType());
+            final ReadMitarbeiterSearchCriteriaType searchCriteria = new ReadMitarbeiterSearchCriteriaType();
+            searchCriteria.setUserId(userId);
+
             final List<MitarbeiterType> employees = flatMap(zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType));
             return employees.stream()
-                    .filter(e -> e.getEmail() != null && e.getEmail().equals(email))
+                    .filter(e -> e.getEmail() != null && e.getEmail().equals(userId))
                     .findFirst()
                     .orElse(null);
         } catch (Exception e) {
-            logger.error(format("error getEmployee for user: %s", email));
+            logger.error(format("error getEmployee for user: %s", userId));
             return null;
         }
     }

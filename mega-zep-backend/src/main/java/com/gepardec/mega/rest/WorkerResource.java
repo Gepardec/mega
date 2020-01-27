@@ -35,8 +35,8 @@ public class WorkerResource {
     @Path("/employee")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
-    public Response employee(@NotEmpty(message = "{workerResource.email.notEmpty}") final String email) {
-        final MitarbeiterType mitarbeiter = workerService.getEmployee(email);
+    public Response employee(@NotEmpty(message = "{workerResource.email.notEmpty}") final String userId) {
+        final MitarbeiterType mitarbeiter = workerService.getEmployee(userId);
         if (mitarbeiter == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

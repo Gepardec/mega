@@ -16,8 +16,8 @@ public class WorkerServiceMock extends WorkerServiceImpl {
     WorkerServiceImpl delegate;
 
     @Override
-    public MitarbeiterType getEmployee(String email) {
-        return delegate.getEmployee(email);
+    public MitarbeiterType getEmployee(String userId) {
+        return delegate.getEmployee(userId);
     }
 
     @Override
