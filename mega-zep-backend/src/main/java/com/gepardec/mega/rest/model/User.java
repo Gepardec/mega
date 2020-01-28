@@ -15,6 +15,8 @@ public class User {
 
     private Role role;
 
+    private String pictureUrl;
+
     public User() {
     }
 
@@ -48,5 +50,13 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 }

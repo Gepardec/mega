@@ -41,7 +41,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   showLink(link: Link) {
-    console.log(link);
     return this.rolesService.isAllowed(link.path);
   }
 

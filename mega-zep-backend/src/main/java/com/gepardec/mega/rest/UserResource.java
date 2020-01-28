@@ -45,7 +45,7 @@ public class UserResource {
     public Response login(@NotEmpty(message = "{authenticationResource.google.idToken.notEmpty}") String idToken) {
         log.info("idToken: {}", (idToken == null ? "null" : idToken));
         final String oldEmail = sessionUser.getEmail();
-        final User user = UserTranslator.translate(userService.login(idToken));
+        final User user = userService.login(idToken);
 
         if (oldEmail == null) {
             log.info("User '{}' logged in", sessionUser.getEmail());

@@ -2,8 +2,8 @@ package com.gepardec.mega;
 
 import com.gepardec.mega.aplication.security.Role;
 import com.gepardec.mega.aplication.security.SessionUser;
+import com.gepardec.mega.rest.model.User;
 import com.gepardec.mega.zep.service.impl.UserServiceImpl;
-import de.provantis.zep.MitarbeiterType;
 import io.quarkus.test.Mock;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -16,31 +16,30 @@ public class UserServiceMock extends UserServiceImpl {
     @Inject
     private SessionUser sessionUser;
 
-    private MitarbeiterType mitarbeiter;
+    private User user;
 
     @Override
-    public MitarbeiterType login(String idToken) {
-        sessionUser.init(mitarbeiter.getUserId(), mitarbeiter.getEmail(), idToken, mitarbeiter.getRechte());
-
-        return mitarbeiter;
+    public User login(String idToken) {
+        sessionUser.init("1337-testvorname.testnachname", user.getEmail(), idToken, user.getRole().roleId);
+        return user;
     }
 
-    public static MitarbeiterType createMitarbeiterType() {
-        final MitarbeiterType mitarbeiter = new MitarbeiterType();
-        mitarbeiter.setUserId("1337-testvorname.testnachname");
-        mitarbeiter.setEmail("test@gepardec.com");
-        mitarbeiter.setVorname("Testvorname");
-        mitarbeiter.setNachname("Testnachname");
-        mitarbeiter.setRechte(Role.USER.roleId);
-
-        return mitarbeiter;
+    public static User createUser() {
+        final User user = new User();
+        //user.setUserId("1337-testvorname.testnachname");
+        user.setEmail("test@gepardec.com");
+        user.setFirstname("Testvorname");
+        user.setLastname("Testnachname");
+        user.setRole(Role.USER);
+        user.setPictureUrl("https://www.gepardec.com/picture");
+        return user;
     }
 
-    public MitarbeiterType getMitarbeiter() {
-        return mitarbeiter;
+    public User getUser() {
+        return user;
     }
 
-    public void setMitarbeiter(MitarbeiterType mitarbeiter) {
-        this.mitarbeiter = mitarbeiter;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

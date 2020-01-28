@@ -1,6 +1,7 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.UserServiceMock;
+import com.gepardec.mega.rest.model.User;
 import de.provantis.zep.MitarbeiterType;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
@@ -20,12 +21,12 @@ class UserResourceTest {
     @Inject
     UserServiceMock userServiceMock;
 
-    private MitarbeiterType mitarbeiter;
+    private User user;
 
     @BeforeEach
     void beforeEach() {
-        mitarbeiter = UserServiceMock.createMitarbeiterType();
-        userServiceMock.setMitarbeiter(mitarbeiter);
+        user = UserServiceMock.createUser();
+        userServiceMock.setUser(user);
     }
 
     @Test
@@ -64,10 +65,11 @@ class UserResourceTest {
                 .body("fakeIdToken")
                 .post("/user/login")
                 .then().statusCode(HttpStatus.SC_OK)
-                .body("email", equalTo(mitarbeiter.getEmail()))
-                .body("lastname", equalTo(mitarbeiter.getNachname()))
-                .body("firstname", equalTo(mitarbeiter.getVorname()))
-                .body("role", equalTo("USER"));
+                .body("email", equalTo(user.getEmail()))
+                .body("lastname", equalTo(user.getLastname()))
+                .body("firstname", equalTo(user.getFirstname()))
+                .body("role", equalTo(user.getRole().name()))
+                .body("pictureUrl", equalTo(user.getPictureUrl()));
     }
 
     @Test

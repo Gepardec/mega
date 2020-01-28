@@ -2,8 +2,7 @@
   <mat-icon matListIcon>keyboard_arrow_down</mat-icon>
 </button>
 
-<!-- FIXME GAJ: where to get photoUrl -->
-<!--<img class="avatar" src="{{user?.photoUrl}}"/>-->
+<img class="avatar" [src]="user.pictureUrl" />
 
 <mat-menu id="menu" #menu>
   <button id="logoutBtn" mat-menu-item (click)="doLogout()">Logout</button>

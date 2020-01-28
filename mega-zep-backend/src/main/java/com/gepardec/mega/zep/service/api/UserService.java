@@ -1,7 +1,8 @@
 package com.gepardec.mega.zep.service.api;
 
-import de.provantis.zep.MitarbeiterType;
+
+import com.gepardec.mega.rest.model.User;
 
 public interface UserService {
-    MitarbeiterType login(String token);
+    User login(String token);
 }
