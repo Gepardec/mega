@@ -23,17 +23,10 @@ export const configuration = {
     '06-1': 'Software-Architekt',
     '07': 'Ferialpraktikant',
     '08': 'Consultant Senior',
-    99: 'Reisezeiten'
+    '99': 'Reisezeiten'
   },
 
   dateFormat: 'yyyy-MM-dd',
-
-  EMPLOYEE_ROLES: {
-    USER: '0',
-    ADMINISTRATOR: '1',
-    CONTROLLER: '2',
-    USER_MIT_ZUSATZRECHTEN: '3'
-  },
 
   LogLevel: {
     All: 0,

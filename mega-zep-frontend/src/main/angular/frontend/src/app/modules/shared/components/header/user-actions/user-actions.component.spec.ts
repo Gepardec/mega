@@ -57,14 +57,4 @@ describe('UserActionsComponent', () => {
     expect(fixture.debugElement.nativeElement.querySelector('#userBtn').textContent)
       .toEqual(user.firstname + ' ' + user.lastname + ' keyboard_arrow_down');
   });
-
-  it('should display photo url', () => {
-    const {fixture, app} = setup();
-    const user = setupUser();
-    app.user = user;
-    const img: DebugElement = fixture.debugElement.query(By.css('.avatar'));
-    fixture.detectChanges();
-
-    // expect(img.nativeElement.src).toEqual(user.photoUrl);
-  });
 });

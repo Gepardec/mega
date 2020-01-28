@@ -67,20 +67,6 @@ public class WorkerResourceTest {
     }
 
     @Test
-    void employee_withGET_returnsMethodNotAllowed() {
-        given().contentType(ContentType.TEXT)
-                .get("/worker/employee")
-                .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
-    }
-
-    @Test
-    void employee_withEmptyEmail_returnsBadRequest() {
-        given().contentType(ContentType.TEXT)
-                .post("/worker/employee")
-                .then().statusCode(HttpStatus.SC_BAD_REQUEST);
-    }
-
-    @Test
     void employee_withInvalidEmail_returnsNotFound() {
         given().contentType(ContentType.TEXT)
                 .body("hacker@gmail.com")
@@ -89,23 +75,8 @@ public class WorkerResourceTest {
     }
 
     @Test
-    void employee_withValidEmail_returnsEmployee() {
-        final MitarbeiterType mitarbeiter = createMitarbeiter(0);
-        Mockito.when(workerService.getEmployee(mitarbeiter.getEmail())).thenReturn(mitarbeiter);
-        workerServiceMock.setDelegate(workerService);
-
-        final Employee actual = given().contentType(ContentType.TEXT)
-                .body(mitarbeiter.getEmail())
-                .post("/worker/employee")
-                .then().assertThat().statusCode(HttpStatus.SC_OK)
-                .extract().as(Employee.class);
-
-        assertEmployee(actual, mitarbeiter);
-    }
-
-    @Test
-    void employees_withGET_returnsMethodNotAllowed() {
-        given().get("/worker/employees")
+    void employees_withPOST_returnsMethodNotAllowed() {
+        given().post("/worker/employees")
                 .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
     }
 
@@ -115,7 +86,7 @@ public class WorkerResourceTest {
         Mockito.when(workerService.getAllActiveEmployees()).thenReturn(mitarbeiter);
         workerServiceMock.setDelegate(workerService);
 
-        final List<Employee> actual = given().post("/worker/employees")
+        final List<Employee> actual = given().get("/worker/employees")
                 .then().assertThat().statusCode(HttpStatus.SC_OK)
                 .extract().as(new TypeRef<>() {
                 });
@@ -127,16 +98,16 @@ public class WorkerResourceTest {
     }
 
     @Test
-    void employeesUpdate_withGET_returnsMethodNotAllowed() {
+    void employeesUpdate_withPOST_returnsMethodNotAllowed() {
         given().contentType(ContentType.JSON)
-                .get("/worker/employees/update")
+                .post("/worker/employees")
                 .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
     }
 
     @Test
     void employeesUpdate_withEmptyBody_returnsBadRequest() {
         given().contentType(ContentType.JSON)
-                .put("/worker/employees/update")
+                .put("/worker/employees")
                 .then().statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
@@ -144,7 +115,7 @@ public class WorkerResourceTest {
     void employeesUpdate_withEmptyArray_returnsBadRequest() {
         given().contentType(ContentType.JSON)
                 .body(new ArrayList<>())
-                .put("/worker/employees/update")
+                .put("/worker/employees")
                 .then().statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
@@ -157,7 +128,7 @@ public class WorkerResourceTest {
 
         final List<String> actual = given().contentType(ContentType.JSON)
                 .body(employees)
-                .put("/worker/employees/update")
+                .put("/worker/employees")
                 .then().assertThat().statusCode(HttpStatus.SC_OK)
                 .extract().as(new TypeRef<>() {
                 });
@@ -174,7 +145,7 @@ public class WorkerResourceTest {
 
         final List<String> actual = given().contentType(ContentType.JSON)
                 .body(employees)
-                .put("/worker/employees/update")
+                .put("/worker/employees")
                 .then().assertThat().statusCode(HttpStatus.SC_OK)
                 .extract().as(new TypeRef<>() {
                 });
@@ -183,40 +154,16 @@ public class WorkerResourceTest {
     }
 
     @Test
-    void employeeUpdate_withGET_returnsMethodNotAllowed() {
+    void employeeMonthendReport_withPOST_returnsMethodNotAllowed() {
         given().contentType(ContentType.JSON)
-                .get("/worker/employee/update")
-                .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
-    }
-
-    @Test
-    void employeeUpdate_withEmptyBody_returnsBadRequest() {
-        given().contentType(ContentType.JSON)
-                .put("/worker/employee/update")
-                .then().statusCode(HttpStatus.SC_BAD_REQUEST);
-    }
-
-    @Test
-    void employeeUpdate_withValidEmployee_returnsNothing() {
-        final Employee employee = createEmployee(0);
-
-        given().contentType(ContentType.JSON)
-                .body(employee)
-                .put("/worker/employee/update")
-                .then().statusCode(HttpStatus.SC_OK);
-    }
-
-    @Test
-    void employeeMonthendReport_withGET_returnsMethodNotAllowed() {
-        given().contentType(ContentType.JSON)
-                .get("/worker/employee/monthendReport")
+                .post("/worker/monthendreports")
                 .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
     }
 
     @Test
     void employeeMonthendReport_withNoReport_returnsNotFound() {
         given().contentType(ContentType.JSON)
-                .post("/worker/employee/monthendReport")
+                .get("/worker/monthendreports")
                 .then().statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
@@ -227,7 +174,7 @@ public class WorkerResourceTest {
         Mockito.when(workerService.getMonthendReportForUser(Mockito.anyString())).thenReturn(expected);
 
         final MonthlyReport actual = given().contentType(ContentType.JSON)
-                .post("/worker/employee/monthendReport")
+                .get("/worker/monthendreports")
                 .then().assertThat().statusCode(HttpStatus.SC_OK)
                 .extract().as(MonthlyReport.class);
 

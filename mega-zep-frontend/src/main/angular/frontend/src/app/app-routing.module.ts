@@ -5,6 +5,8 @@ import { LoginComponent } from './modules/shared/components/login/login.componen
 import { LoginGuard } from './modules/shared/guards/login.guard';
 import { EmployeesComponent } from './modules/employees/employees.component';
 import { MonthlyReportComponent } from './modules/monthly-report/monthly-report.component';
+import { RolesGuard } from './modules/shared/guards/roles.guard';
+import { Role } from './modules/shared/models/Role';
 
 
 export const routes: Routes = [
@@ -18,8 +20,10 @@ export const routes: Routes = [
     path: configuration.PAGE_URLS.EMPLOYEES,
     component: EmployeesComponent,
     loadChildren: './modules/employees/employees.module#EmployeesModule',
-    data: {roles: [configuration.EMPLOYEE_ROLES.ADMINISTRATOR, configuration.EMPLOYEE_ROLES.CONTROLLER]},
-    canActivate: [LoginGuard]
+    data: {
+      roles: [Role.ADMINISTRATOR, Role.CONTROLLER]
+    },
+    canActivate: [LoginGuard, RolesGuard]
   },
   {
     path: configuration.PAGE_URLS.LOGIN, component: LoginComponent

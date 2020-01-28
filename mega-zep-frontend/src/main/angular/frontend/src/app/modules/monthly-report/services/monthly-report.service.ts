@@ -15,6 +15,6 @@ export class MonthlyReportService {
   }
 
   getAll(): Observable<MonthlyReport> {
-    return this.httpClient.post<MonthlyReport>(this.config.getBackendUrl() + '/worker/employee/monthendReport', null);
+    return this.httpClient.get<MonthlyReport>(this.config.getBackendUrlWithContext('/worker/monthendreports'));
   }
 }

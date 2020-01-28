@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {configuration} from '../../constants/configuration';
-import {LogEntry} from '../../util/LogEntry';
+import {LogEntry} from '../../models/LogEntry';
 
 @Injectable({
   providedIn: 'root'

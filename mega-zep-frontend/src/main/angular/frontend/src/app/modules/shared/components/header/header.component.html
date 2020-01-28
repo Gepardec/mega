@@ -5,13 +5,11 @@
     </div>
 
     <nav mat-tab-nav-bar *ngIf="user">
-      <a mat-tab-link
-         *ngFor="let link of links"
-         [routerLink]="link[1]"
-         routerLinkActive #rla="routerLinkActive"
-         [active]="rla.isActive">
-        {{link[0]}}
-      </a>
+      <ng-container *ngFor="let link of links">
+        <a mat-tab-link *ngIf="showLink(link)" [routerLink]="link.path" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">
+          {{ link.name }}
+        </a>
+      </ng-container>
       <a mat-tab-link
          [href]="spreadSheetUrl"
          target="_blank">
