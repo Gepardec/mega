@@ -3,6 +3,8 @@ import { configuration } from '../../constants/configuration';
 import { UserService } from '../../services/user/user.service';
 import { Subscription } from 'rxjs';
 import { User } from '../../models/User';
+import { Link } from '../../models/Link';
+import { RolesService } from '../../services/roles/roles.service';
 
 @Component({
   selector: 'app-header',
@@ -13,23 +15,34 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private userSubscription: Subscription;
 
-  readonly links = [
-    [configuration.PAGE_NAMES.MONTHLY_REPORT, configuration.PAGE_URLS.MONTHLY_REPORT],
-    [configuration.PAGE_NAMES.EMPLOYEES, configuration.PAGE_URLS.EMPLOYEES]
-  ];
+  readonly links: Array<Link> = [{
+    name: configuration.PAGE_NAMES.MONTHLY_REPORT,
+    path: configuration.PAGE_URLS.MONTHLY_REPORT
+  }, {
+    name: configuration.PAGE_NAMES.EMPLOYEES,
+    path: configuration.PAGE_URLS.EMPLOYEES
+  }];
   readonly spreadSheetUrl = configuration.SPREADSHEET_URL;
 
   user: User;
 
-  constructor(private userService: UserService) {
+  constructor(private rolesService: RolesService,
+              private userService: UserService) {
   }
 
   ngOnInit() {
-    this.userSubscription = this.userService.user.subscribe((user) => this.user = user);
+    this.userSubscription = this.userService.user.subscribe((user) => {
+      this.user = user;
+    });
   }
 
   ngOnDestroy(): void {
     this.userSubscription.unsubscribe();
+  }
+
+  showLink(link: Link) {
+    console.log(link);
+    return this.rolesService.isAllowed(link.path);
   }
 
   onLogout($event: void) {
