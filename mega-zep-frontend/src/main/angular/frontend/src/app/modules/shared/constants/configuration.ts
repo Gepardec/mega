@@ -23,7 +23,7 @@ export const configuration = {
     '06-1': 'Software-Architekt',
     '07': 'Ferialpraktikant',
     '08': 'Consultant Senior',
-    99: 'Reisezeiten'
+    '99': 'Reisezeiten'
   },
 
   dateFormat: 'yyyy-MM-dd',
