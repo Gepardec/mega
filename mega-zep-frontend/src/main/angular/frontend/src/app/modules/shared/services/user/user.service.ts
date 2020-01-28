@@ -29,7 +29,7 @@ export class UserService {
       this.user.next(JSON.parse(sessionStorage.getItem(this.SESSION_STORAGE_KEY)));
       this.navigateToStartpage();
     } else {
-      this.httpClient.post<User>(this.configService.getBackendUrl() + '/user/login/', this.oAuthService.getIdToken())
+      this.httpClient.post<User>(this.configService.getBackendUrlWithContext('/user/login/'), this.oAuthService.getIdToken())
         .subscribe((result) => {
           sessionStorage.setItem(this.SESSION_STORAGE_KEY, JSON.stringify(result));
           this.user.next(result);
@@ -39,7 +39,7 @@ export class UserService {
   }
 
   public logout(): void {
-    this.httpClient.post<void>(this.configService.getBackendUrl() + '/user/logout', null).subscribe(() => {
+    this.httpClient.post<void>(this.configService.getBackendUrlWithContext('/user/logout'), null).subscribe(() => {
       this.oAuthService.logOut();
       this.configService.logOut();
       this.user.next(undefined);

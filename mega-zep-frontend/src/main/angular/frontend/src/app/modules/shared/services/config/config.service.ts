@@ -19,7 +19,7 @@ export class ConfigService {
     if (sessionStorage.getItem(this.SESSION_STORAGE_KEY)) {
       return new BehaviorSubject(JSON.parse(sessionStorage.getItem(this.SESSION_STORAGE_KEY)));
     } else {
-      return this.httpClient.get<Config>(this.getBackendUrl() + '/config')
+      return this.httpClient.get<Config>(this.getBackendUrlWithContext('/config'))
         .pipe(tap((result) => sessionStorage.setItem(this.SESSION_STORAGE_KEY, JSON.stringify(result))));
     }
   }
@@ -30,5 +30,9 @@ export class ConfigService {
 
   getBackendUrl(): string {
     return window.location.origin.replace(environment.frontendOriginSegment, environment.backendOriginSegment);
+  }
+
+  getBackendUrlWithContext(context: string): string {
+    return this.getBackendUrl() + context;
   }
 }
