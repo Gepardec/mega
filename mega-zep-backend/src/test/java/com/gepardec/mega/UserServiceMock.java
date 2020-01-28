@@ -20,13 +20,14 @@ public class UserServiceMock extends UserServiceImpl {
 
     @Override
     public MitarbeiterType login(String idToken) {
-        sessionUser.init(mitarbeiter.getEmail(), idToken, mitarbeiter.getRechte());
+        sessionUser.init(mitarbeiter.getUserId(), mitarbeiter.getEmail(), idToken, mitarbeiter.getRechte());
 
         return mitarbeiter;
     }
 
     public static MitarbeiterType createMitarbeiterType() {
         final MitarbeiterType mitarbeiter = new MitarbeiterType();
+        mitarbeiter.setUserId("1337-testvorname.testnachname");
         mitarbeiter.setEmail("test@gepardec.com");
         mitarbeiter.setVorname("Testvorname");
         mitarbeiter.setNachname("Testnachname");

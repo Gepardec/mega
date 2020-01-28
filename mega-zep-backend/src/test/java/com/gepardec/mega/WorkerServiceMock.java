@@ -27,7 +27,7 @@ public class WorkerServiceMock extends WorkerServiceImpl {
     public List<String> updateEmployeesReleaseDate(Map<String, String> emailReleaseDates) {return delegate.updateEmployeesReleaseDate(emailReleaseDates);}
 
     @Override
-    public MonthlyReport getMonthendReportForUser(String eMail) {return delegate.getMonthendReportForUser(eMail);}
+    public MonthlyReport getMonthendReportForUser(String userId) {return delegate.getMonthendReportForUser(userId);}
 
     @Override
     public void updateEmployeeReleaseDate(String id, String releaseDate) {delegate.updateEmployeeReleaseDate(id, releaseDate);}

@@ -15,10 +15,12 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   imports: [
     OverlayModule,
+    MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
     MatDatepickerModule,
@@ -37,6 +39,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
   ],
   exports: [
     OverlayModule,
+    MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
     MatDatepickerModule,

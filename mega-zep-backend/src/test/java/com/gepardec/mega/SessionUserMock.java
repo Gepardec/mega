@@ -10,7 +10,7 @@ import javax.enterprise.context.ApplicationScoped;
 public class SessionUserMock extends SessionUser {
 
     @Override
-    public void init(String email, String idToken, int recht) {
-        super.init(email, idToken, recht);
+    public void init(String userId, String email, String idToken, int recht) {
+        super.init(userId, email, idToken, recht);
     }
 }

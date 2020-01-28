@@ -61,7 +61,7 @@ public class WorkerResource {
     @Path("/monthendreports")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMonthEndReports() {
-        com.gepardec.mega.monthlyreport.MonthlyReport monthlyReport = workerService.getMonthendReportForUser(sessionUser.getEmail());
+        com.gepardec.mega.monthlyreport.MonthlyReport monthlyReport = workerService.getMonthendReportForUser(sessionUser.getUserId());
 
         if (monthlyReport == null) {
             return Response.status(Response.Status.NOT_FOUND).build();

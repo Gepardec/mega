@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // Could be re-logged in with different user within the same session
-        sessionUser.init(email, idToken, mt.getRechte());
+        sessionUser.init(mt.getUserId(), email, idToken, mt.getRechte());
 
         return mt;
     }

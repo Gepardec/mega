@@ -59,10 +59,11 @@ public class WorkerResourceTest {
 
     @BeforeEach
     void beforeEach() throws Exception {
+        final String userId = "1337-thomas.herzog";
         final String email = "thomas.herzog@gepardec.com";
         Mockito.when(googleIdTokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
         googleTokenVerifierMock.setDelegate(googleIdTokenVerifier);
-        sessionUserMock.init(email, "", Role.ADMINISTRATOR.roleId);
+        sessionUserMock.init(userId, email, "", Role.ADMINISTRATOR.roleId);
         workerServiceMock.setDelegate(workerService);
     }
 

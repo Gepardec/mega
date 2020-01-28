@@ -47,7 +47,7 @@ public class WorkerServiceImpl implements WorkerService {
 
             final List<MitarbeiterType> employees = flatMap(zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType));
             return employees.stream()
-                    .filter(e -> e.getEmail() != null && e.getEmail().equals(userId))
+                    .filter(e -> e.getUserId().equals(userId))
                     .findFirst()
                     .orElse(null);
         } catch (Exception e) {
@@ -80,8 +80,8 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public MonthlyReport getMonthendReportForUser(final String eMail) {
-        MitarbeiterType employee = getEmployee(eMail);
+    public MonthlyReport getMonthendReportForUser(final String userId) {
+        MitarbeiterType employee = getEmployee(userId);
         if (employee == null) {
             return null;
         }
@@ -128,7 +128,7 @@ public class WorkerServiceImpl implements WorkerService {
         final UpdateMitarbeiterRequestType umrt = new UpdateMitarbeiterRequestType();
         umrt.setRequestHeader(zepSoapProvider.createRequestHeaderType());
 
-        final MitarbeiterType mitarbeiter = new MitarbeiterType();//getEmployee(eMail);
+        final MitarbeiterType mitarbeiter = new MitarbeiterType();
         mitarbeiter.setUserId(id);
         mitarbeiter.setFreigabedatum(releaseDate);
         umrt.setMitarbeiter(mitarbeiter);

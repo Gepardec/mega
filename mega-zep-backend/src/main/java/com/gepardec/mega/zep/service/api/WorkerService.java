@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface WorkerService {
-    MitarbeiterType getEmployee(final String eMail);
+    MitarbeiterType getEmployee(final String userId);
 
     List<MitarbeiterType> getAllActiveEmployees();
 
@@ -15,5 +15,5 @@ public interface WorkerService {
 
     List<String> updateEmployeesReleaseDate(final Map<String, String> pairs);
 
-    MonthlyReport getMonthendReportForUser(final String eMail);
+    MonthlyReport getMonthendReportForUser(final String userId);
 }
