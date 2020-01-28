@@ -30,6 +30,7 @@ export class MonthlyReportService {
     // return this.mockService();
   }
 
+  // FIXME GAJ: remove mock method after GUI has been reviewed
   mockService(): Observable<MonthlyReport> {
 
     let employee = new Employee();
