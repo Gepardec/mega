@@ -9,6 +9,7 @@ import { MatSpinner } from '@angular/material/progress-spinner';
 export class LoaderService {
 
   private spinnerRef: OverlayRef = this.cdkSpinnerCreate();
+  private requests = 0;
 
   constructor(private overlay: Overlay) {
   }
@@ -25,11 +26,16 @@ export class LoaderService {
   }
 
   showSpinner() {
-    this.stopSpinner();
-    this.spinnerRef.attach(new ComponentPortal(MatSpinner));
+    this.requests++;
+    if (!this.spinnerRef.hasAttached()) {
+      this.spinnerRef.attach(new ComponentPortal(MatSpinner));
+    }
   }
 
   stopSpinner() {
-    this.spinnerRef.detach();
+    this.requests--;
+    if (this.requests === 0) {
+      this.spinnerRef.detach();
+    }
   }
 }
