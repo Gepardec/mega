@@ -1,12 +1,12 @@
 package com.gepardec.mega.zep.service.impl;
 
+import com.gepardec.mega.aplication.utils.DateUtils;
 import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.monthlyreport.ProjectTimeManager;
 import com.gepardec.mega.monthlyreport.journey.JourneyWarning;
 import com.gepardec.mega.monthlyreport.warning.TimeWarning;
 import com.gepardec.mega.monthlyreport.warning.WarningCalculator;
 import com.gepardec.mega.monthlyreport.warning.WarningConfig;
-import com.gepardec.mega.aplication.utils.DateUtils;
 import com.gepardec.mega.zep.exception.ZepServiceException;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import com.gepardec.mega.zep.soap.ZepSoapProvider;
@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 import static com.gepardec.mega.aplication.utils.DateUtils.getFirstDayOfFollowingMonth;
@@ -87,7 +88,14 @@ public class WorkerServiceImpl implements WorkerService {
         }
         final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
         projektzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
-        ReadProjektzeitenSearchCriteriaType searchCriteria = createProjectTimeSearchCriteria(employee);
+
+        final ReadProjektzeitenSearchCriteriaType searchCriteria;
+        try {
+            searchCriteria = createProjectTimeSearchCriteria(employee);
+        } catch (DateTimeParseException e) {
+            logger.error("invalid release date {0}", e);
+            return null;
+        }
         projektzeitenRequest.setReadProjektzeitenSearchCriteria(searchCriteria);
 
         ReadProjektzeitenResponseType projectTimeResponse = zepSoapPortType.readProjektzeiten(projektzeitenRequest);
@@ -96,10 +104,10 @@ public class WorkerServiceImpl implements WorkerService {
 
     }
 
-    private static ReadProjektzeitenSearchCriteriaType createProjectTimeSearchCriteria(MitarbeiterType employee) {
+    private ReadProjektzeitenSearchCriteriaType createProjectTimeSearchCriteria(MitarbeiterType employee) {
         ReadProjektzeitenSearchCriteriaType searchCriteria = new ReadProjektzeitenSearchCriteriaType();
 
-        String releaseDate = employee.getFreigabedatum();
+        final String releaseDate = employee.getFreigabedatum();
         searchCriteria.setVon(getFirstDayOfFollowingMonth(releaseDate));
         searchCriteria.setBis(getLastDayOfFollowingMonth(releaseDate));
 

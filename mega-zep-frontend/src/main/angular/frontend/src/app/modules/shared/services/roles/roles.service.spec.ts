@@ -57,7 +57,8 @@ describe('RolesService', () => {
       firstname: 'john',
       lastname: 'doe',
       email: 'john.doe@gepardec.com',
-      role: Role.USER
+      role: Role.USER,
+      pictureUrl: undefined
     });
     expect(service.isAllowed(configuration.PAGE_URLS.EMPLOYEES + 'somewrongroute')).toBe(false);
   });
@@ -68,7 +69,8 @@ describe('RolesService', () => {
       firstname: 'john',
       lastname: 'doe',
       email: 'john.doe@gepardec.com',
-      role: Role.USER
+      role: Role.USER,
+      pictureUrl: undefined
     });
     expect(service.isAllowed(configuration.PAGE_URLS.EMPLOYEES)).toBe(false);
   });
@@ -79,7 +81,8 @@ describe('RolesService', () => {
       firstname: 'john',
       lastname: 'doe',
       email: 'john.doe@gepardec.com',
-      role: Role.CONTROLLER
+      role: Role.CONTROLLER,
+      pictureUrl: undefined
     });
     expect(service.isAllowed(configuration.PAGE_URLS.EMPLOYEES)).toBe(true);
   });
@@ -90,7 +93,8 @@ describe('RolesService', () => {
       firstname: 'john',
       lastname: 'doe',
       email: 'john.doe@gepardec.com',
-      role: Role.USER
+      role: Role.USER,
+      pictureUrl: undefined
     });
     expect(service.isAllowed(configuration.PAGE_URLS.MONTHLY_REPORT)).toBe(true);
   });

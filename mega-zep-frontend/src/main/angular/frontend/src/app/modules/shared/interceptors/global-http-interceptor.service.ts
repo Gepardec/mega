@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, Observer, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { ErrorHandlerService } from '../services/error/error-handler.service';
 import { UserService } from '../services/user/user.service';
 import { ConfigService } from '../services/config/config.service';
 import { LoaderService } from '../services/loader/loader.service';
+import { empty } from 'rxjs/internal/Observer';
 
 @Injectable({
   providedIn: 'root'
@@ -38,25 +39,19 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
             this.loaderService.stopSpinner();
             switch (error.status) {
               case this.HTTP_STATUS_BAD_REQUEST:
-                this.errorHandler.handleError(error);
-                break;
+                return this.handleError(error);
               case this.HTTP_STATUS_UNAUTHORIZED:
-                this.errorHandler.handleError(error);
                 this.userService.logout();
-                break;
+                return this.handleError(error);
               case this.HTTP_STATUS_FORBIDDEN:
-                this.errorHandler.handleError(error);
                 this.userService.logout();
-                break;
+                return this.handleError(error);
               case this.HTTP_STATUS_NOT_FOUND:
-                this.errorHandler.handleError(error);
-                break;
+                return this.handleError(error);
               case this.HTTP_STATUS_METHOD_NOT_ALLOWED:
-                this.errorHandler.handleError(error);
-                break;
+                return this.handleError(error);
               case this.HTTP_STATUS_REQUEST_TIMEOUT:
-                this.errorHandler.handleError(error);
-                break;
+                return this.handleError(error);
               default:
                 return throwError(error);
             }
@@ -66,5 +61,10 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
     } else {
       return next.handle(req);
     }
+  }
+
+  private handleError(error): Observable<any> {
+    this.errorHandler.handleError(error);
+    return of(error);
   }
 }

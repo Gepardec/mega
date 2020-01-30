@@ -1,11 +1,16 @@
 package com.gepardec.mega;
 
 import com.gepardec.mega.monthlyreport.MonthlyReport;
+import com.gepardec.mega.monthlyreport.warning.WarningConfig;
 import com.gepardec.mega.zep.service.impl.WorkerServiceImpl;
+import com.gepardec.mega.zep.soap.ZepSoapProvider;
 import de.provantis.zep.MitarbeiterType;
+import de.provantis.zep.ZepSoapPortType;
 import io.quarkus.test.Mock;
+import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +19,10 @@ import java.util.Map;
 public class WorkerServiceMock extends WorkerServiceImpl {
 
     WorkerServiceImpl delegate;
+
+    public WorkerServiceMock() {
+
+    }
 
     @Override
     public MitarbeiterType getEmployee(String userId) {
