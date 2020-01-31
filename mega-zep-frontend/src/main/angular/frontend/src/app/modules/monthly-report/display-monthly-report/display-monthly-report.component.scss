@@ -1,33 +1,27 @@
 @import "src/app/styles/variables";
 
-.mat-header-cell {
-  flex-direction: column;
-  justify-content: center;
-}
-
-.mat-cell {
-  text-align: center;
-  justify-content:center;
-}
-.container {
-  width: 40%;
-  margin: 5px auto 0;
-}
-
 .mat-card {
-  text-align: center;
-  font-weight: bold;
-  font-size: 20px;
-}
-.container-mat-table {
-  height: 40vh;
-  overflow: auto;
-  margin-top: 20px
+  margin-top: 8%;
 }
 
-.mat-header-row {
-  background-color: $background-color-grey;
-  color: rgb(193, 196, 203);
+.mat-card-subtitle {
+  margin-left: 20px;
+}
+
+.mat-card-content {
+  font-size: 20px;
+  margin-left: 20px;
+  margin-right: 30px;
+}
+
+.mat-card-date {
+  float: right;
+}
+
+.container-mat-table {
+  margin-top: 8%;
+  height: 30vh;
+  overflow: auto;
 }
 
 .headline {
@@ -35,10 +29,10 @@
   font-size: 20px;
 }
 
-.mat-row {
-  min-height: 65px;
+.mat-column-date-journey {
+  max-width: 25%;
+}
 
-  &.selected {
-    background: #dddddd;
-  }
+.mat-cell {
+  font-weight: bold;
 }

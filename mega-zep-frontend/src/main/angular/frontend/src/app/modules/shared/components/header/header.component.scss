@@ -1,20 +1,19 @@
+@import "../../../../styles/variables.scss";
+
 .toolbar {
-  background-color: rgb(67, 66, 93);
+  background-color: $background-color-grey;
+  height: 7%;
 }
 
-.header-caption h1 {
-  font-weight: bolder;
-  font-size: 35px;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+.logo-mega {
+  max-width: 10%;
+  margin-top: 1%;
 }
 
 .mat-tab-nav-bar a {
-  color: white;
+  margin-top: 9%;
 }
 
-.useractions {
-  flex: 1;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
+.user-actions {
+  color: black;
 }

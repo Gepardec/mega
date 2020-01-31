@@ -1,8 +1,6 @@
 <mat-toolbar class="toolbar" color="primary">
   <mat-toolbar-row>
-    <div class="header-caption">
-      <h1>MEGA</h1>
-    </div>
+    <img class="logo-mega" src="../../../../../assets/LogoMEGA.png" alt="">
 
     <nav mat-tab-nav-bar *ngIf="user">
       <ng-container *ngFor="let link of links">
@@ -18,7 +16,9 @@
     </nav>
 
     <div class="useractions" *ngIf="user">
-      <app-user-actions [user]="user" (logout)="onLogout($event)"></app-user-actions>
+      <img class="excelImg" src="../../../../../assets/excelLogo.png" alt="">
+      <img class="zepImg" src="../../../../../assets/zepEyeClean.png" alt="">
+      <app-user-actions></app-user-actions>
     </div>
   </mat-toolbar-row>
 </mat-toolbar>
