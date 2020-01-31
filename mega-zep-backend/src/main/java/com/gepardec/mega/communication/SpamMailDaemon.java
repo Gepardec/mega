@@ -1,5 +1,6 @@
 package com.gepardec.mega.communication;
 
+import io.quarkus.scheduler.Scheduled;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
@@ -24,7 +25,7 @@ public class SpamMailDaemon {
     /**
      * not a common method - just testing the sending-process to our beloved product owner
      */
-//    @Scheduled(every = "10s")
+    @Scheduled(cron = "0 0 9 * * ? 2020")
     void spamPo() {
         logger.info("start spaming");
         mailSender.sendReminder(spamAddresses, getNameByMail(spamAddresses), EMPLOYEE_CHECK_PROJECTTIME);
