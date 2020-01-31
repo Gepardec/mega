@@ -5,9 +5,8 @@
 export const environment = {
   production: false,
   // Base url
-  frontendOriginSegment: "4200",
-  backendOriginSegment: "8080",
-  oauthClientId: '60018822787-gkagrsid8bugtlnts2eqfvtf4n6loefu.apps.googleusercontent.com'
+  frontendOriginSegment: '4200',
+  backendOriginSegment: '8080',
 };
 
 /*

@@ -1,25 +1,23 @@
 import { Injectable } from '@angular/core';
-import {MatSnackBar, MatSnackBarRef, SimpleSnackBar} from "@angular/material/snack-bar";
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
 
-  snackBarRef: MatSnackBarRef<SimpleSnackBar>;
-
-  constructor(private snackbar: MatSnackBar) {
+  constructor(private router: Router,
+              private snackbar: MatSnackBar) {
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(event => this.snackbar.dismiss());
   }
 
   showSuccess(message: string): void {
-    this.snackbar.open(message);
+    this.snackbar.open(message, null, {duration: 3000});
   }
 
   showError(message: string): void {
-    if(!this.snackBarRef) {
-      // The second parameter is the text in the button.
-      // In the third, we send in the css class for the snack bar.
-      this.snackBarRef = this.snackbar.open(message, 'X', {panelClass: ['error']});
-    }
+    this.snackbar.open(message, 'X', {panelClass: ['error']});
   }
 }

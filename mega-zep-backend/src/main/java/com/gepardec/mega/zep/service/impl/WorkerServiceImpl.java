@@ -1,97 +1,105 @@
 package com.gepardec.mega.zep.service.impl;
 
-import com.gepardec.mega.model.google.GoogleUser;
+import com.gepardec.mega.aplication.utils.DateUtils;
 import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.monthlyreport.ProjectTimeManager;
+import com.gepardec.mega.monthlyreport.journey.JourneyWarning;
+import com.gepardec.mega.monthlyreport.warning.TimeWarning;
+import com.gepardec.mega.monthlyreport.warning.WarningCalculator;
 import com.gepardec.mega.monthlyreport.warning.WarningConfig;
-import com.gepardec.mega.security.AuthorizationInterceptor;
-import com.gepardec.mega.utils.DateUtils;
+import com.gepardec.mega.zep.exception.ZepServiceException;
 import com.gepardec.mega.zep.service.api.WorkerService;
+import com.gepardec.mega.zep.soap.ZepSoapProvider;
 import de.provantis.zep.*;
-import org.apache.http.HttpStatus;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
-import javax.interceptor.Interceptors;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
-import static com.gepardec.mega.utils.DateUtils.getFirstDayOfFollowingMonth;
-import static com.gepardec.mega.utils.DateUtils.getLastDayOfFollowingMonth;
-import static com.gepardec.mega.zep.service.ZepStatusCodeMapper.toHttpResponseCode;
+import static com.gepardec.mega.aplication.utils.DateUtils.getFirstDayOfFollowingMonth;
+import static com.gepardec.mega.aplication.utils.DateUtils.getLastDayOfFollowingMonth;
 import static java.lang.String.format;
 
-@Interceptors(AuthorizationInterceptor.class)
-@ApplicationScoped
+@RequestScoped
 public class WorkerServiceImpl implements WorkerService {
 
     @Inject
     Logger logger;
 
     @Inject
-    @Named("ZepAuthorizationSOAPPortType")
     ZepSoapPortType zepSoapPortType;
 
     @Inject
-    @Named("ZepAuthorizationRequestHeaderType")
-    RequestHeaderType requestHeaderType;
+    ZepSoapProvider zepSoapProvider;
 
     @Inject
     WarningConfig warningConfig;
 
-    private static final ReadMitarbeiterRequestType readMitarbeiterRequestType = new ReadMitarbeiterRequestType();
-    private static final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
-
-    @PostConstruct
-    void init() {
-        readMitarbeiterRequestType.setRequestHeader(requestHeaderType);
-        projektzeitenRequest.setRequestHeader(requestHeaderType);
-    }
-
-
     @Override
-    public MitarbeiterType getEmployee(final GoogleUser user) {
-
+    public MitarbeiterType getEmployee(final String userId) {
+        if (StringUtils.isBlank(userId)) {
+            return null;
+        }
         try {
+            final ReadMitarbeiterRequestType readMitarbeiterRequestType = new ReadMitarbeiterRequestType();
+            readMitarbeiterRequestType.setRequestHeader(zepSoapProvider.createRequestHeaderType());
+            final ReadMitarbeiterSearchCriteriaType searchCriteria = new ReadMitarbeiterSearchCriteriaType();
+            searchCriteria.setUserId(userId);
+
             final List<MitarbeiterType> employees = flatMap(zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType));
             return employees.stream()
-                    .filter(e -> e.getEmail() != null && e.getEmail().equals(user.getEmail()))
+                    .filter(e -> e.getUserId().equals(userId))
                     .findFirst()
                     .orElse(null);
         } catch (Exception e) {
-            logger.error(format("error getEmployee for user: %s", user.getId()));
+            logger.error(format("error getEmployee for user: %s", userId));
             return null;
         }
     }
 
     @Override
     public List<MitarbeiterType> getAllActiveEmployees() {
+        final ReadMitarbeiterRequestType readMitarbeiterRequestType = new ReadMitarbeiterRequestType();
+        readMitarbeiterRequestType.setRequestHeader(zepSoapProvider.createRequestHeaderType());
         ReadMitarbeiterResponseType rmrt = zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType);
         return filterActiveEmployees(rmrt);
     }
 
     @Override
-    public Integer updateEmployees(final List<MitarbeiterType> employees) {
-        final List<Integer> statusCodeList = new LinkedList<>();
+    public List<String> updateEmployeesReleaseDate(final Map<String, String> emailReleaseDates) {
+        final List<String> failedEmails = new LinkedList<>();
 
-        employees.forEach(e -> statusCodeList.add(updateEmployee(e)));
+        for (final Map.Entry<String, String> entry : emailReleaseDates.entrySet()) {
+            try {
+                updateEmployeeReleaseDate(entry.getKey(), entry.getValue());
+            } catch (Exception e) {
+                failedEmails.add(entry.getKey());
+            }
+        }
 
-        return statusCodeList.stream()
-                .filter(statuscode -> statuscode == HttpStatus.SC_INTERNAL_SERVER_ERROR)
-                .findAny()
-                .orElse(HttpStatus.SC_OK);
+        return failedEmails;
     }
 
     @Override
-    public MonthlyReport getMonthendReportForUser(GoogleUser user) {
-        MitarbeiterType employee = getEmployee(user);
+    public MonthlyReport getMonthendReportForUser(final String userId) {
+        MitarbeiterType employee = getEmployee(userId);
         if (employee == null) {
             return null;
         }
-        ReadProjektzeitenSearchCriteriaType searchCriteria = createProjectTimeSearchCriteria(employee);
+        final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
+        projektzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
+
+        final ReadProjektzeitenSearchCriteriaType searchCriteria;
+        try {
+            searchCriteria = createProjectTimeSearchCriteria(employee);
+        } catch (DateTimeParseException e) {
+            logger.error("invalid release date {0}", e);
+            return null;
+        }
         projektzeitenRequest.setReadProjektzeitenSearchCriteria(searchCriteria);
 
         ReadProjektzeitenResponseType projectTimeResponse = zepSoapPortType.readProjektzeiten(projektzeitenRequest);
@@ -100,10 +108,10 @@ public class WorkerServiceImpl implements WorkerService {
 
     }
 
-    private static ReadProjektzeitenSearchCriteriaType createProjectTimeSearchCriteria(MitarbeiterType employee) {
+    private ReadProjektzeitenSearchCriteriaType createProjectTimeSearchCriteria(MitarbeiterType employee) {
         ReadProjektzeitenSearchCriteriaType searchCriteria = new ReadProjektzeitenSearchCriteriaType();
 
-        String releaseDate = employee.getFreigabedatum();
+        final String releaseDate = employee.getFreigabedatum();
         searchCriteria.setVon(getFirstDayOfFollowingMonth(releaseDate));
         searchCriteria.setBis(getLastDayOfFollowingMonth(releaseDate));
 
@@ -114,31 +122,34 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
 
-    private MonthlyReport calcWarnings(ReadProjektzeitenResponseType projectTimeResponse, MitarbeiterType employee) {
+    private MonthlyReport calcWarnings(ReadProjektzeitenResponseType projectTimeResponse, MitarbeiterType mitarbeiterType) {
         if (projectTimeResponse == null || projectTimeResponse.getProjektzeitListe() == null) {
             return null;
         }
-        MonthlyReport monthlyReport = new MonthlyReport(employee,
-                new ProjectTimeManager(projectTimeResponse.getProjektzeitListe().getProjektzeiten()), warningConfig);
-        monthlyReport.calculateWarnings();
-        return monthlyReport;
+        final ProjectTimeManager projectTimeManager = new ProjectTimeManager(projectTimeResponse.getProjektzeitListe().getProjektzeiten());
+        final WarningCalculator warningCalculator = new WarningCalculator(warningConfig);
+        final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(projectTimeManager);
+        final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectTimeManager);
+
+        return new MonthlyReport(timeWarnings, journeyWarnings, mitarbeiterType);
     }
 
 
     @Override
-    public Integer updateEmployee(final MitarbeiterType employee) {
-        try {
-            final UpdateMitarbeiterRequestType umrt = new UpdateMitarbeiterRequestType();
-            umrt.setRequestHeader(requestHeaderType);
-            umrt.setMitarbeiter(employee);
+    public void updateEmployeeReleaseDate(final String id, final String releaseDate) {
+        final UpdateMitarbeiterRequestType umrt = new UpdateMitarbeiterRequestType();
+        umrt.setRequestHeader(zepSoapProvider.createRequestHeaderType());
 
-            final UpdateMitarbeiterResponseType updateMitarbeiterResponseType = zepSoapPortType.updateMitarbeiter(umrt);
-            final ResponseHeaderType responseHeaderType = updateMitarbeiterResponseType != null ? updateMitarbeiterResponseType.getResponseHeader() : null;
+        final MitarbeiterType mitarbeiter = new MitarbeiterType();
+        mitarbeiter.setUserId(id);
+        mitarbeiter.setFreigabedatum(releaseDate);
+        umrt.setMitarbeiter(mitarbeiter);
 
-            return toHttpResponseCode(responseHeaderType);
-        } catch (Exception e) {
-            logger.error(format("Errro updatingEmployee, id: %s", employee.getUserId()));
-            return HttpStatus.SC_INTERNAL_SERVER_ERROR;
+        final UpdateMitarbeiterResponseType updateMitarbeiterResponseType = zepSoapPortType.updateMitarbeiter(umrt);
+        final ResponseHeaderType responseHeaderType = updateMitarbeiterResponseType != null ? updateMitarbeiterResponseType.getResponseHeader() : null;
+
+        if (responseHeaderType != null && Integer.parseInt(responseHeaderType.getReturnCode()) == 0) {
+            throw new ZepServiceException("updateEmployeeReleaseDate failed with code: " + responseHeaderType.getReturnCode());
         }
     }
 
@@ -160,7 +171,7 @@ public class WorkerServiceImpl implements WorkerService {
                 if (last.getEnddatum() == null) {
                     activeEmployees.add(employee);
                 } else {
-                    final LocalDate endDate = DateUtils.toLocalDate(Objects.requireNonNull(last).getEnddatum());
+                    final LocalDate endDate = DateUtils.parseDate(Objects.requireNonNull(last).getEnddatum());
                     if (!endDate.isBefore(LocalDate.now())) {
                         activeEmployees.add(employee);
                     }

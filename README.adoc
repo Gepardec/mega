@@ -8,6 +8,18 @@ Make End-of-the-month-process Great Again!
 
 - Java 11
 - Maven 3.5+
+- node.js 12+
+- npm 6+
+
+==== Frontend Setup
+
+install node.js
+
+npm install -g @angular/cli
+
+cd mega-zep-frontend/src/main/angular/frontend
+npm install
+npx ng serve
 
 See link:mega-zep-connector/README.adoc[README of ZEP-Connector] for more information.
 
@@ -37,3 +49,10 @@ mega.mail.firstbusinessday.reminder=<MAIL_REMINDER_MAIL>
 mega.test.googleuser.email=<USER_EMAIL>
 mega.test.googleuser.id=<USER_ID>
 ----
+
+## TODO
+
+- Remove google-secrets not needed anymore
+- Recreate newly introduced secrets
+- Modify frontend template to map secret 'asset/config.json' into html root where the clientId and backendOrigin is defined
+- Jenkins build pipeline does not need to replace client_id anymore

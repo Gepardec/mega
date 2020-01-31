@@ -1,8 +1,8 @@
 package com.gepardec.mega.communication;
 
+import com.gepardec.mega.aplication.utils.DateUtils;
 import com.gepardec.mega.communication.dates.BusinessDayCalculator;
 import com.gepardec.mega.communication.exception.MissingReceiverException;
-import com.gepardec.mega.utils.DateUtils;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +39,7 @@ public class MailDaemon {
     @ConfigProperty(name = "mega.mail.employees.notification")
     boolean employeesNotification;
 
+
     @Scheduled(cron = "{mega.mail.cron.config}")
     void sendReminder() {
         logger.info("Mail-Daemon-cron-job started at {}", DateUtils.today().toString());
@@ -70,11 +71,15 @@ public class MailDaemon {
                     break;
                 }
                 default: {
+                    logger.info("No notification sent today");
                     break;
                 }
             }
+        } else {
+            logger.info("NO notification sent today");
         }
     }
+
 
     void sendReminderToPl() {
         if (plMailAddresses == null) {
@@ -84,7 +89,7 @@ public class MailDaemon {
         }
         Arrays.asList(plMailAddresses.split("\\,"))
                 .forEach(mailAddress -> mailSender.sendReminder(mailAddress, getNameByMail(mailAddress), PL_PROJECT_CONTROLLING));
-        logger.info("PL-Notification sent for reminder {}", PL_PROJECT_CONTROLLING.name());
+        logSentNotification(PL_PROJECT_CONTROLLING);
     }
 
     void sendReminderToOm(Reminder reminder) {
@@ -95,16 +100,17 @@ public class MailDaemon {
         }
         Arrays.asList(omMailAddresses.split("\\,"))
                 .forEach(mailAddress -> mailSender.sendReminder(mailAddress, getNameByMail(mailAddress), reminder));
-        logger.info("OM-Notification sent for reminder {}", reminder.name());
+        logSentNotification(reminder);
     }
 
     void sendReminderToUser() {
         if (employeesNotification) {
             workerService.getAllActiveEmployees()
                     .forEach(employee -> mailSender.sendReminder(employee.getEmail(), employee.getVorname(), EMPLOYEE_CHECK_PROJECTTIME));
-            logger.info("Reminder to employees sent");
+            logSentNotification(EMPLOYEE_CHECK_PROJECTTIME);
+        } else {
+            logger.info("NO Reminder to employes sent, cause mega.mail.employees.notification-property is false");
         }
-        logger.info("NO Reminder to employes sent, cause mega.mail.employees.notification-property is false");
     }
 
     //TODO: remove immediately when names are available with persistence layer
@@ -115,5 +121,9 @@ public class MailDaemon {
             return firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
         }
         return StringUtils.EMPTY;
+    }
+
+    private void logSentNotification(Reminder reminder) {
+        logger.info("{}. working-day of month. Notification sent for Reminder {}", reminder.getWorkingDay(), reminder.name());
     }
 }

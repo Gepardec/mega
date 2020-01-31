@@ -44,6 +44,10 @@
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jsonp</artifactId>
         </dependency>
         <dependency>
@@ -107,10 +111,21 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client</artifactId>
+            <version>1.30.4</version>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombock.version}</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>3.2.4</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
@@ -130,7 +145,10 @@
                             <sourceRoot>${project.build.directory}/generated-sources</sourceRoot>
                             <wsdlOptions>
                                 <wsdlOption>
-                                    <wsdl>${project.basedir}/src/main/resources/wsdl/Zep_V7.wsdl</wsdl>
+                                    <wsdl>${project.basedir}/src/main/resources/wsdl/zep_v7.wsdl</wsdl>
+                                    <bindingFiles>
+                                        <bindingFile>${project.basedir}/src/main/resources/wsdl/zep-bindings.xml</bindingFile>
+                                    </bindingFiles>
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>
@@ -223,6 +241,7 @@
                                 </goals>
                                 <configuration>
                                     <systemPropertyVariables>
+                                        <skipTests>true</skipTests>
                                         <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
                                     </systemPropertyVariables>
                                 </configuration>

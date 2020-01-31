@@ -1,19 +1,19 @@
 package com.gepardec.mega.zep.service.api;
 
-import com.gepardec.mega.model.google.GoogleUser;
 import com.gepardec.mega.monthlyreport.MonthlyReport;
 import de.provantis.zep.MitarbeiterType;
 
 import java.util.List;
+import java.util.Map;
 
 public interface WorkerService {
-    MitarbeiterType getEmployee (GoogleUser user);
+    MitarbeiterType getEmployee(final String userId);
 
     List<MitarbeiterType> getAllActiveEmployees();
 
-    Integer updateEmployee(MitarbeiterType employee);
+    void updateEmployeeReleaseDate(final String id, final String releaseDate);
 
-    Integer updateEmployees(List<MitarbeiterType> employees);
+    List<String> updateEmployeesReleaseDate(final Map<String, String> pairs);
 
-    MonthlyReport getMonthendReportForUser(GoogleUser user);
+    MonthlyReport getMonthendReportForUser(final String userId);
 }

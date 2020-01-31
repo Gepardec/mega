@@ -34,25 +34,19 @@ pipeline {
 
                                         def revision = buildRevisionForBranch()
 
-                                        withCredentials([file(credentialsId: 'google-secrets', variable: 'GOOGLE_SECRET_FILE')]) {
-                                            def googleProps = readProperties file: "${GOOGLE_SECRET_FILE}"
-
-                                            dir('mega-zep-frontend/src/main/angular/frontend') {
-                                                sh "sed -i -e 's|REPLACE_OAUTH_CLIENT_ID|${googleProps['oauth.clientId']}|g' src/environments/environment.prod.ts"
-                                                sh "npm install"
-                                                sh "ng build --sourceMap=false --configuration=production"
-                                            }
+                                        dir('mega-zep-frontend/src/main/angular/frontend') {
+                                            sh "npm install"
+                                            sh "npx ng test --browsers=ChromeHeadlessNoSandbox --watch=false"
+                                            sh "npx ng build --configuration=production"
                                         }
 
                                         dir('mega-zep-frontend/src/main/angular/frontend') {
                                             openshift.withCluster() {
-                                                openshift.withProject("${OCP_PROJECT_NAME}") {
-                                                    sh "oc start-build mega-zep-frontend --commit=${env.GIT_COMMIT} \
+                                                sh "oc start-build mega-zep-frontend --commit=${env.GIT_COMMIT} \
                                                                                          --from-dir=dist/frontend \
                                                                                          --follow \
                                                                                          --wait"
-                                                    openshift.tag("mega-zep-frontend:latest", "mega-zep-frontend:${revision}")
-                                                }
+                                                openshift.tag("mega-zep-frontend:latest", "mega-zep-frontend:${revision}")
                                             }
                                         }
                                     }
@@ -89,12 +83,10 @@ pipeline {
 
                                         dir('mega-zep-backend/target/') {
                                             openshift.withCluster() {
-                                                openshift.withProject("${OCP_PROJECT_NAME}") {
-                                                    def artifact = "mega-zep-backend-${revision}-runner.jar"
+                                                def artifact = "mega-zep-backend-${revision}-runner.jar"
 
-                                                    sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait"
-                                                    openshift.tag("mega-zep-backend:latest", "mega-zep-backend:${revision}")
-                                                }
+                                                sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait"
+                                                openshift.tag("mega-zep-backend:latest", "mega-zep-backend:${revision}")
                                             }
                                         }
                                     }

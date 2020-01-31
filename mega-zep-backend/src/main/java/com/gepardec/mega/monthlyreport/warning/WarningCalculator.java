@@ -6,7 +6,7 @@ import com.gepardec.mega.monthlyreport.Task;
 import com.gepardec.mega.monthlyreport.journey.JourneyDirectionHandler;
 import com.gepardec.mega.monthlyreport.journey.JourneyEntry;
 import com.gepardec.mega.monthlyreport.journey.JourneyWarning;
-import com.gepardec.mega.utils.DateUtils;
+import com.gepardec.mega.aplication.utils.DateUtils;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -34,7 +34,8 @@ public class WarningCalculator {
         entries.forEach(e -> checkForBreaksForWorkingDaysWithMoreThan6Hours(e.getValue(), e.getKey()));
 
         //3. check earliest start and latest ending
-        projectTimeManager.getEntriesAsFlatList().forEach(e -> checkForFlexibleWorkFrame(e));
+//        not activated now
+//        projectTimeManager.getEntriesAsFlatList().forEach(e -> checkForFlexibleWorkFrame(e));
 
         //4. check fore enough rest
         checkForRestTime(projectTimeManager);

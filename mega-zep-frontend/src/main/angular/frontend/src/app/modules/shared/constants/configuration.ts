@@ -1,16 +1,14 @@
-import {HttpHeaders} from "@angular/common/http";
-
 export const configuration = {
   PAGE_NAMES: {
-    LOGIN: "Login",
-    EMPLOYEES: "Freigabe",
-    MONTHLY_REPORT : "Monats-Auswertung"
+    LOGIN: 'Login',
+    EMPLOYEES: 'Freigabe',
+    MONTHLY_REPORT: 'Monats-Auswertung'
   },
 
   PAGE_URLS: {
-    LOGIN: "/login",
-    EMPLOYEES: "/employees",
-    MONTHLY_REPORT : "/monthlyReport"
+    MONTHLY_REPORT: 'monthlyReport',
+    EMPLOYEES: 'employees',
+    LOGIN: 'login'
   },
 
   SPREADSHEET_URL: 'https://docs.google.com/spreadsheets/d/1PmJ9wnYk-OJL91iwMzMBE_DTifHdhaa35HrOMtmEfgs/edit#gid=1076534321',
@@ -28,22 +26,7 @@ export const configuration = {
     '99': 'Reisezeiten'
   },
 
-  // Http Headers
-  httpOptions: {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-    }),
-    withCredentials: true
-  },
-
   dateFormat: 'yyyy-MM-dd',
-
-  EMPLOYEE_ROLES: {
-    USER: 0,
-    ADMINISTRATOR: 1,
-    CONTROLLER: 2,
-    USER_MIT_ZUSATZRECHTEN: 3
-  },
 
   LogLevel: {
     All: 0,

@@ -1,7 +1,7 @@
 package com.gepardec.mega.communication;
 
 import com.gepardec.mega.communication.exception.MissingLogoException;
-import com.gepardec.mega.utils.FileHelper;
+import com.gepardec.mega.aplication.utils.FileHelper;
 import com.google.common.net.MediaType;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;
@@ -23,6 +23,8 @@ public class MailSender {
 
     private byte[] logoByteArray;
 
+    @ConfigProperty(name = "mega.mail.subjectPrefix", defaultValue = "")
+    String subjectPrefix;
 
     @ConfigProperty(name = "mega.image.logo.url")
     String megaImageLogoUrl;
@@ -165,7 +167,7 @@ public class MailSender {
                 break;
             }
         }
-        return subject;
+        return subjectPrefix + subject;
     }
 
 }

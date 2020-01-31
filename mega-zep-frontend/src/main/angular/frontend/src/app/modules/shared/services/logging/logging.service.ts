@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {configuration} from "../../constants/configuration";
-import {LogEntry} from "../../util/LogEntry";
+import {configuration} from '../../constants/configuration';
+import {LogEntry} from '../../models/LogEntry';
 
 @Injectable({
   providedIn: 'root'
@@ -16,18 +16,18 @@ export class LoggingService {
   public writeToLog(msg: string,
                     level: number): void {
     if (this.shouldLog(level)) {
-      let entry: LogEntry = new LogEntry();
+      const entry: LogEntry = new LogEntry();
       entry.message = msg;
       entry.level = level;
       entry.logWithDate = this.logWithDate;
-      console.log("test");
+      console.log('test');
       console.log(entry.buildLogString());
       console.log(entry.buildLogString());
     }
   }
 
   private shouldLog(level: number) {
-    let ret: boolean = false;
+    let ret = false;
     if ((level >= this.level &&
       level !== configuration.LogLevel.Off) ||
       this.level === configuration.LogLevel.All) {

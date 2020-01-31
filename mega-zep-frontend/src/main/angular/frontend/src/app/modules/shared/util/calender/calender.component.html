@@ -1,9 +1,0 @@
-<div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.6%" fxLayoutAlign="center">
-  <div>
-    <h3>Ausgewähltes Datum: <span style="font-weight: bold">{{selectedDate}}</span></h3>
-  </div>
-
-  <mat-card>
-    <mat-calendar [selected]="selectedDate" (selectedChange)="onSelect($event)"></mat-calendar>
-  </mat-card>
-</div>
