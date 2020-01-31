@@ -11,6 +11,7 @@ import com.gepardec.mega.zep.exception.ZepServiceException;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import com.gepardec.mega.zep.soap.ZepSoapProvider;
 import de.provantis.zep.*;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
@@ -40,6 +41,9 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public MitarbeiterType getEmployee(final String userId) {
+        if (StringUtils.isBlank(userId)) {
+            return null;
+        }
         try {
             final ReadMitarbeiterRequestType readMitarbeiterRequestType = new ReadMitarbeiterRequestType();
             readMitarbeiterRequestType.setRequestHeader(zepSoapProvider.createRequestHeaderType());

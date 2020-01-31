@@ -39,6 +39,7 @@ public class MailDaemon {
     @ConfigProperty(name = "mega.mail.employees.notification")
     boolean employeesNotification;
 
+
     @Scheduled(cron = "{mega.mail.cron.config}")
     void sendReminder() {
         logger.info("Mail-Daemon-cron-job started at {}", DateUtils.today().toString());
@@ -78,6 +79,7 @@ public class MailDaemon {
             logger.info("NO notification sent today");
         }
     }
+
 
     void sendReminderToPl() {
         if (plMailAddresses == null) {
