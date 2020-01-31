@@ -36,7 +36,8 @@ pipeline {
 
                                         dir('mega-zep-frontend/src/main/angular/frontend') {
                                             sh "npm install"
-                                            sh "ng build --configuration=production"
+                                            sh "npx ng test --browsers=ChromeHeadlessNoSandbox --watch=false"
+                                            sh "npx ng build --configuration=production"
                                         }
 
                                         dir('mega-zep-frontend/src/main/angular/frontend') {
