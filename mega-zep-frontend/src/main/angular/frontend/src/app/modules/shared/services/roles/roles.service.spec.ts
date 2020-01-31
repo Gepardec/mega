@@ -84,7 +84,7 @@ describe('RolesService', () => {
       role: Role.CONTROLLER,
       pictureUrl: undefined
     });
-    expect(service.isAllowed(configuration.PAGE_URLS.EMPLOYEES)).toBe(false);
+    expect(service.isAllowed(configuration.PAGE_URLS.EMPLOYEES)).toBe(true);
   });
 
   it('should return true if no role is required', () => {
