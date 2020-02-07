@@ -40,6 +40,7 @@ export class DisplayMonthlyReportComponent implements OnInit {
 
   getDateOfReport(date: string): Date {
     const reportDate = new Date(date);
+    reportDate.setDate(1);
     reportDate.setMonth(reportDate.getMonth() + 1);
     return reportDate;
   }
