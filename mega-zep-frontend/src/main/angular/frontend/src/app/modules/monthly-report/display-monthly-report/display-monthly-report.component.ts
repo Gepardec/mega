@@ -13,8 +13,8 @@ import { configuration } from '../../shared/constants/configuration';
 export class DisplayMonthlyReportComponent implements OnInit {
 
   @Input() monthlyReport: MonthlyReport;
-  displayedColumnsTimeTable = ['date', 'restTime', 'breakTime', 'workingTime'];
-  displayedColumnsJourneyTable = ['date', 'warning'];
+  displayedColumnsTimeTable = ['date-time', 'restTime', 'breakTime', 'workingTime'];
+  displayedColumnsJourneyTable = ['date-journey', 'warning'];
   datasourceTimeTable = new MatTableDataSource<TimeWarning>();
   datasourceJourneyTable = new MatTableDataSource<JourneyWarning>();
   readonly functions = configuration.EMPLOYEE_FUNCTIONS;
