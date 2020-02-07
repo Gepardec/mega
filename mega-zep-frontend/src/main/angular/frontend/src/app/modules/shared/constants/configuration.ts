@@ -1,8 +1,8 @@
 export const configuration = {
   PAGE_NAMES: {
     LOGIN: 'Login',
-    EMPLOYEES: 'Freigabe',
-    MONTHLY_REPORT: 'Monats-Auswertung'
+    EMPLOYEES: 'MITARBEITERÜBERSICHT',
+    MONTHLY_REPORT: 'MEIN MEGA'
   },
 
   PAGE_URLS: {
@@ -12,6 +12,7 @@ export const configuration = {
   },
 
   SPREADSHEET_URL: 'https://docs.google.com/spreadsheets/d/1PmJ9wnYk-OJL91iwMzMBE_DTifHdhaa35HrOMtmEfgs/edit#gid=1076534321',
+  ZEP_URL: 'https://www.zep-online.de/zepgepardecservices',
 
   EMPLOYEE_FUNCTIONS: {
     '01': 'Technischer PL',
