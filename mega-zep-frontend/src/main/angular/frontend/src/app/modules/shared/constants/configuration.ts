@@ -15,14 +15,14 @@ export const configuration = {
   ZEP_URL: 'https://www.zep-online.de/zepgepardecservices',
 
   EMPLOYEE_FUNCTIONS: {
-    '01': 'Technischer PL',
-    '02': 'Softwareentwickler',
+    '01': 'Technische/r PL',
+    '02': 'SoftwareentwicklerIn',
     '03': 'Verwaltung',
     '04': 'Senior',
     '05': 'Junior',
-    '06': 'Experte Inbetriebnahme',
-    '06-1': 'Software-Architekt',
-    '07': 'Ferialpraktikant',
+    '06': 'ExpertIn Inbetriebnahme',
+    '06-1': 'Software-ArchitektIn',
+    '07': 'FerialpraktikantIn',
     '08': 'Consultant Senior',
     '99': 'Reisezeiten'
   },
