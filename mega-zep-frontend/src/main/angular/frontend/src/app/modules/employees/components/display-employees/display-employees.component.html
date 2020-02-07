@@ -8,18 +8,20 @@
 
       <span class="fill-remaining-space"></span>
 
-      <p *ngIf="selectedEmployees.length > 0"
-         style="font-size: 12px; margin: 0 15px 0 0; color: rgb(67, 66, 93);">{{selectedEmployees.length}} Person<span
-        *ngIf="selectedEmployees.length > 1">en</span> ausgewählt</p>
+      <div class="freigabe">
+        <a *ngIf="selectedEmployees.length > 0"
+           style="font-size: 12px; margin: 0 15px 0 0; color: rgb(67, 66, 93);">{{selectedEmployees.length}} Person<span
+          *ngIf="selectedEmployees.length > 1">en</span> ausgewählt</a>
 
-      <app-datepicker *ngIf="filteredEmployees && selectedEmployees?.length > 0"
-                      (dateEmitter)="dateChanged($event)" style="margin-right: 10px;"></app-datepicker>
+        <app-datepicker *ngIf="filteredEmployees && selectedEmployees?.length > 0"
+                        (dateEmitter)="dateChanged($event)" style="margin-right: 10px;"></app-datepicker>
 
-      <button *ngIf="selectedEmployees?.length > 0 && selectedDate != null" class="releaseBtn"
-              mat-button
-              (click)="releaseEmployees()">
-        Freigeben
-      </button>
+        <button *ngIf="selectedEmployees?.length > 0 && selectedDate != null" class="releaseBtn"
+                mat-button
+                (click)="releaseEmployees()">
+          Freigeben
+        </button>
+      </div>
 
     </mat-toolbar-row>
   </mat-toolbar>
