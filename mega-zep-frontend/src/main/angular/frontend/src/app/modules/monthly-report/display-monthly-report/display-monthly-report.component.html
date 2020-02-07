@@ -53,7 +53,7 @@
       <ng-container matColumnDef="date-journey">
         <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
         <mat-cell
-          *matCellDef="let journeyEntry"> {{journeyEntry.date | date:'fullDate' : '+060' : 'de-AT'}} </mat-cell>
+          *matCellDef="let journeyEntry"> {{journeyEntry.date | date:'E dd.MM.yyyy' : '+060' : 'de-AT'}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="warning">
