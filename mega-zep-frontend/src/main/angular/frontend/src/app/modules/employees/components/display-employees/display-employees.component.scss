@@ -1,3 +1,9 @@
+.releaseBtn {
+  background-color: rgb(67, 66, 93);
+  border-radius: 5px;
+  color: white !important;
+}
+
 .filter {
   width: 40%;
 }
@@ -11,13 +17,7 @@
   flex: 1 1 auto;
 }
 
-.swap-view {
-  font-size: 60px;
-  width: 100%;
+.employeeList {
+  margin-top: 3%;
 }
 
-.releaseBtn {
-  background-color: rgb(67, 66, 93);
-  border-radius: 5px;
-  color: white !important;
-}
