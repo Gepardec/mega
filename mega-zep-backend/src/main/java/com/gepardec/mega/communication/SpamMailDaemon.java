@@ -24,7 +24,8 @@ public class SpamMailDaemon {
     /**
      * not a common method - just testing the sending-process to our beloved product owner
      */
-//    @Scheduled(every = "10s")
+    //use only for spam-testing issues
+    @Deprecated
     void spamPo() {
         logger.info("start spaming");
         mailSender.sendReminder(spamAddresses, getNameByMail(spamAddresses), EMPLOYEE_CHECK_PROJECTTIME);
