@@ -1,4 +1,5 @@
 @import "src/app/styles/variables";
+@import "src/app/styles/table-style";
 
 .mat-card {
   margin-top: 8%;
@@ -24,16 +25,6 @@
   overflow: auto;
 }
 
-.headline {
-  color: black;
-  font-weight: bold;
-  font-size: 20px;
-}
-
 .mat-column-date-journey {
   max-width: 25%;
-}
-
-.mat-cell {
-  font-weight: bold;
 }
