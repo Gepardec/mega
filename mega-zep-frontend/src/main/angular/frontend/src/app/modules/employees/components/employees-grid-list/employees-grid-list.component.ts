@@ -9,6 +9,7 @@ import {DatePickerDialogComponent} from './date-picker-dialog/date-picker-dialog
   templateUrl: './employees-grid-list.component.html',
   styleUrls: ['./employees-grid-list.component.scss']
 })
+// FIXME: gridlist no longer needed remove at given time
 export class EmployeesGridListComponent implements OnInit {
 
   readonly date = new Date();
