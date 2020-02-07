@@ -11,7 +11,7 @@ export const configuration = {
     LOGIN: 'login'
   },
 
-  SPREADSHEET_URL: 'https://docs.google.com/spreadsheets/d/1PmJ9wnYk-OJL91iwMzMBE_DTifHdhaa35HrOMtmEfgs/edit#gid=1076534321',
+  SPREADSHEET_URL: 'https://docs.google.com/spreadsheets/d/1wUJHMtkY47RhLIGytg_MXVe_hgPAj_yzozLMcv5hrdU/edit#gid=604001411',
   ZEP_URL: 'https://www.zep-online.de/zepgepardecservices',
 
   EMPLOYEE_FUNCTIONS: {
