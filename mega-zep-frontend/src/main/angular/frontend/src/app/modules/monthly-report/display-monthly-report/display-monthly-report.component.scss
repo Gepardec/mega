@@ -1,44 +1,30 @@
 @import "src/app/styles/variables";
-
-.mat-header-cell {
-  flex-direction: column;
-  justify-content: center;
-}
-
-.mat-cell {
-  text-align: center;
-  justify-content:center;
-}
-.container {
-  width: 40%;
-  margin: 5px auto 0;
-}
+@import "src/app/styles/table-style";
 
 .mat-card {
-  text-align: center;
-  font-weight: bold;
-  font-size: 20px;
+  margin-top: 8%;
 }
+
+.mat-card-subtitle {
+  margin-left: 20px;
+}
+
+.mat-card-content {
+  font-size: 20px;
+  margin-left: 20px;
+  margin-right: 30px;
+}
+
+.mat-card-date {
+  float: right;
+}
+
 .container-mat-table {
-  height: 40vh;
+  margin-top: 8%;
+  height: 30vh;
   overflow: auto;
-  margin-top: 20px
 }
 
-.mat-header-row {
-  background-color: $background-color-grey;
-  color: rgb(193, 196, 203);
-}
-
-.headline {
-  font-weight: bold;
-  font-size: 20px;
-}
-
-.mat-row {
-  min-height: 65px;
-
-  &.selected {
-    background: #dddddd;
-  }
+.mat-column-date-journey {
+  max-width: 25%;
 }

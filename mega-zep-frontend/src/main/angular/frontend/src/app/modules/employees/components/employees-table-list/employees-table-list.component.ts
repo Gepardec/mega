@@ -17,7 +17,7 @@ export class EmployeesTableListComponent implements OnInit, OnDestroy {
   readonly functions = configuration.EMPLOYEE_FUNCTIONS;
 
   @Input() dataSource: MatTableDataSource<Employee>;
-  displayedColumns = ['nachname', 'abteilung', 'freigabedatum', 'auswaehlen'];
+  displayedColumns = ['auswaehlen', 'nachname', 'abteilung', 'freigabedatum'];
   selection = new SelectionModel<Employee>(true, null);
 
   private selectionChangedSubscription: Subscription;

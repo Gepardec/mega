@@ -1,26 +1,9 @@
 <div class="example-container mat-elevation-z8">
   <mat-table #table class="tablelist" scr [dataSource]="dataSource">
 
-    <!-- name Column -->
-    <ng-container matColumnDef="nachname">
-      <mat-header-cell *matHeaderCellDef>Mitarbeiter</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.firstName + " " + element.sureName}} </mat-cell>
+    <ng-container matColumnDef="headline">
+      <mat-header-cell class="headline" *matHeaderCellDef>Mitarbeiter Übersicht</mat-header-cell>
     </ng-container>
-
-    <!-- funktion Column -->
-    <ng-container matColumnDef="abteilung">
-      <mat-header-cell *matHeaderCellDef> Funktion</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{functions[element.workDescription]}}</mat-cell>
-    </ng-container>
-
-    <!-- freigabedatum Column -->
-    <ng-container matColumnDef="freigabedatum">
-      <mat-header-cell *matHeaderCellDef>Freigegeben bis</mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <p [ngClass]="stringToDate(element) > date ? 'releaseWarn' : 'releaseSuccess'">{{element.releaseDate}}</p>
-      </mat-cell>
-    </ng-container>
-
 
     <!-- Checkbox Column -->
     <ng-container matColumnDef="auswaehlen">
@@ -40,6 +23,27 @@
       </mat-cell>
     </ng-container>
 
+    <!-- name Column -->
+    <ng-container matColumnDef="nachname">
+      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.firstName + " " + element.sureName}} </mat-cell>
+    </ng-container>
+
+    <!-- funktion Column -->
+    <ng-container matColumnDef="abteilung">
+      <mat-header-cell *matHeaderCellDef>Funktion</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{functions[element.workDescription]}}</mat-cell>
+    </ng-container>
+
+    <!-- freigabedatum Column -->
+    <ng-container matColumnDef="freigabedatum">
+      <mat-header-cell *matHeaderCellDef>Freigegeben bis</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <p [ngClass]="stringToDate(element) > date ? 'releaseWarn' : 'releaseSuccess'">{{element.releaseDate}}</p>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="['headline']; sticky: true"></mat-header-row>
     <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"
              [ngClass]="{ 'selected': selection.isSelected(row)}"

@@ -7,6 +7,7 @@ import {MatTableDataSource} from '@angular/material/table';
   templateUrl: './employees-list.component.html',
   styleUrls: ['./employees-list.component.scss']
 })
+// FIXME: this might also not be needed if gridlist gets removed
 export class EmployeesListComponent implements OnInit, OnChanges {
 
   @Input() isGridlistActive: boolean;

@@ -1,23 +1,31 @@
-.filter {
-  width: 40%;
-}
-
 .toolbar {
   background-color: white !important;
   margin-top: 30px;
+}
+
+.mat-toolbar {
+  min-height: 80px;
+}
+
+.filter {
+  margin-top: 3%;
 }
 
 .fill-remaining-space {
   flex: 1 1 auto;
 }
 
-.swap-view {
-  font-size: 60px;
-  width: 100%;
+.freigabe {
+  margin-top: 3%;
 }
 
 .releaseBtn {
-  background-color: rgb(67, 66, 93);
+  background-color: #3F51B5;
   border-radius: 5px;
   color: white !important;
 }
+
+.employeeList {
+  margin-top: 3%;
+}
+

@@ -1,5 +1,17 @@
 // TODO: declare variables for styling
 
+@import "src/app/styles/variables";
+@import "src/app/styles/table-style";
+
+.example-container {
+  height: 80vh;
+  overflow: auto;
+}
+
+.mat-column-auswaehlen {
+  max-width: 10%;
+}
+
 .mat-row {
   min-height: 65px;
 
@@ -8,14 +20,9 @@
   }
 }
 
-.example-container {
-  height: 80vh;
-  overflow: auto;
-}
-
-.mat-header-row {
-  background-color: rgb(245, 246, 250);
-  color: rgb(193, 196, 203);
+// FIXME: uncheck checkbox still has orange color
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background, .mat-accent .mat-pseudo-checkbox-checked, .mat-accent .mat-pseudo-checkbox-indeterminate, .mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate {
+  background-color: black !important;
 }
 
 .releaseWarn {

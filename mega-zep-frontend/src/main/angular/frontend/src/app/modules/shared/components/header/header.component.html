@@ -1,21 +1,24 @@
 <mat-toolbar class="toolbar" color="primary">
   <mat-toolbar-row>
-    <div class="header-caption">
-      <h1>MEGA</h1>
-    </div>
+    <img class="logo-mega" [src]= "assetsPath + logoMega" alt="">
 
     <nav mat-tab-nav-bar *ngIf="user">
       <ng-container *ngFor="let link of links">
-        <a mat-tab-link *ngIf="showLink(link)" [routerLink]="link.path" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">
+        <a mat-tab-link *ngIf="showLink(link)" [routerLink]="link.path" routerLinkActive #rla="routerLinkActive"
+           [active]="rla.isActive">
           {{ link.name }}
         </a>
       </ng-container>
-      <a mat-tab-link
-         [href]="spreadSheetUrl"
-         target="_blank">
-        Google-Spreadsheet
-      </a>
     </nav>
+
+    <span class="filler"></span>
+
+    <a [href]="spreadSheetUrl" *ngIf="user">
+      <img class="excelImg" [src] = "assetsPath + excelLogo" alt="">
+    </a>
+    <a [href]="zepUrl" *ngIf="user">
+      <img class="zepImg" [src] = "assetsPath + zepLogo" alt="">
+    </a>
 
     <div class="useractions" *ngIf="user">
       <app-user-actions [user]="user" (logout)="onLogout($event)"></app-user-actions>

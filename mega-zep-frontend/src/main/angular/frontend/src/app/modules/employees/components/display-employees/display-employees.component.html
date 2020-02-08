@@ -1,29 +1,32 @@
 <div class="container">
-  <mat-toolbar class="toolbar">
+  <mat-toolbar class="toolbar mat-elevation-z8">
     <mat-toolbar-row>
+
       <mat-form-field class="filter">
         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
       </mat-form-field>
+
       <span class="fill-remaining-space"></span>
-      <p *ngIf="!isGridlistActive && selectedEmployees.length > 0"
-         style="font-size: 12px; margin: 0 15px 0 0; color: rgb(67, 66, 93);">{{selectedEmployees.length}} Person<span
-        *ngIf="selectedEmployees.length > 1">en</span> ausgewählt</p>
-      <app-datepicker *ngIf="!isGridlistActive && filteredEmployees && selectedEmployees?.length > 0"
-                      (dateEmitter)="dateChanged($event)" style="margin-right: 10px;"></app-datepicker>
-      <button *ngIf="!isGridlistActive && selectedEmployees?.length > 0 && selectedDate != null" class="releaseBtn"
-              mat-button
-              (click)="releaseEmployees()">
-        Freigeben
-      </button>
-      <button class="toggleView" mat-icon-button
-              (click)="toggleView()">
-        <mat-icon class="swap-view">view_list</mat-icon>
-      </button>
+
+      <div class="freigabe">
+        <a *ngIf="selectedEmployees.length > 0"
+           style="font-size: 12px; margin: 0 15px 0 0; color: rgb(67, 66, 93);">{{selectedEmployees.length}} Person<span
+          *ngIf="selectedEmployees.length > 1">en</span> ausgewählt</a>
+
+        <app-datepicker *ngIf="filteredEmployees && selectedEmployees?.length > 0"
+                        (dateEmitter)="dateChanged($event)" style="margin-right: 10px;"></app-datepicker>
+
+        <button *ngIf="selectedEmployees?.length > 0 && selectedDate != null" class="releaseBtn"
+                mat-button
+                (click)="releaseEmployees()">
+          Freigeben
+        </button>
+      </div>
+
     </mat-toolbar-row>
-
-
   </mat-toolbar>
 
-  <app-employees-list *ngIf="filteredEmployees" [employees]="filteredEmployees"
-                     [isGridlistActive]="isGridlistActive"></app-employees-list>
+  <div class="employeeList">
+    <app-employees-list *ngIf="filteredEmployees" [employees]="filteredEmployees"></app-employees-list>
+  </div>
 </div>

@@ -1,20 +1,22 @@
 <div class="container">
   <mat-card>
-    <mat-card-title>{{monthlyReport.employee.salutation}} {{monthlyReport.employee.title}} {{monthlyReport.employee.firstName}} {{monthlyReport.employee.sureName}}</mat-card-title>
     <mat-card-subtitle>{{functions[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
-    <mat-card-content>{{getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : '+060' : 'de-AT'}}</mat-card-content>
+    <mat-card-content>
+      {{monthlyReport.employee.firstName}} {{monthlyReport.employee.sureName}}
+      <span class="mat-card-date">{{getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : '+060' : 'de-AT'}}</span>
+    </mat-card-content>
   </mat-card>
 
   <div class="container-mat-table mat-elevation-z8">
-    <mat-table #timeTable class="tablelist" [dataSource]="datasourceTimeTable">
+    <mat-table [dataSource]="datasourceTimeTable">
 
       <ng-container matColumnDef="headline">
         <mat-header-cell class="headline" *matHeaderCellDef>Pausen</mat-header-cell>
       </ng-container>
 
-      <ng-container matColumnDef="date">
+      <ng-container matColumnDef="date-time">
         <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
-        <mat-cell *matCellDef="let timeEntry"> {{timeEntry.date | date:'fullDate' : '+060' : 'de-AT'}} </mat-cell>
+        <mat-cell *matCellDef="let timeEntry"> {{timeEntry.date | date:'E dd.MM.yyyy' : '+060' : 'de-AT'}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="restTime">
@@ -42,24 +44,22 @@
 
   <div class="container-mat-table mat-elevation-z8">
 
-    <mat-table #journeyTable class="tablelist" [dataSource]="datasourceJourneyTable">
+    <mat-table [dataSource]="datasourceJourneyTable">
 
       <ng-container matColumnDef="headline">
         <mat-header-cell class="headline" *matHeaderCellDef>Reisen</mat-header-cell>
       </ng-container>
 
-      <ng-container matColumnDef="date">
+      <ng-container matColumnDef="date-journey">
         <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
         <mat-cell
-          *matCellDef="let journeyEntry"> {{journeyEntry.date | date:'fullDate' : '+060' : 'de-AT'}} </mat-cell>
+          *matCellDef="let journeyEntry"> {{journeyEntry.date | date:'E dd.MM.yyyy' : '+060' : 'de-AT'}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="warning">
         <mat-header-cell *matHeaderCellDef>Warnung</mat-header-cell>
         <mat-cell *matCellDef="let journeyEntry">
-          <mat-cell *ngFor="let warning of journeyEntry.warnings">
-            {{warning}}
-          </mat-cell>
+          {{getJourneyWarningString(journeyEntry.warnings)}}
         </mat-cell>
       </ng-container>
 

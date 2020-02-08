@@ -13,14 +13,13 @@ import { configuration } from '../../shared/constants/configuration';
 export class DisplayMonthlyReportComponent implements OnInit {
 
   @Input() monthlyReport: MonthlyReport;
-  displayedColumnsTimeTable = ['date', 'restTime', 'breakTime', 'workingTime'];
-  displayedColumnsJourneyTable = ['date', 'warning'];
+  displayedColumnsTimeTable = ['date-time', 'restTime', 'breakTime', 'workingTime'];
+  displayedColumnsJourneyTable = ['date-journey', 'warning'];
   datasourceTimeTable = new MatTableDataSource<TimeWarning>();
   datasourceJourneyTable = new MatTableDataSource<JourneyWarning>();
   readonly functions = configuration.EMPLOYEE_FUNCTIONS;
 
-  constructor() {
-  }
+  constructor() {  }
 
   ngOnInit() {
     if (this.monthlyReport) {
@@ -29,8 +28,19 @@ export class DisplayMonthlyReportComponent implements OnInit {
     }
   }
 
+  getJourneyWarningString(warnings: Array<string>): String {
+    let warningString: string = "";
+
+    warnings.forEach(function (value) {
+      warningString += value + ". ";
+    });
+
+    return warningString;
+  }
+
   getDateOfReport(date: string): Date {
     const reportDate = new Date(date);
+    reportDate.setDate(1);
     reportDate.setMonth(reportDate.getMonth() + 1);
     return reportDate;
   }
