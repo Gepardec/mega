@@ -92,6 +92,10 @@ public class WorkerServiceImpl implements WorkerService {
     public List<String> updateEmployeesReleaseDate(List<Employee> employees) {
         final List<String> failedUserIds = new LinkedList<>();
 
+        /*
+        workaround until we can configure the managed executor in quarkus environment.
+        at the moment, employees list is partitioned by 10 and therefore 10 requests to zep are started at a time.
+         */
         Iterables.partition(Optional.ofNullable(employees).orElseThrow(() -> new ZepServiceException("no employees to update")), employeeUpdateParallelExecutions).forEach((partition) -> {
             try {
                 CompletableFuture.allOf(partition.stream().map((employee) -> CompletableFuture.runAsync(() -> updateEmployeeReleaseDate(employee.getUserId(), employee.getReleaseDate()), managedExecutor)
