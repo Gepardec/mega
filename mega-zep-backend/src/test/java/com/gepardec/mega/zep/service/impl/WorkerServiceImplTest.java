@@ -5,6 +5,7 @@ import com.gepardec.mega.aplication.security.Role;
 import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.monthlyreport.WorkingLocation;
 import com.gepardec.mega.monthlyreport.warning.WarningConfig;
+import com.gepardec.mega.zep.exception.ZepServiceException;
 import com.gepardec.mega.zep.soap.ZepSoapProvider;
 import de.provantis.zep.*;
 import org.junit.jupiter.api.Assertions;
@@ -18,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -41,9 +43,18 @@ public class WorkerServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        Mockito.when(zepSoapProvider.createRequestHeaderType()).thenCallRealMethod();
+        workerService.setEmployeeUpdateParallelExecutions(10);
     }
 
+    @Test
+    void testUpdateEmployeesReleaseDate_EmployeesNull() {
+        Assertions.assertThrows(ZepServiceException.class, () -> workerService.updateEmployeesReleaseDate(null));
+    }
+
+    @Test
+    void testUpdateEmployeesReleaseDate_EmployeesEmpty() {
+        Assertions.assertTrue(workerService.updateEmployeesReleaseDate(new ArrayList<>()).isEmpty());
+    }
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterNull() {

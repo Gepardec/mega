@@ -51,10 +51,7 @@ public class WorkerResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response setEmployees(@NotEmpty(message = "{workerResource.employees.notEmpty}") final List<Employee> employees) {
-        Map<String, String> emailReleaseDates = employees.stream()
-                .collect(Collectors.toMap(Employee::getUserId, Employee::getReleaseDate));
-        final List<String> failedEmails = workerService.updateEmployeesReleaseDate(emailReleaseDates);
-        return Response.ok().entity(failedEmails).build();
+        return Response.ok().entity(workerService.updateEmployeesReleaseDate(employees)).build();
     }
 
     @GET

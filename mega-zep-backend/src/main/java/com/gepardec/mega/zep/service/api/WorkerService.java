@@ -1,10 +1,10 @@
 package com.gepardec.mega.zep.service.api;
 
 import com.gepardec.mega.monthlyreport.MonthlyReport;
+import com.gepardec.mega.rest.model.Employee;
 import de.provantis.zep.MitarbeiterType;
 
 import java.util.List;
-import java.util.Map;
 
 public interface WorkerService {
     MitarbeiterType getEmployee(final String userId);
@@ -13,7 +13,7 @@ public interface WorkerService {
 
     void updateEmployeeReleaseDate(final String id, final String releaseDate);
 
-    List<String> updateEmployeesReleaseDate(final Map<String, String> pairs);
+    List<String> updateEmployeesReleaseDate(List<Employee> employees);
 
     MonthlyReport getMonthendReportForUser(final String userId);
 }

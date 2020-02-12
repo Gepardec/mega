@@ -7,11 +7,15 @@ import com.gepardec.mega.monthlyreport.journey.JourneyWarning;
 import com.gepardec.mega.monthlyreport.warning.TimeWarning;
 import com.gepardec.mega.monthlyreport.warning.WarningCalculator;
 import com.gepardec.mega.monthlyreport.warning.WarningConfig;
+import com.gepardec.mega.rest.model.Employee;
 import com.gepardec.mega.zep.exception.ZepServiceException;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import com.gepardec.mega.zep.soap.ZepSoapProvider;
+import com.google.common.collect.Iterables;
 import de.provantis.zep.*;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.context.ManagedExecutor;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
@@ -19,6 +23,8 @@ import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static com.gepardec.mega.aplication.utils.DateUtils.getFirstDayOfFollowingMonth;
 import static com.gepardec.mega.aplication.utils.DateUtils.getLastDayOfFollowingMonth;
@@ -38,6 +44,12 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Inject
     WarningConfig warningConfig;
+
+    @Inject
+    ManagedExecutor managedExecutor;
+
+    // TODO: find better way to unittest this, at the moment we use setter injection of ConfigProperty @runtime and call setter @testing
+    Integer employeeUpdateParallelExecutions;
 
     @Override
     public MitarbeiterType getEmployee(final String userId) {
@@ -70,18 +82,23 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public List<String> updateEmployeesReleaseDate(final Map<String, String> emailReleaseDates) {
-        final List<String> failedEmails = new LinkedList<>();
+    public List<String> updateEmployeesReleaseDate(List<Employee> employees) {
+        final List<String> failedUserIds = new LinkedList<>();
 
-        for (final Map.Entry<String, String> entry : emailReleaseDates.entrySet()) {
+        Iterables.partition(Optional.ofNullable(employees).orElseThrow(() -> new ZepServiceException("no employees to update")), employeeUpdateParallelExecutions).forEach((partition) -> {
             try {
-                updateEmployeeReleaseDate(entry.getKey(), entry.getValue());
-            } catch (Exception e) {
-                failedEmails.add(entry.getKey());
+                CompletableFuture.allOf(partition.stream().map((employee) -> CompletableFuture.runAsync(() -> updateEmployeeReleaseDate(employee.getUserId(), employee.getReleaseDate()), managedExecutor)
+                        .handle((aVoid, throwable) -> {
+                            Optional.ofNullable(throwable).ifPresent((t) -> failedUserIds.add(employee.getUserId()));
+                            return null;
+                        })).toArray(CompletableFuture[]::new)).get();
+            } catch (InterruptedException | ExecutionException e) {
+                logger.error("error updating employees", e);
+                throw new ZepServiceException("updateEmployeesReleaseDate failed with code");
             }
-        }
+        });
 
-        return failedEmails;
+        return failedUserIds;
     }
 
     @Override
@@ -136,19 +153,27 @@ public class WorkerServiceImpl implements WorkerService {
 
 
     @Override
-    public void updateEmployeeReleaseDate(final String id, final String releaseDate) {
+    public void updateEmployeeReleaseDate(final String userId, final String releaseDate) {
+        logger.info("start update user {} with releaseDate {}", userId, releaseDate);
+
+        if (userId.equalsIgnoreCase("045-rneunteufel")) {
+            throw new ZepServiceException();
+        }
+
         final UpdateMitarbeiterRequestType umrt = new UpdateMitarbeiterRequestType();
         umrt.setRequestHeader(zepSoapProvider.createRequestHeaderType());
 
         final MitarbeiterType mitarbeiter = new MitarbeiterType();
-        mitarbeiter.setUserId(id);
+        mitarbeiter.setUserId(userId);
         mitarbeiter.setFreigabedatum(releaseDate);
         umrt.setMitarbeiter(mitarbeiter);
 
         final UpdateMitarbeiterResponseType updateMitarbeiterResponseType = zepSoapPortType.updateMitarbeiter(umrt);
         final ResponseHeaderType responseHeaderType = updateMitarbeiterResponseType != null ? updateMitarbeiterResponseType.getResponseHeader() : null;
 
-        if (responseHeaderType != null && Integer.parseInt(responseHeaderType.getReturnCode()) == 0) {
+        logger.info("finish update user {} with response {}", userId, responseHeaderType != null ? responseHeaderType.getReturnCode() : null);
+
+        if (responseHeaderType != null && Integer.parseInt(responseHeaderType.getReturnCode()) != 0) {
             throw new ZepServiceException("updateEmployeeReleaseDate failed with code: " + responseHeaderType.getReturnCode());
         }
     }
@@ -185,5 +210,10 @@ public class WorkerServiceImpl implements WorkerService {
     private List<MitarbeiterType> flatMap(final ReadMitarbeiterResponseType readMitarbeiterResponseType) {
         final MitarbeiterListeType mitarbeiterListeType = readMitarbeiterResponseType.getMitarbeiterListe();
         return mitarbeiterListeType != null ? mitarbeiterListeType.getMitarbeiter() : new LinkedList<>();
+    }
+
+    @Inject
+    public void setEmployeeUpdateParallelExecutions(@ConfigProperty(name = "mega.employee.update.parallel.executions", defaultValue = "10") Integer employeeUpdateParallelExecutions) {
+        this.employeeUpdateParallelExecutions = employeeUpdateParallelExecutions;
     }
 }

@@ -124,7 +124,7 @@ public class WorkerResourceTest {
     void employeesUpdate_withInvalidEmployees_returnsInvalidEmails() {
         final List<Employee> employees = IntStream.range(1, 11).mapToObj(this::createEmployee).collect(Collectors.toList());
         final List<String> expected = employees.subList(0, 5).stream().map(Employee::getEmail).collect(Collectors.toList());
-        Mockito.when(workerService.updateEmployeesReleaseDate(Mockito.anyMap())).thenReturn(expected);
+        Mockito.when(workerService.updateEmployeesReleaseDate(Mockito.anyList())).thenReturn(expected);
         workerServiceMock.setDelegate(workerService);
 
         final List<String> actual = given().contentType(ContentType.JSON)
@@ -141,7 +141,7 @@ public class WorkerResourceTest {
     @Test
     void employeesUpdate_withAllValidEmployees_returnsNothing() {
         final List<Employee> employees = IntStream.range(1, 11).mapToObj(this::createEmployee).collect(Collectors.toList());
-        Mockito.when(workerService.updateEmployeesReleaseDate(Mockito.anyMap())).thenReturn(Collections.emptyList());
+        Mockito.when(workerService.updateEmployeesReleaseDate(Mockito.anyList())).thenReturn(Collections.emptyList());
         workerServiceMock.setDelegate(workerService);
 
         final List<String> actual = given().contentType(ContentType.JSON)
