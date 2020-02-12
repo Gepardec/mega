@@ -25,6 +25,8 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 import static com.gepardec.mega.aplication.utils.DateUtils.getFirstDayOfFollowingMonth;
 import static com.gepardec.mega.aplication.utils.DateUtils.getLastDayOfFollowingMonth;
@@ -50,6 +52,11 @@ public class WorkerServiceImpl implements WorkerService {
 
     // TODO: find better way to unittest this, at the moment we use setter injection of ConfigProperty @runtime and call setter @testing
     Integer employeeUpdateParallelExecutions;
+
+    @Inject
+    public void setEmployeeUpdateParallelExecutions(@ConfigProperty(name = "mega.employee.update.parallel.executions", defaultValue = "10") Integer employeeUpdateParallelExecutions) {
+        this.employeeUpdateParallelExecutions = employeeUpdateParallelExecutions;
+    }
 
     @Override
     public MitarbeiterType getEmployee(final String userId) {
@@ -94,9 +101,10 @@ public class WorkerServiceImpl implements WorkerService {
                         })).toArray(CompletableFuture[]::new)).get();
             } catch (InterruptedException | ExecutionException e) {
                 logger.error("error updating employees", e);
-                throw new ZepServiceException("updateEmployeesReleaseDate failed with code");
+                failedUserIds.addAll(partition.stream().map(Employee::getUserId).collect(Collectors.toList()));
             }
         });
+
 
         return failedUserIds;
     }
@@ -210,10 +218,5 @@ public class WorkerServiceImpl implements WorkerService {
     private List<MitarbeiterType> flatMap(final ReadMitarbeiterResponseType readMitarbeiterResponseType) {
         final MitarbeiterListeType mitarbeiterListeType = readMitarbeiterResponseType.getMitarbeiterListe();
         return mitarbeiterListeType != null ? mitarbeiterListeType.getMitarbeiter() : new LinkedList<>();
-    }
-
-    @Inject
-    public void setEmployeeUpdateParallelExecutions(@ConfigProperty(name = "mega.employee.update.parallel.executions", defaultValue = "10") Integer employeeUpdateParallelExecutions) {
-        this.employeeUpdateParallelExecutions = employeeUpdateParallelExecutions;
     }
 }

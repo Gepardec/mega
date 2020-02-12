@@ -5,9 +5,12 @@ import com.gepardec.mega.aplication.security.Role;
 import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.monthlyreport.WorkingLocation;
 import com.gepardec.mega.monthlyreport.warning.WarningConfig;
+import com.gepardec.mega.rest.model.Employee;
 import com.gepardec.mega.zep.exception.ZepServiceException;
 import com.gepardec.mega.zep.soap.ZepSoapProvider;
 import de.provantis.zep.*;
+import org.codehaus.groovy.ast.stmt.AssertStatement;
+import org.eclipse.microprofile.context.ManagedExecutor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +24,9 @@ import org.slf4j.Logger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -38,8 +44,12 @@ public class WorkerServiceImplTest {
     @Mock
     private WarningConfig warningConfig;
 
+    @Mock
+    private ManagedExecutor managedExecutor;
+
     @InjectMocks
     private WorkerServiceImpl workerService;
+
 
     @BeforeEach
     void setUp() {
@@ -54,6 +64,57 @@ public class WorkerServiceImplTest {
     @Test
     void testUpdateEmployeesReleaseDate_EmployeesEmpty() {
         Assertions.assertTrue(workerService.updateEmployeesReleaseDate(new ArrayList<>()).isEmpty());
+    }
+
+    @Test
+    void testUpdateEmployeesReleaseDate_EmployeesNotEmpty_EmployeeError() {
+        Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any())).thenReturn(createUpdateMitarbeiterResponseType("13"));
+        Mockito.doAnswer(invocation -> {
+            ((Runnable) invocation.getArgument(0)).run();
+            return null;
+        }).when(managedExecutor).execute(Mockito.any());
+
+        final List<String> result = workerService.updateEmployeesReleaseDate(createEmployees(1));
+        Assertions.assertNotNull(result);
+        Assertions.assertFalse(result.isEmpty());
+        Assertions.assertEquals(1, result.size());
+        Assertions.assertEquals("0", result.get(0));
+    }
+
+    @Test
+    void testUpdateEmployeesReleaseDate_EmployeesNotEmpty_ThreadingError() {
+        AtomicInteger count = new AtomicInteger();
+
+        Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any())).thenReturn(createUpdateMitarbeiterResponseType("0"));
+        Mockito.doAnswer(invocation -> {
+            count.getAndIncrement();
+            ((Runnable) invocation.getArgument(0)).run();
+            if (count.get() == 1) {
+                throw new ExecutionException(new IllegalStateException());
+            } else {
+                return null;
+            }
+        }).when(managedExecutor).execute(Mockito.any());
+
+        final List<String> result = workerService.updateEmployeesReleaseDate(createEmployees(40));
+        Assertions.assertNotNull(result);
+        Assertions.assertFalse(result.isEmpty());
+        Assertions.assertEquals(10, result.size());
+        Assertions.assertEquals("0", result.get(0));
+        Assertions.assertEquals("9", result.get(9));
+    }
+
+    @Test
+    void testUpdateEmployeesReleaseDate_EmployeesNotEmpty_EmployeOk() {
+        Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any())).thenReturn(createUpdateMitarbeiterResponseType("0"));
+        Mockito.doAnswer(invocation -> {
+            ((Runnable) invocation.getArgument(0)).run();
+            return null;
+        }).when(managedExecutor).execute(Mockito.any());
+
+        final List<String> result = workerService.updateEmployeesReleaseDate(createEmployees(1));
+        Assertions.assertNotNull(result);
+        Assertions.assertTrue(result.isEmpty());
     }
 
     @Test
@@ -119,6 +180,16 @@ public class WorkerServiceImplTest {
         Assertions.assertEquals(0.5d, monthendReportForUser.getTimeWarnings().get(0).getMissingBreakTime());
     }
 
+    private UpdateMitarbeiterResponseType createUpdateMitarbeiterResponseType(final String returnCode) {
+        final ResponseHeaderType responseHeaderType = new ResponseHeaderType();
+        responseHeaderType.setReturnCode(returnCode);
+
+        final UpdateMitarbeiterResponseType updateMitarbeiterResponseType = new UpdateMitarbeiterResponseType();
+        updateMitarbeiterResponseType.setResponseHeader(responseHeaderType);
+
+        return updateMitarbeiterResponseType;
+    }
+
     private ReadMitarbeiterResponseType createReadMitarbeiterResponseType(final MitarbeiterType... mitarbeiterType) {
         final MitarbeiterListeType mitarbeiterListeType = new MitarbeiterListeType();
         mitarbeiterListeType.getMitarbeiter().addAll(Arrays.asList(mitarbeiterType));
@@ -168,5 +239,18 @@ public class WorkerServiceImplTest {
         mitarbeiter.setRechte(Role.USER.roleId);
 
         return mitarbeiter;
+    }
+
+    private List<Employee> createEmployees(final int count) {
+        final List<Employee> result = new ArrayList<>();
+
+        for (int i = 0; i < count; i++) {
+            final Employee employee = new Employee();
+            employee.setUserId(""+i);
+            employee.setReleaseDate("2020-01-31");
+            result.add(employee);
+        }
+
+        return result;
     }
 }
