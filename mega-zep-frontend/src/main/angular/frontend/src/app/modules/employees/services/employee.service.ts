@@ -15,10 +15,10 @@ export class EmployeeService {
   }
 
   getAll(): Observable<Array<Employee>> {
-    return this.httpClient.get<Array<Employee>>(this.config.getBackendUrlWithContext('/worker/employees'));
+    return this.httpClient.get<Array<Employee>>(this.config.getBackendUrlWithContext('/employees'));
   }
 
   updateAll(employees: Array<Employee>): Observable<Response> {
-    return this.httpClient.put<Response>(this.config.getBackendUrlWithContext('/worker/employees'), employees);
+    return this.httpClient.put<Response>(this.config.getBackendUrlWithContext('/employees'), employees);
   }
 }

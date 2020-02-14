@@ -1,6 +1,7 @@
 package com.gepardec.mega.communication;
 
-import com.gepardec.mega.zep.service.api.WorkerService;
+import com.gepardec.mega.service.api.EmployeeService;
+import com.gepardec.mega.service.model.Employee;
 import de.provantis.zep.MitarbeiterType;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
@@ -41,8 +42,7 @@ public class MailDaemonTest {
     NotificationConfig notificationConfig;
 
     @Inject
-    WorkerService workerService;
-
+    EmployeeService employeeService;
 
     @BeforeEach
     void init() {
@@ -87,8 +87,8 @@ public class MailDaemonTest {
     @Disabled("till userNotifaction is enabled")
     @Test
     void sendReminderToUser() {
-        List<String> addresses = workerService.getAllActiveEmployees().stream()
-                .map(MitarbeiterType::getEmail)
+        List<String> addresses = employeeService.getAllActiveEmployees().stream()
+                .map(Employee::getEmail)
                 .collect(Collectors.toList());
 
         mailDaemon.sendReminderToUser();
