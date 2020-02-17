@@ -1,11 +1,9 @@
 package com.gepardec.mega.service.impl;
 
-import com.gepardec.mega.aplication.security.Role;
-import com.gepardec.mega.aplication.security.RolesAllowed;
 import com.gepardec.mega.service.api.EmployeeService;
 import com.gepardec.mega.service.model.Employee;
 import com.gepardec.mega.zep.exception.ZepServiceException;
-import com.gepardec.mega.zep.service.ZepServiceImpl;
+import com.gepardec.mega.zep.service.ZepService;
 import com.google.common.collect.Iterables;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.context.ManagedExecutor;
@@ -23,20 +21,19 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class EmployeeServiceImpl implements EmployeeService {
 
-    @Inject
-    Logger logger;
+    private final Logger logger;
+    private final ZepService zepService;
+    private final ManagedExecutor managedExecutor;
+    private final Integer employeeUpdateParallelExecutions;
 
     @Inject
-    ZepServiceImpl zepService;
-
-    @Inject
-    ManagedExecutor managedExecutor;
-
-    // TODO: find better way to unittest this, at the moment we use setter injection of ConfigProperty @runtime and call setter @testing
-    Integer employeeUpdateParallelExecutions;
-
-    @Inject
-    public void setEmployeeUpdateParallelExecutions(@ConfigProperty(name = "mega.employee.update.parallel.executions", defaultValue = "10") Integer employeeUpdateParallelExecutions) {
+    public EmployeeServiceImpl(final Logger logger,
+                               final ZepService zepService,
+                               final ManagedExecutor managedExecutor,
+                               @ConfigProperty(name = "mega.employee.update.parallel.executions", defaultValue = "10") final Integer employeeUpdateParallelExecutions) {
+        this.logger = logger;
+        this.zepService = zepService;
+        this.managedExecutor = managedExecutor;
         this.employeeUpdateParallelExecutions = employeeUpdateParallelExecutions;
     }
 

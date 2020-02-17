@@ -111,20 +111,20 @@ public class WorkerResourceTest {
     }
 
     private Employee createEmployee(final int userId) {
-        final Employee mitarbeiter = new Employee();
+        final Employee employee = new Employee();
         final String name = "Thomas_" + userId;
 
-        mitarbeiter.setEmail(name + "@gepardec.com");
-        mitarbeiter.setFirstName(name);
-        mitarbeiter.setSureName(name + "_Nachname");
-        mitarbeiter.setTitle("Ing.");
-        mitarbeiter.setUserId(String.valueOf(userId));
-        mitarbeiter.setSalutation("Herr");
-        mitarbeiter.setWorkDescription("ARCHITEKT");
-        mitarbeiter.setReleaseDate("2020-01-01");
-        mitarbeiter.setRole(Role.USER.roleId);
+        employee.setEmail(name + "@gepardec.com");
+        employee.setFirstName(name);
+        employee.setSureName(name + "_Nachname");
+        employee.setTitle("Ing.");
+        employee.setUserId(String.valueOf(userId));
+        employee.setSalutation("Herr");
+        employee.setWorkDescription("ARCHITEKT");
+        employee.setReleaseDate("2020-01-01");
+        employee.setRole(Role.USER.roleId);
 
-        return mitarbeiter;
+        return employee;
     }
 
     private void assertEmployee(final Employee actual, final Employee employee) {

@@ -3,13 +3,12 @@ package com.gepardec.mega.service.impl;
 
 import com.gepardec.mega.service.model.Employee;
 import com.gepardec.mega.zep.exception.ZepServiceException;
-import com.gepardec.mega.zep.service.ZepServiceImpl;
+import com.gepardec.mega.zep.service.ZepService;
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceImplTest {
 
@@ -28,28 +26,26 @@ public class EmployeeServiceImplTest {
     private Logger logger;
 
     @Mock
-    private ZepServiceImpl zepService;
+    private ZepService zepService;
 
     @Mock
     private ManagedExecutor managedExecutor;
 
-    @InjectMocks
-    private EmployeeServiceImpl employeeService;
-
+    private EmployeeServiceImpl beanUnderTest;
 
     @BeforeEach
     void setUp() {
-        employeeService.setEmployeeUpdateParallelExecutions(10);
+        beanUnderTest = new EmployeeServiceImpl(logger, zepService, managedExecutor, 10);
     }
 
     @Test
     void testUpdateEmployeesReleaseDate_EmployeesNull() {
-        Assertions.assertThrows(ZepServiceException.class, () -> employeeService.updateEmployeesReleaseDate(null));
+        Assertions.assertThrows(ZepServiceException.class, () -> beanUnderTest.updateEmployeesReleaseDate(null));
     }
 
     @Test
     void testUpdateEmployeesReleaseDate_EmployeesEmpty() {
-        Assertions.assertTrue(employeeService.updateEmployeesReleaseDate(new ArrayList<>()).isEmpty());
+        Assertions.assertTrue(beanUnderTest.updateEmployeesReleaseDate(new ArrayList<>()).isEmpty());
     }
 
     @Test
@@ -60,7 +56,7 @@ public class EmployeeServiceImplTest {
             return null;
         }).when(managedExecutor).execute(Mockito.any());
 
-        final List<String> result = employeeService.updateEmployeesReleaseDate(createEmployees(1));
+        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(createEmployees(1));
         Assertions.assertNotNull(result);
         Assertions.assertFalse(result.isEmpty());
         Assertions.assertEquals(1, result.size());
@@ -81,7 +77,7 @@ public class EmployeeServiceImplTest {
             }
         }).when(managedExecutor).execute(Mockito.any());
 
-        final List<String> result = employeeService.updateEmployeesReleaseDate(createEmployees(40));
+        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(createEmployees(40));
         Assertions.assertNotNull(result);
         Assertions.assertFalse(result.isEmpty());
         Assertions.assertEquals(10, result.size());
@@ -96,7 +92,7 @@ public class EmployeeServiceImplTest {
             return null;
         }).when(managedExecutor).execute(Mockito.any());
 
-        final List<String> result = employeeService.updateEmployeesReleaseDate(createEmployees(1));
+        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(createEmployees(1));
         Assertions.assertNotNull(result);
         Assertions.assertTrue(result.isEmpty());
     }

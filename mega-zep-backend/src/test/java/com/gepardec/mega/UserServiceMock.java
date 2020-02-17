@@ -2,8 +2,9 @@ package com.gepardec.mega;
 
 import com.gepardec.mega.aplication.security.Role;
 import com.gepardec.mega.aplication.security.SessionUser;
-import com.gepardec.mega.rest.model.User;
-import com.gepardec.mega.zep.service.impl.UserServiceImpl;
+import com.gepardec.mega.service.api.UserService;
+import com.gepardec.mega.service.model.User;
+import com.gepardec.mega.service.impl.UserServiceImpl;
 import io.quarkus.test.Mock;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -11,7 +12,7 @@ import javax.inject.Inject;
 
 @Mock
 @ApplicationScoped
-public class UserServiceMock extends UserServiceImpl {
+public class UserServiceMock implements UserService {
 
     @Inject
     private SessionUser sessionUser;

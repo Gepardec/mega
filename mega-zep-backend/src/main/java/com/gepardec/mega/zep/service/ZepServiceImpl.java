@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @RequestScoped
-public class ZepServiceImpl {
+public class ZepServiceImpl implements ZepService {
 
     @Inject
     Logger logger;
@@ -27,12 +27,14 @@ public class ZepServiceImpl {
     @Inject
     ZepSoapProvider zepSoapProvider;
 
+    @Override
     public Employee getEmployee(final String userId) {
         final ReadMitarbeiterSearchCriteriaType readMitarbeiterSearchCriteriaType = new ReadMitarbeiterSearchCriteriaType();
         readMitarbeiterSearchCriteriaType.setUserId(userId);
         return getEmployeeInternal(readMitarbeiterSearchCriteriaType, employee -> true).stream().findFirst().orElse(null);
     }
 
+    @Override
     public List<Employee> getActiveEmployees() {
         return getEmployeeInternal(null, employee -> {
             final BeschaeftigungszeitListeType beschaeftigungszeitListeType = employee.getBeschaeftigungszeitListe();
@@ -56,6 +58,7 @@ public class ZepServiceImpl {
         });
     }
 
+    @Override
     public void updateEmployeesReleaseDate(final String userId, final String releaseDate) {
         logger.info("start update user {} with releaseDate {}", userId, releaseDate);
 
