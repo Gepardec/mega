@@ -13,11 +13,11 @@
 
     <span class="filler"></span>
 
-    <a [href]="spreadSheetUrl" *ngIf="user">
-      <img class="excelImg" [src] = "assetsPath + excelLogo" alt="">
+    <a [href]="spreadSheetUrl" target="_blank" *ngIf="user">
+      <img class="excelImg" [src] = "assetsPath + excelLogo" alt="Dashboard Link">
     </a>
-    <a [href]="zepUrl" *ngIf="user">
-      <img class="zepImg" [src] = "assetsPath + zepLogo" alt="">
+    <a [href]="zepUrl" target="_blank" *ngIf="user">
+      <img class="zepImg" [src] = "assetsPath + zepLogo" alt="ZEP Link">
     </a>
 
     <div class="useractions" *ngIf="user">
