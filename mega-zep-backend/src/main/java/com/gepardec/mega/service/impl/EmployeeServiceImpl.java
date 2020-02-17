@@ -64,7 +64,10 @@ public class EmployeeServiceImpl implements EmployeeService {
             try {
                 CompletableFuture.allOf(partition.stream().map((employee) -> CompletableFuture.runAsync(() -> updateEmployeeReleaseDate(employee.getUserId(), employee.getReleaseDate()), managedExecutor)
                         .handle((aVoid, throwable) -> {
-                            Optional.ofNullable(throwable).ifPresent((t) -> failedUserIds.add(employee.getUserId()));
+                            Optional.ofNullable(throwable).ifPresent((t) -> {
+                                logger.error(String.format("error updating %s", employee.getUserId()), t);
+                                failedUserIds.add(employee.getUserId());
+                            });
                             return null;
                         })).toArray(CompletableFuture[]::new)).get();
             } catch (InterruptedException | ExecutionException e) {
