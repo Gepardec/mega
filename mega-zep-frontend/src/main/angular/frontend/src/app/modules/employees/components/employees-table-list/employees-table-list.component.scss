@@ -25,15 +25,22 @@
   background-color: black !important;
 }
 
-.releaseWarn {
-  background-color: rgb(255, 227, 231);
+.releaseDone {
+  background-color: #E1FAED;
   color: black !important;
   border-radius: 5px;
   padding: 5px;
 }
 
-.releaseSuccess {
-  background-color: rgb(225, 250, 237);
+.releaseInProgress {
+  background-color: #FFEFD9;
+  color: black !important;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.releaseWarning {
+  background-color: #FFE3E7;
   color: black !important;
   border-radius: 5px;
   padding: 5px;

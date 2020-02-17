@@ -39,7 +39,7 @@
     <ng-container matColumnDef="freigabedatum">
       <mat-header-cell *matHeaderCellDef>Freigegeben bis</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <p [ngClass]="stringToDate(element) > date ? 'releaseWarn' : 'releaseSuccess'">{{element.releaseDate}}</p>
+        <p [ngClass]="getReleaseDateColourCoding(element.releaseDate)">{{element.releaseDate}}</p>
       </mat-cell>
     </ng-container>
 
