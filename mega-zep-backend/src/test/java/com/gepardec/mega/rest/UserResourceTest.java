@@ -1,13 +1,11 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.UserServiceMock;
-import com.gepardec.mega.rest.model.User;
-import de.provantis.zep.MitarbeiterType;
+import com.gepardec.mega.service.model.User;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;

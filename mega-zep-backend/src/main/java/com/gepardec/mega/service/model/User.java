@@ -1,4 +1,4 @@
-package com.gepardec.mega.rest.model;
+package com.gepardec.mega.service.model;
 
 import com.gepardec.mega.aplication.security.Role;
 

@@ -3,6 +3,7 @@ package com.gepardec.mega.communication;
 import com.gepardec.mega.aplication.utils.DateUtils;
 import com.gepardec.mega.communication.dates.BusinessDayCalculator;
 import com.gepardec.mega.communication.exception.MissingReceiverException;
+import com.gepardec.mega.service.api.EmployeeService;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +27,9 @@ public class MailDaemon {
 
     @Inject
     WorkerService workerService;
+
+    @Inject
+    EmployeeService employeeService;
 
     @Inject
     Logger logger;
@@ -105,8 +109,8 @@ public class MailDaemon {
 
     void sendReminderToUser() {
         if (employeesNotification) {
-            workerService.getAllActiveEmployees()
-                    .forEach(employee -> mailSender.sendReminder(employee.getEmail(), employee.getVorname(), EMPLOYEE_CHECK_PROJECTTIME));
+            employeeService.getAllActiveEmployees()
+                    .forEach(employee -> mailSender.sendReminder(employee.getEmail(), employee.getFirstName(), EMPLOYEE_CHECK_PROJECTTIME));
             logSentNotification(EMPLOYEE_CHECK_PROJECTTIME);
         } else {
             logger.info("NO Reminder to employes sent, cause mega.mail.employees.notification-property is false");

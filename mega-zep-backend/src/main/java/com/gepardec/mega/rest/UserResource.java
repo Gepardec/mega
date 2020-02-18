@@ -1,19 +1,14 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.rest.model.User;
-import com.gepardec.mega.rest.translator.UserTranslator;
+import com.gepardec.mega.service.model.User;
 import com.gepardec.mega.aplication.security.SessionUser;
-import com.gepardec.mega.zep.service.api.UserService;
-import org.apache.commons.lang3.StringUtils;
-import org.jboss.resteasy.annotations.Body;
+import com.gepardec.mega.service.api.UserService;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
