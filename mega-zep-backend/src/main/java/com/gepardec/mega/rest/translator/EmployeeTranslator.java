@@ -1,6 +1,6 @@
 package com.gepardec.mega.rest.translator;
 
-import com.gepardec.mega.rest.model.Employee;
+import com.gepardec.mega.service.model.Employee;
 import de.provantis.zep.MitarbeiterType;
 
 public class EmployeeTranslator {
