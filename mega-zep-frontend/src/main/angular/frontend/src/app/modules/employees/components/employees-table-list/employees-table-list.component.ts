@@ -74,12 +74,13 @@ export class EmployeesTableListComponent implements OnInit, OnDestroy {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
+  // FIXME GAJ: differences in year not handled
   getReleaseDateColourCoding(date: string): string {
 
     let releaseDate = new Date(date);
 
     // previous month -> OK || in future -> OK
-    if(releaseDate.getMonth() === this.oneMonthAgo || releaseDate > this.currentDate) {
+    if(releaseDate.getMonth() === this.oneMonthAgo || releaseDate.getMonth() === this.currentDate.getMonth() || releaseDate > this.currentDate) {
       return this.releaseDateColourTypes[0];
     }
 
