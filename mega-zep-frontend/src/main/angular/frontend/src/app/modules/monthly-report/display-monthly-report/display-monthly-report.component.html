@@ -3,40 +3,57 @@
     <mat-card-subtitle>{{functions[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
     <mat-card-content>
       {{monthlyReport.employee.firstName}} {{monthlyReport.employee.sureName}}
-      <span class="mat-card-date">{{getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : '+060' : 'de-AT'}}</span>
+      <span
+        class="mat-card-date">{{getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : '+060' : 'de-AT'}}</span>
     </mat-card-content>
   </mat-card>
 
   <div class="container-mat-table mat-elevation-z8">
     <mat-table [dataSource]="datasourceTimeTable">
 
+
       <ng-container matColumnDef="headline">
         <mat-header-cell class="headline" *matHeaderCellDef>Pausen</mat-header-cell>
       </ng-container>
 
-      <ng-container matColumnDef="date-time">
-        <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
-        <mat-cell *matCellDef="let timeEntry"> {{timeEntry.date | date:'E dd.MM.yyyy' : '+060' : 'de-AT'}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="restTime">
-        <mat-header-cell *matHeaderCellDef>zu wenig Ruhezeit</mat-header-cell>
-        <mat-cell *matCellDef="let timeEntry"> {{timeEntry.missingRestTime}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="breakTime">
-        <mat-header-cell *matHeaderCellDef>zu wenig Pausenzeit</mat-header-cell>
-        <mat-cell *matCellDef="let timeEntry"> {{timeEntry.missingBreakTime}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="workingTime">
-        <mat-header-cell *matHeaderCellDef>zu viel Arbeitszeit</mat-header-cell>
-        <mat-cell *matCellDef="let timeEntry"> {{timeEntry.excessWorkTime}} </mat-cell>
-      </ng-container>
-
       <mat-header-row *matHeaderRowDef="['headline']; sticky: true"></mat-header-row>
-      <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsTimeTable; sticky: true"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumnsTimeTable;"></mat-row>
+
+      <div *ngIf="datasourceTimeTable.data.length > 0">
+        <ng-container matColumnDef="date-time">
+          <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
+          <mat-cell *matCellDef="let timeEntry"> {{timeEntry.date | date:'E dd.MM.yyyy' : '+060' : 'de-AT'}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="restTime">
+          <mat-header-cell *matHeaderCellDef>zu wenig Ruhezeit</mat-header-cell>
+          <mat-cell *matCellDef="let timeEntry"> {{timeEntry.missingRestTime}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="breakTime">
+          <mat-header-cell *matHeaderCellDef>zu wenig Pausenzeit</mat-header-cell>
+          <mat-cell *matCellDef="let timeEntry"> {{timeEntry.missingBreakTime}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="workingTime">
+          <mat-header-cell *matHeaderCellDef>zu viel Arbeitszeit</mat-header-cell>
+          <mat-cell *matCellDef="let timeEntry"> {{timeEntry.excessWorkTime}} </mat-cell>
+        </ng-container>
+
+
+        <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsTimeTable; sticky: true"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumnsTimeTable;"></mat-row>
+      </div>
+
+      <div *ngIf="datasourceTimeTable.data.length === 0">
+        <ng-container matColumnDef="no-warnings">
+          <mat-header-cell *matHeaderCellDef>
+            <mat-checkbox [disabled]="true" [checked]="true"></mat-checkbox>
+            <a class="no-warning-text">Alle Eingaben sind korrekt</a>
+          </mat-header-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="['no-warnings']"></mat-header-row>
+      </div>
 
     </mat-table>
 
@@ -50,22 +67,36 @@
         <mat-header-cell class="headline" *matHeaderCellDef>Reisen</mat-header-cell>
       </ng-container>
 
-      <ng-container matColumnDef="date-journey">
-        <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
-        <mat-cell
-          *matCellDef="let journeyEntry"> {{journeyEntry.date | date:'E dd.MM.yyyy' : '+060' : 'de-AT'}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="warning">
-        <mat-header-cell *matHeaderCellDef>Warnung</mat-header-cell>
-        <mat-cell *matCellDef="let journeyEntry">
-          {{getJourneyWarningString(journeyEntry.warnings)}}
-        </mat-cell>
-      </ng-container>
-
       <mat-header-row class="headline" *matHeaderRowDef="['headline']; sticky: true"></mat-header-row>
-      <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsJourneyTable; sticky: true"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumnsJourneyTable;"></mat-row>
+
+      <div *ngIf="datasourceJourneyTable.data.length > 0">
+        <ng-container matColumnDef="date-journey">
+          <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
+          <mat-cell
+            *matCellDef="let journeyEntry"> {{journeyEntry.date | date:'E dd.MM.yyyy' : '+060' : 'de-AT'}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="warning">
+          <mat-header-cell *matHeaderCellDef>Warnung</mat-header-cell>
+          <mat-cell *matCellDef="let journeyEntry">
+            {{getJourneyWarningString(journeyEntry.warnings)}}
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsJourneyTable; sticky: true"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumnsJourneyTable;"></mat-row>
+      </div>
+
+      <div *ngIf="datasourceJourneyTable.data.length === 0">
+        <ng-container matColumnDef="no-warnings">
+          <mat-header-cell *matHeaderCellDef>
+            <mat-checkbox [disabled]="true" [checked]="true"></mat-checkbox>
+            <a class="no-warning-text">Alle Eingaben sind korrekt</a>
+          </mat-header-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="['no-warnings']"></mat-header-row>
+      </div>
 
     </mat-table>
   </div>

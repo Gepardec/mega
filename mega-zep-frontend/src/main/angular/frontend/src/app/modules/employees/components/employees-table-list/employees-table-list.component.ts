@@ -13,7 +13,12 @@ import { EmployeesService } from '../../services/employees.service';
 })
 export class EmployeesTableListComponent implements OnInit, OnDestroy {
 
-  readonly date = new Date();
+  releaseDateColourTypes = ['releaseDone', 'releaseInProgress', 'releaseWarning'];
+  readonly currentDate = new Date();
+  readonly oneMonthAgo = this.currentDate.getMonth() == 0 ? 11 : this.currentDate.getMonth() - 1;
+  readonly twoMonthsAgo = this.oneMonthAgo == 0 ? 11 : this.oneMonthAgo - 1;
+  readonly dayOfMonthForWarning = 5;
+
   readonly functions = configuration.EMPLOYEE_FUNCTIONS;
 
   @Input() dataSource: MatTableDataSource<Employee>;
@@ -69,7 +74,22 @@ export class EmployeesTableListComponent implements OnInit, OnDestroy {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
-  stringToDate(date: string): Date {
-    return new Date(date);
+  // FIXME GAJ: differences in year not handled
+  getReleaseDateColourCoding(date: string): string {
+
+    let releaseDate = new Date(date);
+
+    // previous month -> OK || in future -> OK
+    if(releaseDate.getMonth() === this.oneMonthAgo || releaseDate.getMonth() === this.currentDate.getMonth() || releaseDate > this.currentDate) {
+      return this.releaseDateColourTypes[0];
+    }
+
+    // Two Months ago -> WARN til 5th of month
+    if(releaseDate.getMonth() === this.twoMonthsAgo && this.currentDate.getDate() <= this.dayOfMonthForWarning) {
+      return this.releaseDateColourTypes[1];
+    }
+
+    // everything else -> NOK
+    return this.releaseDateColourTypes[2];
   }
 }

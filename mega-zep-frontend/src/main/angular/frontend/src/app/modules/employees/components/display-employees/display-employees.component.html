@@ -16,7 +16,7 @@
         <app-datepicker *ngIf="filteredEmployees && selectedEmployees?.length > 0"
                         (dateEmitter)="dateChanged($event)" style="margin-right: 10px;"></app-datepicker>
 
-        <button *ngIf="selectedEmployees?.length > 0 && selectedDate != null" class="releaseBtn"
+        <button *ngIf="selectedEmployees?.length > 0 && selectedDate != null" class="mega-button"
                 mat-button
                 (click)="releaseEmployees()">
           Freigeben
