@@ -73,6 +73,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             } catch (InterruptedException | ExecutionException e) {
                 logger.error("error updating employees", e);
                 failedUserIds.addAll(partition.stream().map(Employee::getUserId).collect(Collectors.toList()));
+                Thread.currentThread().interrupt();
             }
         });
 
