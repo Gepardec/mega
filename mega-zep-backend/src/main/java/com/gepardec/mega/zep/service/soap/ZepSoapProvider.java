@@ -1,4 +1,4 @@
-package com.gepardec.mega.zep.soap;
+package com.gepardec.mega.zep.service.soap;
 
 import com.sun.xml.ws.developer.JAXWSProperties;
 import de.provantis.zep.RequestHeaderType;

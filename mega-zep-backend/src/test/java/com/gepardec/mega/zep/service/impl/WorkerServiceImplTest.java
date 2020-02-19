@@ -1,13 +1,13 @@
 package com.gepardec.mega.zep.service.impl;
 
 
-import com.gepardec.mega.aplication.security.Role;
 import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.monthlyreport.WorkingLocation;
 import com.gepardec.mega.monthlyreport.warning.WarningConfig;
 import com.gepardec.mega.service.api.EmployeeService;
 import com.gepardec.mega.service.model.Employee;
-import com.gepardec.mega.zep.soap.ZepSoapProvider;
+import com.gepardec.mega.util.EmployeeTestUtil;
+import com.gepardec.mega.zep.service.soap.ZepSoapProvider;
 import de.provantis.zep.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -53,7 +53,8 @@ public class WorkerServiceImplTest {
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterInvalid() {
-        final Employee employee = createEmployee(0, "NULL");
+        final Employee employee = EmployeeTestUtil.createEmployee(0);
+        employee.setReleaseDate("NULL");
         Mockito.when(employeeService.getEmployee(Mockito.any())).thenReturn(employee);
 
         Assertions.assertNull(workerService.getMonthendReportForUser("0"));
@@ -61,7 +62,7 @@ public class WorkerServiceImplTest {
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenNull() {
-        final Employee employee = createEmployee(0, "2020-01-31");
+        final Employee employee = EmployeeTestUtil.createEmployee(0);
         Mockito.when(employeeService.getEmployee(Mockito.any())).thenReturn(employee);
         Mockito.when(zepSoapPortType.readProjektzeiten(Mockito.any())).thenReturn(null);
 
@@ -71,7 +72,7 @@ public class WorkerServiceImplTest {
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenInvalid() {
-        final Employee employee = createEmployee(0, "2020-01-31");
+        final Employee employee = EmployeeTestUtil.createEmployee(0);
         Mockito.when(employeeService.getEmployee(Mockito.any())).thenReturn(employee);
         Mockito.when(zepSoapPortType.readProjektzeiten(Mockito.any())).thenReturn(new ReadProjektzeitenResponseType());
 
@@ -80,7 +81,7 @@ public class WorkerServiceImplTest {
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenValid_NoWarning() {
-        final Employee employee = createEmployee(0, "2020-01-31");
+        final Employee employee = EmployeeTestUtil.createEmployee(0);
         Mockito.when(employeeService.getEmployee(Mockito.any())).thenReturn(employee);
         Mockito.when(zepSoapPortType.readProjektzeiten(Mockito.any())).thenReturn(createReadProjektzeitenResponseType("10:00"));
 
@@ -93,7 +94,7 @@ public class WorkerServiceImplTest {
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenValid_Warning() {
-        final Employee employee = createEmployee(0, "2020-01-31");
+        final Employee employee = EmployeeTestUtil.createEmployee(0);
         Mockito.when(employeeService.getEmployee(Mockito.any())).thenReturn(employee);
         Mockito.when(zepSoapPortType.readProjektzeiten(Mockito.any())).thenReturn(createReadProjektzeitenResponseType("18:00"));
 
@@ -105,16 +106,6 @@ public class WorkerServiceImplTest {
         Assertions.assertEquals(LocalDate.of(2020, 1, 31), monthendReportForUser.getTimeWarnings().get(0).getDate());
         Assertions.assertEquals(1d, monthendReportForUser.getTimeWarnings().get(0).getExcessWorkTime());
         Assertions.assertEquals(0.5d, monthendReportForUser.getTimeWarnings().get(0).getMissingBreakTime());
-    }
-
-    private ReadMitarbeiterResponseType createReadMitarbeiterResponseType(final MitarbeiterType... mitarbeiterType) {
-        final MitarbeiterListeType mitarbeiterListeType = new MitarbeiterListeType();
-        mitarbeiterListeType.getMitarbeiter().addAll(Arrays.asList(mitarbeiterType));
-
-        final ReadMitarbeiterResponseType readMitarbeiterResponseType = new ReadMitarbeiterResponseType();
-        readMitarbeiterResponseType.setMitarbeiterListe(mitarbeiterListeType);
-
-        return readMitarbeiterResponseType;
     }
 
     private ReadProjektzeitenResponseType createReadProjektzeitenResponseType(String bis) {
@@ -139,22 +130,5 @@ public class WorkerServiceImplTest {
         readProjektzeitenResponseType.setProjektzeitListe(projektzeitenListeType);
 
         return readProjektzeitenResponseType;
-    }
-
-    private Employee createEmployee(final int userId, final String freigabedatum) {
-        final Employee employee = new Employee();
-        final String name = "Thomas_" + userId;
-
-        employee.setEmail(name + "@gepardec.com");
-        employee.setFirstName(name);
-        employee.setSureName(name + "_Nachname");
-        employee.setTitle("Ing.");
-        employee.setUserId(String.valueOf(userId));
-        employee.setSalutation("Herr");
-        employee.setWorkDescription("ARCHITEKT");
-        employee.setReleaseDate(freigabedatum);
-        employee.setRole(Role.USER.roleId);
-
-        return employee;
     }
 }

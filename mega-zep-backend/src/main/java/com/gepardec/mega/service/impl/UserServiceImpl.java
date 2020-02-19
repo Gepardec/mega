@@ -4,10 +4,10 @@ import com.gepardec.mega.aplication.security.ForbiddenException;
 import com.gepardec.mega.aplication.security.Role;
 import com.gepardec.mega.aplication.security.SessionUser;
 import com.gepardec.mega.aplication.security.UnauthorizedException;
+import com.gepardec.mega.service.api.EmployeeService;
 import com.gepardec.mega.service.api.UserService;
 import com.gepardec.mega.service.model.Employee;
 import com.gepardec.mega.service.model.User;
-import com.gepardec.mega.zep.service.ZepService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import org.slf4j.Logger;
@@ -22,17 +22,17 @@ public class UserServiceImpl implements UserService {
 
     private final Logger logger;
     private final GoogleIdTokenVerifier tokenVerifier;
-    private final ZepService zepService;
+    private final EmployeeService employeeService;
     private final SessionUser sessionUser;
 
     @Inject
     public UserServiceImpl(final Logger logger,
                            final GoogleIdTokenVerifier tokenVerifier,
-                           final ZepService zepService,
+                           final EmployeeService employeeService,
                            final SessionUser sessionUser) {
         this.logger = logger;
         this.tokenVerifier = tokenVerifier;
-        this.zepService = zepService;
+        this.employeeService = employeeService;
         this.sessionUser = sessionUser;
     }
 
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalStateException("Could not verify idToken", e);
         }
 
-        final Employee employee = Optional.ofNullable(zepService.getActiveEmployees()).orElse(new ArrayList<>()).stream()
+        final Employee employee = Optional.ofNullable(employeeService.getAllActiveEmployees()).orElse(new ArrayList<>()).stream()
                 .filter(e -> email.equals(e.getEmail()))
                 .findFirst().orElse(null);
 

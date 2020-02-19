@@ -1,61 +1,46 @@
-package com.gepardec.mega.zep.service;
+package com.gepardec.mega.zep.service.impl;
 
-import com.gepardec.mega.aplication.utils.DateUtils;
-import com.gepardec.mega.rest.translator.EmployeeTranslator;
 import com.gepardec.mega.service.model.Employee;
 import com.gepardec.mega.zep.exception.ZepServiceException;
-import com.gepardec.mega.zep.soap.ZepSoapProvider;
+import com.gepardec.mega.zep.service.api.ZepService;
+import com.gepardec.mega.zep.service.soap.ZepSoapProvider;
+import com.gepardec.mega.zep.service.translator.EmployeeTranslator;
 import de.provantis.zep.*;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import java.time.LocalDate;
-import java.util.*;
-import java.util.function.Predicate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequestScoped
 public class ZepServiceImpl implements ZepService {
 
-    @Inject
-    Logger logger;
+    final Logger logger;
+    final ZepSoapPortType zepSoapPortType;
+    final ZepSoapProvider zepSoapProvider;
 
     @Inject
-    ZepSoapPortType zepSoapPortType;
-
-    @Inject
-    ZepSoapProvider zepSoapProvider;
+    public ZepServiceImpl(final Logger logger,
+                          final ZepSoapPortType zepSoapPortType,
+                          final ZepSoapProvider zepSoapProvider) {
+        this.logger = logger;
+        this.zepSoapPortType = zepSoapPortType;
+        this.zepSoapProvider = zepSoapProvider;
+    }
 
     @Override
     public Employee getEmployee(final String userId) {
         final ReadMitarbeiterSearchCriteriaType readMitarbeiterSearchCriteriaType = new ReadMitarbeiterSearchCriteriaType();
         readMitarbeiterSearchCriteriaType.setUserId(userId);
-        return getEmployeeInternal(readMitarbeiterSearchCriteriaType, employee -> true).stream().findFirst().orElse(null);
+        return getEmployeeInternal(readMitarbeiterSearchCriteriaType).stream().findFirst().orElse(null);
     }
 
     @Override
-    public List<Employee> getActiveEmployees() {
-        return getEmployeeInternal(null, employee -> {
-            final BeschaeftigungszeitListeType beschaeftigungszeitListeType = employee.getBeschaeftigungszeitListe();
-            final List<BeschaeftigungszeitType> beschaeftigungszeitTypeList = beschaeftigungszeitListeType.getBeschaeftigungszeit();
-            final BeschaeftigungszeitType last = beschaeftigungszeitTypeList
-                    .stream()
-                    .sorted(Comparator.comparing(BeschaeftigungszeitType::getStartdatum))
-                    .reduce((first, second) -> second)
-                    .orElse(null);
-
-            if (last != null) {
-                // if enddatum (sic!) is null => employee is active
-                if (last.getEnddatum() == null) {
-                    return true;
-                } else {
-                    final LocalDate endDate = DateUtils.parseDate(Objects.requireNonNull(last).getEnddatum());
-                    return !endDate.isBefore(LocalDate.now());
-                }
-            }
-            return false;
-        });
+    public List<Employee> getEmployees() {
+        return getEmployeeInternal(null);
     }
 
     @Override
@@ -81,12 +66,10 @@ public class ZepServiceImpl implements ZepService {
     }
 
     /**
-     *
      * @param readMitarbeiterSearchCriteriaType search for specific criterias in zep
-     * @param mitarbeiterTypePredicate filter result based on predicate
      * @return list of employees
      */
-    private List<Employee> getEmployeeInternal(final ReadMitarbeiterSearchCriteriaType readMitarbeiterSearchCriteriaType, Predicate<MitarbeiterType> mitarbeiterTypePredicate) {
+    private List<Employee> getEmployeeInternal(final ReadMitarbeiterSearchCriteriaType readMitarbeiterSearchCriteriaType) {
 
         final ReadMitarbeiterRequestType readMitarbeiterRequestType = new ReadMitarbeiterRequestType();
         readMitarbeiterRequestType.setRequestHeader(zepSoapProvider.createRequestHeaderType());
@@ -96,11 +79,10 @@ public class ZepServiceImpl implements ZepService {
         }
 
         final ReadMitarbeiterResponseType readMitarbeiterResponseType = zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType);
-
         final List<Employee> result = new ArrayList<>();
 
         Optional.ofNullable(readMitarbeiterResponseType).flatMap(readMitarbeiterResponse -> Optional.ofNullable(readMitarbeiterResponse.getMitarbeiterListe())).ifPresent(mitarbeiterListe -> {
-            result.addAll(mitarbeiterListe.getMitarbeiter().stream().filter(mitarbeiterTypePredicate).map(EmployeeTranslator::toEmployee).collect(Collectors.toList()));
+            result.addAll(mitarbeiterListe.getMitarbeiter().stream().map(EmployeeTranslator::toEmployee).collect(Collectors.toList()));
         });
 
         return result;

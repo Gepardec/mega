@@ -3,9 +3,10 @@ package com.gepardec.mega.service.impl;
 import com.gepardec.mega.aplication.security.ForbiddenException;
 import com.gepardec.mega.aplication.security.Role;
 import com.gepardec.mega.aplication.security.SessionUser;
+import com.gepardec.mega.service.api.EmployeeService;
 import com.gepardec.mega.service.model.Employee;
 import com.gepardec.mega.service.model.User;
-import com.gepardec.mega.zep.service.ZepService;
+import com.gepardec.mega.util.EmployeeTestUtil;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import org.junit.jupiter.api.Assertions;
@@ -35,7 +36,7 @@ public class UserServiceImplTest {
     private GoogleIdTokenVerifier tokenVerifier;
 
     @Mock
-    private ZepService zepService;
+    private EmployeeService employeeService;
 
     @Mock
     private SessionUser sessionUser;
@@ -44,7 +45,7 @@ public class UserServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        beanUnderTest = new UserServiceImpl(logger, tokenVerifier, zepService, sessionUser);
+        beanUnderTest = new UserServiceImpl(logger, tokenVerifier, employeeService, sessionUser);
         Mockito.when(googleIdToken.getPayload()).thenReturn(new GoogleIdToken.Payload().setEmail("Thomas_0@gepardec.com").set("picture", "https://www.gepardec.com/mypicture.jpg"));
     }
 
@@ -59,7 +60,7 @@ public class UserServiceImplTest {
     @Test
     void testLoginEmployeesNull() throws GeneralSecurityException, IOException {
         Mockito.when(tokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
-        Mockito.when(zepService.getActiveEmployees()).thenReturn(null);
+        Mockito.when(employeeService.getAllActiveEmployees()).thenReturn(null);
 
         final ForbiddenException forbiddenException = Assertions.assertThrows(ForbiddenException.class, () -> beanUnderTest.login("sometoken"));
         Assertions.assertEquals("'Thomas_0@gepardec.com' is not an employee in ZEP", forbiddenException.getMessage());
@@ -68,7 +69,7 @@ public class UserServiceImplTest {
     @Test
     void testLoginEmployeesEmailNotFound() throws GeneralSecurityException, IOException {
         Mockito.when(tokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
-        Mockito.when(zepService.getActiveEmployees()).thenReturn(Collections.singletonList(new Employee()));
+        Mockito.when(employeeService.getAllActiveEmployees()).thenReturn(Collections.singletonList(new Employee()));
 
         final ForbiddenException forbiddenException = Assertions.assertThrows(ForbiddenException.class, () -> beanUnderTest.login("sometoken"));
         Assertions.assertEquals("'Thomas_0@gepardec.com' is not an employee in ZEP", forbiddenException.getMessage());
@@ -77,7 +78,7 @@ public class UserServiceImplTest {
     @Test
     void testLogin() throws GeneralSecurityException, IOException {
         Mockito.when(tokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
-        Mockito.when(zepService.getActiveEmployees()).thenReturn(Collections.singletonList(createEmployee(0)));
+        Mockito.when(employeeService.getAllActiveEmployees()).thenReturn(Collections.singletonList(EmployeeTestUtil.createEmployee(0)));
 
         final User user = beanUnderTest.login("sometoken");
 
@@ -88,22 +89,5 @@ public class UserServiceImplTest {
         Assertions.assertEquals("Thomas_0_Nachname", user.getLastname());
         Assertions.assertEquals(Role.USER, user.getRole());
         Assertions.assertEquals("https://www.gepardec.com/mypicture.jpg", user.getPictureUrl());
-    }
-
-    private Employee createEmployee(final int userId) {
-        final Employee employee = new Employee();
-        final String name = "Thomas_" + userId;
-
-        employee.setEmail(name + "@gepardec.com");
-        employee.setFirstName(name);
-        employee.setSureName(name + "_Nachname");
-        employee.setTitle("Ing.");
-        employee.setUserId(String.valueOf(userId));
-        employee.setSalutation("Herr");
-        employee.setWorkDescription("ARCHITEKT");
-        employee.setReleaseDate("2020-01-01");
-        employee.setRole(Role.USER.roleId);
-
-        return employee;
     }
 }

@@ -3,7 +3,7 @@ package com.gepardec.mega.service.impl;
 import com.gepardec.mega.service.api.EmployeeService;
 import com.gepardec.mega.service.model.Employee;
 import com.gepardec.mega.zep.exception.ZepServiceException;
-import com.gepardec.mega.zep.service.ZepService;
+import com.gepardec.mega.zep.service.api.ZepService;
 import com.google.common.collect.Iterables;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.context.ManagedExecutor;
@@ -44,7 +44,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> getAllActiveEmployees() {
-        return zepService.getActiveEmployees();
+        return zepService.getEmployees().stream().filter(Employee::isActive).collect(Collectors.toList());
     }
 
     @Override

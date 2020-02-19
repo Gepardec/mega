@@ -2,8 +2,9 @@ package com.gepardec.mega.service.impl;
 
 
 import com.gepardec.mega.service.model.Employee;
+import com.gepardec.mega.util.EmployeeTestUtil;
 import com.gepardec.mega.zep.exception.ZepServiceException;
-import com.gepardec.mega.zep.service.ZepService;
+import com.gepardec.mega.zep.service.api.ZepService;
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -39,6 +41,32 @@ public class EmployeeServiceImplTest {
     }
 
     @Test
+    void testGetEmployee() {
+        Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(EmployeeTestUtil.createEmployee(0));
+
+        final Employee employee = beanUnderTest.getEmployee("someuserid");
+        Assertions.assertNotNull(employee);
+        Assertions.assertEquals("0", employee.getUserId());
+        Assertions.assertEquals("Thomas_0", employee.getFirstName());
+    }
+
+    @Test
+    void testGetEmployees() {
+        final Employee employee0 = EmployeeTestUtil.createEmployee(0);
+        final Employee employee1 = EmployeeTestUtil.createEmployee(1);
+        employee1.setActive(false);
+
+        Mockito.when(zepService.getEmployees()).thenReturn(Arrays.asList(employee0, employee1));
+
+        final List<Employee> employees = beanUnderTest.getAllActiveEmployees();
+        Assertions.assertNotNull(employees);
+        Assertions.assertFalse(employees.isEmpty());
+        Assertions.assertEquals(1, employees.size());
+        Assertions.assertEquals("0", employees.get(0).getUserId());
+        Assertions.assertEquals("Thomas_0", employees.get(0).getFirstName());
+    }
+
+    @Test
     void testUpdateEmployeesReleaseDate_EmployeesNull() {
         Assertions.assertThrows(ZepServiceException.class, () -> beanUnderTest.updateEmployeesReleaseDate(null));
     }
@@ -56,7 +84,7 @@ public class EmployeeServiceImplTest {
             return null;
         }).when(managedExecutor).execute(Mockito.any());
 
-        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(createEmployees(1));
+        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(EmployeeTestUtil.createEmployees(1));
         Assertions.assertNotNull(result);
         Assertions.assertFalse(result.isEmpty());
         Assertions.assertEquals(1, result.size());
@@ -77,7 +105,7 @@ public class EmployeeServiceImplTest {
             }
         }).when(managedExecutor).execute(Mockito.any());
 
-        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(createEmployees(40));
+        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(EmployeeTestUtil.createEmployees(40));
         Assertions.assertNotNull(result);
         Assertions.assertFalse(result.isEmpty());
         Assertions.assertEquals(10, result.size());
@@ -92,21 +120,10 @@ public class EmployeeServiceImplTest {
             return null;
         }).when(managedExecutor).execute(Mockito.any());
 
-        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(createEmployees(1));
+        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(EmployeeTestUtil.createEmployees(1));
         Assertions.assertNotNull(result);
         Assertions.assertTrue(result.isEmpty());
     }
 
-    private List<Employee> createEmployees(final int count) {
-        final List<Employee> result = new ArrayList<>();
 
-        for (int i = 0; i < count; i++) {
-            final Employee employee = new Employee();
-            employee.setUserId("" + i);
-            employee.setReleaseDate("2020-01-31");
-            result.add(employee);
-        }
-
-        return result;
-    }
 }
