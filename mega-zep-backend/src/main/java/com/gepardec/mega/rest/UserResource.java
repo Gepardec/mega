@@ -38,7 +38,7 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes({MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN})
     public Response login(@NotEmpty(message = "{authenticationResource.google.idToken.notEmpty}") String idToken) {
-        log.info("idToken: {}", (idToken == null ? "null" : idToken));
+        log.info("idToken: {}", idToken);
         final String oldEmail = sessionUser.getEmail();
         final User user = userService.login(idToken);
 

@@ -70,13 +70,20 @@ public class EmployeeServiceImpl implements EmployeeService {
                             });
                             return null;
                         })).toArray(CompletableFuture[]::new)).get();
-            } catch (InterruptedException | ExecutionException e) {
+            } catch (ExecutionException e) {
                 logger.error("error updating employees", e);
-                failedUserIds.addAll(partition.stream().map(Employee::getUserId).collect(Collectors.toList()));
+                failedUserIds.addAll(getUserIds(partition));
+            } catch (InterruptedException e) {
+                logger.error("error updating employees", e);
+                failedUserIds.addAll(getUserIds(partition));
                 Thread.currentThread().interrupt();
             }
         });
 
         return failedUserIds;
+    }
+
+    private List<String> getUserIds(final List<Employee> employees) {
+        return employees.stream().map(Employee::getUserId).collect(Collectors.toList());
     }
 }

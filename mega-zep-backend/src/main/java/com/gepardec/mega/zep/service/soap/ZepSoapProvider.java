@@ -1,6 +1,6 @@
 package com.gepardec.mega.zep.service.soap;
 
-import com.sun.xml.ws.developer.JAXWSProperties;
+import com.sun.xml.ws.developer.JAXWSProperties; // NOSONAR
 import de.provantis.zep.RequestHeaderType;
 import de.provantis.zep.ZepSoap;
 import de.provantis.zep.ZepSoapPortType;
@@ -26,7 +26,7 @@ public class ZepSoapProvider {
 
     @Produces
     @Dependent
-    ZepSoapPortType createZepSoapPortType() throws Exception {
+    ZepSoapPortType createZepSoapPortType() {
         final ZepSoap zs = new ZepSoap(Thread.currentThread()
                 .getContextClassLoader()
                 .getResource("wsdl/zep_v7.wsdl"));

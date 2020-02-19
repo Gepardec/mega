@@ -6,6 +6,7 @@ import com.gepardec.mega.zep.service.api.ZepService;
 import com.gepardec.mega.zep.service.soap.ZepSoapProvider;
 import com.gepardec.mega.zep.service.translator.EmployeeTranslator;
 import de.provantis.zep.*;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
@@ -13,6 +14,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @RequestScoped
@@ -56,12 +58,14 @@ public class ZepServiceImpl implements ZepService {
         umrt.setMitarbeiter(mitarbeiter);
 
         final UpdateMitarbeiterResponseType updateMitarbeiterResponseType = zepSoapPortType.updateMitarbeiter(umrt);
-        final ResponseHeaderType responseHeaderType = updateMitarbeiterResponseType != null ? updateMitarbeiterResponseType.getResponseHeader() : null;
 
-        logger.info("finish update user {} with response {}", userId, responseHeaderType != null ? responseHeaderType.getReturnCode() : null);
+        final AtomicReference<String> returnCode = new AtomicReference<>(null);
+        Optional.ofNullable(updateMitarbeiterResponseType).flatMap(response -> Optional.ofNullable(response.getResponseHeader())).ifPresent((header) -> returnCode.set(header.getReturnCode()));
 
-        if (responseHeaderType != null && Integer.parseInt(responseHeaderType.getReturnCode()) != 0) {
-            throw new ZepServiceException("updateEmployeeReleaseDate failed with code: " + responseHeaderType.getReturnCode());
+        logger.info("finish update user {} with response {}", userId, returnCode.get());
+
+        if (StringUtils.isNotEmpty(returnCode.get()) && Integer.parseInt(returnCode.get()) != 0) {
+            throw new ZepServiceException("updateEmployeeReleaseDate failed with code: " + returnCode.get());
         }
     }
 

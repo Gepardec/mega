@@ -14,6 +14,10 @@ import java.util.Optional;
 
 public class EmployeeTranslator {
 
+    private EmployeeTranslator() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static Employee toEmployee(MitarbeiterType mitarbeiterType) {
         Employee employee = new Employee();
         employee.setUserId(mitarbeiterType.getUserId());

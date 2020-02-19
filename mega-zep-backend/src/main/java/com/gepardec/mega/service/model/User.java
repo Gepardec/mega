@@ -18,6 +18,7 @@ public class User {
     private String pictureUrl;
 
     public User() {
+        // nop
     }
 
     public String getEmail() {

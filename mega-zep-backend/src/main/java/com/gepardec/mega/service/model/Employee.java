@@ -13,6 +13,7 @@ public class Employee {
     private boolean active;
 
     public Employee() {
+        // nop
     }
 
     public String getUserId() {
