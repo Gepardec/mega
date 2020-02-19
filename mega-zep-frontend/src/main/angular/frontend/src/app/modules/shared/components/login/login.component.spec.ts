@@ -4,6 +4,7 @@ import { LoginComponent } from './login.component';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from '../../services/user/user.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -34,6 +35,7 @@ describe('LoginComponent', () => {
           provide: UserService, useClass: UserServiceMock
         }
       ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));
