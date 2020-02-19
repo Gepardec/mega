@@ -18,6 +18,7 @@ speed-measure-plugin*.json
 # dependencies
 /node_modules
 /bower_components
+/.scannerwork
 
 # IDEs and editors
 /.idea
