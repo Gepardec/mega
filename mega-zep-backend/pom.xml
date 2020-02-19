@@ -22,6 +22,11 @@
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
 
         <quarkus.package.uber.jar>false</quarkus.package.uber.jar>
+
+        <sonar.projectKey>mega-zep-backend</sonar.projectKey>
+        <sonar.projectName>mega-zep-backend</sonar.projectName>
+        <sonar.projectVersion>${revision}</sonar.projectVersion>
+        <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
     </properties>
     <dependencyManagement>
         <dependencies>

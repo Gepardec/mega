@@ -56,3 +56,9 @@ mega.test.googleuser.id=<USER_ID>
 - Recreate newly introduced secrets
 - Modify frontend template to map secret 'asset/config.json' into html root where the clientId and backendOrigin is defined
 - Jenkins build pipeline does not need to replace client_id anymore
+
+## instructions for local sonar
+- docker pull sonarqube
+- docker run -d --name sonarqube -p 9000:9000 sonarqube
+- frontend: npm run sonar -- -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin
+- backend: mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin
