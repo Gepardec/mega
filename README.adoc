@@ -60,5 +60,5 @@ mega.test.googleuser.id=<USER_ID>
 ## instructions for local sonar
 - docker pull sonarqube
 - docker run -d --name sonarqube -p 9000:9000 sonarqube
-- frontend: npm run sonar -- -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin
-- backend: mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin
+- frontend: npx ng test --watch=false --code-coverage && npm run sonar -- -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin
+- backend: mvn clean verify -P sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin
