@@ -9,15 +9,12 @@ import com.gepardec.mega.monthlyreport.warning.WarningConfig;
 import com.gepardec.mega.service.api.EmployeeService;
 import com.gepardec.mega.service.model.Employee;
 import com.gepardec.mega.zep.service.api.WorkerService;
-import com.gepardec.mega.zep.soap.ZepSoapProvider;
+import com.gepardec.mega.zep.service.soap.ZepSoapProvider;
 import de.provantis.zep.*;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.context.ManagedExecutor;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import java.time.Month;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 

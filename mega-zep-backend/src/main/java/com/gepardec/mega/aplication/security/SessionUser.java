@@ -14,6 +14,7 @@ public class SessionUser implements Serializable {
     private boolean logged;
 
     public SessionUser() {
+        // nop
     }
 
     public void init(final String userId, final String email, final String idToken, final int recht) {

@@ -24,10 +24,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }];
   readonly spreadSheetUrl = configuration.SPREADSHEET_URL;
   readonly zepUrl = configuration.ZEP_URL;
-  readonly assetsPath = "../../../../../assets/";
-  readonly logoMega = "LogoMEGA.png";
-  readonly excelLogo = "excelLogo.png"
-  readonly zepLogo = "zepEyeClean.png";
+  readonly assetsPath = '../../../../../assets/';
+  readonly logoMega = 'LogoMEGA.png';
+  readonly excelLogo = 'excelLogo.png';
+  readonly zepLogo = 'zepEyeClean.png';
 
   user: User;
 

@@ -37,7 +37,7 @@ describe('UserActionsComponent', () => {
     user.email = 'max.mustermann@gmail.com';
     user.firstname = 'Max';
     user.lastname = 'Mustermann';
-    user.pictureUrl = undefined
+    user.pictureUrl = undefined;
     return user;
   }
 

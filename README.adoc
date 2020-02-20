@@ -13,15 +13,17 @@ Make End-of-the-month-process Great Again!
 
 ==== Frontend Setup
 
-install node.js
+- install node.js
+- npm install -g @angular/cli
+- cd mega-zep-frontend/src/main/angular/frontend
+- npm install
+- npx ng serve / npx ng test
 
-npm install -g @angular/cli
-
-cd mega-zep-frontend/src/main/angular/frontend
-npm install
-npx ng serve
+==== ZEP-Connector
 
 See link:mega-zep-connector/README.adoc[README of ZEP-Connector] for more information.
+
+==== Configuration
 
 ./mega-zep-backend/config/application.properties (externalized configurations)
 [source,properties]
@@ -56,3 +58,19 @@ mega.test.googleuser.id=<USER_ID>
 - Recreate newly introduced secrets
 - Modify frontend template to map secret 'asset/config.json' into html root where the clientId and backendOrigin is defined
 - Jenkins build pipeline does not need to replace client_id anymore
+
+## instructions for local sonar
+- docker pull sonarqube
+- docker run -d --name sonarqube -p 9000:9000 sonarqube
+
+frontend:
+[source]
+----
+npx ng test --watch=false --code-coverage && npm run sonar -- -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin
+----
+
+backend: 
+[source]
+----
+mvn clean verify -P sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin
+----

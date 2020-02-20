@@ -6,9 +6,9 @@ import com.gepardec.mega.SessionUserMock;
 import com.gepardec.mega.aplication.security.Role;
 import com.gepardec.mega.service.api.EmployeeService;
 import com.gepardec.mega.service.model.Employee;
+import com.gepardec.mega.util.EmployeeTestUtil;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import de.provantis.zep.MitarbeiterType;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
@@ -71,7 +71,7 @@ public class EmployeeResourceTest {
 
     @Test
     void employees_withValidRequest_returnsActiveEmployees() {
-        final List<Employee> employees = IntStream.range(1, 10).mapToObj(this::createEmployee).collect(Collectors.toList());
+        final List<Employee> employees = IntStream.range(1, 10).mapToObj(EmployeeTestUtil::createEmployee).collect(Collectors.toList());
         Mockito.when(employeeService.getAllActiveEmployees()).thenReturn(employees);
 
         final List<Employee> actual = given().get("/employees")
@@ -81,7 +81,7 @@ public class EmployeeResourceTest {
 
         Assertions.assertEquals(employees.size(), actual.size());
         for (int i = 0; i < employees.size(); i++) {
-            assertEmployee(actual.get(i), employees.get(i));
+            EmployeeTestUtil.assertEmployee(actual.get(i), employees.get(i));
         }
     }
 
@@ -109,7 +109,7 @@ public class EmployeeResourceTest {
 
     @Test
     void employeesUpdate_withInvalidEmployees_returnsInvalidEmails() {
-        final List<Employee> employees = IntStream.range(1, 11).mapToObj(this::createEmployee).collect(Collectors.toList());
+        final List<Employee> employees = IntStream.range(1, 11).mapToObj(EmployeeTestUtil::createEmployee).collect(Collectors.toList());
         final List<String> expected = employees.subList(0, 5).stream().map(Employee::getEmail).collect(Collectors.toList());
         Mockito.when(employeeService.updateEmployeesReleaseDate(Mockito.anyList())).thenReturn(expected);
         employeeServiceMock.setDelegate(employeeService);
@@ -127,7 +127,7 @@ public class EmployeeResourceTest {
 
     @Test
     void employeesUpdate_withAllValidEmployees_returnsNothing() {
-        final List<Employee> employees = IntStream.range(1, 11).mapToObj(this::createEmployee).collect(Collectors.toList());
+        final List<Employee> employees = IntStream.range(1, 11).mapToObj(EmployeeTestUtil::createEmployee).collect(Collectors.toList());
         Mockito.when(employeeService.updateEmployeesReleaseDate(Mockito.anyList())).thenReturn(Collections.emptyList());
         employeeServiceMock.setDelegate(employeeService);
 
@@ -139,34 +139,5 @@ public class EmployeeResourceTest {
                 });
 
         Assertions.assertTrue(actual.isEmpty());
-    }
-
-    private Employee createEmployee(final int userId) {
-        final Employee mitarbeiter = new Employee();
-        final String name = "Thomas_" + userId;
-
-        mitarbeiter.setEmail(name + "@gepardec.com");
-        mitarbeiter.setFirstName(name);
-        mitarbeiter.setSureName(name + "_Nachname");
-        mitarbeiter.setTitle("Ing.");
-        mitarbeiter.setUserId(String.valueOf(userId));
-        mitarbeiter.setSalutation("Herr");
-        mitarbeiter.setWorkDescription("ARCHITEKT");
-        mitarbeiter.setReleaseDate("2020-01-01");
-        mitarbeiter.setRole(Role.USER.roleId);
-
-        return mitarbeiter;
-    }
-
-    private void assertEmployee(final Employee actual, final Employee employee) {
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(employee.getRole(), actual.getRole(), "role"),
-                () -> Assertions.assertEquals(employee.getUserId(), actual.getUserId(), "userId"),
-                () -> Assertions.assertEquals(employee.getTitle(), actual.getTitle(), "title"),
-                () -> Assertions.assertEquals(employee.getFirstName(), actual.getFirstName(), "firstName"),
-                () -> Assertions.assertEquals(employee.getSureName(), actual.getSureName(), "sureName"),
-                () -> Assertions.assertEquals(employee.getSalutation(), actual.getSalutation(), "salutation"),
-                () -> Assertions.assertEquals(employee.getWorkDescription(), actual.getWorkDescription(), "workDescription"),
-                () -> Assertions.assertEquals(employee.getReleaseDate(), actual.getReleaseDate()));
     }
 }

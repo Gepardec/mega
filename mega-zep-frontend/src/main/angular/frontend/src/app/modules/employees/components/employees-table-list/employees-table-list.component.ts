@@ -15,8 +15,8 @@ export class EmployeesTableListComponent implements OnInit, OnDestroy {
 
   releaseDateColourTypes = ['releaseDone', 'releaseInProgress', 'releaseWarning'];
   readonly currentDate = new Date();
-  readonly oneMonthAgo = this.currentDate.getMonth() == 0 ? 11 : this.currentDate.getMonth() - 1;
-  readonly twoMonthsAgo = this.oneMonthAgo == 0 ? 11 : this.oneMonthAgo - 1;
+  readonly oneMonthAgo = this.currentDate.getMonth() === 0 ? 11 : this.currentDate.getMonth() - 1;
+  readonly twoMonthsAgo = this.oneMonthAgo === 0 ? 11 : this.oneMonthAgo - 1;
   readonly dayOfMonthForWarning = 5;
 
   readonly functions = configuration.EMPLOYEE_FUNCTIONS;
@@ -77,15 +77,17 @@ export class EmployeesTableListComponent implements OnInit, OnDestroy {
   // FIXME GAJ: differences in year not handled
   getReleaseDateColourCoding(date: string): string {
 
-    let releaseDate = new Date(date);
+    const releaseDate = new Date(date);
 
     // previous month -> OK || in future -> OK
-    if(releaseDate.getMonth() === this.oneMonthAgo || releaseDate.getMonth() === this.currentDate.getMonth() || releaseDate > this.currentDate) {
+    if (releaseDate.getMonth() === this.oneMonthAgo ||
+      releaseDate.getMonth() === this.currentDate.getMonth() ||
+      releaseDate > this.currentDate) {
       return this.releaseDateColourTypes[0];
     }
 
     // Two Months ago -> WARN til 5th of month
-    if(releaseDate.getMonth() === this.twoMonthsAgo && this.currentDate.getDate() <= this.dayOfMonthForWarning) {
+    if (releaseDate.getMonth() === this.twoMonthsAgo && this.currentDate.getDate() <= this.dayOfMonthForWarning) {
       return this.releaseDateColourTypes[1];
     }
 

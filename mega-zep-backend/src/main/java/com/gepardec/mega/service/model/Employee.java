@@ -10,8 +10,10 @@ public class Employee {
     private String releaseDate;
     private String workDescription;
     private Integer role;
+    private boolean active;
 
     public Employee() {
+        // nop
     }
 
     public String getUserId() {
@@ -84,5 +86,13 @@ public class Employee {
 
     public void setRole(Integer role) {
         this.role = role;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

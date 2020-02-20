@@ -19,7 +19,8 @@ export class DisplayMonthlyReportComponent implements OnInit {
   datasourceJourneyTable = new MatTableDataSource<JourneyWarning>();
   readonly functions = configuration.EMPLOYEE_FUNCTIONS;
 
-  constructor() {  }
+  constructor() {
+  }
 
   ngOnInit() {
     if (this.monthlyReport) {
@@ -28,12 +29,10 @@ export class DisplayMonthlyReportComponent implements OnInit {
     }
   }
 
-  getJourneyWarningString(warnings: Array<string>): String {
-    let warningString: string = "";
+  getJourneyWarningString(warnings: Array<string>): string {
+    let warningString = '';
 
-    warnings.forEach(function (value) {
-      warningString += value + ". ";
-    });
+    warnings.forEach((value) => warningString += value + '. ');
 
     return warningString;
   }

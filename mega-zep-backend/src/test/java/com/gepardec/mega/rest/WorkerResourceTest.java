@@ -8,12 +8,11 @@ import com.gepardec.mega.monthlyreport.MonthlyReport;
 import com.gepardec.mega.monthlyreport.journey.JourneyWarning;
 import com.gepardec.mega.monthlyreport.warning.TimeWarning;
 import com.gepardec.mega.service.model.Employee;
+import com.gepardec.mega.util.EmployeeTestUtil;
 import com.gepardec.mega.zep.service.impl.WorkerServiceImpl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import de.provantis.zep.MitarbeiterType;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
@@ -27,11 +26,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static io.restassured.RestAssured.given;
 
@@ -85,7 +81,7 @@ public class WorkerResourceTest {
 
     @Test
     void employeeMonthendReport_withReport_returnsReport() {
-        final Employee employee = createEmployee(0);
+        final Employee employee = EmployeeTestUtil.createEmployee(0);
         final com.gepardec.mega.monthlyreport.MonthlyReport expected = createZepMonthlyReport(employee);
         Mockito.when(workerService.getMonthendReportForUser(Mockito.anyString())).thenReturn(expected);
 
@@ -94,7 +90,7 @@ public class WorkerResourceTest {
                 .then().assertThat().statusCode(HttpStatus.SC_OK)
                 .extract().as(MonthlyReport.class);
 
-        assertEmployee(actual.getEmployee(), employee);
+        EmployeeTestUtil.assertEmployee(actual.getEmployee(), employee);
         assertTimeWarnings(expected.getTimeWarnings(), actual.getTimeWarnings());
         assertJourneyWarnings(expected.getJourneyWarnings(), actual.getJourneyWarnings());
     }
@@ -103,40 +99,11 @@ public class WorkerResourceTest {
         final List<TimeWarning> timeWarnings = Collections.singletonList(TimeWarning.of(LocalDate.now(), 0.0, 0.0, 0.0));
         final List<JourneyWarning> journeyWarnings = Collections.singletonList(new JourneyWarning(LocalDate.now(), Collections.singletonList("WARNING")));
 
-        final MonthlyReport monthlyReport =  new MonthlyReport();
+        final MonthlyReport monthlyReport = new MonthlyReport();
         monthlyReport.setTimeWarnings(timeWarnings);
         monthlyReport.setJourneyWarnings(journeyWarnings);
         monthlyReport.setEmployee(employee);
         return monthlyReport;
-    }
-
-    private Employee createEmployee(final int userId) {
-        final Employee employee = new Employee();
-        final String name = "Thomas_" + userId;
-
-        employee.setEmail(name + "@gepardec.com");
-        employee.setFirstName(name);
-        employee.setSureName(name + "_Nachname");
-        employee.setTitle("Ing.");
-        employee.setUserId(String.valueOf(userId));
-        employee.setSalutation("Herr");
-        employee.setWorkDescription("ARCHITEKT");
-        employee.setReleaseDate("2020-01-01");
-        employee.setRole(Role.USER.roleId);
-
-        return employee;
-    }
-
-    private void assertEmployee(final Employee actual, final Employee employee) {
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(employee.getRole(), actual.getRole(), "role"),
-                () -> Assertions.assertEquals(employee.getUserId(), actual.getUserId(), "userId"),
-                () -> Assertions.assertEquals(employee.getTitle(), actual.getTitle(), "title"),
-                () -> Assertions.assertEquals(employee.getFirstName(), actual.getFirstName(), "firstName"),
-                () -> Assertions.assertEquals(employee.getSureName(), actual.getSureName(), "sureName"),
-                () -> Assertions.assertEquals(employee.getSalutation(), actual.getSalutation(), "salutation"),
-                () -> Assertions.assertEquals(employee.getWorkDescription(), actual.getWorkDescription(), "workDescription"),
-                () -> Assertions.assertEquals(employee.getReleaseDate(), actual.getReleaseDate()));
     }
 
     private void assertJourneyWarnings(List<com.gepardec.mega.monthlyreport.journey.JourneyWarning> expected, List<JourneyWarning> actual) {
