@@ -20,9 +20,13 @@ import java.util.stream.Collectors;
 @RequestScoped
 public class ZepServiceImpl implements ZepService {
 
-    private final Logger logger;
-    private final ZepSoapPortType zepSoapPortType;
-    private final ZepSoapProvider zepSoapProvider;
+    private Logger logger;
+    private ZepSoapPortType zepSoapPortType;
+    private ZepSoapProvider zepSoapProvider;
+
+    public ZepServiceImpl() {
+        // no args constructor
+    }
 
     @Inject
     public ZepServiceImpl(final Logger logger,
