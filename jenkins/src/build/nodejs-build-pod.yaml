@@ -10,4 +10,11 @@ spec:
       command:
         - cat
       tty: true
+      resources:
+        limits:
+          memory: 1Gi
+          cpu: 1
+        requests:
+          memory: 500Mi
+          cpu: 0.5
   restartPolicy: Never
