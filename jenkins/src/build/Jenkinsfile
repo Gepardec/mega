@@ -4,13 +4,12 @@ pipeline {
     agent any
 
     environment {
-        OCP_PROJECT_NAME = "57-mega-dev"
-        OCP_ROUTE_SUFFIX = "${OCP_PROJECT_NAME}.cloud.itandtel.at"
         REVISION = buildRevisionForBranch()
     }
 
     options {
         disableConcurrentBuilds()
+        parallelsAlwaysFailFast()
     }
 
     stages {
@@ -100,6 +99,20 @@ pipeline {
                 }
             }
         }
+        stage('Deploy DEV') {
+            when {
+                branch "develop"
+            }
+            steps {
+                script {
+                    build job: 'mega-release', parameters: [
+                            string(name: 'sourceEnvironment', value: 'dev'),
+                            string(name: 'targetEnvironment', value: "dev"),
+                            string(name: 'version', value: "${env.REVISION}")]
+
+                }
+            }
+        }
     }
 }
 
@@ -111,7 +124,7 @@ def buildRevisionForBranch(String pomLocation = "./") {
         return pom.properties['revision']
     } else if (branch.startsWith("feature/")) {
         return branch.replace("/", "-").toUpperCase()
-    } else if (branch.startsWith("pr-")) {
+    } else if (branch.startsWith("PR-")) {
         return branch.replace("/", "-").toUpperCase()
     } else if (branch.startsWith("release/") || branch.startsWith("hotfix/")) {
         pom = readMavenPom file: pomLocation + 'pom.xml'

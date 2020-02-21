@@ -5,18 +5,20 @@ spec:
   serviceAccountName: jenkins
   containers:
     - name: quarkus
-      image: docker-registry.default.svc:5000/57-mega-test/quarkus-build-agent:latest
+      image: docker-registry.default.svc:5000/57-mega-dev/jenkins-agent-jdk-11:latest
       imagePullPolicy: Always
       command:
+        - /docker-entrypoint.sh
+      args:
         - cat
       tty: true
       resources:
         limits:
           memory: 1Gi
-          cpu: 1
+          cpu: 1000m
         requests:
           memory: 500Mi
-          cpu: 0.5
+          cpu: 500m
       volumeMounts:
         - name: mvn-repo
           mountPath: /home/jenkins/.m2/repository

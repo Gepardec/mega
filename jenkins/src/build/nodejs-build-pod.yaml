@@ -5,16 +5,11 @@ spec:
   serviceAccountName: jenkins
   containers:
     - name: nodejs
-      image: docker-registry.default.svc:5000/57-mega-test/nodejs-build-agent:latest
+      image: docker-registry.default.svc:5000/57-mega-dev/jenkins-agent-nodejs-12-5:latest
       imagePullPolicy: Always
       command:
         - cat
       tty: true
-      resources:
-        limits:
-          memory: 1Gi
-          cpu: 1
-        requests:
-          memory: 500Mi
-          cpu: 0.5
+      # chrome won't start doen't run because of limits
+      # [0221/200339.535218:ERROR:zygote_host_impl_linux.cc(259)] Failed to adjust OOM score of renderer with pid 190: Permission denied (13)
   restartPolicy: Never
