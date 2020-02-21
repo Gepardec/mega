@@ -1,0 +1,20 @@
+kind: Pod
+metadata:
+  name: quarkus-agent-pod
+spec:
+  serviceAccountName: jenkins
+  containers:
+    - name: quarkus
+      image: docker-registry.default.svc:5000/57-mega-test/quarkus-build-agent:latest
+      imagePullPolicy: Always
+      command:
+        - cat
+      tty: true
+      volumeMounts:
+        - name: mvn-repo
+          mountPath: /home/jenkins/.m2/repository
+  restartPolicy: Never
+  volumes:
+    - name: mvn-repo
+      persistentVolumeClaim:
+        claimName: jenkins-mvn-repo-cache

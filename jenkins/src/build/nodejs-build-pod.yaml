@@ -1,0 +1,13 @@
+kind: Pod
+metadata:
+  name: nodejs-agent-pod
+spec:
+  serviceAccountName: jenkins
+  containers:
+    - name: nodejs
+      image: docker-registry.default.svc:5000/57-mega-test/nodejs-build-agent:latest
+      imagePullPolicy: Always
+      command:
+        - cat
+      tty: true
+  restartPolicy: Never
