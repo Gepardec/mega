@@ -106,10 +106,10 @@ pipeline {
             steps {
                 script {
                     build job: 'mega-release', parameters: [
+                            string(name: 'Branch', value: "${env.GIT_COMMIT}"),
                             string(name: 'sourceEnvironment', value: 'dev'),
                             string(name: 'targetEnvironment', value: "dev"),
                             string(name: 'version', value: "${env.REVISION}")]
-
                 }
             }
         }
