@@ -13,11 +13,9 @@
         <cxf-codegen-plugin.version>3.3.3</cxf-codegen-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <quarkus-plugin.version>1.0.1.Final</quarkus-plugin.version>
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.platform.version>1.0.1.Final</quarkus.platform.version>
-        <quarkus.version>1.0.1.Final</quarkus.version>
+        <quarkus.version>1.2.1.Final</quarkus.version>
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
 
         <quarkus.package.uber.jar>false</quarkus.package.uber.jar>
@@ -32,7 +30,7 @@
             <dependency>
                 <groupId>${quarkus.platform.group-id}</groupId>
                 <artifactId>${quarkus.platform.artifact-id}</artifactId>
-                <version>${quarkus.platform.version}</version>
+                <version>${quarkus.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
