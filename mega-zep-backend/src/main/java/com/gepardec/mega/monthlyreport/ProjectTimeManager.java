@@ -3,7 +3,6 @@ package com.gepardec.mega.monthlyreport;
 import com.gepardec.mega.monthlyreport.journey.JourneyDirection;
 import com.gepardec.mega.monthlyreport.journey.JourneyEntry;
 import de.provantis.zep.ProjektzeitType;
-import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,7 +13,6 @@ import static com.gepardec.mega.aplication.utils.DateUtils.parseDateTime;
 
 public class ProjectTimeManager {
 
-    @Getter
     private final Map<LocalDate, List<ProjectTimeEntry>> projectTimes;
 
     public ProjectTimeManager(List<ProjektzeitType> projectTimes) {
@@ -47,5 +45,9 @@ public class ProjectTimeManager {
         } else {
             return new ProjectTimeEntry(fromTime, toTime, task, workingLocation);
         }
+    }
+
+    public Map<LocalDate, List<ProjectTimeEntry>> getProjectTimes() {
+        return projectTimes;
     }
 }
