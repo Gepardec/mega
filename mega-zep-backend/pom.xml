@@ -11,7 +11,6 @@
     <name>MEGA ZEP-Backend</name>
     <properties>
         <cxf-codegen-plugin.version>3.3.3</cxf-codegen-plugin.version>
-        <lombock.version>1.18.8</lombock.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus-plugin.version>1.0.1.Final</quarkus-plugin.version>
@@ -125,12 +124,6 @@
             <groupId>com.google.api-client</groupId>
             <artifactId>google-api-client</artifactId>
             <version>1.30.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombock.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>

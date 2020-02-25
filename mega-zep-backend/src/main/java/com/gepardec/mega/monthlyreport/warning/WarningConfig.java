@@ -1,12 +1,10 @@
 package com.gepardec.mega.monthlyreport.warning;
 
-import lombok.Getter;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-@Getter
 public class WarningConfig {
     @ConfigProperty(name = "warning.time.excess_worktime")
     String excessWorktime;
@@ -22,4 +20,32 @@ public class WarningConfig {
     String missingJourneyBack;
     @ConfigProperty(name = "warning.journey.missing_journey_to_aim")
     String missingJourneyToAim;
+
+    public String getExcessWorktime() {
+        return excessWorktime;
+    }
+
+    public String getMissingBreaktime() {
+        return missingBreaktime;
+    }
+
+    public String getMissingResttime() {
+        return missingResttime;
+    }
+
+    public String getTooEarlyStart() {
+        return tooEarlyStart;
+    }
+
+    public String getTooLateEnd() {
+        return tooLateEnd;
+    }
+
+    public String getMissingJourneyBack() {
+        return missingJourneyBack;
+    }
+
+    public String getMissingJourneyToAim() {
+        return missingJourneyToAim;
+    }
 }
