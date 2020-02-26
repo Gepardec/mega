@@ -21,7 +21,7 @@ public class BusinessDayCalculator {
 
     public Optional<Reminder> getEventForDate(LocalDate actualDate) {
 
-        logger.info("starting getEventForDate with date %s", actualDate.toString());
+        logger.info("starting getEventForDate with date {}", actualDate.toString());
         LocalDate firstWorkingDayOfMonth = calcFirstWorkingDayOfMonthForDate(actualDate);
         if (actualDate.isEqual(firstWorkingDayOfMonth)) {
             logReminder(EMPLOYEE_CHECK_PROJECTTIME);
@@ -61,7 +61,7 @@ public class BusinessDayCalculator {
     }
 
     private void logReminder(Reminder reminder) {
-        logger.info("%d. workingday of month was calculated: - Event: %s", reminder.getWorkingDay(), reminder.name());
+        logger.info("{}. workingday of month was calculated: - Event: {}", reminder.getWorkingDay(), reminder.name());
     }
 
 
