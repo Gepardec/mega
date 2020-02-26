@@ -1,13 +1,11 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.monthlyreport.MonthlyReport;
-import com.gepardec.mega.rest.model.Employee;
-import com.gepardec.mega.rest.translator.EmployeeTranslator;
 import com.gepardec.mega.aplication.security.ForbiddenException;
-import com.gepardec.mega.aplication.security.Role;
-import com.gepardec.mega.aplication.security.RolesAllowed;
-import com.gepardec.mega.aplication.security.Secured;
-import com.gepardec.mega.aplication.security.SessionUser;
+import com.gepardec.mega.aplication.security.*;
+import com.gepardec.mega.rest.model.Employee;
+import com.gepardec.mega.rest.model.MonthlyReport;
+import com.gepardec.mega.rest.translator.EmployeeTranslator;
+import com.gepardec.mega.rest.translator.MonthlyReportTranslator;
 import com.gepardec.mega.zep.service.api.WorkerService;
 import de.provantis.zep.MitarbeiterType;
 
@@ -63,13 +61,15 @@ public class WorkerResource {
     @Path("/employee/monthendReport")
     @Produces(MediaType.APPLICATION_JSON)
     public Response employeeMonthendReport() {
-        MonthlyReport monthlyReport = workerService.getMonthendReportForUser(sessionUser.getEmail());
+        com.gepardec.mega.monthlyreport.MonthlyReport monthlyReport = workerService.getMonthendReportForUser(sessionUser.getEmail());
 
         if (monthlyReport == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        return Response.ok(monthlyReport).build();
+        final Employee employee = EmployeeTranslator.toEmployee(monthlyReport.getMitarbeiter());
+        final MonthlyReport result = MonthlyReportTranslator.to(monthlyReport.getTimeWarnings(), monthlyReport.getJourneyWarnings(), employee);
+        return Response.ok(result).build();
     }
 
     @RolesAllowed(allowedRoles = {Role.ADMINISTRATOR, Role.CONTROLLER})

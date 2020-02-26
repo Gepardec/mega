@@ -23,6 +23,8 @@ public class MailSender {
 
     private byte[] logoByteArray;
 
+    @ConfigProperty(name = "mega.mail.subjectPrefix", defaultValue = "")
+    String subjectPrefix;
 
     @ConfigProperty(name = "mega.image.logo.url")
     String megaImageLogoUrl;
@@ -165,7 +167,7 @@ public class MailSender {
                 break;
             }
         }
-        return subject;
+        return subjectPrefix + subject;
     }
 
 }

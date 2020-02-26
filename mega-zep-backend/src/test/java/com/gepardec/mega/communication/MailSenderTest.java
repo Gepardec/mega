@@ -1,4 +1,4 @@
-package com.gepardec.mega;
+package com.gepardec.mega.communication;
 
 import com.gepardec.mega.communication.MailSender;
 import com.gepardec.mega.communication.NotificationConfig;

@@ -1,4 +1,4 @@
-package com.gepardec.mega.monthlyreport;
+package com.gepardec.mega.monthlyreport.journey;
 
 
 import com.gepardec.mega.monthlyreport.journey.JourneyDirectionHandler;

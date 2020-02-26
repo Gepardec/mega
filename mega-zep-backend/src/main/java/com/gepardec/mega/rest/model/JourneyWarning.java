@@ -1,4 +1,4 @@
-package com.gepardec.mega.monthlyreport.journey;
+package com.gepardec.mega.rest.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -10,17 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JourneyWarning {
+
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
+
     private List<String> warnings = new ArrayList<>(0);
 
     public JourneyWarning() {
-    }
-
-    public JourneyWarning(LocalDate date, List<String> warnings) {
-        this.date = date;
-        this.warnings = warnings;
     }
 
     public LocalDate getDate() {
