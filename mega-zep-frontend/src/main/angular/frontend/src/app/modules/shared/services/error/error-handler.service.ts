@@ -33,13 +33,14 @@ export class ErrorHandlerService implements ErrorHandler {
       // notifier.showError(message);
     }
 
-    this.showErrorPage();
+    this.showErrorPage(message);
     logger.writeToLog(message, configuration.LogLevel.Debug);
   }
 
-  showErrorPage() {
+  showErrorPage(message: string) {
     const router = this.injector.get(Router);
     const zone = this.injector.get(NgZone);
-    zone.run(() => router.navigate([configuration.PAGE_URLS.ERROR]));
+    let previousPage = router.url;
+    zone.run(() => router.navigate([configuration.PAGE_URLS.ERROR, {errorMessage: message, previousPage: previousPage}]));
   }
 }

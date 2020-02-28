@@ -6,8 +6,8 @@
     <mat-card-title>Ups, Seite konnte nicht geladen werden</mat-card-title>
     <mat-card-content>
       <div>
-        <p>Some error occured!</p>
-        <button class="mega-button" mat-button>NEU LADEN</button>
+        <p>Ein Fehler ist aufgetreten: {{message}}</p>
+        <button class="mega-button" mat-button (click)="navigatePreviousPage()">NEU LADEN</button>
       </div>
     </mat-card-content>
   </mat-card>

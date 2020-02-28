@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-error',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ErrorComponent implements OnInit {
 
-  constructor() { }
+  private message: string;
+  private previousUrl: string;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
 
   ngOnInit() {
+    this.route.params.subscribe(params => {this.message = params["errorMessage"]; this.previousUrl = params["previousPage"];});
   }
 
+  navigatePreviousPage() {
+    this.router.navigate([this.previousUrl]);
+  }
 }
