@@ -1,5 +1,5 @@
 <div class="container">
-  <mat-card>
+  <mat-card class="mat-elevation-z8">
     <mat-card-subtitle>{{functions[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
     <mat-card-content>
       {{monthlyReport.employee.firstName}} {{monthlyReport.employee.sureName}}
@@ -10,7 +10,6 @@
 
   <div class="container-mat-table mat-elevation-z8">
     <mat-table [dataSource]="datasourceTimeTable">
-
 
       <ng-container matColumnDef="headline">
         <mat-header-cell class="headline" *matHeaderCellDef>Pausen</mat-header-cell>
