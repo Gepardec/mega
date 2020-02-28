@@ -1,6 +1,16 @@
+@import "src/app/styles/button-style";
+
 .main-div {
   height: 85%;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.mat-card-header {
+  margin-bottom: 5%;
+}
+
+.sad-face {
+  margin-left: -8%;
 }
