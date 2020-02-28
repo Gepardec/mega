@@ -8,6 +8,7 @@ import {CalenderComponent} from './components/calender/calender.component';
 import {HeaderComponent} from './components/header/header.component';
 import {UserActionsComponent} from './components/header/user-actions/user-actions.component';
 import {RouterModule} from '@angular/router';
+import { ErrorComponent} from "./components/error/error.component";
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {RouterModule} from '@angular/router';
     CalenderComponent,
     HeaderComponent,
     UserActionsComponent,
-    LoginComponent
+    LoginComponent,
+    ErrorComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +32,8 @@ import {RouterModule} from '@angular/router';
     CalenderComponent,
     HeaderComponent,
     UserActionsComponent,
-    LoginComponent
+    LoginComponent,
+    ErrorComponent
   ],
   entryComponents: [
     DatePickerDialogComponent
