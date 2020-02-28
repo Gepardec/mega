@@ -30,7 +30,6 @@ export class EmployeesGridListComponent implements OnInit {
   openDialog(employee: Employee): void {
     const config: MatDialogConfig = new MatDialogConfig();
     config.data = employee;
-    // TODO: why is DatePickerDialogComponent not imported from SharedModule???
     const dialogRef = this.dialog.open(DatePickerDialogComponent, config);
 
     dialogRef.afterClosed().subscribe(result => {

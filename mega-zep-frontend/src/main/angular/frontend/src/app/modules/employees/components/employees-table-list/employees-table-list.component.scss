@@ -1,5 +1,3 @@
-// TODO: declare variables for styling
-
 @import "src/app/styles/variables";
 @import "src/app/styles/table-style";
 
@@ -20,7 +18,7 @@
   }
 }
 
-// FIXME: uncheck checkbox still has orange color
+// FIXME: uncheck checkbox still has orange color(possible fix - create custom theme)
 ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background, .mat-accent .mat-pseudo-checkbox-checked, .mat-accent .mat-pseudo-checkbox-indeterminate, .mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate {
   background-color: black !important;
 }

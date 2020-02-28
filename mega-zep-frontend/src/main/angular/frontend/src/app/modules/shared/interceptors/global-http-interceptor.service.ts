@@ -1,18 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Observable, Observer, of, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { ErrorHandlerService } from '../services/error/error-handler.service';
 import { UserService } from '../services/user/user.service';
 import { ConfigService } from '../services/config/config.service';
 import { LoaderService } from '../services/loader/loader.service';
-import { empty } from 'rxjs/internal/Observer';
 
 @Injectable({
   providedIn: 'root'
 })
-// TODO: Snackbar opens multiple times because of retry-mechanism of rest calls
-// possible solution: handle error after retries -> implement logic in service where calls are executed
 export class GlobalHttpInterceptorService implements HttpInterceptor {
 
   private readonly HTTP_STATUS_BAD_REQUEST: number = 400;

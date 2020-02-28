@@ -33,7 +33,6 @@ export class EmployeesTableListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // TODO: fix this code(service logic is now in container - how to refactor)
     this.selectionChangedSubscription = this.selection.changed.subscribe(
       (selectedEmployees: SelectionChange<Employee>) => {
         this.displayEmployeeService.setSelectedEmployees(selectedEmployees);
