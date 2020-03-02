@@ -16,6 +16,7 @@ export class ErrorHandlerService implements ErrorHandler {
 
   }
 
+  // FIXME GAJ: redirect with logout doesnt work as expected
   handleError(error: any): void {
     const errorService = this.injector.get(ErrorService);
     const logger = this.injector.get(LoggingService);
