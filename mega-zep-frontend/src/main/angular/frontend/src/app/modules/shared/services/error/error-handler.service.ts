@@ -9,7 +9,7 @@ import {Router} from "@angular/router";
 @Injectable({
   providedIn: 'root'
 })
-// FIXME GAJ: remove NotifiactionService if no longer in use
+// FIXME GAJ: remove NotificationService if no longer in use
 export class ErrorHandlerService implements ErrorHandler {
 
   constructor(private injector: Injector) {
