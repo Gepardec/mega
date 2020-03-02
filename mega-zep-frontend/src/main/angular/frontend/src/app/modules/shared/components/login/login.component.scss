@@ -1,11 +1,5 @@
 @import "src/app/styles/button-style";
-
-.main-div {
-  height: 85%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+@import "src/app/styles/center-component";
 
 .mat-card {
   height: 20vh;
