@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { ErrorHandlerService } from '../services/error/error-handler.service';
 import { UserService } from '../services/user/user.service';
@@ -11,13 +11,6 @@ import { LoaderService } from '../services/loader/loader.service';
   providedIn: 'root'
 })
 export class GlobalHttpInterceptorService implements HttpInterceptor {
-
-  private readonly HTTP_STATUS_BAD_REQUEST: number = 400;
-  private readonly HTTP_STATUS_UNAUTHORIZED: number = 401;
-  private readonly HTTP_STATUS_FORBIDDEN: number = 403;
-  private readonly HTTP_STATUS_NOT_FOUND: number = 404;
-  private readonly HTTP_STATUS_METHOD_NOT_ALLOWED: number = 405;
-  private readonly HTTP_STATUS_REQUEST_TIMEOUT: number = 408;
 
   constructor(
     private errorHandler: ErrorHandlerService,
@@ -34,24 +27,7 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
         tap({complete: () => this.loaderService.stopSpinner()}),
         catchError((error: HttpErrorResponse) => {
             this.loaderService.stopSpinner();
-            switch (error.status) {
-              case this.HTTP_STATUS_BAD_REQUEST:
-                return this.handleError(error);
-              case this.HTTP_STATUS_UNAUTHORIZED:
-                this.userService.logout();
-                return this.handleError(error);
-              case this.HTTP_STATUS_FORBIDDEN:
-                this.userService.logout();
-                return this.handleError(error);
-              case this.HTTP_STATUS_NOT_FOUND:
-                return this.handleError(error);
-              case this.HTTP_STATUS_METHOD_NOT_ALLOWED:
-                return this.handleError(error);
-              case this.HTTP_STATUS_REQUEST_TIMEOUT:
-                return this.handleError(error);
-              default:
-                return throwError(error);
-            }
+            return this.handleError(error);
           }
         )
       );

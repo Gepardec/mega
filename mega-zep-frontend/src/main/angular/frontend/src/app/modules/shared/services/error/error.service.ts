@@ -1,10 +1,19 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpErrorResponse} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ErrorService {
+
+  getErrorMessage(error: Error): string {
+    if (error instanceof HttpErrorResponse) {
+      // Server Error
+      return this.getServerMessage(error);
+    }
+    // Client Error
+    return this.getClientMessage(error);
+  }
 
   getClientMessage(error: Error): string {
     if (!navigator.onLine) {
