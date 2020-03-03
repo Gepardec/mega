@@ -17,6 +17,7 @@ export class ErrorComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // FIXME GAJ: get params from service not from pathparam
     this.route.params.subscribe(params => {this.message = params["errorMessage"]; this.previousUrl = params["previousPage"];});
   }
 
