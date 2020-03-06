@@ -7,11 +7,11 @@ import {HttpErrorResponse} from '@angular/common/http';
 export class ErrorService {
 
   message: string;
-  redirectPage: string;
+  redirectUrl: string;
 
   storeLastErrorData(message: string, redirectPage: string) {
     this.message = message;
-    this.redirectPage = redirectPage;
+    this.redirectUrl = redirectPage;
   }
 
   removeLastErrorData() {

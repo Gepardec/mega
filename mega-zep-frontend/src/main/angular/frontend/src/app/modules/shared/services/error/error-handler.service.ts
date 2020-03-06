@@ -31,19 +31,20 @@ export class ErrorHandlerService implements ErrorHandler {
   }
 
   showErrorPage(message: string, logout: boolean) {
+    let redirectUrl;
     const router = this.injector.get(Router);
     const zone = this.injector.get(NgZone);
 
-    let redirectPage;
     if (logout) {
+      redirectUrl = configuration.PAGE_URLS.LOGIN;
+      
       const userService = this.injector.get(UserService);
       userService.logoutWithoutRedirect();
-      redirectPage = configuration.PAGE_URLS.LOGIN;
     } else {
-      redirectPage = router.url;
+      redirectUrl = router.url;
     }
 
-    this.errorService.storeLastErrorData(message, redirectPage);
+    this.errorService.storeLastErrorData(message, redirectUrl);
     zone.run(() => router.navigate([configuration.PAGE_URLS.ERROR]));
   }
 }

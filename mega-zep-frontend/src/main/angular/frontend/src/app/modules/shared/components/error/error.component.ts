@@ -9,22 +9,23 @@ import {ErrorService} from "../../services/error/error.service";
 })
 export class ErrorComponent implements OnInit {
 
-  private message: string;
-  private previousUrl: string;
+  private errorMessage: string;
+  private redirectUrl: string;
 
   constructor(
     private router: Router,
     private injector: Injector
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     const errorService = this.injector.get(ErrorService);
-    this.message = errorService.message;
-    this.previousUrl = errorService.redirectPage;
+    this.errorMessage = errorService.message;
+    this.redirectUrl = errorService.redirectUrl;
     errorService.removeLastErrorData();
   }
 
   navigatePreviousPage() {
-    this.router.navigate([this.previousUrl]);
+    this.router.navigate([this.redirectUrl]);
   }
 }
