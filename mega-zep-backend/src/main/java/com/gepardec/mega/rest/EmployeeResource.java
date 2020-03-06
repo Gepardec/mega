@@ -24,8 +24,7 @@ public class EmployeeResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getEmployees() {
-        return Response.status(401).build();
-        // return Response.ok(employeeService.getAllActiveEmployees()).build();
+        return Response.ok(employeeService.getAllActiveEmployees()).build();
     }
 
     @RolesAllowed(allowedRoles = {Role.ADMINISTRATOR, Role.CONTROLLER})
