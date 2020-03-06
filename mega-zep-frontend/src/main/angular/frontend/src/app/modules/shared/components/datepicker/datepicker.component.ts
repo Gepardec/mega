@@ -13,7 +13,7 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
   private format = configuration.dateFormat;
   today: Date = new Date();
 
-  @ViewChild('picker', {static: false}) datePicker: MatDatepicker<Date>;
+  @ViewChild('picker') datePicker: MatDatepicker<Date>;
   @Output() dateEmitter: EventEmitter<string> = new EventEmitter<string>();
   selectedDate: string;
 

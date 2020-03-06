@@ -13,13 +13,13 @@ export const routes: Routes = [
   {
     path: configuration.PAGE_URLS.MONTHLY_REPORT,
     component: MonthlyReportComponent,
-    loadChildren: './modules/monthly-report/monthly-report.module#MonthlyReportModule',
+    loadChildren: () => import('./modules/monthly-report/monthly-report.module').then(m => m.MonthlyReportModule),
     canActivate: [LoginGuard]
   },
   {
     path: configuration.PAGE_URLS.EMPLOYEES,
     component: EmployeesComponent,
-    loadChildren: './modules/employees/employees.module#EmployeesModule',
+    loadChildren: () => import('./modules/employees/employees.module').then(m => m.EmployeesModule),
     data: {
       roles: [Role.ADMINISTRATOR, Role.CONTROLLER]
     },
