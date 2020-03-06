@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { JwksValidationHandler, OAuthService } from 'angular-oauth2-oidc';
+import { OAuthService } from 'angular-oauth2-oidc';
 import { authConfig } from './auth/auth.config';
 import { Router } from '@angular/router';
 import { UserService } from './modules/shared/services/user/user.service';
 import { ConfigService } from './modules/shared/services/config/config.service';
 import { Config } from './modules/shared/models/Config';
 import { Subscription } from 'rxjs';
+import { JwksValidationHandler } from 'angular-oauth2-oidc-jwks';
 
 @Component({
   selector: 'app-root',
