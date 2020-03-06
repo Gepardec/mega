@@ -87,7 +87,7 @@ public class WarningCalculatorTest {
                 () -> assertNull(warnings.get(0).getMissingRestTime()),
                 () -> assertEquals(0.5, warnings.get(0).getMissingBreakTime()),
                 () -> assertEquals(3.0, warnings.get(0).getExcessWorkTime()),
-                //seconda day
+                //second day
                 () -> assertEquals(LocalDate.of(2020, 1, 8), warnings.get(1).getDate()),
                 () -> assertEquals(3.0, warnings.get(1).getMissingRestTime()),
                 () -> assertNull(warnings.get(1).getMissingBreakTime()),
