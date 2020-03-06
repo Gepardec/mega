@@ -36,7 +36,8 @@ mega.image.logo.url=<YOUR_LOGO_URL>
 mega.wiki.eom.url=<YOUR_EOM_URL>
 
 ## ZEP ##
-zep.soap.token=***
+mega.zep.admin.token=***
+mega.zep.admin.endpoint=https://www.your-zep-url.com/soap-uri
 
 ## MAIL ##
 quarkus.mailer.auth-methods=DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN
