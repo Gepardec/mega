@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {MatDatepicker} from '@angular/material';
+import { MatDatepicker } from '@angular/material/datepicker';
 import {formatDate} from '@angular/common';
 import {configuration} from '../../constants/configuration';
 
