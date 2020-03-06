@@ -9,7 +9,7 @@ import {ErrorService} from "../../services/error/error.service";
 })
 export class ErrorComponent implements OnInit {
 
-  private errorMessage: string;
+  errorMessage: string;
   private redirectUrl: string;
 
   constructor(
