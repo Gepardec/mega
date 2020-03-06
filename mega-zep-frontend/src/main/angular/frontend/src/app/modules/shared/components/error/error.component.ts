@@ -1,5 +1,5 @@
 import {Component, Injector, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {ErrorService} from "../../services/error/error.service";
 
 @Component({
@@ -13,7 +13,6 @@ export class ErrorComponent implements OnInit {
   private previousUrl: string;
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private injector: Injector
   ) { }
