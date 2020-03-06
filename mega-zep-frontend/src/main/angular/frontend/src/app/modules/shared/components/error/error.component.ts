@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Injector, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
+import {ErrorService} from "../../services/error/error.service";
 
 @Component({
   selector: 'app-error',
@@ -13,12 +14,15 @@ export class ErrorComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private injector: Injector
   ) { }
 
   ngOnInit() {
-    // FIXME GAJ: get params from service not from pathparam
-    this.route.params.subscribe(params => {this.message = params["errorMessage"]; this.previousUrl = params["previousPage"];});
+    const errorService = this.injector.get(ErrorService);
+    this.message = errorService.message;
+    this.previousUrl = errorService.redirectPage;
+    errorService.removeLastErrorData();
   }
 
   navigatePreviousPage() {

@@ -6,6 +6,19 @@ import {HttpErrorResponse} from '@angular/common/http';
 })
 export class ErrorService {
 
+  message: string;
+  redirectPage: string;
+
+  storeLastErrorData(message: string, redirectPage: string) {
+    this.message = message;
+    this.redirectPage = redirectPage;
+  }
+
+  removeLastErrorData() {
+    delete this.message;
+    delete this.message;
+  }
+
   getErrorMessage(error: Error): string {
     if (error instanceof HttpErrorResponse) {
       // Server Error
