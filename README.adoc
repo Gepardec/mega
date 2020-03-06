@@ -11,6 +11,13 @@ Make End-of-the-month-process Great Again!
 - node.js 12+
 - npm 6+
 
+=== Backend setup
+- current application.properties file @ mega-zep-backend/config/:
+    * https://drive.google.com/drive/folders/13w1kmHHgH7jIl9utx0RCmfFLMqsM53s1[google drive]
+- new run config(maven):
+    * working dir: mega-zep-backend
+    * command line: clean compile quarkus:dev
+
 ==== Frontend Setup
 
 - install node.js
@@ -18,10 +25,6 @@ Make End-of-the-month-process Great Again!
 - cd mega-zep-frontend/src/main/angular/frontend
 - npm install
 - npx ng serve / npx ng test
-
-==== ZEP-Connector
-
-See link:mega-zep-connector/README.adoc[README of ZEP-Connector] for more information.
 
 ==== Configuration
 
@@ -67,8 +70,13 @@ mega.test.googleuser.id=<USER_ID>
 frontend:
 [source]
 ----
+cd mega-zep-frontend/src/main/angular/frontend
+npm install
+npm run sonar
 npx ng test --watch=false --code-coverage && npm run sonar -- -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin
 ----
+- under linux you need to install chrome or configure karma to https://developerslogblog.wordpress.com/2019/03/19/how-to-fix-no-binary-for-chrome-browser-on-your-platform/[use firefox]
+- https://medium.com/@learning.bikash/angular-code-coverage-with-sonarqube-d2283442080b[quick setup angular with sonarqube]
 
 backend: 
 [source]
