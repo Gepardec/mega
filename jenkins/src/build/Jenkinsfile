@@ -119,7 +119,6 @@ pipeline {
         failure {
             script {
                 emailext attachLog: true,
-                        to: params.EmailRecipients,
                         recipientProviders: [
                                 [$class: 'DevelopersRecipientProvider'],
                                 [$class: 'RequesterRecipientProvider']
@@ -136,7 +135,6 @@ Please see ${env.RUN_DISPLAY_URL} for further details
         fixed {
             script {
                 emailext attachLog: true,
-                        to: params.EmailRecipients,
                         recipientProviders: [
                                 [$class: 'DevelopersRecipientProvider'],
                                 [$class: 'RequesterRecipientProvider']
