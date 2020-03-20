@@ -60,7 +60,7 @@ pipeline {
                     agent {
                         kubernetes {
                             cloud 'openshift'
-                            yamlFile "./jenkins/src/build/quarkus-build-pod.yaml"
+                            yamlFile "./jenkins/src/build/openjdk-11-build-pod.yaml"
                         }
                     }
                     stages {
