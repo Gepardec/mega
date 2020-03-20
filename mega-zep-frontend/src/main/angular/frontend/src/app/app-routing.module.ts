@@ -1,45 +1,37 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import {MainLayoutComponent} from "./shared/main-layout/main-layout/main-layout.component";
-import {GoogleSigninComponent} from "./signin/google-signin/google-signin.component";
-import {DashboardPagesModule} from "./main-pages/dashboard/home/home.module";
-import {HomePagesModule} from "./main-pages/home/home.module";
-import {GoogleUserAuthenticationGuard} from "./shared/guards/google-user-authentication.guard";
-import {EmployeesPagesModule} from "./main-pages/employees/home/home.module";
+import { RouterModule, Routes } from '@angular/router';
+import { configuration } from './modules/shared/constants/configuration';
+import { LoginComponent } from './modules/shared/components/login/login.component';
+import { LoginGuard } from './modules/shared/guards/login.guard';
+import { EmployeesComponent } from './modules/employees/employees.component';
+import { MonthlyReportComponent } from './modules/monthly-report/monthly-report.component';
+import { RolesGuard } from './modules/shared/guards/roles.guard';
+import { Role } from './modules/shared/models/Role';
 
 
 export const routes: Routes = [
   {
-    path: 'home',
-    component: MainLayoutComponent,
-    loadChildren: () => HomePagesModule,
-    data: { pageTitle: 'Home' },
-    canActivate: [GoogleUserAuthenticationGuard]
+    path: configuration.PAGE_URLS.MONTHLY_REPORT,
+    component: MonthlyReportComponent,
+    loadChildren: './modules/monthly-report/monthly-report.module#MonthlyReportModule',
+    canActivate: [LoginGuard]
   },
   {
-    path: 'dashboard',
-    component: MainLayoutComponent,
-    loadChildren: () => DashboardPagesModule,
-    data: { pageTitle: 'Dashboard' },
-    canActivate: [GoogleUserAuthenticationGuard]
+    path: configuration.PAGE_URLS.EMPLOYEES,
+    component: EmployeesComponent,
+    loadChildren: './modules/employees/employees.module#EmployeesModule',
+    data: {
+      roles: [Role.ADMINISTRATOR, Role.CONTROLLER]
+    },
+    canActivate: [LoginGuard, RolesGuard]
   },
   {
-    path: 'employees',
-    component: MainLayoutComponent,
-    loadChildren: () => EmployeesPagesModule,
-    data: { pageTitle: 'Employees' },
-    canActivate: [GoogleUserAuthenticationGuard]
+    path: configuration.PAGE_URLS.LOGIN, component: LoginComponent
   },
-  { path: '', redirectTo: 'login', pathMatch: 'full'},
-
-  { path: '#', redirectTo: 'login' },
-
-  { path: 'login', component: GoogleSigninComponent},
-
-  { path: '**', redirectTo: 'login' }
-
+  {path: '', redirectTo: configuration.PAGE_URLS.LOGIN, pathMatch: 'full'},
+  {path: '#', redirectTo: configuration.PAGE_URLS.LOGIN},
+  {path: '**', redirectTo: configuration.PAGE_URLS.LOGIN}
 ];
-
 
 
 @NgModule({

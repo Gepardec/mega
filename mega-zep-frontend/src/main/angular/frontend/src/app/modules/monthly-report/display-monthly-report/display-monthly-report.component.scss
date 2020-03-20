@@ -1,0 +1,42 @@
+@import "src/app/styles/variables";
+@import "src/app/styles/table-style";
+
+.mat-card {
+  margin-top: 8%;
+}
+
+.mat-card-subtitle {
+  margin-left: 20px;
+}
+
+.mat-card-content {
+  font-size: 20px;
+  margin-left: 20px;
+  margin-right: 30px;
+}
+
+.mat-card-date {
+  float: right;
+}
+
+.container-mat-table {
+  margin-top: 8%;
+  height: 30vh;
+  overflow: auto;
+}
+
+.mat-column-date-journey {
+  max-width: 25%;
+}
+
+// FIXME GAJ: Bug where checkbox changes color to black after visiting Mitarbeiteruebersicht(possible fix - create custom theme)
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background, .mat-accent .mat-pseudo-checkbox-checked, .mat-accent .mat-pseudo-checkbox-indeterminate, .mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate {
+  background-color: green !important;
+}
+
+.no-warning-text {
+  font-size: 18px;
+  font-weight: bold;
+  margin-left: 1%;
+  margin-bottom: 0.5%;
+}

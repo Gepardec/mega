@@ -1,0 +1,135 @@
+#!groovy
+
+pipeline {
+    agent any
+
+    environment {
+        REVISION = buildRevisionForBranch()
+    }
+
+    options {
+        disableConcurrentBuilds()
+        parallelsAlwaysFailFast()
+    }
+
+    stages {
+        stage("Build") {
+            parallel {
+                stage('frontend') {
+                    agent {
+                        kubernetes {
+                            cloud 'openshift'
+                            yamlFile "./jenkins/src/build/nodejs-build-pod.yaml"
+                        }
+                    }
+                    stages {
+                        stage('Build Artefakt') {
+                            steps {
+                                script {
+                                    container('nodejs') {
+                                        dir('mega-zep-frontend/src/main/angular/frontend') {
+                                            sh "npm install"
+                                            sh "npx ng test --browsers=ChromeHeadlessNoSandbox --watch=false"
+                                            sh "npx ng build --configuration=production"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        stage('Build Image') {
+                            steps {
+                                script {
+                                    container('nodejs') {
+                                        dir('mega-zep-frontend/src/main/angular/frontend') {
+                                            openshift.withCluster() {
+                                                sh "oc start-build mega-zep-frontend --commit=${env.GIT_COMMIT} \
+                                                                                         --from-dir=dist/frontend \
+                                                                                         --follow \
+                                                                                         --wait"
+                                                openshift.tag("mega-zep-frontend:latest", "mega-zep-frontend:${env.REVISION}")
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                stage('backend') {
+                    agent {
+                        kubernetes {
+                            cloud 'openshift'
+                            yamlFile "./jenkins/src/build/quarkus-build-pod.yaml"
+                        }
+                    }
+                    stages {
+                        stage('Build Artefakt') {
+                            steps {
+                                script {
+                                    container('quarkus') {
+                                        withCredentials([file(credentialsId: 'mega-secrets', variable: 'FILE')]) {
+                                            sh "mkdir -p ./mega-zep-backend/config"
+                                            sh "cp -f ${FILE} ./mega-zep-backend/config/application.properties"
+                                            sh "mvn -B -s jenkins-settings.xml \
+                                                   install \
+                                                   -Drevision=${env.REVISION} \
+                                                   -Dquarkus.package.uber.jar=true"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        stage('Build Image') {
+                            steps {
+                                script {
+                                    container('quarkus') {
+                                        dir('mega-zep-backend/target/') {
+                                            openshift.withCluster() {
+                                                def artifact = "mega-zep-backend-${env.REVISION}-runner.jar"
+                                                sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait"
+                                                openshift.tag("mega-zep-backend:latest", "mega-zep-backend:${env.REVISION}")
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        stage('Deploy DEV') {
+            when {
+                branch "develop"
+            }
+            steps {
+                script {
+                    build job: 'mega-release', parameters: [
+                            string(name: 'Branch', value: "${env.GIT_COMMIT}"),
+                            string(name: 'sourceEnvironment', value: 'dev'),
+                            string(name: 'targetEnvironment', value: "dev"),
+                            string(name: 'version', value: "${env.REVISION}")]
+                }
+            }
+        }
+    }
+}
+
+def buildRevisionForBranch(String pomLocation = "./") {
+    def branch = "${env.GIT_BRANCH}".trim().toLowerCase()
+    def revision = "";
+    if (branch.equals("develop")) {
+        pom = readMavenPom file: pomLocation + 'pom.xml'
+        return pom.properties['revision']
+    } else if (branch.startsWith("feature/")) {
+        return branch.replace("/", "-").toUpperCase()
+    } else if (branch.startsWith("PR-")) {
+        return branch.replace("/", "-").toUpperCase()
+    } else if (branch.startsWith("release/") || branch.startsWith("hotfix/")) {
+        pom = readMavenPom file: pomLocation + 'pom.xml'
+        return pom.properties['revision']
+    } else {
+        error("Branch not detected. branch=${branch}")
+    }
+}

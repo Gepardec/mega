@@ -1,0 +1,1 @@
+add application.properties file with custom settings to this directory to override settings in src/main/resources/application.properties

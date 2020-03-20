@@ -1,0 +1,27 @@
+<mat-toolbar class="toolbar" color="primary">
+  <mat-toolbar-row>
+    <img class="logo-mega" [src]= "assetsPath + logoMega" alt="">
+
+    <nav mat-tab-nav-bar *ngIf="user">
+      <ng-container *ngFor="let link of links">
+        <a mat-tab-link *ngIf="showLink(link)" [routerLink]="link.path" routerLinkActive #rla="routerLinkActive"
+           [active]="rla.isActive">
+          {{ link.name }}
+        </a>
+      </ng-container>
+    </nav>
+
+    <span class="filler"></span>
+
+    <a [href]="spreadSheetUrl" target="_blank" *ngIf="user">
+      <img class="excelImg" [src] = "assetsPath + excelLogo" alt="Dashboard Link">
+    </a>
+    <a [href]="zepUrl" target="_blank" *ngIf="user">
+      <img class="zepImg" [src] = "assetsPath + zepLogo" alt="ZEP Link">
+    </a>
+
+    <div class="useractions" *ngIf="user">
+      <app-user-actions [user]="user" (logout)="onLogout($event)"></app-user-actions>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>

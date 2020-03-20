@@ -1,0 +1,45 @@
+@import "src/app/styles/variables";
+@import "src/app/styles/table-style";
+
+.example-container {
+  height: 80vh;
+  overflow: auto;
+}
+
+.mat-column-auswaehlen {
+  max-width: 10%;
+}
+
+.mat-row {
+  min-height: 65px;
+
+  &.selected {
+    background: #dddddd;
+  }
+}
+
+// FIXME: uncheck checkbox still has orange color(possible fix - create custom theme)
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background, .mat-accent .mat-pseudo-checkbox-checked, .mat-accent .mat-pseudo-checkbox-indeterminate, .mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate {
+  background-color: black !important;
+}
+
+.releaseDone {
+  background-color: #E1FAED;
+  color: black !important;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.releaseInProgress {
+  background-color: #FFEFD9;
+  color: black !important;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.releaseWarning {
+  background-color: #FFE3E7;
+  color: black !important;
+  border-radius: 5px;
+  padding: 5px;
+}

@@ -1,0 +1,42 @@
+.card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.card-header {
+  float: left;
+  background-color: white;
+  width: 50%;
+}
+
+.employee-card {
+  width: 100%;
+}
+
+.releaseBtn {
+  width: 30%;
+  padding: 0;
+  background-color: rgb(67, 66, 93);
+  border-radius: 5px;
+  color: white;
+  margin: 10px 0 0 0 !important;
+}
+
+.releaseWarn {
+  background-color: rgb(255, 227, 231);
+  color: black !important;
+  border-radius: 20px;
+  font-size: small;
+}
+
+.releaseSuccess {
+  background-color: rgb(225, 250, 237);
+  color: black !important;
+  border-radius: 20px;
+  font-size: small;
+}
+
+.mat-button {
+  line-height: 25px;
+}

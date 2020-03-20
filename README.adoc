@@ -4,7 +4,82 @@ Make End-of-the-month-process Great Again!
 
 == Prerequisites
 
+=== Project setup
+
 - Java 11
 - Maven 3.5+
+- node.js 12+
+- npm 6+
 
-See link:mega-zep-connector/README.adoc[README of ZEP-Connector] for more information.
+=== Backend setup
+- current application.properties file @ mega-zep-backend/config/:
+    * available internally
+- new run config(maven):
+    * working dir: mega-zep-backend
+    * command line: clean compile quarkus:dev
+
+==== Frontend Setup
+
+- install node.js
+- npm install -g @angular/cli
+- cd mega-zep-frontend/src/main/angular/frontend
+- npm install
+- npx ng serve / npx ng test
+
+==== Configuration
+
+./mega-zep-backend/config/application.properties (externalized configurations)
+[source,properties]
+----
+## COMMON ##
+mega.image.logo.url=<YOUR_LOGO_URL>
+mega.wiki.eom.url=<YOUR_EOM_URL>
+
+## ZEP ##
+mega.zep.admin.token=***
+mega.zep.admin.endpoint=https://www.your-zep-url.com/soap-uri
+
+## MAIL ##
+quarkus.mailer.auth-methods=DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN
+quarkus.mailer.from=<MAIL_FROM>
+quarkus.mailer.host=<MAIL_HOST>
+quarkus.mailer.port=<MAIL_PORT>
+quarkus.mailer.ssl=<SSL_ENABLED>
+quarkus.mailer.username=<MAIL_ACCOUNT_USERNAME>
+quarkus.mailer.password=<MAIL_ACCOUNT_PASSWORD>
+quarkus.mailer.mock=false
+
+mega.mail.firstbusinessday.reminder=<MAIL_REMINDER_MAIL>
+
+## TEST USER ##
+mega.test.googleuser.email=<USER_EMAIL>
+mega.test.googleuser.id=<USER_ID>
+----
+
+## TODO
+
+- Remove google-secrets not needed anymore
+- Recreate newly introduced secrets
+- Modify frontend template to map secret 'asset/config.json' into html root where the clientId and backendOrigin is defined
+- Jenkins build pipeline does not need to replace client_id anymore
+
+## instructions for local sonar
+- docker pull sonarqube
+- docker run -d --name sonarqube -p 9000:9000 sonarqube
+
+frontend:
+[source]
+----
+cd mega-zep-frontend/src/main/angular/frontend
+npm install
+npm run sonar
+npx ng test --watch=false --code-coverage && npm run sonar -- -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin
+----
+- under linux you need to install chrome or configure karma to https://developerslogblog.wordpress.com/2019/03/19/how-to-fix-no-binary-for-chrome-browser-on-your-platform/[use firefox]
+- https://medium.com/@learning.bikash/angular-code-coverage-with-sonarqube-d2283442080b[quick setup angular with sonarqube]
+
+backend: 
+[source]
+----
+mvn clean verify -P sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin
+----

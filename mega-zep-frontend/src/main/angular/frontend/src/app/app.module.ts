@@ -1,64 +1,41 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { ErrorHandler, NgModule } from '@angular/core';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { APP_BASE_HREF, registerLocaleData } from '@angular/common';
+import localeDeAt from '@angular/common/locales/de-AT';
+import { SharedModule } from './modules/shared/shared.module';
+import { OAuthModule, OAuthModuleConfig } from 'angular-oauth2-oidc';
+import { EmployeesModule } from './modules/employees/employees.module';
+import { GlobalHttpInterceptorService } from './modules/shared/interceptors/global-http-interceptor.service';
+import { authConfigFactory } from './auth/auth.config.factory';
+import { ConfigService } from './modules/shared/services/config/config.service';
+import { ErrorHandlerService } from './modules/shared/services/error/error-handler.service';
+import { MonthlyReportModule } from './modules/monthly-report/monthly-report.module';
 
-import {AppRoutingModule} from './app-routing.module';
-import {AppComponent} from './app.component';
-import {AuthServiceConfig, GoogleLoginProvider, LoginOpt, SocialLoginModule} from 'angularx-social-login';
-import {GoogleSigninComponent} from './signin/google-signin/google-signin.component';
-import {HttpClientModule} from "@angular/common/http";
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MainLayoutModule} from "./shared/main-layout/main-layout/main-layout.module";
-import {NavigationModule} from "./shared/navigation/navigation.module";
-import {HomeComponent} from './main-pages/employees/home/home.component';
-import { PaginationComponent } from './main-pages/employees/pagination/pagination.component';
-import { GridlistComponent } from './main-pages/employees/views/gridlist/gridlist.component';
-import { TablelistComponent } from './main-pages/employees/views/tablelist/tablelist.component';
-
-let config = new AuthServiceConfig([
-  {
-    id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider('259022406161-oi9mt111p3j3ul93dikbf2etfjoo4vjm.apps.googleusercontent.com')
-  },
-]);
-
-export function provideConfig() {
-  return config;
-}
-
-const googleLoginOptions: LoginOpt = {
-  scope: 'profile email'
-};
-
+registerLocaleData(localeDeAt, 'de-AT');
 
 @NgModule({
   declarations: [
-    AppComponent,
-    GoogleSigninComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SocialLoginModule,
     HttpClientModule,
+    OAuthModule.forRoot(),
     BrowserAnimationsModule,
-    NavigationModule,
-    MainLayoutModule
-  ],
-  exports: [
-    BrowserModule,
-    AppRoutingModule,
-    SocialLoginModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    NavigationModule,
-    MainLayoutModule
+    SharedModule,
+    EmployeesModule,
+    MonthlyReportModule
   ],
   providers: [
-    HttpClientModule,
-    {
-      provide: AuthServiceConfig,
-      useFactory: provideConfig
-    },
+    {provide: APP_BASE_HREF, useValue: '/'},
+    {provide: ErrorHandler, useClass: ErrorHandlerService},
+    {provide: OAuthModuleConfig, useFactory: authConfigFactory, deps: [ConfigService]},
+    {provide: HTTP_INTERCEPTORS, useClass: GlobalHttpInterceptorService, multi: true}
   ],
   bootstrap: [AppComponent]
 })

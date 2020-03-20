@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  // Base url
+  frontendOriginSegment: '4200',
+  backendOriginSegment: '8080',
 };
 
 /*
