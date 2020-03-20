@@ -16,6 +16,7 @@ export class ErrorHandlerService implements ErrorHandler {
   errorService: ErrorService;
 
   constructor(private injector: Injector) {
+    // TODO: using injector is bad practice, we should refactor this and move potential cyclic dependency router to error-service
     this.errorService = this.injector.get(ErrorService);
   }
 
@@ -37,7 +38,7 @@ export class ErrorHandlerService implements ErrorHandler {
 
     if (logout) {
       redirectUrl = configuration.PAGE_URLS.LOGIN;
-      
+
       const userService = this.injector.get(UserService);
       userService.logoutWithoutRedirect();
     } else {
@@ -45,6 +46,7 @@ export class ErrorHandlerService implements ErrorHandler {
     }
 
     this.errorService.storeLastErrorData(message, redirectUrl);
+    // TODO: use of zone is dangerous and should be avoided, as mentioned above we should move the router to error-service to solve cyclic dependency
     zone.run(() => router.navigate([configuration.PAGE_URLS.ERROR]));
   }
 }

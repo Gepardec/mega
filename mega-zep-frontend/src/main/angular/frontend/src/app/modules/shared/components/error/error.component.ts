@@ -19,6 +19,7 @@ export class ErrorComponent implements OnInit {
   }
 
   ngOnInit() {
+    // TODO: using injector is bad practice, we should refactor this
     const errorService = this.injector.get(ErrorService);
     this.errorMessage = errorService.message;
     this.redirectUrl = errorService.redirectUrl;
