@@ -114,6 +114,40 @@ pipeline {
             }
         }
     }
+
+    post {
+        failure {
+            script {
+                emailext attachLog: true,
+                        to: params.EmailRecipients,
+                        recipientProviders: [
+                                [$class: 'DevelopersRecipientProvider'],
+                                [$class: 'RequesterRecipientProvider']
+                        ],
+                        subject: "MEGA Jenkions Job ${env.JOB_NAME}#${env.BUILD_NUMBER} failed",
+                        body: """
+Build for Branch '${env.GIT_BRANCH}@${env.GIT_COMMIT}' has failed.
+
+Please see ${env.RUN_DISPLAY_URL} for further details
+"""
+            }
+        }
+
+        fixed {
+            script {
+                emailext attachLog: true,
+                        to: params.EmailRecipients,
+                        recipientProviders: [
+                                [$class: 'DevelopersRecipientProvider'],
+                                [$class: 'RequesterRecipientProvider']
+                        ],
+                        subject: "MEGA Jenkions Job ${env.JOB_NAME}#${env.BUILD_NUMBER} fixed",
+                        body: """
+Build for Branch '${env.GIT_BRANCH}@${env.GIT_COMMIT}' has been fixed.
+"""
+            }
+        }
+    }
 }
 
 def buildRevisionForBranch(String pomLocation = "./") {
