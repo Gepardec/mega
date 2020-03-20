@@ -13,7 +13,7 @@ Make End-of-the-month-process Great Again!
 
 === Backend setup
 - current application.properties file @ mega-zep-backend/config/:
-    * https://drive.google.com/drive/folders/13w1kmHHgH7jIl9utx0RCmfFLMqsM53s1[google drive]
+    * available internally
 - new run config(maven):
     * working dir: mega-zep-backend
     * command line: clean compile quarkus:dev
