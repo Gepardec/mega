@@ -68,7 +68,7 @@ pipeline {
                             steps {
                                 script {
                                     container('quarkus') {
-                                        withCredentials([file(credentialsId: 'mega-secrets', variable: 'FILE')]) {
+                                        withCredentials([file(credentialsId: 'jenkins-mega-secrets', variable: 'FILE')]) {
                                             sh "mkdir -p ./mega-zep-backend/config"
                                             sh "cp -f ${FILE} ./mega-zep-backend/config/application.properties"
                                             sh "mvn -B -s jenkins-settings.xml \
