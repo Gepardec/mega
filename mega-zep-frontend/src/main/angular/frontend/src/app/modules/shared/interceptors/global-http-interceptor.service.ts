@@ -1,23 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-import { ErrorHandlerService } from '../services/error/error-handler.service';
-import { UserService } from '../services/user/user.service';
-import { ConfigService } from '../services/config/config.service';
-import { LoaderService } from '../services/loader/loader.service';
+import {Injectable} from '@angular/core';
+import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {Observable, of} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
+import {ErrorHandlerService} from '../services/error/error-handler.service';
+import {UserService} from '../services/user/user.service';
+import {ConfigService} from '../services/config/config.service';
+import {LoaderService} from '../services/loader/loader.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GlobalHttpInterceptorService implements HttpInterceptor {
-
-  private readonly HTTP_STATUS_BAD_REQUEST: number = 400;
-  private readonly HTTP_STATUS_UNAUTHORIZED: number = 401;
-  private readonly HTTP_STATUS_FORBIDDEN: number = 403;
-  private readonly HTTP_STATUS_NOT_FOUND: number = 404;
-  private readonly HTTP_STATUS_METHOD_NOT_ALLOWED: number = 405;
-  private readonly HTTP_STATUS_REQUEST_TIMEOUT: number = 408;
 
   constructor(
     private errorHandler: ErrorHandlerService,
@@ -30,28 +23,17 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
     // apply interceptor on requests to our backend only
     if (req.url.startsWith(this.configService.getBackendUrl())) {
       this.loaderService.showSpinner();
+
       return next.handle(req.clone({withCredentials: true})).pipe(
-        tap({complete: () => this.loaderService.stopSpinner()}),
+        tap({
+          complete: () =>
+            this.loaderService.stopSpinner()
+        }),
+
         catchError((error: HttpErrorResponse) => {
             this.loaderService.stopSpinner();
-            switch (error.status) {
-              case this.HTTP_STATUS_BAD_REQUEST:
-                return this.handleError(error);
-              case this.HTTP_STATUS_UNAUTHORIZED:
-                this.userService.logout();
-                return this.handleError(error);
-              case this.HTTP_STATUS_FORBIDDEN:
-                this.userService.logout();
-                return this.handleError(error);
-              case this.HTTP_STATUS_NOT_FOUND:
-                return this.handleError(error);
-              case this.HTTP_STATUS_METHOD_NOT_ALLOWED:
-                return this.handleError(error);
-              case this.HTTP_STATUS_REQUEST_TIMEOUT:
-                return this.handleError(error);
-              default:
-                return throwError(error);
-            }
+            // TODO: we should lookup documentation on this code, not necessary a problem with this pull request ... is the direct call of handleError from application code valid?
+            return this.handleError(error);
           }
         )
       );

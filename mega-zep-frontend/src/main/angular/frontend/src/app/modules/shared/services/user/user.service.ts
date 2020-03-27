@@ -40,13 +40,22 @@ export class UserService {
 
   public logout(): void {
     this.httpClient.post<void>(this.configService.getBackendUrlWithContext('/user/logout'), null).subscribe(() => {
-      this.oAuthService.logOut();
-      this.configService.logOut();
-      this.user.next(undefined);
-      sessionStorage.removeItem(this.SESSION_STORAGE_KEY);
-
+      this.invalidateUser();
       this.router.navigate([configuration.PAGE_URLS.LOGIN]);
     });
+  }
+
+  public logoutWithoutRedirect(): void {
+    this.httpClient.post<void>(this.configService.getBackendUrlWithContext('/user/logout'), null).subscribe(() => {
+      this.invalidateUser()
+    });
+  }
+
+  invalidateUser() {
+    this.oAuthService.logOut();
+    this.configService.logOut();
+    this.user.next(undefined);
+    sessionStorage.removeItem(this.SESSION_STORAGE_KEY);
   }
 
   public loggedInWithGoogle(): boolean {
