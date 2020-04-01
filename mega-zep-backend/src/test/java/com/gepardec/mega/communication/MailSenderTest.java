@@ -1,8 +1,5 @@
 package com.gepardec.mega.communication;
 
-import com.gepardec.mega.communication.MailSender;
-import com.gepardec.mega.communication.NotificationConfig;
-import com.gepardec.mega.communication.Reminder;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
@@ -12,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,8 +21,8 @@ class MailSenderTest {
     @ConfigProperty(name = "quarkus.mailer.mock")
     boolean mailMockSetting;
 
-    @ConfigProperty(name = "mega.mail.subjectPrefix", defaultValue = "")
-    String subjectPrefix;
+    @ConfigProperty(name = "mega.mail.subjectPrefix")
+    Optional<String> subjectPrefix;
 
     @Inject
     MailSender mailSender;
@@ -88,6 +86,6 @@ class MailSenderTest {
         assertAll(
                 () -> assertEquals(1, sent.size()),
                 () -> assertTrue(sent.get(0).getHtml().startsWith("<p>Hallo " + name)),
-                () -> assertTrue(sent.get(0).getSubject().equals(subjectPrefix + expectedSubject)));
+                () -> assertTrue(sent.get(0).getSubject().equals(subjectPrefix.orElse("") + expectedSubject)));
     }
 }
