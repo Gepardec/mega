@@ -7,8 +7,6 @@ spec:
     - name: quarkus
       image: docker-registry.default.svc:5000/57-mega-dev/jenkins-agent-jdk-11:latest
       imagePullPolicy: Always
-      command:
-        - /docker-entrypoint.sh
       args:
         - cat
       tty: true

@@ -60,7 +60,7 @@ pipeline {
                     agent {
                         kubernetes {
                             cloud 'openshift'
-                            yamlFile "./jenkins/src/build/quarkus-build-pod.yaml"
+                            yamlFile "./jenkins/src/build/openjdk-11-build-pod.yaml"
                         }
                     }
                     stages {
@@ -68,7 +68,7 @@ pipeline {
                             steps {
                                 script {
                                     container('quarkus') {
-                                        withCredentials([file(credentialsId: 'mega-secrets', variable: 'FILE')]) {
+                                        withCredentials([file(credentialsId: 'jenkins-mega-secrets', variable: 'FILE')]) {
                                             sh "mkdir -p ./mega-zep-backend/config"
                                             sh "cp -f ${FILE} ./mega-zep-backend/config/application.properties"
                                             sh "mvn -B -s jenkins-settings.xml \
@@ -106,11 +106,43 @@ pipeline {
             steps {
                 script {
                     build job: 'mega-release', parameters: [
-                            string(name: 'Branch', value: "${env.GIT_COMMIT}"),
+                            string(name: 'Branch', value: "master"),
                             string(name: 'sourceEnvironment', value: 'dev'),
                             string(name: 'targetEnvironment', value: "dev"),
                             string(name: 'version', value: "${env.REVISION}")]
                 }
+            }
+        }
+    }
+
+    post {
+        failure {
+            script {
+                emailext attachLog: true,
+                        recipientProviders: [
+                                [$class: 'DevelopersRecipientProvider'],
+                                [$class: 'RequesterRecipientProvider']
+                        ],
+                        subject: "MEGA Jenkions Job ${env.JOB_NAME}#${env.BUILD_NUMBER} failed",
+                        body: """
+Build for Branch '${env.GIT_BRANCH}@${env.GIT_COMMIT}' has failed.
+
+Please see ${env.RUN_DISPLAY_URL} for further details
+"""
+            }
+        }
+
+        fixed {
+            script {
+                emailext attachLog: true,
+                        recipientProviders: [
+                                [$class: 'DevelopersRecipientProvider'],
+                                [$class: 'RequesterRecipientProvider']
+                        ],
+                        subject: "MEGA Jenkions Job ${env.JOB_NAME}#${env.BUILD_NUMBER} fixed",
+                        body: """
+Build for Branch '${env.GIT_BRANCH}@${env.GIT_COMMIT}' has been fixed.
+"""
             }
         }
     }
