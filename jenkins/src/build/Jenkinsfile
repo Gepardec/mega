@@ -5,7 +5,7 @@ pipeline {
 
     environment {
         REVISION = buildRevisionForBranch()
-        NODE_RESOURCE_LIMITS = "--initial-old-space-size=768 --max-old-space-size=768"
+        NODE_RESOURCE_LIMITS = "--initial-old-space-size=1024 --max-old-space-size=1024"
     }
 
     options {
@@ -29,7 +29,6 @@ pipeline {
                                 script {
                                     container('nodejs') {
                                         dir('mega-zep-frontend/src/main/angular/frontend') {
-                                            sh "env | grep NODE"
                                             sh "npm install"
                                             sh "node ${NODE_RESOURCE_LIMITS} \
                                                      ./node_modules/@angular/cli/bin/ng \
