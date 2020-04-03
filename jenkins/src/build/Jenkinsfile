@@ -25,9 +25,6 @@ pipeline {
                     }
                     stages {
                         stage('Build Artefakt') {
-                            environment {
-                                NODE_OPTIONS = "${NODE_RESOURCE_LIMITS}"
-                            }
                             steps {
                                 script {
                                     container('nodejs') {
