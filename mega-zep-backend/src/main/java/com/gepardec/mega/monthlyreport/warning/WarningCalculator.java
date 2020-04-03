@@ -1,12 +1,12 @@
 package com.gepardec.mega.monthlyreport.warning;
 
+import com.gepardec.mega.aplication.utils.DateUtils;
 import com.gepardec.mega.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.monthlyreport.ProjectTimeManager;
 import com.gepardec.mega.monthlyreport.Task;
 import com.gepardec.mega.monthlyreport.journey.JourneyDirectionHandler;
 import com.gepardec.mega.monthlyreport.journey.JourneyEntry;
 import com.gepardec.mega.monthlyreport.journey.JourneyWarning;
-import com.gepardec.mega.aplication.utils.DateUtils;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -94,6 +94,7 @@ public class WarningCalculator {
 
         List<ProjectTimeEntry> entries = projectTimeManager.getProjectTimes().values().stream()
                 .flatMap(Collection::stream)
+                .filter(entry -> Task.isTask(entry.getTask()))
                 .sorted(Comparator.comparing(ProjectTimeEntry::getFromTime))
                 .collect(Collectors.toList());
 
@@ -128,13 +129,11 @@ public class WarningCalculator {
     }
 
     private static double calcWorkingDurationOfDay(List<ProjectTimeEntry> entriesPerDay) {
-        double dayWorkingDuration = 0.0d;
-        for (ProjectTimeEntry entry : entriesPerDay) {
-            if (!Task.isJourney(entry.getTask())) {
-                dayWorkingDuration += entry.getDurationInHours();
-            }
-        }
-        return dayWorkingDuration;
+        return entriesPerDay.stream()
+                .filter(entry -> Task.isTask(entry.getTask()))
+                .map(ProjectTimeEntry::getDurationInHours)
+                .collect(Collectors.summarizingDouble(Double::doubleValue))
+                .getSum();
     }
 
 
