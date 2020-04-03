@@ -5,6 +5,7 @@ pipeline {
 
     environment {
         REVISION = buildRevisionForBranch()
+        // POD must have' max_limits * 2' regarding memory
         NODE_RESOURCE_LIMITS = "--initial-old-space-size=1024 --max-old-space-size=1024"
     }
 
@@ -33,11 +34,9 @@ pipeline {
                                             sh "node ${NODE_RESOURCE_LIMITS} \
                                                      ./node_modules/@angular/cli/bin/ng \
                                                      test --browsers=ChromeHeadlessNoSandbox --watch=false"
-//                                            sh "npx ng test --browsers=ChromeHeadlessNoSandbox --watch=false"
                                             sh "node ${NODE_RESOURCE_LIMITS} \
                                                      ./node_modules/@angular/cli/bin/ng build \
                                                      --configuration=production"
-//                                            sh "npx ng build --configuration=production"
                                         }
                                     }
                                 }
