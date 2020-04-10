@@ -6,7 +6,7 @@ pipeline {
     environment {
         REVISION = buildRevisionForBranch()
         // POD must have' max_limits * 2' regarding memory
-        NODE_RESOURCE_LIMITS = "--initial-old-space-size=2048 --max-old-space-size=2048"
+        NODE_RESOURCE_LIMITS = "--initial-old-space-size=1024 --max-old-space-size=1024"
     }
 
     options {
@@ -31,6 +31,10 @@ pipeline {
                                     container('nodejs') {
                                         dir('mega-zep-frontend/src/main/angular/frontend') {
                                             sh "npm install"
+                                            // temporary fix see https://github.com/angular/angular/issues/36278
+                                            sh "node ${NODE_RESOURCE_LIMITS} \
+                                                     ./node_modules/angular/compiler-cli/ngcc \
+                                                     --properties es2015 browser module main --async false"
                                             sh "node ${NODE_RESOURCE_LIMITS} \
                                                      ./node_modules/@angular/cli/bin/ng \
                                                      test --browsers=ChromeHeadlessNoSandbox --watch=false"
