@@ -22,6 +22,10 @@ public enum Task {
         return task == REISEN;
     }
 
+    public static boolean isTask(Task task) {
+        return !isJourney(task);
+    }
+
     public static Optional<Task> fromString(String name) {
         return Optional.ofNullable(enumMap.get(StringUtils.defaultIfBlank(name, StringUtils.EMPTY).toUpperCase()));
     }

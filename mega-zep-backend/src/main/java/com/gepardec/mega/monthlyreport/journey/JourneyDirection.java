@@ -26,4 +26,7 @@ public enum JourneyDirection {
         return Optional.ofNullable(enumMap.get(StringUtils.defaultIfEmpty(direction, StringUtils.EMPTY).toUpperCase()));
     }
 
+    public String getDirection() {
+        return direction;
+    }
 }
