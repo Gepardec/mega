@@ -1,6 +1,7 @@
 package com.gepardec.mega.communication.dates;
 
 import com.gepardec.mega.communication.Reminder;
+import com.gepardec.mega.communication.Remindertype;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -8,9 +9,11 @@ import javax.inject.Inject;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-import static com.gepardec.mega.communication.Reminder.*;
 import static java.time.temporal.ChronoField.DAY_OF_MONTH;
 
 @ApplicationScoped
@@ -22,52 +25,46 @@ public class BusinessDayCalculator {
     public Optional<Reminder> getEventForDate(LocalDate actualDate) {
 
         logger.info("starting getEventForDate with date {}", actualDate.toString());
+
+        Map<LocalDate, Reminder> reminderByDate = new HashMap<>(0);
         LocalDate firstWorkingDayOfMonth = calcFirstWorkingDayOfMonthForDate(actualDate);
-        if (actualDate.isEqual(firstWorkingDayOfMonth)) {
-            logReminder(EMPLOYEE_CHECK_PROJECTTIME);
-            return Optional.of(EMPLOYEE_CHECK_PROJECTTIME);
-        }
 
-        LocalDate userCheckContentWorkingDay = addWorkingdays(firstWorkingDayOfMonth, OM_CONTROL_EMPLOYEES_CONTENT.getWorkingDay() - EMPLOYEE_CHECK_PROJECTTIME.getWorkingDay());
-        if (actualDate.isEqual(userCheckContentWorkingDay)) {
-            logReminder(OM_CONTROL_EMPLOYEES_CONTENT);
-            return Optional.of(OM_CONTROL_EMPLOYEES_CONTENT);
-        }
+        Arrays.stream(Reminder.values())
+                .forEach(reminder -> reminderByDate.put(calcDateForReminder(firstWorkingDayOfMonth, reminder), reminder));
 
-        LocalDate plControllingDay = addWorkingdays(firstWorkingDayOfMonth, PL_PROJECT_CONTROLLING.getWorkingDay() - EMPLOYEE_CHECK_PROJECTTIME.getWorkingDay());
-        if (actualDate.isEqual(plControllingDay)) {
-            logReminder(PL_PROJECT_CONTROLLING);
-            return Optional.of(PL_PROJECT_CONTROLLING);
-        }
+        Optional<Reminder> relevantReminder = Optional.ofNullable(reminderByDate.get(actualDate));
+        relevantReminder.ifPresent(reminder -> logger.info("Reminder {} was calculated", reminder.name()));
 
-        LocalDate releaseWorkingDay = addWorkingdays(firstWorkingDayOfMonth, OM_RELEASE.getWorkingDay() - EMPLOYEE_CHECK_PROJECTTIME.getWorkingDay());
-        if (actualDate.isEqual(releaseWorkingDay)) {
-            logReminder(OM_RELEASE);
-            return Optional.of(OM_RELEASE);
-        }
-
-        LocalDate salaryChargingWorkingDay = addWorkingdays(firstWorkingDayOfMonth, OM_ADMINISTRATIVE.getWorkingDay() - EMPLOYEE_CHECK_PROJECTTIME.getWorkingDay());
-        if (actualDate.isEqual(salaryChargingWorkingDay)) {
-            logReminder(OM_ADMINISTRATIVE);
-            return Optional.of(OM_ADMINISTRATIVE);
-        }
-
-        LocalDate salaryTransferWorkingDay = removeWorkingdaysFromNextMonth(actualDate, OM_SALARY.getWorkingDay());
-        if (actualDate.isEqual(salaryTransferWorkingDay)) {
-            logReminder(OM_SALARY);
-            return Optional.of(OM_SALARY);
-        }
-        return Optional.empty();
+        return relevantReminder;
     }
 
-    private void logReminder(Reminder reminder) {
-        logger.info("{}. workingday of month was calculated: - Event: {}", reminder.getWorkingDay(), reminder.name());
+    private LocalDate calcDateForReminder(LocalDate firstWorkingdayOfMonth, Reminder reminder) {
+        if (reminder.getType() == Remindertype.DAY_OF_MONTH_BASED) {
+            return calcNextWorkingdayForDayOfMonth(firstWorkingdayOfMonth, reminder.getDay());
+        } else if (reminder.getType() == Remindertype.WORKING_DAY_BASED) {
+            if (reminder.getDay() > 0) {
+                return addWorkingdays(firstWorkingdayOfMonth, reminder.getDay() - 1);
+            } else {
+                return removeWorkingdaysFromNextMonth(firstWorkingdayOfMonth, reminder.getDay());
+            }
+        } else {
+            return LocalDate.MIN;
+        }
+    }
+
+    private LocalDate calcNextWorkingdayForDayOfMonth(LocalDate actualDate, int dayOfMonth) {
+        LocalDate dayOfMonthDate = actualDate.withDayOfMonth(dayOfMonth);
+        if (isWorkingDay(dayOfMonthDate)) {
+            return dayOfMonthDate;
+        } else {
+            return addWorkingdays(dayOfMonthDate, 1);
+        }
     }
 
 
-    private LocalDate calcFirstWorkingDayOfMonthForDate(LocalDate actual) {
+    private LocalDate calcFirstWorkingDayOfMonthForDate(LocalDate date) {
 
-        LocalDate firstWorkingDayOfMonth = actual.with(DAY_OF_MONTH, 1);
+        LocalDate firstWorkingDayOfMonth = date.with(DAY_OF_MONTH, 1);
 
         while (!isWorkingDay(firstWorkingDayOfMonth)) {
             firstWorkingDayOfMonth = firstWorkingDayOfMonth.plusDays(1);
@@ -80,7 +77,7 @@ public class BusinessDayCalculator {
         if (workdaysToAdd < 1) {
             return date;
         }
-        LocalDate resultDate = date;
+        LocalDate resultDate = LocalDate.from(date);
         int addedDays = 0;
         while (addedDays < workdaysToAdd) {
             resultDate = resultDate.plusDays(1);

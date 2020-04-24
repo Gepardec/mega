@@ -124,6 +124,6 @@ public class MailDaemon {
     }
 
     private void logSentNotification(Reminder reminder) {
-        logger.info("{}. working-day of month. Notification sent for Reminder {}", reminder.getWorkingDay(), reminder.name());
+        logger.info("{}. working-day of month. Notification sent for Reminder {}", reminder.getDay(), reminder.name());
     }
 }
