@@ -128,6 +128,10 @@ public class MailSender {
                 path = notificationConfig.getOmSalaryPath();
                 break;
             }
+            case OM_CONTROL_PROJECTTIMES: {
+                path = notificationConfig.getOmControlProjecttimesPath();
+                break;
+            }
             default: {
                 path = null;
                 break;
@@ -161,6 +165,10 @@ public class MailSender {
             }
             case OM_SALARY: {
                 subject = notificationConfig.getOmSalarySubject();
+                break;
+            }
+            case OM_CONTROL_PROJECTTIMES: {
+                subject = notificationConfig.getOmControlProjecttimesSubject();
                 break;
             }
             default: {

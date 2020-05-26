@@ -54,6 +54,11 @@ class MailSenderTest {
         testMailFor("Garfield", Reminder.OM_CONTROL_EMPLOYEES_CONTENT, notificationConfig.getOmControlEmployeesDataSubject());
     }
 
+    @Test
+    void sendMail_toOmControlProjecttimes() {
+        testMailFor("Dagobert", Reminder.OM_CONTROL_PROJECTTIMES, notificationConfig.getOmControlProjecttimesSubject());
+    }
+
 
     @Test
     void sendMail_toOmRelease() {

@@ -43,6 +43,13 @@ public class NotificationConfig {
     @ConfigProperty(name = "mega.mail.reminder.om.salary.subject")
     String omSalarySubject;
 
+    @ConfigProperty(name = "mega.mail.reminder.om.controlprojecttimes.path")
+    String omControlProjecttimesPath;
+
+    @ConfigProperty(name = "mega.mail.reminder.om.controlprojecttimes.subject")
+    String omControlProjecttimesSubject;
+
+
     public String getEmployeePath() {
         return employeePath;
     }
@@ -89,5 +96,13 @@ public class NotificationConfig {
 
     public String getOmSalarySubject() {
         return omSalarySubject;
+    }
+
+    public String getOmControlProjecttimesPath() {
+        return omControlProjecttimesPath;
+    }
+
+    public String getOmControlProjecttimesSubject() {
+        return omControlProjecttimesSubject;
     }
 }
