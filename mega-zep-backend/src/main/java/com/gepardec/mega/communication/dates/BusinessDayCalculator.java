@@ -24,7 +24,7 @@ public class BusinessDayCalculator {
 
     public Optional<Reminder> getEventForDate(LocalDate actualDate) {
 
-        logger.info("starting getEventForDate with date {}", actualDate.toString());
+        logger.info("starting getEventForDate with date {}", actualDate);
 
         Map<LocalDate, Reminder> reminderByDate = new HashMap<>(0);
         LocalDate firstWorkingDayOfMonth = calcFirstWorkingDayOfMonthForDate(actualDate);
@@ -77,7 +77,7 @@ public class BusinessDayCalculator {
         if (workdaysToAdd < 1) {
             return date;
         }
-        LocalDate resultDate = LocalDate.from(date);
+        LocalDate resultDate = date;
         int addedDays = 0;
         while (addedDays < workdaysToAdd) {
             resultDate = resultDate.plusDays(1);
