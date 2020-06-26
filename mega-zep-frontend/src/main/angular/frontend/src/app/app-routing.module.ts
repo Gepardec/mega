@@ -7,6 +7,7 @@ import { EmployeesComponent } from './modules/employees/employees.component';
 import { MonthlyReportComponent } from './modules/monthly-report/monthly-report.component';
 import { RolesGuard } from './modules/shared/guards/roles.guard';
 import { Role } from './modules/shared/models/Role';
+import {ErrorComponent} from "./modules/shared/components/error/error.component";
 
 
 export const routes: Routes = [
@@ -27,6 +28,9 @@ export const routes: Routes = [
   },
   {
     path: configuration.PAGE_URLS.LOGIN, component: LoginComponent
+  },
+  {
+    path: configuration.PAGE_URLS.ERROR, component: ErrorComponent
   },
   {path: '', redirectTo: configuration.PAGE_URLS.LOGIN, pathMatch: 'full'},
   {path: '#', redirectTo: configuration.PAGE_URLS.LOGIN},

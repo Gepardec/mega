@@ -4,7 +4,7 @@
     <mat-card-content>
       {{monthlyReport.employee.firstName}} {{monthlyReport.employee.sureName}}
       <span
-        class="mat-card-date">{{getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : '+060' : 'de-AT'}}</span>
+        class="mat-card-date">{{getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : null : 'de-AT'}}</span>
     </mat-card-content>
   </mat-card>
 
@@ -20,7 +20,7 @@
       <div *ngIf="datasourceTimeTable.data.length > 0">
         <ng-container matColumnDef="date-time">
           <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
-          <mat-cell *matCellDef="let timeEntry"> {{timeEntry.date | date:'E dd.MM.yyyy' : '+060' : 'de-AT'}} </mat-cell>
+          <mat-cell *matCellDef="let timeEntry"> {{timeEntry.date | date:'E dd.MM.yyyy' : null : 'de-AT'}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="restTime">
@@ -72,7 +72,7 @@
         <ng-container matColumnDef="date-journey">
           <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
           <mat-cell
-            *matCellDef="let journeyEntry"> {{journeyEntry.date | date:'E dd.MM.yyyy' : '+060' : 'de-AT'}} </mat-cell>
+            *matCellDef="let journeyEntry"> {{journeyEntry.date | date:'E dd.MM.yyyy' : null : 'de-AT'}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="warning">

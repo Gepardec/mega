@@ -4,7 +4,6 @@ import com.gepardec.mega.aplication.utils.DateUtils;
 import com.gepardec.mega.communication.dates.BusinessDayCalculator;
 import com.gepardec.mega.communication.exception.MissingReceiverException;
 import com.gepardec.mega.service.api.EmployeeService;
-import com.gepardec.mega.zep.service.api.WorkerService;
 import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -24,9 +23,6 @@ public class MailDaemon {
 
     @Inject
     MailSender mailSender;
-
-    @Inject
-    WorkerService workerService;
 
     @Inject
     EmployeeService employeeService;
@@ -128,6 +124,6 @@ public class MailDaemon {
     }
 
     private void logSentNotification(Reminder reminder) {
-        logger.info("{}. working-day of month. Notification sent for Reminder {}", reminder.getWorkingDay(), reminder.name());
+        logger.info("{}. working-day of month. Notification sent for Reminder {}", reminder.getDay(), reminder.name());
     }
 }

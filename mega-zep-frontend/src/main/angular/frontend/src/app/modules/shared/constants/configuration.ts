@@ -2,16 +2,18 @@ export const configuration = {
   PAGE_NAMES: {
     LOGIN: 'Login',
     EMPLOYEES: 'MITARBEITERÜBERSICHT',
-    MONTHLY_REPORT: 'MEIN MEGA'
+    MONTHLY_REPORT: 'MEIN MEGA',
+    ERROR: 'Error'
   },
 
   PAGE_URLS: {
     MONTHLY_REPORT: 'monthlyReport',
     EMPLOYEES: 'employees',
-    LOGIN: 'login'
+    LOGIN: 'login',
+    ERROR: 'error'
   },
 
-  SPREADSHEET_URL: 'https://docs.google.com/spreadsheets/d/1wUJHMtkY47RhLIGytg_MXVe_hgPAj_yzozLMcv5hrdU/edit#gid=604001411',
+  SPREADSHEET_URL: 'https://docs.google.com/spreadsheets/d/1wUJHMtkY47RhLIGytg_MXVe_hgPAj_yzozLMcv5hrdU/',
   ZEP_URL: 'https://www.zep-online.de/zepgepardecservices',
 
   EMPLOYEE_FUNCTIONS: {

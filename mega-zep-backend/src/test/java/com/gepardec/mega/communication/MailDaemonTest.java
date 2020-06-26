@@ -2,7 +2,6 @@ package com.gepardec.mega.communication;
 
 import com.gepardec.mega.service.api.EmployeeService;
 import com.gepardec.mega.service.model.Employee;
-import de.provantis.zep.MitarbeiterType;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.gepardec.mega.communication.Reminder.OM_RELEASE;
@@ -35,8 +35,8 @@ public class MailDaemonTest {
     @ConfigProperty(name = "quarkus.mailer.mock")
     boolean mailMockSetting;
 
-    @ConfigProperty(name = "mega.mail.subjectPrefix", defaultValue = "")
-    String subjectPrefix;
+    @ConfigProperty(name = "mega.mail.subjectPrefix")
+    Optional<String> subjectPrefix;
 
     @Inject
     NotificationConfig notificationConfig;
@@ -100,7 +100,7 @@ public class MailDaemonTest {
     }
 
     private String buildSubject(final String subject){
-        return subjectPrefix + subject;
+        return subjectPrefix.orElse("") + subject;
     }
 
 

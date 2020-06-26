@@ -1,0 +1,14 @@
+<div class="center-component">
+  <mat-card class="mat-elevation-z0">
+    <mat-card-header>
+      <img class="sad-face" src="../../../../../assets/sad-face.png" alt="Sad Face">
+    </mat-card-header>
+    <mat-card-title>Ups, Seite konnte nicht geladen werden</mat-card-title>
+    <mat-card-content>
+      <div>
+        <p>Ein Fehler ist aufgetreten: {{errorMessage}}</p>
+        <button class="mega-button" mat-button (click)="navigatePreviousPage()">NEU LADEN</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

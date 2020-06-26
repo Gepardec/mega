@@ -1,7 +1,7 @@
 package com.gepardec.mega.communication;
 
-import com.gepardec.mega.communication.exception.MissingLogoException;
 import com.gepardec.mega.aplication.utils.FileHelper;
+import com.gepardec.mega.communication.exception.MissingLogoException;
 import com.google.common.net.MediaType;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;
@@ -13,6 +13,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 
 @ApplicationScoped
 public class MailSender {
@@ -23,8 +24,8 @@ public class MailSender {
 
     private byte[] logoByteArray;
 
-    @ConfigProperty(name = "mega.mail.subjectPrefix", defaultValue = "")
-    String subjectPrefix;
+    @ConfigProperty(name = "mega.mail.subjectPrefix")
+    Optional<String> subjectPrefix;
 
     @ConfigProperty(name = "mega.image.logo.url")
     String megaImageLogoUrl;
@@ -127,6 +128,10 @@ public class MailSender {
                 path = notificationConfig.getOmSalaryPath();
                 break;
             }
+            case OM_CONTROL_PROJECTTIMES: {
+                path = notificationConfig.getOmControlProjecttimesPath();
+                break;
+            }
             default: {
                 path = null;
                 break;
@@ -162,12 +167,16 @@ public class MailSender {
                 subject = notificationConfig.getOmSalarySubject();
                 break;
             }
+            case OM_CONTROL_PROJECTTIMES: {
+                subject = notificationConfig.getOmControlProjecttimesSubject();
+                break;
+            }
             default: {
-                subject = null;
+                subject = "";
                 break;
             }
         }
-        return subjectPrefix + subject;
+        return subjectPrefix.orElse("") + subject;
     }
 
 }
