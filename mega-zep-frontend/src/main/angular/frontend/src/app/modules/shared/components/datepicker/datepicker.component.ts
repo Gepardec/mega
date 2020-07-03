@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {MatDatepicker} from '@angular/material';
+import { MatDatepicker } from '@angular/material/datepicker';
 import {formatDate} from '@angular/common';
 import {configuration} from '../../constants/configuration';
 
@@ -13,7 +13,7 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
   private format = configuration.dateFormat;
   today: Date = new Date();
 
-  @ViewChild('picker', {static: false}) datePicker: MatDatepicker<Date>;
+  @ViewChild('picker') datePicker: MatDatepicker<Date>;
   @Output() dateEmitter: EventEmitter<string> = new EventEmitter<string>();
   selectedDate: string;
 
