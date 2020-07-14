@@ -6,7 +6,7 @@ pipeline {
     environment {
         REVISION = buildRevisionForBranch()
         // POD must have' max_limits * 2' regarding memory
-        NODE_RESOURCE_LIMITS = "--initial-old-space-size=1024 --max-old-space-size=1024"
+        NODE_RESOURCE_LIMITS = "--initial-old-space-size=2048 --max-old-space-size=2048"
     }
 
     options {
