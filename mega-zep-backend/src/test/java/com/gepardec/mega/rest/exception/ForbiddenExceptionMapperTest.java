@@ -1,6 +1,6 @@
 package com.gepardec.mega.rest.exception;
 
-import com.gepardec.mega.aplication.security.ForbiddenException;
+import com.gepardec.mega.application.security.ForbiddenException;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
