@@ -1,6 +1,5 @@
 package com.gepardec.mega.application.security;
 
-import com.gepardec.mega.aplication.security.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
@@ -30,7 +29,7 @@ class RolesAllowedInterceptorTest {
     private RolesAllowedInterceptor rolesAllowedInterceptor;
 
     @Test
-    void intercept_notLogged_throwsForbiddenException() throws Exception {
+    void intercept_notLogged_throwsForbiddenException() {
         when(invocationContext.getMethod().getAnnotation(any())).thenReturn(createAnnotation(new Role[]{Role.USER}));
         when(sessionUser.isLogged()).thenReturn(false);
 
@@ -38,7 +37,7 @@ class RolesAllowedInterceptorTest {
     }
 
     @Test
-    void invoke_loggedAndNotInRole_throwsForbiddenException() throws Exception {
+    void invoke_loggedAndNotInRole_throwsForbiddenException() {
         when(invocationContext.getMethod().getAnnotation(any())).thenReturn(createAnnotation(new Role[]{Role.ADMINISTRATOR}));
         when(sessionUser.isLogged()).thenReturn(true);
         when(sessionUser.getRole()).thenReturn(Role.USER);

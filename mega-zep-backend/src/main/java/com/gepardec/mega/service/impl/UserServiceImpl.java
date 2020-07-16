@@ -1,13 +1,13 @@
 package com.gepardec.mega.service.impl;
 
-import com.gepardec.mega.aplication.security.ForbiddenException;
-import com.gepardec.mega.aplication.security.Role;
-import com.gepardec.mega.aplication.security.SessionUser;
-import com.gepardec.mega.aplication.security.UnauthorizedException;
+import com.gepardec.mega.application.security.ForbiddenException;
+import com.gepardec.mega.application.security.Role;
+import com.gepardec.mega.application.security.SessionUser;
+import com.gepardec.mega.application.security.UnauthorizedException;
 import com.gepardec.mega.service.api.EmployeeService;
 import com.gepardec.mega.service.api.UserService;
-import com.gepardec.mega.service.model.Employee;
-import com.gepardec.mega.service.model.User;
+import com.gepardec.mega.domain.Employee;
+import com.gepardec.mega.domain.User;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import org.slf4j.Logger;

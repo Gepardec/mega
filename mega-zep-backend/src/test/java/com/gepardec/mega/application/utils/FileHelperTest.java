@@ -1,6 +1,5 @@
 package com.gepardec.mega.application.utils;
 
-import com.gepardec.mega.aplication.utils.FileHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

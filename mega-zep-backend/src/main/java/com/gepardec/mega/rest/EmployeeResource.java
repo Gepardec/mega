@@ -1,10 +1,10 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.aplication.security.Role;
-import com.gepardec.mega.aplication.security.RolesAllowed;
-import com.gepardec.mega.aplication.security.Secured;
+import com.gepardec.mega.application.security.Role;
+import com.gepardec.mega.application.security.RolesAllowed;
+import com.gepardec.mega.application.security.Secured;
 import com.gepardec.mega.service.api.EmployeeService;
-import com.gepardec.mega.service.model.Employee;
+import com.gepardec.mega.domain.Employee;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotEmpty;

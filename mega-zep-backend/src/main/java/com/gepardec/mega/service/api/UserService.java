@@ -1,7 +1,7 @@
 package com.gepardec.mega.service.api;
 
 
-import com.gepardec.mega.service.model.User;
+import com.gepardec.mega.domain.User;
 
 public interface UserService {
     User login(String token);

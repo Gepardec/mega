@@ -1,7 +1,7 @@
 package com.gepardec.mega;
 
-import com.gepardec.mega.monthlyreport.MonthlyReport;
-import com.gepardec.mega.zep.service.impl.WorkerServiceImpl;
+import com.gepardec.mega.domain.MonthlyReport;
+import com.gepardec.mega.service.impl.WorkerServiceImpl;
 import io.quarkus.test.Mock;
 
 import javax.enterprise.context.ApplicationScoped;
