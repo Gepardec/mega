@@ -78,7 +78,7 @@ pipeline {
                                             dir('mega-zep-backend') {
                                                 sh "mkdir -p ./config"
                                                 sh "cp -f ${FILE} ./config/application.properties"
-                                                sh "mvn -B -s jenkins-settings.xml \
+                                                sh "mvn -B -s ${WORKSPACE}/jenkins/src/build/jenkins-settings.xml \
                                                         install \
                                                         -Drevision=${env.REVISION} \
                                                         -Dquarkus.package.uber.jar=true"
