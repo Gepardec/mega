@@ -1,6 +1,7 @@
 package com.gepardec.mega;
 
 import com.gepardec.mega.monthlyreport.MonthlyReport;
+import com.gepardec.mega.zep.service.api.WorkerService;
 import com.gepardec.mega.zep.service.impl.WorkerServiceImpl;
 import io.quarkus.test.Mock;
 
@@ -10,7 +11,7 @@ import javax.enterprise.context.ApplicationScoped;
 @Mock
 public class WorkerServiceMock extends WorkerServiceImpl {
 
-    WorkerServiceImpl delegate;
+    WorkerService delegate;
 
     public WorkerServiceMock() {
 
@@ -21,7 +22,7 @@ public class WorkerServiceMock extends WorkerServiceImpl {
         return delegate.getMonthendReportForUser(userId);
     }
 
-    public void setDelegate(WorkerServiceImpl delegate) {
+    public void setDelegate(WorkerService delegate) {
         this.delegate = delegate;
     }
 }

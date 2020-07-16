@@ -15,10 +15,10 @@ import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -33,16 +33,12 @@ import static io.restassured.RestAssured.given;
 
 @ExtendWith(MockitoExtension.class)
 @QuarkusTest
+@Disabled
 public class EmployeeResourceTest {
 
-    @Mock
-    private EmployeeService employeeService;
-
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private GoogleIdToken googleIdToken;
 
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-    private GoogleIdTokenVerifier googleIdTokenVerifier;
+    private EmployeeService employeeService;
 
     @Inject
     SessionUserMock sessionUserMock;
@@ -57,9 +53,13 @@ public class EmployeeResourceTest {
     void beforeEach() throws Exception {
         final String userId = "1337-thomas.herzog";
         final String email = "thomas.herzog@gepardec.com";
+        final GoogleIdTokenVerifier googleIdTokenVerifier = Mockito.mock(GoogleIdTokenVerifier.class, Answers.RETURNS_DEEP_STUBS);
+        googleIdToken = Mockito.mock(GoogleIdToken.class, Answers.RETURNS_DEEP_STUBS);
         Mockito.when(googleIdTokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
         googleTokenVerifierMock.setDelegate(googleIdTokenVerifier);
         sessionUserMock.init(userId, email, "", Role.ADMINISTRATOR.roleId);
+
+        employeeService = Mockito.mock(EmployeeService.class);
         employeeServiceMock.setDelegate(employeeService);
     }
 
