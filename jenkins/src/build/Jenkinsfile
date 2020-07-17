@@ -156,18 +156,18 @@ Build for Branch '${env.GIT_BRANCH}@${env.GIT_COMMIT}' has been fixed.
     }
 }
 
-def buildRevisionForBranch(String pomLocation = "./") {
+def buildRevisionForBranch(String pomLocation = ".") {
     def branch = "${env.GIT_BRANCH}".trim().toLowerCase()
     def revision = "";
     if (branch.equals("develop")) {
-        pom = readMavenPom file: pomLocation + 'pom.xml'
+        pom = readMavenPom file: pomLocation + '/pom.xml'
         return pom.properties['revision']
     } else if (branch.startsWith("feature/")) {
         return branch.replace("/", "-").toUpperCase()
     } else if (branch.startsWith("PR-")) {
         return branch.replace("/", "-").toUpperCase()
     } else if (branch.startsWith("release/") || branch.startsWith("hotfix/")) {
-        pom = readMavenPom file: pomLocation + 'pom.xml'
+        pom = readMavenPom file: pomLocation + '/pom.xml'
         return pom.properties['revision']
     } else {
         error("Branch not detected. branch=${branch}")
