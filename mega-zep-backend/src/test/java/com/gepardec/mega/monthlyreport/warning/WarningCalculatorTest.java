@@ -1,10 +1,12 @@
 package com.gepardec.mega.monthlyreport.warning;
 
-import com.gepardec.mega.aplication.utils.DateUtils;
-import com.gepardec.mega.monthlyreport.ProjectTimeManager;
-import com.gepardec.mega.monthlyreport.Task;
-import com.gepardec.mega.monthlyreport.WorkingLocation;
-import com.gepardec.mega.monthlyreport.journey.JourneyDirection;
+import com.gepardec.mega.application.utils.DateUtils;
+import com.gepardec.mega.service.monthlyreport.ProjectTimeManager;
+import com.gepardec.mega.domain.Task;
+import com.gepardec.mega.domain.WorkingLocation;
+import com.gepardec.mega.domain.JourneyDirection;
+import com.gepardec.mega.domain.TimeWarning;
+import com.gepardec.mega.service.monthlyreport.WarningCalculator;
 import de.provantis.zep.ProjektzeitType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

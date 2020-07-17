@@ -1,12 +1,11 @@
 package com.gepardec.mega.zep.service.impl;
 
-import com.gepardec.mega.service.model.Employee;
+import com.gepardec.mega.domain.Employee;
+import com.gepardec.mega.service.impl.ZepServiceImpl;
 import com.gepardec.mega.util.ZepTestUtil;
-import com.gepardec.mega.zep.exception.ZepServiceException;
-import com.gepardec.mega.zep.service.api.ZepService;
-import com.gepardec.mega.zep.service.soap.ZepSoapProvider;
+import com.gepardec.mega.zep.ZepServiceException;
+import com.gepardec.mega.zep.ZepSoapProvider;
 import de.provantis.zep.ReadMitarbeiterResponseType;
-import de.provantis.zep.UpdateMitarbeiterResponseType;
 import de.provantis.zep.ZepSoapPortType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
-import org.wildfly.common.Assert;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.aplication.configuration.OAuthConfig;
+import com.gepardec.mega.application.configuration.OAuthConfig;
 import com.gepardec.mega.rest.model.Config;
 
 import javax.inject.Inject;

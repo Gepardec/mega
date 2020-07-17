@@ -1,10 +1,9 @@
 package com.gepardec.mega.util;
 
-import com.gepardec.mega.aplication.security.Role;
-import com.gepardec.mega.aplication.utils.DateUtils;
+import com.gepardec.mega.application.security.Role;
+import com.gepardec.mega.application.utils.DateUtils;
 import de.provantis.zep.*;
 
-import javax.xml.ws.Response;
 import java.time.LocalDate;
 import java.util.Arrays;
 

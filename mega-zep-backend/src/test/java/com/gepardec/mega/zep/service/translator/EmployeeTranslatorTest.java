@@ -1,7 +1,8 @@
 package com.gepardec.mega.zep.service.translator;
 
-import com.gepardec.mega.aplication.security.Role;
-import com.gepardec.mega.service.model.Employee;
+import com.gepardec.mega.application.security.Role;
+import com.gepardec.mega.domain.Employee;
+import com.gepardec.mega.service.employee.EmployeeTranslator;
 import com.gepardec.mega.util.ZepTestUtil;
 import de.provantis.zep.MitarbeiterType;
 import org.junit.jupiter.api.Assertions;

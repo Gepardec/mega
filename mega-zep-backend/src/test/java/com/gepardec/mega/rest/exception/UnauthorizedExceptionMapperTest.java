@@ -1,6 +1,6 @@
 package com.gepardec.mega.rest.exception;
 
-import com.gepardec.mega.aplication.security.UnauthorizedException;
+import com.gepardec.mega.application.security.UnauthorizedException;
 
 import static org.junit.jupiter.api.Assertions.*;
 

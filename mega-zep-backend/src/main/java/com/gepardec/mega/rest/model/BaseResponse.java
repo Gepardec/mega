@@ -1,5 +1,6 @@
 package com.gepardec.mega.rest.model;
 
+// FIXME GAJ:
 public class BaseResponse {
 
     private String message;

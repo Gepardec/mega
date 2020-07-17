@@ -1,11 +1,9 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.aplication.configuration.OAuthConfig;
-import com.gepardec.mega.rest.model.Config;
+import com.gepardec.mega.application.configuration.OAuthConfig;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;

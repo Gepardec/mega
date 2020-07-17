@@ -1,13 +1,14 @@
 package com.gepardec.mega.zep.service.impl;
 
 
-import com.gepardec.mega.monthlyreport.MonthlyReport;
-import com.gepardec.mega.monthlyreport.WorkingLocation;
-import com.gepardec.mega.monthlyreport.warning.WarningConfig;
+import com.gepardec.mega.domain.MonthlyReport;
+import com.gepardec.mega.domain.WorkingLocation;
+import com.gepardec.mega.service.impl.WorkerServiceImpl;
+import com.gepardec.mega.service.monthlyreport.WarningConfig;
 import com.gepardec.mega.service.api.EmployeeService;
-import com.gepardec.mega.service.model.Employee;
+import com.gepardec.mega.domain.Employee;
 import com.gepardec.mega.util.EmployeeTestUtil;
-import com.gepardec.mega.zep.service.soap.ZepSoapProvider;
+import com.gepardec.mega.zep.ZepSoapProvider;
 import de.provantis.zep.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

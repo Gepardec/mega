@@ -1,6 +1,6 @@
 package com.gepardec.mega;
 
-import com.gepardec.mega.aplication.security.SessionUser;
+import com.gepardec.mega.application.security.SessionUser;
 import io.quarkus.test.Mock;
 
 import javax.enterprise.context.ApplicationScoped;

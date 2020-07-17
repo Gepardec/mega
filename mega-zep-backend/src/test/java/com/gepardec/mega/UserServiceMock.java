@@ -1,10 +1,9 @@
 package com.gepardec.mega;
 
-import com.gepardec.mega.aplication.security.Role;
-import com.gepardec.mega.aplication.security.SessionUser;
+import com.gepardec.mega.application.security.Role;
+import com.gepardec.mega.application.security.SessionUser;
 import com.gepardec.mega.service.api.UserService;
-import com.gepardec.mega.service.model.User;
-import com.gepardec.mega.service.impl.UserServiceImpl;
+import com.gepardec.mega.domain.User;
 import io.quarkus.test.Mock;
 
 import javax.enterprise.context.ApplicationScoped;

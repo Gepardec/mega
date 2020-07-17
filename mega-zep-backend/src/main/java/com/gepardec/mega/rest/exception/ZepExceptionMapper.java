@@ -1,6 +1,6 @@
 package com.gepardec.mega.rest.exception;
 
-import com.gepardec.mega.zep.exception.ZepServiceException;
+import com.gepardec.mega.zep.ZepServiceException;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
