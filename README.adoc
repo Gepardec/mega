@@ -29,7 +29,7 @@ Make End-of-the-month-process Great Again!
 
 ==== Configuration
 
-./mega-zep-backend/config/.env (externalized secrets)
+./mega-zep-backend/.env (externalized secrets)
 [source,properties]
 ----
 TOKEN=***
