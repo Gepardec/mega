@@ -1,6 +1,8 @@
 # Created by https://www.gitignore.io/api/linux,macos,maven,patch,sonar,windows,eclipse,sonarqube,intellij+all,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=linux,macos,maven,patch,sonar,windows,eclipse,sonarqube,intellij+all,visualstudiocode
 
+.env
+
 ### Eclipse ###
 .metadata
 bin/

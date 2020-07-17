@@ -29,32 +29,11 @@ Make End-of-the-month-process Great Again!
 
 ==== Configuration
 
-./mega-zep-backend/config/application.properties (externalized configurations)
+./mega-zep-backend/config/.env (externalized secrets)
 [source,properties]
 ----
-## COMMON ##
-mega.image.logo.url=<YOUR_LOGO_URL>
-mega.wiki.eom.url=<YOUR_EOM_URL>
-
-## ZEP ##
-mega.zep.admin.token=***
-mega.zep.admin.endpoint=https://www.your-zep-url.com/soap-uri
-
-## MAIL ##
-quarkus.mailer.auth-methods=DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN
-quarkus.mailer.from=<MAIL_FROM>
-quarkus.mailer.host=<MAIL_HOST>
-quarkus.mailer.port=<MAIL_PORT>
-quarkus.mailer.ssl=<SSL_ENABLED>
-quarkus.mailer.username=<MAIL_ACCOUNT_USERNAME>
-quarkus.mailer.password=<MAIL_ACCOUNT_PASSWORD>
-quarkus.mailer.mock=false
-
-mega.mail.firstbusinessday.reminder=<MAIL_REMINDER_MAIL>
-
-## TEST USER ##
-mega.test.googleuser.email=<USER_EMAIL>
-mega.test.googleuser.id=<USER_ID>
+TOKEN=***
+MAILER_PASSWORD=***
 ----
 
 ## TODO
