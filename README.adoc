@@ -13,6 +13,7 @@ Make End-of-the-month-process Great Again!
 - npm 6+
 
 === Backend setup
+
 - current application.properties file @ mega-zep-backend/config/:
     * available internally
 - new run config(maven):
@@ -29,37 +30,12 @@ Make End-of-the-month-process Great Again!
 
 ==== Configuration
 
-./mega-zep-backend/.env (externalized secrets)
+The following file ``./mega-zep-backend/.env`` contains the secret values and has to be added manually by the developers.
+This file is not part of the VCS.
+
+./mega-zep-backend/.env
 [source,properties]
 ----
 TOKEN=***
 MAILER_PASSWORD=***
-----
-
-## TODO
-
-- Remove google-secrets not needed anymore
-- Recreate newly introduced secrets
-- Modify frontend template to map secret 'asset/config.json' into html root where the clientId and backendOrigin is defined
-- Jenkins build pipeline does not need to replace client_id anymore
-
-## instructions for local sonar
-- docker pull sonarqube
-- docker run -d --name sonarqube -p 9000:9000 sonarqube
-
-frontend:
-[source]
-----
-cd mega-zep-frontend/src/main/angular/frontend
-npm install
-npm run sonar
-npx ng test --watch=false --code-coverage && npm run sonar -- -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin
-----
-- under linux you need to install chrome or configure karma to https://developerslogblog.wordpress.com/2019/03/19/how-to-fix-no-binary-for-chrome-browser-on-your-platform/[use firefox]
-- https://medium.com/@learning.bikash/angular-code-coverage-with-sonarqube-d2283442080b[quick setup angular with sonarqube]
-
-backend: 
-[source]
-----
-mvn clean verify -P sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin
 ----
