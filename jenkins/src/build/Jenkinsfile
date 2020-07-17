@@ -80,7 +80,7 @@ pipeline {
                                                 sh "cp -f ${FILE} ./config/.env"
                                                 sh "cp -f ${WORKSPACE}/jenkins/src/build/application.properties ./config/application.properties"
                                                 sh "mvn -B -s ${WORKSPACE}/jenkins/src/build/jenkins-settings.xml \
-                                                        install \
+                                                        clean compile install \
                                                         -Drevision=${env.REVISION} \
                                                         -Dquarkus.package.uber.jar=true"
                                                 jacoco(execPattern: 'target/*.exec', classPattern: 'target/classes', sourcePattern: 'src/main/java', exclusionPattern: 'src/test*')
