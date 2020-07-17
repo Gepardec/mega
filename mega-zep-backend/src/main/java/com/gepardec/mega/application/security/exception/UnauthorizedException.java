@@ -1,4 +1,4 @@
-package com.gepardec.mega.application.security;
+package com.gepardec.mega.application.security.exception;
 
 public class UnauthorizedException extends SecurityException {
 

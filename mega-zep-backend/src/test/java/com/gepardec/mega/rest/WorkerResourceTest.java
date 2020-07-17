@@ -4,10 +4,10 @@ import com.gepardec.mega.GoogleTokenVerifierMock;
 import com.gepardec.mega.SessionUserMock;
 import com.gepardec.mega.WorkerServiceMock;
 import com.gepardec.mega.application.security.Role;
-import com.gepardec.mega.domain.MonthlyReport;
-import com.gepardec.mega.domain.JourneyWarning;
-import com.gepardec.mega.domain.TimeWarning;
-import com.gepardec.mega.domain.Employee;
+import com.gepardec.mega.domain.model.MonthlyReport;
+import com.gepardec.mega.domain.model.JourneyWarning;
+import com.gepardec.mega.domain.model.TimeWarning;
+import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.service.api.WorkerService;
 import com.gepardec.mega.util.EmployeeTestUtil;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -80,7 +80,7 @@ public class WorkerResourceTest {
     @Test
     void employeeMonthendReport_withReport_returnsReport() {
         final Employee employee = EmployeeTestUtil.createEmployee(0);
-        final com.gepardec.mega.domain.MonthlyReport expected = createZepMonthlyReport(employee);
+        final MonthlyReport expected = createZepMonthlyReport(employee);
         Mockito.when(workerService.getMonthendReportForUser(Mockito.anyString())).thenReturn(expected);
 
         final MonthlyReport actual = given().contentType(ContentType.JSON)
@@ -93,7 +93,7 @@ public class WorkerResourceTest {
         assertJourneyWarnings(expected.getJourneyWarnings(), actual.getJourneyWarnings());
     }
 
-    private com.gepardec.mega.domain.MonthlyReport createZepMonthlyReport(final Employee employee) {
+    private MonthlyReport createZepMonthlyReport(final Employee employee) {
         final List<TimeWarning> timeWarnings = Collections.singletonList(TimeWarning.of(LocalDate.now(), 0.0, 0.0, 0.0));
         final List<JourneyWarning> journeyWarnings = Collections.singletonList(new JourneyWarning(LocalDate.now(), Collections.singletonList("WARNING")));
 
@@ -104,28 +104,28 @@ public class WorkerResourceTest {
         return monthlyReport;
     }
 
-    private void assertJourneyWarnings(List<com.gepardec.mega.domain.JourneyWarning> expected, List<JourneyWarning> actual) {
+    private void assertJourneyWarnings(List<JourneyWarning> expected, List<JourneyWarning> actual) {
         Assertions.assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
             assertJourneyWarning(expected.get(i), actual.get(i));
         }
     }
 
-    private void assertJourneyWarning(com.gepardec.mega.domain.JourneyWarning expected, JourneyWarning actual) {
+    private void assertJourneyWarning(JourneyWarning expected, JourneyWarning actual) {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(expected.getDate(), actual.getDate(), "date"),
                 () -> Assertions.assertIterableEquals(expected.getWarnings(), actual.getWarnings(), "warnings")
         );
     }
 
-    private void assertTimeWarnings(List<com.gepardec.mega.domain.TimeWarning> expected, List<TimeWarning> actual) {
+    private void assertTimeWarnings(List<TimeWarning> expected, List<TimeWarning> actual) {
         Assertions.assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
             assertTimeWarning(expected.get(i), actual.get(i));
         }
     }
 
-    private void assertTimeWarning(com.gepardec.mega.domain.TimeWarning expected, TimeWarning actual) {
+    private void assertTimeWarning(TimeWarning expected, TimeWarning actual) {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(expected.getDate(), actual.getDate(), "date"),
                 () -> Assertions.assertEquals(expected.getExcessWorkTime(), actual.getExcessWorkTime(), "exessWorkTime"),

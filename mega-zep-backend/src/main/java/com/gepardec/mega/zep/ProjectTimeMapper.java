@@ -1,39 +1,24 @@
-package com.gepardec.mega.service.monthlyreport;
+package com.gepardec.mega.zep;
 
 import com.gepardec.mega.domain.model.*;
 import de.provantis.zep.ProjektzeitType;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.gepardec.mega.domain.utils.DateUtils.parseDateTime;
 
-public class ProjectTimeManager {
+public class ProjectTimeMapper {
 
-    private final Map<LocalDate, List<ProjectTimeEntry>> projectTimes;
-
-    public ProjectTimeManager(List<ProjektzeitType> projectTimes) {
-
-        this.projectTimes = projectTimes.stream()
-                .map(ProjectTimeManager::toProjectTimeEntry)
+    public static List<ProjectTimeEntry> mapToEntryList(List<ProjektzeitType> projectTimes) {
+        return projectTimes.stream()
+                .map(ProjectTimeMapper::mapSingleTypeToEntry)
                 .sorted(Comparator.comparing(ProjectTimeEntry::getFromTime))
-                .collect(Collectors.groupingBy(ProjectTimeEntry::getDate, LinkedHashMap::new, Collectors.toUnmodifiableList()));
-    }
-
-    public Map<LocalDate, List<ProjectTimeEntry>> getProjectTimes() {
-        return projectTimes;
-    }
-
-    public List<ProjectTimeEntry> getEntriesAsFlatList() {
-        return projectTimes.values().stream()
-                .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
 
-
-    private static ProjectTimeEntry toProjectTimeEntry(ProjektzeitType projektzeitType) {
+    private static ProjectTimeEntry mapSingleTypeToEntry(ProjektzeitType projektzeitType) {
         LocalDateTime fromTime = parseDateTime(projektzeitType.getDatum(), projektzeitType.getVon());
         LocalDateTime toTime = parseDateTime(projektzeitType.getDatum(), projektzeitType.getBis());
         Task task = Task.fromString(projektzeitType.getTaetigkeit())

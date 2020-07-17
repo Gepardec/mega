@@ -1,4 +1,4 @@
-package com.gepardec.mega.domain;
+package com.gepardec.mega.domain.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

@@ -1,6 +1,6 @@
 package com.gepardec.mega;
 
-import com.gepardec.mega.domain.MonthlyReport;
+import com.gepardec.mega.domain.model.MonthlyReport;
 import com.gepardec.mega.service.api.WorkerService;
 import com.gepardec.mega.service.impl.WorkerServiceImpl;
 import io.quarkus.test.Mock;

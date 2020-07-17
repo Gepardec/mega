@@ -2,7 +2,7 @@ package com.gepardec.mega.rest;
 
 import com.gepardec.mega.application.security.Secured;
 import com.gepardec.mega.application.security.SessionUser;
-import com.gepardec.mega.domain.MonthlyReport;
+import com.gepardec.mega.domain.model.MonthlyReport;
 import com.gepardec.mega.service.api.WorkerService;
 
 import javax.enterprise.context.RequestScoped;

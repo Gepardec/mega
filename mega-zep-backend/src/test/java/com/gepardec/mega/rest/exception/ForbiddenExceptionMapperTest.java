@@ -1,6 +1,7 @@
 package com.gepardec.mega.rest.exception;
 
-import com.gepardec.mega.application.security.ForbiddenException;
+import com.gepardec.mega.application.security.exception.ForbiddenException;
+import com.gepardec.mega.application.security.exception.mapper.ForbiddenExceptionMapper;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
