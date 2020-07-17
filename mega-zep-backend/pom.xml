@@ -9,6 +9,7 @@
 
     <properties>
         <!-- Project properties -->
+        <maven.version>3.6.3</maven.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -18,6 +19,7 @@
         <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
         <cxf-codegen-plugin.version>3.3.3</cxf-codegen-plugin.version>
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
+        <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
 
         <quarkus.version>1.6.0.Final</quarkus.version>
         <commons-lang3.version>3.9</commons-lang3.version>
@@ -227,6 +229,37 @@
                                     <filtering>false</filtering>
                                 </resource>
                             </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <message>
+                                        This project requires a maven '${maven.version}' or greater. You can
+                                        download it
+                                        from here https://maven.apache.org/download.cgi
+                                    </message>
+                                    <version>${maven.version}</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <message>
+                                        To build this project JDK ${maven.compiler.target} (or
+                                        greater) is required. Please install it.
+                                    </message>
+                                    <version>${maven.compiler.target}</version>
+                                </requireJavaVersion>
+                            </rules>
                         </configuration>
                     </execution>
                 </executions>
