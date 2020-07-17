@@ -1,6 +1,8 @@
 # Created by https://www.gitignore.io/api/linux,macos,maven,patch,sonar,windows,eclipse,sonarqube,intellij+all,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=linux,macos,maven,patch,sonar,windows,eclipse,sonarqube,intellij+all,visualstudiocode
 
+.env
+
 ### Eclipse ###
 .metadata
 bin/
@@ -16,11 +18,6 @@ local.properties
 .bash_history
 
 package-lock.json
-mega-secrets.properties
-mega-dev-github.properties
-mega-dev.ssh.key
-mega-dev.auth.ssh
-google-secrets.properties
 
 # External tool builders
 .externalToolBuilders/
@@ -246,6 +243,3 @@ $RECYCLE.BIN/
 
 
 # End of https://www.gitignore.io/api/java,linux,macos,maven,windows,angular,eclipse,intellij
-
-#SOAP key
-secret.soaptoken
