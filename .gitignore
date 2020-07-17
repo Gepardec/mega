@@ -16,11 +16,6 @@ local.properties
 .bash_history
 
 package-lock.json
-mega-secrets.properties
-mega-dev-github.properties
-mega-dev.ssh.key
-mega-dev.auth.ssh
-google-secrets.properties
 
 # External tool builders
 .externalToolBuilders/
@@ -246,6 +241,3 @@ $RECYCLE.BIN/
 
 
 # End of https://www.gitignore.io/api/java,linux,macos,maven,windows,angular,eclipse,intellij
-
-#SOAP key
-secret.soaptoken

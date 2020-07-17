@@ -6,8 +6,9 @@ Make End-of-the-month-process Great Again!
 
 === Project setup
 
-- Java 11
-- Maven 3.5+
+- Quarkus 1.6.0.Final
+- OpenJDK 11
+- Maven 3.6.3
 - node.js 12+
 - npm 6+
 
