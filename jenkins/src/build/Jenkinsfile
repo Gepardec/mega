@@ -4,7 +4,7 @@ pipeline {
     agent any
 
     environment {
-        REVISION = buildRevisionForBranch()
+        REVISION = buildRevisionForBranch('./mega-zep-backend')
         // POD must have' max_limits * 2' regarding memory
         NODE_RESOURCE_LIMITS = "--initial-old-space-size=2048 --max-old-space-size=2048"
     }
