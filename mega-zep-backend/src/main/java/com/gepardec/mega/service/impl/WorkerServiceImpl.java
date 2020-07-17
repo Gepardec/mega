@@ -28,10 +28,6 @@ public class WorkerServiceImpl implements WorkerService {
 
         Employee employee = zepService.getEmployee(userId);
 
-        if (employee == null) {
-            return null;
-        }
-
         return calcWarnings(zepService.getProjectTimes(employee), employee);
     }
 
@@ -49,7 +45,7 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     private MonthlyReport calcWarnings(List<ProjectTimeEntry> projectTimeList, Employee employee) {
-        if (projectTimeList == null) {
+        if (projectTimeList == null || projectTimeList.isEmpty()) {
             return null;
         }
         final WarningCalculator warningCalculator = new WarningCalculator(warningConfig);

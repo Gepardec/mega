@@ -105,7 +105,7 @@ public class WorkerServiceImplTest {
                         Task.BEARBEITEN,
                         WorkingLocation.DEFAULT_WORKING_LOCATION),
                 new ProjectTimeEntry(LocalDateTime.of(2020, 1, 30, 7 ,0),
-                        LocalDateTime.of(2020, 1, 31, 10, 0),
+                        LocalDateTime.of(2020, 1, 30, 10, 0),
                         Task.BEARBEITEN,
                         WorkingLocation.DEFAULT_WORKING_LOCATION));
     }
