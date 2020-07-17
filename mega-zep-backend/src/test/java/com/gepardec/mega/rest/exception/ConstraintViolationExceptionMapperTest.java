@@ -1,5 +1,6 @@
 package com.gepardec.mega.rest.exception;
 
+import com.gepardec.mega.application.exception.mapper.ConstraintViolationExceptionMapper;
 import com.gepardec.mega.rest.model.ConstraintViolationResponse;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;

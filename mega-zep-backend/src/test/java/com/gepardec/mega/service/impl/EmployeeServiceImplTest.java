@@ -1,10 +1,10 @@
 package com.gepardec.mega.service.impl;
 
 
-import com.gepardec.mega.domain.Employee;
+import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.util.EmployeeTestUtil;
 import com.gepardec.mega.zep.ZepServiceException;
-import com.gepardec.mega.service.api.ZepService;
+import com.gepardec.mega.zep.ZepService;
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

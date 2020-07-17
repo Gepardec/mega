@@ -1,4 +1,4 @@
-package com.gepardec.mega.domain;
+package com.gepardec.mega.domain.model;
 
 public class Employee {
     private String userId;

@@ -1,5 +1,6 @@
 package com.gepardec.mega.application.utils;
 
+import com.gepardec.mega.domain.utils.DateUtils;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

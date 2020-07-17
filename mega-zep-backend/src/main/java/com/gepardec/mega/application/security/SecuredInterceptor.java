@@ -1,5 +1,6 @@
 package com.gepardec.mega.application.security;
 
+import com.gepardec.mega.application.security.exception.UnauthorizedException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 
 import javax.annotation.Priority;

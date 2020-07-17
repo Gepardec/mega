@@ -1,6 +1,6 @@
 package com.gepardec.mega.notification.mail;
 
-import com.gepardec.mega.application.utils.FileHelper;
+import com.gepardec.mega.domain.utils.FileHelper;
 import com.gepardec.mega.notification.mail.exception.MissingLogoException;
 import com.google.common.net.MediaType;
 import io.quarkus.mailer.Mail;

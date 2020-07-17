@@ -1,6 +1,6 @@
-package com.gepardec.mega.rest.exception;
+package com.gepardec.mega.application.security.exception.mapper;
 
-import com.gepardec.mega.application.security.UnauthorizedException;
+import com.gepardec.mega.application.security.exception.UnauthorizedException;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;

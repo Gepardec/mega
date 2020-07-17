@@ -1,7 +1,7 @@
 package com.gepardec.mega.util;
 
 import com.gepardec.mega.application.security.Role;
-import com.gepardec.mega.domain.Employee;
+import com.gepardec.mega.domain.model.Employee;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.ArrayList;

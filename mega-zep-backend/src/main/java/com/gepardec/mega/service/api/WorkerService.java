@@ -1,6 +1,6 @@
 package com.gepardec.mega.service.api;
 
-import com.gepardec.mega.domain.MonthlyReport;
+import com.gepardec.mega.domain.model.MonthlyReport;
 
 public interface WorkerService {
 

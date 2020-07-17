@@ -1,4 +1,4 @@
-package com.gepardec.mega.application.utils;
+package com.gepardec.mega.domain.utils;
 
 import java.time.Duration;
 import java.time.LocalDate;

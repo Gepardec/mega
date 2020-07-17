@@ -1,13 +1,13 @@
 package com.gepardec.mega.service.monthlyreport;
 
-import com.gepardec.mega.application.utils.DateUtils;
-import com.gepardec.mega.domain.*;
+import com.gepardec.mega.domain.model.*;
+import com.gepardec.mega.domain.utils.DateUtils;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.gepardec.mega.domain.TimeWarning.*;
+import static com.gepardec.mega.domain.model.TimeWarning.*;
 
 public class WarningCalculator {
     private List<TimeWarning> timeWarnings = new ArrayList<>(0);
@@ -19,21 +19,23 @@ public class WarningCalculator {
     }
 
 
-    public List<TimeWarning> determineTimeWarnings(ProjectTimeManager projectTimeManager) {
-        Set<Map.Entry<LocalDate, List<ProjectTimeEntry>>> entries = projectTimeManager.getProjectTimes().entrySet();
+    public List<TimeWarning> determineTimeWarnings(List<ProjectTimeEntry> projectTimeList) {
+        Set<Map.Entry<LocalDate, List<ProjectTimeEntry>>> entrySet = projectTimeList.stream()
+                .sorted(Comparator.comparing(ProjectTimeEntry::getFromTime))
+                .collect(Collectors.groupingBy(ProjectTimeEntry::getDate, LinkedHashMap::new, Collectors.toUnmodifiableList())).entrySet();
 
         //1. more than 10 hours a day
-        entries.forEach(e -> checkFor10Hours(e.getValue(), e.getKey()));
+        entrySet.forEach(e -> checkFor10Hours(e.getValue(), e.getKey()));
 
         //2. no break when more than 6 hours a day
-        entries.forEach(e -> checkForBreaksForWorkingDaysWithMoreThan6Hours(e.getValue(), e.getKey()));
+        entrySet.forEach(e -> checkForBreaksForWorkingDaysWithMoreThan6Hours(e.getValue(), e.getKey()));
 
         //3. check earliest start and latest ending
 //        not activated now
 //        projectTimeManager.getEntriesAsFlatList().forEach(e -> checkForFlexibleWorkFrame(e));
 
         //4. check fore enough rest
-        checkForRestTime(projectTimeManager);
+        checkForRestTime(projectTimeList);
 
         timeWarnings.sort(Comparator.comparing(TimeWarning::getDate));
         return timeWarnings;
@@ -85,18 +87,17 @@ public class WarningCalculator {
         }
     }
 
-    private void checkForRestTime(ProjectTimeManager projectTimeManager) {
+    private void checkForRestTime(List<ProjectTimeEntry> projectTimeEntryList) {
 
-        List<ProjectTimeEntry> entries = projectTimeManager.getProjectTimes().values().stream()
-                .flatMap(Collection::stream)
+        List<ProjectTimeEntry> filteredEntries = projectTimeEntryList.stream()
                 .filter(entry -> Task.isTask(entry.getTask()))
                 .sorted(Comparator.comparing(ProjectTimeEntry::getFromTime))
                 .collect(Collectors.toList());
 
-        for (int i = 0; i < entries.size(); i++) {
-            ProjectTimeEntry actualEntry = entries.get(i);
-            if (i + 1 < entries.size()) {
-                ProjectTimeEntry nextEntry = entries.get(i + 1);
+        for (int i = 0; i < filteredEntries.size(); i++) {
+            ProjectTimeEntry actualEntry = filteredEntries.get(i);
+            if (i + 1 < filteredEntries.size()) {
+                ProjectTimeEntry nextEntry = filteredEntries.get(i + 1);
                 if (nextEntry.getDate().isEqual(actualEntry.getDate().plusDays(1L))) {
                     double restHours = DateUtils.calcDiffInHours(actualEntry.getToTime(), nextEntry.getFromTime());
                     if (restHours < MIN_REQUIRED_REST_TIME) {
@@ -132,9 +133,9 @@ public class WarningCalculator {
     }
 
 
-    public List<JourneyWarning> determineJourneyWarnings(ProjectTimeManager projectTimeManager) {
+    public List<JourneyWarning> determineJourneyWarnings(List<ProjectTimeEntry> projectTimeEntryList) {
         JourneyDirectionHandler journeyDirectionHandler = new JourneyDirectionHandler();
-        for (ProjectTimeEntry projectTimeEntry : projectTimeManager.getEntriesAsFlatList()) {
+        for (ProjectTimeEntry projectTimeEntry : projectTimeEntryList) {
 
             if (projectTimeEntry instanceof JourneyEntry) {
                 JourneyEntry journeyEntry = (JourneyEntry) projectTimeEntry;
