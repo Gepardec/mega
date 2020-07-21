@@ -46,15 +46,14 @@ public class EmployeeServiceImplTest {
 
         final Employee employee = beanUnderTest.getEmployee("someuserid");
         Assertions.assertNotNull(employee);
-        Assertions.assertEquals("0", employee.getUserId());
-        Assertions.assertEquals("Thomas_0", employee.getFirstName());
+        Assertions.assertEquals("0", employee.userId());
+        Assertions.assertEquals("Thomas_0", employee.firstName());
     }
 
     @Test
     void testGetEmployees() {
         final Employee employee0 = EmployeeTestUtil.createEmployee(0);
-        final Employee employee1 = EmployeeTestUtil.createEmployee(1);
-        employee1.setActive(false);
+        final Employee employee1 = EmployeeTestUtil.createEmployee(1, "2020-01-01", false);
 
         Mockito.when(zepService.getEmployees()).thenReturn(Arrays.asList(employee0, employee1));
 
@@ -62,8 +61,8 @@ public class EmployeeServiceImplTest {
         Assertions.assertNotNull(employees);
         Assertions.assertFalse(employees.isEmpty());
         Assertions.assertEquals(1, employees.size());
-        Assertions.assertEquals("0", employees.get(0).getUserId());
-        Assertions.assertEquals("Thomas_0", employees.get(0).getFirstName());
+        Assertions.assertEquals("0", employees.get(0).userId());
+        Assertions.assertEquals("Thomas_0", employees.get(0).firstName());
     }
 
     @Test

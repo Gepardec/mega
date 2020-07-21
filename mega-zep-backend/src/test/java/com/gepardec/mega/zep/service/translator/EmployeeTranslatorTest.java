@@ -19,7 +19,7 @@ public class EmployeeTranslatorTest {
 
         final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
-        Assertions.assertFalse(employee.isActive());
+        Assertions.assertFalse(employee.active());
     }
 
     @Test
@@ -29,7 +29,7 @@ public class EmployeeTranslatorTest {
 
         final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
-        Assertions.assertFalse(employee.isActive());
+        Assertions.assertFalse(employee.active());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class EmployeeTranslatorTest {
 
         final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
-        Assertions.assertFalse(employee.isActive());
+        Assertions.assertFalse(employee.active());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class EmployeeTranslatorTest {
 
         final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
-        Assertions.assertFalse(employee.isActive());
+        Assertions.assertFalse(employee.active());
     }
 
     @Test
@@ -63,7 +63,7 @@ public class EmployeeTranslatorTest {
 
         final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
-        Assertions.assertFalse(employee.isActive());
+        Assertions.assertFalse(employee.active());
     }
 
     @Test
@@ -73,7 +73,7 @@ public class EmployeeTranslatorTest {
 
         final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
-        Assertions.assertTrue(employee.isActive());
+        Assertions.assertTrue(employee.active());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class EmployeeTranslatorTest {
 
         final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
-        Assertions.assertTrue(employee.isActive());
+        Assertions.assertTrue(employee.active());
     }
 
     @Test
@@ -97,7 +97,7 @@ public class EmployeeTranslatorTest {
 
         final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
-        Assertions.assertTrue(employee.isActive());
+        Assertions.assertTrue(employee.active());
     }
 
     @Test
@@ -107,7 +107,7 @@ public class EmployeeTranslatorTest {
 
         final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
-        Assertions.assertTrue(employee.isActive());
+        Assertions.assertTrue(employee.active());
     }
 
     @Test
@@ -117,15 +117,15 @@ public class EmployeeTranslatorTest {
 
         final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
-        Assertions.assertEquals("0", employee.getUserId());
-        Assertions.assertEquals("Thomas_0@gepardec.com", employee.getEmail());
-        Assertions.assertEquals("Ing.", employee.getTitle());
-        Assertions.assertEquals("Thomas_0", employee.getFirstName());
-        Assertions.assertEquals("Thomas_0_Nachname", employee.getSureName());
-        Assertions.assertEquals("Herr", employee.getSalutation());
-        Assertions.assertEquals("2020-01-01", employee.getReleaseDate());
-        Assertions.assertEquals("ARCHITEKT", employee.getWorkDescription());
-        Assertions.assertEquals(Role.USER.roleId, employee.getRole());
-        Assertions.assertTrue(employee.isActive());
+        Assertions.assertEquals("0", employee.userId());
+        Assertions.assertEquals("Thomas_0@gepardec.com", employee.email());
+        Assertions.assertEquals("Ing.", employee.title());
+        Assertions.assertEquals("Thomas_0", employee.firstName());
+        Assertions.assertEquals("Thomas_0_Nachname", employee.sureName());
+        Assertions.assertEquals("Herr", employee.salutation());
+        Assertions.assertEquals("2020-01-01", employee.releaseDate());
+        Assertions.assertEquals("ARCHITEKT", employee.workDescription());
+        Assertions.assertEquals(Role.USER.roleId, employee.role());
+        Assertions.assertTrue(employee.active());
     }
 }

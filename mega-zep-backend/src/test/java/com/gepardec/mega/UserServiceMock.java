@@ -20,18 +20,19 @@ public class UserServiceMock implements UserService {
 
     @Override
     public User login(String idToken) {
-        sessionUser.init("1337-testvorname.testnachname", user.getEmail(), idToken, user.getRole().roleId);
+        sessionUser.init("1337-testvorname.testnachname", user.email(), idToken, user.role().roleId);
         return user;
     }
 
     public static User createUser() {
-        final User user = new User();
-        //user.setUserId("1337-testvorname.testnachname");
-        user.setEmail("test@gepardec.com");
-        user.setFirstname("Testvorname");
-        user.setLastname("Testnachname");
-        user.setRole(Role.USER);
-        user.setPictureUrl("https://www.gepardec.com/picture");
+        final User user = User.builder()
+                .email("test@gepardec.com")
+                .firstname("Testvorname")
+                .lastname("Testnachname")
+                .role(Role.USER)
+                .pictureUrl("https://www.gepardec.com/picture")
+                .build();
+
         return user;
     }
 

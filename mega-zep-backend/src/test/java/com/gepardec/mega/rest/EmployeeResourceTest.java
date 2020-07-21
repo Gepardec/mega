@@ -110,7 +110,7 @@ public class EmployeeResourceTest {
     @Test
     void employeesUpdate_withInvalidEmployees_returnsInvalidEmails() {
         final List<Employee> employees = IntStream.range(1, 11).mapToObj(EmployeeTestUtil::createEmployee).collect(Collectors.toList());
-        final List<String> expected = employees.subList(0, 5).stream().map(Employee::getEmail).collect(Collectors.toList());
+        final List<String> expected = employees.subList(0, 5).stream().map(Employee::email).collect(Collectors.toList());
         Mockito.when(employeeService.updateEmployeesReleaseDate(Mockito.anyList())).thenReturn(expected);
         employeeServiceMock.setDelegate(employeeService);
 

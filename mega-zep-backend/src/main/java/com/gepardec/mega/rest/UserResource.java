@@ -44,7 +44,7 @@ public class UserResource {
 
         if (oldEmail == null) {
             log.info("User '{}' logged in", sessionUser.getEmail());
-        } else if (!oldEmail.equals(user.getEmail())) {
+        } else if (!oldEmail.equals(user.email())) {
             log.info("Logged user '{}' out and logged user '{}' in", sessionUser.getEmail(), oldEmail);
         } else {
             log.info("User '{}' already logged in", sessionUser.getEmail());

@@ -63,11 +63,11 @@ class UserResourceTest {
                 .body("fakeIdToken")
                 .post("/user/login")
                 .then().statusCode(HttpStatus.SC_OK)
-                .body("email", equalTo(user.getEmail()))
-                .body("lastname", equalTo(user.getLastname()))
-                .body("firstname", equalTo(user.getFirstname()))
-                .body("role", equalTo(user.getRole().name()))
-                .body("pictureUrl", equalTo(user.getPictureUrl()));
+                .body("email", equalTo(user.email()))
+                .body("lastname", equalTo(user.lastname()))
+                .body("firstname", equalTo(user.firstname()))
+                .body("role", equalTo(user.role().name()))
+                .body("pictureUrl", equalTo(user.pictureUrl()));
     }
 
     @Test
