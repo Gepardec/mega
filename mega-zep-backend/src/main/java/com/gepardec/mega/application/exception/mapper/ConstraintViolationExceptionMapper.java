@@ -1,4 +1,4 @@
-package com.gepardec.mega.rest.exception;
+package com.gepardec.mega.application.exception.mapper;
 
 import com.gepardec.mega.rest.model.ConstraintViolationResponse;
 import org.apache.http.HttpStatus;

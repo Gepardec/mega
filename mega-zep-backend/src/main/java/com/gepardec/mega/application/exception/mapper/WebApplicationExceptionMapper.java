@@ -1,4 +1,4 @@
-package com.gepardec.mega.rest.exception;
+package com.gepardec.mega.application.exception.mapper;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;

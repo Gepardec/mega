@@ -1,7 +1,7 @@
 package com.gepardec.mega.zep.service.impl;
 
-import com.gepardec.mega.domain.Employee;
-import com.gepardec.mega.service.impl.ZepServiceImpl;
+import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.zep.ZepServiceImpl;
 import com.gepardec.mega.util.ZepTestUtil;
 import com.gepardec.mega.zep.ZepServiceException;
 import com.gepardec.mega.zep.ZepSoapProvider;

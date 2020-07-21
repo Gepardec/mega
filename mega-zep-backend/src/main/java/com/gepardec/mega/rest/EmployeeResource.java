@@ -4,7 +4,7 @@ import com.gepardec.mega.application.security.Role;
 import com.gepardec.mega.application.security.RolesAllowed;
 import com.gepardec.mega.application.security.Secured;
 import com.gepardec.mega.service.api.EmployeeService;
-import com.gepardec.mega.domain.Employee;
+import com.gepardec.mega.domain.model.Employee;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotEmpty;

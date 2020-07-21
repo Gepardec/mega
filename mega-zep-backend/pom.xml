@@ -229,7 +229,7 @@
                 <version>${maven-resource-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
+                        <id>copy-application-config</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -240,6 +240,9 @@
                                 <resource>
                                     <directory>${basedir}/config</directory>
                                     <filtering>false</filtering>
+                                    <includes>
+                                        <include>application.properties</include>
+                                    </includes>
                                 </resource>
                             </resources>
                         </configuration>

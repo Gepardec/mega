@@ -5,7 +5,7 @@ import com.gepardec.mega.GoogleTokenVerifierMock;
 import com.gepardec.mega.SessionUserMock;
 import com.gepardec.mega.application.security.Role;
 import com.gepardec.mega.service.api.EmployeeService;
-import com.gepardec.mega.domain.Employee;
+import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.util.EmployeeTestUtil;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;

@@ -1,7 +1,7 @@
 package com.gepardec.mega.service.employee;
 
-import com.gepardec.mega.application.utils.DateUtils;
-import com.gepardec.mega.domain.Employee;
+import com.gepardec.mega.domain.utils.DateUtils;
+import com.gepardec.mega.domain.model.Employee;
 import de.provantis.zep.BeschaeftigungszeitListeType;
 import de.provantis.zep.BeschaeftigungszeitType;
 import de.provantis.zep.MitarbeiterType;

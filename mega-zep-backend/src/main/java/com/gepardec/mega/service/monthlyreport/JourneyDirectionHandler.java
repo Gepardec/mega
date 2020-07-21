@@ -1,7 +1,7 @@
 package com.gepardec.mega.service.monthlyreport;
 
-import com.gepardec.mega.domain.JourneyDirection;
-import com.gepardec.mega.domain.Warning;
+import com.gepardec.mega.domain.model.JourneyDirection;
+import com.gepardec.mega.domain.model.Warning;
 
 import java.util.Optional;
 

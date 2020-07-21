@@ -1,6 +1,6 @@
 package com.gepardec.mega.notification.mail;
 
-import com.gepardec.mega.application.utils.DateUtils;
+import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.notification.mail.dates.BusinessDayCalculator;
 import com.gepardec.mega.notification.mail.exception.MissingReceiverException;
 import com.gepardec.mega.service.api.EmployeeService;

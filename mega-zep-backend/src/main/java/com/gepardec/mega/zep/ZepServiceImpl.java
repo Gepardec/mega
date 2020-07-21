@@ -1,8 +1,9 @@
-package com.gepardec.mega.service.impl;
+package com.gepardec.mega.zep;
 
-import com.gepardec.mega.domain.Employee;
+import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.ProjectTimeEntry;
 import com.gepardec.mega.zep.ZepServiceException;
-import com.gepardec.mega.service.api.ZepService;
+import com.gepardec.mega.zep.ZepService;
 import com.gepardec.mega.zep.ZepSoapProvider;
 import com.gepardec.mega.service.employee.EmployeeTranslator;
 import de.provantis.zep.*;
@@ -11,11 +12,17 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+
+import static com.gepardec.mega.domain.utils.DateUtils.getFirstDayOfFollowingMonth;
+import static com.gepardec.mega.domain.utils.DateUtils.getLastDayOfFollowingMonth;
 
 @RequestScoped
 public class ZepServiceImpl implements ZepService {
@@ -71,6 +78,38 @@ public class ZepServiceImpl implements ZepService {
         if (StringUtils.isNotEmpty(returnCode.get()) && Integer.parseInt(returnCode.get()) != 0) {
             throw new ZepServiceException("updateEmployeeReleaseDate failed with code: " + returnCode.get());
         }
+    }
+
+    @Override
+    public List<ProjectTimeEntry> getProjectTimes(Employee employee) {
+        final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
+        projektzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
+
+        final ReadProjektzeitenSearchCriteriaType searchCriteria;
+        try {
+            searchCriteria = createProjectTimeSearchCriteria(employee);
+        } catch (DateTimeParseException e) {
+            logger.error("invalid release date {0}", e);
+            return null;
+        }
+        projektzeitenRequest.setReadProjektzeitenSearchCriteria(searchCriteria);
+
+        ReadProjektzeitenResponseType projectTimeResponse = zepSoapPortType.readProjektzeiten(projektzeitenRequest);
+
+        return ProjectTimeMapper.mapToEntryList(projectTimeResponse.getProjektzeitListe().getProjektzeiten());
+    }
+
+    private ReadProjektzeitenSearchCriteriaType createProjectTimeSearchCriteria(Employee employee) {
+        ReadProjektzeitenSearchCriteriaType searchCriteria = new ReadProjektzeitenSearchCriteriaType();
+
+        final String releaseDate = employee.getReleaseDate();
+        searchCriteria.setVon(getFirstDayOfFollowingMonth(releaseDate));
+        searchCriteria.setBis(getLastDayOfFollowingMonth(releaseDate));
+
+        UserIdListeType userIdListType = new UserIdListeType();
+        userIdListType.getUserId().add(employee.getUserId());
+        searchCriteria.setUserIdListe(userIdListType);
+        return searchCriteria;
     }
 
     /**

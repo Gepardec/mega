@@ -1,4 +1,4 @@
-package com.gepardec.mega.rest.exception;
+package com.gepardec.mega.application.exception.mapper;
 
 import com.gepardec.mega.zep.ZepServiceException;
 import org.slf4j.Logger;

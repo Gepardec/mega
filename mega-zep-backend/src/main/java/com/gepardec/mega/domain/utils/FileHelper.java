@@ -1,4 +1,4 @@
-package com.gepardec.mega.application.utils;
+package com.gepardec.mega.domain.utils;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 import static java.lang.String.format;
 

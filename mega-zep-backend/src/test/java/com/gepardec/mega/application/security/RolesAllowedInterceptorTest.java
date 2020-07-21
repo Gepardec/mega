@@ -1,5 +1,6 @@
 package com.gepardec.mega.application.security;
 
+import com.gepardec.mega.application.security.exception.ForbiddenException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;

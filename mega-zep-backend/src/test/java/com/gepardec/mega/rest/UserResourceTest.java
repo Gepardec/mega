@@ -1,7 +1,7 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.UserServiceMock;
-import com.gepardec.mega.domain.User;
+import com.gepardec.mega.domain.model.User;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
