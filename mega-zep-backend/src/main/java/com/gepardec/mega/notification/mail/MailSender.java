@@ -1,7 +1,6 @@
 package com.gepardec.mega.notification.mail;
 
 import com.gepardec.mega.domain.utils.FileHelper;
-import com.gepardec.mega.notification.mail.exception.MissingLogoException;
 import com.google.common.net.MediaType;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;
@@ -76,7 +75,7 @@ public class MailSender {
         } else {
             String msg = String.format("No image found under following Path: %s", megaImageLogoUrl);
             logger.error(msg);
-            throw new MissingLogoException(msg);
+            throw new IllegalStateException(msg);
         }
     }
 
