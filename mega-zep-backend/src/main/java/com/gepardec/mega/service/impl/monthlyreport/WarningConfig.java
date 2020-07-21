@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.monthlyreport;
+package com.gepardec.mega.service.impl.monthlyreport;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 

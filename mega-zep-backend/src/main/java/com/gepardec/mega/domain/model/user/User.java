@@ -1,4 +1,4 @@
-package com.gepardec.mega.domain.model;
+package com.gepardec.mega.domain.model.user;
 
 import com.gepardec.mega.application.security.Role;
 

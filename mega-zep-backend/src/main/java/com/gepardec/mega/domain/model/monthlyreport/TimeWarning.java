@@ -1,4 +1,4 @@
-package com.gepardec.mega.domain.model;
+package com.gepardec.mega.domain.model.monthlyreport;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

@@ -1,8 +1,8 @@
 package com.gepardec.mega.zep.service.translator;
 
 import com.gepardec.mega.application.security.Role;
-import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.service.employee.EmployeeTranslator;
+import com.gepardec.mega.domain.model.employee.Employee;
+import com.gepardec.mega.service.impl.employee.EmployeeMapper;
 import com.gepardec.mega.util.ZepTestUtil;
 import de.provantis.zep.MitarbeiterType;
 import org.junit.jupiter.api.Assertions;
@@ -10,14 +10,14 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-public class EmployeeTranslatorTest {
+public class EmployeeMapperTest {
 
 
     @Test
     void testToEmployeeBeschaeftingungszeitListeNull() {
         final MitarbeiterType mitarbeiterType = ZepTestUtil.createMitarbeiterType(0);
 
-        final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
+        final Employee employee = EmployeeMapper.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
         Assertions.assertFalse(employee.isActive());
     }
@@ -27,7 +27,7 @@ public class EmployeeTranslatorTest {
         final MitarbeiterType mitarbeiterType = ZepTestUtil.createMitarbeiterType(0);
         mitarbeiterType.setBeschaeftigungszeitListe(ZepTestUtil.createBeschaeftigungszeitListeType());
 
-        final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
+        final Employee employee = EmployeeMapper.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
         Assertions.assertFalse(employee.isActive());
     }
@@ -37,7 +37,7 @@ public class EmployeeTranslatorTest {
         final MitarbeiterType mitarbeiterType = ZepTestUtil.createMitarbeiterType(0);
         mitarbeiterType.setBeschaeftigungszeitListe(ZepTestUtil.createBeschaeftigungszeitListeType(ZepTestUtil.createBeschaeftigungszeitType(LocalDate.now().minusDays(30), LocalDate.now().minusDays(15))));
 
-        final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
+        final Employee employee = EmployeeMapper.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
         Assertions.assertFalse(employee.isActive());
     }
@@ -51,7 +51,7 @@ public class EmployeeTranslatorTest {
                 ZepTestUtil.createBeschaeftigungszeitType(LocalDate.now().minusDays(30), LocalDate.now().minusDays(15))
         ));
 
-        final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
+        final Employee employee = EmployeeMapper.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
         Assertions.assertFalse(employee.isActive());
     }
@@ -61,7 +61,7 @@ public class EmployeeTranslatorTest {
         final MitarbeiterType mitarbeiterType = ZepTestUtil.createMitarbeiterType(0);
         mitarbeiterType.setBeschaeftigungszeitListe(ZepTestUtil.createBeschaeftigungszeitListeType(ZepTestUtil.createBeschaeftigungszeitType(LocalDate.now().minusDays(30), LocalDate.now().minusDays(1))));
 
-        final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
+        final Employee employee = EmployeeMapper.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
         Assertions.assertFalse(employee.isActive());
     }
@@ -71,7 +71,7 @@ public class EmployeeTranslatorTest {
         final MitarbeiterType mitarbeiterType = ZepTestUtil.createMitarbeiterType(0);
         mitarbeiterType.setBeschaeftigungszeitListe(ZepTestUtil.createBeschaeftigungszeitListeType(ZepTestUtil.createBeschaeftigungszeitType(LocalDate.now().minusDays(30),null)));
 
-        final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
+        final Employee employee = EmployeeMapper.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
         Assertions.assertTrue(employee.isActive());
     }
@@ -85,7 +85,7 @@ public class EmployeeTranslatorTest {
                 ZepTestUtil.createBeschaeftigungszeitType(LocalDate.now().minusDays(30), null)
         ));
 
-        final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
+        final Employee employee = EmployeeMapper.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
         Assertions.assertTrue(employee.isActive());
     }
@@ -95,7 +95,7 @@ public class EmployeeTranslatorTest {
         final MitarbeiterType mitarbeiterType = ZepTestUtil.createMitarbeiterType(0);
         mitarbeiterType.setBeschaeftigungszeitListe(ZepTestUtil.createBeschaeftigungszeitListeType(ZepTestUtil.createBeschaeftigungszeitType(LocalDate.now().minusDays(30), LocalDate.now())));
 
-        final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
+        final Employee employee = EmployeeMapper.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
         Assertions.assertTrue(employee.isActive());
     }
@@ -105,7 +105,7 @@ public class EmployeeTranslatorTest {
         final MitarbeiterType mitarbeiterType = ZepTestUtil.createMitarbeiterType(0);
         mitarbeiterType.setBeschaeftigungszeitListe(ZepTestUtil.createBeschaeftigungszeitListeType(ZepTestUtil.createBeschaeftigungszeitType(LocalDate.now().minusDays(30), LocalDate.now().plusDays(1))));
 
-        final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
+        final Employee employee = EmployeeMapper.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
         Assertions.assertTrue(employee.isActive());
     }
@@ -115,7 +115,7 @@ public class EmployeeTranslatorTest {
         final MitarbeiterType mitarbeiterType = ZepTestUtil.createMitarbeiterType(0);
         mitarbeiterType.setBeschaeftigungszeitListe(ZepTestUtil.createBeschaeftigungszeitListeType(ZepTestUtil.createBeschaeftigungszeitType(LocalDate.now().minusDays(300), null)));
 
-        final Employee employee = EmployeeTranslator.toEmployee(mitarbeiterType);
+        final Employee employee = EmployeeMapper.toEmployee(mitarbeiterType);
         Assertions.assertNotNull(employee);
         Assertions.assertEquals("0", employee.getUserId());
         Assertions.assertEquals("Thomas_0@gepardec.com", employee.getEmail());

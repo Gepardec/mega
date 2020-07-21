@@ -1,6 +1,6 @@
-package com.gepardec.mega.service.api;
+package com.gepardec.mega.service.api.employee;
 
-import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.employee.Employee;
 
 import java.util.List;
 

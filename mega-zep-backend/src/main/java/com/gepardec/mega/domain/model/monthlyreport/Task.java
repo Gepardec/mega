@@ -1,4 +1,4 @@
-package com.gepardec.mega.domain.model;
+package com.gepardec.mega.domain.model.monthlyreport;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,7 +15,7 @@ public enum Task {
     REISEN,
     UNDEFINIERT;
 
-    private static Map<String, Task> enumMap = Stream.of(Task.values())
+    private static final Map<String, Task> ENUM_MAP = Stream.of(Task.values())
             .collect(toMap(Task::name, task -> task));
 
     public static boolean isJourney(Task task) {
@@ -27,7 +27,7 @@ public enum Task {
     }
 
     public static Optional<Task> fromString(String name) {
-        return Optional.ofNullable(enumMap.get(StringUtils.defaultIfBlank(name, StringUtils.EMPTY).toUpperCase()));
+        return Optional.ofNullable(ENUM_MAP.get(StringUtils.defaultIfBlank(name, StringUtils.EMPTY).toUpperCase()));
     }
 
 }

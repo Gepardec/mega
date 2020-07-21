@@ -1,7 +1,7 @@
-package com.gepardec.mega.service.impl;
+package com.gepardec.mega.service.impl.employee;
 
-import com.gepardec.mega.service.api.EmployeeService;
-import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.service.api.employee.EmployeeService;
+import com.gepardec.mega.domain.model.employee.Employee;
 import com.gepardec.mega.zep.ZepServiceException;
 import com.gepardec.mega.zep.ZepService;
 import com.google.common.collect.Iterables;

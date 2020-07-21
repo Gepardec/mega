@@ -1,14 +1,13 @@
 package com.gepardec.mega.zep.service.impl;
 
 
-import com.gepardec.mega.domain.model.*;
-import com.gepardec.mega.service.impl.WorkerServiceImpl;
-import com.gepardec.mega.service.monthlyreport.WarningConfig;
-import com.gepardec.mega.service.api.EmployeeService;
+import com.gepardec.mega.domain.model.employee.Employee;
+import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.Task;
+import com.gepardec.mega.service.impl.monthlyreport.MonthlyReportServiceImpl;
 import com.gepardec.mega.util.EmployeeTestUtil;
 import com.gepardec.mega.zep.ZepService;
-import com.gepardec.mega.zep.ZepSoapProvider;
-import de.provantis.zep.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,13 +24,13 @@ import java.util.List;
 
 
 @ExtendWith(MockitoExtension.class)
-public class WorkerServiceImplTest {
+public class MonthlyReportServiceImplTest {
 
     @Mock
     private ZepService zepService;
 
     @InjectMocks
-    private WorkerServiceImpl workerService;
+    private MonthlyReportServiceImpl workerService;
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterNull() {
@@ -102,11 +100,9 @@ public class WorkerServiceImplTest {
 
         return Arrays.asList(new ProjectTimeEntry(LocalDateTime.of(2020, 1, 31, 7 ,0),
                         LocalDateTime.of(2020, 1, 31, bisHours, 0),
-                        Task.BEARBEITEN,
-                        WorkingLocation.DEFAULT_WORKING_LOCATION),
+                        Task.BEARBEITEN),
                 new ProjectTimeEntry(LocalDateTime.of(2020, 1, 30, 7 ,0),
                         LocalDateTime.of(2020, 1, 30, 10, 0),
-                        Task.BEARBEITEN,
-                        WorkingLocation.DEFAULT_WORKING_LOCATION));
+                        Task.BEARBEITEN));
     }
 }

@@ -1,8 +1,8 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.domain.model.User;
+import com.gepardec.mega.domain.model.user.User;
 import com.gepardec.mega.application.security.SessionUser;
-import com.gepardec.mega.service.api.UserService;
+import com.gepardec.mega.service.api.user.UserService;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;

@@ -1,7 +1,7 @@
 package com.gepardec.mega.notification.mail;
 
-import com.gepardec.mega.service.api.EmployeeService;
-import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.service.api.employee.EmployeeService;
+import com.gepardec.mega.domain.model.employee.Employee;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
 import org.eclipse.microprofile.config.inject.ConfigProperty;

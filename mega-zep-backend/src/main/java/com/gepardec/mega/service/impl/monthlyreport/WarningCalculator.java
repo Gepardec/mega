@@ -1,18 +1,18 @@
-package com.gepardec.mega.service.monthlyreport;
+package com.gepardec.mega.service.impl.monthlyreport;
 
-import com.gepardec.mega.domain.model.*;
+import com.gepardec.mega.domain.model.monthlyreport.*;
 import com.gepardec.mega.domain.utils.DateUtils;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.gepardec.mega.domain.model.TimeWarning.*;
+import static com.gepardec.mega.domain.model.monthlyreport.TimeWarning.*;
 
 public class WarningCalculator {
-    private List<TimeWarning> timeWarnings = new ArrayList<>(0);
-    private List<JourneyWarning> journeyWarnings = new ArrayList<>(0);
-    private WarningConfig warningConfig;
+    private final List<TimeWarning> timeWarnings = new ArrayList<>(0);
+    private final List<JourneyWarning> journeyWarnings = new ArrayList<>(0);
+    private final WarningConfig warningConfig;
 
     public WarningCalculator(WarningConfig warningConfig) {
         this.warningConfig = warningConfig;
@@ -74,6 +74,7 @@ public class WarningCalculator {
         }
     }
 
+    // FIXME GAJ: not used at the moment may still be useful later -> remove?!?
     private void checkForFlexibleWorkFrame(ProjectTimeEntry projectTimeEntry) {
         if (projectTimeEntry.getFromTime().toLocalTime().isBefore(EARLIEST_START_TIME)) {
             TimeWarning timeWarning = new TimeWarning();
@@ -133,7 +134,7 @@ public class WarningCalculator {
     }
 
 
-    public List<JourneyWarning> determineJourneyWarnings(List<ProjectTimeEntry> projectTimeEntryList) {
+    List<JourneyWarning> determineJourneyWarnings(List<ProjectTimeEntry> projectTimeEntryList) {
         JourneyDirectionHandler journeyDirectionHandler = new JourneyDirectionHandler();
         for (ProjectTimeEntry projectTimeEntry : projectTimeEntryList) {
 

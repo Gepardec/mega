@@ -37,5 +37,4 @@ public class FileHelper {
         }
         return text;
     }
-
 }

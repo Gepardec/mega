@@ -1,4 +1,6 @@
-package com.gepardec.mega.domain.model;
+package com.gepardec.mega.domain.model.monthlyreport;
+
+import com.gepardec.mega.domain.model.employee.Employee;
 
 import java.util.List;
 

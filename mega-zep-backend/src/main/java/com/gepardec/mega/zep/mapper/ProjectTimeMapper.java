@@ -1,6 +1,6 @@
-package com.gepardec.mega.zep;
+package com.gepardec.mega.zep.mapper;
 
-import com.gepardec.mega.domain.model.*;
+import com.gepardec.mega.domain.model.monthlyreport.*;
 import de.provantis.zep.ProjektzeitType;
 
 import java.time.LocalDateTime;
@@ -21,17 +21,18 @@ public class ProjectTimeMapper {
     private static ProjectTimeEntry mapSingleTypeToEntry(ProjektzeitType projektzeitType) {
         LocalDateTime fromTime = parseDateTime(projektzeitType.getDatum(), projektzeitType.getVon());
         LocalDateTime toTime = parseDateTime(projektzeitType.getDatum(), projektzeitType.getBis());
+
         Task task = Task.fromString(projektzeitType.getTaetigkeit())
                 .orElseThrow(() -> new IllegalArgumentException("ProjektzeitType.getTaetigkeit could not be converted to Task enum"));
-        WorkingLocation workingLocation = WorkingLocation.fromString(projektzeitType.getOrt())
-                .orElseThrow(() -> new IllegalArgumentException("ProjektzeitType.getOrt could not be converted to WorkingLocation enum"));
 
         if (Task.isJourney(task)) {
             JourneyDirection journeyDirection = JourneyDirection.fromString(projektzeitType.getReiseRichtung())
                     .orElseThrow(() -> new IllegalArgumentException("ProjektzeitType.getReiseRichtung could not be converted to JourneyDirection enum"));
-            return new JourneyEntry(fromTime, toTime, task, workingLocation, journeyDirection);
+
+            return new JourneyEntry(fromTime, toTime, task, journeyDirection);
         } else {
-            return new ProjectTimeEntry(fromTime, toTime, task, workingLocation);
+
+            return new ProjectTimeEntry(fromTime, toTime, task);
         }
     }
 }
