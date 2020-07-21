@@ -16,7 +16,7 @@ public abstract class User {
     public abstract String pictureUrl();
 
     public static Builder builder() {
-        return new com.gepardec.mega.domain.AutoValue_User.Builder();
+        return new com.gepardec.mega.domain.model.AutoValue_User.Builder();
     }
 
     @AutoValue.Builder

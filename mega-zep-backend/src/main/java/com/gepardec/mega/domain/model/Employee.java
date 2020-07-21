@@ -17,7 +17,7 @@ public abstract class Employee {
     public abstract boolean active();
 
     public static Builder builder() {
-        return new com.gepardec.mega.domain.AutoValue_Employee.Builder();
+        return new com.gepardec.mega.domain.model.AutoValue_Employee.Builder();
     }
 
     @AutoValue.Builder
