@@ -11,11 +11,11 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class User {
 
-    public abstract String email();
-    public abstract String firstname();
-    public abstract String lastname();
-    public abstract Role role();
-    public abstract String pictureUrl();
+    @Nullable public abstract String email();
+    @Nullable public abstract String firstname();
+    @Nullable public abstract String lastname();
+    @Nullable public abstract Role role();
+    @Nullable public abstract String pictureUrl();
 
     public static Builder builder() {
         return new com.gepardec.mega.domain.model.AutoValue_User.Builder();
@@ -23,11 +23,11 @@ public abstract class User {
 
     @AutoValue.Builder
     public abstract static class Builder {
-        @Nullable public abstract Builder email(String email);
-        @Nullable public abstract Builder firstname(String firstname);
-        @Nullable public abstract Builder lastname(String lastname);
-        @Nullable public abstract Builder role(Role role);
-        @Nullable public abstract Builder pictureUrl(String pictureUrl);
+        public abstract Builder email(String email);
+        public abstract Builder firstname(String firstname);
+        public abstract Builder lastname(String lastname);
+        public abstract Builder role(Role role);
+        public abstract Builder pictureUrl(String pictureUrl);
         public abstract User build();
     }
 }

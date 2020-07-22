@@ -1,5 +1,8 @@
 package com.gepardec.mega.rest;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.application.security.SessionUser;
 import com.gepardec.mega.service.api.UserService;
@@ -13,6 +16,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 
 /**
  * Handles the User actions.
