@@ -3,6 +3,8 @@ package com.gepardec.mega.domain.model;
 import com.gepardec.mega.application.security.Role;
 import com.google.auto.value.AutoValue;
 
+import javax.annotation.Nullable;
+
 /**
  * Represents the logged user in mega.
  */
@@ -21,11 +23,11 @@ public abstract class User {
 
     @AutoValue.Builder
     public abstract static class Builder {
-        public abstract Builder email(String email);
-        public abstract Builder firstname(String firstname);
-        public abstract Builder lastname(String lastname);
-        public abstract Builder role(Role role);
-        public abstract Builder pictureUrl(String pictureUrl);
+        @Nullable public abstract Builder email(String email);
+        @Nullable public abstract Builder firstname(String firstname);
+        @Nullable public abstract Builder lastname(String lastname);
+        @Nullable public abstract Builder role(Role role);
+        @Nullable public abstract Builder pictureUrl(String pictureUrl);
         public abstract User build();
     }
 }
