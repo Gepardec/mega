@@ -1,10 +1,11 @@
 package com.gepardec.mega.notification.mail;
 
-import com.gepardec.mega.domain.utils.FileHelper;
 import com.gepardec.mega.notification.mail.exception.MissingLogoException;
 import com.google.common.net.MediaType;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
@@ -13,7 +14,10 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+
+import static java.lang.String.format;
 
 @ApplicationScoped
 public class MailSender {
@@ -46,16 +50,13 @@ public class MailSender {
     Mailer mailer;
 
     @Inject
-    FileHelper fileHelper;
-
-    @Inject
     Logger logger;
 
     private String mailTemplateText;
 
     @PostConstruct
     void initLogoAndTemplate() {
-        mailTemplateText = fileHelper.readTextOfPath(mailTemplateTextPath)
+        mailTemplateText = this.readTextOfPath(mailTemplateTextPath)
                 .replace(MEGA_DASH_URL_PLACEHOLDER, megaDashUrl);
 
         readLogo();
@@ -83,7 +84,7 @@ public class MailSender {
 
     public void sendReminder(String eMail, String firstName, Reminder reminder) {
         String subject = getSubjectForReminder(reminder);
-        String text = fileHelper.readTextOfPath(
+        String text = this.readTextOfPath(
                 getPathForReminder(reminder));
         sendMail(eMail, firstName, subject, text);
     }
@@ -177,6 +178,26 @@ public class MailSender {
             }
         }
         return subjectPrefix.orElse("") + subject;
+    }
+
+    String readTextOfPath(String pathToRead) {
+        String text = null;
+        if (StringUtils.isBlank(pathToRead)) {
+            logger.error("pathToRead is empty");
+            return null;
+        }
+        try {
+            final ClassLoader classLoader = MailSender.class.getClassLoader();
+            final InputStream is = classLoader.getResourceAsStream(pathToRead);
+            if (is != null) {
+                text = String.join(System.lineSeparator(), IOUtils.readLines(is, StandardCharsets.UTF_8));
+            } else {
+                logger.error(format("File with path %s not found", pathToRead));
+            }
+        } catch (IOException e) {
+            logger.error(format("Error reading message Text from File %s", pathToRead));
+        }
+        return text;
     }
 
 }
