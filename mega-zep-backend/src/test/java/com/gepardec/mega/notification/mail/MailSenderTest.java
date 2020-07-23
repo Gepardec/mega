@@ -95,18 +95,5 @@ class MailSenderTest {
                 () -> assertTrue(sent.get(0).getSubject().equals(subjectPrefix.orElse("") + expectedSubject)));
     }
 
-    @Test
-    void readTextOfPath_correctPath_returnsContent() throws ReflectiveOperationException {
-        assertTrue(StringUtils.isNoneBlank(mailSender.readTextOfPath("notifications/5_plProjectControlling.html")));
-    }
-
-    @Test
-    void readTextOfPath_incorrectPath_returnsNull() {
-        assertThrows(NullPointerException.class, () -> mailSender.readTextOfPath("notificatictControlling.html"));
-    }
-
-    @Test()
-    void readTextOfPath_blankPath_returnsNull() {
-        assertThrows(IllegalArgumentException.class, () -> mailSender.readTextOfPath(" "));
-    }
+    // TODO: Add tests for each Reminder if the template and subject can be loaded. Mock NotificationConfig for that
 }

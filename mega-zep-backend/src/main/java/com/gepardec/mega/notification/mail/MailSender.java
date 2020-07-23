@@ -1,6 +1,5 @@
 package com.gepardec.mega.notification.mail;
 
-import com.gepardec.mega.notification.mail.exception.MissingLogoException;
 import com.google.common.net.MediaType;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;
@@ -11,7 +10,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -25,8 +23,6 @@ public class MailSender {
     private static final String EOM_WIKI_PLACEHOLDER = "$wikiEomUrl$";
     private static final String MEGA_DASH_URL_PLACEHOLDER = "$megaDash$";
     private static final String TEMPLATE_MAILTEXT_PLACEHOLDER = "$mailText$";
-
-    private byte[] logoByteArray;
 
     @ConfigProperty(name = "mega.mail.subjectPrefix")
     String subjectPrefix;
@@ -58,29 +54,7 @@ public class MailSender {
     void initLogoAndTemplate() {
         mailTemplateText = readTextOfPath(mailTemplateTextPath)
                 .replace(MEGA_DASH_URL_PLACEHOLDER, megaDashUrl);
-
-        readLogo();
     }
-
-    private void readLogo() {
-        final InputStream logoInputStream = MailSender.class.getClassLoader().getResourceAsStream(megaImageLogoUrl);
-        if (logoInputStream != null) {
-            try {
-                logoByteArray = new byte[logoInputStream.available()];
-                final int result = logoInputStream.read(logoByteArray);
-                if (result == -1) {
-                    logger.error("Error while reading image file.");
-                }
-            } catch (IOException e) {
-                logger.error(e.getMessage());
-            }
-        } else {
-            String msg = String.format("No image found under following Path: %s", megaImageLogoUrl);
-            logger.error(msg);
-            throw new MissingLogoException(msg);
-        }
-    }
-
 
     public void sendReminder(String eMail, String firstName, Reminder reminder) {
         String subject = getSubjectForReminder(reminder);
@@ -97,7 +71,7 @@ public class MailSender {
 
 
         mailer.send(Mail.withHtml(eMail, subject, mailContent)
-                .addInlineAttachment("LogoMEGAdash.png", logoByteArray, MediaType.PNG.type(), "<LogoMEGAdash@gepardec.com>"));
+                .addInlineAttachment("LogoMEGAdash.png", readLogo(), MediaType.PNG.type(), "<LogoMEGAdash@gepardec.com>"));
     }
 
 
@@ -177,7 +151,7 @@ public class MailSender {
         return Optional.ofNullable(subjectPrefix).orElse("") + subject;
     }
 
-    String readTextOfPath(String pathToRead) {
+    private String readTextOfPath(String pathToRead) {
         final URL url = MailSender.class.getClassLoader().getResource(pathToRead);
         Objects.requireNonNull(url, String.format("File '%s' could not be loaded as a resource", pathToRead));
         try {
@@ -186,6 +160,18 @@ public class MailSender {
             throw new IllegalStateException(String.format("Could not read lines of resource '%s'", pathToRead));
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(String.format("Could not get URI of found resource '%s'", pathToRead));
+        }
+    }
+
+    private byte[] readLogo() {
+        final URL url = MailSender.class.getClassLoader().getResource(megaImageLogoUrl);
+        Objects.requireNonNull(url, String.format("File '%s' could not be loaded as a resource", megaImageLogoUrl));
+        try {
+            return Files.readAllBytes(Paths.get(url.toURI()));
+        } catch (IOException e) {
+            throw new IllegalStateException(String.format("Could not read bytes of resource '%s'", megaImageLogoUrl));
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(String.format("Could not get URI of found resource '%s'", megaImageLogoUrl));
         }
     }
 }
