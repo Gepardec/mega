@@ -102,21 +102,11 @@ class MailSenderTest {
 
     @Test
     void readTextOfPath_incorrectPath_returnsNull() {
-        assertNull(mailSender.readTextOfPath("notificatictControlling.html"));
+        assertThrows(NullPointerException.class, () -> mailSender.readTextOfPath("notificatictControlling.html"));
     }
 
-    @Test
-    void readTextOfPath_nullPath_returnsNull() {
-        assertNull(mailSender.readTextOfPath("null"));
-    }
-
-    @Test
-    void readTextOfPath_BlankPath_returnsNull() {
-        assertNull(mailSender.readTextOfPath(" "));
-    }
-
-    @Test
-    void readTextOfPath_EmptyPath_returnsNull() {
-        assertNull(mailSender.readTextOfPath(""));
+    @Test()
+    void readTextOfPath_blankPath_returnsNull() {
+        assertThrows(IllegalArgumentException.class, () -> mailSender.readTextOfPath(" "));
     }
 }

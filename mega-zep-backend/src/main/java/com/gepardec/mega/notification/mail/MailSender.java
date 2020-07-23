@@ -4,8 +4,6 @@ import com.gepardec.mega.notification.mail.exception.MissingLogoException;
 import com.google.common.net.MediaType;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
@@ -14,10 +12,12 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Optional;
-
-import static java.lang.String.format;
 
 @ApplicationScoped
 public class MailSender {
@@ -29,7 +29,7 @@ public class MailSender {
     private byte[] logoByteArray;
 
     @ConfigProperty(name = "mega.mail.subjectPrefix")
-    Optional<String> subjectPrefix;
+    String subjectPrefix;
 
     @ConfigProperty(name = "mega.image.logo.url")
     String megaImageLogoUrl;
@@ -56,7 +56,7 @@ public class MailSender {
 
     @PostConstruct
     void initLogoAndTemplate() {
-        mailTemplateText = this.readTextOfPath(mailTemplateTextPath)
+        mailTemplateText = readTextOfPath(mailTemplateTextPath)
                 .replace(MEGA_DASH_URL_PLACEHOLDER, megaDashUrl);
 
         readLogo();
@@ -84,8 +84,7 @@ public class MailSender {
 
     public void sendReminder(String eMail, String firstName, Reminder reminder) {
         String subject = getSubjectForReminder(reminder);
-        String text = this.readTextOfPath(
-                getPathForReminder(reminder));
+        String text = readTextOfPath(getPathForReminder(reminder));
         sendMail(eMail, firstName, subject, text);
     }
 
@@ -134,8 +133,7 @@ public class MailSender {
                 break;
             }
             default: {
-                path = null;
-                break;
+                throw new IllegalArgumentException(String.format("No mail template found for Reminder: '%s'", reminder.name()));
             }
         }
         return path;
@@ -173,31 +171,21 @@ public class MailSender {
                 break;
             }
             default: {
-                subject = "";
-                break;
+                throw new IllegalArgumentException(String.format("No mail subject found for Reminder: '%s'", reminder.name()));
             }
         }
-        return subjectPrefix.orElse("") + subject;
+        return Optional.ofNullable(subjectPrefix).orElse("") + subject;
     }
 
     String readTextOfPath(String pathToRead) {
-        String text = null;
-        if (StringUtils.isBlank(pathToRead)) {
-            logger.error("pathToRead is empty");
-            return null;
-        }
+        final URL url = MailSender.class.getClassLoader().getResource(pathToRead);
+        Objects.requireNonNull(url, String.format("File '%s' could not be loaded as a resource", pathToRead));
         try {
-            final ClassLoader classLoader = MailSender.class.getClassLoader();
-            final InputStream is = classLoader.getResourceAsStream(pathToRead);
-            if (is != null) {
-                text = String.join(System.lineSeparator(), IOUtils.readLines(is, StandardCharsets.UTF_8));
-            } else {
-                logger.error(format("File with path %s not found", pathToRead));
-            }
+            return String.join(System.lineSeparator(), Files.readAllLines(Paths.get(url.toURI())));
         } catch (IOException e) {
-            logger.error(format("Error reading message Text from File %s", pathToRead));
+            throw new IllegalStateException(String.format("Could not read lines of resource '%s'", pathToRead));
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(String.format("Could not get URI of found resource '%s'", pathToRead));
         }
-        return text;
     }
-
 }
