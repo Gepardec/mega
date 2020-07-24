@@ -1,6 +1,7 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.UserServiceMock;
+import com.gepardec.mega.application.security.Role;
 import com.gepardec.mega.domain.model.User;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -63,11 +65,11 @@ class UserResourceTest {
                 .body("fakeIdToken")
                 .post("/user/login")
                 .then().statusCode(HttpStatus.SC_OK)
-                .body("email", equalTo(user.getEmail()))
-                .body("lastname", equalTo(user.getLastname()))
-                .body("firstname", equalTo(user.getFirstname()))
-                .body("role", equalTo(user.getRole().name()))
-                .body("pictureUrl", equalTo(user.getPictureUrl()));
+                .body("email", equalTo(user.email()))
+                .body("lastname", equalTo(user.lastname()))
+                .body("firstname", equalTo(user.firstname()))
+                .body("role", equalTo(Optional.ofNullable(user.role()).map(Role::name).orElse(null)))
+                .body("pictureUrl", equalTo(user.pictureUrl()));
     }
 
     @Test

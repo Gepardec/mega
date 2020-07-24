@@ -102,12 +102,12 @@ public class ZepServiceImpl implements ZepService {
     private ReadProjektzeitenSearchCriteriaType createProjectTimeSearchCriteria(Employee employee) {
         ReadProjektzeitenSearchCriteriaType searchCriteria = new ReadProjektzeitenSearchCriteriaType();
 
-        final String releaseDate = employee.getReleaseDate();
+        final String releaseDate = employee.releaseDate();
         searchCriteria.setVon(getFirstDayOfFollowingMonth(releaseDate));
         searchCriteria.setBis(getLastDayOfFollowingMonth(releaseDate));
 
         UserIdListeType userIdListType = new UserIdListeType();
-        userIdListType.getUserId().add(employee.getUserId());
+        userIdListType.getUserId().add(employee.userId());
         searchCriteria.setUserIdListe(userIdListType);
         return searchCriteria;
     }

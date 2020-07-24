@@ -19,17 +19,18 @@ public class EmployeeTranslator {
     }
 
     public static Employee toEmployee(MitarbeiterType mitarbeiterType) {
-        Employee employee = new Employee();
-        employee.setUserId(mitarbeiterType.getUserId());
-        employee.setEmail(mitarbeiterType.getEmail());
-        employee.setTitle(mitarbeiterType.getTitel());
-        employee.setFirstName(mitarbeiterType.getVorname());
-        employee.setSureName(mitarbeiterType.getNachname());
-        employee.setSalutation(mitarbeiterType.getAnrede());
-        employee.setReleaseDate(mitarbeiterType.getFreigabedatum());
-        employee.setWorkDescription(mitarbeiterType.getPreisgruppe());
-        employee.setRole(mitarbeiterType.getRechte());
-        employee.setActive(isActive(mitarbeiterType));
+        Employee employee = Employee.builder()
+                .userId(mitarbeiterType.getUserId())
+                .email(mitarbeiterType.getEmail())
+                .title(mitarbeiterType.getTitel())
+                .firstName(mitarbeiterType.getVorname())
+                .sureName(mitarbeiterType.getNachname())
+                .salutation(mitarbeiterType.getAnrede())
+                .releaseDate(mitarbeiterType.getFreigabedatum())
+                .workDescription(mitarbeiterType.getPreisgruppe())
+                .role(mitarbeiterType.getRechte())
+                .active(isActive(mitarbeiterType))
+                .build();
 
         return employee;
     }
