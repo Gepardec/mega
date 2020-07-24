@@ -82,9 +82,7 @@ public class MailDaemon {
 
     void sendReminderToPl() {
         if (plMailAddresses == null) {
-            String msg = "No mail address for project-leaders available, check value for property 'mega.mail.reminder.pl'!";
-            logger.error(msg);
-            throw new IllegalStateException(msg);
+            throw new IllegalStateException("No mail address for project-leaders available, check value for property 'mega.mail.reminder.pl'!");
         }
         Arrays.asList(plMailAddresses.split("\\,"))
                 .forEach(mailAddress -> mailSender.sendReminder(mailAddress, getNameByMail(mailAddress), PL_PROJECT_CONTROLLING));
@@ -93,9 +91,7 @@ public class MailDaemon {
 
     void sendReminderToOm(Reminder reminder) {
         if (omMailAddresses == null) {
-            String msg = "No mail address for om available, check value for property 'mega.mail.reminder.om'!";
-            logger.error(msg);
-            throw new IllegalStateException(msg);
+            throw new IllegalStateException("No mail address for om available, check value for property 'mega.mail.reminder.om'!");
         }
         Arrays.asList(omMailAddresses.split("\\,"))
                 .forEach(mailAddress -> mailSender.sendReminder(mailAddress, getNameByMail(mailAddress), reminder));

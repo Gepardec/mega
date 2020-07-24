@@ -73,9 +73,7 @@ public class MailSender {
                 logger.error(e.getMessage());
             }
         } else {
-            String msg = String.format("No image found under following Path: %s", megaImageLogoUrl);
-            logger.error(msg);
-            throw new IllegalStateException(msg);
+            throw new IllegalStateException(String.format("No image found under following Path: %s", megaImageLogoUrl));
         }
     }
 
