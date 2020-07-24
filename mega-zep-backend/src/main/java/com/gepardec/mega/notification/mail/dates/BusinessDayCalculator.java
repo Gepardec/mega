@@ -1,7 +1,7 @@
 package com.gepardec.mega.notification.mail.dates;
 
 import com.gepardec.mega.notification.mail.Reminder;
-import com.gepardec.mega.notification.mail.Remindertype;
+import com.gepardec.mega.notification.mail.ReminderType;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -39,9 +39,9 @@ public class BusinessDayCalculator {
     }
 
     private LocalDate calcDateForReminder(LocalDate firstWorkingdayOfMonth, Reminder reminder) {
-        if (reminder.getType() == Remindertype.DAY_OF_MONTH_BASED) {
+        if (reminder.getType() == ReminderType.DAY_OF_MONTH_BASED) {
             return calcNextWorkingdayForDayOfMonth(firstWorkingdayOfMonth, reminder.getDay());
-        } else if (reminder.getType() == Remindertype.WORKING_DAY_BASED) {
+        } else if (reminder.getType() == ReminderType.WORKING_DAY_BASED) {
             if (reminder.getDay() > 0) {
                 return addWorkingdays(firstWorkingdayOfMonth, reminder.getDay() - 1);
             } else {

@@ -2,13 +2,14 @@ package com.gepardec.mega.rest;
 
 import com.gepardec.mega.GoogleTokenVerifierMock;
 import com.gepardec.mega.SessionUserMock;
-import com.gepardec.mega.WorkerServiceMock;
+import com.gepardec.mega.MonthlyReportServiceMock;
 import com.gepardec.mega.application.security.Role;
+import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
+import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.JourneyWarning;
-import com.gepardec.mega.domain.model.MonthlyReport;
-import com.gepardec.mega.domain.model.TimeWarning;
-import com.gepardec.mega.service.api.WorkerService;
+import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
+import com.gepardec.mega.util.EmployeeTestUtil;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import io.quarkus.test.junit.QuarkusTest;
@@ -34,7 +35,7 @@ public class WorkerResourceTest {
 
     private GoogleIdToken googleIdToken;
 
-    private WorkerService workerService;
+    private MonthlyReportService monthlyReportService;
 
     private GoogleIdTokenVerifier googleIdTokenVerifier;
 
@@ -42,7 +43,7 @@ public class WorkerResourceTest {
     SessionUserMock sessionUserMock;
 
     @Inject
-    WorkerServiceMock workerServiceMock;
+    MonthlyReportServiceMock workerServiceMock;
 
     @Inject
     GoogleTokenVerifierMock googleTokenVerifierMock;
@@ -57,8 +58,8 @@ public class WorkerResourceTest {
         googleTokenVerifierMock.setDelegate(googleIdTokenVerifier);
         sessionUserMock.init(userId, email, "", Role.ADMINISTRATOR.roleId);
 
-        workerService = Mockito.mock(WorkerService.class);
-        workerServiceMock.setDelegate(workerService);
+        monthlyReportService = Mockito.mock(MonthlyReportService.class);
+        workerServiceMock.setDelegate(monthlyReportService);
     }
 
 
@@ -80,7 +81,7 @@ public class WorkerResourceTest {
     void employeeMonthendReport_withReport_returnsReport() {
         final Employee employee = createEmployee(0);
         final MonthlyReport expected = createZepMonthlyReport(employee);
-        Mockito.when(workerService.getMonthendReportForUser(Mockito.anyString())).thenReturn(expected);
+        Mockito.when(monthlyReportService.getMonthendReportForUser(Mockito.anyString())).thenReturn(expected);
 
         final MonthlyReport actual = given().contentType(ContentType.JSON)
                 .get("/worker/monthendreports")
