@@ -8,8 +8,6 @@ import java.util.ResourceBundle;
 @ApplicationScoped
 public class ResourceBundleProducer {
 
-    private ResourceBundle mailMessages;
-
     @Produces
     @ApplicationScoped
     ResourceBundle getMessages() {
