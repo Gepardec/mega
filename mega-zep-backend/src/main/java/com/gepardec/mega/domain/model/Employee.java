@@ -16,10 +16,11 @@ public abstract class Employee {
     @Nullable public abstract String releaseDate();
     @Nullable public abstract String workDescription();
     @Nullable public abstract Integer role();
-    @Nullable public abstract Boolean active();
+    public abstract boolean active();
 
     public static Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_Employee.Builder();
+        return new com.gepardec.mega.domain.model.AutoValue_Employee.Builder()
+                .active(false);
     }
 
     @AutoValue.Builder
@@ -37,88 +38,3 @@ public abstract class Employee {
         public abstract Employee build();
     }
 }
-
-//    public Employee() {
-//        // nop
-//    }
-//
-//    public String getUserId() {
-//        return userId;
-//    }
-//
-//    public void setUserId(String userId) {
-//        this.userId = userId;
-//    }
-//
-//    public String getEmail() {
-//        return email;
-//    }
-//
-//    public void setEmail(String email) {
-//        this.email = email;
-//    }
-//
-//    public String getTitle() {
-//        return title;
-//    }
-//
-//    public void setTitle(String title) {
-//        this.title = title;
-//    }
-//
-//    public String getFirstName() {
-//        return firstName;
-//    }
-//
-//    public void setFirstName(String firstName) {
-//        this.firstName = firstName;
-//    }
-//
-//    public String getSureName() {
-//        return sureName;
-//    }
-//
-//    public void setSureName(String sureName) {
-//        this.sureName = sureName;
-//    }
-//
-//    public String getSalutation() {
-//        return salutation;
-//    }
-//
-//    public void setSalutation(String salutation) {
-//        this.salutation = salutation;
-//    }
-//
-//    public String getReleaseDate() {
-//        return releaseDate;
-//    }
-//
-//    public void setReleaseDate(String releaseDate) {
-//        this.releaseDate = releaseDate;
-//    }
-//
-//    public String getWorkDescription() {
-//        return workDescription;
-//    }
-//
-//    public void setWorkDescription(String workDescription) {
-//        this.workDescription = workDescription;
-//    }
-//
-//    public Integer getRole() {
-//        return role;
-//    }
-//
-//    public void setRole(Integer role) {
-//        this.role = role;
-//    }
-//
-//    public boolean isActive() {
-//        return active;
-//    }
-//
-//    public void setActive(boolean active) {
-//        this.active = active;
-//    }
-//}
