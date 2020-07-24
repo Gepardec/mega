@@ -6,7 +6,6 @@ import { ErrorHandlerService } from '../services/error/error-handler.service';
 import { UserService } from '../services/user/user.service';
 import { ConfigService } from '../services/config/config.service';
 import { LoaderService } from '../services/loader/loader.service';
-import { OAuthStorage } from 'angular-oauth2-oidc';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +16,7 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
     private errorHandler: ErrorHandlerService,
     private configService: ConfigService,
     private userService: UserService,
-    private loaderService: LoaderService,
-    private authStorage: OAuthStorage) {
+    private loaderService: LoaderService) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -26,14 +24,7 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
     if (req.url.startsWith(this.configService.getBackendUrl())) {
       this.loaderService.showSpinner();
 
-      let headers;
-      if (this.authStorage.getItem('id_token')) {
-        headers = req.headers.set('X-Authorization', this.authStorage.getItem('id_token'));
-      } else {
-        headers = req.headers;
-      }
-
-      return next.handle(req.clone({withCredentials: true, headers})).pipe(
+      return next.handle(req.clone({withCredentials: true})).pipe(
         tap({
           complete: () =>
             this.loaderService.stopSpinner()
