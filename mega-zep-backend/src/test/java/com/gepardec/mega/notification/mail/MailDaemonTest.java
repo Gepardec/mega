@@ -1,7 +1,7 @@
 package com.gepardec.mega.notification.mail;
 
-import com.gepardec.mega.service.api.EmployeeService;
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.service.api.employee.EmployeeService;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.gepardec.mega.notification.mail.Reminder.OM_RELEASE;
@@ -34,12 +33,6 @@ public class MailDaemonTest {
 
     @ConfigProperty(name = "quarkus.mailer.mock")
     boolean mailMockSetting;
-
-    @ConfigProperty(name = "mega.mail.subjectPrefix")
-    Optional<String> subjectPrefix;
-
-    @Inject
-    NotificationConfig notificationConfig;
 
     @Inject
     EmployeeService employeeService;
@@ -69,7 +62,7 @@ public class MailDaemonTest {
         assertAll(
                 () -> assertEquals(mailAddresses.size(), mailbox.getTotalMessagesSent()),
                 () -> mailAddresses.forEach(mailAddress ->
-                        assertEquals(buildSubject(notificationConfig.getOmReleaseSubject()), mailbox.getMessagesSentTo(mailAddresses.get(0)).get(0).getSubject()))
+                        assertEquals("LOCAL: Reminder: Freigaben durchführen", mailbox.getMessagesSentTo(mailAddresses.get(0)).get(0).getSubject()))
         );
     }
 
@@ -80,7 +73,7 @@ public class MailDaemonTest {
         assertAll(
                 () -> assertEquals(mailAddresses.size(), mailbox.getTotalMessagesSent()),
                 () -> mailAddresses.forEach(mailAddress ->
-                        assertEquals(buildSubject(notificationConfig.getPlSubject()), mailbox.getMessagesSentTo(mailAddress).get(0).getSubject()))
+                        assertEquals("LOCAL: Reminder: Projekte kontrollieren und abrechnen", mailbox.getMessagesSentTo(mailAddress).get(0).getSubject()))
         );
     }
 
@@ -95,13 +88,7 @@ public class MailDaemonTest {
         assertAll(
                 () -> assertEquals(addresses.size(), mailbox.getTotalMessagesSent()),
                 () -> addresses.forEach(address ->
-                        assertEquals(buildSubject(notificationConfig.getEmployeeSubject()), mailbox.getMessagesSentTo(address).get(0).getSubject()))
+                        assertEquals("LOCAL: Friendly Reminder: Buchungen kontrollieren", mailbox.getMessagesSentTo(address).get(0).getSubject()))
         );
     }
-
-    private String buildSubject(final String subject){
-        return subjectPrefix.orElse("") + subject;
-    }
-
-
 }

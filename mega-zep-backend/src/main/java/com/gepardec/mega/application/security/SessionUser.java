@@ -17,7 +17,7 @@ public class SessionUser implements Serializable {
         // nop
     }
 
-    public void init(final String userId, final String email, final String idToken, final int recht) {
+    public void init(final String userId, final String email, final String idToken, final Integer recht) {
         this.userId = Objects.requireNonNull(userId, "SessionUser must have an userId");
         this.email = Objects.requireNonNull(email, "SessionUser must have an email");
         this.idToken = Objects.requireNonNull(idToken, "SessionUser must have an idToken");

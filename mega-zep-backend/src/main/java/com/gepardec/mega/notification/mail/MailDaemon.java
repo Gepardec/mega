@@ -2,7 +2,7 @@ package com.gepardec.mega.notification.mail;
 
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.notification.mail.dates.BusinessDayCalculator;
-import com.gepardec.mega.service.api.EmployeeService;
+import com.gepardec.mega.service.api.employee.EmployeeService;
 import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -111,7 +111,7 @@ public class MailDaemon {
     //TODO: remove immediately when names are available with persistence layer
     static String getNameByMail(String eMail) {
         String[] mailParts = StringUtils.defaultIfBlank(eMail, "").split("\\.");
-        if (mailParts != null && !StringUtils.isBlank(mailParts[0])) {
+        if (!StringUtils.isBlank(mailParts[0])) {
             String firstName = mailParts[0];
             return firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
         }

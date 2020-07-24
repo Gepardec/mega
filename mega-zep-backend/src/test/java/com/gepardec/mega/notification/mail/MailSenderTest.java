@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,9 +20,6 @@ class MailSenderTest {
 
     @ConfigProperty(name = "quarkus.mailer.mock")
     boolean mailMockSetting;
-
-    @ConfigProperty(name = "mega.mail.subjectPrefix")
-    Optional<String> subjectPrefix;
 
     @Inject
     MailSender mailSender;
@@ -42,38 +38,38 @@ class MailSenderTest {
 
     @Test
     void sendMail_toEmployees_shouldContainEmpleyNotificationData() {
-        testMailFor("Jamal", Reminder.EMPLOYEE_CHECK_PROJECTTIME, notificationConfig.getEmployeeSubject());
+        testMailFor("Jamal", Reminder.EMPLOYEE_CHECK_PROJECTTIME, "LOCAL: Friendly Reminder: Buchungen kontrollieren");
     }
 
     @Test
     void sendMail_toPL_shouldCountainPlData() {
-        testMailFor("Simba", Reminder.PL_PROJECT_CONTROLLING, notificationConfig.getPlSubject());
+        testMailFor("Simba", Reminder.PL_PROJECT_CONTROLLING, "LOCAL: Reminder: Projekte kontrollieren und abrechnen");
     }
 
     @Test
     void sendMail_toOmControlContent() {
-        testMailFor("Garfield", Reminder.OM_CONTROL_EMPLOYEES_CONTENT, notificationConfig.getOmControlEmployeesDataSubject());
+        testMailFor("Garfield", Reminder.OM_CONTROL_EMPLOYEES_CONTENT, "LOCAL: Reminder: Kontrolle Mitarbeiter");
     }
 
     @Test
     void sendMail_toOmControlProjecttimes() {
-        testMailFor("Dagobert", Reminder.OM_CONTROL_PROJECTTIMES, notificationConfig.getOmControlProjecttimesSubject());
+        testMailFor("Dagobert", Reminder.OM_CONTROL_PROJECTTIMES, "LOCAL: Reminder: Administrative Projektzeiten kontrollieren (Monatsende)");
     }
 
 
     @Test
     void sendMail_toOmRelease() {
-        testMailFor("Pacman", Reminder.OM_RELEASE, notificationConfig.getOmReleaseSubject());
+        testMailFor("Pacman", Reminder.OM_RELEASE, "LOCAL: Reminder: Freigaben durchführen");
     }
 
     @Test
     void sendMail_toOmAdministrative() {
-        testMailFor("ALF", Reminder.OM_ADMINISTRATIVE, notificationConfig.getOmAdministrativeSubject());
+        testMailFor("ALF", Reminder.OM_ADMINISTRATIVE, "LOCAL: Reminder: Administratives");
     }
 
     @Test
     void sendMail_toOmSalary() {
-        testMailFor("Spiderman", Reminder.OM_SALARY, notificationConfig.getOmSalarySubject());
+        testMailFor("Spiderman", Reminder.OM_SALARY, "LOCAL: Reminder: Gehälter");
     }
 
 
@@ -86,13 +82,13 @@ class MailSenderTest {
         assertEquals(100, sent.size());
     }
 
-    private void testMailFor(String name, Reminder reminder, String expectedSubject) {
+    private void testMailFor(String name, Reminder reminder, String subject) {
         mailSender.sendReminder(TO, name, reminder);
         List<Mail> sent = mailbox.getMessagesSentTo(TO);
         assertAll(
                 () -> assertEquals(1, sent.size()),
                 () -> assertTrue(sent.get(0).getHtml().startsWith("<p>Hallo " + name)),
-                () -> assertTrue(sent.get(0).getSubject().equals(subjectPrefix.orElse("") + expectedSubject)));
+                () -> assertEquals(sent.get(0).getSubject(), subject));
     }
 
     // TODO: Add tests for each Reminder if the template and subject can be loaded. Mock NotificationConfig for that
