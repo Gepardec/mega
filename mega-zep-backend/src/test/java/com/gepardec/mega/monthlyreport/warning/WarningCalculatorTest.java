@@ -1,7 +1,7 @@
 package com.gepardec.mega.monthlyreport.warning;
 
-import com.gepardec.mega.domain.model.*;
-import com.gepardec.mega.service.monthlyreport.WarningCalculator;
+import com.gepardec.mega.domain.model.monthlyreport.*;
+import com.gepardec.mega.service.impl.monthlyreport.WarningCalculator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -85,8 +85,7 @@ public class WarningCalculatorTest {
         return Arrays.asList(
                 new ProjectTimeEntry(LocalDateTime.of(2020, 01, 07, 9, 00),
                         LocalDateTime.of(2020, 01, 07, 16, 00),
-                        Task.BEARBEITEN,
-                        WorkingLocation.DEFAULT_WORKING_LOCATION));
+                        Task.BEARBEITEN));
     }
 
     private static List<ProjectTimeEntry> createEntriesMoreThan6HoursWithTravelTime() {
@@ -94,17 +93,14 @@ public class WarningCalculatorTest {
 
                 new ProjectTimeEntry(LocalDateTime.of(2020, 01, 07, 9, 00),
                         LocalDateTime.of(2020, 01, 07, 14, 00),
-                        Task.BEARBEITEN,
-                        WorkingLocation.DEFAULT_WORKING_LOCATION),
+                        Task.BEARBEITEN),
                 new JourneyEntry(LocalDateTime.of(2020, 01, 07, 14, 00),
                         LocalDateTime.of(2020, 01, 07, 16, 00),
                         Task.REISEN,
-                        WorkingLocation.AUSTRIA,
                         JourneyDirection.TO_AIM),
                 new ProjectTimeEntry(LocalDateTime.of(2020, 01, 07, 16, 00),
                         LocalDateTime.of(2020, 01, 07, 17, 00),
-                        Task.BEARBEITEN,
-                        WorkingLocation.DEFAULT_WORKING_LOCATION));
+                        Task.BEARBEITEN));
     }
 
 
@@ -113,18 +109,15 @@ public class WarningCalculatorTest {
         projectTimes.add(
                 new ProjectTimeEntry(LocalDateTime.of(2020, 01, 07, 7, 00),
                         LocalDateTime.of(2020, 01, 07, 10, 00),
-                        Task.BEARBEITEN,
-                        WorkingLocation.DEFAULT_WORKING_LOCATION));
+                        Task.BEARBEITEN));
         projectTimes.add(
                 new ProjectTimeEntry(LocalDateTime.of(2020, 01, 07, 10, 30),
                         LocalDateTime.of(2020, 01, 07, 17, 45),
-                        Task.BEARBEITEN,
-                        WorkingLocation.DEFAULT_WORKING_LOCATION));
+                        Task.BEARBEITEN));
         projectTimes.add(
                 new ProjectTimeEntry(LocalDateTime.of(2020, 01, 07, 18, 00),
                         LocalDateTime.of(2020, 01, 07, 22, 00),
-                        Task.BEARBEITEN,
-                        WorkingLocation.DEFAULT_WORKING_LOCATION));
+                        Task.BEARBEITEN));
         return projectTimes;
     }
 
@@ -133,13 +126,11 @@ public class WarningCalculatorTest {
         projectTimes.add(
                 new ProjectTimeEntry(LocalDateTime.of(2020, 01, 07, 16, 00),
                         LocalDateTime.of(2020, 01, 07, 22, 00),
-                        Task.BEARBEITEN,
-                        WorkingLocation.DEFAULT_WORKING_LOCATION));
+                        Task.BEARBEITEN));
         projectTimes.add(
                 new ProjectTimeEntry(LocalDateTime.of(2020, 1, 8, 6, 00),
                         LocalDateTime.of(2020, 1, 8, 8, 00),
-                        Task.BEARBEITEN,
-                        WorkingLocation.DEFAULT_WORKING_LOCATION));
+                        Task.BEARBEITEN));
         return projectTimes;
     }
 }

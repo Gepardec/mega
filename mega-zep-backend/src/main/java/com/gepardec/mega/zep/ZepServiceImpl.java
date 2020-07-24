@@ -1,22 +1,18 @@
 package com.gepardec.mega.zep;
 
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.ProjectTimeEntry;
-import com.gepardec.mega.zep.ZepServiceException;
-import com.gepardec.mega.zep.ZepService;
-import com.gepardec.mega.zep.ZepSoapProvider;
-import com.gepardec.mega.service.employee.EmployeeTranslator;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
+import com.gepardec.mega.service.impl.employee.EmployeeMapper;
+import com.gepardec.mega.zep.mapper.ProjectTimeMapper;
 import de.provantis.zep.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -48,6 +44,7 @@ public class ZepServiceImpl implements ZepService {
     public Employee getEmployee(final String userId) {
         final ReadMitarbeiterSearchCriteriaType readMitarbeiterSearchCriteriaType = new ReadMitarbeiterSearchCriteriaType();
         readMitarbeiterSearchCriteriaType.setUserId(userId);
+
         return getEmployeeInternal(readMitarbeiterSearchCriteriaType).stream().findFirst().orElse(null);
     }
 
@@ -129,7 +126,7 @@ public class ZepServiceImpl implements ZepService {
         final List<Employee> result = new ArrayList<>();
 
         Optional.ofNullable(readMitarbeiterResponseType).flatMap(readMitarbeiterResponse -> Optional.ofNullable(readMitarbeiterResponse.getMitarbeiterListe())).ifPresent(mitarbeiterListe ->
-            result.addAll(mitarbeiterListe.getMitarbeiter().stream().map(EmployeeTranslator::toEmployee).collect(Collectors.toList()))
+            result.addAll(mitarbeiterListe.getMitarbeiter().stream().map(EmployeeMapper::toEmployee).collect(Collectors.toList()))
         );
 
         return result;

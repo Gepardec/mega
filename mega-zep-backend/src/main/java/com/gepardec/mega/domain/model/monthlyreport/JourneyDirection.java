@@ -1,4 +1,4 @@
-package com.gepardec.mega.domain.model;
+package com.gepardec.mega.domain.model.monthlyreport;
 
 import org.apache.commons.lang3.StringUtils;
 

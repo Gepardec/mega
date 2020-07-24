@@ -1,7 +1,7 @@
-package com.gepardec.mega.service.monthlyreport;
+package com.gepardec.mega.service.impl.monthlyreport;
 
-import com.gepardec.mega.domain.model.JourneyDirection;
-import com.gepardec.mega.domain.model.Warning;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyDirection;
+import com.gepardec.mega.domain.model.monthlyreport.Warning;
 
 import java.util.Optional;
 
@@ -28,6 +28,4 @@ public class JourneyDirectionHandler {
         beforeJourneyDirection = journeyDirection;
         return Optional.empty();
     }
-
-
 }

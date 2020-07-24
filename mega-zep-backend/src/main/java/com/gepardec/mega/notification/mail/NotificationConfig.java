@@ -1,108 +1,91 @@
 package com.gepardec.mega.notification.mail;
 
+import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 @ApplicationScoped
 public class NotificationConfig {
 
-    @ConfigProperty(name = "mega.mail.reminder.employee.path")
-    String employeePath;
+    private static final String NAME_PLACEHOLDER = "$firstName$";
+    private static final String EOM_WIKI_PLACEHOLDER = "$wikiEomUrl$";
+    private static final String MEGA_DASH_URL_PLACEHOLDER = "$megaDash$";
+    private static final String TEMPLATE_MAILTEXT_PLACEHOLDER = "$mailText$";
 
-    @ConfigProperty(name = "mega.mail.reminder.employee.subject")
-    String employeeSubject;
+    private static final String CONFIG_KEY_TEMPLATE_MAIL_TEMPLATE = "mega.mail.reminder.%s.path";
+    private static final String MESSAGE_KEY_TEMPLATE_REMINDER = "mail.reminder.%s.subject";
 
-    @ConfigProperty(name = "mega.mail.reminder.pl.path")
-    String plPath;
+    @ConfigProperty(name = "mega.mail.reminder.template.path")
+    String mailTemplateTextPath;
 
-    @ConfigProperty(name = "mega.mail.reminder.pl.subject")
-    String plSubject;
+    @ConfigProperty(name = "mega.mail.subjectPrefix")
+    String subjectPrefix;
 
-    @ConfigProperty(name = "mega.mail.reminder.om.controlEmployeesData.path")
-    String omControlEmployeesDataPath;
+    @ConfigProperty(name = "mega.image.logo.url")
+    String megaImageLogoUrl;
 
-    @ConfigProperty(name = "mega.mail.reminder.om.controlEmployeesData.subject")
-    String omControlEmployeesDataSubject;
+    @ConfigProperty(name = "mega.wiki.eom.url")
+    String megaWikiEomUrl;
 
-    @ConfigProperty(name = "mega.mail.reminder.om.release.path")
-    String omReleasePath;
+    @ConfigProperty(name = "mega.dash.url")
+    String megaDashUrl;
 
-    @ConfigProperty(name = "mega.mail.reminder.om.release.subject")
-    String omReleaseSubject;
+    @Inject
+    Config config;
 
-    @ConfigProperty(name = "mega.mail.reminder.om.administrative.path")
-    String omAdministrativePath;
+    @Inject
+    ResourceBundle messages;
 
-    @ConfigProperty(name = "mega.mail.reminder.om.administrative.subject")
-    String omAdministrativeSubject;
-
-    @ConfigProperty(name = "mega.mail.reminder.om.salary.path")
-    String omSalaryPath;
-
-    @ConfigProperty(name = "mega.mail.reminder.om.salary.subject")
-    String omSalarySubject;
-
-    @ConfigProperty(name = "mega.mail.reminder.om.controlprojecttimes.path")
-    String omControlProjecttimesPath;
-
-    @ConfigProperty(name = "mega.mail.reminder.om.controlprojecttimes.subject")
-    String omControlProjecttimesSubject;
-
-
-    public String getEmployeePath() {
-        return employeePath;
+    public String templatePathForReminder(final String reminderName) {
+        Objects.requireNonNull(reminderName, "Cannot retrieve template path for null reminderName");
+        final String configKey = String.format(CONFIG_KEY_TEMPLATE_MAIL_TEMPLATE, reminderName);
+        return config.getOptionalValue(configKey, String.class)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("No template path for reminder '%s' found", reminderName)));
     }
 
-    public String getEmployeeSubject() {
-        return employeeSubject;
+    public String subjectForReminder(String reminderName) {
+        Objects.requireNonNull(reminderName, "Cannot retrieve subject for null reminderName");
+        return subjectPrefix() + messages.getString(String.format(MESSAGE_KEY_TEMPLATE_REMINDER, reminderName));
     }
 
-    public String getPlPath() {
-        return plPath;
+    public String subjectPrefix() {
+        return Optional.ofNullable(subjectPrefix).orElse("");
     }
 
-    public String getPlSubject() {
-        return plSubject;
+    public String getMailTemplateTextPath() {
+        return mailTemplateTextPath;
     }
 
-    public String getOmControlEmployeesDataPath() {
-        return omControlEmployeesDataPath;
+    public String getMegaImageLogoUrl() {
+        return megaImageLogoUrl;
     }
 
-    public String getOmControlEmployeesDataSubject() {
-        return omControlEmployeesDataSubject;
+    public String getMegaWikiEomUrl() {
+        return megaWikiEomUrl;
     }
 
-    public String getOmReleasePath() {
-        return omReleasePath;
+    public String getMegaDashUrl() {
+        return megaDashUrl;
     }
 
-    public String getOmReleaseSubject() {
-        return omReleaseSubject;
+    public String getNamePlaceholder() {
+        return NAME_PLACEHOLDER;
     }
 
-    public String getOmAdministrativePath() {
-        return omAdministrativePath;
+    public String getEomWikiPlaceholder() {
+        return EOM_WIKI_PLACEHOLDER;
     }
 
-    public String getOmAdministrativeSubject() {
-        return omAdministrativeSubject;
+    public String getMegaDashUrlPlaceholder() {
+        return MEGA_DASH_URL_PLACEHOLDER;
     }
 
-    public String getOmSalaryPath() {
-        return omSalaryPath;
-    }
-
-    public String getOmSalarySubject() {
-        return omSalarySubject;
-    }
-
-    public String getOmControlProjecttimesPath() {
-        return omControlProjecttimesPath;
-    }
-
-    public String getOmControlProjecttimesSubject() {
-        return omControlProjecttimesSubject;
+    public String getTemplateMailtextPlaceholder() {
+        return TEMPLATE_MAILTEXT_PLACEHOLDER;
     }
 }

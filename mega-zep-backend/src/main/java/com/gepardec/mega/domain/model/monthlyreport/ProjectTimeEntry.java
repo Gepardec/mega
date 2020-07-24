@@ -1,4 +1,4 @@
-package com.gepardec.mega.domain.model;
+package com.gepardec.mega.domain.model.monthlyreport;
 
 import com.gepardec.mega.domain.utils.DateUtils;
 
@@ -10,13 +10,11 @@ public class ProjectTimeEntry {
     private LocalDateTime fromTime;
     private LocalDateTime toTime;
     private Task task;
-    private WorkingLocation workingLocation;
 
-    public ProjectTimeEntry(LocalDateTime fromTime, LocalDateTime toTime, Task task, WorkingLocation workingLocation) {
+    public ProjectTimeEntry(LocalDateTime fromTime, LocalDateTime toTime, Task task) {
         this.fromTime = fromTime;
         this.toTime = toTime;
         this.task = task;
-        this.workingLocation = workingLocation;
     }
 
     public double getDurationInHours() {
@@ -37,9 +35,5 @@ public class ProjectTimeEntry {
 
     public Task getTask() {
         return task;
-    }
-
-    public WorkingLocation getWorkingLocation() {
-        return workingLocation;
     }
 }
