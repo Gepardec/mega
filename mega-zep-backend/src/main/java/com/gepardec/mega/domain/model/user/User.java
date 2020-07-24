@@ -1,63 +1,33 @@
 package com.gepardec.mega.domain.model.user;
 
 import com.gepardec.mega.application.security.Role;
+import com.google.auto.value.AutoValue;
+
+import javax.annotation.Nullable;
 
 /**
  * Represents the logged user in mega.
  */
-public class User {
+@AutoValue
+public abstract class User {
 
-    private String email;
+    @Nullable public abstract String email();
+    @Nullable public abstract String firstname();
+    @Nullable public abstract String lastname();
+    @Nullable public abstract Role role();
+    @Nullable public abstract String pictureUrl();
 
-    private String firstname;
-
-    private String lastname;
-
-    private Role role;
-
-    private String pictureUrl;
-
-    public User() {
-        // nop
+    public static Builder builder() {
+        return new com.gepardec.mega.domain.model.AutoValue_User.Builder();
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public String getPictureUrl() {
-        return pictureUrl;
-    }
-
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder email(String email);
+        public abstract Builder firstname(String firstname);
+        public abstract Builder lastname(String lastname);
+        public abstract Builder role(Role role);
+        public abstract Builder pictureUrl(String pictureUrl);
+        public abstract User build();
     }
 }

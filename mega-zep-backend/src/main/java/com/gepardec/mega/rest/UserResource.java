@@ -1,6 +1,9 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.domain.model.user.User;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.application.security.SessionUser;
 import com.gepardec.mega.service.api.user.UserService;
 import org.slf4j.Logger;
@@ -13,6 +16,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 
 /**
  * Handles the User actions.
@@ -44,7 +48,7 @@ public class UserResource {
 
         if (oldEmail == null) {
             log.info("User '{}' logged in", sessionUser.getEmail());
-        } else if (!oldEmail.equals(user.getEmail())) {
+        } else if (!oldEmail.equals(user.email())) {
             log.info("Logged user '{}' out and logged user '{}' in", sessionUser.getEmail(), oldEmail);
         } else {
             log.info("User '{}' already logged in", sessionUser.getEmail());

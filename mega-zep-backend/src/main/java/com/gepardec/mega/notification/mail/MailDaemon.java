@@ -106,7 +106,7 @@ public class MailDaemon {
     void sendReminderToUser() {
         if (employeesNotification) {
             employeeService.getAllActiveEmployees()
-                    .forEach(employee -> mailSender.sendReminder(employee.getEmail(), employee.getFirstName(), EMPLOYEE_CHECK_PROJECTTIME));
+                    .forEach(employee -> mailSender.sendReminder(employee.email(), employee.firstName(), EMPLOYEE_CHECK_PROJECTTIME));
             logSentNotification(EMPLOYEE_CHECK_PROJECTTIME);
         } else {
             logger.info("NO Reminder to employes sent, cause mega.mail.employees.notification-property is false");

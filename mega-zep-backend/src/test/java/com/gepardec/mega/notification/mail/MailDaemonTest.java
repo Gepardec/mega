@@ -81,7 +81,7 @@ public class MailDaemonTest {
     @Test
     void sendReminderToUser() {
         List<String> addresses = employeeService.getAllActiveEmployees().stream()
-                .map(Employee::getEmail)
+                .map(Employee::email)
                 .collect(Collectors.toList());
 
         mailDaemon.sendReminderToUser();

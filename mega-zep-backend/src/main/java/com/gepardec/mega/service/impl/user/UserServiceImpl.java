@@ -1,9 +1,13 @@
 package com.gepardec.mega.service.impl.user;
 
-import com.gepardec.mega.application.security.exception.ForbiddenException;
 import com.gepardec.mega.application.security.Role;
 import com.gepardec.mega.application.security.SessionUser;
+import com.gepardec.mega.application.security.exception.ForbiddenException;
 import com.gepardec.mega.application.security.exception.UnauthorizedException;
+import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.User;
+import com.gepardec.mega.service.api.EmployeeService;
+import com.gepardec.mega.service.api.UserService;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.user.UserService;
 import com.gepardec.mega.domain.model.employee.Employee;
@@ -54,7 +58,7 @@ public class UserServiceImpl implements UserService {
         }
 
         final Employee employee = Optional.ofNullable(employeeService.getAllActiveEmployees()).orElse(new ArrayList<>()).stream()
-                .filter(e -> email.equals(e.getEmail()))
+                .filter(e -> email.equals(e.email()))
                 .findFirst().orElse(null);
 
         if (employee == null) {
@@ -62,14 +66,17 @@ public class UserServiceImpl implements UserService {
         }
 
         // Could be re-logged in with different user within the same session
-        sessionUser.init(employee.getUserId(), email, idToken, employee.getRole());
+        sessionUser.init(employee.userId(), email, idToken, employee.role());
 
-        final User user = new User();
-        user.setEmail(employee.getEmail());
-        user.setFirstname(employee.getFirstName());
-        user.setLastname(employee.getSureName());
-        user.setRole(Role.forId(employee.getRole()).orElse(null));
-        user.setPictureUrl(pictureUrl);
+
+        final User user = User.builder()
+                .email(employee.email())
+                .firstname(employee.firstName())
+                .lastname(employee.sureName())
+                .role(Role.forId(employee.role()).orElse(null))
+                .pictureUrl(pictureUrl)
+                .build();
+
         return user;
     }
 }

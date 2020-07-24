@@ -20,33 +20,42 @@ public class EmployeeTestUtil {
     }
 
     public static Employee createEmployee(final int userId) {
-        final Employee employee = new Employee();
+        return EmployeeTestUtil.createEmployee(userId, "2020-01-01");
+    }
+
+    public static Employee createEmployee(final int userId, final String releaseDate) {
+        return EmployeeTestUtil.createEmployee(userId, releaseDate, true);
+    }
+
+    public static Employee createEmployee(final int userId, final String releaseDate, final boolean active) {
         final String name = "Thomas_" + userId;
 
-        employee.setEmail(name + "@gepardec.com");
-        employee.setFirstName(name);
-        employee.setSureName(name + "_Nachname");
-        employee.setTitle("Ing.");
-        employee.setUserId(String.valueOf(userId));
-        employee.setSalutation("Herr");
-        employee.setWorkDescription("ARCHITEKT");
-        employee.setReleaseDate("2020-01-01");
-        employee.setRole(Role.USER.roleId);
-        employee.setActive(true);
+        final Employee employee = Employee.builder()
+                .email(name + "@gepardec.com")
+                .firstName(name)
+                .sureName(name + "_Nachname")
+                .title("Ing.")
+                .userId(String.valueOf(userId))
+                .salutation("Herr")
+                .workDescription("ARCHITEKT")
+                .releaseDate(releaseDate)
+                .role(Role.USER.roleId)
+                .active(active)
+                .build();
 
         return employee;
     }
 
     public static void assertEmployee(final Employee actual, final Employee employee) {
         Assertions.assertAll(
-                () -> Assertions.assertEquals(employee.getRole(), actual.getRole(), "role"),
-                () -> Assertions.assertEquals(employee.getUserId(), actual.getUserId(), "userId"),
-                () -> Assertions.assertEquals(employee.getTitle(), actual.getTitle(), "title"),
-                () -> Assertions.assertEquals(employee.getFirstName(), actual.getFirstName(), "firstName"),
-                () -> Assertions.assertEquals(employee.getSureName(), actual.getSureName(), "sureName"),
-                () -> Assertions.assertEquals(employee.getSalutation(), actual.getSalutation(), "salutation"),
-                () -> Assertions.assertEquals(employee.getWorkDescription(), actual.getWorkDescription(), "workDescription"),
-                () -> Assertions.assertEquals(employee.getReleaseDate(), actual.getReleaseDate(), "releaseDate"),
-                () -> Assertions.assertEquals(employee.isActive(), actual.isActive(), "isActive"));
+                () -> Assertions.assertEquals(employee.role(), actual.role(), "role"),
+                () -> Assertions.assertEquals(employee.userId(), actual.userId(), "userId"),
+                () -> Assertions.assertEquals(employee.title(), actual.title(), "title"),
+                () -> Assertions.assertEquals(employee.firstName(), actual.firstName(), "firstName"),
+                () -> Assertions.assertEquals(employee.sureName(), actual.sureName(), "sureName"),
+                () -> Assertions.assertEquals(employee.salutation(), actual.salutation(), "salutation"),
+                () -> Assertions.assertEquals(employee.workDescription(), actual.workDescription(), "workDescription"),
+                () -> Assertions.assertEquals(employee.releaseDate(), actual.releaseDate(), "releaseDate"),
+                () -> Assertions.assertEquals(employee.active(), actual.active(), "isActive"));
     }
 }

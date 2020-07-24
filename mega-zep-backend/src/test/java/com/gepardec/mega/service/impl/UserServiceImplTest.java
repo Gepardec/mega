@@ -70,7 +70,7 @@ public class UserServiceImplTest {
     @Test
     void testLoginEmployeesEmailNotFound() throws GeneralSecurityException, IOException {
         Mockito.when(tokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
-        Mockito.when(employeeService.getAllActiveEmployees()).thenReturn(Collections.singletonList(new Employee()));
+        Mockito.when(employeeService.getAllActiveEmployees()).thenReturn(Collections.singletonList(Employee.builder().build()));
 
         final ForbiddenException forbiddenException = Assertions.assertThrows(ForbiddenException.class, () -> beanUnderTest.login("sometoken"));
         Assertions.assertEquals("'Thomas_0@gepardec.com' is not an employee in ZEP", forbiddenException.getMessage());
@@ -85,10 +85,10 @@ public class UserServiceImplTest {
 
         Mockito.verify(sessionUser).init("0", "Thomas_0@gepardec.com", "sometoken", Role.USER.roleId);
 
-        Assertions.assertEquals("Thomas_0@gepardec.com", user.getEmail());
-        Assertions.assertEquals("Thomas_0", user.getFirstname());
-        Assertions.assertEquals("Thomas_0_Nachname", user.getLastname());
-        Assertions.assertEquals(Role.USER, user.getRole());
-        Assertions.assertEquals("https://www.gepardec.com/mypicture.jpg", user.getPictureUrl());
+        Assertions.assertEquals("Thomas_0@gepardec.com", user.email());
+        Assertions.assertEquals("Thomas_0", user.firstname());
+        Assertions.assertEquals("Thomas_0_Nachname", user.lastname());
+        Assertions.assertEquals(Role.USER, user.role());
+        Assertions.assertEquals("https://www.gepardec.com/mypicture.jpg", user.pictureUrl());
     }
 }

@@ -45,7 +45,7 @@ public class ZepServiceImplTest {
 
         final Employee employee = beanUnderTest.getEmployee("0");
         Assertions.assertNotNull(employee);
-        Assertions.assertEquals("0", employee.getUserId());
+        Assertions.assertEquals("0", employee.userId());
 
         Mockito.verify(zepSoapPortType).readMitarbeiter(Mockito.argThat(
                 argument -> argument.getReadMitarbeiterSearchCriteria() != null && argument.getReadMitarbeiterSearchCriteria().getUserId().equals("0")
