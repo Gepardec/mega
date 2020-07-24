@@ -43,8 +43,7 @@ public class WorkerServiceImplTest {
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterInvalid() {
-        final Employee employee = EmployeeTestUtil.createEmployee(0);
-        employee.setReleaseDate("NULL");
+        final Employee employee = EmployeeTestUtil.createEmployee(0, "NULL");
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
 
         Assertions.assertNull(workerService.getMonthendReportForUser("0"));
@@ -77,7 +76,7 @@ public class WorkerServiceImplTest {
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
         Assertions.assertNotNull(monthendReportForUser);
-        Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.getEmployee().getEmail());
+        Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.getEmployee().email());
         Assertions.assertNotNull(monthendReportForUser.getTimeWarnings());
         Assertions.assertTrue(monthendReportForUser.getTimeWarnings().isEmpty());
     }
@@ -90,7 +89,7 @@ public class WorkerServiceImplTest {
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
         Assertions.assertNotNull(monthendReportForUser);
-        Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.getEmployee().getEmail());
+        Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.getEmployee().email());
         Assertions.assertNotNull(monthendReportForUser.getTimeWarnings());
         Assertions.assertFalse(monthendReportForUser.getTimeWarnings().isEmpty());
         Assertions.assertEquals(LocalDate.of(2020, 1, 31), monthendReportForUser.getTimeWarnings().get(0).getDate());
