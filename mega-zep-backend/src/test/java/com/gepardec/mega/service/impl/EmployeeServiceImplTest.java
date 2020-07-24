@@ -131,22 +131,7 @@ public class EmployeeServiceImplTest {
     }
 
     private Employee createEmployee(final int userId) {
-        final String name = "Thomas_" + userId;
-
-        final Employee employee = Employee.builder()
-                .email(name + "@gepardec.com")
-                .firstName(name)
-                .sureName(name + "_Nachname")
-                .title("Ing.")
-                .userId(String.valueOf(userId))
-                .salutation("Herr")
-                .workDescription("ARCHITEKT")
-                .releaseDate("2020-01-01")
-                .role(Role.USER.roleId)
-                .active(true)
-                .build();
-
-        return employee;
+        return createEmployeeWithActive(userId, true);
     }
 
     private Employee createEmployeeWithActive(final int userId, boolean active) {

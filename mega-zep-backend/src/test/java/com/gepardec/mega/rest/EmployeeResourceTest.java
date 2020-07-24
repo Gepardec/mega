@@ -35,8 +35,6 @@ import static io.restassured.RestAssured.given;
 @Disabled
 public class EmployeeResourceTest {
 
-    private GoogleIdToken googleIdToken;
-
     private EmployeeService employeeService;
 
     @Inject
@@ -53,7 +51,7 @@ public class EmployeeResourceTest {
         final String userId = "1337-thomas.herzog";
         final String email = "thomas.herzog@gepardec.com";
         final GoogleIdTokenVerifier googleIdTokenVerifier = Mockito.mock(GoogleIdTokenVerifier.class, Answers.RETURNS_DEEP_STUBS);
-        googleIdToken = Mockito.mock(GoogleIdToken.class, Answers.RETURNS_DEEP_STUBS);
+        GoogleIdToken googleIdToken = Mockito.mock(GoogleIdToken.class, Answers.RETURNS_DEEP_STUBS);
         Mockito.when(googleIdTokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
         googleTokenVerifierMock.setDelegate(googleIdTokenVerifier);
         sessionUserMock.init(userId, email, "", Role.ADMINISTRATOR.roleId);

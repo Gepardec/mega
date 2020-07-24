@@ -106,22 +106,7 @@ public class MonthlyReportServiceImplTest {
     }
 
     private Employee createEmployee(final int userId) {
-        final String name = "Thomas_" + userId;
-
-        final Employee employee = Employee.builder()
-                .email(name + "@gepardec.com")
-                .firstName(name)
-                .sureName(name + "_Nachname")
-                .title("Ing.")
-                .userId(String.valueOf(userId))
-                .salutation("Herr")
-                .workDescription("ARCHITEKT")
-                .releaseDate("2020-01-01")
-                .role(Role.USER.roleId)
-                .active(true)
-                .build();
-
-        return employee;
+        return createEmployeeWithReleaseDate(userId, "2020-01-01");
     }
 
     private Employee createEmployeeWithReleaseDate(final int userId, String releaseDate) {
