@@ -4,12 +4,11 @@ import com.gepardec.mega.GoogleTokenVerifierMock;
 import com.gepardec.mega.SessionUserMock;
 import com.gepardec.mega.WorkerServiceMock;
 import com.gepardec.mega.application.security.Role;
-import com.gepardec.mega.domain.model.MonthlyReport;
-import com.gepardec.mega.domain.model.JourneyWarning;
-import com.gepardec.mega.domain.model.TimeWarning;
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.JourneyWarning;
+import com.gepardec.mega.domain.model.MonthlyReport;
+import com.gepardec.mega.domain.model.TimeWarning;
 import com.gepardec.mega.service.api.WorkerService;
-import com.gepardec.mega.util.EmployeeTestUtil;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import io.quarkus.test.junit.QuarkusTest;
@@ -79,7 +78,7 @@ public class WorkerResourceTest {
 
     @Test
     void employeeMonthendReport_withReport_returnsReport() {
-        final Employee employee = EmployeeTestUtil.createEmployee(0);
+        final Employee employee = createEmployee(0);
         final MonthlyReport expected = createZepMonthlyReport(employee);
         Mockito.when(workerService.getMonthendReportForUser(Mockito.anyString())).thenReturn(expected);
 
@@ -88,7 +87,7 @@ public class WorkerResourceTest {
                 .then().assertThat().statusCode(HttpStatus.SC_OK)
                 .extract().as(MonthlyReport.class);
 
-        EmployeeTestUtil.assertEmployee(actual.getEmployee(), employee);
+        assertEmployee(actual.getEmployee(), employee);
         assertTimeWarnings(expected.getTimeWarnings(), actual.getTimeWarnings());
         assertJourneyWarnings(expected.getJourneyWarnings(), actual.getJourneyWarnings());
     }
@@ -132,5 +131,37 @@ public class WorkerResourceTest {
                 () -> Assertions.assertEquals(expected.getMissingBreakTime(), actual.getMissingBreakTime(), "missingBreakTime"),
                 () -> Assertions.assertEquals(expected.getMissingRestTime(), actual.getMissingRestTime(), "missingRestTime")
         );
+    }
+
+    private Employee createEmployee(final int userId) {
+        final String name = "Thomas_" + userId;
+
+        final Employee employee = Employee.builder()
+                .email(name + "@gepardec.com")
+                .firstName(name)
+                .sureName(name + "_Nachname")
+                .title("Ing.")
+                .userId(String.valueOf(userId))
+                .salutation("Herr")
+                .workDescription("ARCHITEKT")
+                .releaseDate("2020-01-01")
+                .role(Role.USER.roleId)
+                .active(true)
+                .build();
+
+        return employee;
+    }
+
+    private void assertEmployee(final Employee actual, final Employee employee) {
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(employee.role(), actual.role(), "role"),
+                () -> Assertions.assertEquals(employee.userId(), actual.userId(), "userId"),
+                () -> Assertions.assertEquals(employee.title(), actual.title(), "title"),
+                () -> Assertions.assertEquals(employee.firstName(), actual.firstName(), "firstName"),
+                () -> Assertions.assertEquals(employee.sureName(), actual.sureName(), "sureName"),
+                () -> Assertions.assertEquals(employee.salutation(), actual.salutation(), "salutation"),
+                () -> Assertions.assertEquals(employee.workDescription(), actual.workDescription(), "workDescription"),
+                () -> Assertions.assertEquals(employee.releaseDate(), actual.releaseDate(), "releaseDate"),
+                () -> Assertions.assertEquals(employee.active(), actual.active(), "isActive"));
     }
 }

@@ -1,12 +1,11 @@
 package com.gepardec.mega.service.impl;
 
-import com.gepardec.mega.application.security.exception.ForbiddenException;
 import com.gepardec.mega.application.security.Role;
 import com.gepardec.mega.application.security.SessionUser;
-import com.gepardec.mega.service.api.EmployeeService;
+import com.gepardec.mega.application.security.exception.ForbiddenException;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.User;
-import com.gepardec.mega.util.EmployeeTestUtil;
+import com.gepardec.mega.service.api.EmployeeService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import org.junit.jupiter.api.Assertions;
@@ -78,7 +77,7 @@ public class UserServiceImplTest {
     @Test
     void testLogin() throws GeneralSecurityException, IOException {
         Mockito.when(tokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
-        Mockito.when(employeeService.getAllActiveEmployees()).thenReturn(Collections.singletonList(EmployeeTestUtil.createEmployee(0)));
+        Mockito.when(employeeService.getAllActiveEmployees()).thenReturn(Collections.singletonList(createEmployee(0)));
 
         final User user = beanUnderTest.login("sometoken");
 
@@ -89,5 +88,24 @@ public class UserServiceImplTest {
         Assertions.assertEquals("Thomas_0_Nachname", user.lastname());
         Assertions.assertEquals(Role.USER, user.role());
         Assertions.assertEquals("https://www.gepardec.com/mypicture.jpg", user.pictureUrl());
+    }
+
+    private Employee createEmployee(final int userId) {
+        final String name = "Thomas_" + userId;
+
+        final Employee employee = Employee.builder()
+                .email(name + "@gepardec.com")
+                .firstName(name)
+                .sureName(name + "_Nachname")
+                .title("Ing.")
+                .userId(String.valueOf(userId))
+                .salutation("Herr")
+                .workDescription("ARCHITEKT")
+                .releaseDate("2020-01-01")
+                .role(Role.USER.roleId)
+                .active(true)
+                .build();
+
+        return employee;
     }
 }

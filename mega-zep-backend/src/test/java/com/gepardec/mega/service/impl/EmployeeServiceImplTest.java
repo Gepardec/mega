@@ -1,10 +1,10 @@
 package com.gepardec.mega.service.impl;
 
 
+import com.gepardec.mega.application.security.Role;
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.util.EmployeeTestUtil;
-import com.gepardec.mega.zep.ZepServiceException;
 import com.gepardec.mega.zep.ZepService;
+import com.gepardec.mega.zep.ZepServiceException;
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,9 +17,12 @@ import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceImplTest {
@@ -42,7 +45,7 @@ public class EmployeeServiceImplTest {
 
     @Test
     void testGetEmployee() {
-        Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(EmployeeTestUtil.createEmployee(0));
+        Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(createEmployee(0));
 
         final Employee employee = beanUnderTest.getEmployee("someuserid");
         Assertions.assertNotNull(employee);
@@ -52,8 +55,8 @@ public class EmployeeServiceImplTest {
 
     @Test
     void testGetEmployees() {
-        final Employee employee0 = EmployeeTestUtil.createEmployee(0);
-        final Employee employee1 = EmployeeTestUtil.createEmployee(1, "2020-01-01", false);
+        final Employee employee0 = createEmployee(0);
+        final Employee employee1 = createEmployeeWithActive(1, false);
 
         Mockito.when(zepService.getEmployees()).thenReturn(Arrays.asList(employee0, employee1));
 
@@ -83,7 +86,7 @@ public class EmployeeServiceImplTest {
             return null;
         }).when(managedExecutor).execute(Mockito.any());
 
-        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(EmployeeTestUtil.createEmployees(1));
+        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(Collections.singletonList(createEmployee(0)));
         Assertions.assertNotNull(result);
         Assertions.assertFalse(result.isEmpty());
         Assertions.assertEquals(1, result.size());
@@ -104,7 +107,9 @@ public class EmployeeServiceImplTest {
             }
         }).when(managedExecutor).execute(Mockito.any());
 
-        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(EmployeeTestUtil.createEmployees(40));
+        final List<Employee> employees = IntStream.range(0,40).mapToObj(this::createEmployee).collect(Collectors.toList());
+
+        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(employees);
         Assertions.assertNotNull(result);
         Assertions.assertFalse(result.isEmpty());
         Assertions.assertEquals(10, result.size());
@@ -119,10 +124,46 @@ public class EmployeeServiceImplTest {
             return null;
         }).when(managedExecutor).execute(Mockito.any());
 
-        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(EmployeeTestUtil.createEmployees(1));
+        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(Collections.singletonList(createEmployee(0)));
         Assertions.assertNotNull(result);
         Assertions.assertTrue(result.isEmpty());
     }
 
+    private Employee createEmployee(final int userId) {
+        final String name = "Thomas_" + userId;
 
+        final Employee employee = Employee.builder()
+                .email(name + "@gepardec.com")
+                .firstName(name)
+                .sureName(name + "_Nachname")
+                .title("Ing.")
+                .userId(String.valueOf(userId))
+                .salutation("Herr")
+                .workDescription("ARCHITEKT")
+                .releaseDate("2020-01-01")
+                .role(Role.USER.roleId)
+                .active(true)
+                .build();
+
+        return employee;
+    }
+
+    private Employee createEmployeeWithActive(final int userId, boolean active) {
+        final String name = "Thomas_" + userId;
+
+        final Employee employee = Employee.builder()
+                .email(name + "@gepardec.com")
+                .firstName(name)
+                .sureName(name + "_Nachname")
+                .title("Ing.")
+                .userId(String.valueOf(userId))
+                .salutation("Herr")
+                .workDescription("ARCHITEKT")
+                .releaseDate("2020-01-01")
+                .role(Role.USER.roleId)
+                .active(active)
+                .build();
+
+        return employee;
+    }
 }
