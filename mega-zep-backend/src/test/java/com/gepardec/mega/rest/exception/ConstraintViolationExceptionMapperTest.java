@@ -14,7 +14,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
