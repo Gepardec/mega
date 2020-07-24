@@ -9,6 +9,10 @@ pipeline {
         NODE_RESOURCE_LIMITS = "--initial-old-space-size=2048 --max-old-space-size=2048"
     }
 
+    parameters {
+        booleanParam(name: 'deployToDev', defaultValue: 'false', description: 'True if the build shall be deployed to dev')
+    }
+
     options {
         disableConcurrentBuilds()
         parallelsAlwaysFailFast()
@@ -110,7 +114,10 @@ pipeline {
         }
         stage('Deploy DEV') {
             when {
-                branch "develop"
+                anyOf {
+                    branch "develop"
+                    expression params.deployToDev
+                }
             }
             steps {
                 script {
