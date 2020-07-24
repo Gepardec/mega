@@ -1,6 +1,7 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.UserServiceMock;
+import com.gepardec.mega.application.security.Role;
 import com.gepardec.mega.domain.model.User;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -66,7 +68,7 @@ class UserResourceTest {
                 .body("email", equalTo(user.email()))
                 .body("lastname", equalTo(user.lastname()))
                 .body("firstname", equalTo(user.firstname()))
-                .body("role", equalTo(user.role().name()))
+                .body("role", equalTo(Optional.ofNullable(user.role()).map(Role::name).orElse(null)))
                 .body("pictureUrl", equalTo(user.pictureUrl()));
     }
 
