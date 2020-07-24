@@ -1,7 +1,6 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.GoogleTokenVerifierMock;
-import com.gepardec.mega.SessionUserMock;
 import com.gepardec.mega.MonthlyReportServiceMock;
 import com.gepardec.mega.application.security.Role;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
@@ -40,9 +39,6 @@ public class WorkerResourceTest {
     private GoogleIdTokenVerifier googleIdTokenVerifier;
 
     @Inject
-    SessionUserMock sessionUserMock;
-
-    @Inject
     MonthlyReportServiceMock workerServiceMock;
 
     @Inject
@@ -56,7 +52,6 @@ public class WorkerResourceTest {
         googleIdTokenVerifier = Mockito.mock(GoogleIdTokenVerifier.class, Answers.RETURNS_DEEP_STUBS);
         Mockito.when(googleIdTokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
         googleTokenVerifierMock.setDelegate(googleIdTokenVerifier);
-        sessionUserMock.init(userId, email, "", Role.ADMINISTRATOR.roleId);
 
         monthlyReportService = Mockito.mock(MonthlyReportService.class);
         workerServiceMock.setDelegate(monthlyReportService);

@@ -1,8 +1,6 @@
 package com.gepardec.mega.application.security;
 
 import com.gepardec.mega.application.security.exception.UnauthorizedException;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,16 +16,10 @@ import static org.mockito.Mockito.*;
 class SecuredInterceptorTest {
 
     @Mock
-    private SessionUser sessionUser;
+    private UserContext userContext;
 
     @Mock
     private InvocationContext invocationContext;
-
-    @Mock
-    private GoogleIdTokenVerifier tokenVerifier;
-
-    @Mock
-    private GoogleIdToken idToken;
 
     @InjectMocks
     private SecuredInterceptor securedInterceptor;
@@ -39,15 +31,13 @@ class SecuredInterceptorTest {
 
     @Test
     void invoke_tokenInvalid_throwUnauthorizedException() {
-        when(sessionUser.isLogged()).thenReturn(true);
+        when(userContext.loggedIn()).thenReturn(false);
         assertThrows(UnauthorizedException.class, () -> securedInterceptor.invoke(invocationContext));
     }
 
     @Test
     void invoke_userLoggedAndTokenValid_callsProceed() throws Exception {
-        when(sessionUser.isLogged()).thenReturn(true);
-        when(sessionUser.getIdToken()).thenReturn("idToken");
-        when(tokenVerifier.verify(anyString())).thenReturn(idToken);
+        when(userContext.loggedIn()).thenReturn(true);
         securedInterceptor.invoke(invocationContext);
 
         verify(invocationContext, times(1)).proceed();

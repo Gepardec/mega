@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class User {
 
+    @Nullable public abstract String userId();
     @Nullable public abstract String email();
     @Nullable public abstract String firstname();
     @Nullable public abstract String lastname();
@@ -23,6 +24,7 @@ public abstract class User {
 
     @AutoValue.Builder
     public abstract static class Builder {
+        public abstract Builder userId(String userId);
         public abstract Builder email(String email);
         public abstract Builder firstname(String firstname);
         public abstract Builder lastname(String lastname);

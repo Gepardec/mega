@@ -17,8 +17,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class RolesAllowedInterceptorTest {
 
-    @Mock
-    private SessionUser sessionUser;
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+    private UserContext userContext;
 
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private Object target;
@@ -32,7 +32,6 @@ class RolesAllowedInterceptorTest {
     @Test
     void intercept_notLogged_throwsForbiddenException() {
         when(invocationContext.getMethod().getAnnotation(any())).thenReturn(createAnnotation(new Role[]{Role.USER}));
-        when(sessionUser.isLogged()).thenReturn(false);
 
         assertThrows(ForbiddenException.class, () -> rolesAllowedInterceptor.intercept(invocationContext));
     }
@@ -40,8 +39,7 @@ class RolesAllowedInterceptorTest {
     @Test
     void invoke_loggedAndNotInRole_throwsForbiddenException() {
         when(invocationContext.getMethod().getAnnotation(any())).thenReturn(createAnnotation(new Role[]{Role.ADMINISTRATOR}));
-        when(sessionUser.isLogged()).thenReturn(true);
-        when(sessionUser.getRole()).thenReturn(Role.USER);
+        when(userContext.getUser().role()).thenReturn(Role.USER);
 
         assertThrows(ForbiddenException.class, () -> rolesAllowedInterceptor.intercept(invocationContext));
     }
@@ -49,8 +47,7 @@ class RolesAllowedInterceptorTest {
     @Test
     void invoke_loggedAndInRoleMethodAnnotated_throwsForbiddenException() throws Exception {
         when(invocationContext.getMethod().getAnnotation(any())).thenReturn(createAnnotation(Role.values()));
-        when(sessionUser.isLogged()).thenReturn(true);
-        when(sessionUser.getRole()).thenReturn(Role.USER);
+        when(userContext.getUser().role()).thenReturn(Role.USER);
 
         rolesAllowedInterceptor.intercept(invocationContext);
 
