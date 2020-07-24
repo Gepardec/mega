@@ -1,9 +1,9 @@
 package com.gepardec.mega.service.impl.employee;
 
+import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.service.api.employee.EmployeeService;
-import com.gepardec.mega.domain.model.employee.Employee;
-import com.gepardec.mega.zep.ZepServiceException;
 import com.gepardec.mega.zep.ZepService;
+import com.gepardec.mega.zep.ZepServiceException;
 import com.google.common.collect.Iterables;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.context.ManagedExecutor;

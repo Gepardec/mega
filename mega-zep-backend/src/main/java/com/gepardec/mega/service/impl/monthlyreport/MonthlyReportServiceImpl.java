@@ -1,6 +1,6 @@
 package com.gepardec.mega.service.impl.monthlyreport;
 
-import com.gepardec.mega.domain.model.employee.Employee;
+import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;

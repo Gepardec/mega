@@ -1,6 +1,6 @@
 package com.gepardec.mega.zep;
 
-import com.sun.xml.ws.developer.JAXWSProperties; // NOSONAR
+import com.sun.xml.ws.developer.JAXWSProperties;
 import de.provantis.zep.RequestHeaderType;
 import de.provantis.zep.ZepSoap;
 import de.provantis.zep.ZepSoapPortType;

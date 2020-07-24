@@ -1,10 +1,7 @@
 package com.gepardec.mega.rest;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.application.security.SessionUser;
+import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.service.api.user.UserService;
 import org.slf4j.Logger;
 
@@ -12,11 +9,13 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotEmpty;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 
 /**
  * Handles the User actions.

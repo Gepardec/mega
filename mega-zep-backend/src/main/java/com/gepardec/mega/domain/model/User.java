@@ -1,4 +1,4 @@
-package com.gepardec.mega.domain.model.user;
+package com.gepardec.mega.domain.model;
 
 import com.gepardec.mega.application.security.Role;
 import com.google.auto.value.AutoValue;

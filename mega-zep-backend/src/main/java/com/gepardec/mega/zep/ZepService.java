@@ -1,6 +1,6 @@
 package com.gepardec.mega.zep;
 
-import com.gepardec.mega.domain.model.employee.Employee;
+import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 
 import java.util.List;

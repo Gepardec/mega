@@ -1,7 +1,7 @@
 package com.gepardec.mega;
 
 import com.gepardec.mega.service.api.employee.EmployeeService;
-import com.gepardec.mega.domain.model.employee.Employee;
+import com.gepardec.mega.domain.model.Employee;
 import io.quarkus.test.Mock;
 
 import javax.enterprise.context.ApplicationScoped;
