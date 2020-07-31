@@ -21,7 +21,6 @@ public class RolesAllowedInterceptor {
 
     @AroundInvoke
     public Object intercept(InvocationContext invocationContext) throws Exception {
-
         RolesAllowed rolesAllowedAnnotation = invocationContext.getMethod().getAnnotation(RolesAllowed.class);
         if (rolesAllowedAnnotation == null) {
             rolesAllowedAnnotation = invocationContext.getTarget().getClass().getAnnotation(RolesAllowed.class);

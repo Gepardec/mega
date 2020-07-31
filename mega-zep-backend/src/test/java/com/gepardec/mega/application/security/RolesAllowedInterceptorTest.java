@@ -21,9 +21,6 @@ class RolesAllowedInterceptorTest {
     private UserContext userContext;
 
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-    private Object target;
-
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private InvocationContext invocationContext;
 
     @InjectMocks

@@ -31,13 +31,13 @@ class SecuredInterceptorTest {
 
     @Test
     void invoke_tokenInvalid_throwUnauthorizedException() {
-        when(userContext.loggedIn()).thenReturn(false);
+        when(userContext.isLoggedIn()).thenReturn(false);
         assertThrows(UnauthorizedException.class, () -> securedInterceptor.invoke(invocationContext));
     }
 
     @Test
     void invoke_userLoggedAndTokenValid_callsProceed() throws Exception {
-        when(userContext.loggedIn()).thenReturn(true);
+        when(userContext.isLoggedIn()).thenReturn(true);
         securedInterceptor.invoke(invocationContext);
 
         verify(invocationContext, times(1)).proceed();

@@ -18,10 +18,10 @@ public class SecuredInterceptor {
     UserContext userContext;
 
     @AroundInvoke
-    public Object invoke(final InvocationContext ic) throws Exception {
-        if (!userContext.loggedIn()) {
+    public Object invoke(final InvocationContext invocationContext) throws Exception {
+        if (!userContext.isLoggedIn()) {
             throw new UnauthorizedException("IdToken was invalid");
         }
-        return ic.proceed();
+        return invocationContext.proceed();
     }
 }

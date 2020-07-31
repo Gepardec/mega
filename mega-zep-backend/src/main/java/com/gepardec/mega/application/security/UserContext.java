@@ -39,7 +39,7 @@ public class UserContext {
         }
     }
 
-    public boolean loggedIn() {
+    public boolean isLoggedIn() {
         return user != null;
     }
 
