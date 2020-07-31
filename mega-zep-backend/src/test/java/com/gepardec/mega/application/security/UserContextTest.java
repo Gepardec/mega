@@ -31,7 +31,7 @@ class UserContextTest {
     UserService userService;
 
     @InjectMocks
-    UserContext userContext;
+    UserContextImpl userContext;
 
     @BeforeEach
     void setUp() {

@@ -1,12 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 
 import { AuthorizationHeaderInterceptor } from './authorization-header.interceptor';
+import { OAuthStorage } from 'angular-oauth2-oidc';
 
 describe('AuthorizationHeaderInterceptor', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
-      AuthorizationHeaderInterceptor
-      ]
+      AuthorizationHeaderInterceptor,
+      OAuthStorage
+    ]
   }));
 
   it('should be created', () => {
