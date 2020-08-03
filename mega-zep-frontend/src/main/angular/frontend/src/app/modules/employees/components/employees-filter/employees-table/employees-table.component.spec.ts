@@ -1,10 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { EmployeesTableListComponent } from './employees-table-list.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { MatTableModule } from '@angular/material/table';
-import { EmployeesService } from '../../services/employees.service';
-import { BehaviorSubject } from 'rxjs';
+import {EmployeesTableListComponent} from './employees-table.component';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {MatTableModule} from '@angular/material/table';
+import {BehaviorSubject} from 'rxjs';
+import {EmployeesService} from '../../../services/employees.service';
 
 describe('EmployeesTableListComponent', () => {
   let component: EmployeesTableListComponent;

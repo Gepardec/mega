@@ -1,14 +1,15 @@
-<div class="example-container mat-elevation-z8">
-  <mat-table #table class="tablelist" scr [dataSource]="dataSource">
+<div class="container overflow-auto mat-elevation-z8">
+  <mat-table #table [dataSource]="employees">
 
     <ng-container matColumnDef="headline">
-      <mat-header-cell class="headline" *matHeaderCellDef>Mitarbeiter Übersicht</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="headline">Mitarbeiterübersicht</mat-header-cell>
     </ng-container>
 
     <!-- Checkbox Column -->
     <ng-container matColumnDef="auswaehlen">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null"
+                      color="primary"
                       [checked]="selection.hasValue() && isAllSelected()"
                       [indeterminate]="selection.hasValue() && !isAllSelected()"
                       [aria-label]="checkboxLabel()">
@@ -16,6 +17,7 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
         <mat-checkbox (click)="$event.stopPropagation()"
+                      color="primary"
                       (change)="$event ? selection.toggle(row) : null"
                       [checked]="selection.isSelected(row)"
                       [aria-label]="checkboxLabel(row)">
@@ -39,7 +41,7 @@
     <ng-container matColumnDef="freigabedatum">
       <mat-header-cell *matHeaderCellDef>Freigegeben bis</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <p [ngClass]="getReleaseDateColourCoding(element.releaseDate)">{{element.releaseDate}}</p>
+        <p [ngClass]="getReleaseDateColourCoding(element.releaseDate)" class="release">{{element.releaseDate}}</p>
       </mat-cell>
     </ng-container>
 

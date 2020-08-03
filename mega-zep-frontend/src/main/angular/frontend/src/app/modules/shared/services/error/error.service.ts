@@ -16,7 +16,6 @@ export class ErrorService {
 
   removeLastErrorData() {
     delete this.message;
-    delete this.message;
   }
 
   getErrorMessage(error: Error): string {

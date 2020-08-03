@@ -1,31 +1,4 @@
-@import "src/app/styles/button-style";
-@import "src/app/styles/center-component";
-
-.mat-card {
-  color: #707070;
-}
-
-.mat-card-title {
-  font-size: 42px;
-  font-weight: normal;
-}
-
-.mat-card-header {
-  margin-bottom: 5%;
-}
-
-.mat-card-content {
-  font-size: 21px;
-}
-
-.sad-face {
-  margin-left: -3%;
-}
-
-.mega-button {
-  height: 4vh;
-  width: 7vw;
-  margin-top: 5%;
-  font-size: 21px;
-  font-weight: normal;
+mat-icon {
+  font-size: 80px;
+  width: auto; /* stopping displacement of icon */
 }
