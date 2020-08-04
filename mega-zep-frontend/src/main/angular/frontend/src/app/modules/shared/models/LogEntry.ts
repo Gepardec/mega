@@ -1,4 +1,4 @@
-import {configuration} from '../constants/configuration';
+import { configuration } from '../constants/configuration';
 
 export class LogEntry {
   message = '';

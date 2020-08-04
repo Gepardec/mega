@@ -1,9 +1,9 @@
-import {ErrorHandler, Injectable, NgZone} from '@angular/core';
-import {LoggingService} from '../logging/logging.service';
-import {ErrorService} from './error.service';
-import {configuration} from '../../constants/configuration';
-import {Router} from '@angular/router';
-import {UserService} from '../user/user.service';
+import { ErrorHandler, Injectable, NgZone } from '@angular/core';
+import { LoggingService } from '../logging/logging.service';
+import { ErrorService } from './error.service';
+import { configuration } from '../../constants/configuration';
+import { Router } from '@angular/router';
+import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -44,7 +44,8 @@ export class ErrorHandlerService implements ErrorHandler {
 
     this.errorService.storeLastErrorData(message, redirectUrl);
 
-    // TODO: use of zone is dangerous and should be avoided, as mentioned above we should move the router to error-service to solve cyclic dependency
+    // TODO: use of zone is dangerous and should be avoided
+    //  as mentioned above we should move the router to error-service to solve cyclic dependency
     this.ngZone.run(() => this.router.navigate([configuration.PAGE_URLS.ERROR]));
   }
 }

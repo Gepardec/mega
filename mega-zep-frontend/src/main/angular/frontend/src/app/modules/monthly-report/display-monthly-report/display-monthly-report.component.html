@@ -12,7 +12,7 @@
     <mat-table [dataSource]="datasourceTimeTable">
 
       <ng-container matColumnDef="headline">
-        <mat-header-cell class="headline" *matHeaderCellDef>Pausen</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef class="headline">Pausen</mat-header-cell>
       </ng-container>
       tab
 
@@ -40,14 +40,14 @@
         </ng-container>
 
 
-        <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsTimeTable; sticky: true"></mat-header-row>
+        <mat-header-row *matHeaderRowDef="displayedColumnsTimeTable; sticky: true" mat-header-row></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumnsTimeTable;"></mat-row>
       </div>
 
       <div *ngIf="datasourceTimeTable.data.length === 0">
         <ng-container matColumnDef="no-warnings">
           <mat-header-cell *matHeaderCellDef>
-            <mat-checkbox [disabled]="true" [checked]="true"></mat-checkbox>
+            <mat-checkbox [checked]="true" [disabled]="true"></mat-checkbox>
             <a class="no-warning-text">Alle Eingaben sind korrekt</a>
           </mat-header-cell>
         </ng-container>
@@ -64,10 +64,10 @@
     <mat-table [dataSource]="datasourceJourneyTable">
 
       <ng-container matColumnDef="headline">
-        <mat-header-cell class="headline" *matHeaderCellDef>Reisen</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef class="headline">Reisen</mat-header-cell>
       </ng-container>
 
-      <mat-header-row class="headline" *matHeaderRowDef="['headline']; sticky: true"></mat-header-row>
+      <mat-header-row *matHeaderRowDef="['headline']; sticky: true" class="headline"></mat-header-row>
 
       <div *ngIf="datasourceJourneyTable.data.length > 0">
         <ng-container matColumnDef="date-journey">
@@ -83,14 +83,14 @@
           </mat-cell>
         </ng-container>
 
-        <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsJourneyTable; sticky: true"></mat-header-row>
+        <mat-header-row *matHeaderRowDef="displayedColumnsJourneyTable; sticky: true" mat-header-row></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumnsJourneyTable;"></mat-row>
       </div>
 
       <div *ngIf="datasourceJourneyTable.data.length === 0">
         <ng-container matColumnDef="no-warnings">
           <mat-header-cell *matHeaderCellDef>
-            <mat-checkbox [disabled]="true" [checked]="true"></mat-checkbox>
+            <mat-checkbox [checked]="true" [disabled]="true"></mat-checkbox>
             <a class="no-warning-text">Alle Eingaben sind korrekt</a>
           </mat-header-cell>
         </ng-container>

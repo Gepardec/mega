@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {MonthlyReport} from './models/MonthlyReport';
-import {Subscription} from 'rxjs';
-import {MonthlyReportService} from './services/monthly-report.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MonthlyReport } from './models/MonthlyReport';
+import { Subscription } from 'rxjs';
+import { MonthlyReportService } from './services/monthly-report.service';
 
 @Component({
   selector: 'app-monthly-report',
@@ -9,8 +9,8 @@ import {MonthlyReportService} from './services/monthly-report.service';
 })
 export class MonthlyReportComponent implements OnInit, OnDestroy {
 
-  private monthlyReportSubscription: Subscription;
   monthlyReport: MonthlyReport;
+  private monthlyReportSubscription: Subscription;
 
   constructor(private monthlyReportService: MonthlyReportService) {
   }

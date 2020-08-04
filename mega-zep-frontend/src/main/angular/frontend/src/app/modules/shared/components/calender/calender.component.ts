@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {formatDate} from '@angular/common';
-import {configuration} from '../../constants/configuration';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { formatDate } from '@angular/common';
+import { configuration } from '../../constants/configuration';
 
 @Component({
   selector: 'app-calender',
@@ -9,10 +9,9 @@ import {configuration} from '../../constants/configuration';
 })
 export class CalenderComponent implements OnInit {
 
-  private format = configuration.dateFormat;
-
   @Input() date: string;
   @Output() dateEmitter: EventEmitter<string> = new EventEmitter<string>();
+  private format = configuration.dateFormat;
 
   ngOnInit(): void {
   }

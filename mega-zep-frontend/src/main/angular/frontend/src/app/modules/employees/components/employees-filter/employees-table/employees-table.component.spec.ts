@@ -1,14 +1,14 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {EmployeesTableListComponent} from './employees-table.component';
-import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
-import {MatTableModule} from '@angular/material/table';
-import {BehaviorSubject} from 'rxjs';
-import {EmployeesService} from '../../../services/employees.service';
+import { EmployeesTableComponent } from './employees-table.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { MatTableModule } from '@angular/material/table';
+import { BehaviorSubject } from 'rxjs';
+import { EmployeesService } from '../../../services/employees.service';
 
 describe('EmployeesTableListComponent', () => {
-  let component: EmployeesTableListComponent;
-  let fixture: ComponentFixture<EmployeesTableListComponent>;
+  let component: EmployeesTableComponent;
+  let fixture: ComponentFixture<EmployeesTableComponent>;
 
   class EmployeesServiceMock {
     get resetSelection(): BehaviorSubject<boolean> {
@@ -18,7 +18,7 @@ describe('EmployeesTableListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [EmployeesTableListComponent],
+      declarations: [EmployeesTableComponent],
       imports: [
         MatTableModule
       ],
@@ -33,7 +33,7 @@ describe('EmployeesTableListComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EmployeesTableListComponent);
+    fixture = TestBed.createComponent(EmployeesTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

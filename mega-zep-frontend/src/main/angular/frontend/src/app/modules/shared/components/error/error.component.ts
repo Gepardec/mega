@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {ErrorService} from '../../services/error/error.service';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ErrorService } from '../../services/error/error.service';
 
 @Component({
   selector: 'app-error',

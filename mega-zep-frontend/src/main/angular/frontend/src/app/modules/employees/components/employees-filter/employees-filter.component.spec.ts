@@ -1,12 +1,12 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {EmployeesFilterComponent} from './employees-filter.component';
-import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
-import {EmployeesService} from '../../services/employees.service';
-import {NotificationService} from '../../../shared/services/notification/notification.service';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {Employee} from '../../models/Employee';
-import {SelectionChange} from '@angular/cdk/collections';
+import { EmployeesFilterComponent } from './employees-filter.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { EmployeesService } from '../../services/employees.service';
+import { NotificationService } from '../../../shared/services/notification/notification.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Employee } from '../../models/Employee';
+import { SelectionChange } from '@angular/cdk/collections';
 
 describe('EmployeesFilterComponent', () => {
   let component: EmployeesFilterComponent;

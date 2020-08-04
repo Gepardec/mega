@@ -1,9 +1,9 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {SelectionChange, SelectionModel} from '@angular/cdk/collections';
-import {Subscription} from 'rxjs';
-import {configuration} from '../../../../shared/constants/configuration';
-import {Employee} from '../../../models/Employee';
-import {EmployeesService} from '../../../services/employees.service';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
+import { Subscription } from 'rxjs';
+import { configuration } from '../../../../shared/constants/configuration';
+import { Employee } from '../../../models/Employee';
+import { EmployeesService } from '../../../services/employees.service';
 
 @Component({
   selector: 'app-employees-table',
@@ -15,11 +15,10 @@ export class EmployeesTableComponent implements OnInit, OnDestroy {
   @Input() employees: Array<Employee>;
   displayedColumns = ['auswaehlen', 'nachname', 'abteilung', 'freigabedatum'];
   selection = new SelectionModel<Employee>(true, null);
-  private selectionChangedSubscription: Subscription;
-
   readonly currentDate = new Date();
   readonly dayOfMonthForWarning = 5;
   readonly functions = configuration.EMPLOYEE_FUNCTIONS;
+  private selectionChangedSubscription: Subscription;
 
   constructor(
     private displayEmployeeService: EmployeesService

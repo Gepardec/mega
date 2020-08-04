@@ -1,12 +1,12 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {RouterModule} from '@angular/router';
-import {EmployeesComponent} from './employees.component';
-import {AngularMaterialModule} from '../../material-module';
-import {SharedModule} from '../shared/shared.module';
-import {EmployeesModuleRouting} from './employees.routing';
-import {EmployeesFilterComponent} from './components/employees-filter/employees-filter.component';
-import {EmployeesTableComponent} from './components/employees-filter/employees-table/employees-table.component';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { EmployeesComponent } from './employees.component';
+import { AngularMaterialModule } from '../../material-module';
+import { SharedModule } from '../shared/shared.module';
+import { EmployeesModuleRouting } from './employees.routing';
+import { EmployeesFilterComponent } from './components/employees-filter/employees-filter.component';
+import { EmployeesTableComponent } from './components/employees-filter/employees-table/employees-table.component';
 
 @NgModule({
   declarations: [

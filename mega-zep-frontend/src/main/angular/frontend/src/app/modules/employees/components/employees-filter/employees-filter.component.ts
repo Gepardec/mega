@@ -1,8 +1,8 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Employee} from '../../models/Employee';
-import {Subscription} from 'rxjs';
-import {EmployeesService} from '../../services/employees.service';
-import {NotificationService} from '../../../shared/services/notification/notification.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Employee } from '../../models/Employee';
+import { Subscription } from 'rxjs';
+import { EmployeesService } from '../../services/employees.service';
+import { NotificationService } from '../../../shared/services/notification/notification.service';
 
 @Component({
   selector: 'app-employees-filter',

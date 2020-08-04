@@ -2,7 +2,7 @@
   <mat-toolbar-row>
     <img [src]="assetsPath + logoMega" alt="Logo MEGA" class="logo-mega mr-3">
 
-    <nav mat-tab-nav-bar *ngIf="user">
+    <nav *ngIf="user" mat-tab-nav-bar>
       <ng-container *ngFor="let link of links">
         <span #rla="routerLinkActive" *ngIf="showLink(link)" [active]="rla.isActive" [routerLink]="link.path"
               mat-tab-link
@@ -32,8 +32,8 @@
       <img [src]="assetsPath + zepLogo" alt="ZEP Link" class="zepImg">
     </a>
 
-    <div class="useractions" *ngIf="user">
-      <app-user-actions [user]="user" (logout)="onLogout($event)"></app-user-actions>
+    <div *ngIf="user" class="useractions">
+      <app-user-actions (logout)="onLogout($event)" [user]="user"></app-user-actions>
     </div>
   </mat-toolbar-row>
 </mat-toolbar>

@@ -12,10 +12,9 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class UserService {
 
+  user: BehaviorSubject<User> = new BehaviorSubject(undefined);
   private SESSION_STORAGE_KEY = 'MEGA_USER';
   private SESSION_STORAGE_KEY_STARTPAGE_OVERRIDE = 'MEGA_USER_STARTPAGE';
-
-  user: BehaviorSubject<User> = new BehaviorSubject(undefined);
 
   constructor(private router: Router,
               private httpClient: HttpClient,
@@ -47,7 +46,7 @@ export class UserService {
 
   public logoutWithoutRedirect(): void {
     this.httpClient.post<void>(this.configService.getBackendUrlWithContext('/user/logout'), null).subscribe(() => {
-      this.invalidateUser()
+      this.invalidateUser();
     });
   }
 
