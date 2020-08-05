@@ -37,9 +37,11 @@ $gepardec-pal: (
 
 $mega-primary: mat-palette($gepardec-pal);
 $mega-accent: mat-palette($gepardec-pal, A100);
+
 $mega-theme: mat-light-theme($mega-primary, $mega-accent);
 
-@mixin mix-app-theme($my-app-theme) {
+// Global theme
+@mixin global-theme($mega-theme) {
   $primary: $mega-primary;
   $accent: $mega-accent;
 
@@ -50,4 +52,20 @@ $mega-theme: mat-light-theme($mega-primary, $mega-accent);
 }
 
 @include angular-material-theme($mega-theme);
-@include mix-app-theme($mega-theme);
+@include global-theme($mega-theme);
+
+// Custom/component specific themes
+@mixin green-checkboxes($mega-theme) {
+  .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,
+  .mat-accent .mat-pseudo-checkbox-checked,
+  .mat-accent .mat-pseudo-checkbox-indeterminate,
+  .mat-pseudo-checkbox-checked,
+  .mat-pseudo-checkbox-indeterminate {
+    background-color: green;
+  }
+}
+
+app-display-monthly-report {
+  @include green-checkboxes($mega-theme);
+}
