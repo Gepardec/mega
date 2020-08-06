@@ -83,7 +83,7 @@ public class WorkerResourceTest {
                 .then().assertThat().statusCode(HttpStatus.SC_OK)
                 .extract().as(MonthlyReport.class);
 
-        assertEmployee(actual.getEmployee(), employee);
+        Assertions.assertEquals(employee, actual.getEmployee());
         assertTimeWarnings(expected.getTimeWarnings(), actual.getTimeWarnings());
         assertJourneyWarnings(expected.getJourneyWarnings(), actual.getJourneyWarnings());
     }
@@ -146,18 +146,5 @@ public class WorkerResourceTest {
                 .build();
 
         return employee;
-    }
-
-    private void assertEmployee(final Employee actual, final Employee employee) {
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(employee.role(), actual.role(), "role"),
-                () -> Assertions.assertEquals(employee.userId(), actual.userId(), "userId"),
-                () -> Assertions.assertEquals(employee.title(), actual.title(), "title"),
-                () -> Assertions.assertEquals(employee.firstName(), actual.firstName(), "firstName"),
-                () -> Assertions.assertEquals(employee.sureName(), actual.sureName(), "sureName"),
-                () -> Assertions.assertEquals(employee.salutation(), actual.salutation(), "salutation"),
-                () -> Assertions.assertEquals(employee.workDescription(), actual.workDescription(), "workDescription"),
-                () -> Assertions.assertEquals(employee.releaseDate(), actual.releaseDate(), "releaseDate"),
-                () -> Assertions.assertEquals(employee.active(), actual.active(), "isActive"));
     }
 }
