@@ -2,13 +2,13 @@ package com.gepardec.mega.rest;
 
 import com.gepardec.mega.GoogleTokenVerifierMock;
 import com.gepardec.mega.MonthlyReportServiceMock;
+import com.gepardec.mega.SessionUserMock;
 import com.gepardec.mega.application.security.Role;
-import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
-import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
-import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
+import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
+import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
-import com.gepardec.mega.util.EmployeeTestUtil;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import io.quarkus.test.junit.QuarkusTest;
@@ -32,11 +32,7 @@ import static io.restassured.RestAssured.given;
 @Disabled
 public class WorkerResourceTest {
 
-    private GoogleIdToken googleIdToken;
-
     private MonthlyReportService monthlyReportService;
-
-    private GoogleIdTokenVerifier googleIdTokenVerifier;
 
     @Inject
     MonthlyReportServiceMock workerServiceMock;
@@ -48,8 +44,8 @@ public class WorkerResourceTest {
     void beforeEach() throws Exception {
         final String userId = "1337-thomas.herzog";
         final String email = "thomas.herzog@gepardec.com";
-        googleIdToken = Mockito.mock(GoogleIdToken.class, Answers.RETURNS_DEEP_STUBS);
-        googleIdTokenVerifier = Mockito.mock(GoogleIdTokenVerifier.class, Answers.RETURNS_DEEP_STUBS);
+        GoogleIdToken googleIdToken = Mockito.mock(GoogleIdToken.class, Answers.RETURNS_DEEP_STUBS);
+        GoogleIdTokenVerifier googleIdTokenVerifier = Mockito.mock(GoogleIdTokenVerifier.class, Answers.RETURNS_DEEP_STUBS);
         Mockito.when(googleIdTokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
         googleTokenVerifierMock.setDelegate(googleIdTokenVerifier);
 
@@ -74,7 +70,7 @@ public class WorkerResourceTest {
 
     @Test
     void employeeMonthendReport_withReport_returnsReport() {
-        final Employee employee = EmployeeTestUtil.createEmployee(0);
+        final Employee employee = createEmployee(0);
         final MonthlyReport expected = createZepMonthlyReport(employee);
         Mockito.when(monthlyReportService.getMonthendReportForUser(Mockito.anyString())).thenReturn(expected);
 
@@ -83,7 +79,7 @@ public class WorkerResourceTest {
                 .then().assertThat().statusCode(HttpStatus.SC_OK)
                 .extract().as(MonthlyReport.class);
 
-        EmployeeTestUtil.assertEmployee(actual.getEmployee(), employee);
+        Assertions.assertEquals(employee, actual.getEmployee());
         assertTimeWarnings(expected.getTimeWarnings(), actual.getTimeWarnings());
         assertJourneyWarnings(expected.getJourneyWarnings(), actual.getJourneyWarnings());
     }
@@ -127,5 +123,24 @@ public class WorkerResourceTest {
                 () -> Assertions.assertEquals(expected.getMissingBreakTime(), actual.getMissingBreakTime(), "missingBreakTime"),
                 () -> Assertions.assertEquals(expected.getMissingRestTime(), actual.getMissingRestTime(), "missingRestTime")
         );
+    }
+
+    private Employee createEmployee(final int userId) {
+        final String name = "Thomas_" + userId;
+
+        final Employee employee = Employee.builder()
+                .email(name + "@gepardec.com")
+                .firstName(name)
+                .sureName(name + "_Nachname")
+                .title("Ing.")
+                .userId(String.valueOf(userId))
+                .salutation("Herr")
+                .workDescription("ARCHITEKT")
+                .releaseDate("2020-01-01")
+                .role(Role.USER.roleId)
+                .active(true)
+                .build();
+
+        return employee;
     }
 }
