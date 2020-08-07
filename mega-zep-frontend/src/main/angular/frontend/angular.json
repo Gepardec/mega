@@ -28,8 +28,8 @@
               "src/httpd-cfg"
             ],
             "styles": [
-              "src/styles.scss",
               "node_modules/bootstrap/scss/bootstrap.scss",
+              "src/styles.scss",
               "src/gepardec.scss"
             ],
             "scripts": []
