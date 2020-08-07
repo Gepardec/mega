@@ -1,7 +1,7 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.application.security.Secured;
-import com.gepardec.mega.application.security.SessionUser;
+import com.gepardec.mega.application.security.UserContext;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
 
@@ -22,13 +22,13 @@ public class WorkerResource {
     MonthlyReportService monthlyReportService;
 
     @Inject
-    SessionUser sessionUser;
+    UserContext userContext;
 
     @GET
     @Path("/monthendreports")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMonthEndReports() {
-        final MonthlyReport monthlyReport = monthlyReportService.getMonthendReportForUser(sessionUser.getUserId());
+        final MonthlyReport monthlyReport = monthlyReportService.getMonthendReportForUser(userContext.getUser().userId());
 
         if (monthlyReport == null) {
             return Response.status(Response.Status.NOT_FOUND).build();

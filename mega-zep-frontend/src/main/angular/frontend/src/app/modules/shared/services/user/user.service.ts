@@ -12,7 +12,6 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class UserService {
 
-  private SESSION_STORAGE_KEY = 'MEGA_USER';
   private SESSION_STORAGE_KEY_STARTPAGE_OVERRIDE = 'MEGA_USER_STARTPAGE';
 
   user: BehaviorSubject<User> = new BehaviorSubject(undefined);
@@ -25,37 +24,26 @@ export class UserService {
   }
 
   public loginUser(): void {
-    if (sessionStorage.getItem(this.SESSION_STORAGE_KEY)) {
-      this.user.next(JSON.parse(sessionStorage.getItem(this.SESSION_STORAGE_KEY)));
-      this.navigateToStartpage();
-    } else {
-      this.httpClient.post<User>(this.configService.getBackendUrlWithContext('/user/login/'), this.oAuthService.getIdToken())
-        .subscribe((result) => {
-          sessionStorage.setItem(this.SESSION_STORAGE_KEY, JSON.stringify(result));
-          this.user.next(result);
-          this.navigateToStartpage();
-        });
-    }
+    this.httpClient.get<User>(this.configService.getBackendUrlWithContext('/user'))
+      .subscribe((result) => {
+        this.user.next(result);
+        this.navigateToStartpage();
+      });
   }
 
   public logout(): void {
-    this.httpClient.post<void>(this.configService.getBackendUrlWithContext('/user/logout'), null).subscribe(() => {
-      this.invalidateUser();
-      this.router.navigate([configuration.PAGE_URLS.LOGIN]);
-    });
+    this.invalidateUser();
+    this.router.navigate([configuration.PAGE_URLS.LOGIN]);
   }
 
   public logoutWithoutRedirect(): void {
-    this.httpClient.post<void>(this.configService.getBackendUrlWithContext('/user/logout'), null).subscribe(() => {
-      this.invalidateUser()
-    });
+    this.invalidateUser();
   }
 
   invalidateUser() {
     this.oAuthService.logOut();
     this.configService.logOut();
     this.user.next(undefined);
-    sessionStorage.removeItem(this.SESSION_STORAGE_KEY);
   }
 
   public loggedInWithGoogle(): boolean {
