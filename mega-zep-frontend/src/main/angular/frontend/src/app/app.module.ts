@@ -14,6 +14,7 @@ import { authConfigFactory } from './auth/auth.config.factory';
 import { ConfigService } from './modules/shared/services/config/config.service';
 import { ErrorHandlerService } from './modules/shared/services/error/error-handler.service';
 import { MonthlyReportModule } from './modules/monthly-report/monthly-report.module';
+import { AuthorizationHeaderInterceptor } from './modules/shared/interceptors/authorization-header.interceptor';
 
 registerLocaleData(localeDeAt, 'de-AT');
 
@@ -35,6 +36,7 @@ registerLocaleData(localeDeAt, 'de-AT');
     {provide: APP_BASE_HREF, useValue: '/'},
     {provide: ErrorHandler, useClass: ErrorHandlerService},
     {provide: OAuthModuleConfig, useFactory: authConfigFactory, deps: [ConfigService]},
+    {provide: HTTP_INTERCEPTORS, useClass: AuthorizationHeaderInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: GlobalHttpInterceptorService, multi: true}
   ],
   bootstrap: [AppComponent]
