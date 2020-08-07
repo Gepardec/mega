@@ -1,27 +1,15 @@
 package com.gepardec.mega.service.impl;
 
-import com.gepardec.mega.application.security.Role;
-import com.gepardec.mega.application.security.SessionUser;
-import com.gepardec.mega.application.security.exception.ForbiddenException;
-import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.impl.user.UserServiceImpl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.Collections;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
@@ -33,80 +21,14 @@ public class UserServiceImplTest {
     private GoogleIdToken googleIdToken;
 
     @Mock
-    private GoogleIdTokenVerifier tokenVerifier;
-
-    @Mock
     private EmployeeService employeeService;
-
-    @Mock
-    private SessionUser sessionUser;
 
     private UserServiceImpl beanUnderTest;
 
     @BeforeEach
     void setUp() {
-        beanUnderTest = new UserServiceImpl(logger, tokenVerifier, employeeService, sessionUser);
+        beanUnderTest = new UserServiceImpl(logger, employeeService);
         Mockito.when(googleIdToken.getPayload()).thenReturn(new GoogleIdToken.Payload().setEmail("Thomas_0@gepardec.com").set("picture", "https://www.gepardec.com/mypicture.jpg"));
     }
 
-    @Test
-    void testLoginTokenInvalid() throws GeneralSecurityException, IOException {
-        Mockito.when(tokenVerifier.verify(Mockito.anyString())).thenReturn(null);
-
-        final IllegalStateException illegalStateException = Assertions.assertThrows(IllegalStateException.class, () -> beanUnderTest.login("sometoken"));
-        Assertions.assertEquals("Could not verify idToken", illegalStateException.getMessage());
-    }
-
-    @Test
-    void testLoginEmployeesNull() throws GeneralSecurityException, IOException {
-        Mockito.when(tokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
-        Mockito.when(employeeService.getAllActiveEmployees()).thenReturn(null);
-
-        final ForbiddenException forbiddenException = Assertions.assertThrows(ForbiddenException.class, () -> beanUnderTest.login("sometoken"));
-        Assertions.assertEquals("'Thomas_0@gepardec.com' is not an employee in ZEP", forbiddenException.getMessage());
-    }
-
-    @Test
-    void testLoginEmployeesEmailNotFound() throws GeneralSecurityException, IOException {
-        Mockito.when(tokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
-        Mockito.when(employeeService.getAllActiveEmployees()).thenReturn(Collections.singletonList(Employee.builder().build()));
-
-        final ForbiddenException forbiddenException = Assertions.assertThrows(ForbiddenException.class, () -> beanUnderTest.login("sometoken"));
-        Assertions.assertEquals("'Thomas_0@gepardec.com' is not an employee in ZEP", forbiddenException.getMessage());
-    }
-
-    @Test
-    void testLogin() throws GeneralSecurityException, IOException {
-        Mockito.when(tokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
-        Mockito.when(employeeService.getAllActiveEmployees()).thenReturn(Collections.singletonList(createEmployee(0)));
-
-        final User user = beanUnderTest.login("sometoken");
-
-        Mockito.verify(sessionUser).init("0", "Thomas_0@gepardec.com", "sometoken", Role.USER.roleId);
-
-        Assertions.assertEquals("Thomas_0@gepardec.com", user.email());
-        Assertions.assertEquals("Thomas_0", user.firstname());
-        Assertions.assertEquals("Thomas_0_Nachname", user.lastname());
-        Assertions.assertEquals(Role.USER, user.role());
-        Assertions.assertEquals("https://www.gepardec.com/mypicture.jpg", user.pictureUrl());
-    }
-
-    private Employee createEmployee(final int userId) {
-        final String name = "Thomas_" + userId;
-
-        final Employee employee = Employee.builder()
-                .email(name + "@gepardec.com")
-                .firstName(name)
-                .sureName(name + "_Nachname")
-                .title("Ing.")
-                .userId(String.valueOf(userId))
-                .salutation("Herr")
-                .workDescription("ARCHITEKT")
-                .releaseDate("2020-01-01")
-                .role(Role.USER.roleId)
-                .active(true)
-                .build();
-
-        return employee;
-    }
 }
