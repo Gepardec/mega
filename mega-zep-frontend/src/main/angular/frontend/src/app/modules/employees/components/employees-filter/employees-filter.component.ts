@@ -5,14 +5,13 @@ import { EmployeesService } from '../../services/employees.service';
 import { NotificationService } from '../../../shared/services/notification/notification.service';
 
 @Component({
-  selector: 'app-display-employees',
-  templateUrl: './display-employees.component.html',
-  styleUrls: ['./display-employees.component.scss']
+  selector: 'app-employees-filter',
+  templateUrl: './employees-filter.component.html',
+  styleUrls: ['./employees-filter.component.scss']
 })
-export class DisplayEmployeesComponent implements OnInit, OnDestroy {
+export class EmployeesFilterComponent implements OnInit, OnDestroy {
 
   selectedEmployees: Array<Employee> = new Array<Employee>();
-  isGridlistActive = false;
   employees: Array<Employee> = new Array<Employee>();
   filteredEmployees: Array<Employee>;
   selectedDate: string = null;
@@ -24,11 +23,9 @@ export class DisplayEmployeesComponent implements OnInit, OnDestroy {
   constructor(
     private displayEmployeeListService: EmployeesService,
     private notificationService: NotificationService) {
-
   }
 
   ngOnInit() {
-    this.selectedDate = null;
     this.selectedEmployeesSubscription = this.displayEmployeeListService.selectedEmployees
       .subscribe((selectedEmployees: Array<Employee>) => {
         this.selectedEmployees = selectedEmployees;
@@ -47,10 +44,6 @@ export class DisplayEmployeesComponent implements OnInit, OnDestroy {
     if (this.updateEmployeesSubscription) {
       this.updateEmployeesSubscription.unsubscribe();
     }
-  }
-
-  toggleView(): void {
-    this.isGridlistActive = !this.isGridlistActive;
   }
 
   releaseEmployees() {
@@ -76,7 +69,7 @@ export class DisplayEmployeesComponent implements OnInit, OnDestroy {
       });
   }
 
-  dateChanged(date: string) {
+  changeDate(date: string) {
     this.selectedDate = date;
   }
 

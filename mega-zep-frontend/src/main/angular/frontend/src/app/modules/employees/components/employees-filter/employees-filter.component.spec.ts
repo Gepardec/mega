@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DisplayEmployeesComponent } from './display-employees.component';
+import { EmployeesFilterComponent } from './employees-filter.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { EmployeesService } from '../../services/employees.service';
 import { NotificationService } from '../../../shared/services/notification/notification.service';
@@ -8,9 +8,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Employee } from '../../models/Employee';
 import { SelectionChange } from '@angular/cdk/collections';
 
-describe('DisplayEmployeesComponent', () => {
-  let component: DisplayEmployeesComponent;
-  let fixture: ComponentFixture<DisplayEmployeesComponent>;
+describe('EmployeesFilterComponent', () => {
+  let component: EmployeesFilterComponent;
+  let fixture: ComponentFixture<EmployeesFilterComponent>;
 
   class EmployeesServiceMock {
     selectedEmployees: BehaviorSubject<Array<Employee>> = new BehaviorSubject<Array<Employee>>([]);
@@ -34,7 +34,7 @@ describe('DisplayEmployeesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [DisplayEmployeesComponent],
+      declarations: [EmployeesFilterComponent],
       providers: [
         {
           provide: EmployeesService, useClass: EmployeesServiceMock
@@ -49,7 +49,7 @@ describe('DisplayEmployeesComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DisplayEmployeesComponent);
+    fixture = TestBed.createComponent(EmployeesFilterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

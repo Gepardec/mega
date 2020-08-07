@@ -32,7 +32,8 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
 
         catchError((error: HttpErrorResponse) => {
             this.loaderService.stopSpinner();
-            // TODO: we should lookup documentation on this code, not necessary a problem with this pull request ... is the direct call of handleError from application code valid?
+            // TODO: we should lookup documentation on this code, not necessary a problem with this pull request ...
+            //  is the direct call of handleError from application code valid?
             return this.handleError(error);
           }
         )

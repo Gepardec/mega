@@ -1,22 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { EmployeesListComponent } from './components/employees-list/employees-list.component';
-import { DisplayEmployeesComponent } from './components/display-employees/display-employees.component';
-import { EmployeesGridListComponent } from './components/employees-grid-list/employees-grid-list.component';
-import { EmployeesTableListComponent } from './components/employees-table-list/employees-table-list.component';
 import { EmployeesComponent } from './employees.component';
 import { AngularMaterialModule } from '../../material-module';
 import { SharedModule } from '../shared/shared.module';
 import { EmployeesModuleRouting } from './employees.routing';
+import { EmployeesFilterComponent } from './components/employees-filter/employees-filter.component';
+import { EmployeesTableComponent } from './components/employees-filter/employees-table/employees-table.component';
 
 @NgModule({
   declarations: [
-    DisplayEmployeesComponent,
-    EmployeesListComponent,
     EmployeesComponent,
-    EmployeesGridListComponent,
-    EmployeesTableListComponent
+    EmployeesFilterComponent,
+    EmployeesTableComponent
   ],
   imports: [
     CommonModule,

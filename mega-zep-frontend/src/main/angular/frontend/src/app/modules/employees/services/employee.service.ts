@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 import { Employee } from '../models/Employee';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from '../../shared/services/config/config.service';
-import { User } from '../../shared/models/User';
 
 @Injectable({
   providedIn: 'root'

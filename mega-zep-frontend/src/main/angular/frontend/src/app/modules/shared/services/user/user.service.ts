@@ -12,9 +12,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class UserService {
 
-  private SESSION_STORAGE_KEY_STARTPAGE_OVERRIDE = 'MEGA_USER_STARTPAGE';
-
   user: BehaviorSubject<User> = new BehaviorSubject(undefined);
+  private SESSION_STORAGE_KEY_STARTPAGE_OVERRIDE = 'MEGA_USER_STARTPAGE';
 
   constructor(private router: Router,
               private httpClient: HttpClient,
