@@ -1,0 +1,168 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_table_employee
+      author: julian
+      changes:
+        - createTable:
+            tableName: employee
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: email
+                  type: varchar
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: create_table_check
+      author: julian
+      changes:
+        - createTable:
+            tableName: check
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: int
+
+  - changeSet:
+      id: create_table_check_employee
+      author: julian
+      changes:
+        - createTable:
+            tableName: check_employee
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: owner
+                  type: int
+                  constraints:
+                    references: employee(id)
+                    foreignKeyName: fk_employee_owner
+                    nullable: false
+              - column:
+                  name: assignee
+                  type: int
+                  constraints:
+                    references: employee(id)
+                    foreignKeyName: fk_employee_assignee
+                    nullable: false
+              - column:
+                  name: check
+                  type: int
+                  constraints:
+                    references: check(id)
+                    foreignKeyName: fk_check
+                    nullable: false
+              - column:
+                  name: date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar
+              - column:
+                  name: project
+                  type: varchar
+
+  - changeSet:
+      id: create_table_comment
+      author: julian
+      changes:
+        - createTable:
+            tableName: comment
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: check
+                  type: int
+                  constraints:
+                    references: check_employee(id)
+                    foreignKeyName: fk_check_employee
+                    nullable: false
+              - column:
+                  name: timestamp
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  type: varchar
+              - column:
+                  name: status
+                  type: varchar
+
+  - changeSet:
+      id: insert-test-data
+      author: julian
+      changes:
+        - insert:
+            tableName: employee
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: email
+                  value: 'john.doe@test.com'
+        - insert:
+            tableName: check
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: 'EMC1'
+        - insert:
+            dbms: 'postgresql'
+            tableName: check_employee
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: owner
+                  value: 1
+              - column:
+                  name: assignee
+                  value: 1
+              - column:
+                  name: check
+                  value: 1
+              - column:
+                  name: date
+                  value: now()
+      rollback:
+        - delete:
+            tableName: check_employee
+        - delete:
+            tableName: check
+        - delete:
+            tableName: employee
