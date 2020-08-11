@@ -26,15 +26,15 @@ public class JourneyDirectionHandlerTest {
     }
 
     @Test
-    void moveTo_further_warningNoReturn() {
+    void moveTo_Further_shouldReturnToAimMissingError() {
         journeyDirectionHandler = new JourneyDirectionHandler();
         assertToAimMissing(journeyDirectionHandler.moveTo(FURTHER));
     }
 
     @Test
-    void moveTo_Further_shouldReturnToAimMissingError() {
+    void moveTo_Back_shouldReturnToAimMissingError() {
         journeyDirectionHandler = new JourneyDirectionHandler();
-        assertToAimMissing(journeyDirectionHandler.moveTo(FURTHER));
+        assertToAimMissing(journeyDirectionHandler.moveTo(BACK));
     }
 
     @Test

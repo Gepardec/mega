@@ -134,14 +134,23 @@ public class WarningCalculator {
     }
 
 
-    List<JourneyWarning> determineJourneyWarnings(List<ProjectTimeEntry> projectTimeEntryList) {
+    public List<JourneyWarning> determineJourneyWarnings(List<ProjectTimeEntry> projectTimeEntryList) {
         JourneyDirectionHandler journeyDirectionHandler = new JourneyDirectionHandler();
-        for (ProjectTimeEntry projectTimeEntry : projectTimeEntryList) {
+        Optional<JourneyEntry> lastJourneyEntry = Optional.empty();
+
+        for (int i = 0; i < projectTimeEntryList.size(); i++) {
+            ProjectTimeEntry projectTimeEntry = projectTimeEntryList.get(i);
 
             if (projectTimeEntry instanceof JourneyEntry) {
                 JourneyEntry journeyEntry = (JourneyEntry) projectTimeEntry;
                 journeyDirectionHandler.moveTo(journeyEntry.getJourneyDirection())
                         .ifPresent(warning -> addToJourneyWarnings(journeyEntry, warning));
+                lastJourneyEntry = Optional.of(journeyEntry);
+            }
+
+            if (i == projectTimeEntryList.size() - 1 && !journeyDirectionHandler.isJourneyFinished()) {
+                lastJourneyEntry.ifPresent(journeyEntry -> journeyDirectionHandler.moveTo(JourneyDirection.INVALIDATE)
+                        .ifPresent(warning -> addToJourneyWarnings(journeyEntry, warning)));
             }
         }
         return journeyWarnings;
