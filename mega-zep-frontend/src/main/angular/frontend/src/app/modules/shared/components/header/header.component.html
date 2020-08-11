@@ -1,27 +1,39 @@
-<mat-toolbar class="toolbar" color="primary">
+<mat-toolbar class="toolbar">
   <mat-toolbar-row>
-    <img class="logo-mega" [src]= "assetsPath + logoMega" alt="Logo MEGA">
+    <img [src]="assetsPath + logoMega" alt="Logo MEGA" class="logo-mega mr-3">
 
-    <nav mat-tab-nav-bar *ngIf="user">
+    <nav *ngIf="user" mat-tab-nav-bar>
       <ng-container *ngFor="let link of links">
-        <a mat-tab-link *ngIf="showLink(link)" [routerLink]="link.path" routerLinkActive #rla="routerLinkActive"
-           [active]="rla.isActive">
+        <span #rla="routerLinkActive" *ngIf="showLink(link)" [active]="rla.isActive" [routerLink]="link.path"
+              mat-tab-link
+              routerLinkActive>
           {{ link.name }}
-        </a>
+        </span>
       </ng-container>
     </nav>
 
-    <span class="filler"></span>
+    <span class="flex-fill"></span>
 
-    <a [href]="spreadSheetUrl" target="_blank" *ngIf="user">
-      <img class="excelImg" [src] = "assetsPath + excelLogo" alt="Dashboard Link">
-    </a>
-    <a [href]="zepUrl" target="_blank" *ngIf="user">
-      <img class="zepImg" [src] = "assetsPath + zepLogo" alt="ZEP Link">
+    <a
+      *ngIf="user"
+      [href]="spreadSheetUrl"
+      class="mr-2"
+      mat-mini-fab
+      target="_blank">
+      <img [src]="assetsPath + excelLogo" alt="Dashboard Link" class="excelImg">
     </a>
 
-    <div class="useractions" *ngIf="user">
-      <app-user-actions [user]="user" (logout)="onLogout($event)"></app-user-actions>
+    <a
+      *ngIf="user"
+      [href]="zepUrl"
+      class="mr-2"
+      mat-mini-fab
+      target="_blank">
+      <img [src]="assetsPath + zepLogo" alt="ZEP Link" class="zepImg">
+    </a>
+
+    <div *ngIf="user" class="useractions">
+      <app-user-actions (logout)="onLogout($event)" [user]="user"></app-user-actions>
     </div>
   </mat-toolbar-row>
 </mat-toolbar>

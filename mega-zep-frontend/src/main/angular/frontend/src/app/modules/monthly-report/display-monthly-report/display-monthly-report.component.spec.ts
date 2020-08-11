@@ -29,7 +29,7 @@ describe('DisplayMonthlyReportComponent', () => {
         firstName: 'John',
         sureName: 'Doe',
         email: 'john.doe@gepardec.com',
-        releaseDate: '01.01.2020',
+        releaseDate: '2020-01-01',
         role: 0,
         salutation: undefined,
         title: undefined,

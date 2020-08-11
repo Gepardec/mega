@@ -13,8 +13,6 @@ import { RolesService } from '../../services/roles/roles.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-  private userSubscription: Subscription;
-
   readonly links: Array<Link> = [{
     name: configuration.PAGE_NAMES.MONTHLY_REPORT,
     path: configuration.PAGE_URLS.MONTHLY_REPORT
@@ -28,8 +26,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   readonly logoMega = 'logo-MEGA.png';
   readonly excelLogo = 'excel-logo.png';
   readonly zepLogo = 'zep-eye.png';
-
   user: User;
+  private userSubscription: Subscription;
 
   constructor(private rolesService: RolesService,
               private userService: UserService) {

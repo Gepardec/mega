@@ -2,11 +2,9 @@ package com.gepardec.mega.rest;
 
 import com.gepardec.mega.EmployeeServiceMock;
 import com.gepardec.mega.GoogleTokenVerifierMock;
-import com.gepardec.mega.SessionUserMock;
 import com.gepardec.mega.application.security.Role;
-import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.util.EmployeeTestUtil;
+import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import io.quarkus.test.junit.QuarkusTest;
@@ -36,12 +34,7 @@ import static io.restassured.RestAssured.given;
 @Disabled
 public class EmployeeResourceTest {
 
-    private GoogleIdToken googleIdToken;
-
     private EmployeeService employeeService;
-
-    @Inject
-    SessionUserMock sessionUserMock;
 
     @Inject
     GoogleTokenVerifierMock googleTokenVerifierMock;
@@ -54,10 +47,9 @@ public class EmployeeResourceTest {
         final String userId = "1337-thomas.herzog";
         final String email = "thomas.herzog@gepardec.com";
         final GoogleIdTokenVerifier googleIdTokenVerifier = Mockito.mock(GoogleIdTokenVerifier.class, Answers.RETURNS_DEEP_STUBS);
-        googleIdToken = Mockito.mock(GoogleIdToken.class, Answers.RETURNS_DEEP_STUBS);
+        GoogleIdToken googleIdToken = Mockito.mock(GoogleIdToken.class, Answers.RETURNS_DEEP_STUBS);
         Mockito.when(googleIdTokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
         googleTokenVerifierMock.setDelegate(googleIdTokenVerifier);
-        sessionUserMock.init(userId, email, "", Role.ADMINISTRATOR.roleId);
 
         employeeService = Mockito.mock(EmployeeService.class);
         employeeServiceMock.setDelegate(employeeService);
@@ -71,7 +63,7 @@ public class EmployeeResourceTest {
 
     @Test
     void employees_withValidRequest_returnsActiveEmployees() {
-        final List<Employee> employees = IntStream.range(1, 10).mapToObj(EmployeeTestUtil::createEmployee).collect(Collectors.toList());
+        final List<Employee> employees = IntStream.range(1, 10).mapToObj(this::createEmployee).collect(Collectors.toList());
         Mockito.when(employeeService.getAllActiveEmployees()).thenReturn(employees);
 
         final List<Employee> actual = given().get("/employees")
@@ -81,7 +73,7 @@ public class EmployeeResourceTest {
 
         Assertions.assertEquals(employees.size(), actual.size());
         for (int i = 0; i < employees.size(); i++) {
-            EmployeeTestUtil.assertEmployee(actual.get(i), employees.get(i));
+            Assertions.assertEquals(employees.get(i), actual.get(i));
         }
     }
 
@@ -109,7 +101,7 @@ public class EmployeeResourceTest {
 
     @Test
     void employeesUpdate_withInvalidEmployees_returnsInvalidEmails() {
-        final List<Employee> employees = IntStream.range(1, 11).mapToObj(EmployeeTestUtil::createEmployee).collect(Collectors.toList());
+        final List<Employee> employees = IntStream.range(1, 11).mapToObj(this::createEmployee).collect(Collectors.toList());
         final List<String> expected = employees.subList(0, 5).stream().map(Employee::email).collect(Collectors.toList());
         Mockito.when(employeeService.updateEmployeesReleaseDate(Mockito.anyList())).thenReturn(expected);
         employeeServiceMock.setDelegate(employeeService);
@@ -127,7 +119,7 @@ public class EmployeeResourceTest {
 
     @Test
     void employeesUpdate_withAllValidEmployees_returnsNothing() {
-        final List<Employee> employees = IntStream.range(1, 11).mapToObj(EmployeeTestUtil::createEmployee).collect(Collectors.toList());
+        final List<Employee> employees = IntStream.range(1, 11).mapToObj(this::createEmployee).collect(Collectors.toList());
         Mockito.when(employeeService.updateEmployeesReleaseDate(Mockito.anyList())).thenReturn(Collections.emptyList());
         employeeServiceMock.setDelegate(employeeService);
 
@@ -139,5 +131,24 @@ public class EmployeeResourceTest {
                 });
 
         Assertions.assertTrue(actual.isEmpty());
+    }
+
+    private Employee createEmployee(final int userId) {
+        final String name = "Thomas_" + userId;
+
+        final Employee employee = Employee.builder()
+                .email(name + "@gepardec.com")
+                .firstName(name)
+                .sureName(name + "_Nachname")
+                .title("Ing.")
+                .userId(String.valueOf(userId))
+                .salutation("Herr")
+                .workDescription("ARCHITEKT")
+                .releaseDate("2020-01-01")
+                .role(Role.USER.roleId)
+                .active(true)
+                .build();
+
+        return employee;
     }
 }

@@ -1,0 +1,32 @@
+<div class="container">
+  <mat-toolbar class="mat-elevation-z8 mt-3" color="accent">
+    <mat-form-field floatLabel="never">
+      <mat-label>Filter</mat-label>
+      <input #filterInput (keyup)="applyFilter(filterInput.value)" matInput>
+    </mat-form-field>
+
+    <span class="flex-fill"></span>
+
+    <small
+      *ngIf="selectedEmployees.length > 0"
+      class="mr-3">
+      {{selectedEmployees.length}} Person<span *ngIf="selectedEmployees.length > 1">en</span> ausgewählt
+    </small>
+
+    <app-datepicker
+      (dateEmitter)="changeDate($event)"
+      *ngIf="filteredEmployees && selectedEmployees?.length > 0"
+      class="mr-3"></app-datepicker>
+
+    <button (click)="releaseEmployees()"
+            *ngIf="selectedEmployees?.length > 0 && selectedDate"
+            color="primary"
+            mat-raised-button>
+      Freigeben
+    </button>
+  </mat-toolbar>
+
+  <div class="mt-3">
+    <app-employees-table *ngIf="filteredEmployees" [employees]="filteredEmployees"></app-employees-table>
+  </div>
+</div>

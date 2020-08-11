@@ -54,6 +54,7 @@ describe('RolesService', () => {
   it('should return false if route is not found', () => {
     const service: RolesService = TestBed.get(RolesService);
     userSubject.next({
+      userId: '07-johndoe',
       firstname: 'john',
       lastname: 'doe',
       email: 'john.doe@gepardec.com',
@@ -66,6 +67,7 @@ describe('RolesService', () => {
   it('should return false if user roles are insufficient', () => {
     const service: RolesService = TestBed.get(RolesService);
     userSubject.next({
+      userId: '07-johndoe',
       firstname: 'john',
       lastname: 'doe',
       email: 'john.doe@gepardec.com',
@@ -78,6 +80,7 @@ describe('RolesService', () => {
   it('should return true if user roles are sufficient', () => {
     const service: RolesService = TestBed.get(RolesService);
     userSubject.next({
+      userId: '07-johndoe',
       firstname: 'john',
       lastname: 'doe',
       email: 'john.doe@gepardec.com',
@@ -90,6 +93,7 @@ describe('RolesService', () => {
   it('should return true if no role is required', () => {
     const service: RolesService = TestBed.get(RolesService);
     userSubject.next({
+      userId: '07-johndoe',
       firstname: 'john',
       lastname: 'doe',
       email: 'john.doe@gepardec.com',

@@ -14,17 +14,6 @@ export class LoaderService {
   constructor(private overlay: Overlay) {
   }
 
-  private cdkSpinnerCreate() {
-    return this.overlay.create({
-      hasBackdrop: true,
-      backdropClass: 'dark-backdrop',
-      positionStrategy: this.overlay.position()
-        .global()
-        .centerHorizontally()
-        .centerVertically()
-    });
-  }
-
   showSpinner() {
     this.requests++;
     if (!this.spinnerRef.hasAttached()) {
@@ -37,5 +26,16 @@ export class LoaderService {
     if (this.requests === 0) {
       this.spinnerRef.detach();
     }
+  }
+
+  private cdkSpinnerCreate() {
+    return this.overlay.create({
+      hasBackdrop: true,
+      backdropClass: 'dark-backdrop',
+      positionStrategy: this.overlay.position()
+        .global()
+        .centerHorizontally()
+        .centerVertically()
+    });
   }
 }
