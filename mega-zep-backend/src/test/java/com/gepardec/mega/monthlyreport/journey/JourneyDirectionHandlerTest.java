@@ -55,6 +55,16 @@ public class JourneyDirectionHandlerTest {
                 () -> assertToAimMissing(journeyDirectionHandler.moveTo(FURTHER)));
     }
 
+    @Test
+    void moveTo_ToAimFurtherToAim_shouldReturnToBackMissingError() {
+        journeyDirectionHandler = new JourneyDirectionHandler();
+        assertAll(
+                () -> assertEmpty(journeyDirectionHandler.moveTo(TO_AIM)),
+                () -> assertEmpty(journeyDirectionHandler.moveTo(FURTHER)),
+                () -> assertBackMissing(journeyDirectionHandler.moveTo(TO_AIM))
+        );
+    }
+
     private static void assertEmpty(Optional<Warning> warning) {
         assertEquals(Optional.empty(), warning);
     }
@@ -66,6 +76,5 @@ public class JourneyDirectionHandlerTest {
     private static void assertBackMissing(Optional<Warning> warning) {
         assertEquals(Optional.of(Warning.WARNING_JOURNEY_BACK_MISSING), warning);
     }
-
 
 }

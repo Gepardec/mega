@@ -31,7 +31,7 @@ public class WarningCalculatorTest {
     void determineTimeWarnings_oneEntryMoreThan6Hours_warning() {
         List<TimeWarning> warnings = warningCalculator.determineTimeWarnings(createEntriesMoreThan6Hours());
         assertAll(() -> assertEquals(1, warnings.size()),
-                () -> assertEquals(LocalDate.of(2020, 01, 07), warnings.get(0).getDate()),
+                () -> assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate()),
                 () -> assertNull(warnings.get(0).getMissingRestTime()),
                 () -> assertEquals(0.5, warnings.get(0).getMissingBreakTime()),
                 () -> assertNull(warnings.get(0).getExcessWorkTime()));
@@ -48,7 +48,7 @@ public class WarningCalculatorTest {
         List<TimeWarning> warnings = warningCalculator.determineTimeWarnings(createEntriesMoreThan10HoursADay());
 
         assertAll(() -> assertEquals(1, warnings.size()),
-                () -> assertEquals(LocalDate.of(2020, 01, 07), warnings.get(0).getDate()),
+                () -> assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate()),
                 () -> assertNull(warnings.get(0).getMissingRestTime()),
                 () -> assertNull(warnings.get(0).getMissingBreakTime()),
                 () -> assertEquals(4.25, warnings.get(0).getExcessWorkTime()));
@@ -90,38 +90,37 @@ public class WarningCalculatorTest {
     void determineJourneyWarnings_journeyToAimMissing_Warning() {
         ArrayList<ProjectTimeEntry> projectTimes = new ArrayList<>();
         projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 01, 07, 14, 00),
-                        LocalDateTime.of(2020, 01, 07, 16, 00),
+                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 14, 0),
+                        LocalDateTime.of(2020, 1, 7, 16, 0),
                         Task.BEARBEITEN));
         projectTimes.add(
-                new JourneyEntry(LocalDateTime.of(2020, 01, 07, 14, 00),
-                        LocalDateTime.of(2020, 01, 07, 16, 00),
+                new JourneyEntry(LocalDateTime.of(2020, 1, 7, 14, 0),
+                        LocalDateTime.of(2020, 1, 7, 16, 0),
                         Task.REISEN,
                         JourneyDirection.BACK));
 
         List<JourneyWarning> warnings = warningCalculator.determineJourneyWarnings(projectTimes);
         assertAll(() -> assertEquals(1, warnings.size()),
-                () -> assertEquals(LocalDate.of(2020, 01, 07), warnings.get(0).getDate()),
+                () -> assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate()),
                 () -> assertEquals(1, warnings.get(0).getWarnings().size()));
-        System.out.println(warnings.get(0).getWarnings().get(0));
     }
 
     @Test
     void determineJourneyWarnings_journeyBackMissing_Warning() {
         ArrayList<ProjectTimeEntry> projectTimes = new ArrayList<>();
         projectTimes.add(
-                new JourneyEntry(LocalDateTime.of(2020, 01, 07, 10, 00),
-                        LocalDateTime.of(2020, 01, 07, 11, 00),
+                new JourneyEntry(LocalDateTime.of(2020, 1, 7, 10, 0),
+                        LocalDateTime.of(2020, 1, 7, 11, 0),
                         Task.REISEN,
                         JourneyDirection.TO_AIM));
         projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 01, 07, 11, 00),
-                        LocalDateTime.of(2020, 01, 07, 16, 00),
+                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 11, 0),
+                        LocalDateTime.of(2020, 1, 7, 16, 0),
                         Task.BEARBEITEN));
 
         List<JourneyWarning> warnings = warningCalculator.determineJourneyWarnings(projectTimes);
         assertAll(() -> assertEquals(1, warnings.size()),
-                () -> assertEquals(LocalDate.of(2020, 01, 07), warnings.get(0).getDate()),
+                () -> assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate()),
                 () -> assertEquals(1, warnings.get(0).getWarnings().size()));
     }
 
@@ -156,25 +155,52 @@ public class WarningCalculatorTest {
         );
     }
 
+    @Test
+    void determineJourneyWarnings_TwoWarningsOnSameDay() {
+        List<ProjectTimeEntry> projectTimes = new ArrayList<>();
+        projectTimes.add(
+                new JourneyEntry(LocalDateTime.of(2020, 1, 7, 10, 0),
+                        LocalDateTime.of(2020, 1, 7, 11, 0),
+                        Task.REISEN,
+                        JourneyDirection.FURTHER));
+        projectTimes.add(
+                new JourneyEntry(LocalDateTime.of(2020, 1, 7, 11, 0),
+                        LocalDateTime.of(2020, 1, 7, 12, 0),
+                        Task.REISEN,
+                        JourneyDirection.BACK));
+
+        String missingJourneyToAim = "Warnung: Hinreise fehlt oder ist vor dem Zeitraum";
+        Mockito.when(warningConfig.getMissingJourneyToAim()).thenReturn(missingJourneyToAim);
+
+        List<JourneyWarning> warnings = warningCalculator.determineJourneyWarnings(projectTimes);
+        assertAll(
+                () -> assertEquals(1, warnings.size()),
+                () -> assertEquals(2, warnings.get(0).getWarnings().size()),
+                () -> assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate()),
+                () -> assertEquals(missingJourneyToAim, warnings.get(0).getWarnings().get(0)),
+                () -> assertEquals(missingJourneyToAim, warnings.get(0).getWarnings().get(1))
+        );
+    }
+
     private static List<ProjectTimeEntry> createEntriesMoreThan6Hours() {
         return Arrays.asList(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 01, 07, 9, 00),
-                        LocalDateTime.of(2020, 01, 07, 16, 00),
+                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 9, 0),
+                        LocalDateTime.of(2020, 1, 7, 16, 0),
                         Task.BEARBEITEN));
     }
 
     private static List<ProjectTimeEntry> createEntriesMoreThan6HoursWithTravelTime() {
         return Arrays.asList(
 
-                new ProjectTimeEntry(LocalDateTime.of(2020, 01, 07, 9, 00),
-                        LocalDateTime.of(2020, 01, 07, 14, 00),
+                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 9, 0),
+                        LocalDateTime.of(2020, 1, 7, 14, 0),
                         Task.BEARBEITEN),
-                new JourneyEntry(LocalDateTime.of(2020, 01, 07, 14, 00),
-                        LocalDateTime.of(2020, 01, 07, 16, 00),
+                new JourneyEntry(LocalDateTime.of(2020, 1, 7, 14, 0),
+                        LocalDateTime.of(2020, 1, 7, 16, 0),
                         Task.REISEN,
                         JourneyDirection.TO_AIM),
-                new ProjectTimeEntry(LocalDateTime.of(2020, 01, 07, 16, 00),
-                        LocalDateTime.of(2020, 01, 07, 17, 00),
+                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 16, 0),
+                        LocalDateTime.of(2020, 1, 7, 17, 0),
                         Task.BEARBEITEN));
     }
 
@@ -182,16 +208,16 @@ public class WarningCalculatorTest {
     private static List<ProjectTimeEntry> createEntriesMoreThan10HoursADay() {
         List<ProjectTimeEntry> projectTimes = new ArrayList<>();
         projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 01, 07, 7, 00),
-                        LocalDateTime.of(2020, 01, 07, 10, 00),
+                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 7, 0),
+                        LocalDateTime.of(2020, 1, 7, 10, 0),
                         Task.BEARBEITEN));
         projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 01, 07, 10, 30),
-                        LocalDateTime.of(2020, 01, 07, 17, 45),
+                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 10, 30),
+                        LocalDateTime.of(2020, 1, 7, 17, 45),
                         Task.BEARBEITEN));
         projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 01, 07, 18, 00),
-                        LocalDateTime.of(2020, 01, 07, 22, 00),
+                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 18, 0),
+                        LocalDateTime.of(2020, 1, 7, 22, 0),
                         Task.BEARBEITEN));
         return projectTimes;
     }
@@ -199,12 +225,12 @@ public class WarningCalculatorTest {
     private static List<ProjectTimeEntry> createEntriesLessThan11HoursRest() {
         List<ProjectTimeEntry> projectTimes = new ArrayList<>();
         projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 01, 07, 16, 00),
-                        LocalDateTime.of(2020, 01, 07, 22, 00),
+                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 16, 0),
+                        LocalDateTime.of(2020, 1, 7, 22, 0),
                         Task.BEARBEITEN));
         projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 8, 6, 00),
-                        LocalDateTime.of(2020, 1, 8, 8, 00),
+                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 8, 6, 0),
+                        LocalDateTime.of(2020, 1, 8, 8, 0),
                         Task.BEARBEITEN));
         return projectTimes;
     }
