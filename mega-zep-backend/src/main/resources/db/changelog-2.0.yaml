@@ -1,6 +1,8 @@
+# changeset id format: descriptive text + unixtimestamp (in snake_case)
+
 databaseChangeLog:
   - changeSet:
-      id: create_table_employee
+      id: create_table_employee_1597226119
       author: julian
       changes:
         - createTable:
@@ -19,7 +21,7 @@ databaseChangeLog:
                     nullable: false
 
   - changeSet:
-      id: create_table_check
+      id: create_table_check_1597226143
       author: julian
       changes:
         - createTable:
@@ -41,7 +43,7 @@ databaseChangeLog:
                   type: int
 
   - changeSet:
-      id: create_table_check_employee
+      id: create_table_check_employee_1597226151
       author: julian
       changes:
         - createTable:
@@ -80,6 +82,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  # TODO: should we add a check-constraint for valid values?
                   name: status
                   type: varchar
               - column:
@@ -87,7 +90,7 @@ databaseChangeLog:
                   type: varchar
 
   - changeSet:
-      id: create_table_comment
+      id: create_table_comment_1597226158
       author: julian
       changes:
         - createTable:
@@ -115,11 +118,12 @@ databaseChangeLog:
                   name: text
                   type: varchar
               - column:
+                  # TODO: should we add a check-constraint for valid values?
                   name: status
                   type: varchar
 
   - changeSet:
-      id: insert-test-data
+      id: insert-test-data_1597226167
       author: julian
       changes:
         - insert:
