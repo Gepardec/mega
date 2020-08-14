@@ -27,7 +27,7 @@
     "angular-oauth2-oidc-jwks": "^9.0.0",
     "bootstrap": "^4.4.1",
     "rxjs": "^6.5.5",
-    "serialize-javascript": "^2.1.2",
+    "serialize-javascript": "^4.0.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"
   },
