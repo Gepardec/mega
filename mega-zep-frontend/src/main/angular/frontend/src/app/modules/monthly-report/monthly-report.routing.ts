@@ -12,5 +12,5 @@ export const homeRoutes: Routes = [
   },
 ];
 
-export const MonthlyReportRoutingModule: ModuleWithProviders = RouterModule.forChild(homeRoutes);
+export const MonthlyReportRoutingModule: ModuleWithProviders<RouterModule> = RouterModule.forChild(homeRoutes);
 
