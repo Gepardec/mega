@@ -8,4 +8,5 @@ export class Employee {
   releaseDate: string;
   workDescription: string;
   salutation: string;
+  active: boolean;
 }
