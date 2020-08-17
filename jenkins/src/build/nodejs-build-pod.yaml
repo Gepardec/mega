@@ -12,7 +12,7 @@ spec:
       tty: true
       resources:
         limits:
-          memory: 6Gi
+          memory: 4Gi
           cpu: 1500m
       # chrome won't start doen't run because of limits
       # [0221/200339.535218:ERROR:zygote_host_impl_linux.cc(259)] Failed to adjust OOM score of renderer with pid 190: Permission denied (13)
