@@ -15,6 +15,7 @@
 
     <app-datepicker
       (dateEmitter)="changeDate($event)"
+      [selectedDate]="selectedDate"
       *ngIf="filteredEmployees && selectedEmployees?.length > 0"
       class="mr-3"></app-datepicker>
 
