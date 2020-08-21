@@ -14,8 +14,9 @@ import java.util.Set;
 public class Employee {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", insertable = false, updatable = false)
+    @GeneratedValue(generator = "generator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "generator", sequenceName = "sequence_employee", allocationSize = 1)
     private Long id;
 
     @NotNull

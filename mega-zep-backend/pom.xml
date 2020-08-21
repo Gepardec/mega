@@ -7,29 +7,31 @@
     <version>${revision}</version>
     <name>MEGA ZEP-Backend</name>
     <properties>
-        <auto-value.version>1.7.4</auto-value.version>
-        <commons-lang3.version>3.9</commons-lang3.version>
-        <cxf-codegen-plugin.version>3.3.3</cxf-codegen-plugin.version>
-        <failOnMissingWebXml>false</failOnMissingWebXml>
-        <google-api-client.version>1.30.4</google-api-client.version>
-        <guava.version>28.1-jre</guava.version>
         <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
         <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
         <maven-resource-plugin.version>3.1.0</maven-resource-plugin.version>
+        <surefire-plugin.version>2.22.2</surefire-plugin.version>
+        <cxf-codegen-plugin.version>3.3.3</cxf-codegen-plugin.version>
+        <liquibase-maven-plugin.version>4.0.0</liquibase-maven-plugin.version>
+
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <maven.version>3.6.3</maven.version>
-        <mockito-junit-jupiter.version>3.3.3</mockito-junit-jupiter.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.version>3.6.3</maven.version>
+
+        <auto-value.version>1.7.4</auto-value.version>
+        <commons-lang3.version>3.9</commons-lang3.version>
+        <google-api-client.version>1.30.4</google-api-client.version>
+        <guava.version>28.1-jre</guava.version>
+        <mockito-junit-jupiter.version>3.3.3</mockito-junit-jupiter.version>
         <quarkus-plugin.version>1.6.1.Final</quarkus-plugin.version>
-        <quarkus.package.uber.jar>false</quarkus.package.uber.jar>
-        <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
-        <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
         <quarkus.platform.version>1.6.1.Final</quarkus.platform.version>
-        <revision>2.0.0</revision>
-        <surefire-plugin.version>2.22.2</surefire-plugin.version>
         <ws.rt.version>2.3.2</ws.rt.version>
         <xml.resolver.version>20050927</xml.resolver.version>
+
+        <quarkus.package.uber.jar>false</quarkus.package.uber.jar>
+
+        <revision>2.0.0</revision>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -285,6 +287,43 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>${liquibase-maven-plugin.version}</version>
+                <configuration>
+                    <propertyFile>${project.basedir}\liquibase.properties</propertyFile>
+                    <changeSetAuthor>mega</changeSetAuthor>
+                </configuration>
+                <!-- Keep the version here, these dependencies are only used here -->
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.validation</groupId>
+                        <artifactId>validation-api</artifactId>
+                        <version>2.0.1.Final</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.liquibase.ext</groupId>
+                        <artifactId>liquibase-hibernate5</artifactId>
+                        <version>4.0.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                        <version>5.2.8.RELEASE</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework.data</groupId>
+                        <artifactId>spring-data-jpa</artifactId>
+                        <version>2.3.3.RELEASE</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.yaml</groupId>
+                        <artifactId>snakeyaml</artifactId>
+                        <version>1.26</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

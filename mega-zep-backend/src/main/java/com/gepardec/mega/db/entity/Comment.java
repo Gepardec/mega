@@ -12,19 +12,13 @@ import java.util.Objects;
 public class Comment {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", insertable = false, updatable = false)
+    @GeneratedValue(generator = "generator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "generator", sequenceName = "sequence_comment", allocationSize = 1)
     private Long id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "step_entry_id",
-            referencedColumnName = "id",
-            foreignKey = @ForeignKey(name = "fk_step_entry", value = ConstraintMode.CONSTRAINT))
-    private StepEntry stepEntry;
-
-    @NotNull
-    @Column(name = "creation_date", updatable = false)
+    @Column(name = "creation_date", updatable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime creationDate;
 
     @NotNull
@@ -36,6 +30,13 @@ public class Comment {
     @Enumerated(EnumType.STRING)
     @Column(name = "state")
     private State state;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "step_entry_id",
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "fk_step_entry", value = ConstraintMode.CONSTRAINT))
+    private StepEntry stepEntry;
 
     @PrePersist
     void onPersist() {

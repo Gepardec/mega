@@ -8,13 +8,29 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-@Table(name = "step_employee")
+@Table(name = "step_entry")
 public class StepEntry {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", insertable = false, updatable = false)
+    @GeneratedValue(generator = "generator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "generator", sequenceName = "sequence_step_entry", allocationSize = 1)
     private Long id;
+
+
+    @NotNull
+    @Column(name = "date", updatable = false, columnDefinition = "DATE")
+    private LocalDate date;
+
+    @NotNull
+    @Length(min = 1, max = 255)
+    @Column(name = "project", updatable = false)
+    private String project;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "state")
+    private State state;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,20 +55,6 @@ public class StepEntry {
             updatable = false,
             foreignKey = @ForeignKey(name = "fk_step", value = ConstraintMode.CONSTRAINT))
     private Step step;
-
-    @NotNull
-    @Column(name = "date", updatable = false)
-    private LocalDate date;
-
-    @NotNull
-    @Length(min = 1, max = 255)
-    @Column(name = "project", updatable = false)
-    private String project;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "state")
-    private State state;
 
     @PrePersist
     void onPersist() {

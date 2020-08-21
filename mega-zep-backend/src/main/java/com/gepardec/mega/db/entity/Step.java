@@ -13,8 +13,9 @@ import java.util.Set;
 public class Step {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", insertable = false, updatable = false)
+    @GeneratedValue(generator = "generator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "generator", sequenceName = "sequence_step", allocationSize = 1)
     private Long id;
 
     @NotNull
