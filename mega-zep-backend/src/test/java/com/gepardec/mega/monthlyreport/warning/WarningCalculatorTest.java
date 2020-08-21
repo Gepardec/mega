@@ -19,7 +19,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class WarningCalculatorTest {
+class WarningCalculatorTest {
 
     @InjectMocks
     private WarningCalculator warningCalculator;
@@ -126,7 +126,7 @@ public class WarningCalculatorTest {
 
     @Test
     void determineJourneyWarnings_TwoJourneyToAimMissingAndTwoJourneyBackMissing_Warning() {
-        List<ProjectTimeEntry> projectTimes = createEntriesWithAllKindOfJourneyWarnings();
+        List<ProjectTimeEntry> projectTimes = createEntrieswithFourJourneyWarnings();
 
         String missingJourneyBack = "Warnung: Rückreise fehlt oder ist nach dem Zeitraum";
         Mockito.when(warningConfig.getMissingJourneyBack()).thenReturn(missingJourneyBack);
@@ -235,7 +235,15 @@ public class WarningCalculatorTest {
         return projectTimes;
     }
 
-    private static List<ProjectTimeEntry> createEntriesWithAllKindOfJourneyWarnings() {
+    /**
+     * This method creates journey entries and some project time entries to simulate a month with
+     * 4 invalid journey entries that have to be detected by the {@code WarningCalculator}.
+     * The aim is to cover as much cases that can occur as possible to guarantee a trustful detection of invalid
+     * journey entries
+     *
+     * @return A list that consists of project time entries distributed over 7 business days.
+     */
+    private static List<ProjectTimeEntry> createEntrieswithFourJourneyWarnings() {
         List<ProjectTimeEntry> projectTimes = new ArrayList<>();
 
         // Day 1 (TO_AIM missing)
