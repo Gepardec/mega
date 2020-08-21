@@ -1,24 +1,26 @@
-<div class="example-container mat-elevation-z8">
-  <mat-table #table class="tablelist" scr [dataSource]="dataSource">
+<div class="container overflow-auto mat-elevation-z8">
+  <mat-table #table [dataSource]="employees">
 
     <ng-container matColumnDef="headline">
-      <mat-header-cell class="headline" *matHeaderCellDef>Mitarbeiter Übersicht</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="headline">Mitarbeiterübersicht</mat-header-cell>
     </ng-container>
 
     <!-- Checkbox Column -->
     <ng-container matColumnDef="auswaehlen">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [aria-label]="checkboxLabel()"
                       [checked]="selection.hasValue() && isAllSelected()"
                       [indeterminate]="selection.hasValue() && !isAllSelected()"
-                      [aria-label]="checkboxLabel()">
+                      color="primary">
         </mat-checkbox>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <mat-checkbox (click)="$event.stopPropagation()"
-                      (change)="$event ? selection.toggle(row) : null"
+        <mat-checkbox (change)="$event ? selection.toggle(row) : null"
+                      (click)="$event.stopPropagation()"
+                      [aria-label]="checkboxLabel(row)"
                       [checked]="selection.isSelected(row)"
-                      [aria-label]="checkboxLabel(row)">
+                      color="primary">
         </mat-checkbox>
       </mat-cell>
     </ng-container>
@@ -39,12 +41,12 @@
     <ng-container matColumnDef="freigabedatum">
       <mat-header-cell *matHeaderCellDef>Freigegeben bis</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <p [ngClass]="getReleaseDateColourCoding(element.releaseDate)">{{element.releaseDate}}</p>
+        <p [ngClass]="getReleaseDateColourCoding(element.releaseDate)" class="release">{{element.releaseDate}}</p>
       </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="['headline']; sticky: true"></mat-header-row>
-    <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" mat-header-row></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"
              [ngClass]="{ 'selected': selection.isSelected(row)}"
     ></mat-row>

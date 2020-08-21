@@ -1,12 +1,12 @@
 package com.gepardec.mega.zep.service.impl;
 
 
+import com.gepardec.mega.application.security.Role;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
 import com.gepardec.mega.service.impl.monthlyreport.MonthlyReportServiceImpl;
-import com.gepardec.mega.util.EmployeeTestUtil;
 import com.gepardec.mega.zep.ZepService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ public class MonthlyReportServiceImplTest {
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterInvalid() {
-        final Employee employee = EmployeeTestUtil.createEmployee(0, "NULL");
+        final Employee employee = createEmployeeWithReleaseDate(0, "NULL");
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
 
         Assertions.assertNull(workerService.getMonthendReportForUser("0"));
@@ -49,7 +49,7 @@ public class MonthlyReportServiceImplTest {
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenNull() {
-        final Employee employee = EmployeeTestUtil.createEmployee(0);
+        final Employee employee = createEmployee(0);
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
         Mockito.when(zepService.getProjectTimes(Mockito.any())).thenReturn(null);
 
@@ -59,7 +59,7 @@ public class MonthlyReportServiceImplTest {
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenInvalid() {
-        final Employee employee = EmployeeTestUtil.createEmployee(0);
+        final Employee employee = createEmployee(0);
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
         Mockito.when(zepService.getProjectTimes(Mockito.any())).thenReturn(new ArrayList<>());
 
@@ -68,7 +68,7 @@ public class MonthlyReportServiceImplTest {
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenValid_NoWarning() {
-        final Employee employee = EmployeeTestUtil.createEmployee(0);
+        final Employee employee = createEmployee(0);
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
         Mockito.when(zepService.getProjectTimes(Mockito.any())).thenReturn(createReadProjektzeitenResponseType(10));
 
@@ -81,7 +81,7 @@ public class MonthlyReportServiceImplTest {
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenValid_Warning() {
-        final Employee employee = EmployeeTestUtil.createEmployee(0);
+        final Employee employee = createEmployee(0);
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
         Mockito.when(zepService.getProjectTimes(Mockito.any())).thenReturn(createReadProjektzeitenResponseType(18));
 
@@ -103,5 +103,28 @@ public class MonthlyReportServiceImplTest {
                 new ProjectTimeEntry(LocalDateTime.of(2020, 1, 30, 7 ,0),
                         LocalDateTime.of(2020, 1, 30, 10, 0),
                         Task.BEARBEITEN));
+    }
+
+    private Employee createEmployee(final int userId) {
+        return createEmployeeWithReleaseDate(userId, "2020-01-01");
+    }
+
+    private Employee createEmployeeWithReleaseDate(final int userId, String releaseDate) {
+        final String name = "Thomas_" + userId;
+
+        final Employee employee = Employee.builder()
+                .email(name + "@gepardec.com")
+                .firstName(name)
+                .sureName(name + "_Nachname")
+                .title("Ing.")
+                .userId(String.valueOf(userId))
+                .salutation("Herr")
+                .workDescription("ARCHITEKT")
+                .releaseDate(releaseDate)
+                .role(Role.USER.roleId)
+                .active(true)
+                .build();
+
+        return employee;
     }
 }

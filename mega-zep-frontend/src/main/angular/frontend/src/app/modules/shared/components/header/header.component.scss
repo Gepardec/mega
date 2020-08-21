@@ -1,38 +1,13 @@
-@import "../../../../styles/variables.scss";
-
 .toolbar {
-  background-color: $background-color-grey;
-  height: 7%;
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
+img {
+  height: 20px;
+}
+
 .logo-mega {
-  max-width: 10%;
-  margin-top: 1%;
-}
-
-.mat-tab-nav-bar a {
-  margin-top: 9%;
-}
-
-.filler {
-  flex: 1 1 auto;
-}
-
-.excelImg {
-  max-width: 50%;
-  margin-top: 37%;
-  margin-right: -40px;
-}
-
-.zepImg {
-  max-width: 70%;
-  margin-top: 35%;
-}
-
-.useractions {
-  margin-top: 1%;
-  color: black;
+  height: inherit;
 }

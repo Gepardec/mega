@@ -9,8 +9,8 @@ import { MonthlyReportService } from './services/monthly-report.service';
 })
 export class MonthlyReportComponent implements OnInit, OnDestroy {
 
-  private monthlyReportSubscrition: Subscription;
   monthlyReport: MonthlyReport;
+  private monthlyReportSubscription: Subscription;
 
   constructor(private monthlyReportService: MonthlyReportService) {
   }
@@ -20,13 +20,13 @@ export class MonthlyReportComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.monthlyReportSubscrition) {
-      this.monthlyReportSubscrition.unsubscribe();
+    if (this.monthlyReportSubscription) {
+      this.monthlyReportSubscription.unsubscribe();
     }
   }
 
   getAllTimeEntries() {
-    this.monthlyReportSubscrition = this.monthlyReportService.getAll().subscribe((monthlyReport: MonthlyReport) => {
+    this.monthlyReportSubscription = this.monthlyReportService.getAll().subscribe((monthlyReport: MonthlyReport) => {
       this.monthlyReport = monthlyReport;
     });
   }
