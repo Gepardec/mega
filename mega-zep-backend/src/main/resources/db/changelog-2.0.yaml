@@ -40,14 +40,16 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: role
-                  type: int
+                  type: varchar
+                  constraints:
+                    nullable: false
 
   - changeSet:
-      id: create_table_step_employee_1597226151
+      id: create_table_step_entry_1597226151
       author: julian
       changes:
         - createTable:
-            tableName: step_employee
+            tableName: step_entry
             columns:
               - column:
                   name: id
@@ -82,9 +84,10 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  # TODO: should we add a check-constraint for valid values?
-                  name: status
+                  name: state
                   type: varchar
+                  constraints:
+                    nullable: false
               - column:
                   name: project
                   type: varchar
@@ -103,24 +106,27 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
               - column:
-                  name: step_employee_id
+                  name: step_entry_id
                   type: int
                   constraints:
-                    references: step_employee(id)
-                    foreignKeyName: fk_step_employee
+                    references: step_entry(id)
+                    foreignKeyName: fk_step_entry
                     nullable: false
               - column:
-                  name: timestamp
+                  name: creation_date
                   type: timestamp
                   constraints:
                     nullable: false
               - column:
-                  name: text
+                  name: message
                   type: varchar
+                  constraints:
+                    nullable: false
               - column:
-                  # TODO: should we add a check-constraint for valid values?
-                  name: status
+                  name: state
                   type: varchar
+                  constraints:
+                    nullable: false
 
   - changeSet:
       id: insert-test-data_1597226167
@@ -144,9 +150,12 @@ databaseChangeLog:
               - column:
                   name: name
                   value: 'EMC1'
+              - column:
+                  name: role
+                  value: 'EMPLOYEE'
         - insert:
             dbms: 'postgresql'
-            tableName: step_employee
+            tableName: step_entry
             columns:
               - column:
                   name: id
@@ -163,9 +172,12 @@ databaseChangeLog:
               - column:
                   name: date
                   value: now()
+              - column:
+                  name: state
+                  value: "OPEN"
       rollback:
         - delete:
-            tableName: step_employee
+            tableName: step_entry
         - delete:
             tableName: step
         - delete:
