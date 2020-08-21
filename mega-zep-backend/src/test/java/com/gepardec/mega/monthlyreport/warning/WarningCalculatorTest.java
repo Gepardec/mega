@@ -126,7 +126,7 @@ class WarningCalculatorTest {
 
     @Test
     void determineJourneyWarnings_TwoJourneyToAimMissingAndTwoJourneyBackMissing_Warning() {
-        List<ProjectTimeEntry> projectTimes = createEntrieswithFourJourneyWarnings();
+        List<ProjectTimeEntry> projectTimes = createJourneyEntriesWithFourJourneyWarnings();
 
         String missingJourneyBack = "Warnung: Rückreise fehlt oder ist nach dem Zeitraum";
         Mockito.when(warningConfig.getMissingJourneyBack()).thenReturn(missingJourneyBack);
@@ -243,14 +243,11 @@ class WarningCalculatorTest {
      *
      * @return A list that consists of project time entries distributed over 7 business days.
      */
-    private static List<ProjectTimeEntry> createEntrieswithFourJourneyWarnings() {
+    private static List<ProjectTimeEntry> createJourneyEntriesWithFourJourneyWarnings() {
         List<ProjectTimeEntry> projectTimes = new ArrayList<>();
 
         // Day 1 (TO_AIM missing)
-        projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 7, 21, 9, 0),
-                        LocalDateTime.of(2020, 7, 21, 15, 0),
-                        Task.BEARBEITEN));
+        // JourneyEntry with JourneyDirection set to BACK which is invalid because no journey TO_AIM booked before
         projectTimes.add(
                 new JourneyEntry(LocalDateTime.of(2020, 7, 21, 15, 0),
                         LocalDateTime.of(2020, 7, 21, 16, 0),
@@ -258,15 +255,12 @@ class WarningCalculatorTest {
                         JourneyDirection.BACK));
 
         // Day 2 (valid)
+        // Just a usual day with journey TO_AIM and BACK to check correct working of the algorithm
         projectTimes.add(
                 new JourneyEntry(LocalDateTime.of(2020, 7, 22, 8, 0),
                         LocalDateTime.of(2020, 7, 22, 9, 0),
                         Task.REISEN,
                         JourneyDirection.TO_AIM));
-        projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 7, 22, 9, 0),
-                        LocalDateTime.of(2020, 7, 22, 15, 0),
-                        Task.BEARBEITEN));
         projectTimes.add(
                 new JourneyEntry(LocalDateTime.of(2020, 7, 22, 15, 0),
                         LocalDateTime.of(2020, 7, 22, 16, 0),
@@ -274,17 +268,15 @@ class WarningCalculatorTest {
                         JourneyDirection.BACK));
 
         // Day 3 (BACK missing)
+        // JourneyEntry with JourneyDirection set to TO_AIM which is valid
         projectTimes.add(
                 new JourneyEntry(LocalDateTime.of(2020, 7, 23, 8, 0),
                         LocalDateTime.of(2020, 7, 23, 9, 0),
                         Task.REISEN,
                         JourneyDirection.TO_AIM));
-        projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 7, 23, 9, 0),
-                        LocalDateTime.of(2020, 7, 23, 15, 0),
-                        Task.BEARBEITEN));
 
         // Day 4 (valid)
+        // A usual day with journey TO_AIM and BACK but has to recognize that the BACK-journey is missing on the day before
         projectTimes.add(
                 new JourneyEntry(LocalDateTime.of(2020, 7, 24, 15, 0),
                         LocalDateTime.of(2020, 7, 24, 16, 0),
@@ -297,6 +289,7 @@ class WarningCalculatorTest {
                         JourneyDirection.BACK));
 
         // Day 5 (TO_AIM missing)
+        // JourneyEntry with JourneyDirection set to BACK which is invalid because the most recent JourneyEntry is a TO_AIM-journey
         projectTimes.add(
                 new JourneyEntry(LocalDateTime.of(2020, 7, 28, 15, 0),
                         LocalDateTime.of(2020, 7, 28, 16, 0),
@@ -304,17 +297,21 @@ class WarningCalculatorTest {
                         JourneyDirection.BACK));
 
         // Day 6 (BACK missing)
+        // Last JourneyEntry for this month with JourneyDirection set to TO_AIM which is valid at this point
         projectTimes.add(
                 new JourneyEntry(LocalDateTime.of(2020, 7, 29, 15, 0),
                         LocalDateTime.of(2020, 7, 29, 16, 0),
                         Task.REISEN,
                         JourneyDirection.TO_AIM));
 
-        // Day 7 (Dummy)
+        // ProjectTimeEntry which is the very last entry in the whole month. Even though this is not a JourneyEntry
+        // If at this time the most recent journey is not finsihed yet (JourneyDirection set to BACK in current entry),
+        // it has to be detected that there is a invalid journey on Day 6
         projectTimes.add(
                 new ProjectTimeEntry(LocalDateTime.of(2020, 7, 30, 15, 0),
                         LocalDateTime.of(2020, 7, 30, 16, 0),
                         Task.BEARBEITEN));
+
         return projectTimes;
     }
 }
