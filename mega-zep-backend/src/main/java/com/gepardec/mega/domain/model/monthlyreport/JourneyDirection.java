@@ -11,7 +11,8 @@ import java.util.stream.Stream;
 public enum JourneyDirection {
     TO_AIM("0"),
     FURTHER("1"),
-    BACK("2");
+    BACK("2"),
+    INVALIDATE("invalidate");
 
     private String direction;
 
