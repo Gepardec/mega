@@ -34,7 +34,8 @@ describe('DisplayMonthlyReportComponent', () => {
         salutation: undefined,
         title: undefined,
         userId: 'john.doe@gepardec.com',
-        workDescription: undefined
+        workDescription: undefined,
+        active: undefined
       }
     };
     fixture.detectChanges();

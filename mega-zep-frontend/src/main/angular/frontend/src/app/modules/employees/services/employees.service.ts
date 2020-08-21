@@ -23,7 +23,10 @@ export class EmployeesService {
   }
 
   updateEmployees(employees: Array<Employee>, date: string) {
-    employees.forEach(empl => empl.releaseDate = date);
+    employees.forEach(empl => {
+      empl.releaseDate = date;
+      empl.active = true;
+    });
     return this.employeeService.updateAll(employees);
   }
 
