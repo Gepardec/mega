@@ -3,6 +3,8 @@ target/
 liquibase-output-changeLog.yaml
 liquibase-diff-changeLog.yaml
 .env
+README.html
+README.pdf
 *.zip
 *.http
 *.iml

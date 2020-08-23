@@ -6,32 +6,42 @@ Make End-of-the-month-process Great Again!
 
 === Project setup
 
-- Quarkus 1.6.0.Final
-- OpenJDK 11
-- Maven 3.6.3
-- node.js 12+
-- npm 6+
+- link:https://quarkus.io/[Quarkus 1.6.0.Final]
+- link:https://openjdk.java.net/[OpenJDK 11]
+- link:https://maven.apache.org/[Maven 3.6.3]
+- link:https://nodejs.org/en/[node.js 12+]
+- link:https://www.npmjs.com/[npm 6+]
+- link:https://www.postgresql.org/[PostgreSQL 10]
 
 === Backend setup
 
-- current application.properties file @ mega-zep-backend/config/:
-    * available internally
-- new run config(maven):
-    * working dir: mega-zep-backend
-    * command line: clean compile quarkus:dev
+The backend project is located at `./mega-zep-backend`.
 
-==== Frontend Setup
+- Start local postgres instance +
+`docker run -p 5432:5432 --env POSTGRES_PASSWORD=mega --env POSTGRES_USER=mega --env POSTGRES_DB=mega --name mega-db postgres:10`
+- Go to +
+`cd ./mega-zep-backend`
+- Build the application +
+`mvn clean install`
+- Start quarkus in development mode +
+`mvn quarkus:dev`
 
-- install node.js
-- npm install -g @angular/cli
-- cd mega-zep-frontend/src/main/angular/frontend
-- npm install
-- npx ng serve / npx ng test
+=== Frontend Setup
 
-==== Configuration
+The frontend project is located at `./mega-zep-frontend`.
+
+. Install global dependencies +
+`npm install -g @angular/cli`
+. Go to the project +
+`cd ./mega-zep-frontend/src/main/angular/frontend`
+. Install project dependencies +
+`npm install`
+. Start webserver +
+`npx ng serve / npx ng test`
+
+=== Secrets
 
 The following file ``./mega-zep-backend/.env`` contains the secret values and has to be added manually by the developers.
-This file is not part of the VCS.
 
 ./mega-zep-backend/.env
 [source,properties]
@@ -39,3 +49,51 @@ This file is not part of the VCS.
 TOKEN=***
 MAILER_PASSWORD=***
 ----
+
+== Databse
+
+Mega uses a database to store persistent data, which is managed by liquibase.
+
+=== Local development with PostgreSQL
+
+For the local development we use PostgreSQL which is automatically setup by liquibase during `mvn quarkus:dev` startup.
+We use the `liquibase-maven-plugin` which provides maven goals to manage the local database.
+The source definition of our database schema is the JPA datamodel, and we generate the changeset files via the `liquibase-maven-plugin`.
+
+IMPORTANT: All liquibase maven goals work on the compiled sources and resources located in `./mega-zep-backend/target/classes/`.
+
+==== How to generate a full changeset?
+
+. Drop the current database schema +
+`mvn liquibase:dropAll`
+. Generate the changeset +
+`mvn liquibase:generateChangeLog`
+
+IMPORTANT: Ensure that the generated full changeset is proper and that everything has been definied in the JPA model.
+
+==== How to generate a diff changeset?
+
+. Ensure the database is consistent with the current liquibase definitions +
+`liquibase:update`
+. Generate the diff changeset +
+`mvn liquibase:diff`
+
+==== How to apply a changeset?
+
+. Apply newly created changeset +
+`liquibase:update`
+
+==== How to test a new changeset?
+
+. Try clean install and H2 setup during tests +
+`mvn clean install`
+. Try application in development and PostgreSQL setup +
+`mvn quarkus:dev`
+
+IMPORTANT: Ensure that the database state is on the current released version.
+
+=== Test with H2
+
+For the unit tests we use H2 which is automatically setup by liquibase.
+We always get a new H2 instance for each test execution, therefore there will never be incompatibilities, therefore developers don't need to anything.
+
