@@ -23,8 +23,8 @@ public class MailSender {
     Mailer mailer;
 
     public void sendReminder(String eMail, String firstName, Reminder reminder) {
-        String subject = notificationConfig.subjectForReminder(reminder.name());
-        String text = readTextOfPath(notificationConfig.templatePathForReminder(reminder.name()));
+        String subject = notificationConfig.subjectForReminder(reminder);
+        String text = readTextOfPath(notificationConfig.templatePathForReminder(reminder));
         sendMail(eMail, firstName, subject, text);
     }
 

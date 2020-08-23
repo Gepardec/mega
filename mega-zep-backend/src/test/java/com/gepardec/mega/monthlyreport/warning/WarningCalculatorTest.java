@@ -2,7 +2,6 @@ package com.gepardec.mega.monthlyreport.warning;
 
 import com.gepardec.mega.domain.model.monthlyreport.*;
 import com.gepardec.mega.service.impl.monthlyreport.WarningCalculator;
-import com.gepardec.mega.service.impl.monthlyreport.WarningConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +25,7 @@ class WarningCalculatorTest {
     private WarningCalculator warningCalculator;
 
     @Mock
-    private WarningConfig warningConfig;
+    private ResourceBundle resourceBundle;
 
     @Test
     void determineTimeWarnings_oneEntryMoreThan6Hours_warning() {
@@ -129,10 +129,10 @@ class WarningCalculatorTest {
         List<ProjectTimeEntry> projectTimes = createJourneyEntriesWithFourJourneyWarnings();
 
         String missingJourneyBack = "Warnung: Rückreise fehlt oder ist nach dem Zeitraum";
-        Mockito.when(warningConfig.getMissingJourneyBack()).thenReturn(missingJourneyBack);
+        Mockito.when(resourceBundle.getString("warning." + Warning.WARNING_JOURNEY_BACK_MISSING.name())).thenReturn(missingJourneyBack);
 
         String missingJourneyToAim = "Warnung: Hinreise fehlt oder ist vor dem Zeitraum";
-        Mockito.when(warningConfig.getMissingJourneyToAim()).thenReturn(missingJourneyToAim);
+        Mockito.when(resourceBundle.getString("warning." + Warning.WARNING_JOURNEY_TO_AIM_MISSING.name())).thenReturn(missingJourneyToAim);
 
         List<JourneyWarning> warnings = warningCalculator.determineJourneyWarnings(projectTimes);
         assertAll(
@@ -170,7 +170,7 @@ class WarningCalculatorTest {
                         JourneyDirection.BACK));
 
         String missingJourneyToAim = "Warnung: Hinreise fehlt oder ist vor dem Zeitraum";
-        Mockito.when(warningConfig.getMissingJourneyToAim()).thenReturn(missingJourneyToAim);
+        Mockito.when(resourceBundle.getString("warning." + Warning.WARNING_JOURNEY_TO_AIM_MISSING.name())).thenReturn(missingJourneyToAim);
 
         List<JourneyWarning> warnings = warningCalculator.determineJourneyWarnings(projectTimes);
         assertAll(
