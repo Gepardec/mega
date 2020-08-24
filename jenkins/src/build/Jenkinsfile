@@ -55,9 +55,15 @@ pipeline {
                                                                                          --wait"
                                                 openshift.tag("mega-zep-frontend:latest", "mega-zep-frontend:${env.REVISION}")
                                             }
-                                            copyImage("mega-zep-frontend:${env.REVISION}")
                                         }
                                     }
+                                }
+                            }
+                        }
+                        stage("Push Image") {
+                            steps {
+                                script {
+                                    copyImage("mega-zep-frontend:${env.REVISION}")
                                 }
                             }
                         }
@@ -104,6 +110,13 @@ pipeline {
                                             copyImage("mega-zep-backend:${env.REVISION}")
                                         }
                                     }
+                                }
+                            }
+                        }
+                        stage("Push Image") {
+                            steps {
+                                script {
+                                    copyImage("mega-zep-backend:${env.REVISION}")
                                 }
                             }
                         }
