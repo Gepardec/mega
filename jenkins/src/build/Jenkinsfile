@@ -63,7 +63,9 @@ pipeline {
                         stage("Push Image") {
                             steps {
                                 script {
-                                    copyImage("mega-zep-frontend:${env.REVISION}")
+                                    container('nodejs') {
+                                        copyImage("mega-zep-frontend:${env.REVISION}")
+                                    }
                                 }
                             }
                         }
@@ -116,7 +118,9 @@ pipeline {
                         stage("Push Image") {
                             steps {
                                 script {
-                                    copyImage("mega-zep-backend:${env.REVISION}")
+                                    container('quarkus') {
+                                        copyImage("mega-zep-backend:${env.REVISION}")
+                                    }
                                 }
                             }
                         }
