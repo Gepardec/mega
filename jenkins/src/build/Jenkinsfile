@@ -55,6 +55,7 @@ pipeline {
                                                                                          --wait"
                                                 openshift.tag("mega-zep-frontend:latest", "mega-zep-frontend:${env.REVISION}")
                                             }
+                                            copyImage("mega-zep-frontend:${env.REVISION}")
                                         }
                                     }
                                 }
@@ -100,21 +101,13 @@ pipeline {
                                                 sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait"
                                                 openshift.tag("mega-zep-backend:latest", "mega-zep-backend:${env.REVISION}")
                                             }
+                                            copyImage("mega-zep-backend:${env.REVISION}")
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                }
-            }
-        }
-
-        stage('Push Dockerhub') {
-            steps {
-                script {
-                    copyImage("mega-zep-backend:${env.REVISION}")
-                    copyImage("mega-zep-frontend:${env.REVISION}")
                 }
             }
         }
