@@ -1,4 +1,5 @@
 #!groovy
+package build
 
 pipeline {
     agent any
@@ -108,6 +109,16 @@ pipeline {
                 }
             }
         }
+
+        stage('Push Dockerhub') {
+            steps {
+                script {
+                    copyImage("mega-zep-backend:${env.REVISION}")
+                    copyImage("mega-zep-frontend:${env.REVISION}")
+                }
+            }
+        }
+
         stage('Deploy DEV') {
             when {
                 branch "develop"
@@ -154,6 +165,17 @@ Build for Branch '${env.GIT_BRANCH}@${env.GIT_COMMIT}' has been fixed.
 """
             }
         }
+    }
+}
+
+def copyImage(String sourceImageTag, String targetImageTag = sourceImageTag) {
+    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+        sh "skopeo copy --src-tls-verify=false \
+                    --dest-tls-verify=false \
+                    --src-creds openshift:\$(oc whoami -t) \
+                    --dest-creds=${USERNAME}:${PASSWORD} \
+                    docker://docker-registry.default.svc:5000/57-mega-dev/${sourceImageTag} \
+                    docker://registry.hub.docker.com/${USERNAME}/${targetImageTag}"
     }
 }
 
