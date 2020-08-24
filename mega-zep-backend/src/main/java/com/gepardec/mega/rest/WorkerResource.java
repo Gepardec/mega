@@ -28,11 +28,7 @@ public class WorkerResource {
     @Path("/monthendreports")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMonthEndReports() {
-        final MonthlyReport monthlyReport = monthlyReportService.getMonthendReportForUser(userContext.getUser().userId());
-
-        if (monthlyReport == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        MonthlyReport monthlyReport = monthlyReportService.getMonthendReportForUser(userContext.getUser().userId());
         return Response.ok(monthlyReport).build();
     }
 }

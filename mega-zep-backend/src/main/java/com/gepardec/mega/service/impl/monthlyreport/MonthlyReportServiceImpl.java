@@ -10,6 +10,7 @@ import com.gepardec.mega.zep.ZepService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.List;
 
 @RequestScoped
@@ -30,17 +31,25 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     }
 
     private MonthlyReport calcWarnings(List<ProjectTimeEntry> projectTimeList, Employee employee) {
+        MonthlyReport monthlyReport = new MonthlyReport();
+
         if (projectTimeList == null || projectTimeList.isEmpty()) {
-            return null;
+            monthlyReport = new MonthlyReport();
+            monthlyReport.setEmployee(employee);
+            monthlyReport.setJourneyWarnings(Collections.emptyList());
+            monthlyReport.setTimeWarnings(Collections.emptyList());
+
+            return monthlyReport;
         }
+
         final WarningCalculator warningCalculator = new WarningCalculator(warningConfig);
         final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(projectTimeList);
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectTimeList);
 
-        final MonthlyReport monthlyReport = new MonthlyReport();
         monthlyReport.setJourneyWarnings(journeyWarnings);
         monthlyReport.setTimeWarnings(timeWarnings);
         monthlyReport.setEmployee(employee);
+
         return monthlyReport;
     }
 }
