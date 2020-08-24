@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
-import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {Observable, of} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
-import {ErrorHandlerService} from '../services/error/error-handler.service';
-import {UserService} from '../services/user/user.service';
-import {ConfigService} from '../services/config/config.service';
-import {LoaderService} from '../services/loader/loader.service';
+import { Injectable } from '@angular/core';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { ErrorHandlerService } from '../services/error/error-handler.service';
+import { UserService } from '../services/user/user.service';
+import { ConfigService } from '../services/config/config.service';
+import { LoaderService } from '../services/loader/loader.service';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +32,8 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
 
         catchError((error: HttpErrorResponse) => {
             this.loaderService.stopSpinner();
-            // TODO: we should lookup documentation on this code, not necessary a problem with this pull request ... is the direct call of handleError from application code valid?
+            // TODO: we should lookup documentation on this code, not necessary a problem with this pull request ...
+            //  is the direct call of handleError from application code valid?
             return this.handleError(error);
           }
         )

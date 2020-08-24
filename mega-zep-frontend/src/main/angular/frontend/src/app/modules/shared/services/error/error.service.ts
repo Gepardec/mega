@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {HttpErrorResponse} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,6 @@ export class ErrorService {
   }
 
   removeLastErrorData() {
-    delete this.message;
     delete this.message;
   }
 

@@ -1,9 +1,8 @@
-import {Injectable, OnInit} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {Employee} from '../models/Employee';
-import {EmployeeService} from './employee.service';
-import {SelectionChange} from '@angular/cdk/collections';
-import { tap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Employee } from '../models/Employee';
+import { EmployeeService } from './employee.service';
+import { SelectionChange } from '@angular/cdk/collections';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +23,10 @@ export class EmployeesService {
   }
 
   updateEmployees(employees: Array<Employee>, date: string) {
-    employees.forEach(empl => empl.releaseDate = date);
+    employees.forEach(empl => {
+      empl.releaseDate = date;
+      empl.active = true;
+    });
     return this.employeeService.updateAll(employees);
   }
 

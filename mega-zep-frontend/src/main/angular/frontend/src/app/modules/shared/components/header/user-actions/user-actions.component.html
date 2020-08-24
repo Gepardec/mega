@@ -1,11 +1,11 @@
-<button id="userBtn" mat-button [matMenuTriggerFor]="menu">{{user?.firstname + " " + user?.lastname}}
+<button [matMenuTriggerFor]="menu" id="userBtn" mat-button>{{user?.firstname + " " + user?.lastname}}
   <mat-icon matListIcon>keyboard_arrow_down</mat-icon>
 </button>
 
-<img class="avatar" [src]="user.pictureUrl" />
+<img [src]="user.pictureUrl" class="avatar"/>
 
-<mat-menu id="menu" #menu>
-  <button id="logoutBtn" mat-menu-item (click)="doLogout()">Logout</button>
+<mat-menu #menu id="menu">
+  <button (click)="doLogout()" id="logoutBtn" mat-menu-item>Logout</button>
 </mat-menu>
 
 
