@@ -13,8 +13,10 @@ pipeline {
 
     stages {
         stage("Skopeo") {
-            container('quarkus') {
-                sh "skopeo copy --dest-creds=gdhet:${params.Password} docker-registry.default.svc:5000/mega-dev/mega-zep-frontend:latest registry.hub.docker.com/gdhet/mega-zep-backend:latest"
+            steps {
+                container('quarkus') {
+                    sh "skopeo copy --dest-creds=gdhet:${params.Password} docker-registry.default.svc:5000/mega-dev/mega-zep-frontend:latest registry.hub.docker.com/gdhet/mega-zep-backend:latest"
+                }
             }
         }
     }
