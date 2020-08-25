@@ -26,7 +26,7 @@
     <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
     <quarkus.platform.version>1.6.1.Final</quarkus.platform.version>
-    <revision>2.0.0</revision>
+    <revision>2.0.0.RC1</revision>
     <surefire-plugin.version>2.22.2</surefire-plugin.version>
     <ws.rt.version>2.3.2</ws.rt.version>
     <xml.resolver.version>20050927</xml.resolver.version>
