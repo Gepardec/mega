@@ -11,6 +11,7 @@ import com.gepardec.mega.zep.ZepService;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.ResourceBundle;
 
 @RequestScoped
 public class MonthlyReportServiceImpl implements MonthlyReportService {
@@ -19,7 +20,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     ZepService zepService;
 
     @Inject
-    WarningConfig warningConfig;
+    ResourceBundle messages;
 
     @Override
     public MonthlyReport getMonthendReportForUser(final String userId) {
@@ -31,8 +32,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         if (projectTimeList == null || projectTimeList.isEmpty()) {
             return null;
         }
-
-        final WarningCalculator warningCalculator = new WarningCalculator(warningConfig);
+        final WarningCalculator warningCalculator = new WarningCalculator(messages);
         final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(projectTimeList);
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectTimeList);
 

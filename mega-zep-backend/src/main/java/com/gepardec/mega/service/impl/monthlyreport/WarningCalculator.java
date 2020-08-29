@@ -10,14 +10,16 @@ import java.util.stream.Collectors;
 import static com.gepardec.mega.domain.model.monthlyreport.TimeWarning.*;
 
 public class WarningCalculator {
+
+    private static final String MESSAGE_KEY_TEMPLATE = "warning.%s";
+
     private final List<TimeWarning> timeWarnings = new ArrayList<>(0);
     private final List<JourneyWarning> journeyWarnings = new ArrayList<>(0);
-    private final WarningConfig warningConfig;
+    private final ResourceBundle messages;
 
-    public WarningCalculator(WarningConfig warningConfig) {
-        this.warningConfig = warningConfig;
+    public WarningCalculator(ResourceBundle messages) {
+        this.messages = messages;
     }
-
 
     public List<TimeWarning> determineTimeWarnings(List<ProjectTimeEntry> projectTimeList) {
         Set<Map.Entry<LocalDate, List<ProjectTimeEntry>>> entrySet = projectTimeList.stream()
@@ -176,41 +178,6 @@ public class WarningCalculator {
 
 
     public String getTextByWarning(Warning warning) {
-        String warningText;
-        switch (warning) {
-            case WARNING_EXCESS_WORKTIME: {
-                warningText = warningConfig.getExcessWorktime();
-                break;
-            }
-            case WARNING_MISSING_BREAKTIME: {
-                warningText = warningConfig.getMissingBreaktime();
-                break;
-            }
-            case WARNING_TIME_TOO_EARLY_START: {
-                warningText = warningConfig.getTooEarlyStart();
-                break;
-            }
-            case WARNING_TIME_TOO_LATE_END: {
-                warningText = warningConfig.getTooLateEnd();
-                break;
-            }
-            case WARNING_MISSING_RESTTIME: {
-                warningText = warningConfig.getMissingResttime();
-                break;
-            }
-            case WARNING_JOURNEY_BACK_MISSING: {
-                warningText = warningConfig.getMissingJourneyBack();
-                break;
-            }
-            case WARNING_JOURNEY_TO_AIM_MISSING: {
-                warningText = warningConfig.getMissingJourneyToAim();
-                break;
-            }
-            default: {
-                warningText = null;
-                break;
-            }
-        }
-        return warningText;
+        return messages.getString(String.format(MESSAGE_KEY_TEMPLATE, warning.name()));
     }
 }

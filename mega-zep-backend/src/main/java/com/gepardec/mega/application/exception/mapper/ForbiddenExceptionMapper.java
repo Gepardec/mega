@@ -1,6 +1,6 @@
-package com.gepardec.mega.application.security.exception.mapper;
+package com.gepardec.mega.application.exception.mapper;
 
-import com.gepardec.mega.application.security.exception.ForbiddenException;
+import com.gepardec.mega.application.exception.ForbiddenException;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;

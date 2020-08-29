@@ -1,5 +1,6 @@
 package com.gepardec.mega.notification.mail;
 
+import com.gepardec.mega.application.configuration.NotificationConfig;
 import com.google.common.net.MediaType;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;
@@ -17,25 +18,28 @@ import java.util.Objects;
 public class MailSender {
 
     @Inject
+    NotificationHelper notificationHelper;
+
+    @Inject
     NotificationConfig notificationConfig;
 
     @Inject
     Mailer mailer;
 
     public void sendReminder(String eMail, String firstName, Reminder reminder) {
-        String subject = notificationConfig.subjectForReminder(reminder.name());
-        String text = readTextOfPath(notificationConfig.templatePathForReminder(reminder.name()));
+        String subject = notificationHelper.subjectForReminder(reminder);
+        String text = readTextOfPath(notificationHelper.templatePathForReminder(reminder));
         sendMail(eMail, firstName, subject, text);
     }
 
 
     private void sendMail(String eMail, String firstName, String subject, String text) {
-        final String mailTemplateText = readTextOfPath(notificationConfig.getMailTemplateTextPath())
-                .replace(notificationConfig.getMegaDashUrlPlaceholder(), notificationConfig.getMegaDashUrl());
+        final String mailTemplateText = readTextOfPath(notificationHelper.getMailTemplateTextPath())
+                .replace(notificationHelper.getMegaDashUrlPlaceholder(), notificationConfig.getMegaDashUrl());
         final String mailContent = mailTemplateText
-                .replace(notificationConfig.getNamePlaceholder(), firstName)
-                .replace(notificationConfig.getTemplateMailtextPlaceholder(), text)
-                .replace(notificationConfig.getEomWikiPlaceholder(), notificationConfig.getMegaWikiEomUrl());
+                .replace(notificationHelper.getNamePlaceholder(), firstName)
+                .replace(notificationHelper.getTemplateMailtextPlaceholder(), text)
+                .replace(notificationHelper.getEomWikiPlaceholder(), notificationConfig.getMegaWikiEomUrl());
 
 
         mailer.send(Mail.withHtml(eMail, subject, mailContent)
