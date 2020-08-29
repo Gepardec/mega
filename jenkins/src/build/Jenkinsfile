@@ -10,6 +10,10 @@ pipeline {
         NODE_RESOURCE_LIMITS = "--initial-old-space-size=4096 --max-old-space-size=4096"
     }
 
+    parameters {
+        booleanParam(name: 'deployToDev', defaultValue: 'false', description: 'True if the build shall be deployed to dev')
+    }
+
     options {
         disableConcurrentBuilds()
         parallelsAlwaysFailFast()
@@ -131,13 +135,17 @@ pipeline {
 
         stage('Deploy DEV') {
             when {
-                branch "develop"
+                anyOf {
+                    branch "develop"
+                    expression {
+                        return params.deployToDev
+                    }
+                }
             }
             steps {
                 script {
                     build job: 'mega-release', parameters: [
                             string(name: 'Branch', value: "master"),
-                            string(name: 'sourceEnvironment', value: 'dev'),
                             string(name: 'targetEnvironment', value: "dev"),
                             string(name: 'version', value: "${env.REVISION}")]
                 }
