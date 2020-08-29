@@ -198,19 +198,15 @@ def copyImage(String sourceImageTag, String targetImageTag = sourceImageTag) {
 }
 
 def buildRevisionForBranch(String pomLocation = ".") {
-    def branch = "${env.GIT_BRANCH}".trim().toLowerCase()
-    def revision = "";
-    if (branch.equals("develop")) {
+    String branch = "${env.GIT_BRANCH}"
+    if (branch == "develop") {
         pom = readMavenPom file: pomLocation + '/pom.xml'
         return pom.properties['revision']
     } else if (branch.startsWith("feature/")) {
         return branch.replace("/", "-").toUpperCase()
-    } else if (branch.startsWith("PR-")) {
-        return branch.replace("/", "-").toUpperCase()
     } else if (branch.startsWith("release/") || branch.startsWith("hotfix/")) {
-        pom = readMavenPom file: pomLocation + '/pom.xml'
-        return pom.properties['revision']
+        return branch.replace("release/", "").replace("hotfix/", "")
     } else {
-        error("Branch not detected. branch=${branch}")
+        error("Cannot caluclate version for branch=${branch}")
     }
 }
