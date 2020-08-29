@@ -1,16 +1,15 @@
 package com.gepardec.mega.notification.mail;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import com.gepardec.mega.application.configuration.NotificationConfig;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 @ApplicationScoped
-public class NotificationConfig {
+public class NotificationHelper {
 
     private static final String NAME_PLACEHOLDER = "$firstName$";
     private static final String EOM_WIKI_PLACEHOLDER = "$wikiEomUrl$";
@@ -19,19 +18,10 @@ public class NotificationConfig {
 
     private static final String MESSAGE_KEY_TEMPLATE_REMINDER = "mail.reminder.%s.subject";
 
-    private static final String EMAIL_PATH = "/emails";
+    private static final String EMAIL_PATH = "emails";
 
-    @ConfigProperty(name = "mega.mail.subjectPrefix")
-    String subjectPrefix;
-
-    @ConfigProperty(name = "mega.image.logo.url")
-    String megaImageLogoUrl;
-
-    @ConfigProperty(name = "mega.wiki.eom.url")
-    String megaWikiEomUrl;
-
-    @ConfigProperty(name = "mega.dash.url")
-    String megaDashUrl;
+    @Inject
+    NotificationConfig notificationConfig;
 
     @Inject
     ResourceBundle resourceBundle;
@@ -39,7 +29,7 @@ public class NotificationConfig {
     public String templatePathForReminder(final Reminder reminder) {
         Objects.requireNonNull(reminder, "Cannot retrieve template path for null reminder");
         final String emailPath = EMAIL_PATH + "/" + reminder.name() + ".html";
-        if (NotificationConfig.class.getClassLoader().getResource(emailPath) != null) {
+        if (NotificationHelper.class.getClassLoader().getResource(emailPath) != null) {
             return emailPath;
         } else {
             throw new IllegalArgumentException(String.format("No template path for reminder '%s' found", reminder));
@@ -48,27 +38,15 @@ public class NotificationConfig {
 
     public String subjectForReminder(Reminder reminder) {
         Objects.requireNonNull(reminder, "Cannot retrieve subject for null reminder");
-        return subjectPrefix() + resourceBundle.getString(String.format(MESSAGE_KEY_TEMPLATE_REMINDER, reminder.name()));
+        return subjectPrefixOrEmptyString() + resourceBundle.getString(String.format(MESSAGE_KEY_TEMPLATE_REMINDER, reminder.name()));
     }
 
-    public String subjectPrefix() {
-        return Optional.ofNullable(subjectPrefix).orElse("");
+    public String subjectPrefixOrEmptyString() {
+        return Optional.ofNullable(notificationConfig.getSubjectPrefix()).orElse("");
     }
 
     public String getMailTemplateTextPath() {
         return EMAIL_PATH + "/template.html";
-    }
-
-    public String getMegaImageLogoUrl() {
-        return megaImageLogoUrl;
-    }
-
-    public String getMegaWikiEomUrl() {
-        return megaWikiEomUrl;
-    }
-
-    public String getMegaDashUrl() {
-        return megaDashUrl;
     }
 
     public String getNamePlaceholder() {

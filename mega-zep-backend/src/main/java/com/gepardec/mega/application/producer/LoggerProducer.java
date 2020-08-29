@@ -1,4 +1,4 @@
-package com.gepardec.mega.application.configuration;
+package com.gepardec.mega.application.producer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,7 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 
 @ApplicationScoped
-public class LoggerConfiguration {
+public class LoggerProducer {
 
     @Produces
     @Default

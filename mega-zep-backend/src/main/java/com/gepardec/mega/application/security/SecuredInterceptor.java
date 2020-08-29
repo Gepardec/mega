@@ -1,6 +1,6 @@
 package com.gepardec.mega.application.security;
 
-import com.gepardec.mega.application.security.exception.UnauthorizedException;
+import com.gepardec.mega.application.exception.UnauthorizedException;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;

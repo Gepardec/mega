@@ -27,7 +27,7 @@ class MailSenderTest {
     MockMailbox mailbox;
 
     @Inject
-    NotificationConfig notificationConfig;
+    NotificationHelper notificationHelper;
 
     @BeforeEach
     void init() {
