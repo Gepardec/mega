@@ -199,7 +199,7 @@ def copyImage(String sourceImageTag, String targetImageTag = sourceImageTag) {
 
 def buildRevisionForBranch(String pomLocation = ".") {
     String branch = "${env.GIT_BRANCH}"
-    if (branch.is("develop")) {
+    if (branch == "develop") {
         pom = readMavenPom file: pomLocation + '/pom.xml'
         return pom.properties['revision']
     } else if (branch.startsWith("feature/")) {
