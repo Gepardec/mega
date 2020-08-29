@@ -5,7 +5,7 @@ spec:
   serviceAccountName: jenkins
   containers:
     - name: nodejs
-      image: docker-registry.default.svc:5000/57-mega-dev/jenkins-agent-nodejs-12-5:SKOPEO
+      image: docker-registry.default.svc:5000/57-mega-dev/jenkins-agent-nodejs-12-5:latest
       imagePullPolicy: Always
       command:
         - cat
