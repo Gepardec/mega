@@ -1,0 +1,32 @@
+version: '3.3'
+services:
+  mega-zep-backend:
+    image: "gdhet/mega-zep-backend:${BRANCH}"
+    environment:
+      - "AB_JOLOKIA_OFF=false"
+      - "AB_PROMETHEUS_OFF=true"
+      - "JAVA_MAX_MEM_RATIO=95"
+      - "TZ=Europe/Vienna"
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./application.properties:/deployments/config/application.properties:ro"
+      - "./secrets.properties:/deployments/.env:ro"
+    healthcheck:
+      test: ["CMD", "curl", "-sSf", "http://localhost:8080/health/ready"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    network_mode: bridge
+  mega-zep-frontend:
+    image: "gdhet/mega-zep-frontend:${BRANCH}"
+    ports:
+      - "8081:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-sSf", "http://localhost:8080/"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - mega-zep-backend
+    network_mode: bridge
