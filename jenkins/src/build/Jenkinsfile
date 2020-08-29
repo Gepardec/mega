@@ -1,4 +1,5 @@
 #!groovy
+package build
 
 pipeline {
     agent any
@@ -63,6 +64,15 @@ pipeline {
                                 }
                             }
                         }
+                        stage("Push Image") {
+                            steps {
+                                script {
+                                    container('nodejs') {
+                                        copyImage("mega-zep-frontend:${env.REVISION}")
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -103,7 +113,17 @@ pipeline {
                                                 sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait"
                                                 openshift.tag("mega-zep-backend:latest", "mega-zep-backend:${env.REVISION}")
                                             }
+                                            copyImage("mega-zep-backend:${env.REVISION}")
                                         }
+                                    }
+                                }
+                            }
+                        }
+                        stage("Push Image") {
+                            steps {
+                                script {
+                                    container('quarkus') {
+                                        copyImage("mega-zep-backend:${env.REVISION}")
                                     }
                                 }
                             }
@@ -112,6 +132,7 @@ pipeline {
                 }
             }
         }
+
         stage('Deploy DEV') {
             when {
                 anyOf {
@@ -163,6 +184,17 @@ Build for Branch '${env.GIT_BRANCH}@${env.GIT_COMMIT}' has been fixed.
 """
             }
         }
+    }
+}
+
+def copyImage(String sourceImageTag, String targetImageTag = sourceImageTag) {
+    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+        sh "skopeo copy --src-tls-verify=false \
+                    --dest-tls-verify=false \
+                    --src-creds openshift:\$(oc whoami -t) \
+                    --dest-creds=${USERNAME}:${PASSWORD} \
+                    docker://docker-registry.default.svc:5000/57-mega-dev/${sourceImageTag} \
+                    docker://registry.hub.docker.com/${USERNAME}/${targetImageTag}"
     }
 }
 
