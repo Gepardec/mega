@@ -24,9 +24,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
 
     @Override
     public MonthlyReport getMonthendReportForUser(final String userId) {
-
         Employee employee = zepService.getEmployee(userId);
-
         return calcWarnings(zepService.getProjectTimes(employee), employee);
     }
 
@@ -38,10 +36,11 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(projectTimeList);
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectTimeList);
 
-        final MonthlyReport monthlyReport = new MonthlyReport();
+        MonthlyReport monthlyReport = new MonthlyReport();
         monthlyReport.setJourneyWarnings(journeyWarnings);
         monthlyReport.setTimeWarnings(timeWarnings);
         monthlyReport.setEmployee(employee);
+
         return monthlyReport;
     }
 }
