@@ -42,6 +42,7 @@ public class WorkerResource {
             monthlyReport.setEmployee(employee);
             monthlyReport.setJourneyWarnings(Collections.emptyList());
             monthlyReport.setTimeWarnings(Collections.emptyList());
+            monthlyReport.setComments(Collections.emptyList());
         }
 
         return Response.ok(monthlyReport).build();

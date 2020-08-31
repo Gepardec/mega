@@ -1,34 +1,63 @@
-.mat-card {
-  margin-top: 8%;
+.center-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: auto;
+  height: 100%;
 }
 
-.mat-card-subtitle {
-  margin-left: 20px;
+.container {
+  min-width: 80% !important;
 }
 
 .mat-card-content {
   font-size: 20px;
-  margin-left: 20px;
-  margin-right: 30px;
 }
 
 .mat-card-date {
   float: right;
 }
 
+.mat-card-title {
+  text-align: left;
+}
+
 .container-mat-table {
-  margin-top: 8%;
   height: 30vh;
   overflow: auto;
 }
 
 .mat-column-date-journey {
-  max-width: 25%;
+  max-width: 150px;
 }
 
-.no-warning-text {
-  font-size: 18px;
-  font-weight: bold;
-  margin-left: 1%;
-  margin-bottom: 0.5%;
+.open {
+  color: red;
+}
+
+.done {
+  color: green;
+  text-decoration: line-through;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+mat-icon {
+  font-size: 80px;
+  width: auto;
+}
+
+.employee-checks * mat-card-content {
+  height: 77vh;
+}
+
+.mega-check * .mat-card-content {
+  height: 35vh;
+  overflow: auto;
 }

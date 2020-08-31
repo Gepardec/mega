@@ -1,17 +1,34 @@
 package com.gepardec.mega.domain.model.monthlyreport;
 
+import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.domain.model.Employee;
 
 import java.util.List;
 
 public class MonthlyReport {
-
+    private List<CommentDTO> comments;
     private List<TimeWarning> timeWarnings;
     private List<JourneyWarning> journeyWarnings;
     private Employee employee;
+    private State emc;
 
     public MonthlyReport() {
-        // nop
+    }
+
+    public State isEmc() {
+        return emc;
+    }
+
+    public void setEmc(State emc) {
+        this.emc = emc;
+    }
+
+    public List<CommentDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentDTO> comments) {
+        this.comments = comments;
     }
 
     public List<TimeWarning> getTimeWarnings() {

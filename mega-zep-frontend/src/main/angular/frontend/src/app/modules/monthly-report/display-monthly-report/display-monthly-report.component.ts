@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { TimeWarning } from '../models/TimeWarning';
 import { JourneyWarning } from '../models/JourneyWarning';
 import { configuration } from '../../shared/constants/configuration';
+import { MatSelectionListChange } from '@angular/material/list';
 
 @Component({
   selector: 'app-display-monthly-report',
@@ -23,17 +24,13 @@ export class DisplayMonthlyReportComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.monthlyReport) {
-      this.datasourceTimeTable.data = this.monthlyReport.timeWarnings;
-      this.datasourceJourneyTable.data = this.monthlyReport.journeyWarnings;
-    }
+    this.datasourceTimeTable.data = this.monthlyReport.timeWarnings;
+    this.datasourceJourneyTable.data = this.monthlyReport.journeyWarnings;
   }
 
   getJourneyWarningString(warnings: Array<string>): string {
     let warningString = '';
-
     warnings.forEach((value) => warningString += value + '. ');
-
     return warningString;
   }
 
@@ -42,5 +39,14 @@ export class DisplayMonthlyReportComponent implements OnInit {
     reportDate.setDate(1);
     reportDate.setMonth(reportDate.getMonth() + 1);
     return reportDate;
+  }
+
+  areAllCommentsDone(): boolean {
+    for (const comment of this.monthlyReport.comments) {
+      if (comment.state === 'OPEN') {
+        return false;
+      }
+    }
+    return true;
   }
 }

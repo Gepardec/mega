@@ -1,11 +1,11 @@
 package com.gepardec.mega.service.impl.monthlyreport;
 
+import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
-import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
-import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
+import com.gepardec.mega.domain.model.monthlyreport.*;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
+import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import com.gepardec.mega.service.comment.CommentService;
 import com.gepardec.mega.zep.ZepService;
 
 import javax.enterprise.context.RequestScoped;
@@ -22,6 +22,12 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     @Inject
     ResourceBundle messages;
 
+    @Inject
+    CommentService commentService;
+
+    @Inject
+    StepEntryService stepEntryService;
+
     @Override
     public MonthlyReport getMonthendReportForUser(final String userId) {
         Employee employee = zepService.getEmployee(userId);
@@ -32,14 +38,19 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         if (projectTimeList == null || projectTimeList.isEmpty()) {
             return null;
         }
+
         final WarningCalculator warningCalculator = new WarningCalculator(messages);
         final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(projectTimeList);
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectTimeList);
+        final List<CommentDTO> comments = commentService.findCommentsForEmployee(employee);
+        final State emcDone = stepEntryService.getEmcState(employee);
 
         MonthlyReport monthlyReport = new MonthlyReport();
         monthlyReport.setJourneyWarnings(journeyWarnings);
         monthlyReport.setTimeWarnings(timeWarnings);
         monthlyReport.setEmployee(employee);
+        monthlyReport.setComments(comments);
+        monthlyReport.setEmc(emcDone);
 
         return monthlyReport;
     }

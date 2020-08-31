@@ -16,6 +16,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatSnackBarModule,
     MatTableModule,
     MatTabsModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatListModule
   ],
   exports: [
     OverlayModule,
@@ -54,7 +56,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatSnackBarModule,
     MatTableModule,
     MatTabsModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatListModule
   ],
   entryComponents: [
     MatSpinner

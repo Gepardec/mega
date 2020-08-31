@@ -28,7 +28,6 @@ public class ZepServiceImpl implements ZepService {
     private ZepSoapProvider zepSoapProvider;
 
     public ZepServiceImpl() {
-        // no args constructor
     }
 
     @Inject
@@ -126,7 +125,7 @@ public class ZepServiceImpl implements ZepService {
         final List<Employee> result = new ArrayList<>();
 
         Optional.ofNullable(readMitarbeiterResponseType).flatMap(readMitarbeiterResponse -> Optional.ofNullable(readMitarbeiterResponse.getMitarbeiterListe())).ifPresent(mitarbeiterListe ->
-            result.addAll(mitarbeiterListe.getMitarbeiter().stream().map(EmployeeMapper::toEmployee).collect(Collectors.toList()))
+                result.addAll(mitarbeiterListe.getMitarbeiter().stream().map(EmployeeMapper::toEmployee).collect(Collectors.toList()))
         );
 
         return result;
