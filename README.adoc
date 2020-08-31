@@ -48,6 +48,9 @@ The following file ``./mega-zep-backend/.env`` contains the secret values and ha
 ----
 TOKEN=***
 MAILER_PASSWORD=***
+# STAGE deployments only, not for local
+DB_USER=***
+DB_PASSWORD=***
 ----
 
 == Databse
