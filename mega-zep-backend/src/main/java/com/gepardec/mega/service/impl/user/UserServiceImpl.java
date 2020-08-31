@@ -1,6 +1,6 @@
 package com.gepardec.mega.service.impl.user;
 
-import com.gepardec.mega.application.security.Role;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.application.exception.ForbiddenException;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.User;

@@ -1,5 +1,6 @@
 package com.gepardec.mega.application.security;
 
+import com.gepardec.mega.domain.model.Role;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

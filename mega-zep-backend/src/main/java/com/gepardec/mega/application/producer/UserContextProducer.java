@@ -1,21 +1,23 @@
-package com.gepardec.mega.application.security;
+package com.gepardec.mega.application.producer;
 
+import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.service.api.user.UserService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Optional;
 
-@RequestScoped
-public class UserContextImpl implements UserContext {
+@ApplicationScoped
+public class UserContextProducer {
 
     @Inject
     HttpServletRequest request;
@@ -26,26 +28,23 @@ public class UserContextImpl implements UserContext {
     @Inject
     UserService userService;
 
-    private User user;
+    @Produces
+    @RequestScoped
+    UserContext createUserContext() {
+        final User user = verifyAndLoadUser();
+        return UserContext.builder()
+                .user(user)
+                .loggedIn(user != null)
+                .build();
+    }
 
-    @PostConstruct
-    public void doPostConstruct() {
+    private User verifyAndLoadUser() {
         try {
             final GoogleIdToken googleIdToken = googleIdTokenVerifier.verify(request.getHeader("X-Authorization"));
-            user = userService.getUser(googleIdToken.getPayload().getEmail(),
+            return userService.getUser(googleIdToken.getPayload().getEmail(),
                     Optional.ofNullable(googleIdToken.getPayload().get("picture")).orElse(StringUtils.EMPTY).toString());
         } catch (GeneralSecurityException | IOException e) {
-            user = null;
+            return null;
         }
-    }
-
-    @Override
-    public boolean isLoggedIn() {
-        return user != null;
-    }
-
-    @Override
-    public User getUser() {
-        return user;
     }
 }

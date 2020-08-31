@@ -1,7 +1,7 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.application.security.Secured;
-import com.gepardec.mega.application.security.UserContext;
+import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.service.api.employee.EmployeeService;
@@ -34,7 +34,7 @@ public class WorkerResource {
     @Path("/monthendreports")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMonthEndReports() {
-        Employee employee = employeeService.getEmployee(userContext.getUser().userId());
+        Employee employee = employeeService.getEmployee(userContext.user().userId());
         MonthlyReport monthlyReport = monthlyReportService.getMonthendReportForUser(employee.userId());
 
         if (monthlyReport == null) {

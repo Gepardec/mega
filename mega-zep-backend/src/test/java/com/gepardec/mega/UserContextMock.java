@@ -1,21 +1,21 @@
 package com.gepardec.mega;
 
-import com.gepardec.mega.application.security.Role;
-import com.gepardec.mega.application.security.UserContext;
+import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.User;
 import io.quarkus.test.Mock;
 
 @Mock
-public class UserContextMock implements UserContext {
+public class UserContextMock extends UserContext {
 
     @Override
-    public boolean isLoggedIn() {
+    public boolean loggedIn() {
         return true;
     }
 
     @Override
-    public User getUser() {
+    public User user() {
         final String name = "Thomas_0";
         final Employee employee = Employee.builder()
                 .email(name + "@gepardec.com")

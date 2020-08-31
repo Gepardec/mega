@@ -1,6 +1,7 @@
 package com.gepardec.mega.application.security;
 
 import com.gepardec.mega.application.exception.UnauthorizedException;
+import com.gepardec.mega.domain.model.UserContext;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -19,7 +20,7 @@ public class SecuredInterceptor {
 
     @AroundInvoke
     public Object invoke(final InvocationContext invocationContext) throws Exception {
-        if (!userContext.isLoggedIn()) {
+        if (!userContext.loggedIn()) {
             throw new UnauthorizedException("IdToken was invalid");
         }
         return invocationContext.proceed();

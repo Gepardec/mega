@@ -1,4 +1,4 @@
-package com.gepardec.mega.application.security;
+package com.gepardec.mega.domain.model;
 
 import java.util.*;
 import java.util.stream.Collectors;

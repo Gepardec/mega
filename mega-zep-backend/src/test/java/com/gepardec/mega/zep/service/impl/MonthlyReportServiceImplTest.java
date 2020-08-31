@@ -1,7 +1,7 @@
 package com.gepardec.mega.zep.service.impl;
 
 
-import com.gepardec.mega.application.security.Role;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;

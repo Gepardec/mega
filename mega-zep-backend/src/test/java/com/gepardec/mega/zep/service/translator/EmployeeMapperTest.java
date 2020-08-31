@@ -1,6 +1,6 @@
 package com.gepardec.mega.zep.service.translator;
 
-import com.gepardec.mega.application.security.Role;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.service.impl.employee.EmployeeMapper;
 import com.gepardec.mega.util.ZepTestUtil;

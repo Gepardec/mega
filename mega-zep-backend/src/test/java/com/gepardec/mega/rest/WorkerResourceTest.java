@@ -2,7 +2,7 @@ package com.gepardec.mega.rest;
 
 import com.gepardec.mega.GoogleTokenVerifierMock;
 import com.gepardec.mega.MonthlyReportServiceMock;
-import com.gepardec.mega.application.security.Role;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;

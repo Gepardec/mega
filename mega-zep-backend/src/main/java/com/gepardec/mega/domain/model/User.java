@@ -3,7 +3,6 @@ package com.gepardec.mega.domain.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gepardec.mega.application.security.Role;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nullable;
