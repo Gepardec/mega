@@ -1,10 +1,10 @@
 package com.gepardec.mega.service.impl.monthlyreport;
 
 import com.gepardec.mega.domain.model.monthlyreport.*;
-import com.gepardec.mega.service.impl.monthlyreport.calculation.time.MoreThan10HourADayTimeWarningCalculationStrategy;
-import com.gepardec.mega.service.impl.monthlyreport.calculation.time.NotEnoughRestTimeTimeWarningCalculator;
+import com.gepardec.mega.service.impl.monthlyreport.calculation.time.ExceededMaximumWorkingHoursPerDayTimeWarningCalculationStrategy;
+import com.gepardec.mega.service.impl.monthlyreport.calculation.time.InsufficientBreakTimeForWorkingDayWithMoreThan6Hours;
+import com.gepardec.mega.service.impl.monthlyreport.calculation.time.InsufficientRestTimeTimeWarningCalculator;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.time.TimeWarningCalculationStrategy;
-import com.gepardec.mega.service.impl.monthlyreport.calculation.time.ToLittleRestTimeForWorkingDayWithMoreThan6Hours;
 
 import java.util.*;
 
@@ -16,9 +16,9 @@ public class WarningCalculator {
     private final ResourceBundle messages;
 
     private static final List<TimeWarningCalculationStrategy> timeWarningCalculators = Arrays.asList(
-            new MoreThan10HourADayTimeWarningCalculationStrategy(),
-            new ToLittleRestTimeForWorkingDayWithMoreThan6Hours(),
-            new NotEnoughRestTimeTimeWarningCalculator());
+            new ExceededMaximumWorkingHoursPerDayTimeWarningCalculationStrategy(),
+            new InsufficientBreakTimeForWorkingDayWithMoreThan6Hours(),
+            new InsufficientRestTimeTimeWarningCalculator());
 
     public WarningCalculator(ResourceBundle messages) {
         this.messages = messages;
