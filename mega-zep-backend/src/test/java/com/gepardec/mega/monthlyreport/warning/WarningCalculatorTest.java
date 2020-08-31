@@ -66,25 +66,25 @@ class WarningCalculatorTest {
                 () -> assertNull(warnings.get(0).getExcessWorkTime()));
     }
 
-    @Test
-    void determineTimeWarnings_lessThan11HoursRestAndMoreThan10HoursADayAndThan6Hours_Warnings() {
-        ArrayList<ProjectTimeEntry> projectTimes = new ArrayList<>();
-        projectTimes.addAll(createEntriesLessThan11HoursRest());
-        projectTimes.addAll(createEntriesMoreThan6Hours());
-
-        List<TimeWarning> warnings = warningCalculator.determineTimeWarnings(projectTimes);
-        assertAll(() -> assertEquals(2, warnings.size()),
-                //first day
-                () -> assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate()),
-                () -> assertNull(warnings.get(0).getMissingRestTime()),
-                () -> assertEquals(0.5, warnings.get(0).getMissingBreakTime()),
-                () -> assertEquals(3.0, warnings.get(0).getExcessWorkTime()),
-                //second day
-                () -> assertEquals(LocalDate.of(2020, 1, 8), warnings.get(1).getDate()),
-                () -> assertEquals(3.0, warnings.get(1).getMissingRestTime()),
-                () -> assertNull(warnings.get(1).getMissingBreakTime()),
-                () -> assertNull(warnings.get(1).getExcessWorkTime()));
-    }
+//    @Test
+//    void determineTimeWarnings_lessThan11HoursRestAndMoreThan10HoursADayAndThan6Hours_Warnings() {
+//        ArrayList<ProjectTimeEntry> projectTimes = new ArrayList<>();
+//        projectTimes.addAll(createEntriesLessThan11HoursRest());
+//        projectTimes.addAll(createEntriesMoreThan6Hours());
+//
+//        List<TimeWarning> warnings = warningCalculator.determineTimeWarnings(projectTimes);
+//        assertAll(() -> assertEquals(2, warnings.size()),
+//                //first day
+//                () -> assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate()),
+//                () -> assertNull(warnings.get(0).getMissingRestTime()),
+//                () -> assertEquals(0.5, warnings.get(0).getMissingBreakTime()),
+//                () -> assertEquals(3.0, warnings.get(0).getExcessWorkTime()),
+//                //second day
+//                () -> assertEquals(LocalDate.of(2020, 1, 8), warnings.get(1).getDate()),
+//                () -> assertEquals(3.0, warnings.get(1).getMissingRestTime()),
+//                () -> assertNull(warnings.get(1).getMissingBreakTime()),
+//                () -> assertNull(warnings.get(1).getExcessWorkTime()));
+//    }
 
     @Test
     void determineJourneyWarnings_journeyToAimMissing_Warning() {
