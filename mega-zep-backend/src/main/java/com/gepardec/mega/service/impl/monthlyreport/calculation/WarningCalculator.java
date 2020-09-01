@@ -3,6 +3,7 @@ package com.gepardec.mega.service.impl.monthlyreport.calculation;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
+import com.gepardec.mega.domain.model.monthlyreport.Warning;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.journey.JourneyWarningCalculationStrategy;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.journey.JourneyWarningCalculator;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.time.ExceededMaximumWorkingHoursPerDayTimeWarningCalculator;
@@ -10,11 +11,17 @@ import com.gepardec.mega.service.impl.monthlyreport.calculation.time.Insufficien
 import com.gepardec.mega.service.impl.monthlyreport.calculation.time.InsufficientRestTimeTimeWarningCalculator;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.time.TimeWarningCalculationStrategy;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.*;
 
+@ApplicationScoped
 public class WarningCalculator {
 
-    private final ResourceBundle messages;
+    private static final String MESSAGE_KEY_TEMPLATE = "warning.%s";
+
+    @Inject
+    ResourceBundle messages;
 
     private static final List<TimeWarningCalculationStrategy> timeWarningCalculators = Arrays.asList(
             new ExceededMaximumWorkingHoursPerDayTimeWarningCalculator(),
@@ -24,10 +31,6 @@ public class WarningCalculator {
     private static final List<JourneyWarningCalculationStrategy> journeyWarningCalculators = Arrays.asList(
             new JourneyWarningCalculator()
     );
-
-    public WarningCalculator(ResourceBundle messages) {
-        this.messages = messages;
-    }
 
     public List<TimeWarning> determineTimeWarnings(List<ProjectTimeEntry> projectTimeList) {
         final List<TimeWarning> warnings = new ArrayList<>();
@@ -43,9 +46,6 @@ public class WarningCalculator {
     public List<JourneyWarning> determineJourneyWarnings(List<ProjectTimeEntry> projectTimeList) {
         final List<JourneyWarning> warnings = new ArrayList<>();
         for (JourneyWarningCalculationStrategy calculator : journeyWarningCalculators) {
-            if (calculator instanceof JourneyWarningCalculator) {
-                ((JourneyWarningCalculator) calculator).setResourceBundle(messages);
-            }
             final List<JourneyWarning> calculatedWarnings = calculator.calculate(projectTimeList);
             calculatedWarnings.forEach(warning -> addToJourneyWarnings(warnings, warning));
         }
@@ -66,6 +66,11 @@ public class WarningCalculator {
     }
 
     private void addToJourneyWarnings(final List<JourneyWarning> warnings, JourneyWarning newJourneyWarning) {
+
+        // convert enum type to string message
+        newJourneyWarning.getWarningTypes()
+                .forEach(warningType -> newJourneyWarning.getWarnings().add(getTextByWarning(warningType)));
+
         Optional<JourneyWarning> journeyWarning = warnings.stream()
                 .filter(warn -> warn.getDate().isEqual(newJourneyWarning.getDate()))
                 .findAny();
@@ -75,5 +80,9 @@ public class WarningCalculator {
         } else {
             warnings.add(newJourneyWarning);
         }
+    }
+
+    private String getTextByWarning(Warning warning) {
+        return messages.getString(String.format(MESSAGE_KEY_TEMPLATE, warning.name()));
     }
 }

@@ -1,12 +1,13 @@
 package com.gepardec.mega.zep.service.impl;
 
 
-import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
 import com.gepardec.mega.service.impl.monthlyreport.MonthlyReportServiceImpl;
+import com.gepardec.mega.service.impl.monthlyreport.calculation.WarningCalculator;
 import com.gepardec.mega.zep.ZepService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
@@ -31,6 +33,9 @@ public class MonthlyReportServiceImplTest {
 
     @InjectMocks
     private MonthlyReportServiceImpl workerService;
+
+    @Spy
+    private WarningCalculator warningCalculator;
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterNull() {
