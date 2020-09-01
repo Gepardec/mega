@@ -41,4 +41,16 @@ export class DisplayMonthlyReportComponent implements OnInit {
     }
     return true;
   }
+
+  formatAuthorName(author: string): string {
+    const foreAndSureNameArr = author.substring(0, author.indexOf('@')).split('.');
+
+    let foreName = foreAndSureNameArr[0];
+    let sureName = foreAndSureNameArr[1];
+
+    foreName = foreName.charAt(0).toUpperCase() + foreName.slice(1);
+    sureName = sureName.charAt(0).toUpperCase() + sureName.slice(1);
+
+    return foreName + ' ' + sureName;
+  }
 }

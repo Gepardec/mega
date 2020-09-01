@@ -9,7 +9,6 @@ import com.gepardec.mega.service.comment.CommentService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,9 +19,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Inject
     CommentRepository commentRepository;
-
-    @Inject
-    EntityManager em;
 
     @Override
     public List<CommentDTO> findCommentsForEmployee(Employee employee) {

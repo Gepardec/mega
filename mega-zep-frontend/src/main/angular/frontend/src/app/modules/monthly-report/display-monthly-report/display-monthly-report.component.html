@@ -1,6 +1,6 @@
-<div class="container" *ngIf="monthlyReport">
+<div *ngIf="monthlyReport" class="container-fluid">
 
-  <mat-card class="mat-elevation-z10">
+  <mat-card class="mat-elevation-z10 mt-3">
     <mat-card-subtitle>{{functions[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
     <mat-card-content>
       {{monthlyReport.employee.firstName}} {{monthlyReport.employee.sureName}}
@@ -24,7 +24,7 @@
         </mat-card-content>
 
         <ng-template #timeContent>
-          <mat-card-content class="scrollable-content" *ngIf="monthlyReport.timeWarnings.length > 0">
+          <mat-card-content *ngIf="monthlyReport.timeWarnings.length > 0">
             <mat-table [dataSource]="monthlyReport.timeWarnings">
               <ng-container matColumnDef="dateTime">
                 <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
@@ -70,11 +70,16 @@
         </mat-card-content>
 
         <ng-template #journeyContent>
-          <mat-card-content class="scrollable-content">
+          <mat-card-content>
             <mat-table [dataSource]="monthlyReport.journeyWarnings">
               <ng-container matColumnDef="dateJourney">
-                <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
+                <mat-header-cell
+                  *matHeaderCellDef
+                  class="mat-column-date-journey">
+                  Tag
+                </mat-header-cell>
                 <mat-cell
+                  class="mat-column-date-journey"
                   *matCellDef="let journeyEntry"> {{journeyEntry.date | date:'E dd.MM.yyyy' : null : 'de-AT'}} </mat-cell>
               </ng-container>
 
@@ -103,26 +108,34 @@
       <mat-card class="mat-elevation-z10">
         <mat-card-title>Status zum Monatsabschluss</mat-card-title>
 
-        <mat-card-content class="scrollable-content text-center d-flex flex-column align-items-center mt-sm-4">
-            <mat-icon class="red">cancel</mat-icon>
-            <p>Einige Anmerkungen sind abzuarbeiten:</p>
-            <mat-selection-list class="align-middle">
-              <mat-list-option
-                #option
-                [selected]="comment.state === 'DONE'"
-                [ngClass]="option.selected ? 'done green' : 'red'"
-                [checkboxPosition]="'before'"
-                *ngFor="let comment of monthlyReport.comments">
-                {{comment.creationDate}}, {{comment.author}}: {{comment.message}}
-              </mat-list-option>
-            </mat-selection-list>
+        <mat-card-content class="d-flex text-center align-items-center">
+          <div class="m-auto">
 
-          <div *ngIf="monthlyReport.emc === 'OPEN' && monthlyReport.comments.length === 0">
-            Bitte überprüfe
-          </div>
+            <div *ngIf="!areAllCommentsDone()">
+              <mat-icon class="red">cancel</mat-icon>
+              <p>Einige Anmerkungen sind abzuarbeiten:</p>
+              <mat-selection-list class="align-middle">
+                <mat-list-option
+                  #option
+                  *ngFor="let comment of monthlyReport.comments"
+                  [checkboxPosition]="'before'"
+                  [ngClass]="option.selected ? 'done green' : 'red'"
+                  [selected]="comment.state === 'DONE'">
+                  {{comment.creationDate | date: 'E dd.MM.yyyy, HH:mm:ss'}},
+                  {{formatAuthorName(comment.author)}}:
+                  {{comment.message}}
+                </mat-list-option>
+              </mat-selection-list>
+            </div>
 
-          <div *ngIf="monthlyReport.emc === 'DONE' && monthlyReport.comments.length === 0">
-            Im Gange
+            <div *ngIf="monthlyReport.emc === 'OPEN' && monthlyReport.comments.length === 0">
+              Bitte überprüfe
+            </div>
+
+            <div *ngIf="monthlyReport.emc === 'DONE' && monthlyReport.comments.length === 0">
+              Im Gange
+            </div>
+
           </div>
         </mat-card-content>
       </mat-card>

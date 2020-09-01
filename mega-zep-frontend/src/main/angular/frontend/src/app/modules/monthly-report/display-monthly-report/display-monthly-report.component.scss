@@ -1,14 +1,11 @@
-.container {
-  min-width: 85% !important;
-  padding: 15px;
-}
-
 mat-card {
   margin-bottom: 1vh;
+  min-width: 300px;
 }
 
 .mat-card-content {
   font-size: 20px;
+  overflow: auto;
 }
 
 .mat-card-title {
@@ -37,15 +34,11 @@ mat-icon {
 }
 
 .mega-check * .mat-card-content {
-  height: calc(40vh - 64px);
+  height: 32vh;
 }
 
 .employee-checks * .mat-card-content {
-  height: calc(80vh - 57px);
-}
-
-.scrollable-content {
-  overflow: auto;
+  height: 72vh;
 }
 
 mat-list-option {
