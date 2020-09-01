@@ -2,7 +2,7 @@ package com.gepardec.mega.monthlyreport.journey;
 
 
 import com.gepardec.mega.domain.model.monthlyreport.Warning;
-import com.gepardec.mega.service.impl.monthlyreport.JourneyDirectionHandler;
+import com.gepardec.mega.service.impl.monthlyreport.calculation.journey.JourneyDirectionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static com.gepardec.mega.domain.model.monthlyreport.TimeWarning.MAX_HOURS_A_DAY;
 
-public class ExceededMaximumWorkingHoursPerDayTimeWarningCalculationStrategy extends AbstractTimeWarningCalculationStrategy implements TimeWarningCalculationStrategy {
+public class ExceededMaximumWorkingHoursPerDayTimeWarningCalculator extends AbstractTimeWarningCalculationStrategy implements TimeWarningCalculationStrategy {
 
     @Override
     public List<TimeWarning> calculate(List<ProjectTimeEntry> projectTimeEntries) {

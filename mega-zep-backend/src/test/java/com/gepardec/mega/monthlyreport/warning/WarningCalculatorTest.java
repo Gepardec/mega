@@ -1,7 +1,7 @@
 package com.gepardec.mega.monthlyreport.warning;
 
 import com.gepardec.mega.domain.model.monthlyreport.*;
-import com.gepardec.mega.service.impl.monthlyreport.WarningCalculator;
+import com.gepardec.mega.service.impl.monthlyreport.calculation.WarningCalculator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

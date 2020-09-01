@@ -12,7 +12,7 @@ import java.util.Map;
 import static com.gepardec.mega.domain.model.monthlyreport.TimeWarning.MAX_HOURS_OF_DAY_WITHOUT_BREAK;
 import static com.gepardec.mega.domain.model.monthlyreport.TimeWarning.MIN_REQUIRED_BREAK_TIME;
 
-public class InsufficientBreakTimeForWorkingDayWithMoreThan6Hours extends AbstractTimeWarningCalculationStrategy implements TimeWarningCalculationStrategy {
+public class InsufficientBreakTimeForWorkingDayWithMoreThan6HoursCalculator extends AbstractTimeWarningCalculationStrategy implements TimeWarningCalculationStrategy {
 
     @Override
     public List<TimeWarning> calculate(List<ProjectTimeEntry> projectTimes) {
