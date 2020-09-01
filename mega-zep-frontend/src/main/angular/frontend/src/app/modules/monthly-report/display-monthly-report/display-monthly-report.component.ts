@@ -1,10 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MonthlyReport } from '../models/MonthlyReport';
-import { MatTableDataSource } from '@angular/material/table';
-import { TimeWarning } from '../models/TimeWarning';
-import { JourneyWarning } from '../models/JourneyWarning';
 import { configuration } from '../../shared/constants/configuration';
-import { MatSelectionListChange } from '@angular/material/list';
 
 @Component({
   selector: 'app-display-monthly-report',
@@ -14,18 +10,14 @@ import { MatSelectionListChange } from '@angular/material/list';
 export class DisplayMonthlyReportComponent implements OnInit {
 
   @Input() monthlyReport: MonthlyReport;
-  displayedColumnsTimeTable = ['date-time', 'restTime', 'breakTime', 'workingTime'];
-  displayedColumnsJourneyTable = ['date-journey', 'warning'];
-  datasourceTimeTable = new MatTableDataSource<TimeWarning>();
-  datasourceJourneyTable = new MatTableDataSource<JourneyWarning>();
+  displayedColumnsTimeTable = ['dateTime', 'restTime', 'breakTime', 'workingTime'];
+  displayedColumnsJourneyTable = ['dateJourney', 'warningJourney'];
   readonly functions = configuration.EMPLOYEE_FUNCTIONS;
 
   constructor() {
   }
 
   ngOnInit() {
-    this.datasourceTimeTable.data = this.monthlyReport.timeWarnings;
-    this.datasourceJourneyTable.data = this.monthlyReport.journeyWarnings;
   }
 
   getJourneyWarningString(warnings: Array<string>): string {

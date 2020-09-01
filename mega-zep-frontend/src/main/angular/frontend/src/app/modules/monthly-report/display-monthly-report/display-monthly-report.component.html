@@ -1,107 +1,121 @@
-<div class="container mt-3">
+<div class="container" *ngIf="monthlyReport">
 
   <mat-card class="mat-elevation-z10">
     <mat-card-subtitle>{{functions[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
     <mat-card-content>
       {{monthlyReport.employee.firstName}} {{monthlyReport.employee.sureName}}
       <span
-        class="mat-card-date">{{getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : null : 'de-AT'}}</span>
+        class="float-right">{{getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : null : 'de-AT'}}</span>
     </mat-card-content>
   </mat-card>
 
-  <div class="row text-center">
-
+  <div class="row">
     <div class="col-lg-4 mega-check">
-      <mat-card class="mat-elevation-z10 mt-3">
+      <mat-card class="mat-elevation-z10">
         <mat-card-title>MEGA Pausen Check</mat-card-title>
-        <mat-card-content class="scrollable">
-          <div class="center-content" *ngIf="datasourceTimeTable.data.length === 0">
+
+        <mat-card-content
+          *ngIf="monthlyReport.timeWarnings.length === 0; else timeContent"
+          class="d-flex text-center justify-content-center align-items-center">
+          <div>
             <mat-icon class="green">check_circle</mat-icon>
             <p>Alle Eingaben sind korrekt</p>
           </div>
-
-          <mat-table class="scrollable" *ngIf="datasourceTimeTable.data.length > 0"
-                     [dataSource]="datasourceTimeTable">
-
-            <ng-container matColumnDef="date-time">
-              <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
-              <mat-cell
-                *matCellDef="let timeEntry"> {{timeEntry.date | date:'E dd.MM.yyyy' : null : 'de-AT'}} </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="restTime">
-              <mat-header-cell *matHeaderCellDef>zu wenig Ruhezeit</mat-header-cell>
-              <mat-cell *matCellDef="let timeEntry"> {{timeEntry.missingRestTime}} </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="breakTime">
-              <mat-header-cell *matHeaderCellDef>zu wenig Pausenzeit</mat-header-cell>
-              <mat-cell *matCellDef="let timeEntry"> {{timeEntry.missingBreakTime}} </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="workingTime">
-              <mat-header-cell *matHeaderCellDef>zu viel Arbeitszeit</mat-header-cell>
-              <mat-cell *matCellDef="let timeEntry"> {{timeEntry.excessWorkTime}} </mat-cell>
-            </ng-container>
-
-            <mat-row *matRowDef="let row; columns: displayedColumnsTimeTable;"></mat-row>
-            <mat-header-row *matHeaderRowDef="displayedColumnsTimeTable; sticky: true"
-                            mat-header-row></mat-header-row>
-          </mat-table>
         </mat-card-content>
+
+        <ng-template #timeContent>
+          <mat-card-content class="scrollable-content" *ngIf="monthlyReport.timeWarnings.length > 0">
+            <mat-table [dataSource]="monthlyReport.timeWarnings">
+              <ng-container matColumnDef="dateTime">
+                <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
+                <mat-cell
+                  *matCellDef="let timeEntry"> {{timeEntry.date | date:'E dd.MM.yyyy' : null : 'de-AT'}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="restTime">
+                <mat-header-cell *matHeaderCellDef>zu wenig Ruhezeit</mat-header-cell>
+                <mat-cell *matCellDef="let timeEntry"> {{timeEntry.missingRestTime}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="breakTime">
+                <mat-header-cell *matHeaderCellDef>zu wenig Pausenzeit</mat-header-cell>
+                <mat-cell *matCellDef="let timeEntry"> {{timeEntry.missingBreakTime}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="workingTime">
+                <mat-header-cell *matHeaderCellDef>zu viel Arbeitszeit</mat-header-cell>
+                <mat-cell *matCellDef="let timeEntry"> {{timeEntry.excessWorkTime}} </mat-cell>
+              </ng-container>
+
+              <mat-row *matRowDef="let row; columns: displayedColumnsTimeTable;"></mat-row>
+              <mat-header-row
+                *matHeaderRowDef="displayedColumnsTimeTable; sticky: true"
+                mat-header-row>
+              </mat-header-row>
+            </mat-table>
+          </mat-card-content>
+        </ng-template>
       </mat-card>
 
-      <mat-card class="mat-elevation-z10 mt-3 mb-3">
+      <mat-card class="mat-elevation-z10">
         <mat-card-title>MEGA Reisen Check</mat-card-title>
-        <mat-card-content>
 
-          <div [class.center-content]="datasourceJourneyTable.data.length === 0" *ngIf="datasourceJourneyTable.data.length === 0">
+        <mat-card-content
+          *ngIf="monthlyReport.journeyWarnings.length === 0; else journeyContent"
+          class="d-flex text-center justify-content-center align-items-center">
+          <div>
             <mat-icon class="green">check_circle</mat-icon>
             <p>Alle Eingaben sind korrekt</p>
           </div>
-
-          <mat-table class="scrollable" *ngIf="datasourceJourneyTable.data.length > 0"
-                     [dataSource]="datasourceJourneyTable">
-            <ng-container matColumnDef="date-journey">
-              <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
-              <mat-cell
-                *matCellDef="let journeyEntry"> {{journeyEntry.date | date:'E dd.MM.yyyy' : null : 'de-AT'}} </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="warning">
-              <mat-header-cell *matHeaderCellDef>Warnung</mat-header-cell>
-              <mat-cell *matCellDef="let journeyEntry">
-                {{getJourneyWarningString(journeyEntry.warnings)}}
-              </mat-cell>
-            </ng-container>
-
-            <mat-row *matRowDef="let row; columns: displayedColumnsJourneyTable;"></mat-row>
-            <mat-header-row *matHeaderRowDef="displayedColumnsJourneyTable; sticky: true"
-                            mat-header-row></mat-header-row>
-
-          </mat-table>
         </mat-card-content>
+
+        <ng-template #journeyContent>
+          <mat-card-content class="scrollable-content">
+            <mat-table [dataSource]="monthlyReport.journeyWarnings">
+              <ng-container matColumnDef="dateJourney">
+                <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
+                <mat-cell
+                  *matCellDef="let journeyEntry"> {{journeyEntry.date | date:'E dd.MM.yyyy' : null : 'de-AT'}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="warningJourney">
+                <mat-header-cell *matHeaderCellDef>Warnung</mat-header-cell>
+                <mat-cell *matCellDef="let journeyEntry">
+                  {{getJourneyWarningString(journeyEntry.warnings)}}
+                </mat-cell>
+              </ng-container>
+
+              <mat-row
+                *matRowDef="let row; columns: displayedColumnsJourneyTable;">
+              </mat-row>
+
+              <mat-header-row
+                *matHeaderRowDef="displayedColumnsJourneyTable; sticky: true"
+                mat-header-row>
+              </mat-header-row>
+            </mat-table>
+          </mat-card-content>
+        </ng-template>
       </mat-card>
     </div>
 
     <div class="col-lg-8 employee-checks">
-      <mat-card class="mat-elevation-z10 mt-3">
+      <mat-card class="mat-elevation-z10">
         <mat-card-title>Status zum Monatsabschluss</mat-card-title>
-        <mat-card-content>
-          <div  class="center-content" *ngIf="!areAllCommentsDone()">
+
+        <mat-card-content class="scrollable-content text-center d-flex flex-column align-items-center mt-sm-4">
             <mat-icon class="red">cancel</mat-icon>
             <p>Einige Anmerkungen sind abzuarbeiten:</p>
-            <mat-selection-list>
+            <mat-selection-list class="align-middle">
               <mat-list-option
                 #option
                 [selected]="comment.state === 'DONE'"
-                [ngClass]="option.selected ? 'done' : 'open'"
+                [ngClass]="option.selected ? 'done green' : 'red'"
                 [checkboxPosition]="'before'"
                 *ngFor="let comment of monthlyReport.comments">
                 {{comment.creationDate}}, {{comment.author}}: {{comment.message}}
               </mat-list-option>
             </mat-selection-list>
-          </div>
 
           <div *ngIf="monthlyReport.emc === 'OPEN' && monthlyReport.comments.length === 0">
             Bitte überprüfe
@@ -114,4 +128,5 @@
       </mat-card>
     </div>
   </div>
+
 </div>

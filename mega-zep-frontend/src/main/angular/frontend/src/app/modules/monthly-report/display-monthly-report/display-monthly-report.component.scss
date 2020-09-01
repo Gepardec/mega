@@ -1,42 +1,25 @@
-.center-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: auto;
-  height: 100%;
+.container {
+  min-width: 85% !important;
+  padding: 15px;
 }
 
-.container {
-  min-width: 80% !important;
+mat-card {
+  margin-bottom: 1vh;
 }
 
 .mat-card-content {
   font-size: 20px;
 }
 
-.mat-card-date {
-  float: right;
-}
-
 .mat-card-title {
   text-align: left;
-}
-
-.container-mat-table {
-  height: 30vh;
-  overflow: auto;
 }
 
 .mat-column-date-journey {
   max-width: 150px;
 }
 
-.open {
-  color: red;
-}
-
 .done {
-  color: green;
   text-decoration: line-through;
 }
 
@@ -49,15 +32,22 @@
 }
 
 mat-icon {
-  font-size: 80px;
+  font-size: 100px;
   width: auto;
 }
 
-.employee-checks * mat-card-content {
-  height: 77vh;
+.mega-check * .mat-card-content {
+  height: calc(40vh - 64px);
 }
 
-.mega-check * .mat-card-content {
-  height: 35vh;
+.employee-checks * .mat-card-content {
+  height: calc(80vh - 57px);
+}
+
+.scrollable-content {
   overflow: auto;
+}
+
+mat-list-option {
+  width: max-content !important;
 }
