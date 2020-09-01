@@ -3,15 +3,12 @@ package com.gepardec.mega.notification.mail;
 import com.google.common.net.MediaType;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;
+import org.apache.commons.io.IOUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Objects;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 @ApplicationScoped
 public class MailSender {
@@ -24,13 +21,13 @@ public class MailSender {
 
     public void sendReminder(String eMail, String firstName, Reminder reminder) {
         String subject = notificationConfig.subjectForReminder(reminder.name());
-        String text = readTextOfPath(notificationConfig.templatePathForReminder(reminder.name()));
+        String text = readEmailTemplateResourceFromStream(notificationConfig.templatePathForReminder(reminder.name()));
         sendMail(eMail, firstName, subject, text);
     }
 
 
     private void sendMail(String eMail, String firstName, String subject, String text) {
-        final String mailTemplateText = readTextOfPath(notificationConfig.getMailTemplateTextPath())
+        final String mailTemplateText = readEmailTemplateResourceFromStream(notificationConfig.getMailTemplateTextPath())
                 .replace(notificationConfig.getMegaDashUrlPlaceholder(), notificationConfig.getMegaDashUrl());
         final String mailContent = mailTemplateText
                 .replace(notificationConfig.getNamePlaceholder(), firstName)
@@ -42,28 +39,26 @@ public class MailSender {
                 .addInlineAttachment("LogoMEGAdash.png", readLogo(), MediaType.PNG.type(), "<LogoMEGAdash@gepardec.com>"));
     }
 
-    private String readTextOfPath(String pathToRead) {
-        final URL url = MailSender.class.getClassLoader().getResource(pathToRead);
-        Objects.requireNonNull(url, String.format("File '%s' could not be loaded as a resource", pathToRead));
-        try {
-            return String.join(System.lineSeparator(), Files.readAllLines(Paths.get(url.toURI())));
-        } catch (IOException e) {
-            throw new IllegalStateException(String.format("Could not read lines of resource '%s'", pathToRead));
-        } catch (URISyntaxException e) {
-            throw new IllegalArgumentException(String.format("Could not get URI of found resource '%s'", pathToRead));
+    private String readEmailTemplateResourceFromStream(String resourcePath) {
+        try (final InputStream is = MailSender.class.getClassLoader().getResourceAsStream(resourcePath)) {
+            if (is == null) {
+                throw new IllegalStateException("Could not get inputStream of email template resource '" + resourcePath + "' resource");
+            }
+            return IOUtils.toString(is, StandardCharsets.UTF_8.name());
+        } catch (Exception e) {
+            throw new IllegalStateException("Cannot read email template '" + resourcePath + "' resource as stream", e);
         }
     }
 
     private byte[] readLogo() {
-        final String imageLogoUrl = notificationConfig.getMegaImageLogoUrl();
-        final URL url = MailSender.class.getClassLoader().getResource(imageLogoUrl);
-        Objects.requireNonNull(url, String.format("File '%s' could not be loaded as a resource", imageLogoUrl));
-        try {
-            return Files.readAllBytes(Paths.get(url.toURI()));
-        } catch (IOException e) {
-            throw new IllegalStateException(String.format("Could not read bytes of resource '%s'", imageLogoUrl));
-        } catch (URISyntaxException e) {
-            throw new IllegalArgumentException(String.format("Could not get URI of found resource '%s'", imageLogoUrl));
+        final String logoResourcePath = notificationConfig.getMegaImageLogoUrl();
+        try (final InputStream is = MailSender.class.getClassLoader().getResourceAsStream(logoResourcePath)) {
+            if (is == null) {
+                throw new IllegalStateException("Could not get inputStream of logo resource '" + logoResourcePath + "' resource");
+            }
+            return IOUtils.toByteArray(is);
+        } catch (Exception e) {
+            throw new IllegalStateException("Cannot read logo '" + logoResourcePath + "' resource as stream", e);
         }
     }
 }
