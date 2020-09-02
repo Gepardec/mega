@@ -10,17 +10,17 @@ public class MonthlyReport {
     private List<TimeWarning> timeWarnings;
     private List<JourneyWarning> journeyWarnings;
     private Employee employee;
-    private State emc;
+    private State emcState;
 
     public MonthlyReport() {
     }
 
-    public State isEmc() {
-        return emc;
+    public State getEmcState() {
+        return emcState;
     }
 
-    public void setEmc(State emc) {
-        this.emc = emc;
+    public void setEmcState(State emcState) {
+        this.emcState = emcState;
     }
 
     public List<CommentDTO> getComments() {

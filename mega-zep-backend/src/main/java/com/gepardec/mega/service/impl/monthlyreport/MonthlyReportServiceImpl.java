@@ -43,14 +43,14 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(projectTimeList);
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectTimeList);
         final List<CommentDTO> comments = commentService.findCommentsForEmployee(employee);
-        final State emcDone = stepEntryService.getEmcState(employee);
+        final State emcState = stepEntryService.getEmcState(employee);
 
         MonthlyReport monthlyReport = new MonthlyReport();
         monthlyReport.setJourneyWarnings(journeyWarnings);
         monthlyReport.setTimeWarnings(timeWarnings);
         monthlyReport.setEmployee(employee);
         monthlyReport.setComments(comments);
-        monthlyReport.setEmc(emcDone);
+        monthlyReport.setEmcState(emcState);
 
         return monthlyReport;
     }

@@ -2,6 +2,7 @@ package com.gepardec.mega.rest;
 
 import com.gepardec.mega.application.security.Secured;
 import com.gepardec.mega.application.security.UserContext;
+import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.service.api.employee.EmployeeService;
@@ -43,6 +44,7 @@ public class WorkerResource {
             monthlyReport.setJourneyWarnings(Collections.emptyList());
             monthlyReport.setTimeWarnings(Collections.emptyList());
             monthlyReport.setComments(Collections.emptyList());
+            monthlyReport.setEmcState(State.OPEN);
         }
 
         return Response.ok(monthlyReport).build();

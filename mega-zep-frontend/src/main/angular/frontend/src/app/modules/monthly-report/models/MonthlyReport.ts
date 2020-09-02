@@ -6,7 +6,7 @@ export class MonthlyReport {
   comments: Array<Comment>;
   timeWarnings: Array<TimeWarning>;
   journeyWarnings: Array<JourneyWarning>;
-  emc: string;
+  emcState: string;
   employee: Employee;
 }
 

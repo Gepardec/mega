@@ -1,15 +1,21 @@
 <div *ngIf="monthlyReport" class="container-fluid">
 
   <mat-card class="mat-elevation-z10 mt-3">
-    <mat-card-subtitle>{{functions[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
+    <mat-card-subtitle>{{FUNCTIONS[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
     <mat-card-content>
       {{monthlyReport.employee.firstName}} {{monthlyReport.employee.sureName}}
       <span
-        class="float-right">{{getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : null : 'de-AT'}}</span>
+        class="float-right">
+        {{
+        isValidDate(monthlyReport.employee.releaseDate) ?
+          (getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : null : 'de-AT') :
+          'Noch nicht freigegeben'
+        }}
+        </span>
     </mat-card-content>
   </mat-card>
 
-  <div class="row">
+  <div *ngIf="isValidDate(monthlyReport.employee.releaseDate); else invalidReleaseDate" class="row">
     <div class="col-lg-4 mega-check">
       <mat-card class="mat-elevation-z10">
         <mat-card-title>MEGA Pausen Check</mat-card-title>
@@ -120,26 +126,44 @@
                   *ngFor="let comment of monthlyReport.comments"
                   [checkboxPosition]="'before'"
                   [ngClass]="option.selected ? 'done green' : 'red'"
-                  [selected]="comment.state === 'DONE'">
-                  {{comment.creationDate | date: 'E dd.MM.yyyy, HH:mm:ss'}},
+                  [selected]="comment.state === DONE">
+                  {{comment.creationDate | date: 'dd.MM.yyyy'}}
                   {{formatAuthorName(comment.author)}}:
                   {{comment.message}}
                 </mat-list-option>
               </mat-selection-list>
             </div>
 
-            <div *ngIf="monthlyReport.emc === 'OPEN' && monthlyReport.comments.length === 0">
-              Bitte überprüfe
+            <div *ngIf="monthlyReport.emcState === OPEN && monthlyReport.comments.length === 0">
+              <p>Bitte überprüfe deine Eingaben (Zeiten, Reisen, Belege, ...) in ZEP und beim Kunden und bestätige
+                diese anschließend.</p>
+              <button mat-raised-button matTooltip="dieser Button tut noch nichts">Buchungen bestätigen</button>
             </div>
 
-            <div *ngIf="monthlyReport.emc === 'DONE' && monthlyReport.comments.length === 0">
-              Im Gange
+            <div *ngIf="(monthlyReport.emcState === DONE || monthlyReport.emcState == OPEN) &&
+            (monthlyReport.comments.length === 0 || areAllCommentsDone())">
+              <mat-icon color="primary">error</mat-icon>
+              <p>Monatsabschlusstätigkeiten sind im Gange.</p>
             </div>
 
+            <div *ngIf="monthlyReport.emcState === DONE && areAllCommentsDone()">
+              <mat-icon class="green">check_circle</mat-icon>
+              <p>Deine Zeiten wurden kontrolliert und sind richtig.</p>
+              <p>Bis nächsten Monat!</p>
+            </div>
           </div>
         </mat-card-content>
       </mat-card>
     </div>
   </div>
+
+  <ng-template #invalidReleaseDate>
+    <mat-card>
+      <mat-card-title>Zeitenkontrolle nicht möglich</mat-card-title>
+      <mat-card-content>
+        <p>Freigabe der Zeiten ausständig. Bitte wende dich an deinen Mentor.</p>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
 
 </div>
