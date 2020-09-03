@@ -44,7 +44,7 @@ class WarningCalculatorTest {
 
     @Test
     void determineTimeWarnings_moreThan6hoursButSummarizedButNotMoreThan6HoursWorkingTime_noWarning() {
-        assertEquals(0, warningCalculator.determineTimeWarnings(createEntriesMoreThan6HoursWithTravelTime()).size());
+        assertTrue(warningCalculator.determineTimeWarnings(createEntriesMoreThan6HoursWithTravelTime()).isEmpty());
     }
 
 

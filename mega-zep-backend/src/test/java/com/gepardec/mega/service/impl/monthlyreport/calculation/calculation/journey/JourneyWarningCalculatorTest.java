@@ -2,7 +2,6 @@ package com.gepardec.mega.service.impl.monthlyreport.calculation.calculation.jou
 
 import com.gepardec.mega.domain.model.monthlyreport.*;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.journey.JourneyWarningCalculator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -12,17 +11,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JourneyWarningCalculatorTest {
 
-    private JourneyWarningCalculator calculator;
-
-    @BeforeEach
-    void beforeEach() {
-        calculator = new JourneyWarningCalculator();
-    }
+    private JourneyWarningCalculator calculator = new JourneyWarningCalculator();
 
     /**
      * This method creates journey entries and some project time entries to simulate a month with
@@ -106,7 +99,7 @@ class JourneyWarningCalculatorTest {
 
     @Test
     void calculate_whenDataListEmpty_thenNoWarningsCreated() {
-        assertEquals(Collections.emptyList(), calculator.calculate(Collections.emptyList()));
+        assertTrue(calculator.calculate(Collections.emptyList()).isEmpty());
     }
 
     @Test
@@ -116,7 +109,7 @@ class JourneyWarningCalculatorTest {
                 new ProjectTimeEntry(LocalDateTime.now(), LocalDateTime.now().plusHours(7), Task.BEARBEITEN)
         ));
 
-        assertEquals(Collections.emptyList(), calculator.calculate(projectTimeEntries));
+        assertTrue(calculator.calculate(projectTimeEntries).isEmpty());
     }
 
     @Test
@@ -127,7 +120,7 @@ class JourneyWarningCalculatorTest {
                 new JourneyEntry(LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3), Task.REISEN, JourneyDirection.BACK)
         ));
 
-        assertEquals(Collections.emptyList(), calculator.calculate(projectTimeEntries));
+        assertTrue(calculator.calculate(projectTimeEntries).isEmpty());
     }
 
     @Test
