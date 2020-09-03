@@ -117,14 +117,14 @@
         <mat-card-content class="d-flex text-center align-items-center">
           <div class="m-auto">
 
-            <div *ngIf="!areAllCommentsDone()">
+            <div *ngIf="!areAllCommentsDone(); else commentsOpen">
               <mat-icon class="red">cancel</mat-icon>
               <p>Einige Anmerkungen sind abzuarbeiten:</p>
               <mat-selection-list class="align-middle">
                 <mat-list-option
                   #option
                   *ngFor="let comment of monthlyReport.comments"
-                  [checkboxPosition]="'before'"
+                  checkboxPosition="before"
                   [ngClass]="option.selected ? 'done green' : 'red'"
                   [selected]="comment.state === DONE">
                   {{comment.creationDate | date: 'dd.MM.yyyy'}}
@@ -134,23 +134,24 @@
               </mat-selection-list>
             </div>
 
-            <div *ngIf="monthlyReport.emcState === OPEN && monthlyReport.comments.length === 0">
-              <p>Bitte überprüfe deine Eingaben (Zeiten, Reisen, Belege, ...) in ZEP und beim Kunden und bestätige
-                diese anschließend.</p>
-              <button mat-raised-button matTooltip="dieser Button tut noch nichts">Buchungen bestätigen</button>
-            </div>
+            <ng-template #commentsOpen>
+              <div *ngIf="monthlyReport.emcState === OPEN && monthlyReport.comments.length === 0">
+                <p>Bitte überprüfe deine Eingaben (Zeiten, Reisen, Belege, ...) in ZEP und beim Kunden und bestätige
+                  diese anschließend.</p>
+                <button mat-raised-button matTooltip="dieser Button tut noch nichts">Buchungen bestätigen</button>
+              </div>
 
-            <div *ngIf="(monthlyReport.emcState === DONE || monthlyReport.emcState == OPEN) &&
-            (monthlyReport.comments.length === 0 || areAllCommentsDone())">
-              <mat-icon color="primary">error</mat-icon>
-              <p>Monatsabschlusstätigkeiten sind im Gange.</p>
-            </div>
+              <div *ngIf="monthlyReport.emcState === DONE && monthlyReport.comments.length === 0">
+                <mat-icon color="primary">error</mat-icon>
+                <p>Monatsabschlusstätigkeiten sind im Gange.</p>
+              </div>
 
-            <div *ngIf="monthlyReport.emcState === DONE && areAllCommentsDone()">
-              <mat-icon class="green">check_circle</mat-icon>
-              <p>Deine Zeiten wurden kontrolliert und sind richtig.</p>
-              <p>Bis nächsten Monat!</p>
-            </div>
+              <div *ngIf="monthlyReport.emcState === DONE && areAllCommentsDone()">
+                <mat-icon class="green">check_circle</mat-icon>
+                <p>Deine Zeiten wurden kontrolliert und sind richtig.</p>
+                <p>Bis nächsten Monat!</p>
+              </div>
+            </ng-template>
           </div>
         </mat-card-content>
       </mat-card>

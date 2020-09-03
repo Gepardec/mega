@@ -22,22 +22,28 @@ describe('DisplayMonthlyReportComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DisplayMonthlyReportComponent);
     component = fixture.componentInstance;
-    // component.monthlyReport = {
-    //   timeWarnings: [],
-    //   journeyWarnings: [],
-    //   employee: {
-    //     firstName: 'John',
-    //     sureName: 'Doe',
-    //     email: 'john.doe@gepardec.com',
-    //     releaseDate: '2020-01-01',
-    //     role: 0,
-    //     salutation: undefined,
-    //     title: undefined,
-    //     userId: 'john.doe@gepardec.com',
-    //     workDescription: undefined,
-    //     active: undefined
-    //   }
-    // };
+    component.monthlyReport = {
+      emcState: 'OPEN',
+      comments: [],
+      timeWarnings: [
+        {date: new Date(), excessWorkTime: 12, missingBreakTime: 12, missingRestTime: 14, warnings: []},
+      ],
+      journeyWarnings: [
+        {date: new Date(), warnings: ['Bitte', 'hoer', 'auf']}
+      ],
+      employee: {
+        userId: '000-mustermann',
+        firstName: 'Max',
+        sureName: 'Mustermann',
+        salutation: null,
+        releaseDate: '2020-07-01',
+        workDescription: '05',
+        email: 'mario.aslan@gepardec.com',
+        role: 1,
+        title: null,
+        active: true
+      }
+    };
     fixture.detectChanges();
   });
 

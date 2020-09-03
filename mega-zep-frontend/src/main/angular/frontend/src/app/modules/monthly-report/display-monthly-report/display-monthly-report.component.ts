@@ -47,7 +47,7 @@ export class DisplayMonthlyReportComponent implements OnInit {
 
   areAllCommentsDone(): boolean {
     for (const comment of this.monthlyReport.comments) {
-      if (comment.state !== 'DONE') {
+      if (comment.state !== this.DONE) {
         return false;
       }
     }
