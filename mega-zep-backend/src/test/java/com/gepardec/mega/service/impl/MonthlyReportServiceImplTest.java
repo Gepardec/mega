@@ -1,4 +1,4 @@
-package com.gepardec.mega.zep.service.impl;
+package com.gepardec.mega.service.impl;
 
 
 import com.gepardec.mega.domain.model.Employee;

@@ -1,4 +1,4 @@
-package com.gepardec.mega.monthlyreport.warning;
+package com.gepardec.mega.service.impl.monthlyreport.calculation;
 
 import com.gepardec.mega.domain.model.monthlyreport.*;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.WarningCalculator;
@@ -26,6 +26,12 @@ class WarningCalculatorTest {
 
     @Mock
     private ResourceBundle resourceBundle;
+
+    // Here we test combinations of time and journy warnings
+    // 1. Only data for  time calculators
+    // 2. Only data for journey calculators
+    // 3. Data for all calculators
+    // 4. Empty Data List
 
     @Test
     void determineTimeWarnings_oneEntryMoreThan6Hours_warning() {

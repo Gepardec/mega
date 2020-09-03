@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.impl;
+package com.gepardec.mega.service.impl.user;
 
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.impl.user.UserServiceImpl;
