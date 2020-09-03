@@ -1,14 +1,12 @@
 package com.gepardec.mega.service.impl.monthlyreport.calculation;
 
 import com.gepardec.mega.domain.model.monthlyreport.*;
-import com.gepardec.mega.service.impl.monthlyreport.calculation.WarningCalculator;
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,14 +16,15 @@ import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@QuarkusTest
 @ExtendWith(MockitoExtension.class)
 class WarningCalculatorTest {
 
-    @InjectMocks
-    private WarningCalculator warningCalculator;
+    @Inject
+    WarningCalculator warningCalculator;
 
-    @Mock
-    private ResourceBundle resourceBundle;
+    @Inject
+    ResourceBundle resourceBundle;
 
     // Here we test combinations of time and journy warnings
     // 1. Only data for  time calculators
@@ -93,98 +92,23 @@ class WarningCalculatorTest {
     }
 
     @Test
-    void determineJourneyWarnings_journeyToAimMissing_Warning() {
-        ArrayList<ProjectTimeEntry> projectTimes = new ArrayList<>();
-        projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 14, 0),
-                        LocalDateTime.of(2020, 1, 7, 16, 0),
-                        Task.BEARBEITEN));
-        projectTimes.add(
-                new JourneyEntry(LocalDateTime.of(2020, 1, 7, 14, 0),
-                        LocalDateTime.of(2020, 1, 7, 16, 0),
-                        Task.REISEN,
-                        JourneyDirection.BACK));
+    void determineJourneyWarnings_validateWarningStrings() {
+        List<ProjectTimeEntry> projectTimeEntries = new ArrayList<>();
 
-        List<JourneyWarning> warnings = warningCalculator.determineJourneyWarnings(projectTimes);
-        assertAll(() -> assertEquals(1, warnings.size()),
-                () -> assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate()),
-                () -> assertEquals(1, warnings.get(0).getWarnings().size()));
-    }
+        projectTimeEntries.addAll(Arrays.asList(
+                new JourneyEntry(LocalDateTime.now(), LocalDateTime.now().plusHours(2), Task.REISEN, JourneyDirection.BACK),
+                new JourneyEntry(LocalDateTime.now().plusHours(3), LocalDateTime.now().plusHours(5), Task.REISEN, JourneyDirection.TO_AIM)
+        ));
 
-    @Test
-    void determineJourneyWarnings_journeyBackMissing_Warning() {
-        ArrayList<ProjectTimeEntry> projectTimes = new ArrayList<>();
-        projectTimes.add(
-                new JourneyEntry(LocalDateTime.of(2020, 1, 7, 10, 0),
-                        LocalDateTime.of(2020, 1, 7, 11, 0),
-                        Task.REISEN,
-                        JourneyDirection.TO_AIM));
-        projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 11, 0),
-                        LocalDateTime.of(2020, 1, 7, 16, 0),
-                        Task.BEARBEITEN));
+        List<JourneyWarning> warnings = warningCalculator.determineJourneyWarnings(projectTimeEntries);
 
-        List<JourneyWarning> warnings = warningCalculator.determineJourneyWarnings(projectTimes);
-        assertAll(() -> assertEquals(1, warnings.size()),
-                () -> assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate()),
-                () -> assertEquals(1, warnings.get(0).getWarnings().size()));
-    }
-
-    @Test
-    void determineJourneyWarnings_TwoJourneyToAimMissingAndTwoJourneyBackMissing_Warning() {
-        List<ProjectTimeEntry> projectTimes = createJourneyEntriesWithFourJourneyWarnings();
-
-        String missingJourneyBack = "Warnung: Rückreise fehlt oder ist nach dem Zeitraum";
-        Mockito.when(resourceBundle.getString("warning." + Warning.WARNING_JOURNEY_BACK_MISSING.name())).thenReturn(missingJourneyBack);
-
-        String missingJourneyToAim = "Warnung: Hinreise fehlt oder ist vor dem Zeitraum";
-        Mockito.when(resourceBundle.getString("warning." + Warning.WARNING_JOURNEY_TO_AIM_MISSING.name())).thenReturn(missingJourneyToAim);
-
-        List<JourneyWarning> warnings = warningCalculator.determineJourneyWarnings(projectTimes);
-        assertAll(
-                () -> assertEquals(4, warnings.size()),
-                () -> assertEquals(LocalDate.of(2020, 7, 21), warnings.get(0).getDate()),
-                () -> assertEquals(1, warnings.get(0).getWarnings().size()),
-                () -> assertEquals(missingJourneyToAim, warnings.get(0).getWarnings().get(0)),
-
-                () -> assertEquals(LocalDate.of(2020, 7, 24), warnings.get(1).getDate()),
-                () -> assertEquals(1, warnings.get(1).getWarnings().size()),
-                () -> assertEquals(missingJourneyBack, warnings.get(1).getWarnings().get(0)),
-
-                () -> assertEquals(LocalDate.of(2020, 7, 28), warnings.get(2).getDate()),
-                () -> assertEquals(1, warnings.get(2).getWarnings().size()),
-                () -> assertEquals(missingJourneyToAim, warnings.get(2).getWarnings().get(0)),
-
-                () -> assertEquals(LocalDate.of(2020, 7, 29), warnings.get(3).getDate()),
-                () -> assertEquals(1, warnings.get(3).getWarnings().size()),
-                () -> assertEquals(missingJourneyBack, warnings.get(3).getWarnings().get(0))
-        );
-    }
-
-    @Test
-    void determineJourneyWarnings_TwoWarningsOnSameDay() {
-        List<ProjectTimeEntry> projectTimes = new ArrayList<>();
-        projectTimes.add(
-                new JourneyEntry(LocalDateTime.of(2020, 1, 7, 10, 0),
-                        LocalDateTime.of(2020, 1, 7, 11, 0),
-                        Task.REISEN,
-                        JourneyDirection.FURTHER));
-        projectTimes.add(
-                new JourneyEntry(LocalDateTime.of(2020, 1, 7, 11, 0),
-                        LocalDateTime.of(2020, 1, 7, 12, 0),
-                        Task.REISEN,
-                        JourneyDirection.BACK));
-
-        String missingJourneyToAim = "Warnung: Hinreise fehlt oder ist vor dem Zeitraum";
-        Mockito.when(resourceBundle.getString("warning." + Warning.WARNING_JOURNEY_TO_AIM_MISSING.name())).thenReturn(missingJourneyToAim);
-
-        List<JourneyWarning> warnings = warningCalculator.determineJourneyWarnings(projectTimes);
         assertAll(
                 () -> assertEquals(1, warnings.size()),
                 () -> assertEquals(2, warnings.get(0).getWarnings().size()),
-                () -> assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate()),
-                () -> assertEquals(missingJourneyToAim, warnings.get(0).getWarnings().get(0)),
-                () -> assertEquals(missingJourneyToAim, warnings.get(0).getWarnings().get(1))
+                () -> assertEquals(resourceBundle.getString("warning." + Warning.WARNING_JOURNEY_TO_AIM_MISSING.name()),
+                        warnings.get(0).getWarnings().get(0)),
+                () -> assertEquals(resourceBundle.getString("warning." + Warning.WARNING_JOURNEY_BACK_MISSING.name()),
+                        warnings.get(0).getWarnings().get(1))
         );
     }
 
@@ -241,83 +165,4 @@ class WarningCalculatorTest {
         return projectTimes;
     }
 
-    /**
-     * This method creates journey entries and some project time entries to simulate a month with
-     * 4 invalid journey entries that have to be detected by the {@code WarningCalculator}.
-     * The aim is to cover as much cases that can occur as possible to guarantee a trustful detection of invalid
-     * journey entries
-     *
-     * @return A list that consists of project time entries distributed over 7 business days.
-     */
-    private static List<ProjectTimeEntry> createJourneyEntriesWithFourJourneyWarnings() {
-        List<ProjectTimeEntry> projectTimes = new ArrayList<>();
-
-        // Day 1 (TO_AIM missing)
-        // JourneyEntry with JourneyDirection set to BACK which is invalid because no journey TO_AIM booked before
-        projectTimes.add(
-                new JourneyEntry(LocalDateTime.of(2020, 7, 21, 15, 0),
-                        LocalDateTime.of(2020, 7, 21, 16, 0),
-                        Task.REISEN,
-                        JourneyDirection.BACK));
-
-        // Day 2 (valid)
-        // Just a usual day with journey TO_AIM and BACK to check correct working of the algorithm
-        projectTimes.add(
-                new JourneyEntry(LocalDateTime.of(2020, 7, 22, 8, 0),
-                        LocalDateTime.of(2020, 7, 22, 9, 0),
-                        Task.REISEN,
-                        JourneyDirection.TO_AIM));
-        projectTimes.add(
-                new JourneyEntry(LocalDateTime.of(2020, 7, 22, 15, 0),
-                        LocalDateTime.of(2020, 7, 22, 16, 0),
-                        Task.REISEN,
-                        JourneyDirection.BACK));
-
-        // Day 3 (BACK missing)
-        // JourneyEntry with JourneyDirection set to TO_AIM which is valid
-        projectTimes.add(
-                new JourneyEntry(LocalDateTime.of(2020, 7, 23, 8, 0),
-                        LocalDateTime.of(2020, 7, 23, 9, 0),
-                        Task.REISEN,
-                        JourneyDirection.TO_AIM));
-
-        // Day 4 (valid)
-        // A usual day with journey TO_AIM and BACK but has to recognize that the BACK-journey is missing on the day before
-        projectTimes.add(
-                new JourneyEntry(LocalDateTime.of(2020, 7, 24, 15, 0),
-                        LocalDateTime.of(2020, 7, 24, 16, 0),
-                        Task.REISEN,
-                        JourneyDirection.TO_AIM));
-        projectTimes.add(
-                new JourneyEntry(LocalDateTime.of(2020, 7, 24, 16, 0),
-                        LocalDateTime.of(2020, 7, 24, 17, 0),
-                        Task.REISEN,
-                        JourneyDirection.BACK));
-
-        // Day 5 (TO_AIM missing)
-        // JourneyEntry with JourneyDirection set to BACK which is invalid because the most recent JourneyEntry is a TO_AIM-journey
-        projectTimes.add(
-                new JourneyEntry(LocalDateTime.of(2020, 7, 28, 15, 0),
-                        LocalDateTime.of(2020, 7, 28, 16, 0),
-                        Task.REISEN,
-                        JourneyDirection.BACK));
-
-        // Day 6 (BACK missing)
-        // Last JourneyEntry for this month with JourneyDirection set to TO_AIM which is valid at this point
-        projectTimes.add(
-                new JourneyEntry(LocalDateTime.of(2020, 7, 29, 15, 0),
-                        LocalDateTime.of(2020, 7, 29, 16, 0),
-                        Task.REISEN,
-                        JourneyDirection.TO_AIM));
-
-        // ProjectTimeEntry which is the very last entry in the whole month. Even though this is not a JourneyEntry
-        // If at this time the most recent journey is not finsihed yet (JourneyDirection set to BACK in current entry),
-        // it has to be detected that there is a invalid journey on Day 6
-        projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 7, 30, 15, 0),
-                        LocalDateTime.of(2020, 7, 30, 16, 0),
-                        Task.BEARBEITEN));
-
-        return projectTimes;
-    }
 }

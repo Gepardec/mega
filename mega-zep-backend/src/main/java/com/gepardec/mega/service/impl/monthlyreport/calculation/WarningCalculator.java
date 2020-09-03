@@ -77,6 +77,7 @@ public class WarningCalculator {
 
         if (journeyWarning.isPresent()) {
             journeyWarning.get().getWarnings().addAll(newJourneyWarning.getWarnings());
+            journeyWarning.get().getWarningTypes().addAll(newJourneyWarning.getWarningTypes());
         } else {
             warnings.add(newJourneyWarning);
         }
