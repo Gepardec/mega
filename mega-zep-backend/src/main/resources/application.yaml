@@ -117,7 +117,7 @@ mega:
       url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
     mail:
       cron: 0 0 7 ? * MON-FRI
-      subject-prefix: 'TEST: '
+      subject-prefix: 'Test Stage: '
       employees:
         notification: false
       reminder:
@@ -138,6 +138,7 @@ mega:
       cron: 0 0 7 ? * MON-FRI
       employees:
         notification: false
+      subject-prefix: ''
       reminder:
         pl: guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com,christoph.kofler@gepardec.com,erhard.siegl@gepardec.com,stefan.kovar@gepardec.com,ludwig.steindl@gepardec.com
         om: evelyn.pirklbauer@gepardec.com
