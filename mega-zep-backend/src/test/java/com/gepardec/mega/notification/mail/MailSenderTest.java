@@ -37,38 +37,38 @@ class MailSenderTest {
 
     @Test
     void sendMail_toEmployees_shouldContainEmpleyNotificationData() {
-        testMailFor("Jamal", Reminder.EMPLOYEE_CHECK_PROJECTTIME, "UNIT-TEST:  Friendly Reminder: Buchungen kontrollieren");
+        testMailFor("Jamal", Reminder.EMPLOYEE_CHECK_PROJECTTIME, "UNIT-TEST: Friendly Reminder: Buchungen kontrollieren");
     }
 
     @Test
     void sendMail_toPL_shouldCountainPlData() {
-        testMailFor("Simba", Reminder.PL_PROJECT_CONTROLLING, "UNIT-TEST:  Reminder: Projekte kontrollieren und abrechnen");
+        testMailFor("Simba", Reminder.PL_PROJECT_CONTROLLING, "UNIT-TEST: Reminder: Projekte kontrollieren und abrechnen");
     }
 
     @Test
     void sendMail_toOmControlContent() {
-        testMailFor("Garfield", Reminder.OM_CONTROL_EMPLOYEES_CONTENT, "UNIT-TEST:  Reminder: Kontrolle Mitarbeiter");
+        testMailFor("Garfield", Reminder.OM_CONTROL_EMPLOYEES_CONTENT, "UNIT-TEST: Reminder: Kontrolle Mitarbeiter");
     }
 
     @Test
     void sendMail_toOmControlProjecttimes() {
-        testMailFor("Dagobert", Reminder.OM_CONTROL_PROJECTTIMES, "UNIT-TEST:  Reminder: Administrative Projektzeiten kontrollieren (Monatsende)");
+        testMailFor("Dagobert", Reminder.OM_CONTROL_PROJECTTIMES, "UNIT-TEST: Reminder: Administrative Projektzeiten kontrollieren (Monatsende)");
     }
 
 
     @Test
     void sendMail_toOmRelease() {
-        testMailFor("Pacman", Reminder.OM_RELEASE, "UNIT-TEST:  Reminder: Freigaben durchführen");
+        testMailFor("Pacman", Reminder.OM_RELEASE, "UNIT-TEST: Reminder: Freigaben durchführen");
     }
 
     @Test
     void sendMail_toOmAdministrative() {
-        testMailFor("ALF", Reminder.OM_ADMINISTRATIVE, "UNIT-TEST:  Reminder: Administratives");
+        testMailFor("ALF", Reminder.OM_ADMINISTRATIVE, "UNIT-TEST: Reminder: Administratives");
     }
 
     @Test
     void sendMail_toOmSalary() {
-        testMailFor("Spiderman", Reminder.OM_SALARY, "UNIT-TEST:  Reminder: Gehälter");
+        testMailFor("Spiderman", Reminder.OM_SALARY, "UNIT-TEST: Reminder: Gehälter");
     }
 
 

@@ -1,0 +1,140 @@
+# GLOBAL Properties
+quarkus:
+  http:
+    cors: true
+  log:
+    console:
+      enable: true
+      level: ALL
+  liquibase:
+    change-log: db/changelog-master.yaml
+    migrate-at-start: false
+  mailer:
+    auth-methods: DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN
+    from: service@gepardec.com (MEGA Mailer)
+    host: smtp.gmail.com
+    port: 465
+    ssl: true
+    username: service@gepardec.com
+    password: ${MAILER_PASSWORD}
+mega:
+  logo-path: img/logo.png
+  wiki:
+    eom-url: https://sites.google.com/a/gepardec.com/internal/zeiterfassung-mit-zep/monatsende-kontrolle-von-arbeitszeiten
+  zep:
+    admin-token: ${TOKEN}
+  oauth:
+    issuer: https://accounts.google.com
+    scope: openid profile email
+## DEV Properties
+"%dev":
+  quarkus:
+    mailer:
+      mock: true
+    datasource:
+      db-kind: portsgresql
+      username: mega
+      password: mega
+      jdbc:
+        url: jdbc:postgresql://localhost:5432/mega
+  mega:
+    dash-url: http://localhost:4444
+    zep-url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
+    oauth:
+      client-id: 60018822787-4nlv6e1tit3q8ssfbe2e013790p939dt.apps.googleusercontent.com
+    mail:
+      cron: 0 0 7 ? * MON-FRI
+      subject-prefix: 'LOCAL: '
+      employees:
+        notification: true
+      reminder:
+        pl: thomas.herzog@gepardec.com
+        om: thomas.herzog@gepardec.com
+## DEV Properties
+"%test":
+  quarkus:
+    mailer:
+      mock: true
+    datasource:
+      db-kind: h2
+      jdbc:
+        url: 'jdbc:h2:mem:mega;MODE=PostgreSQL;INIT=create schema if not exists mega\;SET SCHEMA mega'
+  mega:
+    dash-url: http://localhost:8080
+    oauth:
+      client-id: 60018822787-4nlv6e1tit3q8ssfbe2e013790p939dt.apps.googleusercontent.com
+    zep:
+      url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
+    mail:
+      subject-prefix: 'UNIT-TEST: '
+      cron: 0 0 7 ? * MON-FRI
+      employees:
+        notification: false
+      reminder:
+        pl: thomas.herzog@gepardec.com
+        om: thomas.herzog@gepardec.com
+# PROD Properties
+"%prod":
+  quarkus:
+    mailer:
+      mock: true
+    datasource:
+      db-kind: postgresql
+      username: ${DB_USER}
+      password: ${DB_PASSWORD}
+      jdbc:
+        url: jdbc:postgresql://${DB_HOST}/mega
+# DEV-STAGE Properties
+"%devstage":
+  quarkus:
+    mailer:
+      mock: true
+  mega:
+    dash-url: https://mega-zep-frontend-57-mega-dev.cloud.itandtel.at
+    oauth:
+      client-id: 60018822787-361in5i8h2kaqfmj7ue0ocn5s4acf5ci.apps.googleusercontent.com
+    mail:
+      cron: 0 0 7 ? * MON-FRI
+      subject-prefix: 'Development Stage: '
+      employees:
+        notification: false
+      reminder:
+        pl: thomas.herzog@gepardec.com
+        om: thomas.herzog@gepardec.com
+# TEST-STAGE Properties
+"%teststage":
+  quarkus:
+    mailer:
+      mock: true
+  mega:
+    dash-url: https://mega-zep-frontend-57-mega-test.cloud.itandtel.at
+    oauth:
+      client-id: 60018822787-361in5i8h2kaqfmj7ue0ocn5s4acf5ci.apps.googleusercontent.com
+    zep:
+      url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
+    mail:
+      cron: 0 0 7 ? * MON-FRI
+      subject-prefix: 'TEST: '
+      employees:
+        notification: false
+      reminder:
+        pl: werner.bruckmueller@gepardec.com,guenter.pirklbauer@gepardec.com
+        om: werner.bruckmueller@gepardec.com,guenter.pirklbauer@gepardec.com
+# TEST-STAGE Properties
+"%prodstage":
+  quarkus:
+    mailer:
+      mock: false
+  mega:
+    dash-url: https://mega.gepardec.com
+    oauth:
+      client-id: 60018822787-u23ip1l6n7gbql7mpsh560ffj56uagsr.apps.googleusercontent.com
+    zep:
+      url: https://www.zep-online.de/zepgepardecservices/sync/soap.php?v=7
+    mail:
+      cron: 0 0 7 ? * MON-FRI
+      employees:
+        notification: false
+      reminder:
+        pl: guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com,christoph.kofler@gepardec.com,erhard.siegl@gepardec.com,stefan.kovar@gepardec.com,ludwig.steindl@gepardec.com
+        om: evelyn.pirklbauer@gepardec.com

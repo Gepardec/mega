@@ -10,7 +10,7 @@ import javax.inject.Inject;
 public class OAuthConfig {
 
     @Inject
-    @ConfigProperty(name = "mega.oauth.clientId")
+    @ConfigProperty(name = "mega.oauth.client-id")
     String clientId;
 
     @Inject
