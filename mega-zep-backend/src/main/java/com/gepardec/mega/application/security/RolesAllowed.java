@@ -1,5 +1,7 @@
 package com.gepardec.mega.application.security;
 
+import com.gepardec.mega.domain.model.Role;
+
 import javax.enterprise.util.Nonbinding;
 import javax.interceptor.InterceptorBinding;
 import java.lang.annotation.*;

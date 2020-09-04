@@ -2,7 +2,7 @@ package com.gepardec.mega.rest;
 
 import com.gepardec.mega.EmployeeServiceMock;
 import com.gepardec.mega.GoogleTokenVerifierMock;
-import com.gepardec.mega.application.security.Role;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;

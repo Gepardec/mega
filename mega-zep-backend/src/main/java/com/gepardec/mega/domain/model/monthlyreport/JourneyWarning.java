@@ -1,5 +1,6 @@
 package com.gepardec.mega.domain.model.monthlyreport;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -14,6 +15,9 @@ public class JourneyWarning {
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
     private List<String> warnings = new ArrayList<>(0);
+
+    @JsonIgnore
+    private List<Warning> warningTypes = new ArrayList<>(0);
 
     public JourneyWarning() {
     }
@@ -37,5 +41,13 @@ public class JourneyWarning {
 
     public void setWarnings(List<String> warnings) {
         this.warnings = warnings;
+    }
+
+    public List<Warning> getWarningTypes() {
+        return warningTypes;
+    }
+
+    public void setWarningTypes(List<Warning> warningTypes) {
+        this.warningTypes = warningTypes;
     }
 }

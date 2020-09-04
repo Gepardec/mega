@@ -1,7 +1,7 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.application.security.Secured;
-import com.gepardec.mega.application.security.UserContext;
+import com.gepardec.mega.domain.model.UserContext;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -22,6 +22,6 @@ public class UserResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser() {
-        return Response.ok(userContext.getUser()).build();
+        return Response.ok(userContext.user()).build();
     }
 }
