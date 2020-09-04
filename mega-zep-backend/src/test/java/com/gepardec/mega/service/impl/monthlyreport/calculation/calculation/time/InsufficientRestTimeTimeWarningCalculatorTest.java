@@ -4,7 +4,6 @@ import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.time.InsufficientRestTimeTimeWarningCalculator;
-import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -16,7 +15,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@QuarkusTest
 class InsufficientRestTimeTimeWarningCalculatorTest {
 
     private InsufficientRestTimeTimeWarningCalculator calculator = new InsufficientRestTimeTimeWarningCalculator();
@@ -28,11 +26,8 @@ class InsufficientRestTimeTimeWarningCalculatorTest {
 
     @Test
     void calculate_whenDataNotForTheCalculator_thenNoWarningsCreated() {
-        List<ProjectTimeEntry> projectTimeEntries = new ArrayList<>();
-        projectTimeEntries.addAll(Arrays.asList(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 7, 0), LocalDateTime.of(2020, 1, 7, 17, 0), Task.BEARBEITEN)
-        ));
-        assertTrue(calculator.calculate(projectTimeEntries).isEmpty());
+        final ProjectTimeEntry entry = new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 7, 0), LocalDateTime.of(2020, 1, 7, 17, 0), Task.BEARBEITEN);
+        assertTrue(calculator.calculate(Collections.singletonList(entry)).isEmpty());
     }
 
     @Test
