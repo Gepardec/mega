@@ -145,7 +145,8 @@ pipeline {
                 script {
                     build job: 'mega-release', parameters: [
                             string(name: 'Branch', value: "master"),
-                            string(name: 'targetEnvironment', value: "dev"),
+                            string(name: 'target', value: "dev"),
+                            string(name: 'stage', value: "default"),
                             string(name: 'version', value: "${env.REVISION}")]
                 }
             }
