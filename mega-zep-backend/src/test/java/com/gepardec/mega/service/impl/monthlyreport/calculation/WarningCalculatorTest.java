@@ -1,12 +1,12 @@
 package com.gepardec.mega.service.impl.monthlyreport.calculation;
 
 import com.gepardec.mega.domain.model.monthlyreport.*;
-import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,16 +15,16 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
-@QuarkusTest
 @ExtendWith(MockitoExtension.class)
 class WarningCalculatorTest {
 
-    @Inject
+    @InjectMocks
     WarningCalculator warningCalculator;
 
-    @Inject
-    ResourceBundle resourceBundle;
+    @Mock
+    ResourceBundle messages;
 
     // Here we test combinations of time and journy warnings
     // 1. Only data for  time calculators
@@ -61,27 +61,27 @@ class WarningCalculatorTest {
 
     @Test
     void determineJourneyWarnings_validateWarningStrings() {
-        List<ProjectTimeEntry> projectTimeEntries = new ArrayList<>();
 
-        projectTimeEntries.addAll(Arrays.asList(
+        List<ProjectTimeEntry> projectTimeEntries = List.of(
                 new JourneyEntry(LocalDateTime.now(), LocalDateTime.now().plusHours(2), Task.REISEN, JourneyDirection.BACK),
                 new JourneyEntry(LocalDateTime.now().plusHours(3), LocalDateTime.now().plusHours(5), Task.REISEN, JourneyDirection.TO_AIM)
-        ));
+        );
+
+        when(messages.getString("warning.WARNING_JOURNEY_TO_AIM_MISSING")).thenReturn("WARNING_JOURNEY_TO_AIM_MISSING");
+        when(messages.getString("warning.WARNING_JOURNEY_BACK_MISSING")).thenReturn("WARNING_JOURNEY_BACK_MISSING");
 
         List<JourneyWarning> warnings = warningCalculator.determineJourneyWarnings(projectTimeEntries);
 
         assertAll(
                 () -> assertEquals(1, warnings.size()),
                 () -> assertEquals(2, warnings.get(0).getWarnings().size()),
-                () -> assertEquals(resourceBundle.getString("warning." + Warning.WARNING_JOURNEY_TO_AIM_MISSING.name()),
-                        warnings.get(0).getWarnings().get(0)),
-                () -> assertEquals(resourceBundle.getString("warning." + Warning.WARNING_JOURNEY_BACK_MISSING.name()),
-                        warnings.get(0).getWarnings().get(1))
+                () -> assertEquals("WARNING_JOURNEY_TO_AIM_MISSING", warnings.get(0).getWarnings().get(0)),
+                () -> assertEquals("WARNING_JOURNEY_BACK_MISSING", warnings.get(0).getWarnings().get(1))
         );
     }
 
     private static List<ProjectTimeEntry> createEntriesMoreThan6Hours() {
-        return Arrays.asList(
+        return List.of(
                 new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 9, 0),
                         LocalDateTime.of(2020, 1, 7, 16, 0),
                         Task.BEARBEITEN));
