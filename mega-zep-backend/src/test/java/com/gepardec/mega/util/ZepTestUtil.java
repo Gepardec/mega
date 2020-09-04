@@ -1,6 +1,6 @@
 package com.gepardec.mega.util;
 
-import com.gepardec.mega.application.security.Role;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.utils.DateUtils;
 import de.provantis.zep.*;
 

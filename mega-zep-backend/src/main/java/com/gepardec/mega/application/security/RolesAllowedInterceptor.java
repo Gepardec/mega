@@ -1,6 +1,8 @@
 package com.gepardec.mega.application.security;
 
 import com.gepardec.mega.application.exception.ForbiddenException;
+import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.domain.model.UserContext;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -29,10 +31,10 @@ public class RolesAllowedInterceptor {
         Objects.requireNonNull(rolesAllowedAnnotation, "Could not resolve Authorizaion annotation. Do you use Stereotype annotations, which are currently not supported?");
 
         Role[] allowedRoles = rolesAllowedAnnotation.allowedRoles();
-        if (Stream.of(allowedRoles).anyMatch(role -> role.equals(userContext.getUser().role()))) {
+        if (Stream.of(allowedRoles).anyMatch(role -> role.equals(userContext.user().role()))) {
             return invocationContext.proceed();
         } else {
-            throw new ForbiddenException(String.format("User has insufficient role %s", userContext.getUser().role()));
+            throw new ForbiddenException(String.format("User has insufficient role %s", userContext.user().role()));
         }
     }
 }

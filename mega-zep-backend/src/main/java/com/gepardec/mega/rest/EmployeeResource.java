@@ -1,6 +1,6 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.application.security.Role;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.application.security.RolesAllowed;
 import com.gepardec.mega.application.security.Secured;
 import com.gepardec.mega.domain.model.Employee;
