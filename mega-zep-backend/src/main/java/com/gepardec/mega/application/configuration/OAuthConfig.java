@@ -10,15 +10,15 @@ import javax.inject.Inject;
 public class OAuthConfig {
 
     @Inject
-    @ConfigProperty(name = "oauth.clientId")
+    @ConfigProperty(name = "mega.oauth.clientId")
     String clientId;
 
     @Inject
-    @ConfigProperty(name = "oauth.issuer")
+    @ConfigProperty(name = "mega.oauth.issuer")
     String issuer;
 
     @Inject
-    @ConfigProperty(name = "oauth.scope")
+    @ConfigProperty(name = "mega.oauth.scope")
     String scope;
 
     public String getClientId() {
