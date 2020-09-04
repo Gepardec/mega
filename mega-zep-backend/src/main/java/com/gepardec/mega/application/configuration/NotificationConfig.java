@@ -7,7 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class NotificationConfig {
 
-    @ConfigProperty(name = "mega.mail.subject-prefix")
+    @ConfigProperty(name = "mega.mail.subject-prefix", defaultValue = " ")
     String subjectPrefix;
 
     @ConfigProperty(name = "mega.logo-path")

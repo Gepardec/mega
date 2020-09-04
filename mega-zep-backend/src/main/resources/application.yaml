@@ -32,7 +32,7 @@ mega:
     mailer:
       mock: true
     datasource:
-      db-kind: portsgresql
+      db-kind: postgresql
       username: mega
       password: mega
       jdbc:
@@ -138,7 +138,6 @@ mega:
       cron: 0 0 7 ? * MON-FRI
       employees:
         notification: false
-      subject-prefix: ''
       reminder:
         pl: guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com,christoph.kofler@gepardec.com,erhard.siegl@gepardec.com,stefan.kovar@gepardec.com,ludwig.steindl@gepardec.com
         om: evelyn.pirklbauer@gepardec.com
