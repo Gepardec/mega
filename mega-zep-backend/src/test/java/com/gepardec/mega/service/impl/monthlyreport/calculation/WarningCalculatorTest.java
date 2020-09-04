@@ -59,38 +59,6 @@ class WarningCalculatorTest {
                 () -> assertEquals(4.25, warnings.get(0).getExcessWorkTime()));
     }
 
-
-    @Test
-    void determineTimeWarnings_lessThan11HoursRest_Warning() {
-        List<TimeWarning> warnings = warningCalculator.determineTimeWarnings(createEntriesLessThan11HoursRest());
-
-        assertAll(() -> assertEquals(1, warnings.size()),
-                () -> assertEquals(LocalDate.of(2020, 1, 8), warnings.get(0).getDate()),
-                () -> assertEquals(3.0, warnings.get(0).getMissingRestTime()),
-                () -> assertNull(warnings.get(0).getMissingBreakTime()),
-                () -> assertNull(warnings.get(0).getExcessWorkTime()));
-    }
-
-    @Test
-    void determineTimeWarnings_lessThan11HoursRestAndMoreThan10HoursADayAndThan6Hours_Warnings() {
-        ArrayList<ProjectTimeEntry> projectTimes = new ArrayList<>();
-        projectTimes.addAll(createEntriesLessThan11HoursRest());
-        projectTimes.addAll(createEntriesMoreThan6Hours());
-
-        List<TimeWarning> warnings = warningCalculator.determineTimeWarnings(projectTimes);
-        assertAll(() -> assertEquals(2, warnings.size()),
-                //first day
-                () -> assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate()),
-                () -> assertNull(warnings.get(0).getMissingRestTime()),
-                () -> assertEquals(0.5, warnings.get(0).getMissingBreakTime()),
-                () -> assertEquals(3.0, warnings.get(0).getExcessWorkTime()),
-                //second day
-                () -> assertEquals(LocalDate.of(2020, 1, 8), warnings.get(1).getDate()),
-                () -> assertEquals(3.0, warnings.get(1).getMissingRestTime()),
-                () -> assertNull(warnings.get(1).getMissingBreakTime()),
-                () -> assertNull(warnings.get(1).getExcessWorkTime()));
-    }
-
     @Test
     void determineJourneyWarnings_validateWarningStrings() {
         List<ProjectTimeEntry> projectTimeEntries = new ArrayList<>();
@@ -152,17 +120,5 @@ class WarningCalculatorTest {
         return projectTimes;
     }
 
-    private static List<ProjectTimeEntry> createEntriesLessThan11HoursRest() {
-        List<ProjectTimeEntry> projectTimes = new ArrayList<>();
-        projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 16, 0),
-                        LocalDateTime.of(2020, 1, 7, 22, 0),
-                        Task.BEARBEITEN));
-        projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 8, 6, 0),
-                        LocalDateTime.of(2020, 1, 8, 8, 0),
-                        Task.BEARBEITEN));
-        return projectTimes;
-    }
 
 }
