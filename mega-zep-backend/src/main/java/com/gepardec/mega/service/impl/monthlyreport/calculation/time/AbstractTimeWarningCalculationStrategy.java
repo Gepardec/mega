@@ -18,7 +18,7 @@ public abstract class AbstractTimeWarningCalculationStrategy {
                 .collect(Collectors.groupingBy(ProjectTimeEntry::getDate, LinkedHashMap::new, Collectors.toUnmodifiableList()));
     }
 
-    protected static double calculateWorkingDuration(List<ProjectTimeEntry> entriesPerDay) {
+    protected double calculateWorkingDuration(List<ProjectTimeEntry> entriesPerDay) {
         return entriesPerDay.stream()
                 .filter(entry -> Task.isTask(entry.getTask()))
                 .map(ProjectTimeEntry::getDurationInHours)
