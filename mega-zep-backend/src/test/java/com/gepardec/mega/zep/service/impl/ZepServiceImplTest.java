@@ -1,6 +1,7 @@
 package com.gepardec.mega.zep.service.impl;
 
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.service.impl.employee.EmployeeMapper;
 import com.gepardec.mega.util.ZepTestUtil;
 import com.gepardec.mega.zep.ZepServiceException;
 import com.gepardec.mega.zep.ZepServiceImpl;
@@ -34,7 +35,7 @@ public class ZepServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        beanUnderTest = new ZepServiceImpl(logger, zepSoapPortType, zepSoapProvider);
+        beanUnderTest = new ZepServiceImpl(new EmployeeMapper(), logger, zepSoapPortType, zepSoapProvider);
     }
 
     @Test
@@ -99,9 +100,11 @@ public class ZepServiceImplTest {
 
     @Test
     void testUpdateEmployeesReleaseDateException() {
-        Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any())).thenReturn(ZepTestUtil.createUpaUpdateMitarbeiterResponseType(ZepTestUtil.createResponseHeaderType("1337")));
+        Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any())).thenReturn(ZepTestUtil
+                .createUpaUpdateMitarbeiterResponseType(ZepTestUtil.createResponseHeaderType("1337")));
 
-        final ZepServiceException zepServiceException = Assertions.assertThrows(ZepServiceException.class, () -> beanUnderTest.updateEmployeesReleaseDate("0", "2020-01-01"));
+        final ZepServiceException zepServiceException = Assertions.assertThrows(ZepServiceException.class, () -> beanUnderTest
+                .updateEmployeesReleaseDate("0", "2020-01-01"));
         Assertions.assertEquals("updateEmployeeReleaseDate failed with code: 1337", zepServiceException.getMessage());
 
         Mockito.verify(zepSoapPortType).updateMitarbeiter(Mockito.argThat(
@@ -133,7 +136,8 @@ public class ZepServiceImplTest {
 
     @Test
     void testUpdateEmployeesReleaseDate() {
-        Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any())).thenReturn(ZepTestUtil.createUpaUpdateMitarbeiterResponseType(ZepTestUtil.createResponseHeaderType("0")));
+        Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any())).thenReturn(ZepTestUtil
+                .createUpaUpdateMitarbeiterResponseType(ZepTestUtil.createResponseHeaderType("0")));
 
         beanUnderTest.updateEmployeesReleaseDate("0", "2020-01-01");
 

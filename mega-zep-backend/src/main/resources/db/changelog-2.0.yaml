@@ -1,38 +1,38 @@
 databaseChangeLog:
   - changeSet:
-      id: 1598011990869-1
+      id: 1599301929284-1
       author: thoma (generated)
       changes:
         - createSequence:
             incrementBy: 1
-            sequenceName: sequence_comment
+            sequenceName: SEQUENCE_COMMENT_ID
             startValue: 1
   - changeSet:
-      id: 1598011990869-2
+      id: 1599301929284-2
       author: thoma (generated)
       changes:
         - createSequence:
             incrementBy: 1
-            sequenceName: sequence_employee
+            sequenceName: SEQUENCE_STEP_ENTRY_ID
             startValue: 1
   - changeSet:
-      id: 1598011990869-3
+      id: 1599301929284-3
       author: thoma (generated)
       changes:
         - createSequence:
             incrementBy: 1
-            sequenceName: sequence_step
+            sequenceName: SEQUENCE_STEP_ID
             startValue: 1
   - changeSet:
-      id: 1598011990869-4
+      id: 1599301929284-4
       author: thoma (generated)
       changes:
         - createSequence:
             incrementBy: 1
-            sequenceName: sequence_step_entry
+            sequenceName: SEQUENCE_USER_ID
             startValue: 1
   - changeSet:
-      id: 1598011990869-5
+      id: 1599301929284-5
       author: thoma (generated)
       changes:
         - createTable:
@@ -41,32 +41,37 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: commentPK
-                  name: id
+                    primaryKeyName: COMMENTPK
+                  name: ID
                   type: BIGINT
               - column:
                   constraints:
                     nullable: false
-                  name: creation_date
+                  name: CREATION_DATE
                   type: TIMESTAMP WITHOUT TIME ZONE
               - column:
                   constraints:
                     nullable: false
-                  name: message
+                  name: MESSAGE
                   type: VARCHAR(255)
               - column:
                   constraints:
                     nullable: false
-                  name: state
+                  name: STATE
                   type: VARCHAR(255)
               - column:
                   constraints:
                     nullable: false
-                  name: step_entry_id
+                  name: UPDATE_DATE
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: STEP_ENTRY_ID
                   type: BIGINT
-            tableName: comment
+            tableName: COMMENT
   - changeSet:
-      id: 1598011990869-6
+      id: 1599301929284-6
       author: thoma (generated)
       changes:
         - createTable:
@@ -75,17 +80,30 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: employeePK
-                  name: id
+                    primaryKeyName: STEPPK
+                  name: ID
                   type: BIGINT
+              - column:
+                  name: GROUP_NAME
+                  type: VARCHAR(50)
               - column:
                   constraints:
                     nullable: false
-                  name: email
+                  name: NAME
                   type: VARCHAR(255)
-            tableName: employee
+              - column:
+                  constraints:
+                    nullable: false
+                  name: ORDINAL
+                  type: INTEGER
+              - column:
+                  constraints:
+                    nullable: false
+                  name: ROLE
+                  type: VARCHAR(255)
+            tableName: STEP
   - changeSet:
-      id: 1598011990869-7
+      id: 1599301929284-7
       author: thoma (generated)
       changes:
         - createTable:
@@ -94,113 +112,162 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: stepPK
-                  name: id
+                    primaryKeyName: STEP_ENTRYPK
+                  name: ID
                   type: BIGINT
               - column:
                   constraints:
                     nullable: false
-                  name: name
-                  type: VARCHAR(255)
+                  name: CREATION_DATE
+                  type: TIMESTAMP WITHOUT TIME ZONE
               - column:
                   constraints:
                     nullable: false
-                  name: role
-                  type: VARCHAR(255)
-            tableName: step
-  - changeSet:
-      id: 1598011990869-8
-      author: thoma (generated)
-      changes:
-        - createTable:
-            columns:
-              - column:
-                  constraints:
-                    nullable: false
-                    primaryKey: true
-                    primaryKeyName: step_entryPK
-                  name: id
-                  type: BIGINT
-              - column:
-                  constraints:
-                    nullable: false
-                  name: date
+                  name: DATE
                   type: date
               - column:
                   constraints:
                     nullable: false
-                  name: project
+                  name: PROJECT
                   type: VARCHAR(255)
               - column:
                   constraints:
                     nullable: false
-                  name: state
+                  name: STATE
                   type: VARCHAR(255)
               - column:
                   constraints:
                     nullable: false
-                  name: assignee_employee_id
+                  name: UPDATE_DATE
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: ASSIGNEE_USER_ID
                   type: BIGINT
               - column:
                   constraints:
                     nullable: false
-                  name: owner_employee_id
+                  name: OWNER_USER_ID
                   type: BIGINT
               - column:
                   constraints:
                     nullable: false
-                  name: step_id
+                  name: STEP_ID
                   type: BIGINT
-            tableName: step_entry
+            tableName: STEP_ENTRY
   - changeSet:
-      id: 1598011990869-9
+      id: 1599301929284-8
+      author: thoma (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: USERPK
+                  name: ID
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: CREATION_DATE
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: EMAIL
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: UPDATE_DATE
+                  type: TIMESTAMP WITHOUT TIME ZONE
+            tableName: USER
+  - changeSet:
+      id: 1599301929284-9
+      author: thoma (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: EMAIL
+            constraintName: UIDX_EMAIL
+            tableName: USER
+  - changeSet:
+      id: 1599301929284-10
+      author: thoma (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: ORDINAL
+            constraintName: UIDX_ORDINAL
+            tableName: STEP
+  - changeSet:
+      id: 1599301929284-11
+      author: thoma (generated)
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: GROUP_NAME
+            indexName: IDX_GROUP_NAME
+            tableName: STEP
+  - changeSet:
+      id: 1599301929284-12
       author: thoma (generated)
       changes:
         - addForeignKeyConstraint:
-            baseColumnNames: assignee_employee_id
-            baseTableName: step_entry
-            constraintName: fk_assignee_employee
+            baseColumnNames: ASSIGNEE_USER_ID
+            baseTableName: STEP_ENTRY
+            constraintName: FK_ASSIGNEE_USER_ID
             deferrable: false
             initiallyDeferred: false
-            referencedColumnNames: id
-            referencedTableName: employee
+            referencedColumnNames: ID
+            referencedTableName: USER
             validate: true
   - changeSet:
-      id: 1598011990869-10
+      id: 1599301929284-13
       author: thoma (generated)
       changes:
         - addForeignKeyConstraint:
-            baseColumnNames: owner_employee_id
-            baseTableName: step_entry
-            constraintName: fk_owner_employee
+            baseColumnNames: OWNER_USER_ID
+            baseTableName: STEP_ENTRY
+            constraintName: FK_OWNER_USER_ID
             deferrable: false
             initiallyDeferred: false
-            referencedColumnNames: id
-            referencedTableName: employee
+            referencedColumnNames: ID
+            referencedTableName: USER
             validate: true
   - changeSet:
-      id: 1598011990869-11
+      id: 1599301929284-14
       author: thoma (generated)
       changes:
         - addForeignKeyConstraint:
-            baseColumnNames: step_id
-            baseTableName: step_entry
-            constraintName: fk_step
+            baseColumnNames: STEP_ENTRY_ID
+            baseTableName: COMMENT
+            constraintName: FK_STEP_ENTRY
             deferrable: false
             initiallyDeferred: false
-            referencedColumnNames: id
-            referencedTableName: step
+            referencedColumnNames: ID
+            referencedTableName: STEP_ENTRY
             validate: true
   - changeSet:
-      id: 1598011990869-12
+      id: 1599301929284-15
       author: thoma (generated)
       changes:
         - addForeignKeyConstraint:
-            baseColumnNames: step_entry_id
-            baseTableName: comment
-            constraintName: fk_step_entry
+            baseColumnNames: STEP_ID
+            baseTableName: STEP_ENTRY
+            constraintName: FK_STEP_ID
             deferrable: false
             initiallyDeferred: false
-            referencedColumnNames: id
-            referencedTableName: step_entry
+            referencedColumnNames: ID
+            referencedTableName: STEP
             validate: true
+  - changeSet:
+      id: insert-step
+      author: thoma
+      changes:
+        - loadData:
+            tableName: STEP
+            separator: ';'
+            file: 'db/data/step-2.0.csv'

@@ -15,10 +15,10 @@ import javax.annotation.Nullable;
 @JsonDeserialize(builder = com.gepardec.mega.domain.model.AutoValue_User.Builder.class)
 public abstract class User {
 
-    @Nullable @JsonProperty public abstract String userId();
-    @Nullable @JsonProperty public abstract String email();
-    @Nullable @JsonProperty public abstract String firstname();
-    @Nullable @JsonProperty public abstract String lastname();
+    @JsonProperty public abstract String userId();
+    @JsonProperty public abstract String email();
+    @JsonProperty public abstract String firstname();
+    @JsonProperty public abstract String lastname();
     @Nullable @JsonProperty public abstract Role role();
     @Nullable @JsonProperty public abstract String pictureUrl();
 

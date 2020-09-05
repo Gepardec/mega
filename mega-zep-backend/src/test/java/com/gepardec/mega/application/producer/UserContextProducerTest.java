@@ -72,16 +72,21 @@ class UserContextProducerTest {
         Mockito.when(googleIdToken.getPayload().getEmail()).thenReturn("test@gepardec.com");
         Mockito.when(googleIdToken.getPayload().get("picture")).thenReturn("http://www.gepardec.com/test.jpg");
 
+        final User user = User.builder()
+                .userId("1")
+                .firstname("Thomas")
+                .lastname("Herzog")
+                .email("thomas.herzog@gepardec.com")
+                .build();
         Mockito.when(googleIdTokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
-        Mockito.when(userService.getUser("test@gepardec.com", "http://www.gepardec.com/test.jpg")).thenReturn(User.builder().firstname("test")
-                .build());
+        Mockito.when(userService.getUser("test@gepardec.com", "http://www.gepardec.com/test.jpg")).thenReturn(user);
 
         // When
         final UserContext userContext = producer.createUserContext();
 
         // Then
         Assertions.assertNotNull(userContext.user());
-        Assertions.assertEquals("test", userContext.user().firstname());
+        Assertions.assertEquals(user, userContext.user());
         Assertions.assertTrue(userContext.loggedIn());
     }
 }

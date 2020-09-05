@@ -8,40 +8,68 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "comment")
+@Table(name = "COMMENT")
 public class Comment {
 
     @Id
-    @Column(name = "id", insertable = false, updatable = false)
-    @GeneratedValue(generator = "generator", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "generator", sequenceName = "sequence_comment", allocationSize = 1)
+    @Column(name = "ID", insertable = false, updatable = false)
+    @GeneratedValue(generator = "commentIdGenerator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "commentIdGenerator", sequenceName = "SEQUENCE_COMMENT_ID", allocationSize = 1)
     private Long id;
 
+    /**
+     * The creation date of the comment
+     */
     @NotNull
-    @Column(name = "creation_date", updatable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "CREATION_DATE", updatable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime creationDate;
 
+    /**
+     * The updated date of the comment
+     */
+    @NotNull
+    @Column(name = "UPDATE_DATE", columnDefinition = "TIMESTAMP")
+    private LocalDateTime updatedDate;
+
+    /**
+     * The message of the comment for the related step entry
+     */
     @NotNull
     @Length(min = 1, max = 255)
-    @Column(name = "message", updatable = false)
+    @Column(name = "MESSAGE", updatable = false)
     private String message;
 
+    /**
+     * The state of the comment
+     *
+     * @see State
+     */
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "state")
+    @Column(name = "STATE")
     private State state;
 
+    /**
+     * The step entry the comment is for
+     *
+     * @see StepEntry
+     */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "step_entry_id",
-            referencedColumnName = "id",
-            foreignKey = @ForeignKey(name = "fk_step_entry", value = ConstraintMode.CONSTRAINT))
+    @JoinColumn(name = "STEP_ENTRY_ID",
+            referencedColumnName = "ID",
+            foreignKey = @ForeignKey(name = "FK_STEP_ENTRY", value = ConstraintMode.CONSTRAINT))
     private StepEntry stepEntry;
 
     @PrePersist
     void onPersist() {
         state = State.OPEN;
-        creationDate = LocalDateTime.now();
+        creationDate = updatedDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    void onUpdate() {
+        updatedDate = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -52,20 +80,28 @@ public class Comment {
         this.id = id;
     }
 
-    public StepEntry getStepEntry() {
-        return stepEntry;
-    }
-
-    public void setStepEntry(StepEntry stepEntry) {
-        this.stepEntry = stepEntry;
-    }
-
     public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public LocalDateTime getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(LocalDateTime updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public StepEntry getStepEntry() {
+        return stepEntry;
+    }
+
+    public void setStepEntry(StepEntry stepEntry) {
+        this.stepEntry = stepEntry;
     }
 
     public String getMessage() {
