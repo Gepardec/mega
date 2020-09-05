@@ -62,7 +62,7 @@ public class MailDaemonTest {
         assertAll(
                 () -> assertEquals(mailAddresses.size(), mailbox.getTotalMessagesSent()),
                 () -> mailAddresses.forEach(mailAddress ->
-                        assertEquals("LOCAL: Reminder: Freigaben durchführen", mailbox.getMessagesSentTo(mailAddresses.get(0)).get(0).getSubject()))
+                        assertEquals("UNIT-TEST: Reminder: Freigaben durchführen", mailbox.getMessagesSentTo(mailAddresses.get(0)).get(0).getSubject()))
         );
     }
 
@@ -73,7 +73,7 @@ public class MailDaemonTest {
         assertAll(
                 () -> assertEquals(mailAddresses.size(), mailbox.getTotalMessagesSent()),
                 () -> mailAddresses.forEach(mailAddress ->
-                        assertEquals("LOCAL: Reminder: Projekte kontrollieren und abrechnen", mailbox.getMessagesSentTo(mailAddress).get(0).getSubject()))
+                        assertEquals("UNIT-TEST: Reminder: Projekte kontrollieren und abrechnen", mailbox.getMessagesSentTo(mailAddress).get(0).getSubject()))
         );
     }
 
@@ -88,7 +88,7 @@ public class MailDaemonTest {
         assertAll(
                 () -> assertEquals(addresses.size(), mailbox.getTotalMessagesSent()),
                 () -> addresses.forEach(address ->
-                        assertEquals("LOCAL: Friendly Reminder: Buchungen kontrollieren", mailbox.getMessagesSentTo(address).get(0).getSubject()))
+                        assertEquals("UNIT-TEST: Friendly Reminder: Buchungen kontrollieren", mailbox.getMessagesSentTo(address).get(0).getSubject()))
         );
     }
 }

@@ -56,6 +56,10 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy-jackson</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-config-yaml</artifactId>
+        </dependency>
         <!-- Quarkus MicroProfile-Extensions -->
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -258,31 +262,6 @@
                         <quarkus.mailer.mock>true</quarkus.mailer.mock>
                     </systemPropertyVariables>
                 </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>${maven-resource-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>copy-application-config</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/config</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/config</directory>
-                                    <filtering>false</filtering>
-                                    <includes>
-                                        <include>application.properties</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-enforcer-plugin</artifactId>
