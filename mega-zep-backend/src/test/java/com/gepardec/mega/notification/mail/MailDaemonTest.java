@@ -57,7 +57,7 @@ public class MailDaemonTest {
 
     @Test
     void sendReminderToOm_mailAddressesAvailable_shouldSendMail() {
-        List<String> mailAddresses = Arrays.asList(omMailAddresses.split("\\,"));
+        List<String> mailAddresses = List.of(omMailAddresses.split("\\,"));
         mailDaemon.sendReminderToOm(OM_RELEASE);
         assertAll(
                 () -> assertEquals(mailAddresses.size(), mailbox.getTotalMessagesSent()),
@@ -68,7 +68,7 @@ public class MailDaemonTest {
 
     @Test
     void sendReminderToPl_mailAddressesAvailable_shouldSendMail() {
-        List<String> mailAddresses = Arrays.asList(projectLeadersMailAddresses.split("\\,"));
+        List<String> mailAddresses = List.of(projectLeadersMailAddresses.split("\\,"));
         mailDaemon.sendReminderToPl();
         assertAll(
                 () -> assertEquals(mailAddresses.size(), mailbox.getTotalMessagesSent()),

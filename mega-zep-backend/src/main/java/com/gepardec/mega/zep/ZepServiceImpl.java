@@ -1,7 +1,7 @@
 package com.gepardec.mega.zep;
 
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.service.impl.employee.EmployeeMapper;
 import com.gepardec.mega.zep.mapper.ProjectTimeMapper;
 import de.provantis.zep.*;
@@ -78,7 +78,7 @@ public class ZepServiceImpl implements ZepService {
     }
 
     @Override
-    public List<ProjectTimeEntry> getProjectTimes(Employee employee) {
+    public List<ProjectEntry> getProjectTimes(Employee employee) {
         final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
         projektzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
 

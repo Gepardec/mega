@@ -1,6 +1,9 @@
 package com.gepardec.mega.domain.model;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,15 +30,15 @@ public enum Role {
         List<Role> coherentRoles;
         switch (role) {
             case USER: {
-                coherentRoles = Arrays.asList(USER);
+                coherentRoles = List.of(USER);
                 break;
             }
             case CONTROLLER: {
-                coherentRoles = Arrays.asList(USER, CONTROLLER);
+                coherentRoles = List.of(USER, CONTROLLER);
                 break;
             }
             case ADMINISTRATOR: {
-                coherentRoles = Arrays.asList(USER, CONTROLLER, ADMINISTRATOR);
+                coherentRoles = List.of(USER, CONTROLLER, ADMINISTRATOR);
                 break;
             }
             default:

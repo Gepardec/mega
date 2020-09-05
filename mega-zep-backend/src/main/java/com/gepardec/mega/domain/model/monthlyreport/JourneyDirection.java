@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum JourneyDirection {
-    TO_AIM("0"),
+    TO("0"),
     FURTHER("1"),
     BACK("2"),
     INVALIDATE("invalidate");

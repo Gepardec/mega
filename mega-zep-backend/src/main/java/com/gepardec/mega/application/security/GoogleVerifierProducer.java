@@ -11,7 +11,7 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import java.util.Collections;
+import java.util.List;
 
 @RequestScoped
 public class GoogleVerifierProducer {
@@ -35,7 +35,7 @@ public class GoogleVerifierProducer {
     @Dependent
     public GoogleIdTokenVerifier createGoogleTokenVerifier(final HttpTransport httpTransport, final JsonFactory jsonFactory) {
         return new GoogleIdTokenVerifier.Builder(httpTransport, jsonFactory)
-                .setAudience(Collections.singletonList(oauthConfig.getClientId()))
+                .setAudience(List.of(oauthConfig.getClientId()))
                 .setIssuer(oauthConfig.getIssuer())
                 .build();
     }

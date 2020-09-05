@@ -1,9 +1,6 @@
 package com.gepardec.mega.zep.mapper;
 
-import com.gepardec.mega.domain.model.monthlyreport.JourneyDirection;
-import com.gepardec.mega.domain.model.monthlyreport.JourneyEntry;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
-import com.gepardec.mega.domain.model.monthlyreport.Task;
+import com.gepardec.mega.domain.model.monthlyreport.*;
 import de.provantis.zep.ProjektzeitType;
 
 import java.time.LocalDateTime;
@@ -15,14 +12,14 @@ import static com.gepardec.mega.domain.utils.DateUtils.parseDateTime;
 
 public class ProjectTimeMapper {
 
-    public static List<ProjectTimeEntry> mapToEntryList(List<ProjektzeitType> projectTimes) {
+    public static List<ProjectEntry> mapToEntryList(List<ProjektzeitType> projectTimes) {
         return projectTimes.stream()
                 .map(ProjectTimeMapper::mapSingleTypeToEntry)
-                .sorted(Comparator.comparing(ProjectTimeEntry::getFromTime))
+                .sorted(Comparator.comparing(ProjectEntry::getFromTime))
                 .collect(Collectors.toList());
     }
 
-    private static ProjectTimeEntry mapSingleTypeToEntry(ProjektzeitType projektzeitType) {
+    private static ProjectEntry mapSingleTypeToEntry(ProjektzeitType projektzeitType) {
         LocalDateTime fromTime = parseDateTime(projektzeitType.getDatum(), projektzeitType.getVon());
         LocalDateTime toTime = parseDateTime(projektzeitType.getDatum(), projektzeitType.getBis());
 
@@ -33,10 +30,10 @@ public class ProjectTimeMapper {
             JourneyDirection journeyDirection = JourneyDirection.fromString(projektzeitType.getReiseRichtung())
                     .orElseThrow(() -> new IllegalArgumentException("ProjektzeitType.getReiseRichtung could not be converted to JourneyDirection enum"));
 
-            return new JourneyEntry(fromTime, toTime, task, journeyDirection);
+            return new JourneyTimeEntry(fromTime, toTime, task, journeyDirection);
         } else {
 
-            return new ProjectTimeEntry(fromTime, toTime, task);
+            return ProjectTimeEntry.of(fromTime, toTime, task);
         }
     }
 }

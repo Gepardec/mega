@@ -1,9 +1,8 @@
-package com.gepardec.mega.zep.service.translator;
+package com.gepardec.mega.service.impl.employee;
 
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.utils.DateUtils;
-import com.gepardec.mega.service.impl.employee.EmployeeMapper;
 import de.provantis.zep.BeschaeftigungszeitListeType;
 import de.provantis.zep.BeschaeftigungszeitType;
 import de.provantis.zep.MitarbeiterType;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 
 class EmployeeMapperTest {
 
@@ -177,7 +177,7 @@ class EmployeeMapperTest {
 
     private BeschaeftigungszeitListeType createBeschaeftigungszeitListeType(BeschaeftigungszeitType... employments) {
         final BeschaeftigungszeitListeType beschaeftigungszeitListeType = new BeschaeftigungszeitListeType();
-        beschaeftigungszeitListeType.getBeschaeftigungszeit().addAll(Arrays.asList(employments));
+        beschaeftigungszeitListeType.getBeschaeftigungszeit().addAll(List.of(employments));
         return beschaeftigungszeitListeType;
     }
 }

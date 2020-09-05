@@ -84,8 +84,8 @@ public class WorkerResourceTest {
     }
 
     private MonthlyReport createZepMonthlyReport(final Employee employee) {
-        final List<TimeWarning> timeWarnings = Collections.singletonList(TimeWarning.of(LocalDate.now(), 0.0, 0.0, 0.0));
-        final List<JourneyWarning> journeyWarnings = Collections.singletonList(new JourneyWarning(LocalDate.now(), Collections.singletonList("WARNING")));
+        final List<TimeWarning> timeWarnings = List.of(TimeWarning.of(LocalDate.now(), 0.0, 0.0, 0.0));
+        final List<JourneyWarning> journeyWarnings = List.of(new JourneyWarning(LocalDate.now(), List.of("WARNING")));
 
         final MonthlyReport monthlyReport = new MonthlyReport();
         monthlyReport.setTimeWarnings(timeWarnings);

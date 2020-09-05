@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.impl.monthlyreport.calculation.calculation.time;
+package com.gepardec.mega.service.impl.monthlyreport.calculation.time;
 
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
@@ -26,28 +26,29 @@ class InsufficientRestTimeTimeWarningCalculatorTest {
 
     @Test
     void calculate_whenDataNotForTheCalculator_thenNoWarningsCreated() {
-        final ProjectTimeEntry entry = new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 7, 0), LocalDateTime.of(2020, 1, 7, 17, 0), Task.BEARBEITEN);
-        assertTrue(calculator.calculate(Collections.singletonList(entry)).isEmpty());
+        final LocalDateTime start = LocalDateTime.of(2020, 1, 7, 7, 0);
+        final LocalDateTime end = LocalDateTime.of(2020, 1, 7, 17, 0);
+        final ProjectTimeEntry timeEntry = ProjectTimeEntry.of(start, end, Task.BEARBEITEN);
+        assertTrue(calculator.calculate(List.of(timeEntry)).isEmpty());
     }
 
     @Test
     void calculate_whenRestTimeOk_thenNoWarningsCreated() {
-        List<ProjectTimeEntry> projectTimeEntries = new ArrayList<>();
-        projectTimeEntries.addAll(Arrays.asList(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 7, 0), LocalDateTime.of(2020, 1, 7, 17, 0), Task.BEARBEITEN),
-                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 8, 7, 0), LocalDateTime.of(2020, 1, 7, 17, 0), Task.BEARBEITEN)
-        ));
+        final List<ProjectTimeEntry> projectTimeEntries = List.of(
+                ProjectTimeEntry.of(LocalDateTime.of(2020, 1, 7, 7, 0), LocalDateTime.of(2020, 1, 7, 17, 0), Task.BEARBEITEN),
+                ProjectTimeEntry.of(LocalDateTime.of(2020, 1, 8, 7, 0), LocalDateTime.of(2020, 1, 7, 17, 0), Task.BEARBEITEN)
+        );
         assertTrue(calculator.calculate(projectTimeEntries).isEmpty());
     }
 
     private static List<ProjectTimeEntry> createEntriesLessThan11HoursRest() {
         List<ProjectTimeEntry> projectTimes = new ArrayList<>();
         projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 7, 16, 0),
+                ProjectTimeEntry.of(LocalDateTime.of(2020, 1, 7, 16, 0),
                         LocalDateTime.of(2020, 1, 7, 22, 0),
                         Task.BEARBEITEN));
         projectTimes.add(
-                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 8, 6, 0),
+                ProjectTimeEntry.of(LocalDateTime.of(2020, 1, 8, 6, 0),
                         LocalDateTime.of(2020, 1, 8, 8, 0),
                         Task.BEARBEITEN));
         return projectTimes;

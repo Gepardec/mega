@@ -4,6 +4,7 @@ package com.gepardec.mega.service.impl;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
 import com.gepardec.mega.service.impl.monthlyreport.MonthlyReportServiceImpl;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -31,11 +33,14 @@ public class MonthlyReportServiceImplTest {
     @Mock
     private ZepService zepService;
 
-    @InjectMocks
-    private MonthlyReportServiceImpl workerService;
+    @Mock
+    private ResourceBundle resourceBundle;
 
     @Spy
     private WarningCalculator warningCalculator;
+
+    @InjectMocks
+    private MonthlyReportServiceImpl workerService;
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterNull() {
@@ -93,6 +98,7 @@ public class MonthlyReportServiceImplTest {
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
         Assertions.assertNotNull(monthendReportForUser);
         Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.getEmployee().email());
+        // We will have to reverse engineer why this is false
         Assertions.assertNotNull(monthendReportForUser.getTimeWarnings());
         Assertions.assertFalse(monthendReportForUser.getTimeWarnings().isEmpty());
         Assertions.assertEquals(LocalDate.of(2020, 1, 31), monthendReportForUser.getTimeWarnings().get(0).getDate());
@@ -100,12 +106,12 @@ public class MonthlyReportServiceImplTest {
         Assertions.assertEquals(0.5d, monthendReportForUser.getTimeWarnings().get(0).getMissingBreakTime());
     }
 
-    private List<ProjectTimeEntry> createReadProjektzeitenResponseType(int bisHours) {
+    private List<ProjectEntry> createReadProjektzeitenResponseType(int bisHours) {
 
-        return Arrays.asList(new ProjectTimeEntry(LocalDateTime.of(2020, 1, 31, 7 ,0),
-                        LocalDateTime.of(2020, 1, 31, bisHours, 0),
-                        Task.BEARBEITEN),
-                new ProjectTimeEntry(LocalDateTime.of(2020, 1, 30, 7 ,0),
+        return List.of(ProjectTimeEntry.of(LocalDateTime.of(2020, 1, 31, 7, 0),
+                LocalDateTime.of(2020, 1, 31, bisHours, 0),
+                Task.BEARBEITEN),
+                ProjectTimeEntry.of(LocalDateTime.of(2020, 1, 30, 7, 0),
                         LocalDateTime.of(2020, 1, 30, 10, 0),
                         Task.BEARBEITEN));
     }

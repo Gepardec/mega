@@ -1,10 +1,7 @@
 package com.gepardec.mega.service.impl.monthlyreport;
 
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
-import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
-import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
+import com.gepardec.mega.domain.model.monthlyreport.*;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.WarningCalculator;
 import com.gepardec.mega.zep.ZepService;
@@ -12,6 +9,7 @@ import com.gepardec.mega.zep.ZepService;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestScoped
 public class MonthlyReportServiceImpl implements MonthlyReportService {
@@ -28,12 +26,12 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         return calcWarnings(zepService.getProjectTimes(employee), employee);
     }
 
-    private MonthlyReport calcWarnings(List<ProjectTimeEntry> projectTimeList, Employee employee) {
-        if (projectTimeList == null || projectTimeList.isEmpty()) {
+    private MonthlyReport calcWarnings(List<ProjectEntry> projectEntries, Employee employee) {
+        if (projectEntries == null || projectEntries.isEmpty()) {
             return null;
         }
-        final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(projectTimeList);
-        final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectTimeList);
+        final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(filterJourneyTimeEntries(projectEntries));
+        final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(filterProjectTimeEntries(projectEntries));
 
         MonthlyReport monthlyReport = new MonthlyReport();
         monthlyReport.setJourneyWarnings(journeyWarnings);
@@ -41,5 +39,14 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         monthlyReport.setEmployee(employee);
 
         return monthlyReport;
+    }
+
+    private List<ProjectTimeEntry> filterProjectTimeEntries(List<ProjectEntry> projectEntries) {
+        return projectEntries.stream().filter(entry -> entry instanceof ProjectTimeEntry).map(ProjectTimeEntry.class::cast).collect(Collectors
+                .toList());
+    }
+
+    private List<JourneyTimeEntry> filterJourneyTimeEntries(List<ProjectEntry> projectEntries) {
+        return projectEntries.stream().filter(entry -> entry instanceof JourneyTimeEntry).map(JourneyTimeEntry.class::cast).collect(Collectors.toList());
     }
 }

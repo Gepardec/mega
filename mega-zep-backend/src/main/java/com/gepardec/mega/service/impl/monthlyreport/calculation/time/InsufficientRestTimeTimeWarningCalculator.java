@@ -22,7 +22,7 @@ public class InsufficientRestTimeTimeWarningCalculator extends AbstractTimeWarni
         for (int i = 0; i < filteredProjectTimeEntries.size(); i++) {
             final ProjectTimeEntry currentEntry = filteredProjectTimeEntries.get(i);
             final ProjectTimeEntry nextEntry = getNextEntryOrNull(i, filteredProjectTimeEntries);
-            if (isNextProjectTimeEntryPresentAndOfNextDay(currentEntry, nextEntry)) {
+            if (isNextProjectTimePresentAndOfNextDay(currentEntry, nextEntry)) {
                 final double restHours = DateUtils.calcDiffInHours(currentEntry.getToTime(), nextEntry.getFromTime());
                 if (hasInsufficientRestTime(restHours)) {
                     warnings.add(createTimeWarning(nextEntry, restHours));
@@ -47,7 +47,7 @@ public class InsufficientRestTimeTimeWarningCalculator extends AbstractTimeWarni
         return null;
     }
 
-    private boolean isNextProjectTimeEntryPresentAndOfNextDay(final ProjectTimeEntry currentEntry, final ProjectTimeEntry nextEntry) {
+    private boolean isNextProjectTimePresentAndOfNextDay(final ProjectTimeEntry currentEntry, final ProjectTimeEntry nextEntry) {
         return (nextEntry != null) && nextEntry.getDate().isEqual(currentEntry.getDate().plusDays(1L));
     }
 
