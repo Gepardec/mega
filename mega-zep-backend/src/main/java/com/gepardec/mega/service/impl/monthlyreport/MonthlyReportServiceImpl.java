@@ -35,12 +35,12 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         return calcWarnings(zepService.getProjectTimes(employee), employee);
     }
 
-    private MonthlyReport calcWarnings(List<ProjectTimeEntry> projectEntries, Employee employee) {
+    private MonthlyReport calcWarnings(List<ProjectEntry> projectEntries, Employee employee) {
         if (projectEntries == null || projectEntries.isEmpty()) {
             return null;
         }
-        final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(projectEntries);
-        final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectEntries);
+        final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(filterJourneyTimeEntries(projectEntries));
+        final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(filterProjectTimeEntries(projectEntries));
         final List<CommentDTO> comments = commentService.findCommentsForEmployee(employee);
         final State emcState = stepEntryService.getEmcState(employee);
 
@@ -60,6 +60,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     }
 
     private List<JourneyTimeEntry> filterJourneyTimeEntries(List<ProjectEntry> projectEntries) {
-        return projectEntries.stream().filter(entry -> entry instanceof JourneyTimeEntry).map(JourneyTimeEntry.class::cast).collect(Collectors.toList());
+        return projectEntries.stream().filter(entry -> entry instanceof JourneyTimeEntry).map(JourneyTimeEntry.class::cast).collect(Collectors
+                .toList());
     }
 }
