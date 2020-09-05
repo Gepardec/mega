@@ -40,7 +40,7 @@ public class MailSender {
 
 
         mailer.send(Mail.withHtml(eMail, subject, mailContent)
-                .addInlineAttachment("LogoMEGAdash.png", readLogo(), MediaType.PNG.type(), "<LogoMEGAdash@gepardec.com>"));
+                .addInlineAttachment("logo.png", readLogo(), MediaType.PNG.type(), "<LogoMEGAdash@gepardec.com>"));
     }
 
     private String readEmailTemplateResourceFromStream(String resourcePath) {

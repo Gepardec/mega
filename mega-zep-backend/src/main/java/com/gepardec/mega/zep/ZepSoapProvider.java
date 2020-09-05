@@ -16,12 +16,12 @@ import java.util.concurrent.TimeUnit;
 @ApplicationScoped
 public class ZepSoapProvider {
     @Inject
-    @ConfigProperty(name = "mega.zep.admin.token")
+    @ConfigProperty(name = "mega.zep.admin-token")
     String authorizationToken;
 
 
     @Inject
-    @ConfigProperty(name = "mega.zep.admin.endpoint")
+    @ConfigProperty(name = "mega.zep.url")
     String zepUrl;
 
     @Produces

@@ -7,16 +7,16 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class NotificationConfig {
 
-    @ConfigProperty(name = "mega.mail.subjectPrefix")
+    @ConfigProperty(name = "mega.mail.subject-prefix", defaultValue = " ")
     String subjectPrefix;
 
-    @ConfigProperty(name = "mega.image.logo.url")
+    @ConfigProperty(name = "mega.logo-path")
     String megaImageLogoUrl;
 
-    @ConfigProperty(name = "mega.wiki.eom.url")
+    @ConfigProperty(name = "mega.wiki.eom-url")
     String megaWikiEomUrl;
 
-    @ConfigProperty(name = "mega.dash.url")
+    @ConfigProperty(name = "mega.dash-url")
     String megaDashUrl;
 
     public String getSubjectPrefix() {

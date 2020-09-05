@@ -91,7 +91,6 @@ pipeline {
                                         withCredentials([file(credentialsId: 'jenkins-mega', variable: 'FILE')]) {
                                             dir('mega-zep-backend') {
                                                 sh "cp -f ${FILE} ./.env"
-                                                sh "cp -f ${WORKSPACE}/jenkins/src/build/application.properties ./config/application.properties"
                                                 sh "mvn -B -s ${WORKSPACE}/jenkins/src/build/jenkins-settings.xml \
                                                         clean compile install \
                                                         -Drevision=${env.REVISION} \
@@ -146,7 +145,8 @@ pipeline {
                 script {
                     build job: 'mega-release', parameters: [
                             string(name: 'Branch', value: "master"),
-                            string(name: 'targetEnvironment', value: "dev"),
+                            string(name: 'target', value: "dev"),
+                            string(name: 'stage', value: "default"),
                             string(name: 'version', value: "${env.REVISION}")]
                 }
             }

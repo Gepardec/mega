@@ -39,7 +39,7 @@ public class MailDaemon {
     boolean employeesNotification;
 
 
-    @Scheduled(cron = "{mega.mail.cron.config}")
+    @Scheduled(cron = "{mega.mail.cron}")
     void sendReminder() {
         logger.info("Mail-Daemon-cron-job started at {}", DateUtils.today().toString());
         Optional<Reminder> reminder = businessDayCalculator.getEventForDate(DateUtils.today());
