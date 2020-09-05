@@ -3,33 +3,68 @@ package com.gepardec.mega.db.entity;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
-@Table(name = "step")
+@Table(name = "STEP",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "UIDX_ORDINAL", columnNames = {"ORDINAL"})
+        },
+        indexes = {
+                @Index(name = "IDX_GROUP_NAME", columnList = "GROUP_NAME")
+        }
+)
 public class Step {
 
     @Id
-    @Column(name = "id", insertable = false, updatable = false)
-    @GeneratedValue(generator = "generator", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "generator", sequenceName = "sequence_step", allocationSize = 1)
+    @Column(name = "ID", insertable = false, updatable = false)
+    @GeneratedValue(generator = "stepIdGenerator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "stepIdGenerator", sequenceName = "SEQUENCE_STEP_ID", allocationSize = 1)
     private Long id;
 
+    /**
+     * The name of the step
+     */
     @NotNull
-    @Column(name = "name")
+    @Column(name = "NAME")
     @Length(min = 1, max = 255)
     private String name;
 
+    /**
+     * The role who is responsible for the step completion state
+     */
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @Column(name = "ROLE")
     private Role role;
 
+    /**
+     * The ordinal defining the order of the steps
+     */
+    @NotNull
+    @Min(1)
+    @Column(name = "ORDINAL", unique = true)
+    private Integer ordinal;
+
+    /**
+     * The group id grouping sequential steps, which means the grouped steps can be worked on in parallel,
+     * and all must be completed to be able to worked on the following steps.
+     */
+    @Length(min = 1, max = 50)
+    @Column(name = "GROUP_NAME")
+    private String groupName;
+
+    /**
+     * The related step entries whereby each step entry
+     */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "step")
-    public Set<StepEntry> stepEntries = new HashSet<>(0);
+    @MapKeyColumn(name = "DATE")
+    public Map<LocalDate, StepEntry> stepEntries = new HashMap<>(0);
 
     public Long getId() {
         return id;
@@ -55,12 +90,28 @@ public class Step {
         this.role = role;
     }
 
-    public Set<StepEntry> getStepEntries() {
+    public Map<LocalDate, StepEntry> getStepEntries() {
         return stepEntries;
     }
 
-    public void setStepEntries(Set<StepEntry> stepEntries) {
+    public void setStepEntries(Map<LocalDate, StepEntry> stepEntries) {
         this.stepEntries = stepEntries;
+    }
+
+    public Integer getOrdinal() {
+        return ordinal;
+    }
+
+    public void setOrdinal(Integer ordinal) {
+        this.ordinal = ordinal;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupId) {
+        this.groupName = groupId;
     }
 
     @Override

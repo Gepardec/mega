@@ -1,7 +1,7 @@
 package com.gepardec.mega.zep;
 
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.service.impl.employee.EmployeeMapper;
 import com.gepardec.mega.zep.mapper.ProjectTimeMapper;
 import de.provantis.zep.*;
@@ -23,17 +23,17 @@ import static com.gepardec.mega.domain.utils.DateUtils.getLastDayOfFollowingMont
 @RequestScoped
 public class ZepServiceImpl implements ZepService {
 
-    private Logger logger;
-    private ZepSoapPortType zepSoapPortType;
-    private ZepSoapProvider zepSoapProvider;
-
-    public ZepServiceImpl() {
-    }
+    private final EmployeeMapper employeeMapper;
+    private final Logger logger;
+    private final ZepSoapPortType zepSoapPortType;
+    private final ZepSoapProvider zepSoapProvider;
 
     @Inject
-    public ZepServiceImpl(final Logger logger,
-                          final ZepSoapPortType zepSoapPortType,
-                          final ZepSoapProvider zepSoapProvider) {
+    public ZepServiceImpl(final EmployeeMapper employeeMapper,
+            final Logger logger,
+            final ZepSoapPortType zepSoapPortType,
+            final ZepSoapProvider zepSoapProvider) {
+        this.employeeMapper = employeeMapper;
         this.logger = logger;
         this.zepSoapPortType = zepSoapPortType;
         this.zepSoapProvider = zepSoapProvider;
@@ -67,7 +67,8 @@ public class ZepServiceImpl implements ZepService {
         final UpdateMitarbeiterResponseType updateMitarbeiterResponseType = zepSoapPortType.updateMitarbeiter(umrt);
 
         final AtomicReference<String> returnCode = new AtomicReference<>(null);
-        Optional.ofNullable(updateMitarbeiterResponseType).flatMap(response -> Optional.ofNullable(response.getResponseHeader())).ifPresent((header) -> returnCode.set(header.getReturnCode()));
+        Optional.ofNullable(updateMitarbeiterResponseType).flatMap(response -> Optional.ofNullable(response.getResponseHeader()))
+                .ifPresent((header) -> returnCode.set(header.getReturnCode()));
 
         logger.info("finish update user {} with response {}", userId, returnCode.get());
 
@@ -77,7 +78,7 @@ public class ZepServiceImpl implements ZepService {
     }
 
     @Override
-    public List<ProjectTimeEntry> getProjectTimes(Employee employee) {
+    public List<ProjectEntry> getProjectTimes(Employee employee) {
         final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
         projektzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
 
@@ -124,8 +125,9 @@ public class ZepServiceImpl implements ZepService {
         final ReadMitarbeiterResponseType readMitarbeiterResponseType = zepSoapPortType.readMitarbeiter(readMitarbeiterRequestType);
         final List<Employee> result = new ArrayList<>();
 
-        Optional.ofNullable(readMitarbeiterResponseType).flatMap(readMitarbeiterResponse -> Optional.ofNullable(readMitarbeiterResponse.getMitarbeiterListe())).ifPresent(mitarbeiterListe ->
-                result.addAll(mitarbeiterListe.getMitarbeiter().stream().map(EmployeeMapper::toEmployee).collect(Collectors.toList()))
+        Optional.ofNullable(readMitarbeiterResponseType).flatMap(readMitarbeiterResponse -> Optional
+                .ofNullable(readMitarbeiterResponse.getMitarbeiterListe())).ifPresent(mitarbeiterListe ->
+                result.addAll(mitarbeiterListe.getMitarbeiter().stream().map(employeeMapper::map).collect(Collectors.toList()))
         );
 
         return result;

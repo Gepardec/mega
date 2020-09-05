@@ -20,6 +20,12 @@ public class EmployeeResource {
     @Inject
     EmployeeService employeeService;
 
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response create() {
+        return Response.ok(employeeService.getAllActiveEmployees()).build();
+    }
+
     @RolesAllowed(allowedRoles = {Role.ADMINISTRATOR, Role.CONTROLLER})
     @GET
     @Produces(MediaType.APPLICATION_JSON)

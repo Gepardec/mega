@@ -2,21 +2,20 @@ package com.gepardec.mega.domain.model.monthlyreport;
 
 import java.time.LocalDateTime;
 
-public class ProjectTimeEntry implements ProjectEntry {
+public class JourneyTimeEntry implements ProjectEntry {
 
     private LocalDateTime fromTime;
     private LocalDateTime toTime;
     private Task task;
+    private JourneyDirection journeyDirection;
 
-    ProjectTimeEntry(LocalDateTime fromTime, LocalDateTime toTime, Task task) {
+    public JourneyTimeEntry(LocalDateTime fromTime, LocalDateTime toTime, Task task, JourneyDirection journeyDirection) {
         this.fromTime = fromTime;
         this.toTime = toTime;
         this.task = task;
+        this.journeyDirection = journeyDirection;
     }
 
-    public static ProjectTimeEntry of(LocalDateTime fromTime, LocalDateTime toTime, Task task) {
-        return new ProjectTimeEntry(fromTime, toTime, task);
-    }
 
     @Override
     public LocalDateTime getFromTime() {
@@ -31,5 +30,9 @@ public class ProjectTimeEntry implements ProjectEntry {
     @Override
     public Task getTask() {
         return task;
+    }
+
+    public JourneyDirection getJourneyDirection() {
+        return journeyDirection;
     }
 }

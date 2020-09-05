@@ -1,9 +1,6 @@
 package com.gepardec.mega.service.impl.monthlyreport.calculation;
 
-import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
-import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
-import com.gepardec.mega.domain.model.monthlyreport.Warning;
+import com.gepardec.mega.domain.model.monthlyreport.*;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.journey.JourneyWarningCalculationStrategy;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.journey.JourneyWarningCalculator;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.time.ExceededMaximumWorkingHoursPerDayTimeWarningCalculator;
@@ -23,12 +20,12 @@ public class WarningCalculator {
     @Inject
     ResourceBundle messages;
 
-    private static final List<TimeWarningCalculationStrategy> timeWarningCalculators = Arrays.asList(
+    private static final List<TimeWarningCalculationStrategy> timeWarningCalculators = List.of(
             new ExceededMaximumWorkingHoursPerDayTimeWarningCalculator(),
             new InsufficientBreakTimeForWorkingDayWithMoreThan6HoursCalculator(),
             new InsufficientRestTimeTimeWarningCalculator());
 
-    private static final List<JourneyWarningCalculationStrategy> journeyWarningCalculators = Arrays.asList(
+    private static final List<JourneyWarningCalculationStrategy> journeyWarningCalculators = List.of(
             new JourneyWarningCalculator()
     );
 
@@ -43,7 +40,7 @@ public class WarningCalculator {
         return warnings;
     }
 
-    public List<JourneyWarning> determineJourneyWarnings(List<ProjectTimeEntry> projectTimeList) {
+    public List<JourneyWarning> determineJourneyWarnings(List<JourneyTimeEntry> projectTimeList) {
         final List<JourneyWarning> warnings = new ArrayList<>();
         for (JourneyWarningCalculationStrategy calculator : journeyWarningCalculators) {
             final List<JourneyWarning> calculatedWarnings = calculator.calculate(projectTimeList);

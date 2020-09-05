@@ -59,7 +59,7 @@ public class EmployeeServiceImplTest {
         final Employee employee0 = createEmployee(0);
         final Employee employee1 = createEmployeeWithActive(1, false);
 
-        Mockito.when(zepService.getEmployees()).thenReturn(Arrays.asList(employee0, employee1));
+        Mockito.when(zepService.getEmployees()).thenReturn(List.of(employee0, employee1));
 
         final List<Employee> employees = beanUnderTest.getAllActiveEmployees();
         Assertions.assertNotNull(employees);
@@ -87,7 +87,7 @@ public class EmployeeServiceImplTest {
             return null;
         }).when(managedExecutor).execute(Mockito.any());
 
-        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(Collections.singletonList(createEmployee(0)));
+        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(List.of(createEmployee(0)));
         Assertions.assertNotNull(result);
         Assertions.assertFalse(result.isEmpty());
         Assertions.assertEquals(1, result.size());
@@ -125,7 +125,7 @@ public class EmployeeServiceImplTest {
             return null;
         }).when(managedExecutor).execute(Mockito.any());
 
-        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(Collections.singletonList(createEmployee(0)));
+        final List<String> result = beanUnderTest.updateEmployeesReleaseDate(List.of(createEmployee(0)));
         Assertions.assertNotNull(result);
         Assertions.assertTrue(result.isEmpty());
     }

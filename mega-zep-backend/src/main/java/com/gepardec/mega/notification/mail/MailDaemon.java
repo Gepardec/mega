@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static com.gepardec.mega.notification.mail.Reminder.*;
@@ -84,7 +84,7 @@ public class MailDaemon {
         if (plMailAddresses == null) {
             throw new IllegalStateException("No mail address for project-leaders available, check value for property 'mega.mail.reminder.pl'!");
         }
-        Arrays.asList(plMailAddresses.split("\\,"))
+        List.of(plMailAddresses.split("\\,"))
                 .forEach(mailAddress -> mailSender.sendReminder(mailAddress, getNameByMail(mailAddress), PL_PROJECT_CONTROLLING));
         logSentNotification(PL_PROJECT_CONTROLLING);
     }
@@ -93,7 +93,7 @@ public class MailDaemon {
         if (omMailAddresses == null) {
             throw new IllegalStateException("No mail address for om available, check value for property 'mega.mail.reminder.om'!");
         }
-        Arrays.asList(omMailAddresses.split("\\,"))
+        List.of(omMailAddresses.split("\\,"))
                 .forEach(mailAddress -> mailSender.sendReminder(mailAddress, getNameByMail(mailAddress), reminder));
         logSentNotification(reminder);
     }

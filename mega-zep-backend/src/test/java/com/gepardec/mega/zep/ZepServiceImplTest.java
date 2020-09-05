@@ -1,12 +1,12 @@
-package com.gepardec.mega.zep.service.impl;
+package com.gepardec.mega.zep;
 
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.util.ZepTestUtil;
+import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.service.impl.employee.EmployeeMapper;
 import com.gepardec.mega.zep.ZepServiceException;
 import com.gepardec.mega.zep.ZepServiceImpl;
 import com.gepardec.mega.zep.ZepSoapProvider;
-import de.provantis.zep.ReadMitarbeiterResponseType;
-import de.provantis.zep.ZepSoapPortType;
+import de.provantis.zep.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,13 +34,13 @@ public class ZepServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        beanUnderTest = new ZepServiceImpl(logger, zepSoapPortType, zepSoapProvider);
+        beanUnderTest = new ZepServiceImpl(new EmployeeMapper(), logger, zepSoapPortType, zepSoapProvider);
     }
 
     @Test
     void testGetEmployee() {
-        Mockito.when(zepSoapPortType.readMitarbeiter(Mockito.any())).thenReturn(ZepTestUtil.createReadMitarbeiterResponseType(
-                ZepTestUtil.createMitarbeiterType(0)
+        Mockito.when(zepSoapPortType.readMitarbeiter(Mockito.any())).thenReturn(createReadMitarbeiterResponseType(
+                createMitarbeiterType(0)
         ));
 
         final Employee employee = beanUnderTest.getEmployee("0");
@@ -81,10 +81,10 @@ public class ZepServiceImplTest {
 
     @Test
     void testGetEmployees() {
-        Mockito.when(zepSoapPortType.readMitarbeiter(Mockito.any())).thenReturn(ZepTestUtil.createReadMitarbeiterResponseType(
-                ZepTestUtil.createMitarbeiterType(0),
-                ZepTestUtil.createMitarbeiterType(1),
-                ZepTestUtil.createMitarbeiterType(2)
+        Mockito.when(zepSoapPortType.readMitarbeiter(Mockito.any())).thenReturn(createReadMitarbeiterResponseType(
+                createMitarbeiterType(0),
+                createMitarbeiterType(1),
+                createMitarbeiterType(2)
         ));
 
         final List<Employee> employee = beanUnderTest.getEmployees();
@@ -99,9 +99,11 @@ public class ZepServiceImplTest {
 
     @Test
     void testUpdateEmployeesReleaseDateException() {
-        Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any())).thenReturn(ZepTestUtil.createUpaUpdateMitarbeiterResponseType(ZepTestUtil.createResponseHeaderType("1337")));
+        Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any()))
+                .thenReturn(createUpaUpdateMitarbeiterResponseType(createResponseHeaderType("1337")));
 
-        final ZepServiceException zepServiceException = Assertions.assertThrows(ZepServiceException.class, () -> beanUnderTest.updateEmployeesReleaseDate("0", "2020-01-01"));
+        final ZepServiceException zepServiceException = Assertions.assertThrows(ZepServiceException.class, () -> beanUnderTest
+                .updateEmployeesReleaseDate("0", "2020-01-01"));
         Assertions.assertEquals("updateEmployeeReleaseDate failed with code: 1337", zepServiceException.getMessage());
 
         Mockito.verify(zepSoapPortType).updateMitarbeiter(Mockito.argThat(
@@ -122,7 +124,7 @@ public class ZepServiceImplTest {
 
     @Test
     void testUpdateEmployeesReleaseDateResponseHeaderNull() {
-        Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any())).thenReturn(ZepTestUtil.createUpaUpdateMitarbeiterResponseType(null));
+        Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any())).thenReturn(createUpaUpdateMitarbeiterResponseType(null));
 
         beanUnderTest.updateEmployeesReleaseDate("0", "2020-01-01");
 
@@ -133,12 +135,50 @@ public class ZepServiceImplTest {
 
     @Test
     void testUpdateEmployeesReleaseDate() {
-        Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any())).thenReturn(ZepTestUtil.createUpaUpdateMitarbeiterResponseType(ZepTestUtil.createResponseHeaderType("0")));
+        Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any()))
+                .thenReturn(createUpaUpdateMitarbeiterResponseType(createResponseHeaderType("0")));
 
         beanUnderTest.updateEmployeesReleaseDate("0", "2020-01-01");
 
         Mockito.verify(zepSoapPortType).updateMitarbeiter(Mockito.argThat(
                 argument -> argument.getMitarbeiter().getUserId().equals("0") && argument.getMitarbeiter().getFreigabedatum().equals("2020-01-01")
         ));
+    }
+
+
+    private MitarbeiterType createMitarbeiterType(final int userId) {
+        final MitarbeiterType mitarbeiter = new MitarbeiterType();
+        final String name = "Thomas_" + userId;
+
+        mitarbeiter.setEmail(name + "@gepardec.com");
+        mitarbeiter.setVorname(name);
+        mitarbeiter.setNachname(name + "_Nachname");
+        mitarbeiter.setTitel("Ing.");
+        mitarbeiter.setUserId(String.valueOf(userId));
+        mitarbeiter.setAnrede("Herr");
+        mitarbeiter.setPreisgruppe("ARCHITEKT");
+        mitarbeiter.setFreigabedatum("2020-01-01");
+        mitarbeiter.setRechte(Role.USER.roleId);
+
+        return mitarbeiter;
+    }
+
+    private ReadMitarbeiterResponseType createReadMitarbeiterResponseType(final MitarbeiterType... mitarbeiterType) {
+        final ReadMitarbeiterResponseType readMitarbeiterResponseType = new ReadMitarbeiterResponseType();
+        readMitarbeiterResponseType.setMitarbeiterListe(new MitarbeiterListeType());
+        readMitarbeiterResponseType.getMitarbeiterListe().getMitarbeiter().addAll(List.of(mitarbeiterType));
+        return readMitarbeiterResponseType;
+    }
+
+    private ResponseHeaderType createResponseHeaderType(final String returnCode) {
+        final ResponseHeaderType responseHeaderType = new ResponseHeaderType();
+        responseHeaderType.setReturnCode(returnCode);
+        return responseHeaderType;
+    }
+
+    private UpdateMitarbeiterResponseType createUpaUpdateMitarbeiterResponseType(final ResponseHeaderType responseHeaderType) {
+        final UpdateMitarbeiterResponseType updateMitarbeiterResponseType = new UpdateMitarbeiterResponseType();
+        updateMitarbeiterResponseType.setResponseHeader(responseHeaderType);
+        return updateMitarbeiterResponseType;
     }
 }

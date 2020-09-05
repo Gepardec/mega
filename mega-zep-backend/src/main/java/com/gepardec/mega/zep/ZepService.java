@@ -1,7 +1,7 @@
 package com.gepardec.mega.zep;
 
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 
 import java.util.List;
 
@@ -13,5 +13,5 @@ public interface ZepService {
 
     void updateEmployeesReleaseDate(String userId, String releaseDate);
 
-    List<ProjectTimeEntry> getProjectTimes(Employee employee);
+    List<ProjectEntry> getProjectTimes(Employee employee);
 }
