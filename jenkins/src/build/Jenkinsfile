@@ -94,9 +94,9 @@ pipeline {
                                                 sh "mvn -B -s ${WORKSPACE}/jenkins/src/build/jenkins-settings.xml \
                                                         clean compile install \
                                                         -Drevision=${env.REVISION} \
-                                                        -Dgit.commit=${GIT_COMMIT} \
-                                                        -Dgit.branch=${GIT_BRANCH} \
-                                                        -Dbuild.number=${BUILD_NUMER} \
+                                                        -Dgit.commit=${env.GIT_COMMIT} \
+                                                        -Dgit.branch=${env.GIT_BRANCH} \
+                                                        -Dbuild.number=${env.BUILD_NUMBER} \
                                                         -Dquarkus.package.uber.jar=true"
                                                 jacoco(execPattern: 'target/*.exec', classPattern: 'target/classes', sourcePattern: 'src/main/java', exclusionPattern: 'src/test*')
                                             }
