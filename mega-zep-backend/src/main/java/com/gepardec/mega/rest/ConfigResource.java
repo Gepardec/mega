@@ -1,5 +1,6 @@
 package com.gepardec.mega.rest;
 
+import com.gepardec.mega.application.configuration.ApplicationConfig;
 import com.gepardec.mega.application.configuration.OAuthConfig;
 import com.gepardec.mega.rest.model.Config;
 
@@ -19,10 +20,19 @@ public class ConfigResource {
     @Inject
     OAuthConfig oauthConfig;
 
+    @Inject
+    ApplicationConfig applicationConfig;
+
     @Path("/")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response get() {
-        return Response.ok(new Config(oauthConfig.getClientId(), oauthConfig.getIssuer(), oauthConfig.getScope())).build();
+        final Config config = Config.newBuilder()
+                .clientId(oauthConfig.getClientId())
+                .issuer(oauthConfig.getIssuer())
+                .scope(oauthConfig.getScope())
+                .version(applicationConfig.getVersion())
+                .build();
+        return Response.ok(config).build();
     }
 }

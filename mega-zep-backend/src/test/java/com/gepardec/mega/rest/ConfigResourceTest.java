@@ -1,5 +1,6 @@
 package com.gepardec.mega.rest;
 
+import com.gepardec.mega.application.configuration.ApplicationConfig;
 import com.gepardec.mega.application.configuration.OAuthConfig;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
@@ -17,6 +18,9 @@ public class ConfigResourceTest {
     @Inject
     OAuthConfig oAuthConfig;
 
+    @Inject
+    ApplicationConfig applicationConfig;
+
     @Test
     void get_withPOST_returnsMethodNotallowed() {
         given().contentType(ContentType.TEXT)
@@ -31,6 +35,7 @@ public class ConfigResourceTest {
                 .then().statusCode(HttpStatus.SC_OK)
                 .body("clientId", equalTo(oAuthConfig.getClientId()))
                 .body("issuer", equalTo(oAuthConfig.getIssuer()))
-                .body("scope", equalTo(oAuthConfig.getScope()));
+                .body("scope", equalTo(oAuthConfig.getScope()))
+                .body("version", equalTo(applicationConfig.getVersion()));
     }
 }

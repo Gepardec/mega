@@ -18,6 +18,14 @@ quarkus:
     username: service@gepardec.com
     password: ${MAILER_PASSWORD}
 mega:
+  info:
+    build:
+      version: '${revision}'
+      date: "${timestamp}"
+      number: '${build.number}'
+    git:
+      branch: '${git.branch}'
+      commit: '${git.commit}'
   logo-path: img/logo.png
   wiki:
     eom-url: https://sites.google.com/a/gepardec.com/internal/zeiterfassung-mit-zep/monatsende-kontrolle-von-arbeitszeiten
