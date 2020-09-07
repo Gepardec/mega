@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DisplayMonthlyReportComponent } from './display-monthly-report.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
+import { State } from '../../shared/models/State';
 
 describe('DisplayMonthlyReportComponent', () => {
   let component: DisplayMonthlyReportComponent;
@@ -23,13 +24,14 @@ describe('DisplayMonthlyReportComponent', () => {
     fixture = TestBed.createComponent(DisplayMonthlyReportComponent);
     component = fixture.componentInstance;
     component.monthlyReport = {
-      emcState: 'OPEN',
+      employeeCheckState: State.OPEN,
+      otherChecksDone: true,
       comments: [],
       timeWarnings: [
-        {date: new Date(), excessWorkTime: 12, missingBreakTime: 12, missingRestTime: 14, warnings: []},
+        {date: new Date().toString(), excessWorkTime: 12, missingBreakTime: 12, missingRestTime: 14, warnings: []},
       ],
       journeyWarnings: [
-        {date: new Date(), warnings: ['Bitte', 'hoer', 'auf']}
+        {date: new Date().toString(), warnings: ['Bitte', 'hoer', 'auf']}
       ],
       employee: {
         userId: '000-mustermann',
