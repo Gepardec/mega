@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { MonthlyReport } from '../models/MonthlyReport';
 import { configuration } from '../../shared/constants/configuration';
+import { State } from '../../shared/models/State';
 
 @Component({
   selector: 'app-display-monthly-report',
@@ -10,8 +11,7 @@ import { configuration } from '../../shared/constants/configuration';
 })
 export class DisplayMonthlyReportComponent implements OnInit {
 
-  readonly DONE = 'DONE';
-  readonly OPEN = 'OPEN';
+  readonly State = State;
   readonly FUNCTIONS = configuration.EMPLOYEE_FUNCTIONS;
 
   @Input() monthlyReport: MonthlyReport;
@@ -23,8 +23,6 @@ export class DisplayMonthlyReportComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.monthlyReport.emcState);
-    console.log(this.monthlyReport.comments.length);
   }
 
   getJourneyWarningString(warnings: Array<string>): string {
@@ -47,7 +45,7 @@ export class DisplayMonthlyReportComponent implements OnInit {
 
   areAllCommentsDone(): boolean {
     for (const comment of this.monthlyReport.comments) {
-      if (comment.state !== this.DONE) {
+      if (comment.state !== this.State.DONE) {
         return false;
       }
     }
@@ -60,12 +58,16 @@ export class DisplayMonthlyReportComponent implements OnInit {
   formatAuthorName(author: string): string {
     const foreAndSureNameArr = author.substring(0, author.indexOf('@')).split('.');
 
-    let foreName = foreAndSureNameArr[0];
-    let sureName = foreAndSureNameArr[1];
-
-    foreName = foreName.charAt(0).toUpperCase() + foreName.slice(1);
-    sureName = sureName.charAt(0).toUpperCase() + sureName.slice(1);
-
-    return foreName + ' ' + sureName;
+    switch (foreAndSureNameArr.length) {
+      case 2:
+        let foreName = foreAndSureNameArr[0];
+        let sureName = foreAndSureNameArr[1];
+        foreName = foreName.charAt(0).toUpperCase() + foreName.slice(1);
+        sureName = sureName.charAt(0).toUpperCase() + sureName.slice(1);
+        return foreName + ' ' + sureName;
+      default:
+        return author;
+        break;
+    }
   }
 }

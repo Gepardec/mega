@@ -2,7 +2,7 @@ package com.gepardec.mega;
 
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.CommentDTO;
-import com.gepardec.mega.service.comment.CommentService;
+import com.gepardec.mega.service.api.comment.CommentService;
 import io.quarkus.test.Mock;
 
 import javax.enterprise.context.ApplicationScoped;

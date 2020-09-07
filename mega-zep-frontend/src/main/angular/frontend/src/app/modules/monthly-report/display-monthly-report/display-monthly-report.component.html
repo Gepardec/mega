@@ -117,7 +117,31 @@
         <mat-card-content class="d-flex text-center align-items-center">
           <div class="m-auto">
 
-            <div *ngIf="!areAllCommentsDone(); else commentsOpen">
+            <div *ngIf="areAllCommentsDone(), else openComments">
+              <div [ngSwitch]="monthlyReport.employeeCheckState">
+                <div *ngSwitchCase="State.OPEN">
+                  <div *ngIf="!monthlyReport.otherChecksDone">
+                    <p>Bitte überprüfe deine Eingaben (Zeiten, Reisen, Belege, ...) in ZEP und beim Kunden und bestätige
+                      diese anschließend.</p>
+                    <button mat-raised-button>Buchungen bestätigen</button>
+                  </div>
+                </div>
+                <div *ngSwitchCase="State.DONE">
+                  <div *ngIf="!monthlyReport.otherChecksDone">
+                    <mat-icon color="primary">error</mat-icon>
+                    <p>Monatsabschlusstätigkeiten sind im Gange.</p>
+                  </div>
+
+                  <div *ngIf="monthlyReport.otherChecksDone">
+                    <mat-icon class="green">check_circle</mat-icon>
+                    <p>Deine Zeiten wurden kontrolliert und sind richtig.</p>
+                    <p>Bis nächsten Monat!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <ng-template #openComments>
               <mat-icon class="red">cancel</mat-icon>
               <p>Einige Anmerkungen sind abzuarbeiten:</p>
               <mat-selection-list class="align-middle">
@@ -126,32 +150,14 @@
                   *ngFor="let comment of monthlyReport.comments"
                   checkboxPosition="before"
                   [ngClass]="option.selected ? 'done green' : 'red'"
-                  [selected]="comment.state === DONE">
+                  [selected]="comment.state === State.DONE">
                   {{comment.creationDate | date: 'dd.MM.yyyy'}}
                   {{formatAuthorName(comment.author)}}:
                   {{comment.message}}
                 </mat-list-option>
               </mat-selection-list>
-            </div>
-
-            <ng-template #commentsOpen>
-              <div *ngIf="monthlyReport.emcState === OPEN && monthlyReport.comments.length === 0">
-                <p>Bitte überprüfe deine Eingaben (Zeiten, Reisen, Belege, ...) in ZEP und beim Kunden und bestätige
-                  diese anschließend.</p>
-                <button mat-raised-button matTooltip="dieser Button tut noch nichts">Buchungen bestätigen</button>
-              </div>
-
-              <div *ngIf="monthlyReport.emcState === DONE && monthlyReport.comments.length === 0">
-                <mat-icon color="primary">error</mat-icon>
-                <p>Monatsabschlusstätigkeiten sind im Gange.</p>
-              </div>
-
-              <div *ngIf="monthlyReport.emcState === DONE && areAllCommentsDone()">
-                <mat-icon class="green">check_circle</mat-icon>
-                <p>Deine Zeiten wurden kontrolliert und sind richtig.</p>
-                <p>Bis nächsten Monat!</p>
-              </div>
             </ng-template>
+
           </div>
         </mat-card-content>
       </mat-card>

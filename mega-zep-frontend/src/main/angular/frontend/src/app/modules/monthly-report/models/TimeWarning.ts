@@ -1,5 +1,5 @@
 export class TimeWarning {
-  date: Date;
+  date: string;
   missingRestTime: number;
   missingBreakTime: number;
   excessWorkTime: number;

@@ -5,7 +5,7 @@ import com.gepardec.mega.db.repository.CommentRepository;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.CommentDTO;
 import com.gepardec.mega.domain.utils.DateUtils;
-import com.gepardec.mega.service.comment.CommentService;
+import com.gepardec.mega.service.api.comment.CommentService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

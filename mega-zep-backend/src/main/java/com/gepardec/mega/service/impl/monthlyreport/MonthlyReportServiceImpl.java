@@ -3,9 +3,9 @@ package com.gepardec.mega.service.impl.monthlyreport;
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.*;
+import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
-import com.gepardec.mega.service.comment.CommentService;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.WarningCalculator;
 import com.gepardec.mega.zep.ZepService;
 
