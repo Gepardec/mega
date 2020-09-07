@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 public class ProjectTimeEntry implements ProjectEntry {
 
-    private LocalDateTime fromTime;
-    private LocalDateTime toTime;
-    private Task task;
+    private final LocalDateTime fromTime;
+    private final LocalDateTime toTime;
+    private final Task task;
 
     ProjectTimeEntry(LocalDateTime fromTime, LocalDateTime toTime, Task task) {
         this.fromTime = fromTime;

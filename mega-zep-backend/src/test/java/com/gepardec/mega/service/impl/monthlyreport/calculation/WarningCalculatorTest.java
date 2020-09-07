@@ -7,14 +7,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,8 +29,8 @@ class WarningCalculatorTest {
     void determineJourneyWarnings_validateWarningStrings() {
 
         List<JourneyTimeEntry> projectTimeEntries = List.of(
-                new JourneyTimeEntry(LocalDateTime.now(), LocalDateTime.now().plusHours(2), Task.REISEN, JourneyDirection.BACK),
-                new JourneyTimeEntry(LocalDateTime.now().plusHours(3), LocalDateTime.now().plusHours(5), Task.REISEN, JourneyDirection.TO)
+                JourneyTimeEntry.of(LocalDateTime.now(), LocalDateTime.now().plusHours(2), Task.REISEN, JourneyDirection.BACK),
+                JourneyTimeEntry.of(LocalDateTime.now().plusHours(3), LocalDateTime.now().plusHours(5), Task.REISEN, JourneyDirection.TO)
         );
 
         when(messages.getString("warning.JOURNEY_TO_MISSING")).thenReturn("JOURNEY_TO_MISSING");
