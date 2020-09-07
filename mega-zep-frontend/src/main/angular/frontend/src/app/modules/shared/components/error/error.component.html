@@ -2,14 +2,14 @@
   <div class="row h-100 align-items-center">
     <div class="col text-center">
       <mat-icon color="primary">sentiment_very_dissatisfied</mat-icon>
-      <h1>Ups, Seite konnte nicht geladen werden.</h1>
+      <h1>{{'error.title' | translate}}</h1>
       <div>
-        <p>Ein Fehler ist aufgetreten: {{errorMessage}}</p>
+        <p>{{'error.message' | translate}}: {{errorMessage}}</p>
         <button
           (click)="navigatePreviousPage()"
           color="primary"
           mat-raised-button>
-          NEU LADEN
+          {{'error.reload' | translate}}
         </button>
       </div>
     </div>

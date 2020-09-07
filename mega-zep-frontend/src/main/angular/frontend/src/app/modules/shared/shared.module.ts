@@ -7,7 +7,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { UserActionsComponent } from './components/header/user-actions/user-actions.component';
 import { RouterModule } from '@angular/router';
 import { ErrorComponent } from './components/error/error.component';
-
+import { TranslateModule } from '@ngx-translate/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,9 @@ import { ErrorComponent } from './components/error/error.component';
   imports: [
     CommonModule,
     RouterModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    TranslateModule.forChild(),
+    FlexLayoutModule
   ],
   exports: [
     DatepickerComponent,

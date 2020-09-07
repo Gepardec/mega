@@ -1,11 +1,4 @@
 export const configuration = {
-  PAGE_NAMES: {
-    LOGIN: 'Login',
-    EMPLOYEES: 'MITARBEITERÜBERSICHT',
-    MONTHLY_REPORT: 'MEIN MEGA',
-    ERROR: 'Error'
-  },
-
   PAGE_URLS: {
     MONTHLY_REPORT: 'monthlyReport',
     EMPLOYEES: 'employees',

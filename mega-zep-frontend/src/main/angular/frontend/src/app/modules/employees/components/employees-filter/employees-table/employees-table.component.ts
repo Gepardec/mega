@@ -13,11 +13,11 @@ import { EmployeesService } from '../../../services/employees.service';
 export class EmployeesTableComponent implements OnInit, OnDestroy {
 
   @Input() employees: Array<Employee>;
-  displayedColumns = ['auswaehlen', 'nachname', 'abteilung', 'freigabedatum'];
+  displayedColumns = ['select', 'name', 'workDescription', 'releaseDate'];
   selection = new SelectionModel<Employee>(true, null);
   readonly currentDate = new Date();
   readonly dayOfMonthForWarning = 5;
-  readonly functions = configuration.EMPLOYEE_FUNCTIONS;
+  readonly FUNCTIONS = configuration.EMPLOYEE_FUNCTIONS;
   private selectionChangedSubscription: Subscription;
 
   constructor(

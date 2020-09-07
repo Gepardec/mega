@@ -2,11 +2,12 @@
   <mat-table #table [dataSource]="employees">
 
     <ng-container matColumnDef="headline">
-      <mat-header-cell *matHeaderCellDef class="headline">Mitarbeiterübersicht</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef
+                       class="headline">{{'employees-table.table.title' | translate}}</mat-header-cell>
     </ng-container>
 
     <!-- Checkbox Column -->
-    <ng-container matColumnDef="auswaehlen">
+    <ng-container matColumnDef="select">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null"
                       [aria-label]="checkboxLabel()"
@@ -26,20 +27,20 @@
     </ng-container>
 
     <!-- name Column -->
-    <ng-container matColumnDef="nachname">
-      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>{{'employees-table.table.name' | translate}}</mat-header-cell>
       <mat-cell *matCellDef="let element">{{element.firstName + " " + element.sureName}} </mat-cell>
     </ng-container>
 
-    <!-- funktion Column -->
-    <ng-container matColumnDef="abteilung">
-      <mat-header-cell *matHeaderCellDef>Funktion</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{functions[element.workDescription]}}</mat-cell>
+    <!-- workDescription Column -->
+    <ng-container matColumnDef="workDescription">
+      <mat-header-cell *matHeaderCellDef>{{'employees-table.table.workDescription' | translate}}</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{FUNCTIONS[element.workDescription]}}</mat-cell>
     </ng-container>
 
-    <!-- freigabedatum Column -->
-    <ng-container matColumnDef="freigabedatum">
-      <mat-header-cell *matHeaderCellDef>Freigegeben bis</mat-header-cell>
+    <!-- releaseDate Column -->
+    <ng-container matColumnDef="releaseDate">
+      <mat-header-cell *matHeaderCellDef>{{'employees-table.table.releasedUntil' | translate}}</mat-header-cell>
       <mat-cell *matCellDef="let element">
         <p [ngClass]="getReleaseDateColourCoding(element.releaseDate)" class="release">{{element.releaseDate}}</p>
       </mat-cell>
@@ -48,7 +49,7 @@
     <mat-header-row *matHeaderRowDef="['headline']; sticky: true"></mat-header-row>
     <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" mat-header-row></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"
-             [ngClass]="{ 'selected': selection.isSelected(row)}"
+             [class.selected]="selection.isSelected(row)"
     ></mat-row>
   </mat-table>
 </div>

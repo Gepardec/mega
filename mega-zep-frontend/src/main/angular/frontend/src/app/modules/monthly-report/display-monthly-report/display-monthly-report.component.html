@@ -6,11 +6,9 @@
       {{monthlyReport.employee.firstName}} {{monthlyReport.employee.sureName}}
       <span
         class="float-right">
-        {{
-        isValidDate(monthlyReport.employee.releaseDate) ?
-          (getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : null : 'de-AT') :
-          'Noch nicht freigegeben'
-        }}
+        {{ isValidDate(monthlyReport.employee.releaseDate) ?
+        (getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : null : 'de-AT') :
+        ('monthly-report.notReleasedYet' | translate) }}
         </span>
     </mat-card-content>
   </mat-card>
@@ -18,14 +16,16 @@
   <div *ngIf="isValidDate(monthlyReport.employee.releaseDate); else invalidReleaseDate" class="row">
     <div class="col-lg-4 mega-check">
       <mat-card class="mat-elevation-z10">
-        <mat-card-title>MEGA Pausen Check</mat-card-title>
+        <mat-card-title>
+          {{'monthly-report.title.time' | translate}}
+        </mat-card-title>
 
         <mat-card-content
           *ngIf="monthlyReport.timeWarnings.length === 0; else timeContent"
           class="d-flex text-center justify-content-center align-items-center">
           <div>
             <mat-icon class="green">check_circle</mat-icon>
-            <p>Alle Eingaben sind korrekt</p>
+            <p>{{'monthly-report.ok' | translate}}</p>
           </div>
         </mat-card-content>
 
@@ -33,23 +33,31 @@
           <mat-card-content *ngIf="monthlyReport.timeWarnings.length > 0">
             <mat-table [dataSource]="monthlyReport.timeWarnings">
               <ng-container matColumnDef="dateTime">
-                <mat-header-cell *matHeaderCellDef>Tag</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef>
+                  {{'monthly-report.table.time.day' | translate}}
+                </mat-header-cell>
                 <mat-cell
-                  *matCellDef="let timeEntry"> {{timeEntry.date | date:'E dd.MM.yyyy' : null : 'de-AT'}} </mat-cell>
+                  *matCellDef="let timeEntry">{{timeEntry.date | date:'E dd.MM.yyyy' : null : 'de-AT'}} </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="restTime">
-                <mat-header-cell *matHeaderCellDef>zu wenig Ruhezeit</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef>
+                  {{'monthly-report.table.time.missingRestTime' | translate}}
+                </mat-header-cell>
                 <mat-cell *matCellDef="let timeEntry"> {{timeEntry.missingRestTime}} </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="breakTime">
-                <mat-header-cell *matHeaderCellDef>zu wenig Pausenzeit</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef>
+                  {{'monthly-report.table.time.missingBreakTime' | translate}}
+                </mat-header-cell>
                 <mat-cell *matCellDef="let timeEntry"> {{timeEntry.missingBreakTime}} </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="workingTime">
-                <mat-header-cell *matHeaderCellDef>zu viel Arbeitszeit</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef>
+                  {{'monthly-report.table.time.excessWorkTime' | translate}}
+                </mat-header-cell>
                 <mat-cell *matCellDef="let timeEntry"> {{timeEntry.excessWorkTime}} </mat-cell>
               </ng-container>
 
@@ -64,14 +72,16 @@
       </mat-card>
 
       <mat-card class="mat-elevation-z10">
-        <mat-card-title>MEGA Reisen Check</mat-card-title>
+        <mat-card-title>
+          {{'monthly-report.title.journey' | translate}}
+        </mat-card-title>
 
         <mat-card-content
           *ngIf="monthlyReport.journeyWarnings.length === 0; else journeyContent"
           class="d-flex text-center justify-content-center align-items-center">
           <div>
             <mat-icon class="green">check_circle</mat-icon>
-            <p>Alle Eingaben sind korrekt</p>
+            <p>{{'monthly-report.ok' | translate}}</p>
           </div>
         </mat-card-content>
 
@@ -82,15 +92,17 @@
                 <mat-header-cell
                   *matHeaderCellDef
                   class="mat-column-date-journey">
-                  Tag
+                  {{'monthly-report.table.journey.day' | translate}}
                 </mat-header-cell>
                 <mat-cell
                   class="mat-column-date-journey"
-                  *matCellDef="let journeyEntry"> {{journeyEntry.date | date:'E dd.MM.yyyy' : null : 'de-AT'}} </mat-cell>
+                  *matCellDef="let journeyEntry">{{journeyEntry.date | date:'E dd.MM.yyyy' : null : 'de-AT'}}</mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="warningJourney">
-                <mat-header-cell *matHeaderCellDef>Warnung</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef>
+                  {{'monthly-report.table.journey.warning' | translate}}
+                </mat-header-cell>
                 <mat-cell *matCellDef="let journeyEntry">
                   {{getJourneyWarningString(journeyEntry.warnings)}}
                 </mat-cell>
@@ -112,7 +124,7 @@
 
     <div class="col-lg-8 employee-checks">
       <mat-card class="mat-elevation-z10">
-        <mat-card-title>Status zum Monatsabschluss</mat-card-title>
+        <mat-card-title>{{'monthly-report.title.emc' | translate}}</mat-card-title>
 
         <mat-card-content class="d-flex text-center align-items-center">
           <div class="m-auto">
@@ -121,21 +133,19 @@
               <div [ngSwitch]="monthlyReport.employeeCheckState">
                 <div *ngSwitchCase="State.OPEN">
                   <div *ngIf="!monthlyReport.otherChecksDone">
-                    <p>Bitte überprüfe deine Eingaben (Zeiten, Reisen, Belege, ...) in ZEP und beim Kunden und bestätige
-                      diese anschließend.</p>
-                    <button mat-raised-button>Buchungen bestätigen</button>
+                    <p>{{'monthly-report.pleaseCheckPrompt' | translate}}</p>
+                    <button mat-raised-button>{{'monthly-report.confirmBtnText' | translate}}</button>
                   </div>
                 </div>
                 <div *ngSwitchCase="State.DONE">
                   <div *ngIf="!monthlyReport.otherChecksDone">
                     <mat-icon color="primary">error</mat-icon>
-                    <p>Monatsabschlusstätigkeiten sind im Gange.</p>
+                    <p>{{'monthly-report.checkWip' | translate}}</p>
                   </div>
 
                   <div *ngIf="monthlyReport.otherChecksDone">
                     <mat-icon class="green">check_circle</mat-icon>
-                    <p>Deine Zeiten wurden kontrolliert und sind richtig.</p>
-                    <p>Bis nächsten Monat!</p>
+                    <p>{{'monthly-report.checkSuccess' | translate}}</p>
                   </div>
                 </div>
               </div>
@@ -143,7 +153,7 @@
 
             <ng-template #openComments>
               <mat-icon class="red">cancel</mat-icon>
-              <p>Einige Anmerkungen sind abzuarbeiten:</p>
+              <p>{{'monthly-report.commentsToDo' | translate}}:</p>
               <mat-selection-list (selectionChange)="selectionChange($event)" class="align-middle">
                 <mat-list-option
                   #option
@@ -168,9 +178,9 @@
 
   <ng-template #invalidReleaseDate>
     <mat-card class="mat-elevation-z10">
-      <mat-card-title>Zeitenkontrolle nicht möglich</mat-card-title>
+      <mat-card-title>{{'monthly-report.timeCheckNotPossible' | translate}}</mat-card-title>
       <mat-card-content>
-        <p>Freigabe der Zeiten ausständig. Bitte wende dich an deinen Mentor.</p>
+        <p>{{'monthly-report.timeCheckNotPossiblePrompt' | translate }}</p>
       </mat-card-content>
     </mat-card>
   </ng-template>

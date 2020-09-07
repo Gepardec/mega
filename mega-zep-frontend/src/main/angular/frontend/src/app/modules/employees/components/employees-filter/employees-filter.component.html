@@ -1,7 +1,7 @@
 <div class="container">
   <mat-toolbar class="mat-elevation-z8 mt-3" color="accent">
     <mat-form-field floatLabel="never">
-      <mat-label>Filter</mat-label>
+      <mat-label>{{'employees-filter.filter' | translate}}</mat-label>
       <input #filterInput (keyup)="applyFilter(filterInput.value)" matInput>
     </mat-form-field>
 
@@ -10,7 +10,7 @@
     <small
       *ngIf="selectedEmployees.length > 0"
       class="mr-3">
-      {{selectedEmployees.length}} Person<span *ngIf="selectedEmployees.length > 1">en</span> ausgewählt
+      {{selectedEmployees.length}} {{'employees-filter.personCount' | translate}}
     </small>
 
     <app-datepicker
@@ -23,7 +23,7 @@
             *ngIf="selectedEmployees?.length > 0 && selectedDate"
             color="primary"
             mat-raised-button>
-      Freigeben
+      {{'employees-filter.releaseBtnText' | translate}}
     </button>
   </mat-toolbar>
 

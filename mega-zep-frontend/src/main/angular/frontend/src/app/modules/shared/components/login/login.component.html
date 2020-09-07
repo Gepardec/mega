@@ -1,9 +1,25 @@
 <div *ngIf="!loggedIn()" class="h-75 d-flex justify-content-center align-items-center">
-  <mat-card class="mat-elevation-z8 d-flex text-center justify-content-center align-items-center">
+  <mat-card class="mat-elevation-z8 text-center">
+    <mat-card-title>
+      {{'login.cardTitle' | translate}}
+    </mat-card-title>
+
     <mat-card-content>
-      <img alt="Google G" class="google-img" src="../../../../../assets/google-g.png">
-      <a class="text">Über Google anmelden</a>
-      <button (click)="login()" class="w-75" color="primary" mat-raised-button>Anmelden</button>
+      <span
+        class="text">
+        <img
+          alt="Google G"
+          src="../../../../../assets/google-g.png">
+        {{'login.promptText' | translate }}
+      </span>
+
+      <button
+        (click)="login()"
+        class="w-75 mt-2"
+        color="primary"
+        mat-raised-button>
+        {{'login.btnText' | translate}}
+      </button>
     </mat-card-content>
   </mat-card>
 </div>

@@ -49,6 +49,7 @@ $mega-theme: mat-light-theme($mega-primary, $mega-accent);
     background-color: mat-color($primary);
     color: mat-color($primary, default-contrast);
   }
+
 }
 
 @include angular-material-theme($mega-theme);

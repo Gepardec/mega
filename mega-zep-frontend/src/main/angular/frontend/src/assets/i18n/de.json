@@ -1,0 +1,62 @@
+{
+  "PAGE_NAMES": {
+    "LOGIN": "Login",
+    "EMPLOYEES": "MITARBEITERÜBERSICHT",
+    "MONTHLY_REPORT": "MEIN MEGA",
+    "ERROR": "Error"
+  },
+  "login": {
+    "cardTitle": "Login",
+    "promptText": "Über Google anmelden",
+    "btnText": "Anmelden"
+  },
+  "user-actions": {
+    "logout": "Abmelden"
+  },
+  "error": {
+    "title": "Ups, Seite konnte nicht geladen werden.",
+    "message": "Ein Fehler ist aufgetreten",
+    "reload": "Neu laden"
+  },
+  "monthly-report": {
+    "ok": "Alle Eingaben sind OK",
+    "notReleasedYet": "Noch nicht freigegeben",
+    "timeControlNotPossible": "Zeitenkontrolle nicht möglich",
+    "timeCheckNotPossiblePrompt": "Kontrolle der Zeiten ausständig. Bitte wende dich an deinen Mentor",
+    "commentsToDo": "Einige Anmerkungen sind abzuarbeiten",
+    "checkSuccess": "Deine Zeiten wurden kontrolliert und sind richtig. Bis nächsten Monat!",
+    "checkWip": "Monatsabschlusstätigkeiten sind im Gange.",
+    "pleaseCheckPrompt": "Bitte überprüfe deine Eingaben (Zeiten, Reisen, Belege, ...) in ZEP und beim Kunden und bestätige diese anschließend.",
+    "confirmBtnText": "Buchungen bestätigen",
+    "title": {
+      "emc": "Status zum Monatsabschluss",
+      "journey": "MEGA Reisen Check",
+      "time": "MEGA Pausen Check"
+    },
+    "table": {
+      "time": {
+        "day": "Tag",
+        "missingRestTime": "Zu wenig Ruhezeit",
+        "missingBreakTime": "Zu wenig Pausenzeit",
+        "excessWorkTime": "Zu viel Arbeitszeit"
+      },
+      "journey": {
+        "day": "Tag",
+        "warning": "Warnung"
+      }
+    }
+  },
+  "employees-table": {
+    "table": {
+      "title": "Mitarbeiterübersicht",
+      "name": "Name",
+      "workDescription": "Rolle",
+      "releasedUntil": "Freigegeben bis"
+    }
+  },
+  "employees-filter": {
+    "filter": "Filter",
+    "personCount": "Person(en) ausgewählt",
+    "releaseBtnText": "Freigeben"
+  }
+}

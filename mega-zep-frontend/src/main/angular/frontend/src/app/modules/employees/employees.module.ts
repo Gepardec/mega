@@ -7,6 +7,7 @@ import { SharedModule } from '../shared/shared.module';
 import { EmployeesModuleRouting } from './employees.routing';
 import { EmployeesFilterComponent } from './components/employees-filter/employees-filter.component';
 import { EmployeesTableComponent } from './components/employees-filter/employees-table/employees-table.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { EmployeesTableComponent } from './components/employees-filter/employees
     RouterModule,
     EmployeesModuleRouting,
     AngularMaterialModule,
-    SharedModule
+    SharedModule,
+    TranslateModule.forChild()
   ],
   exports: [
     EmployeesComponent

@@ -4,6 +4,7 @@ import { MonthlyReportComponent } from './monthly-report.component';
 import { DisplayMonthlyReportComponent } from './display-monthly-report/display-monthly-report.component';
 import { AngularMaterialModule } from '../../material-module';
 import { MonthlyReportRoutingModule } from './monthly-report.routing';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { MonthlyReportRoutingModule } from './monthly-report.routing';
   imports: [
     CommonModule,
     MonthlyReportRoutingModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    TranslateModule.forChild()
   ]
 })
 export class MonthlyReportModule {
