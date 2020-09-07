@@ -1,14 +1,11 @@
 package com.gepardec.mega.service.impl;
 
-import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
-import com.gepardec.mega.service.api.comment.CommentService;
-import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.service.impl.monthlyreport.MonthlyReportServiceImpl;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.WarningCalculator;
 import com.gepardec.mega.zep.ZepService;
@@ -24,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -34,11 +30,6 @@ public class MonthlyReportServiceImplTest {
     @Mock
     private ZepService zepService;
 
-    @Mock
-    private StepEntryService stepEntryService;
-
-    @Mock
-    private CommentService commentService;
     @Mock
     private ResourceBundle resourceBundle;
 
@@ -87,8 +78,6 @@ public class MonthlyReportServiceImplTest {
         final Employee employee = createEmployee(0);
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
         Mockito.when(zepService.getProjectTimes(Mockito.any())).thenReturn(createReadProjektzeitenResponseType(10));
-        Mockito.when(stepEntryService.getEmcState(Mockito.any())).thenReturn(State.DONE);
-        Mockito.when(commentService.findCommentsForEmployee(Mockito.any())).thenReturn(Collections.emptyList());
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
         Assertions.assertNotNull(monthendReportForUser);
@@ -102,8 +91,6 @@ public class MonthlyReportServiceImplTest {
         final Employee employee = createEmployee(0);
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
         Mockito.when(zepService.getProjectTimes(Mockito.any())).thenReturn(createReadProjektzeitenResponseType(18));
-        Mockito.when(stepEntryService.getEmcState(Mockito.any())).thenReturn(State.DONE);
-        Mockito.when(commentService.findCommentsForEmployee(Mockito.any())).thenReturn(Collections.emptyList());
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
         Assertions.assertNotNull(monthendReportForUser);

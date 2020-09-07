@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
 import { MonthlyReport } from '../models/MonthlyReport';
 import { configuration } from '../../shared/constants/configuration';
 import { State } from '../../shared/models/State';
+import { MatSelectionListChange } from '@angular/material/list';
 
 @Component({
   selector: 'app-display-monthly-report',
@@ -68,6 +69,14 @@ export class DisplayMonthlyReportComponent implements OnInit {
       default:
         return author;
         break;
+    }
+  }
+
+  selectionChange(change: MatSelectionListChange): void {
+    const comment = change.option.value;
+    const selected = change.option.selected;
+    if (selected) {
+      // TODO: Server request
     }
   }
 }

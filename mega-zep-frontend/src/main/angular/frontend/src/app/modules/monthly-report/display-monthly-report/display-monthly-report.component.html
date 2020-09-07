@@ -144,10 +144,12 @@
             <ng-template #openComments>
               <mat-icon class="red">cancel</mat-icon>
               <p>Einige Anmerkungen sind abzuarbeiten:</p>
-              <mat-selection-list class="align-middle">
+              <mat-selection-list (selectionChange)="selectionChange($event)" class="align-middle">
                 <mat-list-option
                   #option
                   *ngFor="let comment of monthlyReport.comments"
+                  [disabled]="option.selected"
+                  [value]="comment"
                   checkboxPosition="before"
                   [ngClass]="option.selected ? 'done green' : 'red'"
                   [selected]="comment.state === State.DONE">
