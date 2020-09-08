@@ -1,11 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { User } from '../../models/User';
 import { Link } from '../../models/Link';
 import { RolesService } from '../../services/roles/roles.service';
 import { TranslateService } from '@ngx-translate/core';
 import { configuration } from '../../constants/configuration';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -13,6 +15,9 @@ import { configuration } from '../../constants/configuration';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  isHandset: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+    .pipe(map(result => result.matches));
+
   readonly links = new Array<Link>();
   readonly spreadSheetUrl = configuration.SPREADSHEET_URL;
   readonly zepUrl = configuration.ZEP_URL;
@@ -25,7 +30,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(private rolesService: RolesService,
               private userService: UserService,
-              private translate: TranslateService) {
+              private translate: TranslateService,
+              private breakpointObserver: BreakpointObserver) {
     translate.get('PAGE_NAMES').subscribe(
       PAGE_NAMES => {
         this.links.push({name: PAGE_NAMES.MONTHLY_REPORT, path: configuration.PAGE_URLS.MONTHLY_REPORT});
