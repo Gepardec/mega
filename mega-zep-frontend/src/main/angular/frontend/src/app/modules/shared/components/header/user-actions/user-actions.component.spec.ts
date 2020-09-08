@@ -7,6 +7,7 @@ import { AppModule } from '../../../../../app.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { User } from '../../../models/User';
+import { TranslateModule } from '@ngx-translate/core';
 
 describe('UserActionsComponent', () => {
   let component: UserActionsComponent;
@@ -15,10 +16,12 @@ describe('UserActionsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        TranslateModule.forRoot(),
         RouterTestingModule.withRoutes(routes),
         AppModule,
         HttpClientTestingModule,
-        BrowserAnimationsModule],
+        BrowserAnimationsModule
+      ],
       declarations: [],
       providers: []
     })
@@ -46,6 +49,6 @@ describe('UserActionsComponent', () => {
   });
 
   it('should display first name and last name of user', () => {
-    expect(fixture.debugElement.nativeElement.querySelector('#userBtn').textContent).toEqual('Max Mustermann keyboard_arrow_down');
+    expect(fixture.debugElement.nativeElement.querySelector('#userBtn').textContent).toContain('Max Mustermann keyboard_arrow_down');
   });
 });

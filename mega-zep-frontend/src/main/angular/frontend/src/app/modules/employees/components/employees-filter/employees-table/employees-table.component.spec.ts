@@ -5,6 +5,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { BehaviorSubject } from 'rxjs';
 import { EmployeesService } from '../../../services/employees.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 describe('EmployeesTableListComponent', () => {
   let component: EmployeesTableComponent;
@@ -20,12 +21,11 @@ describe('EmployeesTableListComponent', () => {
     TestBed.configureTestingModule({
       declarations: [EmployeesTableComponent],
       imports: [
-        MatTableModule
+        MatTableModule,
+        TranslateModule.forRoot()
       ],
       providers: [
-        {
-          provide: EmployeesService, useClass: EmployeesServiceMock
-        }
+        {provide: EmployeesService, useClass: EmployeesServiceMock}
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })

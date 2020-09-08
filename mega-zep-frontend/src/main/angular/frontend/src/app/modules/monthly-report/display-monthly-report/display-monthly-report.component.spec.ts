@@ -4,6 +4,7 @@ import { DisplayMonthlyReportComponent } from './display-monthly-report.componen
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { State } from '../../shared/models/State';
+import { TranslateModule } from '@ngx-translate/core';
 
 describe('DisplayMonthlyReportComponent', () => {
   let component: DisplayMonthlyReportComponent;
@@ -13,7 +14,8 @@ describe('DisplayMonthlyReportComponent', () => {
     TestBed.configureTestingModule({
       declarations: [DisplayMonthlyReportComponent],
       imports: [
-        MatTableModule
+        MatTableModule,
+        TranslateModule.forRoot()
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })

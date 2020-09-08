@@ -7,6 +7,7 @@ import { NotificationService } from '../../../shared/services/notification/notif
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Employee } from '../../models/Employee';
 import { SelectionChange } from '@angular/cdk/collections';
+import { TranslateModule } from '@ngx-translate/core';
 
 describe('EmployeesFilterComponent', () => {
   let component: EmployeesFilterComponent;
@@ -35,6 +36,9 @@ describe('EmployeesFilterComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [EmployeesFilterComponent],
+      imports: [
+        TranslateModule.forRoot()
+      ],
       providers: [
         {
           provide: EmployeesService, useClass: EmployeesServiceMock
