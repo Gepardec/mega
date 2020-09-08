@@ -30,7 +30,7 @@ public class ProjectTimeMapper {
             JourneyDirection journeyDirection = JourneyDirection.fromString(projektzeitType.getReiseRichtung())
                     .orElseThrow(() -> new IllegalArgumentException("ProjektzeitType.getReiseRichtung could not be converted to JourneyDirection enum"));
 
-            return new JourneyTimeEntry(fromTime, toTime, task, journeyDirection);
+            return JourneyTimeEntry.of(fromTime, toTime, task, journeyDirection);
         } else {
 
             return ProjectTimeEntry.of(fromTime, toTime, task);

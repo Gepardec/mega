@@ -1,13 +1,11 @@
 package com.gepardec.mega.service.impl.monthlyreport.calculation.journey;
 
 import com.gepardec.mega.domain.model.monthlyreport.*;
-import com.gepardec.mega.service.impl.monthlyreport.calculation.journey.JourneyWarningCalculator;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,7 +29,7 @@ class JourneyWarningCalculatorTest {
         // Day 1 (TO_AIM missing)
         // JourneyEntry with JourneyDirection set to BACK which is invalid because no journey TO_AIM booked before
         projectTimes.add(
-                new JourneyTimeEntry(LocalDateTime.of(2020, 7, 21, 15, 0),
+                JourneyTimeEntry.of(LocalDateTime.of(2020, 7, 21, 15, 0),
                         LocalDateTime.of(2020, 7, 21, 16, 0),
                         Task.REISEN,
                         JourneyDirection.BACK));
@@ -39,12 +37,12 @@ class JourneyWarningCalculatorTest {
         // Day 2 (valid)
         // Just a usual day with journey TO_AIM and BACK to check correct working of the algorithm
         projectTimes.add(
-                new JourneyTimeEntry(LocalDateTime.of(2020, 7, 22, 8, 0),
+                JourneyTimeEntry.of(LocalDateTime.of(2020, 7, 22, 8, 0),
                         LocalDateTime.of(2020, 7, 22, 9, 0),
                         Task.REISEN,
                         JourneyDirection.TO));
         projectTimes.add(
-                new JourneyTimeEntry(LocalDateTime.of(2020, 7, 22, 15, 0),
+                JourneyTimeEntry.of(LocalDateTime.of(2020, 7, 22, 15, 0),
                         LocalDateTime.of(2020, 7, 22, 16, 0),
                         Task.REISEN,
                         JourneyDirection.BACK));
@@ -52,7 +50,7 @@ class JourneyWarningCalculatorTest {
         // Day 3 (BACK missing)
         // JourneyEntry with JourneyDirection set to TO_AIM which is valid
         projectTimes.add(
-                new JourneyTimeEntry(LocalDateTime.of(2020, 7, 23, 8, 0),
+                JourneyTimeEntry.of(LocalDateTime.of(2020, 7, 23, 8, 0),
                         LocalDateTime.of(2020, 7, 23, 9, 0),
                         Task.REISEN,
                         JourneyDirection.TO));
@@ -60,12 +58,12 @@ class JourneyWarningCalculatorTest {
         // Day 4 (valid)
         // A usual day with journey TO_AIM and BACK but has to recognize that the BACK-journey is missing on the day before
         projectTimes.add(
-                new JourneyTimeEntry(LocalDateTime.of(2020, 7, 24, 15, 0),
+                JourneyTimeEntry.of(LocalDateTime.of(2020, 7, 24, 15, 0),
                         LocalDateTime.of(2020, 7, 24, 16, 0),
                         Task.REISEN,
                         JourneyDirection.TO));
         projectTimes.add(
-                new JourneyTimeEntry(LocalDateTime.of(2020, 7, 24, 16, 0),
+                JourneyTimeEntry.of(LocalDateTime.of(2020, 7, 24, 16, 0),
                         LocalDateTime.of(2020, 7, 24, 17, 0),
                         Task.REISEN,
                         JourneyDirection.BACK));
@@ -73,7 +71,7 @@ class JourneyWarningCalculatorTest {
         // Day 5 (TO_AIM missing)
         // JourneyEntry with JourneyDirection set to BACK which is invalid because the most recent JourneyEntry is a TO_AIM-journey
         projectTimes.add(
-                new JourneyTimeEntry(LocalDateTime.of(2020, 7, 28, 15, 0),
+                JourneyTimeEntry.of(LocalDateTime.of(2020, 7, 28, 15, 0),
                         LocalDateTime.of(2020, 7, 28, 16, 0),
                         Task.REISEN,
                         JourneyDirection.BACK));
@@ -81,7 +79,7 @@ class JourneyWarningCalculatorTest {
         // Day 6 (BACK missing)
         // Last JourneyEntry for this month with JourneyDirection set to TO_AIM which is valid at this point
         projectTimes.add(
-                new JourneyTimeEntry(LocalDateTime.of(2020, 7, 29, 15, 0),
+                JourneyTimeEntry.of(LocalDateTime.of(2020, 7, 29, 15, 0),
                         LocalDateTime.of(2020, 7, 29, 16, 0),
                         Task.REISEN,
                         JourneyDirection.TO));
@@ -98,8 +96,8 @@ class JourneyWarningCalculatorTest {
     void calculate_whenDataIsValid_thenNoWarningsFound() {
         List<JourneyTimeEntry> projectTimeEntries = new ArrayList<>();
         projectTimeEntries.addAll(List.of(
-                new JourneyTimeEntry(LocalDateTime.now(), LocalDateTime.now().plusHours(1), Task.REISEN, JourneyDirection.TO),
-                new JourneyTimeEntry(LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3), Task.REISEN, JourneyDirection.BACK)
+                JourneyTimeEntry.of(LocalDateTime.now(), LocalDateTime.now().plusHours(1), Task.REISEN, JourneyDirection.TO),
+                JourneyTimeEntry.of(LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3), Task.REISEN, JourneyDirection.BACK)
         ));
 
         assertTrue(calculator.calculate(projectTimeEntries).isEmpty());
@@ -109,7 +107,7 @@ class JourneyWarningCalculatorTest {
     void calculate_journeyToAimMissing_Warning() {
         ArrayList<JourneyTimeEntry> projectTimes = new ArrayList<>();
         projectTimes.add(
-                new JourneyTimeEntry(LocalDateTime.of(2020, 1, 7, 14, 0),
+                JourneyTimeEntry.of(LocalDateTime.of(2020, 1, 7, 14, 0),
                         LocalDateTime.of(2020, 1, 7, 16, 0),
                         Task.REISEN,
                         JourneyDirection.BACK));
@@ -127,7 +125,7 @@ class JourneyWarningCalculatorTest {
     void calculate_journeyBackMissing_Warning() {
         ArrayList<JourneyTimeEntry> projectTimes = new ArrayList<>();
         projectTimes.add(
-                new JourneyTimeEntry(LocalDateTime.of(2020, 1, 7, 10, 0),
+                JourneyTimeEntry.of(LocalDateTime.of(2020, 1, 7, 10, 0),
                         LocalDateTime.of(2020, 1, 7, 11, 0),
                         Task.REISEN,
                         JourneyDirection.TO));
@@ -169,12 +167,12 @@ class JourneyWarningCalculatorTest {
     void calculate_ToAimMissingWhenFirstEntryEqualsFurther_Warning() {
         List<JourneyTimeEntry> projectTimes = new ArrayList<>();
         projectTimes.add(
-                new JourneyTimeEntry(LocalDateTime.of(2020, 1, 7, 10, 0),
+                JourneyTimeEntry.of(LocalDateTime.of(2020, 1, 7, 10, 0),
                         LocalDateTime.of(2020, 1, 7, 11, 0),
                         Task.REISEN,
                         JourneyDirection.FURTHER));
         projectTimes.add(
-                new JourneyTimeEntry(LocalDateTime.of(2020, 1, 7, 11, 0),
+                JourneyTimeEntry.of(LocalDateTime.of(2020, 1, 7, 11, 0),
                         LocalDateTime.of(2020, 1, 7, 12, 0),
                         Task.REISEN,
                         JourneyDirection.BACK));
