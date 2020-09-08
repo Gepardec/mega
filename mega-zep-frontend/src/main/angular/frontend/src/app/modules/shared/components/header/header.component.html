@@ -3,7 +3,7 @@
     <mat-sidenav #sidenav color="primary" fxHide.gt-sm="true" mode="over" opened="false">
       <mat-nav-list *ngIf="user">
         <a mat-list-item>
-          <app-user-actions (logout)="onLogout($event)" [user]="user"></app-user-actions>
+          <app-user-actions (logout)="onLogout($event); sidenav.close()" [user]="user"></app-user-actions>
         </a>
         <ng-container *ngFor="let link of links">
           <a (click)="sidenav.close()"
@@ -26,7 +26,6 @@
     </mat-sidenav>
 
     <mat-sidenav-content fxFlexFill>
-
       <mat-toolbar class="toolbar mat-elevation-z10">
         <div *ngIf="user" fxHide.gt-sm="true" fxShow="true">
           <button (click)="sidenav.toggle()" mat-icon-button>
@@ -71,7 +70,9 @@
         </div>
       </mat-toolbar>
 
-      <router-outlet></router-outlet>
+      <div class="mb-3 mt-3">
+        <router-outlet></router-outlet>
+      </div>
 
     </mat-sidenav-content>
   </mat-sidenav-container>
