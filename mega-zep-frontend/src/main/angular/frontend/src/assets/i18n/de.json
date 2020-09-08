@@ -5,6 +5,9 @@
     "MONTHLY_REPORT": "MEIN MEGA",
     "ERROR": "Error"
   },
+  "messages": {
+    "employeeUpdatedSuccess": "Mitarbeiter erfolgreich aktualisiert"
+  },
   "login": {
     "cardTitle": "Login",
     "promptText": "Über Google anmelden",

@@ -1,0 +1,53 @@
+<h2 mat-dialog-title>Anmerkungen für <u>{{employee.firstName}} {{employee.sureName}}</u></h2>
+<mat-dialog-content class="container-fluid mat-typography">
+  <mat-form-field floatLabel="never" style="width: 80%">
+    <mat-label>Anmerkung</mat-label>
+    <input matInput>
+  </mat-form-field>
+  <button mat-button>Hinzufügen</button>
+
+  <table class="w-100 mat-table">
+    <thead>
+    <tr class="mat-header-row">
+      <th class="mat-header-cell">Abgearbeitet</th>
+      <th class="mat-header-cell">Anmerkung</th>
+      <th class="mat-header-cell">Bearbeiten</th>
+      <th class="mat-header-cell">Löschen</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let comment of comments" class="mat-row">
+      <td [ngSwitch]="comment.state" class="mat-cell">
+        <mat-icon *ngSwitchCase="State.OPEN" class="red">cancel</mat-icon>
+        <mat-icon *ngSwitchCase="State.DONE" class="green">check_circle</mat-icon>
+      </td>
+
+      <td class="mat-cell">
+        <input #newMessage [disabled]="!comment.edit" [value]="comment.message" matInput>
+      </td>
+
+      <td class="mat-cell">
+        <ng-container *ngIf="comment.edit">
+          <button (click)="comment.message = newMessage.value; toggleEditable(comment)" mat-icon-button>
+            <mat-icon>done</mat-icon>
+          </button>
+          <button (click)="newMessage.value = comment.message; toggleEditable(comment)" mat-icon-button>
+            <mat-icon>clear</mat-icon>
+          </button>
+        </ng-container>
+        <button (click)="toggleEditable(comment)" *ngIf="!comment.edit" mat-icon-button>
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+
+      <td class="mat-cell">
+        <button mat-icon-button>
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+
+</mat-dialog-content>

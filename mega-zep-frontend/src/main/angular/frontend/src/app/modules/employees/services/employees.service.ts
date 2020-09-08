@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Employee } from '../models/Employee';
+import { Employee } from '../../shared/models/Employee';
 import { EmployeeService } from './employee.service';
 import { SelectionChange } from '@angular/cdk/collections';
 

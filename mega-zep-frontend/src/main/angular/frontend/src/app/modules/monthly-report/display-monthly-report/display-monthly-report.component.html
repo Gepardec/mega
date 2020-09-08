@@ -164,7 +164,7 @@
                   [ngClass]="option.selected ? 'done green' : 'red'"
                   [selected]="comment.state === State.DONE">
                   {{comment.creationDate | date: 'dd.MM.yyyy'}}
-                  {{formatAuthorName(comment.author)}}:
+                  {{comment.author}}:
                   {{comment.message}}
                 </mat-list-option>
               </mat-selection-list>

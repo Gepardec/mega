@@ -17,6 +17,7 @@ import { MonthlyReportModule } from './modules/monthly-report/monthly-report.mod
 import { AuthorizationHeaderInterceptor } from './modules/shared/interceptors/authorization-header.interceptor';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { OfficeManagementModule } from './modules/office-management/office-management.module';
 
 registerLocaleData(localeDeAt, 'de-AT');
 
@@ -32,6 +33,7 @@ registerLocaleData(localeDeAt, 'de-AT');
     BrowserAnimationsModule,
     SharedModule,
     EmployeesModule,
+    OfficeManagementModule,
     MonthlyReportModule,
     TranslateModule.forRoot({
       loader: {

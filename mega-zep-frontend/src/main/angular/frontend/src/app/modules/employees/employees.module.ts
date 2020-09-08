@@ -8,6 +8,7 @@ import { EmployeesModuleRouting } from './employees.routing';
 import { EmployeesFilterComponent } from './components/employees-filter/employees-filter.component';
 import { EmployeesTableComponent } from './components/employees-filter/employees-table/employees-table.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { OfficeManagementModule } from '../office-management/office-management.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { TranslateModule } from '@ngx-translate/core';
     EmployeesModuleRouting,
     AngularMaterialModule,
     SharedModule,
-    TranslateModule.forChild()
+    TranslateModule.forRoot(),
+    OfficeManagementModule
   ],
   exports: [
     EmployeesComponent

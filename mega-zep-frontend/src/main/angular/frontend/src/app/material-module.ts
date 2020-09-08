@@ -19,10 +19,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   imports: [
-    OverlayModule,
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
@@ -31,20 +31,21 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatGridListModule,
     MatIconModule,
     MatInputModule,
+    MatListModule,
     MatMenuModule,
     MatNativeDateModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
+    MatSidenavModule,
     MatSnackBarModule,
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatListModule,
     MatTooltipModule,
-    MatSidenavModule
+    OverlayModule,
   ],
   exports: [
-    OverlayModule,
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
@@ -53,17 +54,19 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatGridListModule,
     MatIconModule,
     MatInputModule,
+    MatListModule,
     MatMenuModule,
     MatNativeDateModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
+    MatSidenavModule,
     MatSnackBarModule,
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatListModule,
     MatTooltipModule,
-    MatSidenavModule
+    OverlayModule,
   ],
   entryComponents: [
     MatSpinner

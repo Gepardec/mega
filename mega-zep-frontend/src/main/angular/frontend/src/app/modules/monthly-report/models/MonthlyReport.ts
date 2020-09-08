@@ -1,7 +1,7 @@
-import { Employee } from '../../employees/models/Employee';
 import { TimeWarning } from './TimeWarning';
 import { JourneyWarning } from './JourneyWarning';
-import { Comment } from './Comment';
+import { Comment } from '../../shared/models/Comment';
+import { Employee } from '../../shared/models/Employee';
 
 export class MonthlyReport {
   comments: Array<Comment>;

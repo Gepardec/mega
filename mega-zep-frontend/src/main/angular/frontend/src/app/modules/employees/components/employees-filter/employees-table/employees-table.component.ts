@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import { Subscription } from 'rxjs';
 import { configuration } from '../../../../shared/constants/configuration';
-import { Employee } from '../../../models/Employee';
+import { Employee } from '../../../../shared/models/Employee';
 import { EmployeesService } from '../../../services/employees.service';
 
 @Component({

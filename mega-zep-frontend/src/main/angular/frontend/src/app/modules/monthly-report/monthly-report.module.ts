@@ -15,7 +15,7 @@ import { TranslateModule } from '@ngx-translate/core';
     CommonModule,
     MonthlyReportRoutingModule,
     AngularMaterialModule,
-    TranslateModule.forChild()
+    TranslateModule.forRoot()
   ]
 })
 export class MonthlyReportModule {

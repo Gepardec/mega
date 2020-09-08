@@ -9,6 +9,8 @@ import { RouterModule } from '@angular/router';
 import { ErrorComponent } from './components/error/error.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { CommentsForEmployeeComponent } from './components/comments-for-employee/comments-for-employee.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -16,14 +18,16 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     HeaderComponent,
     UserActionsComponent,
     LoginComponent,
-    ErrorComponent
+    ErrorComponent,
+    CommentsForEmployeeComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     AngularMaterialModule,
-    TranslateModule.forChild(),
-    FlexLayoutModule
+    TranslateModule.forRoot(),
+    FlexLayoutModule,
+    FormsModule
   ],
   exports: [
     DatepickerComponent,
@@ -31,6 +35,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     UserActionsComponent,
     LoginComponent,
     ErrorComponent
+  ],
+  entryComponents: [
+    CommentsForEmployeeComponent
   ]
 })
 export class SharedModule {

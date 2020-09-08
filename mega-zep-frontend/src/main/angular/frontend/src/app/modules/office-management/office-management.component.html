@@ -1,0 +1,70 @@
+<div class="container-fluid">
+  <table [dataSource]="omEntries" class="w-100" mat-table>
+
+    <ng-container matColumnDef="name">
+      <th *matHeaderCellDef mat-header-cell>Name</th>
+      <td *matCellDef="let omEntry" mat-cell>{{omEntry.employee.firstName}} {{omEntry.employee.sureName}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="customerCheckState">
+      <th *matHeaderCellDef mat-header-cell>Kundenzeiten</th>
+      <td *matCellDef="let omEntry" mat-cell>
+        <mat-select [value]="omEntry.customerCheckState">
+          <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+        </mat-select>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="internalCheckState">
+      <th *matHeaderCellDef mat-header-cell>Interne Zeiten</th>
+      <td *matCellDef="let omEntry" mat-cell>
+        <mat-select [value]="omEntry.internalCheckState">
+          <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+        </mat-select>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="employeeCheckState">
+      <th *matHeaderCellDef mat-header-cell>Mitarbeiter Check</th>
+      <td *matCellDef="let omEntry" [ngSwitch]="omEntry.employeeCheckState" mat-cell>
+        <mat-icon *ngSwitchCase="State.OPEN" class="red">cancel</mat-icon>
+        <mat-icon *ngSwitchCase="State.DONE" class="green">check_circle</mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="projectCheckState">
+      <th *matHeaderCellDef mat-header-cell>Projektmanager Check</th>
+      <td *matCellDef="let omEntry" [ngSwitch]="omEntry.projectCheckState" mat-cell>
+        <mat-icon *ngSwitchCase="State.OPEN" class="red">cancel</mat-icon>
+        <mat-icon *ngSwitchCase="State.DONE" class="green">check_circle</mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th *matHeaderCellDef mat-header-cell>Aktionen</th>
+      <td *matCellDef="let omEntry" mat-cell>
+        <button (click)="openDialog(omEntry)" mat-icon-button>
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="doneCount">
+      <th *matHeaderCellDef mat-header-cell>Abgearbeitet</th>
+      <td *matCellDef="let omEntry" mat-cell>
+        <span
+          [ngClass]="{'red': countOfDone(omEntry) < omEntry.comments.length, 'green': countOfDone(omEntry) === omEntry.comments.length}">
+          {{countOfDone(omEntry)}} / {{omEntry.comments.length}}
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="releaseDate">
+      <th *matHeaderCellDef mat-header-cell>Freigabedatum</th>
+      <td *matCellDef="let omEntry" mat-cell>{{omEntry.employee.releaseDate}}</td>
+    </ng-container>
+
+    <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+  </table>
+</div>

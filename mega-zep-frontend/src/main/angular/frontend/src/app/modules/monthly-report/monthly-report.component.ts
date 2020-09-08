@@ -21,7 +21,7 @@ export class MonthlyReportComponent implements OnInit, OnDestroy {
     // });
     this.monthlyReport = {
       employeeCheckState: State.DONE,
-      otherChecksDone: true,
+      otherChecksDone: false,
       employee: {
         firstName: 'Mock',
         sureName: 'Other',
@@ -35,19 +35,20 @@ export class MonthlyReportComponent implements OnInit, OnDestroy {
         releaseDate: '2020-02-02'
       },
       comments: [
-        {message: 'wrong time', id: 12, creationDate: '2020-02-02', state: State.DONE, author: 'some author'}
+        {message: 'wrong time', id: 12, creationDate: '2020-02-02', state: State.OPEN, author: 'some author'},
+        {message: 'wrong time', id: 13, creationDate: '2020-02-02', state: State.DONE, author: 'some author'},
       ],
       timeWarnings: [
-        {
-          warnings: ['1', '2'],
-          missingRestTime: 12,
-          missingBreakTime: 12,
-          excessWorkTime: 12,
-          date: new Date().toString()
-        }
+        // {
+        //   warnings: ['1', '2'],
+        //   missingRestTime: 12,
+        //   missingBreakTime: 12,
+        //   excessWorkTime: 12,
+        //   date: new Date().toString()
+        // }
       ],
       journeyWarnings: [
-        {warnings: ['1', '2'], date: new Date().toString()}
+        // {warnings: ['1', '2'], date: new Date().toString()}
       ]
     };
   }

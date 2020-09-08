@@ -53,25 +53,6 @@ export class DisplayMonthlyReportComponent implements OnInit {
     return true;
   }
 
-  /* TODO: this method is likely to be deleted.
-     As of now the email is used to determine the author of a comment.
-     This prevents calling ZepService.getEmployee for every comment. */
-  formatAuthorName(author: string): string {
-    const foreAndSureNameArr = author.substring(0, author.indexOf('@')).split('.');
-
-    switch (foreAndSureNameArr.length) {
-      case 2:
-        let foreName = foreAndSureNameArr[0];
-        let sureName = foreAndSureNameArr[1];
-        foreName = foreName.charAt(0).toUpperCase() + foreName.slice(1);
-        sureName = sureName.charAt(0).toUpperCase() + sureName.slice(1);
-        return foreName + ' ' + sureName;
-      default:
-        return author;
-        break;
-    }
-  }
-
   selectionChange(change: MatSelectionListChange): void {
     const comment = change.option.value;
     const selected = change.option.selected;

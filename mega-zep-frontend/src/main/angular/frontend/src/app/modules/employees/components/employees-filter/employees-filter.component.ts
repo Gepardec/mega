@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Employee } from '../../models/Employee';
+import { Employee } from '../../../shared/models/Employee';
 import { Subscription } from 'rxjs';
 import { EmployeesService } from '../../services/employees.service';
 import { NotificationService } from '../../../shared/services/notification/notification.service';
