@@ -2,11 +2,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserActionsComponent } from './user-actions.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { routes } from '../../../../../app-routing.module';
-import { AppModule } from '../../../../../app.module';
+import { routes } from '../../../../app-routing.module';
+import { AppModule } from '../../../../app.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { User } from '../../../models/User';
+import { User } from '../../models/User';
 import { TranslateModule } from '@ngx-translate/core';
 
 describe('UserActionsComponent', () => {

@@ -1,0 +1,128 @@
+<div class="container-fluid">
+  <mat-toolbar class="w-100 mat-elevation-z8" color="accent">
+    <mat-form-field floatLabel="never">
+      <mat-label>{{'employees-filter.filter' | translate}}</mat-label>
+      <input
+        #employeeNameInput
+        (keyup)="filterOmEntriesByEmployee(employeeNameInput.value)"
+        matInput>
+      <button (click)="employeeNameInput.value=''; filterOmEntriesByEmployee(employeeNameInput.value)"
+              *ngIf="employeeNameInput.value"
+              mat-button mat-icon-button
+              matSuffix>
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <small
+      *ngIf="omSelectionModel.selected.length > 0"
+      class="mr-3">
+      {{omSelectionModel.selected.length}} {{'employees-filter.personCount' | translate}}
+    </small>
+
+    <app-datepicker
+      (dateEmitter)="changeDate($event)"
+      *ngIf="filteredOmEntries && omSelectionModel.selected.length > 0"
+      [selectedDate]="selectedDate">
+    </app-datepicker>
+
+    <button (click)="releaseEmployees()"
+            *ngIf="omSelectionModel.selected.length > 0 && selectedDate"
+            mat-button>
+      {{'employees-filter.releaseBtnText' | translate}}
+    </button>
+  </mat-toolbar>
+
+  <div class="overflow-auto">
+    <table *ngIf="filteredOmEntries && filteredOmEntries.length > 0; else noOmEntriesFound"
+           [dataSource]="filteredOmEntries"
+           class="w-100 mt-2"
+           mat-table>
+      <ng-container matColumnDef="select">
+        <th *matHeaderCellDef mat-header-cell>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="omSelectionModel.hasValue() && isAllSelected()"
+                        [indeterminate]="omSelectionModel.hasValue() && !isAllSelected()"
+                        color="primary">
+          </mat-checkbox>
+        </th>
+        <td *matCellDef="let row" mat-cell>
+          <mat-checkbox (change)="$event ? omSelectionModel.toggle(row) : null"
+                        (click)="$event.stopPropagation()"
+                        [checked]="omSelectionModel.isSelected(row)"
+                        color="primary">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell>Name</th>
+        <td *matCellDef="let omEntry" mat-cell>{{omEntry.employee.firstName}} {{omEntry.employee.sureName}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="customerCheckState">
+        <th *matHeaderCellDef mat-header-cell>Kundenzeiten</th>
+        <td *matCellDef="let omEntry" mat-cell>
+          <mat-select [value]="omEntry.customerCheckState">
+            <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+          </mat-select>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="internalCheckState">
+        <th *matHeaderCellDef mat-header-cell>Interne Zeiten</th>
+        <td *matCellDef="let omEntry" mat-cell>
+          <mat-select [value]="omEntry.internalCheckState">
+            <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+          </mat-select>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="employeeCheckState">
+        <th *matHeaderCellDef mat-header-cell>MA Check</th>
+        <td *matCellDef="let omEntry" [ngSwitch]="omEntry.employeeCheckState" mat-cell>
+          <mat-icon *ngSwitchCase="State.OPEN" class="red">cancel</mat-icon>
+          <mat-icon *ngSwitchCase="State.DONE" class="green">check_circle</mat-icon>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="projectCheckState">
+        <th *matHeaderCellDef mat-header-cell>PM Check</th>
+        <td *matCellDef="let omEntry" [ngSwitch]="omEntry.projectCheckState" mat-cell>
+          <mat-icon *ngSwitchCase="State.OPEN" class="red">cancel</mat-icon>
+          <mat-icon *ngSwitchCase="State.DONE" class="green">check_circle</mat-icon>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th *matHeaderCellDef mat-header-cell>Anmerkungen</th>
+        <td *matCellDef="let omEntry" mat-cell>
+          <button (click)="openDialog(omEntry)" mat-button>
+            <mat-icon>comment</mat-icon>
+            <span
+              *ngIf="omEntry.comments.length > 0; else noCommentsForOmEntry"
+              [ngClass]="{'red': countOfDone(omEntry) < omEntry.comments.length, 'green': countOfDone(omEntry) === omEntry.comments.length}">
+            {{countOfDone(omEntry)}} / {{omEntry.comments.length}}
+          </span>
+            <ng-template #noCommentsForOmEntry>
+              <span> &minus; / &minus;</span>
+            </ng-template>
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="releaseDate">
+        <th *matHeaderCellDef mat-header-cell>Freigabedatum</th>
+        <td *matCellDef="let omEntry" mat-cell>{{omEntry.employee.releaseDate}}</td>
+      </ng-container>
+
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+      <tr>Keine Einträge gefunden</tr>
+    </table>
+  </div>
+
+  <ng-template #noOmEntriesFound>
+    <mat-card class="mt-2">Keine Einträge gefunden</mat-card>
+  </ng-template>
+</div>

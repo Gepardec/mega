@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EmployeesComponent } from './employees.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { EmployeeService } from './services/employee.service';
+import { EmployeeService } from '../services/employee.service';
 
 describe('EmployeesComponent', () => {
   let component: EmployeesComponent;

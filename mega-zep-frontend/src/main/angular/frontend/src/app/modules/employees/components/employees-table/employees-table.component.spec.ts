@@ -4,7 +4,7 @@ import { EmployeesTableComponent } from './employees-table.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { BehaviorSubject } from 'rxjs';
-import { EmployeesService } from '../../../services/employees.service';
+import { EmployeesService } from '../../services/employees.service';
 import { TranslateModule } from '@ngx-translate/core';
 
 describe('EmployeesTableListComponent', () => {

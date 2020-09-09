@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DisplayMonthlyReportComponent } from './display-monthly-report.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
-import { State } from '../../shared/models/State';
+import { State } from '../../../shared/models/State';
 import { TranslateModule } from '@ngx-translate/core';
 
 describe('DisplayMonthlyReportComponent', () => {

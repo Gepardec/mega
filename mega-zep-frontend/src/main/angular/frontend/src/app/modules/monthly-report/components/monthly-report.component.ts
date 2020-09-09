@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MonthlyReport } from './models/MonthlyReport';
+import { MonthlyReport } from '../models/MonthlyReport';
 import { Subscription } from 'rxjs';
-import { MonthlyReportService } from './services/monthly-report.service';
-import { State } from '../shared/models/State';
+import { MonthlyReportService } from '../services/monthly-report.service';
+import { State } from '../../shared/models/State';
 
 @Component({
   selector: 'app-monthly-report',

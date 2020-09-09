@@ -22,7 +22,7 @@
     "reload": "Neu laden"
   },
   "monthly-report": {
-    "ok": "Alle Eingaben sind OK",
+    "ok": "Alle Eingaben sind korrekt",
     "notReleasedYet": "Noch nicht freigegeben",
     "timeControlNotPossible": "Zeitenkontrolle nicht möglich",
     "timeCheckNotPossiblePrompt": "Kontrolle der Zeiten ausständig. Bitte wende dich an deinen Mentor",
@@ -58,7 +58,7 @@
     }
   },
   "employees-filter": {
-    "filter": "Filter",
+    "filter": "Suche nach Name",
     "personCount": "Person(en) ausgewählt",
     "releaseBtnText": "Freigeben"
   }

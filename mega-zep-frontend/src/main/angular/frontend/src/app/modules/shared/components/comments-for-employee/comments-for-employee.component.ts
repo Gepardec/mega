@@ -10,7 +10,6 @@ import { State } from '../../models/State';
 })
 export class CommentsForEmployeeComponent implements OnInit {
   State = State;
-  displayedColumns = ['state', 'message', 'edit', 'delete'];
   employee: Employee;
   comments: Array<Comment>;
 
@@ -24,13 +23,5 @@ export class CommentsForEmployeeComponent implements OnInit {
 
   toggleEditable(comment: any) {
     comment.edit = !comment.edit;
-  }
-
-  setMessage(comment: any, value: any) {
-
-  }
-
-  hi($event: any) {
-    console.log('hi');
   }
 }

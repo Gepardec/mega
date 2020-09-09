@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OfficeManagementComponent } from './office-management.component';
-import { AngularMaterialModule } from '../../material-module';
+import { OfficeManagementComponent } from './components/office-management.component';
+import { AngularMaterialModule } from '../material/material-module';
 import { TranslateModule } from '@ngx-translate/core';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [OfficeManagementComponent],
@@ -12,7 +13,8 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [
     CommonModule,
     AngularMaterialModule,
-    TranslateModule.forRoot()
+    TranslateModule.forRoot(),
+    SharedModule
   ]
 })
 export class OfficeManagementModule {
