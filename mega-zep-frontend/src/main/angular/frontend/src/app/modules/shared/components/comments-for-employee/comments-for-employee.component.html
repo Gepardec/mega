@@ -40,7 +40,7 @@
         </td>
 
         <td class="mat-cell">
-          <div [hidden]="comment.isEditing" [innerHTML]="parseAnchorTags(comment.message)">{{comment.message}}</div>
+          <pre [hidden]="comment.isEditing" [innerHTML]="parseAnchorTags(comment.message)">{{comment.message}}</pre>
           <mat-form-field [hidden]="!comment.isEditing" floatLabel="never">
             <mat-label>Anmerkung bearbeiten</mat-label>
             <textarea
