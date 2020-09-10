@@ -139,7 +139,7 @@
                 </div>
                 <div *ngSwitchCase="State.DONE">
                   <div *ngIf="!monthlyReport.otherChecksDone">
-                    <mat-icon color="primary">error</mat-icon>
+                    <mat-icon class="yellow">error</mat-icon>
                     <p>{{'monthly-report.checkWip' | translate}}</p>
                   </div>
 
@@ -163,7 +163,7 @@
                   checkboxPosition="before"
                   [ngClass]="option.selected ? 'done green' : 'red'"
                   [selected]="comment.state === State.DONE">
-                  {{comment.creationDate | date: 'dd.MM.yyyy'}}
+                  {{comment.authorUpdateDate | date: 'dd.MM.yyyy'}}
                   {{comment.author}}:
                   {{comment.message}}
                 </mat-list-option>

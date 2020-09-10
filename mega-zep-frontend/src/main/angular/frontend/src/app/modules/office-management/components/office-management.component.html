@@ -4,15 +4,17 @@
       <mat-label>{{'employees-filter.filter' | translate}}</mat-label>
       <input
         #employeeNameInput
-        (keyup)="filterOmEntriesByEmployee(employeeNameInput.value)"
+        (keyup)="filterOmEntriesByEmployeeName(employeeNameInput.value)"
         matInput>
-      <button (click)="employeeNameInput.value=''; filterOmEntriesByEmployee(employeeNameInput.value)"
+      <button (click)="employeeNameInput.value=''; filterOmEntriesByEmployeeName(employeeNameInput.value)"
               *ngIf="employeeNameInput.value"
               mat-button mat-icon-button
               matSuffix>
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
+
+    <span class="flex-fill"></span>
 
     <small
       *ngIf="omSelectionModel.selected.length > 0"
@@ -42,15 +44,13 @@
         <th *matHeaderCellDef mat-header-cell>
           <mat-checkbox (change)="$event ? masterToggle() : null"
                         [checked]="omSelectionModel.hasValue() && isAllSelected()"
-                        [indeterminate]="omSelectionModel.hasValue() && !isAllSelected()"
-                        color="primary">
+                        [indeterminate]="omSelectionModel.hasValue() && !isAllSelected()">
           </mat-checkbox>
         </th>
         <td *matCellDef="let row" mat-cell>
           <mat-checkbox (change)="$event ? omSelectionModel.toggle(row) : null"
                         (click)="$event.stopPropagation()"
-                        [checked]="omSelectionModel.isSelected(row)"
-                        color="primary">
+                        [checked]="omSelectionModel.isSelected(row)">
           </mat-checkbox>
         </td>
       </ng-container>
@@ -101,8 +101,8 @@
             <mat-icon>comment</mat-icon>
             <span
               *ngIf="omEntry.comments.length > 0; else noCommentsForOmEntry"
-              [ngClass]="{'red': countOfDone(omEntry) < omEntry.comments.length, 'green': countOfDone(omEntry) === omEntry.comments.length}">
-            {{countOfDone(omEntry)}} / {{omEntry.comments.length}}
+              [ngClass]="{'red': countOfDoneComments(omEntry) < omEntry.comments.length, 'green': countOfDoneComments(omEntry) === omEntry.comments.length}">
+            {{countOfDoneComments(omEntry)}} / {{omEntry.comments.length}}
           </span>
             <ng-template #noCommentsForOmEntry>
               <span> &minus; / &minus;</span>
@@ -113,12 +113,15 @@
 
       <ng-container matColumnDef="releaseDate">
         <th *matHeaderCellDef mat-header-cell>Freigabedatum</th>
-        <td *matCellDef="let omEntry" mat-cell>{{omEntry.employee.releaseDate}}</td>
+        <td *matCellDef="let omEntry" mat-cell>
+          <p [ngClass]="getReleaseDateCssClass(omEntry.employee.releaseDate)" class="release">
+            {{omEntry.employee.releaseDate | date: configuration.dateFormat}}
+          </p>
+        </td>
       </ng-container>
 
       <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
       <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
-      <tr>Keine Einträge gefunden</tr>
     </table>
   </div>
 

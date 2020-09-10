@@ -9,9 +9,11 @@ import { State } from '../../models/State';
   styleUrls: ['./comments-for-employee.component.scss']
 })
 export class CommentsForEmployeeComponent implements OnInit {
+  MAXIMUM_LETTERS = 500;
   State = State;
   employee: Employee;
   comments: Array<Comment>;
+  displayedColumns = ['status', 'author', 'message', 'edit', 'delete'];
 
   constructor() {
   }
@@ -21,7 +23,25 @@ export class CommentsForEmployeeComponent implements OnInit {
     this.comments = JSON.parse(JSON.stringify(this.comments));
   }
 
-  toggleEditable(comment: any) {
-    comment.edit = !comment.edit;
+  toggleIsEditing(comment: Comment) {
+    comment.isEditing = !comment.isEditing;
+  }
+
+  parseAnchorTags(plainText): string {
+    let replacedText;
+    let startingWithHttpHttpsOrFtpPattern;
+    let startingWithWwwPattern;
+    let emailAddressPattern;
+
+    startingWithHttpHttpsOrFtpPattern = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+    replacedText = plainText.replace(startingWithHttpHttpsOrFtpPattern, '<a href="$1" target="_blank">$1</a>');
+
+    startingWithWwwPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+    replacedText = replacedText.replace(startingWithWwwPattern, '$1<a href="http://$2" target="_blank">$2</a>');
+
+    emailAddressPattern = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
+    replacedText = replacedText.replace(emailAddressPattern, '<a href="mailto:$1">$1</a>');
+
+    return replacedText;
   }
 }

@@ -4,6 +4,8 @@ import { State } from '../../shared/models/State';
 import { MatDialog } from '@angular/material/dialog';
 import { CommentsForEmployeeComponent } from '../../shared/components/comments-for-employee/comments-for-employee.component';
 import { SelectionModel } from '@angular/cdk/collections';
+import { configuration } from '../../shared/constants/configuration';
+import { omEntriesMock } from '../models/MockData';
 
 @Component({
   selector: 'app-office-management',
@@ -16,172 +18,45 @@ export class OfficeManagementComponent implements OnInit {
     'name',
     'customerCheckState',
     'internalCheckState',
+    'actions',
     'employeeCheckState',
     'projectCheckState',
-    'actions',
     'releaseDate'
   ];
   State = State;
   states = Object.values(State);
-  omEntries = [
-    {
-      employee: {
-        firstName: 'Mock',
-        sureName: 'Other',
-        workDescription: '02',
-        email: 'someemail@example.com',
-        role: 1,
-        salutation: 'Mister',
-        title: 'Mag.',
-        userId: '000-mother',
-        active: true,
-        releaseDate: '2020-02-02'
-      },
-      comments: [],
-      customerCheckState: State.OPEN,
-      employeeCheckState: State.DONE,
-      internalCheckState: State.OPEN,
-      projectCheckState: State.DONE,
-      id: 1
-    },
-    {
-      employee: {
-        firstName: 'Lincoln',
-        sureName: 'Burrows',
-        workDescription: '02',
-        email: 'someemail@example.com',
-        role: 1,
-        salutation: 'Mister',
-        title: 'Mag.',
-        userId: '000-mother',
-        active: true,
-        releaseDate: '2020-02-02'
-      },
-      comments: [
-        {author: 'jeff', state: State.DONE, creationDate: '2020-02-02', id: 12, message: 'asdasdasd'},
-        {author: 'jeff', state: State.DONE, creationDate: '2020-02-02', id: 15, message: 'asdasdasd'},
-        {author: 'jeff', state: State.DONE, creationDate: '2020-02-02', id: 14, message: 'asdasdasd'},
-        {author: 'jeff', state: State.DONE, creationDate: '2020-02-02', id: 13, message: 'asdasdasd'}
-      ],
-      customerCheckState: State.DONE,
-      employeeCheckState: State.OPEN,
-      internalCheckState: State.OPEN,
-      projectCheckState: State.DONE,
-      id: 2
-    },
-    {
-      employee: {
-        firstName: 'Italy',
-        sureName: 'Spritzer',
-        workDescription: '02',
-        email: 'someemail@example.com',
-        role: 1,
-        salutation: 'Mister',
-        title: 'Mag.',
-        userId: '000-mother',
-        active: true,
-        releaseDate: '2020-02-02'
-      },
-      comments: [
-        {author: 'jeff', state: State.DONE, creationDate: '2020-02-02', id: 12, message: 'asdasdasd'},
-        {author: 'jeff', state: State.DONE, creationDate: '2020-02-02', id: 15, message: 'asdasdasd'},
-        {author: 'jeff', state: State.DONE, creationDate: '2020-02-02', id: 14, message: 'asdasdasd'},
-        {author: 'jeff', state: State.DONE, creationDate: '2020-02-02', id: 13, message: 'asdasdasd'}
-      ],
-      customerCheckState: State.DONE,
-      employeeCheckState: State.OPEN,
-      internalCheckState: State.OPEN,
-      projectCheckState: State.DONE,
-      id: 3
-    },
-    {
-      employee: {
-        firstName: 'Carlos',
-        sureName: 'Has no car',
-        workDescription: '02',
-        email: 'someemail@example.com',
-        role: 1,
-        salutation: 'Mister',
-        title: 'Mag.',
-        userId: '000-mother',
-        active: true,
-        releaseDate: '2020-02-02'
-      },
-      comments: [
-        {author: 'jeff', state: State.DONE, creationDate: '2020-02-02', id: 12, message: 'asdasdasd'},
-        {author: 'jeff', state: State.DONE, creationDate: '2020-02-02', id: 15, message: 'asdasdasd'},
-        {author: 'jeff', state: State.DONE, creationDate: '2020-02-02', id: 14, message: 'asdasdasd'},
-        {author: 'jeff', state: State.DONE, creationDate: '2020-02-02', id: 13, message: 'asdasdasd'}
-      ],
-      customerCheckState: State.DONE,
-      employeeCheckState: State.OPEN,
-      internalCheckState: State.OPEN,
-      projectCheckState: State.DONE,
-      id: 4
-    },
-    {
-      employee: {
-        firstName: 'Pablo',
-        sureName: 'Escobar',
-        workDescription: '02',
-        email: 'someemail@example.com',
-        role: 1,
-        salutation: 'Mister',
-        title: 'Mag.',
-        userId: '000-mother',
-        active: true,
-        releaseDate: '2020-02-02'
-      },
-      comments: [
-        {author: 'jeff', state: State.DONE, creationDate: '2020-02-02', id: 14, message: 'asdasdasd'},
-        {author: 'jeff', state: State.DONE, creationDate: '2020-02-02', id: 13, message: 'asdasdasd'}
-      ],
-      customerCheckState: State.OPEN,
-      employeeCheckState: State.DONE,
-      internalCheckState: State.OPEN,
-      projectCheckState: State.DONE,
-      id: 5
-    },
-    {
-      employee: {
-        firstName: 'Richard',
-        sureName: 'Stallman',
-        workDescription: '02',
-        email: 'someemail@example.com',
-        role: 1,
-        salutation: 'Mister',
-        title: 'Mag.',
-        userId: '000-mother',
-        active: true,
-        releaseDate: '2020-02-02'
-      },
-      comments: [
-        {author: 'jeff', state: State.OPEN, creationDate: '2020-02-02', id: 12, message: 'asdasdasd'},
-        {author: 'jeff', state: State.OPEN, creationDate: '2020-02-02', id: 15, message: 'asdasdasd'},
-        {author: 'jeff', state: State.OPEN, creationDate: '2020-02-02', id: 14, message: 'asdasdasd'},
-        {author: 'jeff', state: State.DONE, creationDate: '2020-02-02', id: 13, message: 'asdasdasd'}
-      ],
-      customerCheckState: State.DONE,
-      employeeCheckState: State.OPEN,
-      internalCheckState: State.OPEN,
-      projectCheckState: State.DONE,
-      id: 6
-    }
-  ];
+  omEntries: OfficeManagementEntry[] = omEntriesMock;
   filteredOmEntries = new Array<OfficeManagementEntry>();
-  // selectedOmEntries = new Array<OfficeManagementEntry>();
   omSelectionModel = new SelectionModel<OfficeManagementEntry>(true, []);
-  selectedDate: string = null;
+  selectedDate: string;
+  dayOfMonthForWarning = 5;
+  configuration = configuration;
 
   constructor(private dialog: MatDialog) {
     console.log(this.states);
   }
 
   ngOnInit(): void {
+    const doneOmEntries = [];
+    const openOmEntries = [];
+
+    this.omEntries.forEach(omEntry => {
+      const diff = this.countOfDoneComments(omEntry) - omEntry.comments.length;
+      if (diff === 0 && omEntry.customerCheckState === State.DONE && omEntry.internalCheckState === State.DONE) {
+        doneOmEntries.push(omEntry);
+      } else {
+        openOmEntries.push(omEntry);
+      }
+    });
+
+    const sortFn = (a: OfficeManagementEntry, b: OfficeManagementEntry) => a.employee.sureName.localeCompare(b.employee.sureName);
+
+    doneOmEntries.sort(sortFn);
+    openOmEntries.sort(sortFn);
+
+    this.omEntries = [].concat(openOmEntries, doneOmEntries);
+
     this.filteredOmEntries = this.omEntries.slice();
-    // this.omSelectionModel.changed.subscribe(value => {
-    //   this.selectedOmEntries = this.omSelectionModel.selected.slice();
-    // });
   }
 
   isAllSelected() {
@@ -192,7 +67,7 @@ export class OfficeManagementComponent implements OnInit {
     this.isAllSelected() ? this.omSelectionModel.clear() : this.omEntries.forEach(row => this.omSelectionModel.select(row));
   }
 
-  countOfDone(omEntry: OfficeManagementEntry): number {
+  countOfDoneComments(omEntry: OfficeManagementEntry): number {
     return omEntry.comments.filter(comment => {
       return comment.state === State.DONE;
     }).length;
@@ -201,24 +76,20 @@ export class OfficeManagementComponent implements OnInit {
   openDialog(omEntry: OfficeManagementEntry): void {
     const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
       {
-        minWidth: '40%',
+        width: '100%',
         autoFocus: false
       }
     );
 
     dialogRef.componentInstance.employee = omEntry.employee;
     dialogRef.componentInstance.comments = omEntry.comments;
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('result: ', result);
-    });
   }
 
   changeDate(emittedDate: string): void {
     this.selectedDate = emittedDate;
   }
 
-  filterOmEntriesByEmployee(filterString: string): void {
+  filterOmEntriesByEmployeeName(filterString: string): void {
     if (!filterString) {
       this.filteredOmEntries = this.omEntries.slice();
       return;
@@ -228,6 +99,27 @@ export class OfficeManagementComponent implements OnInit {
       return omEntry.employee.firstName.toLowerCase().includes(filterString) ||
         omEntry.employee.sureName.toLowerCase().includes(filterString);
     });
+  }
+
+  getReleaseDateCssClass(date: string): string {
+    const today = new Date();
+    const releaseDate = new Date(date);
+    const monthDiff = this.monthDiff(releaseDate, today);
+    if (monthDiff === 1 || monthDiff === 0 || releaseDate > today) {
+      return 'done';
+    }
+    if (monthDiff === 2 && today.getDate() <= this.dayOfMonthForWarning) {
+      return 'wip';
+    }
+    return 'open';
+  }
+
+  // TODO: maybe switch to a library that does this kind of calculations
+  private monthDiff(d1: Date, d2: Date) {
+    let months = (d2.getFullYear() - d1.getFullYear()) * 12;
+    months -= d1.getMonth();
+    months += d2.getMonth();
+    return Math.abs(months);
   }
 
   releaseEmployees() {

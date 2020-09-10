@@ -1,3 +1,10 @@
+@import 'src/styles/colors.scss';
+
 mat-form-field {
   width: 100%;
+}
+
+.saveBtn {
+  background-color: $mega-success-green;
+  color: white;
 }

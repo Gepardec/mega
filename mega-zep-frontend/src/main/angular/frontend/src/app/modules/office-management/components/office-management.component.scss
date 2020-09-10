@@ -1,3 +1,25 @@
+@import '../../../../styles/colors';
+
 .mat-select {
   width: 80px;
+}
+
+.release {
+  color: black !important;
+  border-radius: 5px;
+  padding: 5px;
+  width: fit-content;
+  margin-top: 8px;
+}
+
+.done {
+  background-color: transparentize($mega-success-green, 0.8);
+}
+
+.open {
+  background-color: transparentize($mega-danger-red, 0.8);
+}
+
+.wip {
+  background-color: transparentize($mega-warning-yellow, 0.8);
 }
