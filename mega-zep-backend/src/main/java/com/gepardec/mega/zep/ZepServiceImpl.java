@@ -27,16 +27,19 @@ public class ZepServiceImpl implements ZepService {
     private final Logger logger;
     private final ZepSoapPortType zepSoapPortType;
     private final ZepSoapProvider zepSoapProvider;
+    private final ProjectTimeMapper projectTimeMapper;
 
     @Inject
     public ZepServiceImpl(final EmployeeMapper employeeMapper,
             final Logger logger,
             final ZepSoapPortType zepSoapPortType,
-            final ZepSoapProvider zepSoapProvider) {
+            final ZepSoapProvider zepSoapProvider,
+            final ProjectTimeMapper projectTimeMapper) {
         this.employeeMapper = employeeMapper;
         this.logger = logger;
         this.zepSoapPortType = zepSoapPortType;
         this.zepSoapProvider = zepSoapProvider;
+        this.projectTimeMapper = projectTimeMapper;
     }
 
     @Override
@@ -93,7 +96,7 @@ public class ZepServiceImpl implements ZepService {
 
         ReadProjektzeitenResponseType projectTimeResponse = zepSoapPortType.readProjektzeiten(projektzeitenRequest);
 
-        return ProjectTimeMapper.mapToEntryList(projectTimeResponse.getProjektzeitListe().getProjektzeiten());
+        return projectTimeMapper.mapToEntryList(projectTimeResponse.getProjektzeitListe().getProjektzeiten());
     }
 
     private ReadProjektzeitenSearchCriteriaType createProjectTimeSearchCriteria(Employee employee) {
