@@ -93,7 +93,7 @@ mega:
   mega:
     dash-url: https://mega-zep-frontend-57-mega-dev.cloud.itandtel.at
     oauth:
-      client-id: 60018822787-361in5i8h2kaqfmj7ue0ocn5s4acf5ci.apps.googleusercontent.com
+      client-id: 60018822787-4nlv6e1tit3q8ssfbe2e013790p939dt.apps.googleusercontent.com
     zep:
       url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
     mail:
