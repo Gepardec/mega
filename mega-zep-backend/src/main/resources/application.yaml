@@ -42,7 +42,7 @@ mega:
     zep:
       url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
     oauth:
-      client-id: 60018822787-gkagrsid8bugtlnts2eqfvtf4n6loefu.apps.googleusercontent.com
+      client-id: 60018822787-4nlv6e1tit3q8ssfbe2e013790p939dt.apps.googleusercontent.com
     mail:
       cron: 0 0 7 ? * MON-FRI
       subject-prefix: 'LOCAL: '
@@ -63,7 +63,7 @@ mega:
   mega:
     dash-url: http://localhost:8080
     oauth:
-      client-id: 60018822787-gkagrsid8bugtlnts2eqfvtf4n6loefu.apps.googleusercontent.com
+      client-id: 60018822787-4nlv6e1tit3q8ssfbe2e013790p939dt.apps.googleusercontent.com
     zep:
       url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
     mail:
