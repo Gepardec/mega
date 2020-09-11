@@ -1,90 +1,92 @@
-<h2 mat-dialog-title>Anmerkungen für {{employee.firstName}} {{employee.sureName}}</h2>
+<ng-container *ngIf="comments && employee">
+  <h2 mat-dialog-title>Anmerkungen für {{employee.firstName}} {{employee.sureName}}</h2>
 
-<mat-dialog-content class="container-fluid">
-  <div class="overflow-auto">
+  <mat-dialog-content class="container-fluid">
+    <div class="overflow-auto">
 
-    <mat-form-field appearance="outline">
-      <mat-label>Anmerkung verfassen</mat-label>
-      <textarea
-        #newMessage
-        [maxLength]="MAXIMUM_LETTERS"
-        cdkTextareaAutosize
-        matInput></textarea>
-      <mat-hint align="end">{{newMessage.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
-    </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Anmerkung verfassen</mat-label>
+        <textarea
+          #newMessage
+          [maxLength]="MAXIMUM_LETTERS"
+          cdkTextareaAutosize
+          matInput></textarea>
+        <mat-hint align="end">{{newMessage.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
+      </mat-form-field>
 
-    <button class="float-right mb-3" mat-raised-button>Anmerkung hinzufügen</button>
+      <button class="float-right mb-3" mat-raised-button>Anmerkung hinzufügen</button>
 
-    <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table w-100">
-      <tr class="mat-header-row">
-        <th class="mat-header-cell">Abgearbeitet</th>
-        <th class="mat-header-cell">Verfasser</th>
-        <th class="mat-header-cell">Anmerkung</th>
-        <th class="mat-header-cell">Bearbeiten</th>
-        <th class="mat-header-cell">Löschen</th>
-      </tr>
+      <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table w-100">
+        <tr class="mat-header-row">
+          <th class="mat-header-cell">Abgearbeitet</th>
+          <th class="mat-header-cell">Verfasser</th>
+          <th class="mat-header-cell">Anmerkung</th>
+          <th class="mat-header-cell">Bearbeiten</th>
+          <th class="mat-header-cell">Löschen</th>
+        </tr>
 
-      <tr *ngFor="let comment of comments" class="mat-row">
-        <td [ngSwitch]="comment.state"
-            class="mat-cell">
+        <tr *ngFor="let comment of comments" class="mat-row">
+          <td [ngSwitch]="comment.state"
+              class="mat-cell">
           <span
             [matTooltipPosition]="'after'"
             [matTooltip]="'Zuletzt aktualisiert: ' + (comment.stateUpdateDate | date: 'yyyy.MM.dd HH:mm:SS')">
             <mat-icon *ngSwitchCase="State.OPEN" class="red">cancel</mat-icon>
             <mat-icon *ngSwitchCase="State.DONE" class="green">check_circle</mat-icon>
           </span>
-        </td>
+          </td>
 
-        <td class="mat-cell">
-          {{comment.author}}
-        </td>
+          <td class="mat-cell">
+            {{comment.author}}
+          </td>
 
-        <td class="mat-cell">
-          <pre [hidden]="comment.isEditing" [innerHTML]="parseAnchorTags(comment.message)">{{comment.message}}</pre>
-          <mat-form-field [hidden]="!comment.isEditing" floatLabel="never">
-            <mat-label>Anmerkung bearbeiten</mat-label>
-            <textarea
-              #editMessageInput
-              [disabled]="!comment.isEditing"
-              [matTooltipPosition]="'after'"
-              [matTooltip]="'Zuletzt aktualisiert: ' + (comment.authorUpdateDate | date: 'yyyy.MM.dd HH:mm:ss')"
-              [maxLength]="MAXIMUM_LETTERS"
-              [value]="comment.message"
-              matInput></textarea>
-            <mat-hint *ngIf="comment.isEditing" align="end">{{editMessageInput.value.length}}
-              / {{MAXIMUM_LETTERS}}</mat-hint>
-          </mat-form-field>
-        </td>
+          <td class="mat-cell">
+            <pre [hidden]="comment.isEditing" [innerHTML]="parseAnchorTags(comment.message)">{{comment.message}}</pre>
+            <mat-form-field [hidden]="!comment.isEditing" floatLabel="never">
+              <mat-label>Anmerkung bearbeiten</mat-label>
+              <textarea
+                #editMessageInput
+                [disabled]="!comment.isEditing"
+                [matTooltipPosition]="'after'"
+                [matTooltip]="'Zuletzt aktualisiert: ' + (comment.authorUpdateDate | date: 'yyyy.MM.dd HH:mm:ss')"
+                [maxLength]="MAXIMUM_LETTERS"
+                [value]="comment.message"
+                matInput></textarea>
+              <mat-hint *ngIf="comment.isEditing" align="end">{{editMessageInput.value.length}}
+                / {{MAXIMUM_LETTERS}}</mat-hint>
+            </mat-form-field>
+          </td>
 
-        <td class="mat-cell">
-          <ng-container *ngIf="comment.isEditing">
-            <button (click)="comment.message = editMessageInput.value; toggleIsEditing(comment)" mat-icon-button>
-              <mat-icon>done</mat-icon>
+          <td class="mat-cell">
+            <ng-container *ngIf="comment.isEditing">
+              <button (click)="comment.message = editMessageInput.value; toggleIsEditing(comment)" mat-icon-button>
+                <mat-icon>done</mat-icon>
+              </button>
+              <button (click)="editMessageInput.value = comment.message; toggleIsEditing(comment)" mat-icon-button>
+                <mat-icon>clear</mat-icon>
+              </button>
+            </ng-container>
+            <button (click)="toggleIsEditing(comment)" *ngIf="!comment.isEditing" mat-icon-button>
+              <mat-icon>edit</mat-icon>
             </button>
-            <button (click)="editMessageInput.value = comment.message; toggleIsEditing(comment)" mat-icon-button>
-              <mat-icon>clear</mat-icon>
+          </td>
+
+          <td class="mat-cell">
+            <button mat-icon-button>
+              <mat-icon>delete</mat-icon>
             </button>
-          </ng-container>
-          <button (click)="toggleIsEditing(comment)" *ngIf="!comment.isEditing" mat-icon-button>
-            <mat-icon>edit</mat-icon>
-          </button>
-        </td>
+          </td>
+        </tr>
+      </table>
+    </div>
 
-        <td class="mat-cell">
-          <button mat-icon-button>
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </tr>
-    </table>
-  </div>
+    <ng-template #noCommentsFound>
+      <p>Noch keine Anmerkungen vorhanden</p>
+    </ng-template>
+  </mat-dialog-content>
 
-  <ng-template #noCommentsFound>
-    <p>Noch keine Anmerkungen vorhanden</p>
-  </ng-template>
-</mat-dialog-content>
-
-<mat-dialog-actions align="end">
-  <button mat-dialog-close mat-raised-button>Abbrechen</button>
-  <button class="saveBtn" mat-raised-button>Änderungen speichern</button>
-</mat-dialog-actions>
+  <mat-dialog-actions align="end">
+    <button mat-dialog-close mat-raised-button>Abbrechen</button>
+    <button class="saveBtn" mat-raised-button>Änderungen speichern</button>
+  </mat-dialog-actions>
+</ng-container>

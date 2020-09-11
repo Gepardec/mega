@@ -32,25 +32,25 @@ export class MonthlyReportComponent implements OnInit, OnDestroy {
         title: 'Mag.',
         userId: '000-mother',
         active: true,
-        releaseDate: '2020-02-02'
+        releaseDate: '2020-0asd2-02'
       },
       comments: [
-        {
-          stateUpdateDate: new Date().toString(),
-          message: 'wrong time',
-          id: 12,
-          authorUpdateDate: '2020-02-02',
-          state: State.OPEN,
-          author: 'some author'
-        },
-        {
-          stateUpdateDate: new Date().toString(),
-          message: 'wrong time',
-          id: 13,
-          authorUpdateDate: '2020-02-02',
-          state: State.DONE,
-          author: 'some author'
-        },
+        // {
+        //   stateUpdateDate: new Date().toString(),
+        //   message: 'wrong time',
+        //   id: 12,
+        //   authorUpdateDate: '2020-02-02',
+        //   state: State.OPEN,
+        //   author: 'some author'
+        // },
+        // {
+        //   stateUpdateDate: new Date().toString(),
+        //   message: 'wrong time',
+        //   id: 13,
+        //   authorUpdateDate: '2020-02-02',
+        //   state: State.DONE,
+        //   author: 'some author'
+        // },
       ],
       timeWarnings: [
         {

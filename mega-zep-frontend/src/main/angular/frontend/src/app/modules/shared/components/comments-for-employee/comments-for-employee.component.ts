@@ -23,8 +23,8 @@ export class CommentsForEmployeeComponent implements OnInit {
   ngOnInit(): void {
     console.log(environment.ZEP_URL_OFFICE_MANAGEMENT);
     console.log(notProd.ZEP_URL_OFFICE_MANAGEMENT);
-    this.employee = JSON.parse(JSON.stringify(this.employee));
-    this.comments = JSON.parse(JSON.stringify(this.comments));
+    this.employee = JSON.parse(JSON.stringify(this.employee || null));
+    this.comments = JSON.parse(JSON.stringify(this.comments || null));
   }
 
   toggleIsEditing(comment: Comment) {

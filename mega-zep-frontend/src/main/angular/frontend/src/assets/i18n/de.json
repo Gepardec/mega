@@ -3,6 +3,10 @@
     "OFFICE_MANAGEMENT": "OFFICE MANAGEMENT",
     "MONTHLY_REPORT": "MEIN MEGA"
   },
+  "STATE": {
+    "DONE": "Fertig",
+    "OPEN": "Offen"
+  },
   "messages": {
     "employeeUpdatedSuccess": "Mitarbeiter erfolgreich aktualisiert"
   },
@@ -22,7 +26,7 @@
   "monthly-report": {
     "ok": "Alle Eingaben sind korrekt",
     "notReleasedYet": "Noch nicht freigegeben",
-    "timeControlNotPossible": "Zeitenkontrolle nicht möglich",
+    "timeCheckNotPossible": "Zeitenkontrolle nicht möglich",
     "timeCheckNotPossiblePrompt": "Kontrolle der Zeiten ausständig. Bitte wende dich an deinen Mentor",
     "commentsToDo": "Einige Anmerkungen sind abzuarbeiten",
     "checkSuccess": "Deine Zeiten wurden kontrolliert und sind richtig. Bis nächsten Monat!",

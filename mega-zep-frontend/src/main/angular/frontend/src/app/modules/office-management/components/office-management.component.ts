@@ -25,7 +25,6 @@ export class OfficeManagementComponent implements OnInit {
     'releaseDate'
   ];
   State = State;
-  states = Object.values(State);
   omEntries: OfficeManagementEntry[] = omEntriesMock;
   filteredOmEntries = new Array<OfficeManagementEntry>();
   omSelectionModel = new SelectionModel<OfficeManagementEntry>(true, []);
@@ -35,7 +34,6 @@ export class OfficeManagementComponent implements OnInit {
   environment = environment;
 
   constructor(private dialog: MatDialog) {
-    console.log(this.states);
   }
 
   ngOnInit(): void {

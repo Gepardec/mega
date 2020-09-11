@@ -57,7 +57,7 @@
 
       <ng-container matColumnDef="name">
         <th *matHeaderCellDef mat-header-cell>{{'office-management.table.name' | translate}}</th>
-        <td *matCellDef="let omEntry" mat-cell>
+        <td *matCellDef="let omEntry" class="font-weight-bold" mat-cell>
           <a [href]="environment.ZEP_URL_OFFICE_MANAGEMENT + omEntry.employee.userId"
              target="_blank">
             {{omEntry.employee.firstName}} {{omEntry.employee.sureName}}
@@ -68,8 +68,13 @@
       <ng-container matColumnDef="customerCheckState">
         <th *matHeaderCellDef mat-header-cell>{{'office-management.table.customerCheckState' | translate}}</th>
         <td *matCellDef="let omEntry" mat-cell>
-          <mat-select [value]="omEntry.customerCheckState">
-            <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+          <mat-select
+            #customerSelect
+            [class.select-green]="customerSelect.value === State.DONE"
+            [class.select-red]="customerSelect.value === State.OPEN"
+            [value]="omEntry.customerCheckState">
+            <mat-option [value]="State.OPEN">{{'STATE.OPEN' | translate}}</mat-option>
+            <mat-option [value]="State.DONE">{{'STATE.DONE' | translate}}</mat-option>
           </mat-select>
         </td>
       </ng-container>
@@ -77,8 +82,13 @@
       <ng-container matColumnDef="internalCheckState">
         <th *matHeaderCellDef mat-header-cell>{{'office-management.table.internalCheckState' | translate}}</th>
         <td *matCellDef="let omEntry" mat-cell>
-          <mat-select [value]="omEntry.internalCheckState">
-            <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+          <mat-select
+            #internalSelect
+            [class.select-green]="internalSelect.value === State.DONE"
+            [class.select-red]="internalSelect.value === State.OPEN"
+            [value]="omEntry.internalCheckState">
+            <mat-option [value]="State.OPEN">{{'STATE.OPEN' | translate}}</mat-option>
+            <mat-option [value]="State.DONE">{{'STATE.DONE' | translate}}</mat-option>
           </mat-select>
         </td>
       </ng-container>

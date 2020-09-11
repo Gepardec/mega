@@ -1,9 +1,5 @@
 @import '../../../../styles/colors';
 
-.mat-select {
-  width: 80px;
-}
-
 .release {
   color: black !important;
   border-radius: 5px;
@@ -13,15 +9,15 @@
 }
 
 .done {
-  background-color: transparentize($mega-success-green, 0.8);
+  background-color: $mega-success-green-transparent;
 }
 
 .open {
-  background-color: transparentize($mega-danger-red, 0.8);
+  background-color: $mega-danger-red-transparent;
 }
 
 .wip {
-  background-color: transparentize($mega-warning-yellow, 0.8);
+  background-color: $mega-warning-yellow-transparent;
 }
 
 a {
@@ -31,4 +27,22 @@ a {
 
 a:hover {
   color: $mega-success-green;
+}
+
+mat-select {
+  padding: 5px;
+  border-radius: 3px;
+  width: 100px;
+}
+
+.select-red {
+  background: $mega-danger-red-transparent;
+}
+
+.select-green {
+  background: $mega-success-green-transparent;
+}
+
+th, td {
+  font-size: 17px;
 }

@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CommentsForEmployeeComponent } from './comments-for-employee.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { AngularMaterialModule } from '../../../material/material-module';
 
 describe('CommentsForEmployeeComponent', () => {
   let component: CommentsForEmployeeComponent;
@@ -8,7 +10,11 @@ describe('CommentsForEmployeeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CommentsForEmployeeComponent]
+      declarations: [CommentsForEmployeeComponent],
+      imports: [
+        AngularMaterialModule,
+        TranslateModule.forRoot()
+      ],
     })
       .compileComponents();
   }));

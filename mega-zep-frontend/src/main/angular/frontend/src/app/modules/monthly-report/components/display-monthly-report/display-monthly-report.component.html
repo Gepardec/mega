@@ -132,17 +132,16 @@
             <div *ngIf="areAllCommentsDone(), else openComments">
               <div [ngSwitch]="monthlyReport.employeeCheckState">
                 <div *ngSwitchCase="State.OPEN">
-                  <div *ngIf="!monthlyReport.otherChecksDone">
-                    <p>{{'monthly-report.pleaseCheckPrompt' | translate}}</p>
-                    <button mat-raised-button>{{'monthly-report.confirmBtnText' | translate}}</button>
-                  </div>
+                  <mat-icon class="red">cancel</mat-icon>
+                  <p>{{'monthly-report.pleaseCheckPrompt' | translate}}</p>
+                  <button mat-raised-button>{{'monthly-report.confirmBtnText' | translate}}</button>
                 </div>
+
                 <div *ngSwitchCase="State.DONE">
                   <div *ngIf="!monthlyReport.otherChecksDone">
                     <mat-icon class="yellow">error</mat-icon>
                     <p>{{'monthly-report.checkWip' | translate}}</p>
                   </div>
-
                   <div *ngIf="monthlyReport.otherChecksDone">
                     <mat-icon class="green">check_circle</mat-icon>
                     <p>{{'monthly-report.checkSuccess' | translate}}</p>
