@@ -11,10 +11,9 @@ import java.util.stream.Stream;
 public enum JourneyDirection {
     TO("0"),
     FURTHER("1"),
-    BACK("2"),
-    INVALIDATE("invalidate");
+    BACK("2");
 
-    private String direction;
+    private final String direction;
 
     JourneyDirection(String direction) {
         this.direction = direction;

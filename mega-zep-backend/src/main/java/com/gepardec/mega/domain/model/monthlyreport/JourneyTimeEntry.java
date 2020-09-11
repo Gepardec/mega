@@ -4,16 +4,20 @@ import java.time.LocalDateTime;
 
 public class JourneyTimeEntry implements ProjectEntry {
 
-    private LocalDateTime fromTime;
-    private LocalDateTime toTime;
-    private Task task;
-    private JourneyDirection journeyDirection;
+    private final LocalDateTime fromTime;
+    private final LocalDateTime toTime;
+    private final Task task;
+    private final JourneyDirection journeyDirection;
 
-    public JourneyTimeEntry(LocalDateTime fromTime, LocalDateTime toTime, Task task, JourneyDirection journeyDirection) {
+    JourneyTimeEntry(LocalDateTime fromTime, LocalDateTime toTime, Task task, JourneyDirection journeyDirection) {
         this.fromTime = fromTime;
         this.toTime = toTime;
         this.task = task;
         this.journeyDirection = journeyDirection;
+    }
+
+    public static JourneyTimeEntry of(LocalDateTime fromTime, LocalDateTime toTime, Task task, JourneyDirection journeyDirection) {
+        return new JourneyTimeEntry(fromTime, toTime, task, journeyDirection);
     }
 
 

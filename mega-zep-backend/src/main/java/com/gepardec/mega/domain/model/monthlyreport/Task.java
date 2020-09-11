@@ -25,7 +25,7 @@ public enum Task {
     }
 
     public static Optional<Task> fromString(String name) {
-        return Optional.ofNullable(tasks.get(name));
+        return Optional.ofNullable(tasks.get(name.toUpperCase()));
     }
 
 }
