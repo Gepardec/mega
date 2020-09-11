@@ -6,6 +6,7 @@ import { CommentsForEmployeeComponent } from '../../shared/components/comments-f
 import { SelectionModel } from '@angular/cdk/collections';
 import { configuration } from '../../shared/constants/configuration';
 import { omEntriesMock } from '../models/MockData';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-office-management',
@@ -31,6 +32,7 @@ export class OfficeManagementComponent implements OnInit {
   selectedDate: string;
   dayOfMonthForWarning = 5;
   configuration = configuration;
+  environment = environment;
 
   constructor(private dialog: MatDialog) {
     console.log(this.states);

@@ -1,9 +1,7 @@
 {
   "PAGE_NAMES": {
-    "LOGIN": "Login",
-    "EMPLOYEES": "MITARBEITERÜBERSICHT",
-    "MONTHLY_REPORT": "MEIN MEGA",
-    "ERROR": "Error"
+    "OFFICE_MANAGEMENT": "OFFICE MANAGEMENT",
+    "MONTHLY_REPORT": "MEIN MEGA"
   },
   "messages": {
     "employeeUpdatedSuccess": "Mitarbeiter erfolgreich aktualisiert"
@@ -49,17 +47,19 @@
       }
     }
   },
-  "employees-table": {
+  "office-management": {
+    "filterPlaceholder": "Suche nach Name",
+    "selectedCount": "Person(en) ausgewählt",
+    "releaseBtnText": "Freigeben",
     "table": {
-      "title": "Mitarbeiterübersicht",
       "name": "Name",
-      "workDescription": "Rolle",
-      "releasedUntil": "Freigegeben bis"
-    }
-  },
-  "employees-filter": {
-    "filter": "Suche nach Name",
-    "personCount": "Person(en) ausgewählt",
-    "releaseBtnText": "Freigeben"
+      "customerCheckState": "Kundenzeiten",
+      "internalCheckState": "Interne Zeiten",
+      "comments": "Anmerkungen",
+      "employeeCheckState": "MA Check",
+      "projectCheckState": "PM Check",
+      "releaseDate": "Freigabedatum"
+    },
+    "noOmEntriesFound": "Keine Einträge gefunden"
   }
 }

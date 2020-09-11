@@ -35,7 +35,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     translate.get('PAGE_NAMES').subscribe(
       PAGE_NAMES => {
         this.links.push({name: PAGE_NAMES.MONTHLY_REPORT, path: configuration.PAGE_URLS.MONTHLY_REPORT});
-        this.links.push({name: PAGE_NAMES.EMPLOYEES, path: configuration.PAGE_URLS.EMPLOYEES});
+        this.links.push({name: PAGE_NAMES.OFFICE_MANAGEMENT, path: configuration.PAGE_URLS.OFFICE_MANAGEMENT});
         console.log(this.links);
       }
     );

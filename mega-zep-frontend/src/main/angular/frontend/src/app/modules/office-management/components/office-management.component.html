@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <mat-toolbar class="w-100 mat-elevation-z8" color="accent">
     <mat-form-field floatLabel="never">
-      <mat-label>{{'employees-filter.filter' | translate}}</mat-label>
+      <mat-label>{{'office-management.filterPlaceholder' | translate}}</mat-label>
       <input
         #employeeNameInput
         (keyup)="filterOmEntriesByEmployeeName(employeeNameInput.value)"
@@ -19,7 +19,7 @@
     <small
       *ngIf="omSelectionModel.selected.length > 0"
       class="mr-3">
-      {{omSelectionModel.selected.length}} {{'employees-filter.personCount' | translate}}
+      {{omSelectionModel.selected.length}} {{'office-management.selectedCount' | translate}}
     </small>
 
     <app-datepicker
@@ -31,7 +31,7 @@
     <button (click)="releaseEmployees()"
             *ngIf="omSelectionModel.selected.length > 0 && selectedDate"
             mat-button>
-      {{'employees-filter.releaseBtnText' | translate}}
+      {{'office-management.releaseBtnText' | translate}}
     </button>
   </mat-toolbar>
 
@@ -56,12 +56,17 @@
       </ng-container>
 
       <ng-container matColumnDef="name">
-        <th *matHeaderCellDef mat-header-cell>Name</th>
-        <td *matCellDef="let omEntry" mat-cell>{{omEntry.employee.firstName}} {{omEntry.employee.sureName}}</td>
+        <th *matHeaderCellDef mat-header-cell>{{'office-management.table.name' | translate}}</th>
+        <td *matCellDef="let omEntry" mat-cell>
+          <a [href]="environment.ZEP_URL_OFFICE_MANAGEMENT + omEntry.employee.userId"
+             target="_blank">
+            {{omEntry.employee.firstName}} {{omEntry.employee.sureName}}
+          </a>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="customerCheckState">
-        <th *matHeaderCellDef mat-header-cell>Kundenzeiten</th>
+        <th *matHeaderCellDef mat-header-cell>{{'office-management.table.customerCheckState' | translate}}</th>
         <td *matCellDef="let omEntry" mat-cell>
           <mat-select [value]="omEntry.customerCheckState">
             <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
@@ -70,7 +75,7 @@
       </ng-container>
 
       <ng-container matColumnDef="internalCheckState">
-        <th *matHeaderCellDef mat-header-cell>Interne Zeiten</th>
+        <th *matHeaderCellDef mat-header-cell>{{'office-management.table.internalCheckState' | translate}}</th>
         <td *matCellDef="let omEntry" mat-cell>
           <mat-select [value]="omEntry.internalCheckState">
             <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
@@ -79,7 +84,7 @@
       </ng-container>
 
       <ng-container matColumnDef="employeeCheckState">
-        <th *matHeaderCellDef mat-header-cell>MA Check</th>
+        <th *matHeaderCellDef mat-header-cell>{{'office-management.table.employeeCheckState' | translate}}</th>
         <td *matCellDef="let omEntry" [ngSwitch]="omEntry.employeeCheckState" mat-cell>
           <mat-icon *ngSwitchCase="State.OPEN" class="red">cancel</mat-icon>
           <mat-icon *ngSwitchCase="State.DONE" class="green">check_circle</mat-icon>
@@ -87,7 +92,7 @@
       </ng-container>
 
       <ng-container matColumnDef="projectCheckState">
-        <th *matHeaderCellDef mat-header-cell>PM Check</th>
+        <th *matHeaderCellDef mat-header-cell>{{'office-management.table.projectCheckState' | translate}}</th>
         <td *matCellDef="let omEntry" [ngSwitch]="omEntry.projectCheckState" mat-cell>
           <mat-icon *ngSwitchCase="State.OPEN" class="red">cancel</mat-icon>
           <mat-icon *ngSwitchCase="State.DONE" class="green">check_circle</mat-icon>
@@ -95,7 +100,7 @@
       </ng-container>
 
       <ng-container matColumnDef="actions">
-        <th *matHeaderCellDef mat-header-cell>Anmerkungen</th>
+        <th *matHeaderCellDef mat-header-cell>{{'office-management.table.comments' | translate}}</th>
         <td *matCellDef="let omEntry" mat-cell>
           <button (click)="openDialog(omEntry)" mat-button>
             <mat-icon>comment</mat-icon>
@@ -112,7 +117,7 @@
       </ng-container>
 
       <ng-container matColumnDef="releaseDate">
-        <th *matHeaderCellDef mat-header-cell>Freigabedatum</th>
+        <th *matHeaderCellDef mat-header-cell>{{'office-management.table.releaseDate' | translate}}</th>
         <td *matCellDef="let omEntry" mat-cell>
           <p [ngClass]="getReleaseDateCssClass(omEntry.employee.releaseDate)" class="release">
             {{omEntry.employee.releaseDate | date: configuration.dateFormat}}
@@ -126,6 +131,6 @@
   </div>
 
   <ng-template #noOmEntriesFound>
-    <mat-card class="mt-2">Keine Einträge gefunden</mat-card>
+    <mat-card class="mt-2">{{'office-management.noOmEntriesFound' | translate}}</mat-card>
   </ng-template>
 </div>

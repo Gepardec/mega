@@ -19,7 +19,6 @@ export class UserService {
               private httpClient: HttpClient,
               private oAuthService: OAuthService,
               private configService: ConfigService) {
-
   }
 
   public loginUser(): void {

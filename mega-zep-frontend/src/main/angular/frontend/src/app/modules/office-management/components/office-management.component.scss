@@ -23,3 +23,12 @@
 .wip {
   background-color: transparentize($mega-warning-yellow, 0.8);
 }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: $mega-success-green;
+}

@@ -8,7 +8,6 @@ import { APP_BASE_HREF, registerLocaleData } from '@angular/common';
 import localeDeAt from '@angular/common/locales/de-AT';
 import { SharedModule } from './modules/shared/shared.module';
 import { OAuthModule, OAuthModuleConfig } from 'angular-oauth2-oidc';
-import { EmployeesModule } from './modules/employees/employees.module';
 import { GlobalHttpInterceptorService } from './modules/shared/interceptors/global-http-interceptor.service';
 import { authConfigFactory } from './auth/auth.config.factory';
 import { ConfigService } from './modules/shared/services/config/config.service';
@@ -32,7 +31,6 @@ registerLocaleData(localeDeAt, 'de-AT');
     OAuthModule.forRoot(),
     BrowserAnimationsModule,
     SharedModule,
-    EmployeesModule,
     OfficeManagementModule,
     MonthlyReportModule,
     TranslateModule.forRoot({

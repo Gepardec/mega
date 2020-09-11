@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Employee } from '../../models/Employee';
 import { Comment } from '../../models/Comment';
 import { State } from '../../models/State';
+import { environment } from '../../../../../environments/environment.prod';
+import { environment as notProd } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-comments-for-employee',
@@ -19,6 +21,8 @@ export class CommentsForEmployeeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(environment.ZEP_URL_OFFICE_MANAGEMENT);
+    console.log(notProd.ZEP_URL_OFFICE_MANAGEMENT);
     this.employee = JSON.parse(JSON.stringify(this.employee));
     this.comments = JSON.parse(JSON.stringify(this.comments));
   }
