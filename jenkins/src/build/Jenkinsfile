@@ -95,7 +95,11 @@ pipeline {
                                                         clean compile install \
                                                         -Drevision=${env.REVISION} \
                                                         -Dquarkus.package.uber.jar=true"
-                                                jacoco(execPattern: 'target/*.exec', classPattern: 'target/classes', sourcePattern: 'src/main/java', exclusionPattern: 'src/test*')
+                                                jacoco(execPattern: 'target/*.exec',
+                                                        classPattern: 'target/classes',
+                                                        sourcePattern: 'src/main/java',
+                                                        sourceExclusionPattern: 'src/test/java',
+                                                        exclusionPattern: '**/provantis/**')
                                             }
                                         }
                                     }
