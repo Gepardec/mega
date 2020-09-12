@@ -1,4 +1,4 @@
-package com.gepardec.mega.application.security;
+package com.gepardec.mega.application.interceptor;
 
 import com.gepardec.mega.domain.model.Role;
 

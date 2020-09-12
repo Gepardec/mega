@@ -22,14 +22,14 @@ public class ConfigResourceTest {
     ApplicationConfig applicationConfig;
 
     @Test
-    void get_withPOST_returnsMethodNotallowed() {
+    void get_whenPOST_thenReturnsHttpStatusMETHOD_NOT_ALLOWED() {
         given().contentType(ContentType.TEXT)
                 .post("/config")
                 .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
     }
 
     @Test
-    void get_withGET_returnsConfig() {
+    void get_whenGET_thenReturnsConfig() {
         given().contentType(ContentType.TEXT)
                 .get("/config")
                 .then().statusCode(HttpStatus.SC_OK)

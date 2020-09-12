@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class JourneyWarning {
     @JsonDeserialize(using = LocalDateDeserializer.class)
@@ -49,5 +50,24 @@ public class JourneyWarning {
 
     public void setWarningTypes(List<Warning> warningTypes) {
         this.warningTypes = warningTypes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        JourneyWarning warning = (JourneyWarning) o;
+        return Objects.equals(date, warning.date) &&
+                Objects.equals(warnings, warning.warnings) &&
+                Objects.equals(warningTypes, warning.warningTypes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date, warnings, warningTypes);
     }
 }
