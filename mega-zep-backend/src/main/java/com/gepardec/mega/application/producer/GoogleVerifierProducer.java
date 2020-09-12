@@ -33,7 +33,7 @@ public class GoogleVerifierProducer {
     }
 
     @Produces
-    @ApplicationScoped
+    @Dependent
     GoogleIdTokenVerifier createGoogleTokenVerifier(final HttpTransport httpTransport, final JsonFactory jsonFactory) {
         return new GoogleIdTokenVerifier.Builder(httpTransport, jsonFactory)
                 .setAudience(List.of(oauthConfig.getClientId()))
