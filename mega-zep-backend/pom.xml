@@ -225,7 +225,7 @@
                 <version>${jacoco.version}</version>
                 <configuration>
                     <excludes>
-                        <exclude>de/provantis/**/*</exclude>
+                        <exclude>**/provantis/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>
