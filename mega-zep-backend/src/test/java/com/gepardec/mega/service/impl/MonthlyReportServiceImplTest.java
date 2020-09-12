@@ -81,9 +81,9 @@ public class MonthlyReportServiceImplTest {
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
         Assertions.assertNotNull(monthendReportForUser);
-        Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.getEmployee().email());
-        Assertions.assertNotNull(monthendReportForUser.getTimeWarnings());
-        Assertions.assertTrue(monthendReportForUser.getTimeWarnings().isEmpty());
+        Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.employee().email());
+        Assertions.assertNotNull(monthendReportForUser.timeWarnings());
+        Assertions.assertTrue(monthendReportForUser.timeWarnings().isEmpty());
     }
 
     @Test
@@ -94,12 +94,12 @@ public class MonthlyReportServiceImplTest {
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
         Assertions.assertNotNull(monthendReportForUser);
-        Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.getEmployee().email());
-        Assertions.assertNotNull(monthendReportForUser.getTimeWarnings());
-        Assertions.assertFalse(monthendReportForUser.getTimeWarnings().isEmpty());
-        Assertions.assertEquals(LocalDate.of(2020, 1, 31), monthendReportForUser.getTimeWarnings().get(0).getDate());
-        Assertions.assertEquals(1d, monthendReportForUser.getTimeWarnings().get(0).getExcessWorkTime());
-        Assertions.assertEquals(0.5d, monthendReportForUser.getTimeWarnings().get(0).getMissingBreakTime());
+        Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.employee().email());
+        Assertions.assertNotNull(monthendReportForUser.timeWarnings());
+        Assertions.assertFalse(monthendReportForUser.timeWarnings().isEmpty());
+        Assertions.assertEquals(LocalDate.of(2020, 1, 31), monthendReportForUser.timeWarnings().get(0).getDate());
+        Assertions.assertEquals(1d, monthendReportForUser.timeWarnings().get(0).getExcessWorkTime());
+        Assertions.assertEquals(0.5d, monthendReportForUser.timeWarnings().get(0).getMissingBreakTime());
     }
 
     private List<ProjectEntry> createReadProjektzeitenResponseType(int bisHours) {

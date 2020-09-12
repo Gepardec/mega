@@ -6,8 +6,8 @@ import org.eclipse.microprofile.health.Readiness;
 
 import javax.enterprise.context.ApplicationScoped;
 
-@Readiness
-@ApplicationScoped
+//@Readiness
+//@ApplicationScoped
 public class ReadynessProbe implements HealthCheck {
 
     @Override

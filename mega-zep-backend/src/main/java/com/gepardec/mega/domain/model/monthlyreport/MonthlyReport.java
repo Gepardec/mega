@@ -1,38 +1,35 @@
 package com.gepardec.mega.domain.model.monthlyreport;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gepardec.mega.domain.model.Employee;
+import com.google.auto.value.AutoValue;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class MonthlyReport {
-    private List<TimeWarning> timeWarnings;
-    private List<JourneyWarning> journeyWarnings;
-    private Employee employee;
+@AutoValue
+@JsonSerialize(as = MonthlyReport.class)
+public abstract class MonthlyReport {
 
-    public MonthlyReport() {
-    }
+    @Nullable
+    @JsonProperty
+    public abstract Employee employee();
 
-    public List<TimeWarning> getTimeWarnings() {
-        return timeWarnings;
-    }
+    @Nullable
+    @JsonProperty
+    public abstract List<TimeWarning> timeWarnings();
 
-    public void setTimeWarnings(List<TimeWarning> timeWarnings) {
-        this.timeWarnings = timeWarnings;
-    }
+    @Nullable
+    @JsonProperty
+    public abstract List<JourneyWarning> journeyWarnings();
 
-    public List<JourneyWarning> getJourneyWarnings() {
-        return journeyWarnings;
-    }
-
-    public void setJourneyWarnings(List<JourneyWarning> journeyWarnings) {
-        this.journeyWarnings = journeyWarnings;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    @JsonCreator
+    public static MonthlyReport of(
+            @JsonProperty("employee") final Employee employee,
+            @JsonProperty("timeWarnings") List<TimeWarning> timeWarnings,
+            @JsonProperty("journeyWarnings") final List<JourneyWarning> journeyWarnings) {
+        return new com.gepardec.mega.domain.model.monthlyreport.AutoValue_MonthlyReport(employee, timeWarnings, journeyWarnings);
     }
 }

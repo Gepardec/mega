@@ -1,4 +1,4 @@
-package com.gepardec.mega.application.security;
+package com.gepardec.mega.application.interceptor;
 
 import com.gepardec.mega.application.exception.UnauthorizedException;
 import com.gepardec.mega.domain.model.UserContext;
@@ -21,7 +21,7 @@ public class SecuredInterceptor {
     @AroundInvoke
     public Object invoke(final InvocationContext invocationContext) throws Exception {
         if (!userContext.loggedIn()) {
-            throw new UnauthorizedException("IdToken was invalid");
+            throw new UnauthorizedException("User is not logge");
         }
         return invocationContext.proceed();
     }

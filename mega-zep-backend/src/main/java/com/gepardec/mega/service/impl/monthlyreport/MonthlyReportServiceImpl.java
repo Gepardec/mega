@@ -33,12 +33,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(filterJourneyTimeEntries(projectEntries));
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(filterProjectTimeEntries(projectEntries));
 
-        MonthlyReport monthlyReport = new MonthlyReport();
-        monthlyReport.setJourneyWarnings(journeyWarnings);
-        monthlyReport.setTimeWarnings(timeWarnings);
-        monthlyReport.setEmployee(employee);
-
-        return monthlyReport;
+        return MonthlyReport.of(employee, timeWarnings, journeyWarnings);
     }
 
     private List<ProjectTimeEntry> filterProjectTimeEntries(List<ProjectEntry> projectEntries) {
