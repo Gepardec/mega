@@ -1,6 +1,7 @@
-package com.gepardec.mega.application.security;
+package com.gepardec.mega.application.producer;
 
 import com.gepardec.mega.application.configuration.OAuthConfig;
+import com.gepardec.mega.application.producer.GoogleVerifierProducer;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;

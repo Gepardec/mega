@@ -22,7 +22,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -84,9 +83,9 @@ public class MonthlyReportServiceImplTest {
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
         Assertions.assertNotNull(monthendReportForUser);
-        Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.getEmployee().email());
-        Assertions.assertNotNull(monthendReportForUser.getTimeWarnings());
-        Assertions.assertTrue(monthendReportForUser.getTimeWarnings().isEmpty());
+        Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.employee().email());
+        Assertions.assertNotNull(monthendReportForUser.timeWarnings());
+        Assertions.assertTrue(monthendReportForUser.timeWarnings().isEmpty());
     }
 
     @Test
@@ -97,13 +96,13 @@ public class MonthlyReportServiceImplTest {
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
         Assertions.assertNotNull(monthendReportForUser);
-        Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.getEmployee().email());
+        Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.employee().email());
         // We will have to reverse engineer why this is false
-        Assertions.assertNotNull(monthendReportForUser.getTimeWarnings());
-        Assertions.assertFalse(monthendReportForUser.getTimeWarnings().isEmpty());
-        Assertions.assertEquals(LocalDate.of(2020, 1, 31), monthendReportForUser.getTimeWarnings().get(0).getDate());
-        Assertions.assertEquals(1d, monthendReportForUser.getTimeWarnings().get(0).getExcessWorkTime());
-        Assertions.assertEquals(0.5d, monthendReportForUser.getTimeWarnings().get(0).getMissingBreakTime());
+        Assertions.assertNotNull(monthendReportForUser.timeWarnings());
+        Assertions.assertFalse(monthendReportForUser.timeWarnings().isEmpty());
+        Assertions.assertEquals(LocalDate.of(2020, 1, 31), monthendReportForUser.timeWarnings().get(0).getDate());
+        Assertions.assertEquals(1d, monthendReportForUser.timeWarnings().get(0).getExcessWorkTime());
+        Assertions.assertEquals(0.5d, monthendReportForUser.timeWarnings().get(0).getMissingBreakTime());
     }
 
     private List<ProjectEntry> createReadProjektzeitenResponseType(int bisHours) {

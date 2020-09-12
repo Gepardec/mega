@@ -21,7 +21,7 @@ public abstract class Employee {
     @Nullable @JsonProperty public abstract String releaseDate();
     @Nullable @JsonProperty public abstract String workDescription();
     @Nullable @JsonProperty public abstract Integer role();
-    public abstract boolean active();
+    @JsonProperty public abstract boolean active();
 
     public static Builder builder() {
         return new com.gepardec.mega.domain.model.AutoValue_Employee.Builder()

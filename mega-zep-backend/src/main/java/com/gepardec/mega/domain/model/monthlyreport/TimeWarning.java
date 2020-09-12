@@ -2,6 +2,7 @@ package com.gepardec.mega.domain.model.monthlyreport;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 
 public class TimeWarning {
     public static final double MAX_HOURS_A_DAY = 10d;
@@ -72,5 +73,25 @@ public class TimeWarning {
 
     public void setExcessWorkTime(Double excessWorkTime) {
         this.excessWorkTime = excessWorkTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        TimeWarning that = (TimeWarning) o;
+        return Objects.equals(date, that.date) &&
+                Objects.equals(missingRestTime, that.missingRestTime) &&
+                Objects.equals(missingBreakTime, that.missingBreakTime) &&
+                Objects.equals(excessWorkTime, that.excessWorkTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date, missingRestTime, missingBreakTime, excessWorkTime);
     }
 }
