@@ -2,6 +2,7 @@ package com.gepardec.mega.rest;
 
 import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
