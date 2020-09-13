@@ -212,7 +212,8 @@
                                 <wsdlOption>
                                     <wsdl>${project.basedir}/src/main/resources/wsdl/zep_v7.wsdl</wsdl>
                                     <bindingFiles>
-                                        <bindingFile>${project.basedir}/src/main/resources/wsdl/zep-bindings.xml</bindingFile>
+                                        <bindingFile>${project.basedir}/src/main/resources/wsdl/zep-bindings.xml
+                                        </bindingFile>
                                     </bindingFiles>
                                 </wsdlOption>
                             </wsdlOptions>
@@ -266,8 +267,6 @@
                 <version>${surefire-plugin.version}</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <user.language>de</user.language>
-                        <user.region></user.region>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                         <quarkus.mailer.mock>true</quarkus.mailer.mock>
                     </systemPropertyVariables>
@@ -354,7 +353,6 @@
                             <srcDir>src/main/resources/</srcDir>
                             <includes>
                                 <include>**/*.properties</include>
-                                <include>**/*.html</include>
                             </includes>
                         </configuration>
                     </execution>

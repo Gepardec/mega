@@ -1,54 +1,37 @@
 package com.gepardec.mega.application.producer;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 @RequestScoped
 public class ResourceBundleProducer {
 
-    private final List<Locale> locales;
-
-    private final Locale defaultLocale;
-
-    private final HttpServletRequest request;
+    private final Locale currentLocale;
 
     private ResourceBundle resourceBundle;
 
     @Inject
-    public ResourceBundleProducer(
-            @ConfigProperty(name = "quarkus.locales") List<Locale> locales,
-            @ConfigProperty(name = "quarkus.default-locale") Locale defaultLocale,
-            HttpServletRequest request) {
-        this.locales = locales;
-        this.defaultLocale = defaultLocale;
-        this.request = request;
+    public ResourceBundleProducer(Locale currentLocale) {
+        this.currentLocale = currentLocale;
     }
 
     @PostConstruct
     public void init() {
-        resourceBundle = ResourceBundle.getBundle("messages", localeToUse());
+        resourceBundle = ResourceBundle.getBundle("messages",
+                currentLocale,
+                // Otherwise it will fallback to english depending on the current jvm language settings,
+                // but we always want to fallback to the base bundle which is german.
+                ResourceBundle.Control.getNoFallbackControl(ResourceBundle.Control.FORMAT_PROPERTIES));
     }
 
     @Produces
     @Dependent
     public ResourceBundle getResourceBundle() {
         return resourceBundle;
-    }
-
-    private Locale localeToUse() {
-        final Locale requestLocale = request.getLocale();
-        if (requestLocale != null && locales.contains(requestLocale)) {
-            return request.getLocale();
-        }
-        return defaultLocale;
     }
 }

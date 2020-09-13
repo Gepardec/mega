@@ -7,6 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -29,14 +30,21 @@ public class NotificationHelper {
     @Inject
     ResourceBundle resourceBundle;
 
+    private final Locale currentLocale;
+
+    @Inject
+    public NotificationHelper(Locale currentLocale) {
+        this.currentLocale = currentLocale;
+    }
+
     public String templatePathForReminder(final Reminder reminder) {
         Objects.requireNonNull(reminder, "Cannot retrieve template path for null reminder");
-        final String emailPath = EMAIL_PATH + "/" + reminder.name() + ".html";
-        if (NotificationHelper.class.getClassLoader().getResource(emailPath) != null) {
-            return emailPath;
-        } else {
+        final String emailPath = Optional.ofNullable(localizedEmailOrNull(reminder, currentLocale))
+                .orElse(localizedEmailOrNull(reminder, Locale.ROOT));
+        if (emailPath == null) {
             throw new IllegalArgumentException(String.format("No template path for reminder '%s' found", reminder));
         }
+        return emailPath;
     }
 
     public String readEmailTemplateResourceFromStream(String resourcePath) {
@@ -69,6 +77,19 @@ public class NotificationHelper {
 
     public String subjectPrefixOrEmptyString() {
         return Optional.ofNullable(notificationConfig.getSubjectPrefix()).orElse("");
+    }
+
+    private String localizedEmailOrNull(final Reminder reminder, final Locale locale) {
+        String emailPath = EMAIL_PATH + "/";
+        if (!locale.getLanguage().isEmpty()) {
+            emailPath += locale.getLanguage().toLowerCase() + "/";
+        }
+        emailPath += reminder.name() + ".html";
+        if (NotificationHelper.class.getClassLoader().getResource(emailPath) != null) {
+            return emailPath;
+        } else {
+            return null;
+        }
     }
 
     public String getMailTemplateTextPath() {
