@@ -265,7 +265,8 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire-plugin.version}</version>
                 <configuration>
-                    <systemPropertyVariables>
+                    <systemPropertyVariables
+                        <user.language>de</user.language>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                         <quarkus.mailer.mock>true</quarkus.mailer.mock>
                     </systemPropertyVariables>
