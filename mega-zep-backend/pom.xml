@@ -267,6 +267,7 @@
                 <configuration>
                     <systemPropertyVariables>
                         <user.language>de</user.language>
+                        <user.region></user.region>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                         <quarkus.mailer.mock>true</quarkus.mailer.mock>
                     </systemPropertyVariables>
