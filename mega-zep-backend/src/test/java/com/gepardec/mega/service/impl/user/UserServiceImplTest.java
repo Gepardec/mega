@@ -1,7 +1,6 @@
 package com.gepardec.mega.service.impl.user;
 
 import com.gepardec.mega.service.api.employee.EmployeeService;
-import com.gepardec.mega.service.impl.user.UserServiceImpl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;

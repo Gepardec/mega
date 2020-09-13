@@ -3,21 +3,26 @@ package com.gepardec.mega.application.producer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class ResourceBundleProducerTest {
+@ExtendWith(MockitoExtension.class)
+class ResourceBundleProducerTest {
 
     private ResourceBundleProducer producer;
 
     @BeforeEach
     void beforeEach() {
-        producer = new ResourceBundleProducer();
+        producer = new ResourceBundleProducer(Locale.GERMAN);
     }
 
     @Test
-    void createMessageResourceBundle_whenCalled_thenReturnsLoadedResourceBundle() {
-        final ResourceBundle bundle = producer.createMessageResourceBundle();
+    void init_whenCalled_thenInitializesResourceBundle() {
+        producer.init();
+        final ResourceBundle bundle = producer.getResourceBundle();
 
         Assertions.assertNotNull(bundle);
     }

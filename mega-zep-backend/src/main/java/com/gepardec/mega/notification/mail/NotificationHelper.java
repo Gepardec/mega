@@ -1,9 +1,13 @@
 package com.gepardec.mega.notification.mail;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
+import org.apache.commons.io.IOUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -26,13 +30,43 @@ public class NotificationHelper {
     @Inject
     ResourceBundle resourceBundle;
 
+    private final Locale currentLocale;
+
+    @Inject
+    public NotificationHelper(Locale currentLocale) {
+        this.currentLocale = currentLocale;
+    }
+
     public String templatePathForReminder(final Reminder reminder) {
         Objects.requireNonNull(reminder, "Cannot retrieve template path for null reminder");
-        final String emailPath = EMAIL_PATH + "/" + reminder.name() + ".html";
-        if (NotificationHelper.class.getClassLoader().getResource(emailPath) != null) {
-            return emailPath;
-        } else {
+        final String emailPath = Optional.ofNullable(localizedEmailOrNull(reminder, currentLocale))
+                .orElse(localizedEmailOrNull(reminder, Locale.ROOT));
+        if (emailPath == null) {
             throw new IllegalArgumentException(String.format("No template path for reminder '%s' found", reminder));
+        }
+        return emailPath;
+    }
+
+    public String readEmailTemplateResourceFromStream(String resourcePath) {
+        try (final InputStream is = MailSender.class.getClassLoader().getResourceAsStream(resourcePath)) {
+            if (is == null) {
+                throw new IllegalStateException("Could not get inputStream of email template resource '" + resourcePath + "' resource");
+            }
+            return IOUtils.toString(is, StandardCharsets.UTF_8.name());
+        } catch (Exception e) {
+            throw new IllegalStateException("Cannot read email template '" + resourcePath + "' resource as stream", e);
+        }
+    }
+
+    public byte[] readLogo() {
+        final String logoResourcePath = notificationConfig.getMegaImageLogoUrl();
+        try (final InputStream is = MailSender.class.getClassLoader().getResourceAsStream(logoResourcePath)) {
+            if (is == null) {
+                throw new IllegalStateException("Could not get inputStream of logo resource '" + logoResourcePath + "' resource");
+            }
+            return IOUtils.toByteArray(is);
+        } catch (Exception e) {
+            throw new IllegalStateException("Cannot read logo '" + logoResourcePath + "' resource as stream", e);
         }
     }
 
@@ -43,6 +77,19 @@ public class NotificationHelper {
 
     public String subjectPrefixOrEmptyString() {
         return Optional.ofNullable(notificationConfig.getSubjectPrefix()).orElse("");
+    }
+
+    private String localizedEmailOrNull(final Reminder reminder, final Locale locale) {
+        String emailPath = EMAIL_PATH + "/";
+        if (!locale.getLanguage().isEmpty()) {
+            emailPath += locale.getLanguage().toLowerCase() + "/";
+        }
+        emailPath += reminder.name() + ".html";
+        if (NotificationHelper.class.getClassLoader().getResource(emailPath) != null) {
+            return emailPath;
+        } else {
+            return null;
+        }
     }
 
     public String getMailTemplateTextPath() {

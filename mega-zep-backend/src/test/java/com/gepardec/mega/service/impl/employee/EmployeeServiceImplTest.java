@@ -1,9 +1,8 @@
 package com.gepardec.mega.service.impl.employee;
 
 
-import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.service.impl.employee.EmployeeServiceImpl;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.zep.ZepService;
 import com.gepardec.mega.zep.ZepServiceException;
 import org.eclipse.microprofile.context.ManagedExecutor;
@@ -17,8 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;

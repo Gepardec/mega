@@ -1,17 +1,21 @@
 package com.gepardec.mega.notification.mail;
 
+import com.gepardec.mega.application.producer.LocaleProducer;
+import com.gepardec.mega.application.producer.ResourceBundleProducer;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static com.gepardec.mega.notification.mail.Reminder.OM_RELEASE;
@@ -19,6 +23,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 public class MailDaemonTest {
+
+    @InjectMock
+    private LocaleProducer localeProducer;
+
     @Inject
     MailDaemon mailDaemon;
 
@@ -39,7 +47,8 @@ public class MailDaemonTest {
 
     @BeforeEach
     void init() {
-        assertTrue(mailMockSetting);
+        assertTrue(mailMockSetting, "This test can only run when mail mocking is true");
+        Mockito.when(localeProducer.getCurrentLocale()).thenReturn(Locale.GERMAN);
         mailbox.clear();
     }
 
@@ -62,7 +71,8 @@ public class MailDaemonTest {
         assertAll(
                 () -> assertEquals(mailAddresses.size(), mailbox.getTotalMessagesSent()),
                 () -> mailAddresses.forEach(mailAddress ->
-                        assertEquals("UNIT-TEST: Reminder: Freigaben durchführen", mailbox.getMessagesSentTo(mailAddresses.get(0)).get(0).getSubject()))
+                        assertEquals("UNIT-TEST: Reminder: Freigaben durchführen", mailbox.getMessagesSentTo(mailAddresses.get(0)).get(0)
+                                .getSubject()))
         );
     }
 
@@ -73,7 +83,8 @@ public class MailDaemonTest {
         assertAll(
                 () -> assertEquals(mailAddresses.size(), mailbox.getTotalMessagesSent()),
                 () -> mailAddresses.forEach(mailAddress ->
-                        assertEquals("UNIT-TEST: Reminder: Projekte kontrollieren und abrechnen", mailbox.getMessagesSentTo(mailAddress).get(0).getSubject()))
+                        assertEquals("UNIT-TEST: Reminder: Projekte kontrollieren und abrechnen", mailbox.getMessagesSentTo(mailAddress).get(0)
+                                .getSubject()))
         );
     }
 

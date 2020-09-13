@@ -10,8 +10,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Locale;
 import java.util.ResourceBundle;
 
+// TODO: Enhance tests for other locales as well
 @ExtendWith(MockitoExtension.class)
 class NotificationHelperTest {
 
@@ -22,7 +24,7 @@ class NotificationHelperTest {
     private ResourceBundle resourceBundle;
 
     @InjectMocks
-    private NotificationHelper notificationHelper;
+    private NotificationHelper notificationHelper = new NotificationHelper(Locale.GERMAN);
 
     @Nested
     class TemplatePathForReminder {
@@ -79,6 +81,7 @@ class NotificationHelperTest {
 
     @Nested
     class SubjectForReminder {
+
         @Test
         void whenPrefixNull_thenNoPrefixAdded() {
             Mockito.when(notificationConfig.getSubjectPrefix()).thenReturn(null);
