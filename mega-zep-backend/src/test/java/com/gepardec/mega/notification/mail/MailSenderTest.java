@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,7 +39,7 @@ class MailSenderTest {
     @BeforeEach
     void init() {
         assertTrue(mailMockSetting, "This test can only run when mail mocking is true");
-        when(resourceBundleProducer.getResourceBundle()).thenReturn(ResourceBundle.getBundle("messages", Locale.GERMAN));
+        when(resourceBundleProducer.getResourceBundle()).thenReturn(ResourceBundle.getBundle("messages"));
         mailbox.clear();
     }
 

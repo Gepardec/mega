@@ -351,7 +351,11 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                            <srcDir>src/main/resources</srcDir>
+                            <srcDir>src/main/resources/</srcDir>
+                            <includes>
+                                <include>**/*.properties</include>
+                                <include>**/*.html</include>
+                            </includes>
                         </configuration>
                     </execution>
                 </executions>
