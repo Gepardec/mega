@@ -1,5 +1,6 @@
 package com.gepardec.mega.application.producer;
 
+import com.gepardec.mega.application.configuration.ApplicationConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -21,11 +23,16 @@ class LocaleProducerTest {
     @Mock
     private HttpServletRequest request;
 
+    @Mock
+    private ApplicationConfig applicationConfig;
+
     private LocaleProducer producer;
 
     @BeforeEach
     void beforeEach() {
-        producer = new LocaleProducer(List.of(Locale.GERMAN, Locale.ENGLISH), DEFAULT_LOCALE, request);
+        lenient().when(applicationConfig.getLocales()).thenReturn(List.of(Locale.GERMAN, Locale.ENGLISH));
+        lenient().when(applicationConfig.getDefaultLocale()).thenReturn(Locale.GERMAN);
+        producer = new LocaleProducer(applicationConfig, request);
     }
 
     @Test
