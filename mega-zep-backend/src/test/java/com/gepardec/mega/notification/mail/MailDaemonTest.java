@@ -18,8 +18,7 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import static com.gepardec.mega.notification.mail.Reminder.OM_RELEASE;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -48,6 +47,7 @@ public class MailDaemonTest {
 
     @BeforeEach
     void init() {
+        assertTrue(mailMockSetting, "This test can only run when mail mocking is true");
         when(resourceBundleProducer.getResourceBundle()).thenReturn(ResourceBundle.getBundle("messages", Locale.GERMAN));
         mailbox.clear();
     }

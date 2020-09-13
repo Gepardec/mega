@@ -39,6 +39,7 @@ class MailSenderTest {
 
     @BeforeEach
     void init() {
+        assertTrue(mailMockSetting, "This test can only run when mail mocking is true");
         when(resourceBundleProducer.getResourceBundle()).thenReturn(ResourceBundle.getBundle("messages", Locale.GERMAN));
         mailbox.clear();
     }
