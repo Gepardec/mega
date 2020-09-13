@@ -1,9 +1,12 @@
 package com.gepardec.mega.notification.mail;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
+import org.apache.commons.io.IOUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -33,6 +36,29 @@ public class NotificationHelper {
             return emailPath;
         } else {
             throw new IllegalArgumentException(String.format("No template path for reminder '%s' found", reminder));
+        }
+    }
+
+    public String readEmailTemplateResourceFromStream(String resourcePath) {
+        try (final InputStream is = MailSender.class.getClassLoader().getResourceAsStream(resourcePath)) {
+            if (is == null) {
+                throw new IllegalStateException("Could not get inputStream of email template resource '" + resourcePath + "' resource");
+            }
+            return IOUtils.toString(is, StandardCharsets.UTF_8.name());
+        } catch (Exception e) {
+            throw new IllegalStateException("Cannot read email template '" + resourcePath + "' resource as stream", e);
+        }
+    }
+
+    public byte[] readLogo() {
+        final String logoResourcePath = notificationConfig.getMegaImageLogoUrl();
+        try (final InputStream is = MailSender.class.getClassLoader().getResourceAsStream(logoResourcePath)) {
+            if (is == null) {
+                throw new IllegalStateException("Could not get inputStream of logo resource '" + logoResourcePath + "' resource");
+            }
+            return IOUtils.toByteArray(is);
+        } catch (Exception e) {
+            throw new IllegalStateException("Cannot read logo '" + logoResourcePath + "' resource as stream", e);
         }
     }
 

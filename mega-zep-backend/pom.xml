@@ -14,6 +14,7 @@
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
         <cxf-codegen-plugin.version>3.3.3</cxf-codegen-plugin.version>
         <liquibase-maven-plugin.version>4.0.0</liquibase-maven-plugin.version>
+        <native2ascii-maven-plugin.plugin.version>2.0.1</native2ascii-maven-plugin.plugin.version>
 
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
@@ -175,7 +176,7 @@
             <artifactId>org.jacoco.agent</artifactId>
             <classifier>runtime</classifier>
             <scope>test</scope>
-            <version>0.8.5</version>
+            <version>${jacoco.version}</version>
         </dependency>
 
         <!-- For IDEA, so that annotation processing works -->
@@ -224,8 +225,10 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
                 <configuration>
+                    <!-- We need to exclude generated files, otherwise these files pollute our coverage -->
                     <excludes>
                         <exclude>**/provantis/**</exclude>
+                        <exclude>**/AutoValue_*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -332,6 +335,24 @@
                         <version>1.26</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <!-- Now we can use UTF-8 in the properties files which get converted transparently -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native2ascii-maven-plugin</artifactId>
+                <version>${native2ascii-maven-plugin.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>utf8-to-ascii</id>
+                        <goals>
+                            <goal>resources</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <srcDir>src/main/resources</srcDir>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

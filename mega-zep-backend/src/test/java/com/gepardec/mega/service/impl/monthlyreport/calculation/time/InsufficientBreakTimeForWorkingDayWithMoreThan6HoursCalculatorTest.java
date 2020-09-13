@@ -2,12 +2,13 @@ package com.gepardec.mega.service.impl.monthlyreport.calculation.time;
 
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class InsufficientBreakTimeForWorkingDayWithMoreThan6HoursCalculatorTest {
 
