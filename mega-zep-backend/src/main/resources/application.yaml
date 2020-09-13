@@ -17,6 +17,8 @@ quarkus:
     ssl: true
     username: service@gepardec.com
     password: ${MAILER_PASSWORD}
+  default-locale: de
+  locales: 'en,de'
 mega:
   info:
     build:

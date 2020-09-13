@@ -1,11 +1,11 @@
 package com.gepardec.mega.notification.mail;
 
+import com.gepardec.mega.application.configuration.NotificationConfig;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.notification.mail.dates.BusinessDayCalculator;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -29,15 +29,8 @@ public class MailDaemon {
     @Inject
     Logger logger;
 
-    @ConfigProperty(name = "mega.mail.reminder.pl")
-    String plMailAddresses;
-
-    @ConfigProperty(name = "mega.mail.reminder.om")
-    String omMailAddresses;
-
-    @ConfigProperty(name = "mega.mail.employees.notification")
-    boolean employeesNotification;
-
+    @Inject
+    NotificationConfig notificationConfig;
 
     @Scheduled(cron = "{mega.mail.cron}")
     void sendReminder() {
@@ -81,25 +74,25 @@ public class MailDaemon {
 
 
     void sendReminderToPl() {
-        if (plMailAddresses == null) {
+        if (notificationConfig.getPlMailAddresses().trim().isEmpty()) {
             throw new IllegalStateException("No mail address for project-leaders available, check value for property 'mega.mail.reminder.pl'!");
         }
-        List.of(plMailAddresses.split("\\,"))
+        List.of(notificationConfig.getPlMailAddresses().split("\\,"))
                 .forEach(mailAddress -> mailSender.sendReminder(mailAddress, getNameByMail(mailAddress), PL_PROJECT_CONTROLLING));
         logSentNotification(PL_PROJECT_CONTROLLING);
     }
 
     void sendReminderToOm(Reminder reminder) {
-        if (omMailAddresses == null) {
+        if (notificationConfig.getOmMailAddresses().trim().isEmpty()) {
             throw new IllegalStateException("No mail address for om available, check value for property 'mega.mail.reminder.om'!");
         }
-        List.of(omMailAddresses.split("\\,"))
+        List.of(notificationConfig.getOmMailAddresses().split("\\,"))
                 .forEach(mailAddress -> mailSender.sendReminder(mailAddress, getNameByMail(mailAddress), reminder));
         logSentNotification(reminder);
     }
 
     void sendReminderToUser() {
-        if (employeesNotification) {
+        if (notificationConfig.isEmployeesNotification()) {
             employeeService.getAllActiveEmployees()
                     .forEach(employee -> mailSender.sendReminder(employee.email(), employee.firstName(), EMPLOYEE_CHECK_PROJECTTIME));
             logSentNotification(EMPLOYEE_CHECK_PROJECTTIME);

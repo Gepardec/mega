@@ -1,7 +1,7 @@
 package com.gepardec.mega.application.exception.mapper;
 
-import com.gepardec.mega.rest.model.ConstraintViolationResponse;
-import org.junit.jupiter.api.Assertions;
+import com.gepardec.mega.domain.model.ValidationViolation;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -9,16 +9,27 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
-import javax.validation.ConstraintViolationException;
+import javax.validation.*;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.Collections;
-import java.util.ResourceBundle;
+import java.util.List;
+import java.util.Set;
 
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 public class ConstraintViolationExceptionMapperTest {
+
+    public static class Model {
+
+        @NotNull
+        private String name;
+
+        @NotNull
+        private String email;
+    }
 
     @Mock
     private Logger logger;
@@ -27,23 +38,42 @@ public class ConstraintViolationExceptionMapperTest {
     private UriInfo uriInfo;
 
     @Mock
-    private ResourceBundle resourceBundle;
+    private Validator validator;
 
     @InjectMocks
     private ConstraintViolationExceptionMapper mapper;
 
-    @Test
-    void toResponse_whenCalled_thenReturnsBadRequestResponseAndLoggerInfoCalled() {
-        when(uriInfo.getPath()).thenReturn("/path/resource");
-        when(resourceBundle.getString("response.exception.bad-request")).thenReturn("ConstraintViolationException");
-        final ConstraintViolationResponse violationResponse = ConstraintViolationResponse.invalid("ConstraintViolationException",
-                Collections.emptySet());
-
-        final Response response = mapper.toResponse(new ConstraintViolationException(Collections.emptySet()));
-
-        Assertions.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-        Assertions.assertEquals(violationResponse, response.getEntity());
-        verify(logger, times(1)).info(anyString(), eq("/path/resource"));
+    @BeforeEach
+    void init() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
     }
 
+    @Test
+    void toResponse_whenNullViolations_thenReturnsEmptyList() {
+        final Response response = mapper.toResponse(new ConstraintViolationException(null));
+        List<ValidationViolation> actual = (List<ValidationViolation>) response.getEntity();
+
+        assertTrue(actual.isEmpty());
+    }
+
+    @Test
+    void toResponse_whenEmptyViolations_thenReturnsEmptyList() {
+        final Response response = mapper.toResponse(new ConstraintViolationException(Set.of()));
+        List<ValidationViolation> actual = (List<ValidationViolation>) response.getEntity();
+
+        assertTrue(actual.isEmpty());
+    }
+
+    @Test
+    void toResponse_whenViolations_thenReturnsMappedValidationViolationList() {
+        final Set<ConstraintViolation<Model>> violations = validator.validate(new Model());
+        final Response response = mapper.toResponse(new ConstraintViolationException(violations));
+        List<ValidationViolation> actual = (List<ValidationViolation>) response.getEntity();
+
+        assertEquals(2, actual.size());
+        assertTrue(actual.containsAll(List.of(
+                ValidationViolation.of("name", "must not be null"),
+                ValidationViolation.of("email", "must not be null"))));
+    }
 }
