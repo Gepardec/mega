@@ -99,7 +99,7 @@ pipeline {
                                                         classPattern: 'target/classes',
                                                         sourcePattern: 'src/main/java',
                                                         sourceExclusionPattern: 'src/test/java',
-                                                        exclusionPattern: '**/provantis/**')
+                                                        exclusionPattern: '**/provantis/**,**/AutoValue_*')
                                             }
                                         }
                                     }
