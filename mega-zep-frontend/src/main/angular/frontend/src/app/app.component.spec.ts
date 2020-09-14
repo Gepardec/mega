@@ -17,7 +17,12 @@ describe('AppComponent', () => {
 
   class ConfigServiceMock {
     getConfig(): Observable<Config> {
-      return new BehaviorSubject<Config>({clientId: 'DUMMY', scope: 'email', issuer: 'https://accounts.google.com'});
+      return new BehaviorSubject<Config>({
+        clientId: 'DUMMY',
+        scope: 'email',
+        issuer: 'https://accounts.google.com',
+        version: '1'
+      });
     }
   }
 

@@ -11,6 +11,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CommentsForEmployeeComponent } from './components/comments-for-employee/comments-for-employee.component';
 import { FormsModule } from '@angular/forms';
+import { InfoComponent } from './components/info/info.component';
+import { HttpClientModule } from '@angular/common/http';
+import { InfoDialogComponent } from './components/info-dialog/info-dialog.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +21,9 @@ import { FormsModule } from '@angular/forms';
     HeaderComponent,
     UserActionsComponent,
     LoginComponent,
+    ErrorComponent,
+    InfoComponent,
+    InfoDialogComponent
     ErrorComponent,
     CommentsForEmployeeComponent
   ],
@@ -28,6 +34,7 @@ import { FormsModule } from '@angular/forms';
     TranslateModule.forRoot(),
     FlexLayoutModule,
     FormsModule
+    HttpClientModule
   ],
   exports: [
     DatepickerComponent,
