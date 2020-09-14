@@ -16,7 +16,8 @@
     "btnText": "Anmelden"
   },
   "user-actions": {
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "info": "Info"
   },
   "error": {
     "title": "Ups, Seite konnte nicht geladen werden.",

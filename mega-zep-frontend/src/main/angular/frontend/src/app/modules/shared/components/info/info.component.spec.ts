@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { InfoComponent } from './info.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { AngularMaterialModule } from '../../../../material-module';
+import { AngularMaterialModule } from '../../../material/material-module';
 
 describe('InfoComponent', () => {
   let component: InfoComponent;

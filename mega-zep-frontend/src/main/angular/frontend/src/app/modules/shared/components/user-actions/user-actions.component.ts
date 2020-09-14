@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { User } from '../../../models/User';
 import { MatDialog } from '@angular/material/dialog';
-import { InfoDialogComponent } from '../../info-dialog/info-dialog.component';
 import { User } from '../../models/User';
+import { InfoDialogComponent } from '../info-dialog/info-dialog.component';
 
 @Component({
   selector: 'app-user-actions',

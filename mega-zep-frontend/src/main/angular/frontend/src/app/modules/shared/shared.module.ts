@@ -8,12 +8,12 @@ import { UserActionsComponent } from './components/user-actions/user-actions.com
 import { RouterModule } from '@angular/router';
 import { ErrorComponent } from './components/error/error.component';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { CommentsForEmployeeComponent } from './components/comments-for-employee/comments-for-employee.component';
 import { FormsModule } from '@angular/forms';
 import { InfoComponent } from './components/info/info.component';
 import { HttpClientModule } from '@angular/common/http';
 import { InfoDialogComponent } from './components/info-dialog/info-dialog.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -23,7 +23,7 @@ import { InfoDialogComponent } from './components/info-dialog/info-dialog.compon
     LoginComponent,
     ErrorComponent,
     InfoComponent,
-    InfoDialogComponent
+    InfoDialogComponent,
     ErrorComponent,
     CommentsForEmployeeComponent
   ],
@@ -33,7 +33,7 @@ import { InfoDialogComponent } from './components/info-dialog/info-dialog.compon
     AngularMaterialModule,
     TranslateModule.forRoot(),
     FlexLayoutModule,
-    FormsModule
+    FormsModule,
     HttpClientModule
   ],
   exports: [
@@ -41,10 +41,13 @@ import { InfoDialogComponent } from './components/info-dialog/info-dialog.compon
     HeaderComponent,
     UserActionsComponent,
     LoginComponent,
-    ErrorComponent
+    ErrorComponent,
+    InfoComponent,
+    InfoDialogComponent,
   ],
   entryComponents: [
-    CommentsForEmployeeComponent
+    CommentsForEmployeeComponent,
+    InfoDialogComponent
   ]
 })
 export class SharedModule {
