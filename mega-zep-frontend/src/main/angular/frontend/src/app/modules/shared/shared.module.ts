@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { ErrorComponent } from './components/error/error.component';
 import { InfoComponent } from './components/info/info.component';
 import { HttpClientModule } from '@angular/common/http';
+import { InfoDialogComponent } from './components/info-dialog/info-dialog.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { HttpClientModule } from '@angular/common/http';
     UserActionsComponent,
     LoginComponent,
     ErrorComponent,
-    InfoComponent
+    InfoComponent,
+    InfoDialogComponent
   ],
   imports: [
     CommonModule,

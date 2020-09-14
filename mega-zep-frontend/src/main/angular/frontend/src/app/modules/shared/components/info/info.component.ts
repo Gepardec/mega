@@ -1,7 +1,5 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { InfoService } from '../../services/info/info.service';
-import { Info } from '../../models/Info';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-info',
@@ -10,16 +8,12 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class InfoComponent implements OnInit {
 
-  info: Info;
+  version: string;
 
-  constructor(private infoService: InfoService, private dialog: MatDialog) {
+  constructor(private infoService: InfoService) {
   }
 
   ngOnInit(): void {
-    this.infoService.getInfo().subscribe(info => this.info = info);
-  }
-
-  openInfoDetailsInDialog(infoDetails: TemplateRef<any>): void {
-    this.dialog.open(infoDetails, {minWidth: '50%'});
+    this.infoService.getInfo().subscribe(info => this.version = info.version);
   }
 }
