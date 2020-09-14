@@ -1,5 +1,6 @@
 package com.gepardec.mega.application.observer;
 
+import com.gepardec.mega.application.configuration.ApplicationConfig;
 import io.quarkus.runtime.StartupEvent;
 import liquibase.Contexts;
 import liquibase.Liquibase;
@@ -18,6 +19,11 @@ import javax.sql.DataSource;
  */
 @Dependent
 public class LifecycleObserver {
+
+    void initApplicationBeans(final @Observes StartupEvent event,
+            final ApplicationConfig applicationConfig) {
+        applicationConfig.toString();
+    }
 
     void initDatabase(final @Observes StartupEvent event,
             final DataSource dataSource,

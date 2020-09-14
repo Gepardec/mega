@@ -1,32 +1,27 @@
 package com.gepardec.mega.application.producer;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import com.gepardec.mega.application.configuration.ApplicationConfig;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Locale;
 
 @RequestScoped
 public class LocaleProducer {
 
-    private final List<Locale> locales;
-
-    private final Locale defaultLocale;
+    private final ApplicationConfig applicationConfig;
 
     private final HttpServletRequest request;
 
     private Locale currentLocale;
 
     public LocaleProducer(
-            @ConfigProperty(name = "quarkus.locales") List<Locale> locales,
-            @ConfigProperty(name = "quarkus.default-locale") Locale defaultLocale,
+            final ApplicationConfig applicationConfig,
             HttpServletRequest request) {
-        this.locales = locales;
-        this.defaultLocale = defaultLocale;
+        this.applicationConfig = applicationConfig;
         this.request = request;
     }
 
@@ -43,9 +38,9 @@ public class LocaleProducer {
 
     private Locale determineCurrentLocale() {
         final Locale requestLocale = request.getLocale();
-        if (requestLocale != null && locales.contains(requestLocale)) {
+        if (requestLocale != null && applicationConfig.getLocales().contains(requestLocale)) {
             return request.getLocale();
         }
-        return defaultLocale;
+        return applicationConfig.getDefaultLocale();
     }
 }

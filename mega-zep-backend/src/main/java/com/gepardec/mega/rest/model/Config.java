@@ -1,26 +1,41 @@
 package com.gepardec.mega.rest.model;
 
-public class Config {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.auto.value.AutoValue;
 
-    private final String clientId;
-    private final String issuer;
-    private final String scope;
+@AutoValue
+@JsonSerialize(as = Config.class)
+@JsonDeserialize(builder = Config.Builder.class)
+public abstract class Config {
 
-    public Config(String clientId, String issuer, String scope) {
-        this.clientId = clientId;
-        this.issuer = issuer;
-        this.scope = scope;
+    @JsonProperty
+    public abstract String clientId();
+
+    @JsonProperty
+    public abstract String issuer();
+
+    @JsonProperty
+    public abstract String scope();
+
+    @JsonProperty
+    public abstract String version();
+
+    public static Builder newBuilder() {
+        return new com.gepardec.mega.rest.model.AutoValue_Config.Builder();
     }
 
-    public String getClientId() {
-        return clientId;
-    }
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder clientId(String clientId);
 
-    public String getIssuer() {
-        return issuer;
-    }
+        public abstract Builder issuer(String issuer);
 
-    public String getScope() {
-        return scope;
+        public abstract Builder scope(String scope);
+
+        public abstract Builder version(String version);
+
+        public abstract Config build();
     }
 }
