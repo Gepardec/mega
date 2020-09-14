@@ -7,7 +7,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { UserActionsComponent } from './components/header/user-actions/user-actions.component';
 import { RouterModule } from '@angular/router';
 import { ErrorComponent } from './components/error/error.component';
-
+import { InfoComponent } from './components/info/info.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -15,19 +16,22 @@ import { ErrorComponent } from './components/error/error.component';
     HeaderComponent,
     UserActionsComponent,
     LoginComponent,
-    ErrorComponent
+    ErrorComponent,
+    InfoComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    HttpClientModule
   ],
   exports: [
     DatepickerComponent,
     HeaderComponent,
     UserActionsComponent,
     LoginComponent,
-    ErrorComponent
+    ErrorComponent,
+    InfoComponent
   ]
 })
 export class SharedModule {
