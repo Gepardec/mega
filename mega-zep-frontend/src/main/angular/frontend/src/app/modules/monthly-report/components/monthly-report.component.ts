@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MonthlyReport } from '../models/MonthlyReport';
 import { Subscription } from 'rxjs';
 import { MonthlyReportService } from '../services/monthly-report.service';
-import { monthlyReportMock } from '../models/MockData';
 
 @Component({
   selector: 'app-monthly-report',
@@ -16,10 +15,10 @@ export class MonthlyReportComponent implements OnInit, OnDestroy {
   }
 
   getAllTimeEntries() {
-    // this.monthlyReportSubscription = this.monthlyReportService.getAll().subscribe((monthlyReport: MonthlyReport) => {
-    //   this.monthlyReport = monthlyReport;
-    // });
-    this.monthlyReport = monthlyReportMock;
+    this.monthlyReportSubscription = this.monthlyReportService.getAll().subscribe((monthlyReport: MonthlyReport) => {
+      this.monthlyReport = monthlyReport;
+    });
+//    this.monthlyReport = monthlyReportMock;
   }
 
   ngOnInit(): void {

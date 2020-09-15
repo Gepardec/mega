@@ -77,66 +77,58 @@ export const omEntriesMock: Array<OfficeManagementEntry> = [
     },
     comments: [
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.OPEN,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 12,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.OPEN,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 15,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 14,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 13,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 131,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 1323,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 133344,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 1344444,
         message: 'asdasdasd'
       },
@@ -162,282 +154,247 @@ export const omEntriesMock: Array<OfficeManagementEntry> = [
     },
     comments: [
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 12,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 15,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 14,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 16,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 17,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 18,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 19,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 20,
         message: 'There was a problem, have a look here please'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 21,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 22,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 23,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 24,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 25,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 26,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 27,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 28,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 29,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 30,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 31,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 32,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 33,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 34,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 35,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 36,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 37,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 38,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 39,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 40,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 41,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 42,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 43,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 44,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 45,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 46,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 47,
         message: 'asdasdasd'
       },
@@ -463,34 +420,30 @@ export const omEntriesMock: Array<OfficeManagementEntry> = [
     },
     comments: [
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 12,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 15,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 14,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 13,
         message: 'asdasdasd'
       }
@@ -516,10 +469,9 @@ export const omEntriesMock: Array<OfficeManagementEntry> = [
     },
     comments: [
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 13,
         message: 'https://youtube.com'
       }
@@ -545,34 +497,30 @@ export const omEntriesMock: Array<OfficeManagementEntry> = [
     },
     comments: [
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.OPEN,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 12,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.OPEN,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 15,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.OPEN,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 14,
         message: 'asdasdasd'
       },
       {
-        stateUpdateDate: new Date().toString(),
         author: 'jeff',
         state: State.DONE,
-        authorUpdateDate: '2020-02-02',
+        updateDate: '2020-02-02',
         id: 13,
         message: 'asdasdasd'
       }

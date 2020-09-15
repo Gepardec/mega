@@ -18,6 +18,7 @@
 
       <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table w-100">
         <tr class="mat-header-row">
+          <th class="mat-header-cell">Zul. aktualisiert</th>
           <th class="mat-header-cell">Abgearbeitet</th>
           <th class="mat-header-cell">Verfasser</th>
           <th class="mat-header-cell">Anmerkung</th>
@@ -26,14 +27,12 @@
         </tr>
 
         <tr *ngFor="let comment of comments" class="mat-row">
+          <td>{{comment.updateDate}}</td>
+
           <td [ngSwitch]="comment.state"
               class="mat-cell">
-          <span
-            [matTooltipPosition]="'after'"
-            [matTooltip]="'Zuletzt aktualisiert: ' + (comment.stateUpdateDate | date: 'yyyy.MM.dd HH:mm:SS')">
             <mat-icon *ngSwitchCase="State.OPEN" class="red">cancel</mat-icon>
             <mat-icon *ngSwitchCase="State.DONE" class="green">check_circle</mat-icon>
-          </span>
           </td>
 
           <td class="mat-cell">
@@ -47,8 +46,6 @@
               <textarea
                 #editMessageInput
                 [disabled]="!comment.isEditing"
-                [matTooltipPosition]="'after'"
-                [matTooltip]="'Zuletzt aktualisiert: ' + (comment.authorUpdateDate | date: 'yyyy.MM.dd HH:mm:ss')"
                 [maxLength]="MAXIMUM_LETTERS"
                 [value]="comment.message"
                 matInput></textarea>
