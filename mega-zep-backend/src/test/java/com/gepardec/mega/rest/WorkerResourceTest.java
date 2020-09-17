@@ -1,5 +1,6 @@
 package com.gepardec.mega.rest;
 
+import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
@@ -62,7 +63,7 @@ public class WorkerResourceTest {
         when(employeeService.getEmployee(anyString())).thenReturn(employee);
         final List<TimeWarning> timeWarnings = List.of(TimeWarning.of(LocalDate.now(), 0.0, 0.0, 0.0));
         final List<JourneyWarning> journeyWarnings = List.of(new JourneyWarning(LocalDate.now(), List.of("WARNING")));
-        final MonthlyReport expected = MonthlyReport.of(employee, timeWarnings, journeyWarnings);
+        final MonthlyReport expected = MonthlyReport.of(employee, timeWarnings, journeyWarnings, List.of(), State.OPEN, true);
         when(monthlyReportService.getMonthendReportForUser(anyString())).thenReturn(expected);
 
         final MonthlyReport actual = given().contentType(ContentType.JSON)

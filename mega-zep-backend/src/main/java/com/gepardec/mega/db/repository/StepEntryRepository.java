@@ -2,6 +2,7 @@ package com.gepardec.mega.db.repository;
 
 import com.gepardec.mega.db.entity.StepEntry;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.quarkus.panache.common.Parameters;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.time.LocalDate;
@@ -10,34 +11,23 @@ import java.util.List;
 @ApplicationScoped
 public class StepEntryRepository implements PanacheRepository<StepEntry> {
 
-//    @Inject
-//    EntityManager em;
-
-    public List<StepEntry> findAllStepEntriesBetweenFromDateAndToDateWhereAssigneeEmailAndOwnerEmailEqualEmail(LocalDate fromDate, LocalDate toDate, String email) {
-        return find("SELECT s FROM StepEntry s WHERE s.date BETWEEN ?1 AND ?2 AND s.owner.email = ?3 AND s.assignee.email = ?4", fromDate, toDate, email, email)
+    public List<StepEntry> findAllOwnedAndAssignedStepEntriesInRange(LocalDate startDate, LocalDate endDate, String ownerAndAssigneeEmail) {
+        return find("SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.assignee.email = :assigneeEmail",
+                Parameters
+                        .with("start", startDate)
+                        .and("end", endDate)
+                        .and("ownerEmail", ownerAndAssigneeEmail)
+                        .and("assigneeEmail", ownerAndAssigneeEmail))
                 .list();
     }
 
-    public List<StepEntry> findAllStepEntriesBetweenFromDateAndToDateWhereOwnerEmailEqualsEmailAndDoesNotEqualAssigneeEmail(LocalDate fromDate, LocalDate toDate, String email) {
-        return find("SELECT s FROM StepEntry s WHERE s.date BETWEEN ?1 AND ?2 AND s.owner.email = ?3 AND s.owner.email <> s.assignee.email", fromDate, toDate, email)
+    public List<StepEntry> findAllOwnedAndUnassignedStepEntriesInRange(LocalDate startDate, LocalDate endDate, String ownerEmail) {
+        return find("SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.owner.email <> s.assignee.email",
+                Parameters
+                        .with("start", startDate)
+                        .and("end", endDate)
+                        .and("ownerEmail", ownerEmail))
                 .list();
     }
-
-//    public List<StepEntry> findAllStepEntriesBetweenFromDateAndToDateWhereAssigneeEmailAndOwnerEmailEqualEmail(final LocalDate fromDate, final LocalDate toDate, final String email) {
-//        return em.createQuery("SELECT s FROM StepEntry s WHERE s.date BETWEEN :a1 AND :a2 AND s.owner.email = :a3 AND s.assignee.email = :a4", StepEntry.class)
-//                .setParameter("a1", fromDate)
-//                .setParameter("a2", toDate)
-//                .setParameter("a3", email)
-//                .setParameter("a4", email)
-//                .getResultList();
-//    }
-//
-//    public List<StepEntry> findAllStepEntriesBetweenFromDateAndToDateWhereOwnerEmailEqualsEmailAndDoesNotEqualAssigneeEmail(final LocalDate fromDate, final LocalDate toDate, final String email) {
-//        return em.createQuery("SELECT s FROM StepEntry s WHERE s.date BETWEEN :a1 AND :a2 AND s.owner.email = :a3 AND s.owner.email <> s.assignee.email", StepEntry.class)
-//                .setParameter("a1", fromDate)
-//                .setParameter("a2", toDate)
-//                .setParameter("a3", email)
-//                .getResultList();
-//    }
 
 }

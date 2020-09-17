@@ -26,7 +26,7 @@ public class StepEntryServiceImpl implements StepEntryService {
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
 
         List<StepEntry> stepEntries =
-                stepEntryRepository.findAllStepEntriesBetweenFromDateAndToDateWhereAssigneeEmailAndOwnerEmailEqualEmail(fromDate, toDate, employee.email());
+                stepEntryRepository.findAllOwnedAndAssignedStepEntriesInRange(fromDate, toDate, employee.email());
 
         List<State> states = stepEntries.stream().map(StepEntry::getState).collect(Collectors.toList());
 
@@ -39,7 +39,7 @@ public class StepEntryServiceImpl implements StepEntryService {
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
 
         List<StepEntry> stepEntries =
-                stepEntryRepository.findAllStepEntriesBetweenFromDateAndToDateWhereOwnerEmailEqualsEmailAndDoesNotEqualAssigneeEmail(fromDate, toDate, employee.email());
+                stepEntryRepository.findAllOwnedAndUnassignedStepEntriesInRange(fromDate, toDate, employee.email());
 
         return stepEntries.stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);
     }

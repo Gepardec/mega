@@ -9,6 +9,8 @@
         <textarea
           #newMessage
           [maxLength]="MAXIMUM_LETTERS"
+          cdkAutosizeMaxRows="10"
+          cdkAutosizeMinRows="5"
           cdkTextareaAutosize
           matInput></textarea>
         <mat-hint align="end">{{newMessage.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
@@ -27,7 +29,7 @@
         </tr>
 
         <tr *ngFor="let comment of comments" class="mat-row">
-          <td>{{comment.updateDate}}</td>
+          <td class="mat-cell">{{comment.updateDate}}</td>
 
           <td [ngSwitch]="comment.state"
               class="mat-cell">
@@ -48,6 +50,9 @@
                 [disabled]="!comment.isEditing"
                 [maxLength]="MAXIMUM_LETTERS"
                 [value]="comment.message"
+                cdkAutosizeMaxRows="10"
+                cdkAutosizeMinRows="5"
+                cdkTextareaAutosize
                 matInput></textarea>
               <mat-hint *ngIf="comment.isEditing" align="end">{{editMessageInput.value.length}}
                 / {{MAXIMUM_LETTERS}}</mat-hint>

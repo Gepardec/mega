@@ -6,6 +6,8 @@ import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
+import com.gepardec.mega.service.api.comment.CommentService;
+import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.service.impl.monthlyreport.MonthlyReportServiceImpl;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.WarningCalculator;
 import com.gepardec.mega.zep.ZepService;
@@ -35,6 +37,12 @@ public class MonthlyReportServiceImplTest {
 
     @Spy
     private WarningCalculator warningCalculator;
+
+    @Mock
+    private CommentService commentService;
+
+    @Mock
+    private StepEntryService stepEntryService;
 
     @InjectMocks
     private MonthlyReportServiceImpl workerService;

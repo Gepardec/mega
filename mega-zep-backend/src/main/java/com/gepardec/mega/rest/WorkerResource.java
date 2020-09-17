@@ -14,7 +14,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.Collections;
 import java.util.List;
 
 @RequestScoped
@@ -39,8 +38,7 @@ public class WorkerResource {
         MonthlyReport monthlyReport = monthlyReportService.getMonthendReportForUser(employee.userId());
 
         if (monthlyReport == null) {
-            List empty = Collections.emptyList();
-            monthlyReport = MonthlyReport.of(employee, empty, empty, empty, State.OPEN, false);
+            monthlyReport = MonthlyReport.of(employee, List.of(), List.of(), List.of(), State.OPEN, false);
         }
 
         return monthlyReport;
