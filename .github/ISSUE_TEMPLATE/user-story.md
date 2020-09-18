@@ -1,8 +1,8 @@
 ---
 name: User Story
-about: A software feature from an end-user perspective
+about: A software feature from an end-employee perspective
 title: ''
-labels: user story
+labels: employee story
 assignees: ''
 
 ---
