@@ -66,5 +66,22 @@
       "releaseDate": "Freigabedatum"
     },
     "noOmEntriesFound": "Keine Einträge gefunden"
+  },
+  "comments-for-employee": {
+    "commentsFor": "Anmerkungen für {{firstAndSureName}}",
+    "writeCommentLabel": "Anmerkung verfassen",
+    "addCommentBtn": "Anmerkung hinzufügen",
+    "table": {
+      "lastChanged": "Zul. aktualisiert",
+      "done": "Abgearbeitet",
+      "author": "Verfasser",
+      "comment": "Anmerkung",
+      "edit": "Bearbeiten",
+      "delete": "Löschen"
+    },
+    "editCommentLabel": "Anmerkung bearbeiten",
+    "noCommentsYet": "Noch keine Anmerkungen vorhanden",
+    "cancel": "Abbrechen",
+    "save": "Änderungen speichern"
   }
 }

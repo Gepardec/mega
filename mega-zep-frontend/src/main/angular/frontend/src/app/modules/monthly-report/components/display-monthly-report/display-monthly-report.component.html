@@ -162,7 +162,7 @@
                   checkboxPosition="before"
                   [ngClass]="option.selected ? 'done green' : 'red'"
                   [selected]="comment.state === State.DONE">
-                  {{comment.authorUpdateDate | date: 'dd.MM.yyyy'}}
+                  {{comment.updateDate | date: 'dd.MM.yyyy'}}
                   {{comment.author}}:
                   {{comment.message}}
                 </mat-list-option>

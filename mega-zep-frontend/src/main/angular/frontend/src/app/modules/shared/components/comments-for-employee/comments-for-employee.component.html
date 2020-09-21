@@ -1,11 +1,13 @@
 <ng-container *ngIf="comments && employee">
-  <h2 mat-dialog-title>Anmerkungen für {{employee.firstName}} {{employee.sureName}}</h2>
+  <h2 mat-dialog-title>
+    {{'comments-for-employee.commentsFor' | translate:{'firstAndSureName': employee.firstName + ' ' + employee.sureName} }}
+  </h2>
 
   <mat-dialog-content class="container-fluid">
     <div class="overflow-auto">
 
       <mat-form-field appearance="outline">
-        <mat-label>Anmerkung verfassen</mat-label>
+        <mat-label>{{'comments-for-employee.writeCommentLabel'|translate}}</mat-label>
         <textarea
           #newMessage
           [maxLength]="MAXIMUM_LETTERS"
@@ -16,16 +18,20 @@
         <mat-hint align="end">{{newMessage.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
       </mat-form-field>
 
-      <button class="float-right mb-3" mat-raised-button>Anmerkung hinzufügen</button>
+      <button
+        class="float-right mb-3"
+        mat-raised-button>
+        {{'comments-for-employee.addCommentBtn' | translate}}
+      </button>
 
       <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table w-100">
         <tr class="mat-header-row">
-          <th class="mat-header-cell">Zul. aktualisiert</th>
-          <th class="mat-header-cell">Abgearbeitet</th>
-          <th class="mat-header-cell">Verfasser</th>
-          <th class="mat-header-cell">Anmerkung</th>
-          <th class="mat-header-cell">Bearbeiten</th>
-          <th class="mat-header-cell">Löschen</th>
+          <th class="mat-header-cell">{{'comments-for-employee.table.lastChanged' | translate}}</th>
+          <th class="mat-header-cell">{{'comments-for-employee.table.done' | translate}}</th>
+          <th class="mat-header-cell">{{'comments-for-employee.table.author' | translate}}</th>
+          <th class="mat-header-cell">{{'comments-for-employee.table.comment' | translate}}</th>
+          <th class="mat-header-cell">{{'comments-for-employee.table.edit' | translate}}</th>
+          <th class="mat-header-cell">{{'comments-for-employee.table.delete' | translate}}</th>
         </tr>
 
         <tr *ngFor="let comment of comments" class="mat-row">
@@ -44,7 +50,7 @@
           <td class="mat-cell">
             <pre [hidden]="comment.isEditing" [innerHTML]="parseAnchorTags(comment.message)">{{comment.message}}</pre>
             <mat-form-field [hidden]="!comment.isEditing" floatLabel="never">
-              <mat-label>Anmerkung bearbeiten</mat-label>
+              <mat-label>{{'comments-for-employee.editCommentLabel' | translate}}</mat-label>
               <textarea
                 #editMessageInput
                 [disabled]="!comment.isEditing"
@@ -83,12 +89,12 @@
     </div>
 
     <ng-template #noCommentsFound>
-      <p>Noch keine Anmerkungen vorhanden</p>
+      <p>{{'comments-for-employee.noCommentsYet' | translate}}</p>
     </ng-template>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-dialog-close mat-raised-button>Abbrechen</button>
-    <button class="saveBtn" mat-raised-button>Änderungen speichern</button>
+    <button mat-dialog-close mat-raised-button>{{'comments-for-employee.cancel' | translate}}</button>
+    <button class="saveBtn" mat-raised-button>{{'comments-for-employee.save' | translate}}</button>
   </mat-dialog-actions>
 </ng-container>

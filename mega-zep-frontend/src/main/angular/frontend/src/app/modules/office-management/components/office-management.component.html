@@ -36,9 +36,8 @@
   </mat-toolbar>
 
   <div class="overflow-auto">
-    <table *ngIf="filteredOmEntries && filteredOmEntries.length > 0; else noOmEntriesFound"
+    <table *ngIf="filteredOmEntries && filteredOmEntries.length > 0; else noOmEntriesFound" class="w-100 mt-2"
            [dataSource]="filteredOmEntries"
-           class="w-100 mt-2"
            mat-table>
       <ng-container matColumnDef="select">
         <th *matHeaderCellDef mat-header-cell>
