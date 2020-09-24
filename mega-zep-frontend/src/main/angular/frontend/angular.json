@@ -28,7 +28,6 @@
               "src/httpd-cfg"
             ],
             "styles": [
-              "node_modules/bootstrap/scss/bootstrap.scss",
               "src/styles/colors.scss",
               "src/styles/root.scss",
               "src/styles/gepardec.scss"

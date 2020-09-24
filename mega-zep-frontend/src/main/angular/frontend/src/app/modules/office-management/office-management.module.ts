@@ -4,6 +4,7 @@ import { OfficeManagementComponent } from './components/office-management.compon
 import { AngularMaterialModule } from '../material/material-module';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '../shared/shared.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [OfficeManagementComponent],
@@ -14,7 +15,8 @@ import { SharedModule } from '../shared/shared.module';
     CommonModule,
     AngularMaterialModule,
     TranslateModule.forRoot(),
-    SharedModule
+    SharedModule,
+    FlexLayoutModule
   ]
 })
 export class OfficeManagementModule {

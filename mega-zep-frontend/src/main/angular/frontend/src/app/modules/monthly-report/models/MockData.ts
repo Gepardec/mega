@@ -14,27 +14,571 @@ export const monthlyReportMock: MonthlyReport = {
     title: 'Mag.',
     userId: '000-mother',
     active: true,
-    releaseDate: '2020-0asd2-02'
+    releaseDate: '2020-02-02'
   },
   comments: [
-    // {
-    //   stateUpdateDate: new Date().toString(),
-    //   message: 'wrong time',
-    //   id: 12,
-    //   authorUpdateDate: '2020-02-02',
-    //   state: State.OPEN,
-    //   author: 'some author'
-    // },
-    // {
-    //   stateUpdateDate: new Date().toString(),
-    //   message: 'wrong time',
-    //   id: 13,
-    //   authorUpdateDate: '2020-02-02',
-    //   state: State.DONE,
-    //   author: 'some author'
-    // },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 12,
+      state: State.OPEN,
+      author: 'some author'
+    },
+    {
+      updateDate: new Date().toString(),
+      message: 'wrong time',
+      id: 13,
+      state: State.DONE,
+      author: 'some author'
+    }
   ],
   timeWarnings: [
+    {
+      warnings: ['1', '2'],
+      missingRestTime: 12,
+      missingBreakTime: 12,
+      excessWorkTime: 12,
+      date: new Date().toString()
+    },
+    {
+      warnings: ['1', '2'],
+      missingRestTime: 12,
+      missingBreakTime: 12,
+      excessWorkTime: 12,
+      date: new Date().toString()
+    },
+    {
+      warnings: ['1', '2'],
+      missingRestTime: 12,
+      missingBreakTime: 12,
+      excessWorkTime: 12,
+      date: new Date().toString()
+    },
+    {
+      warnings: ['1', '2'],
+      missingRestTime: 12,
+      missingBreakTime: 12,
+      excessWorkTime: 12,
+      date: new Date().toString()
+    },
+    {
+      warnings: ['1', '2'],
+      missingRestTime: 12,
+      missingBreakTime: 12,
+      excessWorkTime: 12,
+      date: new Date().toString()
+    },
+    {
+      warnings: ['1', '2'],
+      missingRestTime: 12,
+      missingBreakTime: 12,
+      excessWorkTime: 12,
+      date: new Date().toString()
+    },
+    {
+      warnings: ['1', '2'],
+      missingRestTime: 12,
+      missingBreakTime: 12,
+      excessWorkTime: 12,
+      date: new Date().toString()
+    },
+    {
+      warnings: ['1', '2'],
+      missingRestTime: 12,
+      missingBreakTime: 12,
+      excessWorkTime: 12,
+      date: new Date().toString()
+    },
     {
       warnings: ['1', '2'],
       missingRestTime: 12,
@@ -44,6 +588,31 @@ export const monthlyReportMock: MonthlyReport = {
     }
   ],
   journeyWarnings: [
-    // {warnings: ['1', '2'], date: new Date().toString()}
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()},
+    {warnings: ['1', '2'], date: new Date().toString()}
   ]
 };

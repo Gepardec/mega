@@ -1,5 +1,5 @@
-<div class="container-fluid">
-  <mat-toolbar class="w-100 mat-elevation-z8" color="accent">
+<div fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px">
+  <mat-toolbar class="mat-elevation-z8" color="accent">
     <mat-form-field floatLabel="never">
       <mat-label>{{'office-management.filterPlaceholder' | translate}}</mat-label>
       <input
@@ -14,29 +14,30 @@
       </button>
     </mat-form-field>
 
-    <span class="flex-fill"></span>
+    <span fxFlex="1 1 auto"></span>
 
-    <small
-      *ngIf="omSelectionModel.selected.length > 0"
-      class="mr-3">
-      {{omSelectionModel.selected.length}} {{'office-management.selectedCount' | translate}}
-    </small>
+    <div>
+      <small
+        *ngIf="omSelectionModel.selected.length > 0">
+        {{omSelectionModel.selected.length}} {{'office-management.selectedCount' | translate}}
+      </small>
 
-    <app-datepicker
-      (dateEmitter)="changeDate($event)"
-      *ngIf="filteredOmEntries && omSelectionModel.selected.length > 0"
-      [selectedDate]="selectedDate">
-    </app-datepicker>
+      <app-datepicker
+        (dateEmitter)="changeDate($event)"
+        *ngIf="filteredOmEntries && omSelectionModel.selected.length > 0"
+        [selectedDate]="selectedDate">
+      </app-datepicker>
 
-    <button (click)="releaseEmployees()"
-            *ngIf="omSelectionModel.selected.length > 0 && selectedDate"
-            mat-button>
-      {{'office-management.releaseBtnText' | translate}}
-    </button>
+      <button (click)="releaseEmployees()"
+              *ngIf="omSelectionModel.selected.length > 0 && selectedDate"
+              mat-button>
+        {{'office-management.releaseBtnText' | translate}}
+      </button>
+    </div>
   </mat-toolbar>
 
-  <div class="overflow-auto">
-    <table *ngIf="filteredOmEntries && filteredOmEntries.length > 0; else noOmEntriesFound" class="w-100 mt-2"
+  <div class="mat-elevation-z10" style="overflow: auto">
+    <table *ngIf="filteredOmEntries && filteredOmEntries.length > 0; else noOmEntriesFound" style="width: 100%;"
            [dataSource]="filteredOmEntries"
            mat-table>
       <ng-container matColumnDef="select">
@@ -140,6 +141,6 @@
   </div>
 
   <ng-template #noOmEntriesFound>
-    <mat-card class="mt-2">{{'office-management.noOmEntriesFound' | translate}}</mat-card>
+    <mat-card>{{'office-management.noOmEntriesFound' | translate}}</mat-card>
   </ng-template>
 </div>

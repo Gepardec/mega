@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Employee } from '../../models/Employee';
 import { Comment } from '../../models/Comment';
 import { State } from '../../models/State';
-import { environment } from '../../../../../environments/environment.prod';
-import { environment as notProd } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-comments-for-employee',
@@ -15,16 +13,17 @@ export class CommentsForEmployeeComponent implements OnInit {
   State = State;
   employee: Employee;
   comments: Array<Comment>;
-  displayedColumns = ['status', 'author', 'message', 'edit', 'delete'];
 
   constructor() {
   }
 
   ngOnInit(): void {
-    console.log(environment.ZEP_URL_OFFICE_MANAGEMENT);
-    console.log(notProd.ZEP_URL_OFFICE_MANAGEMENT);
     this.employee = JSON.parse(JSON.stringify(this.employee || null));
     this.comments = JSON.parse(JSON.stringify(this.comments || null));
+    if (this.comments) {
+      this.comments.forEach(comment => comment.isEditing = false);
+    }
+    console.log(this.comments);
   }
 
   toggleIsEditing(comment: Comment) {

@@ -83,5 +83,18 @@
     "noCommentsYet": "Noch keine Anmerkungen vorhanden",
     "cancel": "Abbrechen",
     "save": "Änderungen speichern"
+  },
+  "info-dialog": {
+    "title": "MEGA Version",
+    "table": {
+      "version": "Version",
+      "commit": "Commit",
+      "branch": "Branch",
+      "buildNumber": "Build-Nummer",
+      "buildDate": "Build-Datum",
+      "startedAt": "Start-Datum",
+      "upTime": "Laufzeit"
+    },
+    "close": "Schließen"
   }
 }

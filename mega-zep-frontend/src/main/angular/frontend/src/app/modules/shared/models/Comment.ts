@@ -1,8 +1,8 @@
 export class Comment {
-    id: number;
-    message: string;
-    author: string;
-    updateDate: string;
-    state: string;
-    isEditing ? = false; // used for UI
+  id: number;
+  message: string;
+  author: string;
+  updateDate: string;
+  state: string;
+  isEditing?: boolean; // used for UI
 }

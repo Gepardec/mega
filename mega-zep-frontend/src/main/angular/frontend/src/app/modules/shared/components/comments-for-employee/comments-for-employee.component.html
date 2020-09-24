@@ -49,20 +49,21 @@
 
           <td class="mat-cell">
             <pre [hidden]="comment.isEditing" [innerHTML]="parseAnchorTags(comment.message)">{{comment.message}}</pre>
-            <mat-form-field [hidden]="!comment.isEditing" floatLabel="never">
-              <mat-label>{{'comments-for-employee.editCommentLabel' | translate}}</mat-label>
-              <textarea
-                #editMessageInput
-                [disabled]="!comment.isEditing"
-                [maxLength]="MAXIMUM_LETTERS"
-                [value]="comment.message"
-                cdkAutosizeMaxRows="10"
-                cdkAutosizeMinRows="5"
-                cdkTextareaAutosize
-                matInput></textarea>
-              <mat-hint *ngIf="comment.isEditing" align="end">{{editMessageInput.value.length}}
-                / {{MAXIMUM_LETTERS}}</mat-hint>
-            </mat-form-field>
+            <div [hidden]="!comment.isEditing">
+              <mat-form-field floatLabel="never">
+                <mat-label>{{'comments-for-employee.editCommentLabel' | translate}}</mat-label>
+                <textarea
+                  #editMessageInput
+                  [maxLength]="MAXIMUM_LETTERS"
+                  [value]="comment.message"
+                  cdkAutosizeMaxRows="15"
+                  cdkAutosizeMinRows="5"
+                  cdkTextareaAutosize
+                  matInput></textarea>
+                <mat-hint *ngIf="comment.isEditing" align="end">{{editMessageInput.value.length}}
+                  / {{MAXIMUM_LETTERS}}</mat-hint>
+              </mat-form-field>
+            </div>
           </td>
 
           <td class="mat-cell">

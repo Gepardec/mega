@@ -27,7 +27,6 @@
     "@ngx-translate/http-loader": "^6.0.0",
     "angular-oauth2-oidc": "^9.2.0",
     "angular-oauth2-oidc-jwks": "^9.0.0",
-    "bootstrap": "^4.4.1",
     "rxjs": "^6.5.5",
     "serialize-javascript": "^2.1.2",
     "tslib": "^1.11.1",

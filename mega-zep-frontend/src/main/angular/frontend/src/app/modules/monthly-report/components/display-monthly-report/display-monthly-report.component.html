@@ -1,11 +1,10 @@
-<div *ngIf="monthlyReport" class="container-fluid">
+<div *ngIf="monthlyReport" fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px">
 
   <mat-card class="mat-elevation-z10">
     <mat-card-subtitle>{{FUNCTIONS[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
     <mat-card-content>
       {{monthlyReport.employee.firstName}} {{monthlyReport.employee.sureName}}
-      <span
-        class="float-right">
+      <span style="float: right">
         {{ isValidDate(monthlyReport.employee.releaseDate) ?
         (getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : null : 'de-AT') :
         ('monthly-report.notReleasedYet' | translate) }}
@@ -13,20 +12,21 @@
     </mat-card-content>
   </mat-card>
 
-  <div *ngIf="isValidDate(monthlyReport.employee.releaseDate); else invalidReleaseDate" class="row">
-    <div class="col-lg-4 mega-check">
-      <mat-card class="mat-elevation-z10">
+  <div *ngIf="isValidDate(monthlyReport.employee.releaseDate); else invalidReleaseDate" fxFlex="80%" fxLayout="row"
+       fxLayout.lt-lg="column" fxLayoutAlign="flex-start"
+       fxLayoutGap="10px">
+    <div fxFlex.gt-md="30" fxFlexOrder.lt-lg="2" fxLayout="column" fxLayoutGap="10px">
+      <!--Time table-->
+      <mat-card class="mat-elevation-z10" fxFlex="50">
         <mat-card-title>
           {{'monthly-report.title.time' | translate}}
         </mat-card-title>
 
         <mat-card-content
           *ngIf="monthlyReport.timeWarnings.length === 0; else timeContent"
-          class="d-flex text-center justify-content-center align-items-center">
-          <div>
-            <mat-icon class="green">check_circle</mat-icon>
-            <p>{{'monthly-report.ok' | translate}}</p>
-          </div>
+          fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="60px">
+          <mat-icon class="green">check_circle</mat-icon>
+          <p>{{'monthly-report.ok' | translate}}</p>
         </mat-card-content>
 
         <ng-template #timeContent>
@@ -70,19 +70,17 @@
           </mat-card-content>
         </ng-template>
       </mat-card>
-
-      <mat-card class="mat-elevation-z10">
+      <!--Journey table-->
+      <mat-card class="mat-elevation-z10" fxFlex="49">
         <mat-card-title>
           {{'monthly-report.title.journey' | translate}}
         </mat-card-title>
 
         <mat-card-content
           *ngIf="monthlyReport.journeyWarnings.length === 0; else journeyContent"
-          class="d-flex text-center justify-content-center align-items-center">
-          <div>
-            <mat-icon class="green">check_circle</mat-icon>
-            <p>{{'monthly-report.ok' | translate}}</p>
-          </div>
+          fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="60px">
+          <mat-icon class="green">check_circle</mat-icon>
+          <p>{{'monthly-report.ok' | translate}}</p>
         </mat-card-content>
 
         <ng-template #journeyContent>
@@ -121,58 +119,54 @@
         </ng-template>
       </mat-card>
     </div>
+    <!--monthly report-->
+    <mat-card class="mat-elevation-z10" fxFlex.gt-md="70" fxFlexOrder.lt-lg="1">
+      <mat-card-title>{{'monthly-report.title.emc' | translate}}</mat-card-title>
+      <mat-card-content>
+        <div fxLayout="column" fxLayoutAlign="center center"
+             fxLayoutGap="60px" style="overflow: auto; width: 100%; text-align: center">
+          <div *ngIf="areAllCommentsDone(), else openComments">
+            <div [ngSwitch]="monthlyReport.employeeCheckState">
+              <div *ngSwitchCase="State.OPEN">
+                <mat-icon class="red">cancel</mat-icon>
+                <p>{{'monthly-report.pleaseCheckPrompt' | translate}}</p>
+                <button mat-raised-button>{{'monthly-report.confirmBtnText' | translate}}</button>
+              </div>
 
-    <div class="col-lg-8 employee-checks">
-      <mat-card class="mat-elevation-z10">
-        <mat-card-title>{{'monthly-report.title.emc' | translate}}</mat-card-title>
-
-        <mat-card-content class="d-flex text-center align-items-center">
-          <div class="m-auto">
-
-            <div *ngIf="areAllCommentsDone(), else openComments">
-              <div [ngSwitch]="monthlyReport.employeeCheckState">
-                <div *ngSwitchCase="State.OPEN">
-                  <mat-icon class="red">cancel</mat-icon>
-                  <p>{{'monthly-report.pleaseCheckPrompt' | translate}}</p>
-                  <button mat-raised-button>{{'monthly-report.confirmBtnText' | translate}}</button>
+              <div *ngSwitchCase="State.DONE">
+                <div *ngIf="!monthlyReport.otherChecksDone">
+                  <mat-icon class="yellow">error</mat-icon>
+                  <p>{{'monthly-report.checkWip' | translate}}</p>
                 </div>
-
-                <div *ngSwitchCase="State.DONE">
-                  <div *ngIf="!monthlyReport.otherChecksDone">
-                    <mat-icon class="yellow">error</mat-icon>
-                    <p>{{'monthly-report.checkWip' | translate}}</p>
-                  </div>
-                  <div *ngIf="monthlyReport.otherChecksDone">
-                    <mat-icon class="green">check_circle</mat-icon>
-                    <p>{{'monthly-report.checkSuccess' | translate}}</p>
-                  </div>
+                <div *ngIf="monthlyReport.otherChecksDone">
+                  <mat-icon class="green">check_circle</mat-icon>
+                  <p>{{'monthly-report.checkSuccess' | translate}}</p>
                 </div>
               </div>
             </div>
-
-            <ng-template #openComments>
-              <mat-icon class="red">cancel</mat-icon>
-              <p>{{'monthly-report.commentsToDo' | translate}}:</p>
-              <mat-selection-list (selectionChange)="selectionChange($event)" class="align-middle">
-                <mat-list-option
-                  #option
-                  *ngFor="let comment of monthlyReport.comments"
-                  [disabled]="option.selected"
-                  [value]="comment"
-                  checkboxPosition="before"
-                  [ngClass]="option.selected ? 'done green' : 'red'"
-                  [selected]="comment.state === State.DONE">
-                  {{comment.updateDate | date: 'dd.MM.yyyy'}}
-                  {{comment.author}}:
-                  {{comment.message}}
-                </mat-list-option>
-              </mat-selection-list>
-            </ng-template>
-
           </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
+
+          <ng-template #openComments>
+            <mat-icon class="red">cancel</mat-icon>
+            <p>{{'monthly-report.commentsToDo' | translate}}:</p>
+            <mat-selection-list (selectionChange)="selectionChange($event)" class="align-middle">
+              <mat-list-option
+                #option
+                *ngFor="let comment of monthlyReport.comments"
+                [disabled]="option.selected"
+                [ngClass]="option.selected ? 'done green' : 'red'"
+                [selected]="comment.state === State.DONE"
+                [value]="comment"
+                checkboxPosition="before">
+                {{comment.updateDate | date: 'dd.MM.yyyy'}}
+                {{comment.author}}:
+                {{comment.message}}
+              </mat-list-option>
+            </mat-selection-list>
+          </ng-template>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 
   <ng-template #invalidReleaseDate>
