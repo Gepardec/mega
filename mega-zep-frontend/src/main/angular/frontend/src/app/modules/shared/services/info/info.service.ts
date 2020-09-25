@@ -10,16 +10,17 @@ import { tap } from 'rxjs/operators';
 })
 export class InfoService {
 
-  readonly SESSION_STORAGE_KEY = 'MEGA_INFO';
+  private megaInfo: Info;
 
   constructor(private httpClient: HttpClient, private config: ConfigService) {
   }
 
   getInfo(): Observable<Info> {
-    const megaInfo = sessionStorage.getItem(this.SESSION_STORAGE_KEY);
-    return megaInfo ?
-      new BehaviorSubject(JSON.parse(megaInfo)) :
-      this.httpClient.get<Info>(this.config.getBackendUrlWithContext('/info'))
-        .pipe(tap(info => sessionStorage.setItem(this.SESSION_STORAGE_KEY, JSON.stringify(info))));
+    if (this.megaInfo) {
+      return new BehaviorSubject(this.megaInfo);
+    } else {
+      return this.httpClient.get<Info>(this.config.getBackendUrlWithContext('/info'))
+        .pipe(tap(info => this.megaInfo = info));
+    }
   }
 }
