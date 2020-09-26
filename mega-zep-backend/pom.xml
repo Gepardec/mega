@@ -12,7 +12,7 @@
         <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
         <maven-resource-plugin.version>3.1.0</maven-resource-plugin.version>
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
-        <cxf-codegen-plugin.version>3.3.3</cxf-codegen-plugin.version>
+        <cxf-codegen-plugin.version>3.3.4</cxf-codegen-plugin.version>
         <liquibase-maven-plugin.version>4.0.0</liquibase-maven-plugin.version>
         <native2ascii-maven-plugin.plugin.version>2.0.1</native2ascii-maven-plugin.plugin.version>
 
@@ -130,7 +130,7 @@
             <version>${commons-lang3.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
+            <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
         </dependency>
@@ -317,7 +317,7 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>${liquibase-maven-plugin.version}</version>
                 <configuration>
-                    <propertyFile>${project.basedir}\liquibase.properties</propertyFile>
+                    <propertyFile>${project.basedir}/liquibase.properties</propertyFile>
                     <changeSetAuthor>mega</changeSetAuthor>
                 </configuration>
                 <!-- Keep the version here, these dependencies are only used here -->
