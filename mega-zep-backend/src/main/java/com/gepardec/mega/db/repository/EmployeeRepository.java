@@ -7,9 +7,9 @@ import javax.enterprise.context.ApplicationScoped;
 import java.util.Optional;
 
 @ApplicationScoped
-public class UserRepository implements PanacheRepository<Employee> {
+public class EmployeeRepository implements PanacheRepository<Employee> {
 
     public Optional<Employee> findByEmail(final String email) {
-        return find("#User.findByEmail", email).firstResultOptional();
+        return find("#Employee.findByEmail", email).firstResultOptional();
     }
 }

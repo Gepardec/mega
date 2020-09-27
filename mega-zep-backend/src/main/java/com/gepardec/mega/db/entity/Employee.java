@@ -16,7 +16,7 @@ import java.util.Set;
                 @UniqueConstraint(name = "uidx_email", columnNames = {"email"})
         })
 @NamedQueries({
-        @NamedQuery(name = "User.findByEmail", query = "select e from Employee e where e.email = :email")
+        @NamedQuery(name = "Employee.findByEmail", query = "select e from Employee e where e.email = :email")
 })
 public class Employee {
 
