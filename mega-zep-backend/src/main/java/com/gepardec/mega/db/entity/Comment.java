@@ -8,27 +8,27 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "COMMENT")
+@Table(name = "comment")
 public class Comment {
 
     @Id
-    @Column(name = "ID", insertable = false, updatable = false)
+    @Column(name = "id", insertable = false, updatable = false)
     @GeneratedValue(generator = "commentIdGenerator", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "commentIdGenerator", sequenceName = "SEQUENCE_COMMENT_ID", allocationSize = 1)
+    @SequenceGenerator(name = "commentIdGenerator", sequenceName = "sequence_comment_id", allocationSize = 1)
     private Long id;
 
     /**
      * The creation date of the comment
      */
     @NotNull
-    @Column(name = "CREATION_DATE", updatable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "creation_date", updatable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime creationDate;
 
     /**
      * The updated date of the comment
      */
     @NotNull
-    @Column(name = "UPDATE_DATE", columnDefinition = "TIMESTAMP")
+    @Column(name = "update_date", columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedDate;
 
     /**
@@ -36,7 +36,7 @@ public class Comment {
      */
     @NotNull
     @Length(min = 1, max = 255)
-    @Column(name = "MESSAGE", updatable = false)
+    @Column(name = "message", updatable = false)
     private String message;
 
     /**
@@ -46,7 +46,7 @@ public class Comment {
      */
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "STATE")
+    @Column(name = "state")
     private State state;
 
     /**
@@ -56,9 +56,9 @@ public class Comment {
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STEP_ENTRY_ID",
-            referencedColumnName = "ID",
-            foreignKey = @ForeignKey(name = "FK_STEP_ENTRY", value = ConstraintMode.CONSTRAINT))
+    @JoinColumn(name = "step_entry_id",
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "fk_step_entry", value = ConstraintMode.CONSTRAINT))
     private StepEntry stepEntry;
 
     @PrePersist

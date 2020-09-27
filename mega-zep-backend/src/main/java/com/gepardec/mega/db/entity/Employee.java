@@ -11,33 +11,33 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "USER",
+@Table(name = "employee",
         uniqueConstraints = {
-                @UniqueConstraint(name = "UIDX_EMAIL", columnNames = {"EMAIL"})
+                @UniqueConstraint(name = "uidx_email", columnNames = {"email"})
         })
 @NamedQueries({
-        @NamedQuery(name = "User.findByEmail", query = "select e from User e where e.email = :email")
+        @NamedQuery(name = "Employee.findByEmail", query = "select e from Employee e where e.email = :email")
 })
-public class User {
+public class Employee {
 
     @Id
-    @Column(name = "ID", insertable = false, updatable = false)
+    @Column(name = "id", insertable = false, updatable = false)
     @GeneratedValue(generator = "employeeIdGenerator", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "employeeIdGenerator", sequenceName = "SEQUENCE_USER_ID", allocationSize = 1)
+    @SequenceGenerator(name = "employeeIdGenerator", sequenceName = "sequence_user_id", allocationSize = 1)
     private Long id;
 
     /**
      * The creation date of the user
      */
     @NotNull
-    @Column(name = "CREATION_DATE", updatable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "creation_date", updatable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime creationDate;
 
     /**
      * The updated date of the user
      */
     @NotNull
-    @Column(name = "UPDATE_DATE", updatable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "update_date", updatable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedDate;
 
     /**
@@ -46,18 +46,18 @@ public class User {
     @NotNull
     @Email
     @Length(min = 1, max = 255)
-    @Column(name = "EMAIL")
+    @Column(name = "email")
     private String email;
 
-    public User() {
+    public Employee() {
     }
 
-    private User(final String email) {
+    private Employee(final String email) {
         this.email = email;
     }
 
-    public static User of(final String email) {
-        return new User(email);
+    public static Employee of(final String email) {
+        return new Employee(email);
     }
 
     /**
@@ -138,8 +138,8 @@ public class User {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        User user = (User) o;
-        return (id != null) ? Objects.equals(id, user.id) : super.equals(o);
+        Employee employee = (Employee) o;
+        return (id != null) ? Objects.equals(id, employee.id) : super.equals(o);
     }
 
     @Override

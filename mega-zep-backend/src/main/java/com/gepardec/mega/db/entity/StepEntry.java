@@ -9,34 +9,34 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "STEP_ENTRY")
+@Table(name = "step_entry")
 public class StepEntry {
 
     @Id
-    @Column(name = "ID", insertable = false, updatable = false)
+    @Column(name = "id", insertable = false, updatable = false)
     @GeneratedValue(generator = "stepEntryIdGenerator", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "stepEntryIdGenerator", sequenceName = "SEQUENCE_STEP_ENTRY_ID", allocationSize = 1)
+    @SequenceGenerator(name = "stepEntryIdGenerator", sequenceName = "sequence_step_entry_id", allocationSize = 1)
     private Long id;
 
     /**
      * The creation date of the step entry
      */
     @NotNull
-    @Column(name = "CREATION_DATE", updatable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "creation_date", updatable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime creationDate;
 
     /**
      * The update date of the step entry
      */
     @NotNull
-    @Column(name = "UPDATE_DATE", updatable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "update_date", updatable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedDate;
 
     /**
      * The date (=month) the step entry is for
      */
     @NotNull
-    @Column(name = "DATE", updatable = false, columnDefinition = "DATE")
+    @Column(name = "entry_date", updatable = false, columnDefinition = "DATE")
     private LocalDate date;
 
     /**
@@ -44,7 +44,7 @@ public class StepEntry {
      */
     @NotNull
     @Length(min = 1, max = 255)
-    @Column(name = "PROJECT", updatable = false)
+    @Column(name = "project", updatable = false)
     private String project;
 
     /**
@@ -54,7 +54,7 @@ public class StepEntry {
      */
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "STATE")
+    @Column(name = "state")
     private State state;
 
     /**
@@ -62,22 +62,22 @@ public class StepEntry {
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "OWNER_USER_ID",
-            referencedColumnName = "ID",
+    @JoinColumn(name = "owner_employee_id",
+            referencedColumnName = "id",
             updatable = false,
-            foreignKey = @ForeignKey(name = "FK_OWNER_USER_ID", value = ConstraintMode.CONSTRAINT))
-    private User owner;
+            foreignKey = @ForeignKey(name = "fk_owner_employee_id", value = ConstraintMode.CONSTRAINT))
+    private Employee owner;
 
     /**
      * The assignee of the step entry who is the employee who marks the step entry done
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ASSIGNEE_USER_ID",
-            referencedColumnName = "ID",
+    @JoinColumn(name = "assignee_employee_id",
+            referencedColumnName = "id",
             updatable = false,
-            foreignKey = @ForeignKey(name = "FK_ASSIGNEE_USER_ID", value = ConstraintMode.CONSTRAINT))
-    private User assignee;
+            foreignKey = @ForeignKey(name = "fk_assignee_employee_id", value = ConstraintMode.CONSTRAINT))
+    private Employee assignee;
 
     /**
      * The related step of this step entry
@@ -86,10 +86,10 @@ public class StepEntry {
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STEP_ID",
-            referencedColumnName = "ID",
+    @JoinColumn(name = "step_id",
+            referencedColumnName = "id",
             updatable = false,
-            foreignKey = @ForeignKey(name = "FK_STEP_ID", value = ConstraintMode.CONSTRAINT))
+            foreignKey = @ForeignKey(name = "fk_step_id", value = ConstraintMode.CONSTRAINT))
     private Step step;
 
     @PrePersist
@@ -127,19 +127,19 @@ public class StepEntry {
         this.updatedDate = updatedDate;
     }
 
-    public User getOwner() {
+    public Employee getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(Employee owner) {
         this.owner = owner;
     }
 
-    public User getAssignee() {
+    public Employee getAssignee() {
         return assignee;
     }
 
-    public void setAssignee(User assignee) {
+    public void setAssignee(Employee assignee) {
         this.assignee = assignee;
     }
 

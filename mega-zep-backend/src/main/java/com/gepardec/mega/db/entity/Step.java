@@ -11,27 +11,27 @@ import java.util.Map;
 import java.util.Objects;
 
 @Entity
-@Table(name = "STEP",
+@Table(name = "step",
         uniqueConstraints = {
-                @UniqueConstraint(name = "UIDX_ORDINAL", columnNames = {"ORDINAL"})
+                @UniqueConstraint(name = "uidx_ordinal", columnNames = {"ordinal"})
         },
         indexes = {
-                @Index(name = "IDX_GROUP_NAME", columnList = "GROUP_NAME")
+                @Index(name = "idx_group_name", columnList = "group_name")
         }
 )
 public class Step {
 
     @Id
-    @Column(name = "ID", insertable = false, updatable = false)
+    @Column(name = "id", insertable = false, updatable = false)
     @GeneratedValue(generator = "stepIdGenerator", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "stepIdGenerator", sequenceName = "SEQUENCE_STEP_ID", allocationSize = 1)
+    @SequenceGenerator(name = "stepIdGenerator", sequenceName = "sequence_step_id", allocationSize = 1)
     private Long id;
 
     /**
      * The name of the step
      */
     @NotNull
-    @Column(name = "NAME")
+    @Column(name = "name")
     @Length(min = 1, max = 255)
     private String name;
 
@@ -40,7 +40,7 @@ public class Step {
      */
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "ROLE")
+    @Column(name = "role")
     private Role role;
 
     /**
@@ -48,7 +48,7 @@ public class Step {
      */
     @NotNull
     @Min(1)
-    @Column(name = "ORDINAL", unique = true)
+    @Column(name = "ordinal", unique = true)
     private Integer ordinal;
 
     /**
@@ -56,14 +56,14 @@ public class Step {
      * and all must be completed to be able to worked on the following steps.
      */
     @Length(min = 1, max = 50)
-    @Column(name = "GROUP_NAME")
+    @Column(name = "group_name")
     private String groupName;
 
     /**
      * The related step entries whereby each step entry
      */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "step")
-    @MapKeyColumn(name = "DATE")
+    @MapKeyColumn(name = "entry_date")
     public Map<LocalDate, StepEntry> stepEntries = new HashMap<>(0);
 
     public Long getId() {
