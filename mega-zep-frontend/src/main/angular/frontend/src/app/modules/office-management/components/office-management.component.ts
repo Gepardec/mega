@@ -5,8 +5,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { CommentsForEmployeeComponent } from '../../shared/components/comments-for-employee/comments-for-employee.component';
 import { SelectionModel } from '@angular/cdk/collections';
 import { configuration } from '../../shared/constants/configuration';
-import { omEntriesMock } from '../models/MockData';
 import { environment } from '../../../../environments/environment';
+import { OfficeManagementService } from '../services/office-management.service';
+import { omEntriesMock } from '../models/MockData';
+import { NotificationService } from '../../shared/services/notification/notification.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-office-management',
@@ -25,46 +28,31 @@ export class OfficeManagementComponent implements OnInit {
     'releaseDate'
   ];
   State = State;
-  omEntries: OfficeManagementEntry[] = omEntriesMock;
-  filteredOmEntries = new Array<OfficeManagementEntry>();
+  omEntries: Array<OfficeManagementEntry>;
+  filteredOmEntries: Array<OfficeManagementEntry>;
   omSelectionModel = new SelectionModel<OfficeManagementEntry>(true, []);
   selectedDate: string;
   dayOfMonthForWarning = 5;
   configuration = configuration;
   environment = environment;
 
-  constructor(private dialog: MatDialog) {
+  constructor(
+    private dialog: MatDialog,
+    private omService: OfficeManagementService,
+    private notificationService: NotificationService,
+    private translateService: TranslateService) {
   }
 
   ngOnInit(): void {
-    const doneOmEntries = [];
-    const openOmEntries = [];
-
-    this.omEntries.forEach(omEntry => {
-      const diff = this.countOfDoneComments(omEntry) - omEntry.comments.length;
-      if (diff === 0 && omEntry.customerCheckState === State.DONE && omEntry.internalCheckState === State.DONE) {
-        doneOmEntries.push(omEntry);
-      } else {
-        openOmEntries.push(omEntry);
-      }
-    });
-
-    const sortFn = (a: OfficeManagementEntry, b: OfficeManagementEntry) => a.employee.sureName.localeCompare(b.employee.sureName);
-
-    doneOmEntries.sort(sortFn);
-    openOmEntries.sort(sortFn);
-
-    this.omEntries = [].concat(openOmEntries, doneOmEntries);
-
-    this.filteredOmEntries = this.omEntries.slice();
+    this.fillOmEntries();
   }
 
-  isAllSelected() {
+  areAllSelected() {
     return this.omEntries && this.omSelectionModel.selected.length === this.omEntries.length;
   }
 
   masterToggle() {
-    this.isAllSelected() ? this.omSelectionModel.clear() : this.omEntries.forEach(row => this.omSelectionModel.select(row));
+    this.areAllSelected() ? this.omSelectionModel.clear() : this.omEntries.forEach(row => this.omSelectionModel.select(row));
   }
 
   countOfDoneComments(omEntry: OfficeManagementEntry): number {
@@ -123,14 +111,51 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   releaseEmployees() {
-    // if (this.selectedDate) {
-    //   this.updateEmployeesSubscription = this.displayEmployeeListService.updateEmployees(this.selectedEmployees, this.selectedDate)
-    //     .subscribe((res) => {
-    //       // refresh employees
-    //       this.employees = null;
-    //       this.getAllEmployees();
-    //       this.notificationService.showSuccess('Mitarbeiter erfolgreich aktualisiert!');
-    //     });
-    // }
+    const employees = this.omSelectionModel.selected.map(omEntry => {
+      omEntry.employee.releaseDate = this.selectedDate;
+      return omEntry.employee;
+    });
+
+    this.omService.updateEmployees(employees).subscribe(async (res) => {
+      this.filteredOmEntries = null;
+      this.fillOmEntries();
+      const successMessage = await this.translateService.get('notifications.employeesUpdatedSuccess').toPromise();
+      this.notificationService.showSuccess(successMessage);
+    });
+  }
+
+  private fillOmEntries() {
+    this.omService.getEmployees().subscribe(employees => {
+      this.omEntries = omEntriesMock;
+      for (let i = 0; i < this.omEntries.length; i++) {
+        if (employees.length > i) {
+          this.omEntries[i].employee = employees[i];
+        }
+      }
+      this.sortOmEntries();
+    });
+  }
+
+  private sortOmEntries(): void {
+    const doneOmEntries = [];
+    const openOmEntries = [];
+
+    this.omEntries.forEach(omEntry => {
+      const diff = this.countOfDoneComments(omEntry) - omEntry.comments.length;
+      if (diff === 0 && omEntry.customerCheckState === State.DONE && omEntry.internalCheckState === State.DONE) {
+        doneOmEntries.push(omEntry);
+      } else {
+        openOmEntries.push(omEntry);
+      }
+    });
+
+    const sortFn = (a: OfficeManagementEntry, b: OfficeManagementEntry) => a.employee.sureName.localeCompare(b.employee.sureName);
+
+    doneOmEntries.sort(sortFn);
+    openOmEntries.sort(sortFn);
+
+    this.omEntries = [].concat(openOmEntries, doneOmEntries);
+
+    this.filteredOmEntries = this.omEntries.slice();
   }
 }

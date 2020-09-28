@@ -25,6 +25,15 @@
       </button>
 
       <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table w-100">
+        <colgroup>
+          <col style="width:10%">
+          <col style="width:8%">
+          <col style="width:12%">
+          <col style="max-width:55%">
+          <col style="width:7.5%">
+          <col style="width:7.5%">
+        </colgroup>
+
         <tr class="mat-header-row">
           <th class="mat-header-cell">{{'comments-for-employee.table.lastChanged' | translate}}</th>
           <th class="mat-header-cell">{{'comments-for-employee.table.done' | translate}}</th>

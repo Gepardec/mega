@@ -11,19 +11,6 @@ export const configuration = {
   OFFICE_MANAGEMENT_SEGMENT: `view/index.php?menu=MitarbeiterVerwaltungMgr&
   modelContentMenu=true&mgr=MitarbeiterProjektzeitMgr&contentModelId=`,
 
-  EMPLOYEE_FUNCTIONS: {
-    '01': 'Technische/r PL',
-    '02': 'SoftwareentwicklerIn',
-    '03': 'Verwaltung',
-    '04': 'Senior',
-    '05': 'Junior',
-    '06': 'ExpertIn Inbetriebnahme',
-    '06-1': 'Software-ArchitektIn',
-    '07': 'FerialpraktikantIn',
-    '08': 'Consultant Senior',
-    '99': 'Reisezeiten'
-  },
-
   dateFormat: 'yyyy-MM-dd',
 
   LogLevel: {

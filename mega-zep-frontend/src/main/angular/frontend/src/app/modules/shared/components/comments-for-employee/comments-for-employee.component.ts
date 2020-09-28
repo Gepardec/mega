@@ -23,7 +23,6 @@ export class CommentsForEmployeeComponent implements OnInit {
     if (this.comments) {
       this.comments.forEach(comment => comment.isEditing = false);
     }
-    console.log(this.comments);
   }
 
   toggleIsEditing(comment: Comment) {

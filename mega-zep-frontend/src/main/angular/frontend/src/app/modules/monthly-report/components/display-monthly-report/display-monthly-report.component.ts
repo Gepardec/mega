@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { MonthlyReport } from '../../models/MonthlyReport';
-import { configuration } from '../../../shared/constants/configuration';
 import { State } from '../../../shared/models/State';
 import { MatSelectionListChange } from '@angular/material/list';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-display-monthly-report',
@@ -13,17 +13,18 @@ import { MatSelectionListChange } from '@angular/material/list';
 export class DisplayMonthlyReportComponent implements OnInit {
 
   readonly State = State;
-  readonly FUNCTIONS = configuration.EMPLOYEE_FUNCTIONS;
+  employeeFunctions;
 
   @Input() monthlyReport: MonthlyReport;
 
   displayedColumnsTimeTable = ['dateTime', 'restTime', 'breakTime', 'workingTime'];
   displayedColumnsJourneyTable = ['dateJourney', 'warningJourney'];
 
-  constructor() {
+  constructor(private translateService: TranslateService) {
   }
 
   ngOnInit() {
+    this.translateService.get('EMPLOYEE_FUNCTIONS').subscribe(funcs => this.employeeFunctions = funcs);
   }
 
   getJourneyWarningString(warnings: Array<string>): string {

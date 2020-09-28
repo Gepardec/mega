@@ -5,6 +5,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AngularMaterialModule } from '../../material/material-module';
 import { SharedModule } from '../../shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('OfficeManagementComponent', () => {
   let component: OfficeManagementComponent;
@@ -17,7 +19,9 @@ describe('OfficeManagementComponent', () => {
         BrowserAnimationsModule,
         SharedModule,
         AngularMaterialModule,
-        TranslateModule.forRoot()
+        TranslateModule.forRoot(),
+        HttpClientTestingModule,
+        RouterTestingModule
       ]
     })
       .compileComponents();

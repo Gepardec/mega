@@ -1,4 +1,4 @@
-<div fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px">
+<div *ngIf="omEntries && filteredOmEntries" fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px">
   <mat-toolbar class="mat-elevation-z8" color="accent">
     <mat-form-field floatLabel="never">
       <mat-label>{{'office-management.filterPlaceholder' | translate}}</mat-label>
@@ -36,15 +36,15 @@
     </div>
   </mat-toolbar>
 
-  <div class="mat-elevation-z10" style="overflow: auto">
-    <table *ngIf="filteredOmEntries && filteredOmEntries.length > 0; else noOmEntriesFound" style="width: 100%;"
+  <div class="mat-elevation-z10">
+    <table *ngIf="filteredOmEntries.length > 0; else noOmEntriesFound" style="width: 100%;"
            [dataSource]="filteredOmEntries"
            mat-table>
       <ng-container matColumnDef="select">
         <th *matHeaderCellDef mat-header-cell>
           <mat-checkbox (change)="$event ? masterToggle() : null"
-                        [checked]="omSelectionModel.hasValue() && isAllSelected()"
-                        [indeterminate]="omSelectionModel.hasValue() && !isAllSelected()">
+                        [checked]="omSelectionModel.hasValue() && areAllSelected()"
+                        [indeterminate]="omSelectionModel.hasValue() && !areAllSelected()">
           </mat-checkbox>
         </th>
         <td *matCellDef="let row" mat-cell>

@@ -3,13 +3,10 @@ mat-card {
 }
 
 .mat-card-content {
-  font-size: 20px;
   overflow: auto;
-  height: 90%;
-}
-
-.mat-card-title {
-  text-align: left;
+  height: 95%;
+  width: 100%;
+  font-size: 20px;
 }
 
 .mat-column-date-journey {
@@ -21,10 +18,16 @@ mat-card {
 }
 
 mat-icon {
+  height: 80px;
   font-size: 80px;
   width: auto;
 }
 
 mat-list-option {
   width: max-content !important;
+}
+
+mat-selection-list {
+  overflow-y: auto;
+  padding: 15px;
 }
