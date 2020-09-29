@@ -1,0 +1,5 @@
+<span [class]="size" [ngSwitch]="state">
+  <mat-icon *ngSwitchCase="State.OPEN" class="red">cancel</mat-icon>
+  <mat-icon *ngSwitchCase="State.DONE" class="green">check_circle</mat-icon>
+  <mat-icon *ngSwitchDefault class="yellow">error</mat-icon>
+</span>

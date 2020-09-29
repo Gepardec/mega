@@ -2,6 +2,7 @@ export const configuration = {
   PAGE_URLS: {
     MONTHLY_REPORT: 'monthlyReport',
     OFFICE_MANAGEMENT: 'officeManagement',
+    PROJECT_MANAGEMENT: 'projectManagement',
     LOGIN: 'login',
     ERROR: 'error'
   },

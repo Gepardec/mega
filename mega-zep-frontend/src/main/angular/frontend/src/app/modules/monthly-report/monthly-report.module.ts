@@ -5,17 +5,25 @@ import { DisplayMonthlyReportComponent } from './components/display-monthly-repo
 import { AngularMaterialModule } from '../material/material-module';
 import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { SharedModule } from '../shared/shared.module';
+import { TimeCheckComponent } from './components/time-check/time-check.component';
+import { JourneyCheckComponent } from './components/journey-check/journey-check.component';
+import { EmployeeCheckComponent } from './components/employee-check/employee-check.component';
 
 @NgModule({
   declarations: [
     MonthlyReportComponent,
-    DisplayMonthlyReportComponent
+    DisplayMonthlyReportComponent,
+    TimeCheckComponent,
+    JourneyCheckComponent,
+    EmployeeCheckComponent
   ],
   imports: [
     CommonModule,
     AngularMaterialModule,
     TranslateModule.forRoot(),
-    FlexLayoutModule
+    FlexLayoutModule,
+    SharedModule
   ]
 })
 export class MonthlyReportModule {

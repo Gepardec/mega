@@ -1,5 +1,5 @@
 <mat-sidenav-container fxFlexFill>
-  <mat-sidenav #sidenav fxHide.gt-sm="true" mode="over" opened="false">
+  <mat-sidenav #sidenav fxHide.gt-md="true" mode="over" opened="false">
     <mat-nav-list *ngIf="user">
       <a mat-list-item>
         <app-user-actions (logout)="onLogout($event); sidenav.close()" [user]="user"></app-user-actions>
@@ -27,7 +27,7 @@
 
   <mat-sidenav-content>
     <mat-toolbar class="toolbar mat-elevation-z10">
-      <div *ngIf="user" fxHide.gt-sm="true" fxShow="true">
+      <div *ngIf="user" fxHide.gt-md="true" fxShow="true">
         <button (click)="sidenav.toggle()" mat-icon-button>
           <mat-icon>menu</mat-icon>
         </button>
@@ -35,7 +35,7 @@
 
       <img [src]="assetsPath + logoMega" alt="Logo MEGA" class="logo-mega mr-3">
 
-      <div *ngIf="user" fxHide.lt-md="true" fxLayout="row" fxShow="true" style="width: 100%">
+      <div *ngIf="user" fxHide.lt-lg="true" fxLayout="row" fxShow="true" style="width: 100%">
         <nav mat-tab-nav-bar>
           <ng-container *ngFor="let link of links">
             <div #rla="routerLinkActive" *ngIf="showLink(link)" [active]="rla.isActive" [routerLink]="link.path"

@@ -1,0 +1,9 @@
+<mat-select
+  #customer
+  (selectionChange)="onSelectionChange($event)"
+  [class.select-green]="customer.value === State.DONE"
+  [class.select-red]="customer.value === State.OPEN"
+  [value]="value">
+  <mat-option [value]="State.OPEN">{{'STATE.OPEN' | translate}}</mat-option>
+  <mat-option [value]="State.DONE">{{'STATE.DONE' | translate}}</mat-option>
+</mat-select>

@@ -68,44 +68,28 @@
       <ng-container matColumnDef="customerCheckState">
         <th *matHeaderCellDef mat-header-cell>{{'office-management.table.customerCheckState' | translate}}</th>
         <td *matCellDef="let omEntry" mat-cell>
-          <mat-select
-            #customerSelect
-            [class.select-green]="customerSelect.value === State.DONE"
-            [class.select-red]="customerSelect.value === State.OPEN"
-            [value]="omEntry.customerCheckState">
-            <mat-option [value]="State.OPEN">{{'STATE.OPEN' | translate}}</mat-option>
-            <mat-option [value]="State.DONE">{{'STATE.DONE' | translate}}</mat-option>
-          </mat-select>
+          <app-state-select [value]="omEntry.customerCheckState"></app-state-select>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="internalCheckState">
         <th *matHeaderCellDef mat-header-cell>{{'office-management.table.internalCheckState' | translate}}</th>
         <td *matCellDef="let omEntry" mat-cell>
-          <mat-select
-            #internalSelect
-            [class.select-green]="internalSelect.value === State.DONE"
-            [class.select-red]="internalSelect.value === State.OPEN"
-            [value]="omEntry.internalCheckState">
-            <mat-option [value]="State.OPEN">{{'STATE.OPEN' | translate}}</mat-option>
-            <mat-option [value]="State.DONE">{{'STATE.DONE' | translate}}</mat-option>
-          </mat-select>
+          <app-state-select [value]="omEntry.internalCheckState"></app-state-select>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="employeeCheckState">
         <th *matHeaderCellDef mat-header-cell>{{'office-management.table.employeeCheckState' | translate}}</th>
-        <td *matCellDef="let omEntry" [ngSwitch]="omEntry.employeeCheckState" mat-cell>
-          <mat-icon *ngSwitchCase="State.OPEN" class="red">cancel</mat-icon>
-          <mat-icon *ngSwitchCase="State.DONE" class="green">check_circle</mat-icon>
+        <td *matCellDef="let omEntry" mat-cell>
+          <app-state-indicator [state]="omEntry.employeeCheckState"></app-state-indicator>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="projectCheckState">
         <th *matHeaderCellDef mat-header-cell>{{'office-management.table.projectCheckState' | translate}}</th>
-        <td *matCellDef="let omEntry" [ngSwitch]="omEntry.projectCheckState" mat-cell>
-          <mat-icon *ngSwitchCase="State.OPEN" class="red">cancel</mat-icon>
-          <mat-icon *ngSwitchCase="State.DONE" class="green">check_circle</mat-icon>
+        <td *matCellDef="let omEntry" mat-cell>
+          <app-state-indicator [state]="omEntry.projectCheckState"></app-state-indicator>
         </td>
       </ng-container>
 
@@ -114,14 +98,7 @@
         <td *matCellDef="let omEntry" mat-cell>
           <button (click)="openDialog(omEntry)" mat-button>
             <mat-icon>comment</mat-icon>
-            <span
-              *ngIf="omEntry.comments.length > 0; else noCommentsForOmEntry"
-              [ngClass]="{'red': countOfDoneComments(omEntry) < omEntry.comments.length, 'green': countOfDoneComments(omEntry) === omEntry.comments.length}">
-            {{countOfDoneComments(omEntry)}} / {{omEntry.comments.length}}
-          </span>
-            <ng-template #noCommentsForOmEntry>
-              <span> &minus; / &minus;</span>
-            </ng-template>
+            <app-done-comments-indicator [comments]="omEntry.comments"></app-done-comments-indicator>
           </button>
         </td>
       </ng-container>

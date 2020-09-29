@@ -7,6 +7,7 @@ import { RolesGuard } from './modules/shared/guards/roles.guard';
 import { ErrorComponent } from './modules/shared/components/error/error.component';
 import { MonthlyReportComponent } from './modules/monthly-report/components/monthly-report.component';
 import { OfficeManagementComponent } from './modules/office-management/components/office-management.component';
+import { ProjectManagementComponent } from './modules/project-management/components/project-management.component';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,11 @@ export const routes: Routes = [
   {
     path: configuration.PAGE_URLS.OFFICE_MANAGEMENT,
     component: OfficeManagementComponent,
+    canActivate: [LoginGuard, RolesGuard]
+  },
+  {
+    path: configuration.PAGE_URLS.PROJECT_MANAGEMENT,
+    component: ProjectManagementComponent,
     canActivate: [LoginGuard, RolesGuard]
   },
   {

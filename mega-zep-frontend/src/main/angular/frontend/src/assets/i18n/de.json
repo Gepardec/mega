@@ -1,7 +1,8 @@
 {
   "PAGE_NAMES": {
-    "OFFICE_MANAGEMENT": "OFFICE MANAGEMENT",
-    "MONTHLY_REPORT": "MEIN MEGA"
+    "OFFICE_MANAGEMENT": "Office Management",
+    "MONTHLY_REPORT": "Mein MEGA",
+    "PROJECT_MANAGEMENT": "Projekt Management"
   },
   "STATE": {
     "DONE": "Fertig",

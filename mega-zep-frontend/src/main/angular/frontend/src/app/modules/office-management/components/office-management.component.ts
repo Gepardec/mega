@@ -10,6 +10,7 @@ import { OfficeManagementService } from '../services/office-management.service';
 import { omEntriesMock } from '../models/MockData';
 import { NotificationService } from '../../shared/services/notification/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { CommentService } from '../../shared/services/comment/comment.service';
 
 @Component({
   selector: 'app-office-management',
@@ -40,7 +41,8 @@ export class OfficeManagementComponent implements OnInit {
     private dialog: MatDialog,
     private omService: OfficeManagementService,
     private notificationService: NotificationService,
-    private translateService: TranslateService) {
+    private translateService: TranslateService,
+    private commentService: CommentService) {
   }
 
   ngOnInit(): void {
@@ -53,12 +55,6 @@ export class OfficeManagementComponent implements OnInit {
 
   masterToggle() {
     this.areAllSelected() ? this.omSelectionModel.clear() : this.omEntries.forEach(row => this.omSelectionModel.select(row));
-  }
-
-  countOfDoneComments(omEntry: OfficeManagementEntry): number {
-    return omEntry.comments.filter(comment => {
-      return comment.state === State.DONE;
-    }).length;
   }
 
   openDialog(omEntry: OfficeManagementEntry): void {
@@ -102,14 +98,6 @@ export class OfficeManagementComponent implements OnInit {
     return 'open';
   }
 
-  // TODO: maybe switch to a library that does this kind of calculations
-  private monthDiff(d1: Date, d2: Date) {
-    let months = (d2.getFullYear() - d1.getFullYear()) * 12;
-    months -= d1.getMonth();
-    months += d2.getMonth();
-    return Math.abs(months);
-  }
-
   releaseEmployees() {
     const employees = this.omSelectionModel.selected.map(omEntry => {
       omEntry.employee.releaseDate = this.selectedDate;
@@ -141,7 +129,7 @@ export class OfficeManagementComponent implements OnInit {
     const openOmEntries = [];
 
     this.omEntries.forEach(omEntry => {
-      const diff = this.countOfDoneComments(omEntry) - omEntry.comments.length;
+      const diff = this.commentService.getDoneCommentsCount(omEntry.comments) - omEntry.comments.length;
       if (diff === 0 && omEntry.customerCheckState === State.DONE && omEntry.internalCheckState === State.DONE) {
         doneOmEntries.push(omEntry);
       } else {
@@ -158,4 +146,13 @@ export class OfficeManagementComponent implements OnInit {
 
     this.filteredOmEntries = this.omEntries.slice();
   }
+
+  // TODO: maybe switch to a library that does this kind of calculations
+  private monthDiff(d1: Date, d2: Date) {
+    let months = (d2.getFullYear() - d1.getFullYear()) * 12;
+    months -= d1.getMonth();
+    months += d2.getMonth();
+    return Math.abs(months);
+  }
+
 }

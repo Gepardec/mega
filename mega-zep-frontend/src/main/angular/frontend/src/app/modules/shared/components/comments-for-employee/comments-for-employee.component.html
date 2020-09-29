@@ -3,100 +3,93 @@
     {{'comments-for-employee.commentsFor' | translate:{'firstAndSureName': employee.firstName + ' ' + employee.sureName} }}
   </h2>
 
-  <mat-dialog-content class="container-fluid">
-    <div class="overflow-auto">
+  <mat-dialog-content>
+    <mat-form-field appearance="outline">
+      <mat-label>{{'comments-for-employee.writeCommentLabel'|translate}}</mat-label>
+      <textarea
+        #newMessage
+        [maxLength]="MAXIMUM_LETTERS"
+        cdkAutosizeMaxRows="10"
+        cdkAutosizeMinRows="5"
+        cdkTextareaAutosize
+        matInput></textarea>
+      <mat-hint align="end">{{newMessage.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
+    </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{'comments-for-employee.writeCommentLabel'|translate}}</mat-label>
-        <textarea
-          #newMessage
-          [maxLength]="MAXIMUM_LETTERS"
-          cdkAutosizeMaxRows="10"
-          cdkAutosizeMinRows="5"
-          cdkTextareaAutosize
-          matInput></textarea>
-        <mat-hint align="end">{{newMessage.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
-      </mat-form-field>
+    <button mat-raised-button>
+      {{'comments-for-employee.addCommentBtn' | translate}}
+    </button>
 
-      <button
-        class="float-right mb-3"
-        mat-raised-button>
-        {{'comments-for-employee.addCommentBtn' | translate}}
-      </button>
+    <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table">
+      <colgroup>
+        <col style="width:10%">
+        <col style="width:8%">
+        <col style="width:12%">
+        <col style="max-width:55%">
+        <col style="width:7.5%">
+        <col style="width:7.5%">
+      </colgroup>
 
-      <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table w-100">
-        <colgroup>
-          <col style="width:10%">
-          <col style="width:8%">
-          <col style="width:12%">
-          <col style="max-width:55%">
-          <col style="width:7.5%">
-          <col style="width:7.5%">
-        </colgroup>
+      <tr class="mat-header-row">
+        <th class="mat-header-cell">{{'comments-for-employee.table.lastChanged' | translate}}</th>
+        <th class="mat-header-cell">{{'comments-for-employee.table.done' | translate}}</th>
+        <th class="mat-header-cell">{{'comments-for-employee.table.author' | translate}}</th>
+        <th class="mat-header-cell">{{'comments-for-employee.table.comment' | translate}}</th>
+        <th class="mat-header-cell">{{'comments-for-employee.table.edit' | translate}}</th>
+        <th class="mat-header-cell">{{'comments-for-employee.table.delete' | translate}}</th>
+      </tr>
 
-        <tr class="mat-header-row">
-          <th class="mat-header-cell">{{'comments-for-employee.table.lastChanged' | translate}}</th>
-          <th class="mat-header-cell">{{'comments-for-employee.table.done' | translate}}</th>
-          <th class="mat-header-cell">{{'comments-for-employee.table.author' | translate}}</th>
-          <th class="mat-header-cell">{{'comments-for-employee.table.comment' | translate}}</th>
-          <th class="mat-header-cell">{{'comments-for-employee.table.edit' | translate}}</th>
-          <th class="mat-header-cell">{{'comments-for-employee.table.delete' | translate}}</th>
-        </tr>
+      <tr *ngFor="let comment of comments" class="mat-row">
+        <td class="mat-cell">{{comment.updateDate}}</td>
 
-        <tr *ngFor="let comment of comments" class="mat-row">
-          <td class="mat-cell">{{comment.updateDate}}</td>
+        <td class="mat-cell">
+          <app-state-indicator [state]="comment.state"></app-state-indicator>
+        </td>
 
-          <td [ngSwitch]="comment.state"
-              class="mat-cell">
-            <mat-icon *ngSwitchCase="State.OPEN" class="red">cancel</mat-icon>
-            <mat-icon *ngSwitchCase="State.DONE" class="green">check_circle</mat-icon>
-          </td>
+        <td class="mat-cell">
+          {{comment.author}}
+        </td>
 
-          <td class="mat-cell">
-            {{comment.author}}
-          </td>
+        <td class="mat-cell">
+          <pre [hidden]="comment.isEditing" [innerHTML]="parseAnchorTags(comment.message)">{{comment.message}}</pre>
+          <div [hidden]="!comment.isEditing">
+            <mat-form-field floatLabel="never">
+              <mat-label>{{'comments-for-employee.editCommentLabel' | translate}}</mat-label>
+              <textarea
+                #editMessageInput
+                [maxLength]="MAXIMUM_LETTERS"
+                [value]="comment.message"
+                cdkAutosizeMaxRows="15"
+                cdkAutosizeMinRows="5"
+                cdkTextareaAutosize
+                matInput></textarea>
+              <mat-hint *ngIf="comment.isEditing" align="end">{{editMessageInput.value.length}}
+                / {{MAXIMUM_LETTERS}}</mat-hint>
+            </mat-form-field>
+          </div>
+        </td>
 
-          <td class="mat-cell">
-            <pre [hidden]="comment.isEditing" [innerHTML]="parseAnchorTags(comment.message)">{{comment.message}}</pre>
-            <div [hidden]="!comment.isEditing">
-              <mat-form-field floatLabel="never">
-                <mat-label>{{'comments-for-employee.editCommentLabel' | translate}}</mat-label>
-                <textarea
-                  #editMessageInput
-                  [maxLength]="MAXIMUM_LETTERS"
-                  [value]="comment.message"
-                  cdkAutosizeMaxRows="15"
-                  cdkAutosizeMinRows="5"
-                  cdkTextareaAutosize
-                  matInput></textarea>
-                <mat-hint *ngIf="comment.isEditing" align="end">{{editMessageInput.value.length}}
-                  / {{MAXIMUM_LETTERS}}</mat-hint>
-              </mat-form-field>
-            </div>
-          </td>
-
-          <td class="mat-cell">
-            <ng-container *ngIf="comment.isEditing">
-              <button (click)="comment.message = editMessageInput.value; toggleIsEditing(comment)" mat-icon-button>
-                <mat-icon>done</mat-icon>
-              </button>
-              <button (click)="editMessageInput.value = comment.message; toggleIsEditing(comment)" mat-icon-button>
-                <mat-icon>clear</mat-icon>
-              </button>
-            </ng-container>
-            <button (click)="toggleIsEditing(comment)" *ngIf="!comment.isEditing" mat-icon-button>
-              <mat-icon>edit</mat-icon>
+        <td class="mat-cell">
+          <ng-container *ngIf="comment.isEditing">
+            <button (click)="comment.message = editMessageInput.value; toggleIsEditing(comment)" mat-icon-button>
+              <mat-icon>done</mat-icon>
             </button>
-          </td>
-
-          <td class="mat-cell">
-            <button mat-icon-button>
-              <mat-icon>delete</mat-icon>
+            <button (click)="editMessageInput.value = comment.message; toggleIsEditing(comment)" mat-icon-button>
+              <mat-icon>clear</mat-icon>
             </button>
-          </td>
-        </tr>
-      </table>
-    </div>
+          </ng-container>
+          <button (click)="toggleIsEditing(comment)" *ngIf="!comment.isEditing" mat-icon-button>
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+
+        <td class="mat-cell">
+          <button mat-icon-button>
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </table>
 
     <ng-template #noCommentsFound>
       <p>{{'comments-for-employee.noCommentsYet' | translate}}</p>

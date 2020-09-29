@@ -17,6 +17,7 @@ import { AuthorizationHeaderInterceptor } from './modules/shared/interceptors/au
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { OfficeManagementModule } from './modules/office-management/office-management.module';
+import { ProjectManagementModule } from './modules/project-management/project-management.module';
 
 registerLocaleData(localeDeAt, 'de-AT');
 
@@ -33,6 +34,7 @@ registerLocaleData(localeDeAt, 'de-AT');
     SharedModule,
     OfficeManagementModule,
     MonthlyReportModule,
+    ProjectManagementModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

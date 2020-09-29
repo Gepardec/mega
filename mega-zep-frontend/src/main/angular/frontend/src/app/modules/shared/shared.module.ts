@@ -14,6 +14,9 @@ import { InfoComponent } from './components/info/info.component';
 import { HttpClientModule } from '@angular/common/http';
 import { InfoDialogComponent } from './components/info-dialog/info-dialog.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { StateSelectComponent } from './components/state-select/state-select.component';
+import { DoneCommentsIndicatorComponent } from './components/done-comments-indicator/done-comments-indicator.component';
+import { StateIndicatorComponent } from './components/state-indicator/state-indicator.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     InfoComponent,
     InfoDialogComponent,
     ErrorComponent,
-    CommentsForEmployeeComponent
+    CommentsForEmployeeComponent,
+    StateSelectComponent,
+    DoneCommentsIndicatorComponent,
+    StateIndicatorComponent
   ],
   imports: [
     CommonModule,
@@ -44,6 +50,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     ErrorComponent,
     InfoComponent,
     InfoDialogComponent,
+    StateSelectComponent,
+    DoneCommentsIndicatorComponent,
+    StateIndicatorComponent,
   ],
   entryComponents: [
     CommentsForEmployeeComponent,

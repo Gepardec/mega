@@ -1,0 +1,44 @@
+<mat-card *ngIf="monthlyReport" class="mat-elevation-z10">
+  <mat-card-title>{{'monthly-report.title.emc' | translate}}</mat-card-title>
+  <mat-card-content fxLayout="column" fxLayoutAlign="center center" style="text-align: center">
+    <ng-container *ngIf="commentService.areAllCommentsDone(monthlyReport.comments), else openComments">
+
+      <ng-container [ngSwitch]="monthlyReport.employeeCheckState">
+        <ng-container *ngSwitchCase="State.OPEN">
+          <app-state-indicator [state]="State.OPEN" size="large"></app-state-indicator>
+          <p>{{'monthly-report.pleaseCheckPrompt' | translate}}</p>
+          <button mat-raised-button>{{'monthly-report.confirmBtnText' | translate}}</button>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="State.DONE">
+          <ng-container *ngIf="!monthlyReport.otherChecksDone">
+            <app-state-indicator size="large"></app-state-indicator>
+            <p>{{'monthly-report.checkWip' | translate}}</p>
+          </ng-container>
+          <ng-container *ngIf="monthlyReport.otherChecksDone">
+            <app-state-indicator [state]="State.DONE" size="large"></app-state-indicator>
+            <p>{{'monthly-report.checkSuccess' | translate}}</p>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #openComments>
+      <app-state-indicator [state]="State.OPEN" size="large"></app-state-indicator>
+      <p>{{'monthly-report.commentsToDo' | translate}}:</p>
+      <mat-selection-list (selectionChange)="selectionChange($event)">
+        <mat-list-option
+          #option
+          *ngFor="let comment of monthlyReport.comments"
+          [disabled]="option.selected"
+          [ngClass]="option.selected ? 'done green' : 'red'"
+          [selected]="comment.state === State.DONE"
+          [value]="comment">
+          {{comment.updateDate | date: 'dd.MM.yyyy'}}
+          {{comment.author}}:
+          {{comment.message}}
+        </mat-list-option>
+      </mat-selection-list>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

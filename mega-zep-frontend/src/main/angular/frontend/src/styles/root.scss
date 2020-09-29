@@ -43,6 +43,25 @@ app-display-monthly-report {
   .mat-pseudo-checkbox-indeterminate {
     background-color: $mega-success-green;
   }
+
+  .mat-card-content {
+    font-size: 20px;
+  }
+
+}
+
+app-time-check, app-journey-check, app-employee-check {
+  .mat-card-content {
+    font-size: 20px;
+    overflow: auto;
+    height: 100%;
+  }
+
+  .mat-card {
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 app-office-management {

@@ -1,28 +1,24 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CommentsForEmployeeComponent } from './comments-for-employee.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { StateIndicatorComponent } from './state-indicator.component';
 import { AngularMaterialModule } from '../../../material/material-module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-describe('CommentsForEmployeeComponent', () => {
-  let component: CommentsForEmployeeComponent;
-  let fixture: ComponentFixture<CommentsForEmployeeComponent>;
+describe('StateIndicatorComponent', () => {
+  let component: StateIndicatorComponent;
+  let fixture: ComponentFixture<StateIndicatorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CommentsForEmployeeComponent],
-      imports: [
-        AngularMaterialModule,
-        TranslateModule.forRoot()
-      ],
+      declarations: [StateIndicatorComponent],
+      imports: [AngularMaterialModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CommentsForEmployeeComponent);
+    fixture = TestBed.createComponent(StateIndicatorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

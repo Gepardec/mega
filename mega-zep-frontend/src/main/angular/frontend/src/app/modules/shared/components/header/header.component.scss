@@ -1,12 +1,13 @@
 .toolbar {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
+  height: 70px;
 }
 
 .router-outlet {
-  height: 100%;
-  margin-top: 10px;
+  height: calc(100% - 77px);
+  margin-top: 7px;
 }
 
 img {
@@ -15,11 +16,4 @@ img {
 
 .logo-mega {
   height: inherit;
-}
-
-mat-sidenav * a {
-  text-decoration: none;
-  width: 100%;
-  font-size: 20px;
-  color: black;
 }
