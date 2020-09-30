@@ -65,7 +65,7 @@ export class OfficeManagementComponent implements OnInit {
       }
     );
 
-    dialogRef.componentInstance.employee = omEntry.employee;
+    dialogRef.componentInstance.employee = omEntry.employee.firstName + ' ' + omEntry.employee.sureName;
     dialogRef.componentInstance.comments = omEntry.comments;
   }
 

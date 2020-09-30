@@ -34,6 +34,10 @@ button:focus {
   color: $mega-warning-yellow;
 }
 
+.text-center {
+  text-align: center !important;
+}
+
 app-display-monthly-report {
   .mat-checkbox-checked.mat-accent .mat-checkbox-background,
   .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,

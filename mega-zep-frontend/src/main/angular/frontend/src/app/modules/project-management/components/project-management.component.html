@@ -1,1 +1,64 @@
-<h1>W.I.P</h1>
+<div fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px">
+
+  <mat-accordion [multi]="true">
+    <mat-expansion-panel *ngFor="let mapEntry of projectManagementResponse | keyvalue" [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title><strong>{{mapEntry.key}}</strong></mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <table [dataSource]="mapEntry.value" mat-table>
+        <ng-container matColumnDef="employeeName">
+          <th *matHeaderCellDef mat-header-cell>{{'project-management.table.employeeName' | translate}}</th>
+          <td *matCellDef="let pmEntry" mat-cell> {{pmEntry.employeeName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="projectCheckState">
+          <th *matHeaderCellDef class="text-center"
+              mat-header-cell>{{'project-management.table.projectCheckState' | translate}}</th>
+          <td *matCellDef="let pmEntry" class="text-center" mat-cell>
+            <app-state-select [value]="pmEntry.projectCheckState"></app-state-select>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="employeeCheckState">
+          <th *matHeaderCellDef class="text-center"
+              mat-header-cell>{{'project-management.table.employeeCheckState' | translate}}</th>
+          <td *matCellDef="let pmEntry" class="text-center" mat-cell>
+            <app-state-indicator [state]="pmEntry.employeeCheckState"></app-state-indicator>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="internalCheckState">
+          <th *matHeaderCellDef class="text-center"
+              mat-header-cell>{{'project-management.table.internalCheckState' | translate}}</th>
+          <td *matCellDef="let pmEntry" class="text-center" mat-cell>
+            <app-state-indicator [state]="pmEntry.internalCheckState"></app-state-indicator>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="customerCheckState">
+          <th *matHeaderCellDef class="text-center"
+              mat-header-cell>{{'project-management.table.customerCheckState' | translate}}</th>
+          <td *matCellDef="let pmEntry" class="text-center" mat-cell>
+            <app-state-indicator [state]="pmEntry.customerCheckState"></app-state-indicator>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="doneCommentsIndicator">
+          <th *matHeaderCellDef mat-header-cell>{{'project-management.table.comments' | translate}}</th>
+          <td *matCellDef="let pmEntry" mat-cell>
+            <button (click)="openDialog(pmEntry)" mat-button>
+              <mat-icon>comment</mat-icon>
+              <app-done-comments-indicator [comments]="pmEntry.comments"></app-done-comments-indicator>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+      </table>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+
+</div>

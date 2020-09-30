@@ -70,7 +70,7 @@
     "selectedCount": "Person(en) ausgewählt",
     "releaseBtnText": "Freigeben",
     "table": {
-      "name": "Name",
+      "name": "Mitarbeiter",
       "customerCheckState": "Kundenzeiten",
       "internalCheckState": "Interne Zeiten",
       "comments": "Anmerkungen",
@@ -79,6 +79,16 @@
       "releaseDate": "Freigabedatum"
     },
     "noOmEntriesFound": "Keine Einträge gefunden"
+  },
+  "project-management": {
+    "table": {
+      "employeeName": "Mitarbeiter",
+      "projectCheckState": "Überprüfung",
+      "employeeCheckState": "MA Check",
+      "internalCheckState": "Interne Zeiten",
+      "customerCheckState": "Kundenzeiten",
+      "comments": "Anmerkungen"
+    }
   },
   "comments-for-employee": {
     "commentsFor": "Anmerkungen für {{firstAndSureName}}",

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Employee } from '../../models/Employee';
 import { Comment } from '../../models/Comment';
 import { State } from '../../models/State';
+import { configuration } from '../../constants/configuration';
 
 @Component({
   selector: 'app-comments-for-employee',
@@ -10,8 +10,9 @@ import { State } from '../../models/State';
 })
 export class CommentsForEmployeeComponent implements OnInit {
   MAXIMUM_LETTERS = 500;
+  DATE_FORMAT = configuration.dateFormat;
   State = State;
-  employee: Employee;
+  employee: string;
   comments: Array<Comment>;
 
   constructor() {

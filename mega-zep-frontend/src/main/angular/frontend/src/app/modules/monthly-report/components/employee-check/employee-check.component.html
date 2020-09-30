@@ -1,6 +1,6 @@
 <mat-card *ngIf="monthlyReport" class="mat-elevation-z10">
   <mat-card-title>{{'monthly-report.title.emc' | translate}}</mat-card-title>
-  <mat-card-content fxLayout="column" fxLayoutAlign="center center" style="text-align: center">
+  <mat-card-content class="text-center" fxLayout="column" fxLayoutAlign="center center">
     <ng-container *ngIf="commentService.areAllCommentsDone(monthlyReport.comments), else openComments">
 
       <ng-container [ngSwitch]="monthlyReport.employeeCheckState">

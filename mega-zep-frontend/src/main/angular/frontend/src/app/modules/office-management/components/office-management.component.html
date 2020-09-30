@@ -80,15 +80,17 @@
       </ng-container>
 
       <ng-container matColumnDef="employeeCheckState">
-        <th *matHeaderCellDef mat-header-cell>{{'office-management.table.employeeCheckState' | translate}}</th>
-        <td *matCellDef="let omEntry" mat-cell>
+        <th *matHeaderCellDef class="text-center"
+            mat-header-cell>{{'office-management.table.employeeCheckState' | translate}}</th>
+        <td *matCellDef="let omEntry" class="text-center" mat-cell>
           <app-state-indicator [state]="omEntry.employeeCheckState"></app-state-indicator>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="projectCheckState">
-        <th *matHeaderCellDef mat-header-cell>{{'office-management.table.projectCheckState' | translate}}</th>
-        <td *matCellDef="let omEntry" mat-cell>
+        <th *matHeaderCellDef class="text-center"
+            mat-header-cell>{{'office-management.table.projectCheckState' | translate}}</th>
+        <td *matCellDef="let omEntry" class="text-center" mat-cell>
           <app-state-indicator [state]="omEntry.projectCheckState"></app-state-indicator>
         </td>
       </ng-container>
