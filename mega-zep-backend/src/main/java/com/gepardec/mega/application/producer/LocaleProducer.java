@@ -9,12 +9,15 @@ import javax.enterprise.inject.Produces;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
+/**
+ * The MailDaemon is executed outside an request, so no HttpServletRequest ia available as well as an @RequestScope
+ */
 @ApplicationScoped
 public class LocaleProducer {
 
     private final ApplicationConfig applicationConfig;
 
-    private final HttpServletRequest request;
+//    private final HttpServletRequest request;
 
     private Locale currentLocale;
 
@@ -22,7 +25,7 @@ public class LocaleProducer {
             final ApplicationConfig applicationConfig,
             HttpServletRequest request) {
         this.applicationConfig = applicationConfig;
-        this.request = request;
+//        this.request = request;
     }
 
     @PostConstruct
@@ -37,10 +40,10 @@ public class LocaleProducer {
     }
 
     private Locale determineCurrentLocale() {
-        final Locale requestLocale = request.getLocale();
-        if (requestLocale != null && applicationConfig.getLocales().contains(requestLocale)) {
-            return request.getLocale();
-        }
+//        final Locale requestLocale = request.getLocale();
+//        if (requestLocale != null && applicationConfig.getLocales().contains(requestLocale)) {
+//            return request.getLocale();
+//        }
         return applicationConfig.getDefaultLocale();
     }
 }
