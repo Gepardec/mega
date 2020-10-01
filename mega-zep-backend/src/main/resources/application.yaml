@@ -145,7 +145,7 @@ mega:
     zep:
       url: https://www.zep-online.de/zepgepardecservices/sync/soap.php?v=7
     mail:
-      cron: 0 0 11 ? * MON-FRI
+      cron: 0 0 12 ? * MON-FRI
       employees:
         notification: true
       reminder:

@@ -3,13 +3,13 @@ package com.gepardec.mega.application.producer;
 import com.gepardec.mega.application.configuration.ApplicationConfig;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
-@RequestScoped
+@ApplicationScoped
 public class LocaleProducer {
 
     private final ApplicationConfig applicationConfig;
