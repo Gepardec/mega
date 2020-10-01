@@ -145,9 +145,9 @@ mega:
     zep:
       url: https://www.zep-online.de/zepgepardecservices/sync/soap.php?v=7
     mail:
-      cron: 0 0 7 ? * MON-FRI
+      cron: 0 0 11 ? * MON-FRI
       employees:
-        notification: false
+        notification: true
       reminder:
         pl: guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com,christoph.kofler@gepardec.com,erhard.siegl@gepardec.com,stefan.kovar@gepardec.com,ludwig.steindl@gepardec.com
         om: evelyn.pirklbauer@gepardec.com
