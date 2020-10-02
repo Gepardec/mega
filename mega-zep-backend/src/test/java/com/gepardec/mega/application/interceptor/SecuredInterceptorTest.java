@@ -1,7 +1,7 @@
 package com.gepardec.mega.application.interceptor;
 
 import com.gepardec.mega.application.exception.UnauthorizedException;
-import com.gepardec.mega.domain.model.UserContext;
+import com.gepardec.mega.domain.model.SecurityContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 class SecuredInterceptorTest {
 
     @Mock
-    private UserContext userContext;
+    private SecurityContext securityContext;
 
     @Mock
     private InvocationContext invocationContext;
@@ -32,13 +32,13 @@ class SecuredInterceptorTest {
 
     @Test
     void invoke_tokenInvalid_throwUnauthorizedException() {
-        when(userContext.loggedIn()).thenReturn(false);
+        when(securityContext.email()).thenReturn(null);
         assertThrows(UnauthorizedException.class, () -> securedInterceptor.invoke(invocationContext));
     }
 
     @Test
     void invoke_userLoggedAndTokenValid_callsProceed() throws Exception {
-        when(userContext.loggedIn()).thenReturn(true);
+        when(securityContext.email()).thenReturn("test@gepardec.com");
         securedInterceptor.invoke(invocationContext);
 
         verify(invocationContext, times(1)).proceed();

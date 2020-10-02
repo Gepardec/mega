@@ -1,7 +1,7 @@
 package com.gepardec.mega.application.interceptor;
 
 import com.gepardec.mega.application.exception.UnauthorizedException;
-import com.gepardec.mega.domain.model.UserContext;
+import com.gepardec.mega.domain.model.SecurityContext;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -16,12 +16,12 @@ import javax.ws.rs.Priorities;
 public class SecuredInterceptor {
 
     @Inject
-    UserContext userContext;
+    SecurityContext securityContext;
 
     @AroundInvoke
     public Object invoke(final InvocationContext invocationContext) throws Exception {
-        if (!userContext.loggedIn()) {
-            throw new UnauthorizedException("User is not logge");
+        if (securityContext.email() == null) {
+            throw new UnauthorizedException("User is not logged in");
         }
         return invocationContext.proceed();
     }

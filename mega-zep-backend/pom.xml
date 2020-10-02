@@ -26,7 +26,6 @@
         <commons-io.version>1.3.2</commons-io.version>
         <google-api-client.version>1.30.4</google-api-client.version>
         <guava.version>28.1-jre</guava.version>
-        <mockito-junit-jupiter.version>3.3.3</mockito-junit-jupiter.version>
         <quarkus-plugin.version>1.6.1.Final</quarkus-plugin.version>
         <quarkus.platform.version>1.6.1.Final</quarkus.platform.version>
         <ws.rt.version>2.3.2</ws.rt.version>
@@ -169,7 +168,6 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>${mockito-junit-jupiter.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -317,7 +315,7 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>${liquibase-maven-plugin.version}</version>
                 <configuration>
-                    <propertyFile>${project.basedir}/liquibase.properties</propertyFile>
+                    <propertyFile>liquibase.properties</propertyFile>
                     <changeSetAuthor>mega</changeSetAuthor>
                 </configuration>
                 <!-- Keep the version here, these dependencies are only used here -->

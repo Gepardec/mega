@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1600407511007-1
+      id: 1601632160550-1
       author: thoma (generated)
       changes:
         - createSequence:
@@ -8,7 +8,7 @@ databaseChangeLog:
             sequenceName: sequence_comment_id
             startValue: 1
   - changeSet:
-      id: 1600407511007-2
+      id: 1601632160550-2
       author: thoma (generated)
       changes:
         - createSequence:
@@ -16,7 +16,7 @@ databaseChangeLog:
             sequenceName: sequence_step_entry_id
             startValue: 1
   - changeSet:
-      id: 1600407511007-3
+      id: 1601632160550-3
       author: thoma (generated)
       changes:
         - createSequence:
@@ -24,7 +24,7 @@ databaseChangeLog:
             sequenceName: sequence_step_id
             startValue: 1
   - changeSet:
-      id: 1600407511007-4
+      id: 1601632160550-4
       author: thoma (generated)
       changes:
         - createSequence:
@@ -32,7 +32,7 @@ databaseChangeLog:
             sequenceName: sequence_user_id
             startValue: 1
   - changeSet:
-      id: 1600407511007-5
+      id: 1601632160550-5
       author: thoma (generated)
       changes:
         - createTable:
@@ -71,7 +71,7 @@ databaseChangeLog:
                   type: BIGINT
             tableName: comment
   - changeSet:
-      id: 1600407511007-6
+      id: 1601632160550-6
       author: thoma (generated)
       changes:
         - createTable:
@@ -98,9 +98,14 @@ databaseChangeLog:
                     nullable: false
                   name: update_date
                   type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: zep_id
+                  type: BIGINT
             tableName: employee
   - changeSet:
-      id: 1600407511007-7
+      id: 1601632160550-7
       author: thoma (generated)
       changes:
         - createTable:
@@ -113,9 +118,6 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
-                  name: group_name
-                  type: VARCHAR(50)
-              - column:
                   constraints:
                     nullable: false
                   name: name
@@ -126,13 +128,11 @@ databaseChangeLog:
                   name: ordinal
                   type: INTEGER
               - column:
-                  constraints:
-                    nullable: false
                   name: role
                   type: VARCHAR(255)
             tableName: step
   - changeSet:
-      id: 1600407511007-8
+      id: 1601632160550-8
       author: thoma (generated)
       changes:
         - createTable:
@@ -155,8 +155,6 @@ databaseChangeLog:
                   name: entry_date
                   type: date
               - column:
-                  constraints:
-                    nullable: false
                   name: project
                   type: VARCHAR(255)
               - column:
@@ -186,7 +184,7 @@ databaseChangeLog:
                   type: BIGINT
             tableName: step_entry
   - changeSet:
-      id: 1600407511007-9
+      id: 1601632160550-9
       author: thoma (generated)
       changes:
         - addUniqueConstraint:
@@ -194,7 +192,7 @@ databaseChangeLog:
             constraintName: uidx_email
             tableName: employee
   - changeSet:
-      id: 1600407511007-10
+      id: 1601632160550-10
       author: thoma (generated)
       changes:
         - addUniqueConstraint:
@@ -202,17 +200,7 @@ databaseChangeLog:
             constraintName: uidx_ordinal
             tableName: step
   - changeSet:
-      id: 1600407511007-11
-      author: thoma (generated)
-      changes:
-        - createIndex:
-            columns:
-              - column:
-                  name: group_name
-            indexName: idx_group_name
-            tableName: step
-  - changeSet:
-      id: 1600407511007-12
+      id: 1601632160550-11
       author: thoma (generated)
       changes:
         - addForeignKeyConstraint:
@@ -225,7 +213,7 @@ databaseChangeLog:
             referencedTableName: employee
             validate: true
   - changeSet:
-      id: 1600407511007-13
+      id: 1601632160550-12
       author: thoma (generated)
       changes:
         - addForeignKeyConstraint:
@@ -238,7 +226,7 @@ databaseChangeLog:
             referencedTableName: employee
             validate: true
   - changeSet:
-      id: 1600407511007-14
+      id: 1601632160550-13
       author: thoma (generated)
       changes:
         - addForeignKeyConstraint:
@@ -251,7 +239,7 @@ databaseChangeLog:
             referencedTableName: step_entry
             validate: true
   - changeSet:
-      id: 1600407511007-15
+      id: 1601632160550-14
       author: thoma (generated)
       changes:
         - addForeignKeyConstraint:
