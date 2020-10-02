@@ -1,9 +1,6 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.Role;
-import com.gepardec.mega.domain.model.User;
-import com.gepardec.mega.domain.model.UserContext;
+import com.gepardec.mega.domain.model.*;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
@@ -28,12 +25,14 @@ public class EmployeeResourceTest {
     EmployeeService employeeService;
 
     @InjectMock
+    private SecurityContext securityContext;
+
+    @InjectMock
     private UserContext userContext;
 
     @Test
     void list_whenUserNotLoggedAndInRoleADMINISTRATOR_thenReturnsHttpStatusUNAUTHORIZED() {
         when(userContext.user()).thenReturn(createUserForRole(Role.ADMINISTRATOR));
-        when(userContext.loggedIn()).thenReturn(false);
 
         given().get("/employees")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
@@ -41,8 +40,9 @@ public class EmployeeResourceTest {
 
     @Test
     void list_whenUserLoggedAndInRoleUSER_thenReturnsHttpStatusFORBIDDEN() {
-        when(userContext.user()).thenReturn(createUserForRole(Role.USER));
-        when(userContext.loggedIn()).thenReturn(true);
+        final User user = createUserForRole(Role.USER);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
 
         given().get("/employees")
                 .then().assertThat().statusCode(HttpStatus.SC_FORBIDDEN);
@@ -51,8 +51,8 @@ public class EmployeeResourceTest {
     @Test
     void list_whenUserLoggedAndInRoleCONTROLLER_thenReturnsHttpStatusOK() {
         final User user = createUserForRole(Role.CONTROLLER);
+        when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
-        when(userContext.loggedIn()).thenReturn(true);
         final Employee userAsEmployee = createEmployeeForUser(user);
         when(employeeService.getEmployee(anyString())).thenReturn(userAsEmployee);
 
@@ -63,8 +63,8 @@ public class EmployeeResourceTest {
     @Test
     void list_whenUserLoggedAndInRoleADMINISTRATOR_thenReturnsHttpStatusOK() {
         final User user = createUserForRole(Role.ADMINISTRATOR);
+        when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
-        when(userContext.loggedIn()).thenReturn(true);
 
         given().get("/employees")
                 .then().assertThat().statusCode(HttpStatus.SC_OK);
@@ -73,12 +73,13 @@ public class EmployeeResourceTest {
     @Test
     void list_whenUserLoggedAndInRoleADMINISTRATOR_thenReturnsEmployees() {
         final User user = createUserForRole(Role.ADMINISTRATOR);
+        when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
-        when(userContext.loggedIn()).thenReturn(true);
         final Employee userAsEmployee = createEmployeeForUser(user);
         when(employeeService.getAllActiveEmployees()).thenReturn(List.of(userAsEmployee));
 
-        final List<Employee> employees = given().get("/employees").as(new TypeRef<>() {});
+        final List<Employee> employees = given().get("/employees").as(new TypeRef<>() {
+        });
 
         assertEquals(1, employees.size());
         final Employee actual = employees.get(0);
@@ -95,7 +96,6 @@ public class EmployeeResourceTest {
     void update_whenContentTypeIsTextPlain_returnsHttpStatusUNSUPPORTED_MEDIA_TYPE() {
         final User user = createUserForRole(Role.ADMINISTRATOR);
         when(userContext.user()).thenReturn(user);
-        when(userContext.loggedIn()).thenReturn(true);
 
         given().contentType(MediaType.TEXT_PLAIN)
                 .put("/employees")
@@ -105,8 +105,8 @@ public class EmployeeResourceTest {
     @Test
     void update_whenEmptyBody_returnsHttpStatusBAD_REQUEST() {
         final User user = createUserForRole(Role.ADMINISTRATOR);
+        when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
-        when(userContext.loggedIn()).thenReturn(true);
 
         given().contentType(MediaType.APPLICATION_JSON)
                 .put("/employees")
@@ -116,8 +116,8 @@ public class EmployeeResourceTest {
     @Test
     void update_whenEmptyList_returnsHttpStatusBAD_REQUEST() {
         final User user = createUserForRole(Role.ADMINISTRATOR);
+        when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
-        when(userContext.loggedIn()).thenReturn(true);
 
         given().contentType(MediaType.APPLICATION_JSON)
                 .body(List.of())
@@ -128,8 +128,8 @@ public class EmployeeResourceTest {
     @Test
     void update_whenValidRequest_returnsHttpStatusOK() {
         final User user = createUserForRole(Role.ADMINISTRATOR);
+        when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
-        when(userContext.loggedIn()).thenReturn(true);
         final Employee employee = createEmployeeForUser(user);
 
         given().contentType(MediaType.APPLICATION_JSON)
@@ -141,8 +141,8 @@ public class EmployeeResourceTest {
     @Test
     void update_whenValidRequestAndEmployeeServiceReturnsInvalidEmails_returnsInvalidEmails() {
         final User user = createUserForRole(Role.ADMINISTRATOR);
+        when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
-        when(userContext.loggedIn()).thenReturn(true);
         final Employee userAsEmployee = createEmployeeForUser(user);
         final List<String> expected = List.of("invalid1@gmail.com", "invalid2@gmail.com");
         when(employeeService.updateEmployeesReleaseDate(anyList())).thenReturn(expected);
@@ -150,7 +150,8 @@ public class EmployeeResourceTest {
         final List<String> emails = given().contentType(MediaType.APPLICATION_JSON)
                 .body(List.of(userAsEmployee))
                 .put("/employees")
-                .as(new TypeRef<>() {});
+                .as(new TypeRef<>() {
+                });
 
         assertEquals(2, emails.size());
         assertTrue(emails.containsAll(expected));
