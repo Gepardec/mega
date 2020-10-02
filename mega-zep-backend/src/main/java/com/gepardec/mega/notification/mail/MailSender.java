@@ -7,6 +7,7 @@ import io.quarkus.mailer.Mailer;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.util.Locale;
 
 @ApplicationScoped
 public class MailSender {
@@ -20,12 +21,11 @@ public class MailSender {
     @Inject
     Mailer mailer;
 
-    public void sendReminder(String eMail, String firstName, Reminder reminder) {
-        String subject = notificationHelper.subjectForReminder(reminder);
-        String text = notificationHelper.readEmailTemplateResourceFromStream(notificationHelper.templatePathForReminder(reminder));
+    public void sendReminder(String eMail, String firstName, Reminder reminder, Locale locale) {
+        String subject = notificationHelper.subjectForReminder(reminder, locale);
+        String text = notificationHelper.readEmailTemplateResourceFromStream(notificationHelper.templatePathForReminder(reminder, locale));
         sendMail(eMail, firstName, subject, text);
     }
-
 
     private void sendMail(String eMail, String firstName, String subject, String text) {
         final String mailTemplateText = notificationHelper.readEmailTemplateResourceFromStream(notificationHelper.getMailTemplateTextPath())
@@ -34,7 +34,6 @@ public class MailSender {
                 .replace(notificationHelper.getNamePlaceholder(), firstName)
                 .replace(notificationHelper.getTemplateMailtextPlaceholder(), text)
                 .replace(notificationHelper.getEomWikiPlaceholder(), notificationConfig.getMegaWikiEomUrl());
-
 
         mailer.send(Mail.withHtml(eMail, subject, mailContent)
                 .addInlineAttachment("logo.png", notificationHelper.readLogo(), MediaType.PNG.type(), "<LogoMEGAdash@gepardec.com>"));

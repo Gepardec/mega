@@ -83,14 +83,14 @@ class MailSenderTest {
     @Test
     void sendMail_send100Mails_allMailsShouldBeInMailBox() {
         for (int i = 0; i < 100; i++) {
-            mailSender.sendReminder(TO, "Jamal", Reminder.EMPLOYEE_CHECK_PROJECTTIME);
+            mailSender.sendReminder(TO, "Jamal", Reminder.EMPLOYEE_CHECK_PROJECTTIME, Locale.GERMAN);
         }
         List<Mail> sent = mailbox.getMessagesSentTo(TO);
         assertEquals(100, sent.size());
     }
 
     private void testMailFor(String name, Reminder reminder, String subject) {
-        mailSender.sendReminder(TO, name, reminder);
+        mailSender.sendReminder(TO, name, reminder, Locale.GERMAN);
         List<Mail> sent = mailbox.getMessagesSentTo(TO);
         assertAll(
                 () -> assertEquals(1, sent.size()),

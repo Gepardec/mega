@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -13,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "employee",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uidx_email", columnNames = {"email"})
+                @UniqueConstraint(name = "uidx_email", columnNames = { "email" })
         })
 @NamedQueries({
         @NamedQuery(name = "Employee.findByEmail", query = "select e from Employee e where e.email = :email")
@@ -48,6 +49,14 @@ public class Employee {
     @Length(min = 1, max = 255)
     @Column(name = "email")
     private String email;
+
+    /**
+     * The ZEP internal user id
+     */
+    @NotNull
+    @Min(0)
+    @Column(name = "zep_id")
+    private Long zepId;
 
     public Employee() {
     }
@@ -112,6 +121,14 @@ public class Employee {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Long getZepId() {
+        return zepId;
+    }
+
+    public void setZepId(Long zepId) {
+        this.zepId = zepId;
     }
 
     public Set<StepEntry> getAssignedStepEntries() {

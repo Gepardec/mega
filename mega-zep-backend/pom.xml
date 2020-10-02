@@ -317,7 +317,7 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>${liquibase-maven-plugin.version}</version>
                 <configuration>
-                    <propertyFile>${project.basedir}/liquibase.properties</propertyFile>
+                    <propertyFile>liquibase.properties</propertyFile>
                     <changeSetAuthor>mega</changeSetAuthor>
                 </configuration>
                 <!-- Keep the version here, these dependencies are only used here -->
