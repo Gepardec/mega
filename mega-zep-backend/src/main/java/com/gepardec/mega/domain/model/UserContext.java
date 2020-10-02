@@ -10,8 +10,6 @@ public abstract class UserContext {
     @Nullable
     public abstract User user();
 
-    public abstract boolean loggedIn();
-
     public static UserContext.Builder builder() {
         return new com.gepardec.mega.domain.model.AutoValue_UserContext.Builder();
     }
@@ -19,8 +17,6 @@ public abstract class UserContext {
     @AutoValue.Builder
     public abstract static class Builder {
         public abstract Builder user(User user);
-
-        public abstract Builder loggedIn(boolean loggedIn);
 
         public abstract UserContext build();
     }
