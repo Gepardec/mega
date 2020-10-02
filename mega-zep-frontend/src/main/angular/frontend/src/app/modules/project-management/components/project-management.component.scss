@@ -1,7 +1,17 @@
+@import 'src/styles/colors.scss';
+
 table {
   width: 100%;
 }
 
 th, td {
   font-size: 17px;
+}
+
+.actions mat-card-content {
+  margin-top: 20px;
+}
+
+.mat-expansion-panel-header-title {
+  max-width: 30%;
 }

@@ -1,12 +1,44 @@
 <div fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px">
+  <mat-card *ngIf="isAnySelected()" class="actions">
+    <mat-card-content fxFlexAlign="space-around center" fxLayout="row" fxLayoutGap="10px">
+      <h2>{{'project-management.actions' | translate}}</h2>
+      <span fxFlex="1 1 auto"></span>
+      <span fxLayoutGap="10px">
+        <button mat-raised-button>{{'project-management.doneBtn' | translate}}</button>
+        <button mat-raised-button>{{'project-management.notify' | translate}}</button>
+      </span>
+    </mat-card-content>
+  </mat-card>
 
   <mat-accordion [multi]="true">
-    <mat-expansion-panel *ngFor="let mapEntry of projectManagementResponse | keyvalue" [expanded]="true">
+    <mat-expansion-panel *ngFor="let pmEntry of pmEntries | keyvalue, let i = index" [expanded]="true">
       <mat-expansion-panel-header>
-        <mat-panel-title><strong>{{mapEntry.key}}</strong></mat-panel-title>
+        <mat-panel-title>
+          <strong>{{pmEntry.key}}</strong>
+        </mat-panel-title>
+        <mat-panel-description>
+          <span [ngClass]="areAllProjectCheckStatesDone(pmEntry.key) ? 'green' : 'red'">
+            {{'project-management.employeeDone' | translate}}
+          </span>
+        </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <table [dataSource]="mapEntry.value" mat-table>
+      <table [dataSource]="pmEntry.value" mat-table>
+        <ng-container matColumnDef="select">
+          <th *matHeaderCellDef mat-header-cell>
+            <mat-checkbox (change)="$event ? masterToggle(i, pmEntry.key) : null"
+                          [checked]="pmSelectionModels[i].hasValue() && areAllSelected(i, pmEntry.key)"
+                          [indeterminate]="pmSelectionModels[i].hasValue() && !areAllSelected(i, pmEntry.key)">
+            </mat-checkbox>
+          </th>
+          <td *matCellDef="let row" mat-cell>
+            <mat-checkbox (change)="$event ? pmSelectionModels[i].toggle(row) : null"
+                          (click)="$event.stopPropagation()"
+                          [checked]="pmSelectionModels[i].isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="employeeName">
           <th *matHeaderCellDef mat-header-cell>{{'project-management.table.employeeName' | translate}}</th>
           <td *matCellDef="let pmEntry" mat-cell> {{pmEntry.employeeName}} </td>
@@ -59,6 +91,4 @@
       </table>
     </mat-expansion-panel>
   </mat-accordion>
-
-
 </div>
