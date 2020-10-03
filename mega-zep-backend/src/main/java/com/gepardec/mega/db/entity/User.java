@@ -4,7 +4,6 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -12,14 +11,15 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "employee",
+@Table(name = "employee_user",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uidx_email", columnNames = { "email" })
+                @UniqueConstraint(name = "uidx_email", columnNames = {"email"}),
+                @UniqueConstraint(name = "uidx_zep_id", columnNames = {"zep_id"})
         })
 @NamedQueries({
-        @NamedQuery(name = "Employee.findByEmail", query = "select e from Employee e where e.email = :email")
+        @NamedQuery(name = "User.findActiveByEmail", query = "select u from User u where u.email = :email and u.active = true")
 })
-public class Employee {
+public class User {
 
     @Id
     @Column(name = "id", insertable = false, updatable = false)
@@ -54,19 +54,26 @@ public class Employee {
      * The ZEP internal user id
      */
     @NotNull
-    @Min(0)
+    @Length(min = 1, max = 100)
     @Column(name = "zep_id")
-    private Long zepId;
+    private String zepId;
 
-    public Employee() {
+    /**
+     * The flag which indicates the user is active
+     */
+    @NotNull
+    @Column(name = "active")
+    private Boolean active;
+
+    public User() {
     }
 
-    private Employee(final String email) {
+    private User(final String email) {
         this.email = email;
     }
 
-    public static Employee of(final String email) {
-        return new Employee(email);
+    public static User of(final String email) {
+        return new User(email);
     }
 
     /**
@@ -123,12 +130,20 @@ public class Employee {
         this.email = email;
     }
 
-    public Long getZepId() {
+    public String getZepId() {
         return zepId;
     }
 
-    public void setZepId(Long zepId) {
+    public void setZepId(String zepId) {
         this.zepId = zepId;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Set<StepEntry> getAssignedStepEntries() {
@@ -155,8 +170,8 @@ public class Employee {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Employee employee = (Employee) o;
-        return (id != null) ? Objects.equals(id, employee.id) : super.equals(o);
+        User user = (User) o;
+        return (id != null) ? Objects.equals(id, user.id) : super.equals(o);
     }
 
     @Override

@@ -1,42 +1,43 @@
 package com.gepardec.mega.service.impl.user;
 
-import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.application.exception.ForbiddenException;
+import com.gepardec.mega.db.repository.UserRepository;
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.user.UserService;
 import io.quarkus.cache.CacheKey;
 import io.quarkus.cache.CacheResult;
-import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Optional;
+import javax.transaction.Transactional;
 
 @ApplicationScoped
 public class UserServiceImpl implements UserService {
 
-    private final Logger logger;
+    private final UserRepository userRepository;
     private final EmployeeService employeeService;
 
     @Inject
-    public UserServiceImpl(final Logger logger,
+    public UserServiceImpl(final UserRepository userRepository,
                            final EmployeeService employeeService) {
-        this.logger = logger;
+        this.userRepository = userRepository;
         this.employeeService = employeeService;
     }
 
     @CacheResult(cacheName = "user-email")
     @Override
+    @Transactional(Transactional.TxType.SUPPORTS)
     public User getUser(@CacheKey final String email, final String pictureUrl) {
-        final Employee employee = Optional.ofNullable(employeeService.getAllActiveEmployees()).orElse(new ArrayList<>()).stream()
-                .filter(e -> email.equals(e.email()))
-                .findFirst().orElse(null);
+        final String zepId = userRepository.findActiveByEmail(email)
+                .orElseThrow(() -> new ForbiddenException("User with email '" + email + "' is either unknown or inactive"))
+                .getZepId();
+        final Employee employee = employeeService.getEmployee(zepId);
 
         if (employee == null) {
-            throw new ForbiddenException(String.format("'%s' is not an employee in ZEP", email));
+            throw new ForbiddenException("Could not find ZEP-User with userId '" + zepId + "'");
         }
 
         return User.builder()

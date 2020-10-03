@@ -2,22 +2,23 @@ package com.gepardec.mega.notification.mail;
 
 import com.gepardec.mega.application.configuration.ApplicationConfig;
 import com.gepardec.mega.application.configuration.NotificationConfig;
+import com.gepardec.mega.db.repository.UserRepository;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.notification.mail.dates.BusinessDayCalculator;
-import com.gepardec.mega.service.api.employee.EmployeeService;
-import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 import static com.gepardec.mega.notification.mail.Reminder.*;
 
 @ApplicationScoped
-public class MailDaemon {
+@Transactional(Transactional.TxType.SUPPORTS)
+public class ReminderEmailSender {
 
     @Inject
     ApplicationConfig applicationConfig;
@@ -29,7 +30,7 @@ public class MailDaemon {
     MailSender mailSender;
 
     @Inject
-    EmployeeService employeeService;
+    UserRepository userRepository;
 
     @Inject
     Logger logger;
@@ -37,8 +38,7 @@ public class MailDaemon {
     @Inject
     NotificationConfig notificationConfig;
 
-    @Scheduled(cron = "{mega.mail.cron}")
-    void sendReminder() {
+    public void sendReminder() {
         logger.info("Mail-Daemon-cron-job started at {}", DateUtils.today().toString());
         Optional<Reminder> reminder = businessDayCalculator.getEventForDate(DateUtils.today());
         if (reminder.isPresent()) {
@@ -98,15 +98,14 @@ public class MailDaemon {
 
     void sendReminderToUser() {
         if (notificationConfig.isEmployeesNotification()) {
-            employeeService.getAllActiveEmployees()
-                    .forEach(employee -> mailSender.sendReminder(employee.email(), employee.firstName(), EMPLOYEE_CHECK_PROJECTTIME, applicationConfig.getDefaultLocale()));
+            userRepository.listAll()
+                    .forEach(user -> mailSender.sendReminder(user.getEmail(), getNameByMail(user.getEmail()), EMPLOYEE_CHECK_PROJECTTIME, applicationConfig.getDefaultLocale()));
             logSentNotification(EMPLOYEE_CHECK_PROJECTTIME);
         } else {
             logger.info("NO Reminder to employes sent, cause mega.mail.employees.notification-property is false");
         }
     }
 
-    //TODO: remove immediately when names are available with persistence layer
     static String getNameByMail(String eMail) {
         String[] mailParts = StringUtils.defaultIfBlank(eMail, "").split("\\.");
         if (!StringUtils.isBlank(mailParts[0])) {

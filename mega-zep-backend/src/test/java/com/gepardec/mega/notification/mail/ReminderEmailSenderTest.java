@@ -1,34 +1,29 @@
 package com.gepardec.mega.notification.mail;
 
-import com.gepardec.mega.application.producer.LocaleProducer;
-import com.gepardec.mega.application.producer.ResourceBundleProducer;
-import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.service.api.employee.EmployeeService;
+import com.gepardec.mega.db.entity.User;
+import com.gepardec.mega.db.repository.UserRepository;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 import static com.gepardec.mega.notification.mail.Reminder.OM_RELEASE;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @QuarkusTest
-public class MailDaemonTest {
+public class ReminderEmailSenderTest {
 
     @InjectMock
-    private LocaleProducer localeProducer;
+    private UserRepository userRepository;
 
     @Inject
-    MailDaemon mailDaemon;
+    ReminderEmailSender reminderEmailSender;
 
     @Inject
     MockMailbox mailbox;
@@ -42,32 +37,28 @@ public class MailDaemonTest {
     @ConfigProperty(name = "quarkus.mailer.mock")
     boolean mailMockSetting;
 
-    @Inject
-    EmployeeService employeeService;
-
     @BeforeEach
     void init() {
         assertTrue(mailMockSetting, "This test can only run when mail mocking is true");
-        Mockito.when(localeProducer.getCurrentLocale()).thenReturn(Locale.GERMAN);
         mailbox.clear();
     }
 
 
     @Test
     void getNameByMail_usualInput_shouldReturnFirstName() {
-        assertEquals("John", MailDaemon.getNameByMail("john.doe@gmail.com"));
+        assertEquals("John", ReminderEmailSender.getNameByMail("john.doe@gmail.com"));
     }
 
     @Test
     void getNameByMail_EmptyInput_shouldReturnFirstName() {
-        assertEquals("", MailDaemon.getNameByMail(""));
+        assertEquals("", ReminderEmailSender.getNameByMail(""));
     }
 
 
     @Test
     void sendReminderToOm_mailAddressesAvailable_shouldSendMail() {
         List<String> mailAddresses = List.of(omMailAddresses.split("\\,"));
-        mailDaemon.sendReminderToOm(OM_RELEASE);
+        reminderEmailSender.sendReminderToOm(OM_RELEASE);
         assertAll(
                 () -> assertEquals(mailAddresses.size(), mailbox.getTotalMessagesSent()),
                 () -> mailAddresses.forEach(mailAddress ->
@@ -79,7 +70,7 @@ public class MailDaemonTest {
     @Test
     void sendReminderToPl_mailAddressesAvailable_shouldSendMail() {
         List<String> mailAddresses = List.of(projectLeadersMailAddresses.split("\\,"));
-        mailDaemon.sendReminderToPl();
+        reminderEmailSender.sendReminderToPl();
         assertAll(
                 () -> assertEquals(mailAddresses.size(), mailbox.getTotalMessagesSent()),
                 () -> mailAddresses.forEach(mailAddress ->
@@ -88,18 +79,16 @@ public class MailDaemonTest {
         );
     }
 
-    @Disabled("till userNotifaction is enabled")
     @Test
     void sendReminderToUser() {
-        List<String> addresses = employeeService.getAllActiveEmployees().stream()
-                .map(Employee::email)
-                .collect(Collectors.toList());
+        final User user = new User();
+        user.setEmail("thomas.herzog@gepardec.com");
+        when(userRepository.listAll()).thenReturn(List.of(user));
 
-        mailDaemon.sendReminderToUser();
+        reminderEmailSender.sendReminderToUser();
         assertAll(
-                () -> assertEquals(addresses.size(), mailbox.getTotalMessagesSent()),
-                () -> addresses.forEach(address ->
-                        assertEquals("UNIT-TEST: Friendly Reminder: Buchungen kontrollieren", mailbox.getMessagesSentTo(address).get(0).getSubject()))
+                () -> assertEquals(1, mailbox.getTotalMessagesSent()),
+                () -> assertEquals("UNIT-TEST: Friendly Reminder: Buchungen kontrollieren", mailbox.getMessagesSentTo(user.getEmail()).get(0).getSubject())
         );
     }
 }
