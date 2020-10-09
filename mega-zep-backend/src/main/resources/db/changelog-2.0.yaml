@@ -1,39 +1,39 @@
 databaseChangeLog:
   - changeSet:
-      id: 1601743442914-1
-      author: herzo (generated)
+      id: 1602230992399-1
+      author: mega (generated)
       changes:
         - createSequence:
             incrementBy: 1
             sequenceName: sequence_comment_id
             startValue: 1
   - changeSet:
-      id: 1601743442914-2
-      author: herzo (generated)
+      id: 1602230992399-2
+      author: mega (generated)
       changes:
         - createSequence:
             incrementBy: 1
             sequenceName: sequence_step_entry_id
             startValue: 1
   - changeSet:
-      id: 1601743442914-3
-      author: herzo (generated)
+      id: 1602230992399-3
+      author: mega (generated)
       changes:
         - createSequence:
             incrementBy: 1
             sequenceName: sequence_step_id
             startValue: 1
   - changeSet:
-      id: 1601743442914-4
-      author: herzo (generated)
+      id: 1602230992399-4
+      author: mega (generated)
       changes:
         - createSequence:
             incrementBy: 1
             sequenceName: sequence_user_id
             startValue: 1
   - changeSet:
-      id: 1601743442914-5
-      author: herzo (generated)
+      id: 1602230992399-5
+      author: mega (generated)
       changes:
         - createTable:
             columns:
@@ -71,8 +71,8 @@ databaseChangeLog:
                   type: BIGINT
             tableName: comment
   - changeSet:
-      id: 1601743442914-6
-      author: herzo (generated)
+      id: 1602230992399-6
+      author: mega (generated)
       changes:
         - createTable:
             columns:
@@ -110,8 +110,8 @@ databaseChangeLog:
                   type: VARCHAR(100)
             tableName: employee_user
   - changeSet:
-      id: 1601743442914-7
-      author: herzo (generated)
+      id: 1602230992399-7
+      author: mega (generated)
       changes:
         - createTable:
             columns:
@@ -137,8 +137,8 @@ databaseChangeLog:
                   type: VARCHAR(255)
             tableName: step
   - changeSet:
-      id: 1601743442914-8
-      author: herzo (generated)
+      id: 1602230992399-8
+      author: mega (generated)
       changes:
         - createTable:
             columns:
@@ -189,32 +189,32 @@ databaseChangeLog:
                   type: BIGINT
             tableName: step_entry
   - changeSet:
-      id: 1601743442914-9
-      author: herzo (generated)
+      id: 1602230992399-9
+      author: mega (generated)
       changes:
         - addUniqueConstraint:
             columnNames: email
             constraintName: uidx_email
             tableName: employee_user
   - changeSet:
-      id: 1601743442914-10
-      author: herzo (generated)
+      id: 1602230992399-10
+      author: mega (generated)
       changes:
         - addUniqueConstraint:
             columnNames: ordinal
             constraintName: uidx_ordinal
             tableName: step
   - changeSet:
-      id: 1601743442914-11
-      author: herzo (generated)
+      id: 1602230992399-11
+      author: mega (generated)
       changes:
         - addUniqueConstraint:
             columnNames: zep_id
             constraintName: uidx_zep_id
             tableName: employee_user
   - changeSet:
-      id: 1601743442914-12
-      author: herzo (generated)
+      id: 1602230992399-12
+      author: mega (generated)
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: assignee_employee_user_id
@@ -226,8 +226,8 @@ databaseChangeLog:
             referencedTableName: employee_user
             validate: true
   - changeSet:
-      id: 1601743442914-13
-      author: herzo (generated)
+      id: 1602230992399-13
+      author: mega (generated)
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: owner_employee_user_id
@@ -239,8 +239,8 @@ databaseChangeLog:
             referencedTableName: employee_user
             validate: true
   - changeSet:
-      id: 1601743442914-14
-      author: herzo (generated)
+      id: 1602230992399-14
+      author: mega (generated)
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: step_entry_id
@@ -252,8 +252,8 @@ databaseChangeLog:
             referencedTableName: step_entry
             validate: true
   - changeSet:
-      id: 1601743442914-15
-      author: herzo (generated)
+      id: 1602230992399-15
+      author: mega (generated)
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: step_id

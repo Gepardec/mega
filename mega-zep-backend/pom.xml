@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.gepardec.mega</groupId>
     <artifactId>mega-zep-backend</artifactId>
@@ -316,7 +316,13 @@
                 <version>${liquibase-maven-plugin.version}</version>
                 <configuration>
                     <propertyFile>liquibase.properties</propertyFile>
-                    <changeSetAuthor>mega</changeSetAuthor>
+                    <!--
+                        liquibase:diff uses workstation's 'user.name' property but
+                        liquibase:generateChangeLog uses 'changeSetAuthor' property
+                    -->
+                    <systemProperties>
+                        <user.name>mega</user.name>
+                    </systemProperties>
                 </configuration>
                 <!-- Keep the version here, these dependencies are only used here -->
                 <dependencies>
