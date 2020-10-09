@@ -59,7 +59,7 @@ public class SyncServiceImpl implements SyncService {
     }
 
     private List<User> filterNotExistingEmployeesAndMapToUser(final List<Employee> employees, final List<User> users) {
-        final Map<String, User> zepIdToUser = mapZepItToUser(users);
+        final Map<String, User> zepIdToUser = mapZepIdToUser(users);
         return employees.stream()
                 .filter(zepEmployee -> !zepIdToUser.containsKey(zepEmployee.userId()))
                 .map(this::employeeToUser)
@@ -67,7 +67,7 @@ public class SyncServiceImpl implements SyncService {
     }
 
     private List<User> filterUserNotMappedToEmployeesAndMarkUserDeactivated(final List<Employee> employees, final List<User> users) {
-        final Map<String, Employee> zepIdToEmployee = mapZepItToEmployee(employees);
+        final Map<String, Employee> zepIdToEmployee = mapZepIdToEmployee(employees);
         return users.stream()
                 .filter(user -> !zepIdToEmployee.containsKey(user.getZepId()))
                 .map(this::markUserDeactivated)
@@ -75,7 +75,7 @@ public class SyncServiceImpl implements SyncService {
     }
 
     private List<User> filterModifiedEmployeesAndUpdateUsers(final List<Employee> employees, final List<User> users) {
-        final Map<String, User> zepIdToUser = mapZepItToUser(users);
+        final Map<String, User> zepIdToUser = mapZepIdToUser(users);
         final Map<User, Employee> existingUserToEmployee = employees.stream()
                 .filter(zepEmployee -> zepIdToUser.containsKey(zepEmployee.userId()))
                 .collect(Collectors.toMap(employee -> zepIdToUser.get(employee.userId()), Function.identity()));
@@ -110,12 +110,12 @@ public class SyncServiceImpl implements SyncService {
         return user;
     }
 
-    private Map<String, User> mapZepItToUser(final List<User> users) {
+    private Map<String, User> mapZepIdToUser(final List<User> users) {
         return users.stream()
                 .collect(Collectors.toMap(User::getZepId, Function.identity()));
     }
 
-    private Map<String, Employee> mapZepItToEmployee(final List<Employee> employees) {
+    private Map<String, Employee> mapZepIdToEmployee(final List<Employee> employees) {
         return employees.stream()
                 .collect(Collectors.toMap(Employee::userId, Function.identity()));
     }
