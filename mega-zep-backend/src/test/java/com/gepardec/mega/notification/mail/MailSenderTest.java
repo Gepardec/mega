@@ -1,14 +1,11 @@
 package com.gepardec.mega.notification.mail;
 
-import com.gepardec.mega.application.producer.LocaleProducer;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -24,22 +21,15 @@ class MailSenderTest {
     @ConfigProperty(name = "quarkus.mailer.mock")
     boolean mailMockSetting;
 
-    @InjectMock
-    private LocaleProducer localeProducer;
-
     @Inject
     MailSender mailSender;
 
     @Inject
     MockMailbox mailbox;
 
-    @Inject
-    NotificationHelper notificationHelper;
-
     @BeforeEach
     void init() {
         assertTrue(mailMockSetting, "This test can only run when mail mocking is true");
-        Mockito.when(localeProducer.getCurrentLocale()).thenReturn(Locale.GERMAN);
         mailbox.clear();
     }
 

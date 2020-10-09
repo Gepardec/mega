@@ -2,6 +2,7 @@ package com.gepardec.mega.application.configuration;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
@@ -36,9 +37,15 @@ public class ApplicationConfig {
     List<Locale> locales;
 
     @Inject
-    @ConfigProperty(name = "quarkus.default-locale") Locale defaultLocale;
+    @ConfigProperty(name = "quarkus.default-locale")
+    Locale defaultLocale;
 
-    private final LocalDateTime startAt = LocalDateTime.now();
+    private LocalDateTime startAt;
+
+    @PostConstruct
+    public void init() {
+        startAt = LocalDateTime.now();
+    }
 
     public String getVersion() {
         return version;

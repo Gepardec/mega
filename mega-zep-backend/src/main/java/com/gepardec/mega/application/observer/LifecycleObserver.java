@@ -20,15 +20,15 @@ import javax.sql.DataSource;
 @Dependent
 public class LifecycleObserver {
 
-    void initApplicationBeans(final @Observes StartupEvent event,
-            final ApplicationConfig applicationConfig) {
-        applicationConfig.toString();
+    void initApplicationConfig(final @Observes StartupEvent event,
+                               final ApplicationConfig applicationConfig) {
+        applicationConfig.init();
     }
 
     void initDatabase(final @Observes StartupEvent event,
-            final DataSource dataSource,
-            final @ConfigProperty(name = "quarkus.liquibase.change-log") String masterChangeLogFile,
-            final Logger logger) {
+                      final DataSource dataSource,
+                      final @ConfigProperty(name = "quarkus.liquibase.change-log") String masterChangeLogFile,
+                      final Logger logger) {
         try {
             ResourceAccessor resourceAccessor = new ClassLoaderResourceAccessor(LifecycleObserver.class.getClassLoader());
             Liquibase liquibase = new Liquibase(masterChangeLogFile, resourceAccessor, new JdbcConnection(dataSource.getConnection()));

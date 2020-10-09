@@ -24,8 +24,7 @@ public abstract class Employee {
     @JsonProperty public abstract boolean active();
 
     public static Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_Employee.Builder()
-                .active(false);
+        return new com.gepardec.mega.domain.model.AutoValue_Employee.Builder().active(false);
     }
 
     @AutoValue.Builder
