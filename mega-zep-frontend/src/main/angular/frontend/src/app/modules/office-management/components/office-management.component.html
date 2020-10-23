@@ -36,87 +36,93 @@
     </div>
   </mat-toolbar>
 
-  <div class="mat-elevation-z10">
-    <table *ngIf="filteredOmEntries.length > 0; else noOmEntriesFound" style="width: 100%;"
-           [dataSource]="filteredOmEntries"
-           mat-table>
+  <div class="mat-elevation-z10 table-container">
+    <mat-table *ngIf="filteredOmEntries.length > 0; else noOmEntriesFound" style="width: 100%;"
+               [dataSource]="filteredOmEntries">
       <ng-container matColumnDef="select">
-        <th *matHeaderCellDef mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>
           <mat-checkbox (change)="$event ? masterToggle() : null"
                         [checked]="omSelectionModel.hasValue() && areAllSelected()"
                         [indeterminate]="omSelectionModel.hasValue() && !areAllSelected()">
           </mat-checkbox>
-        </th>
-        <td *matCellDef="let row" mat-cell>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
           <mat-checkbox (change)="$event ? omSelectionModel.toggle(row) : null"
                         (click)="$event.stopPropagation()"
                         [checked]="omSelectionModel.isSelected(row)">
           </mat-checkbox>
-        </td>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="name">
-        <th *matHeaderCellDef mat-header-cell>{{'office-management.table.name' | translate}}</th>
-        <td *matCellDef="let omEntry" class="font-weight-bold" mat-cell>
+        <mat-header-cell *matHeaderCellDef>{{'office-management.table.name' | translate}}</mat-header-cell>
+        <mat-cell *matCellDef="let omEntry" class="font-weight-bold">
+          <span class="mobile-label">{{'office-management.table.name' | translate}}</span>
           <a [href]="environment.ZEP_URL_OFFICE_MANAGEMENT + omEntry.employee.userId"
              target="_blank">
             {{omEntry.employee.firstName}} {{omEntry.employee.sureName}}
           </a>
-        </td>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="customerCheckState">
-        <th *matHeaderCellDef mat-header-cell>{{'office-management.table.customerCheckState' | translate}}</th>
-        <td *matCellDef="let omEntry" mat-cell>
+        <mat-header-cell *matHeaderCellDef>{{'office-management.table.customerCheckState' | translate}}</mat-header-cell>
+        <mat-cell *matCellDef="let omEntry">
+          <span class="mobile-label">{{'office-management.table.customerCheckState' | translate}}</span>
           <app-state-select [value]="omEntry.customerCheckState"></app-state-select>
-        </td>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="internalCheckState">
-        <th *matHeaderCellDef mat-header-cell>{{'office-management.table.internalCheckState' | translate}}</th>
-        <td *matCellDef="let omEntry" mat-cell>
+        <mat-header-cell *matHeaderCellDef>{{'office-management.table.internalCheckState' | translate}}</mat-header-cell>
+        <mat-cell *matCellDef="let omEntry">
+          <span class="mobile-label">{{'office-management.table.internalCheckState' | translate}}</span>
           <app-state-select [value]="omEntry.internalCheckState"></app-state-select>
-        </td>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="employeeCheckState">
-        <th *matHeaderCellDef class="text-center"
-            mat-header-cell>{{'office-management.table.employeeCheckState' | translate}}</th>
-        <td *matCellDef="let omEntry" class="text-center" mat-cell>
+        <mat-header-cell *matHeaderCellDef
+                         class="text-center">{{'office-management.table.employeeCheckState' | translate}}</mat-header-cell>
+        <mat-cell *matCellDef="let omEntry" class="text-center">
+          <span class="mobile-label">{{'office-management.table.employeeCheckState' | translate}}</span>
           <app-state-indicator [state]="omEntry.employeeCheckState"></app-state-indicator>
-        </td>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="projectCheckState">
-        <th *matHeaderCellDef class="text-center"
-            mat-header-cell>{{'office-management.table.projectCheckState' | translate}}</th>
-        <td *matCellDef="let omEntry" class="text-center" mat-cell>
+        <mat-header-cell *matHeaderCellDef class="text-center">
+          {{'office-management.table.projectCheckState' | translate}}</mat-header-cell>
+        <mat-cell *matCellDef="let omEntry" class="text-center">
+          <span class="mobile-label">{{'office-management.table.projectCheckState' | translate}}</span>
           <app-state-indicator [state]="omEntry.projectCheckState"></app-state-indicator>
-        </td>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="actions">
-        <th *matHeaderCellDef mat-header-cell>{{'office-management.table.comments' | translate}}</th>
-        <td *matCellDef="let omEntry" mat-cell>
+        <mat-header-cell *matHeaderCellDef>{{'office-management.table.comments' | translate}}</mat-header-cell>
+        <mat-cell *matCellDef="let omEntry">
+          <span class="mobile-label">{{'office-management.table.comments' | translate}}</span>
           <button (click)="openDialog(omEntry)" mat-button>
             <mat-icon>comment</mat-icon>
             <app-done-comments-indicator [comments]="omEntry.comments"></app-done-comments-indicator>
           </button>
-        </td>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="releaseDate">
-        <th *matHeaderCellDef mat-header-cell>{{'office-management.table.releaseDate' | translate}}</th>
-        <td *matCellDef="let omEntry" mat-cell>
+        <mat-header-cell *matHeaderCellDef>{{'office-management.table.releaseDate' | translate}}</mat-header-cell>
+        <mat-cell *matCellDef="let omEntry">
+          <span class="mobile-label">{{'office-management.table.releaseDate' | translate}}</span>
           <p [ngClass]="getReleaseDateCssClass(omEntry.employee.releaseDate)" class="release">
             {{omEntry.employee.releaseDate | date: configuration.dateFormat}}
           </p>
-        </td>
+        </mat-cell>
       </ng-container>
 
-      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-      <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
-    </table>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
   </div>
 
   <ng-template #noOmEntriesFound>
