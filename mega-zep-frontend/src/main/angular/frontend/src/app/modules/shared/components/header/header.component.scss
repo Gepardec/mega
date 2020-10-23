@@ -1,7 +1,13 @@
 .toolbar {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
+  height: 70px;
+}
+
+.router-outlet {
+  height: calc(100% - 77px);
+  margin-top: 7px;
 }
 
 img {

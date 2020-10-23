@@ -1,0 +1,116 @@
+@import './colors.scss';
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing.dark-backdrop {
+  background: #000;
+  opacity: 0.75 !important;
+}
+
+button:focus {
+  outline: none;
+}
+
+.mat-simple-snackbar-action > button {
+  color: $mega-warning-yellow
+}
+
+.green {
+  color: $mega-success-green;
+}
+
+.red {
+  color: $mega-danger-red;
+}
+
+.yellow {
+  color: $mega-warning-yellow;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+app-display-monthly-report {
+  .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,
+  .mat-accent .mat-pseudo-checkbox-checked,
+  .mat-accent .mat-pseudo-checkbox-indeterminate,
+  .mat-pseudo-checkbox-checked,
+  .mat-pseudo-checkbox-indeterminate {
+    background-color: $mega-success-green;
+  }
+
+  .mat-card-content {
+    font-size: 20px;
+  }
+
+}
+
+app-time-check, app-journey-check, app-employee-check {
+  .mat-card-content {
+    font-size: 20px;
+    overflow: auto;
+    height: 100%;
+  }
+
+  .mat-card {
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+app-office-management, app-project-management {
+  .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,
+  .mat-accent .mat-pseudo-checkbox-checked,
+  .mat-accent .mat-pseudo-checkbox-indeterminate,
+  .mat-pseudo-checkbox-checked,
+  .mat-pseudo-checkbox-indeterminate {
+    background-color: $gepardec-black;
+  }
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-table {
+  overflow: auto;
+}
+
+.mobile-label {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .mobile-label {
+    width: 140px;
+    display: inline-block;
+    text-align: left !important;
+  }
+
+  .mat-header-row {
+    display: none;
+  }
+
+  .mat-row {
+    flex-direction: column;
+    align-items: start;
+    padding: 18px 24px;
+  }
+
+  .mat-cell:first-of-type {
+    padding-left: 0 !important;
+  }
+}
+

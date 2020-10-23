@@ -1,36 +1,36 @@
-<h2 mat-dialog-title>MEGA Version</h2>
-<mat-dialog-content class="container-fluid d-flex align-items-center justify-content-center">
+<h2 mat-dialog-title>{{'info-dialog.title' | translate}}</h2>
+<mat-dialog-content fxLayout="column" fxLayoutAlign="center center">
   <table>
     <tr>
-      <td>Version:</td>
+      <td>{{'info-dialog.table.version' | translate}}:</td>
       <td>{{info?.version}}</td>
     </tr>
     <tr>
-      <td>Commit:</td>
+      <td>{{'info-dialog.table.commit' | translate}}:</td>
       <td>{{info?.commit}}</td>
     </tr>
     <tr>
-      <td>Branch:</td>
+      <td>{{'info-dialog.table.branch' | translate}}:</td>
       <td>{{info?.branch}}</td>
     </tr>
     <tr>
-      <td>Build-Nummer:</td>
+      <td>{{'info-dialog.table.buildNumber' | translate}}:</td>
       <td>{{info?.buildNumber}}</td>
     </tr>
     <tr>
-      <td>Build-Datum:</td>
+      <td>{{'info-dialog.table.buildDate' | translate}}:</td>
       <td>{{info?.buildDate}}</td>
     </tr>
     <tr>
-      <td>Start-Datum:</td>
+      <td>{{'info-dialog.table.startedAt' | translate}}:</td>
       <td>{{info?.startedAt}}</td>
     </tr>
     <tr>
-      <td>Laufzeit:</td>
+      <td>{{'info-dialog.table.upTime' | translate}}:</td>
       <td>{{info?.upTime}}</td>
     </tr>
   </table>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-dialog-close mat-raised-button>Schließen</button>
+  <button mat-dialog-close mat-raised-button>{{'info-dialog.close' | translate}}</button>
 </mat-dialog-actions>

@@ -1,0 +1,35 @@
+<div *ngIf="monthlyReport"
+     fxFlexAlign="center"
+     fxFlexFill
+     fxLayout="column"
+     fxLayoutGap="10px">
+
+  <mat-card class="mat-elevation-z10">
+    <mat-card-subtitle>{{employeeFunctions[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
+    <mat-card-content>
+      {{monthlyReport.employee.firstName}} {{monthlyReport.employee.sureName}}
+      <span style="float: right">
+        {{ isValidDate(monthlyReport.employee.releaseDate) ?
+        (getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : null : 'de-AT') :
+        ('monthly-report.notReleasedYet' | translate) }}
+        </span>
+    </mat-card-content>
+  </mat-card>
+
+  <div *ngIf="isValidDate(monthlyReport.employee.releaseDate); else invalidReleaseDate"
+       fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px"
+       style="height: calc(100vh - 180px)">
+    <app-time-check [monthlyReport]="monthlyReport" fxFlex="27.5"></app-time-check>
+    <app-employee-check [monthlyReport]="monthlyReport" fxFlex="45"></app-employee-check>
+    <app-journey-check [monthlyReport]="monthlyReport" fxFlex="27.5"></app-journey-check>
+  </div>
+
+  <ng-template #invalidReleaseDate>
+    <mat-card class="mat-elevation-z10">
+      <mat-card-title>{{'monthly-report.timeCheckNotPossible' | translate}}</mat-card-title>
+      <mat-card-content>
+        <p>{{'monthly-report.timeCheckNotPossiblePrompt' | translate }}</p>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+</div>

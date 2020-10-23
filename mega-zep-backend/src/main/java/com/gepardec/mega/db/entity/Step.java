@@ -13,10 +13,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "step",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uidx_ordinal", columnNames = {"ordinal"})
-        },
-        indexes = {
-                @Index(name = "idx_group_name", columnList = "group_name")
+                @UniqueConstraint(name = "uidx_ordinal", columnNames = { "ordinal" })
         }
 )
 public class Step {
@@ -38,7 +35,6 @@ public class Step {
     /**
      * The role who is responsible for the step completion state
      */
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
@@ -50,14 +46,6 @@ public class Step {
     @Min(1)
     @Column(name = "ordinal", unique = true)
     private Integer ordinal;
-
-    /**
-     * The group id grouping sequential steps, which means the grouped steps can be worked on in parallel,
-     * and all must be completed to be able to worked on the following steps.
-     */
-    @Length(min = 1, max = 50)
-    @Column(name = "group_name")
-    private String groupName;
 
     /**
      * The related step entries whereby each step entry
@@ -104,14 +92,6 @@ public class Step {
 
     public void setOrdinal(Integer ordinal) {
         this.ordinal = ordinal;
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupId) {
-        this.groupName = groupId;
     }
 
     @Override

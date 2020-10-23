@@ -1,12 +1,13 @@
 package com.gepardec.mega.service.impl;
 
-
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
+import com.gepardec.mega.service.api.comment.CommentService;
+import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.service.impl.monthlyreport.MonthlyReportServiceImpl;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.WarningCalculator;
 import com.gepardec.mega.zep.ZepService;
@@ -25,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-
 @ExtendWith(MockitoExtension.class)
 public class MonthlyReportServiceImplTest {
 
@@ -37,6 +37,12 @@ public class MonthlyReportServiceImplTest {
 
     @Spy
     private WarningCalculator warningCalculator;
+
+    @Mock
+    private CommentService commentService;
+
+    @Mock
+    private StepEntryService stepEntryService;
 
     @InjectMocks
     private MonthlyReportServiceImpl workerService;
@@ -97,7 +103,6 @@ public class MonthlyReportServiceImplTest {
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
         Assertions.assertNotNull(monthendReportForUser);
         Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.employee().email());
-        // We will have to reverse engineer why this is false
         Assertions.assertNotNull(monthendReportForUser.timeWarnings());
         Assertions.assertFalse(monthendReportForUser.timeWarnings().isEmpty());
         Assertions.assertEquals(LocalDate.of(2020, 1, 31), monthendReportForUser.timeWarnings().get(0).getDate());

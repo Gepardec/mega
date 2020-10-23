@@ -14,7 +14,7 @@ export class NotificationService {
   }
 
   showSuccess(message: string): void {
-    this.snackbar.open(message, null, {duration: 3000});
+    this.snackbar.open(message, 'OK', {duration: 3000});
   }
 
   showError(message: string): void {

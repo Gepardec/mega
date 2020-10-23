@@ -1,14 +1,19 @@
 package com.gepardec.mega.service.impl.monthlyreport;
 
+import com.gepardec.mega.db.entity.State;
+import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.*;
+import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
+import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.WarningCalculator;
 import com.gepardec.mega.zep.ZepService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequestScoped
@@ -19,6 +24,12 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
 
     @Inject
     WarningCalculator warningCalculator;
+
+    @Inject
+    CommentService commentService;
+
+    @Inject
+    StepEntryService stepEntryService;
 
     @Override
     public MonthlyReport getMonthendReportForUser(final String userId) {
@@ -32,8 +43,11 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         }
         final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(filterJourneyTimeEntries(projectEntries));
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(filterProjectTimeEntries(projectEntries));
+        final List<Comment> comments = commentService.findCommentsForEmployee(employee);
+        final Optional<State> employeeCheckState = stepEntryService.findEmployeeCheckState(employee);
+        final boolean otherChecksDone = stepEntryService.areOtherChecksDone(employee);
 
-        return MonthlyReport.of(employee, timeWarnings, journeyWarnings);
+        return MonthlyReport.of(employee, timeWarnings, journeyWarnings, comments, employeeCheckState.orElse(State.OPEN), otherChecksDone);
     }
 
     private List<ProjectTimeEntry> filterProjectTimeEntries(List<ProjectEntry> projectEntries) {

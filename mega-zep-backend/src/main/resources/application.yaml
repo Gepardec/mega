@@ -1,5 +1,7 @@
 # GLOBAL Properties
 quarkus:
+  scheduler:
+    enabled: true
   http:
     cors: true
   log:
@@ -39,8 +41,12 @@ mega:
 ## DEV Properties
 "%dev":
   quarkus:
+    cache:
+      caffeine:
+        "user-email":
+          expire-after-write: 10M
     mailer:
-      mock: true
+        mock: true
     datasource:
       db-kind: postgresql
       username: mega
@@ -64,6 +70,8 @@ mega:
 ## DEV Properties
 "%test":
   quarkus:
+    scheduler:
+      enabled: false
     mailer:
       mock: true
     datasource:
@@ -80,13 +88,17 @@ mega:
       subject-prefix: 'UNIT-TEST: '
       cron: 0 0 7 ? * MON-FRI
       employees:
-        notification: false
+        notification: true
       reminder:
         pl: thomas.herzog@gepardec.com
         om: thomas.herzog@gepardec.com
 # PROD Properties
 "%prod":
   quarkus:
+    cache:
+      caffeine:
+        "user-email":
+          expire-after-write: "5M"
     mailer:
       mock: true
     datasource:

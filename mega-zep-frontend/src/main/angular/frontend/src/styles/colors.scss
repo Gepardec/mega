@@ -1,0 +1,9 @@
+$gepardec-yellow: #f0d200;
+$gepardec-black: #2d2d2d;
+$mega-success-green: #007a53;
+$mega-danger-red: #e30413;
+$mega-warning-yellow: $gepardec-yellow;
+
+$mega-success-green-transparent: transparentize($mega-success-green, 0.7);
+$mega-danger-red-transparent: transparentize($mega-danger-red, 0.7);
+$mega-warning-yellow-transparent: transparentize($mega-warning-yellow, 0.7);

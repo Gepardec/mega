@@ -1,0 +1,127 @@
+{
+  "PAGE_NAMES": {
+    "OFFICE_MANAGEMENT": "Office Management",
+    "MONTHLY_REPORT": "Mein MEGA",
+    "PROJECT_MANAGEMENT": "Projekt Management"
+  },
+  "STATE": {
+    "DONE": "Fertig",
+    "OPEN": "Offen"
+  },
+  "EMPLOYEE_FUNCTIONS": {
+    "01": "Technische/r PL",
+    "02": "SoftwareentwicklerIn",
+    "03": "Verwaltung",
+    "04": "Senior",
+    "05": "Junior",
+    "06": "ExpertIn Inbetriebnahme",
+    "06-1": "Software-ArchitektIn",
+    "07": "FerialpraktikantIn",
+    "08": "Consultant Senior",
+    "99": "Reisezeiten"
+  },
+  "notifications": {
+    "employeesUpdatedSuccess": "Mitarbeiter erfolgreich aktualisiert"
+  },
+  "login": {
+    "cardTitle": "Login",
+    "promptText": "Über Google anmelden",
+    "btnText": "Anmelden"
+  },
+  "user-actions": {
+    "logout": "Abmelden",
+    "info": "Info"
+  },
+  "error": {
+    "title": "Ups, Seite konnte nicht geladen werden.",
+    "message": "Ein Fehler ist aufgetreten",
+    "reload": "Neu laden"
+  },
+  "monthly-report": {
+    "ok": "Alle Eingaben sind korrekt",
+    "notReleasedYet": "Noch nicht freigegeben",
+    "timeCheckNotPossible": "Zeitenkontrolle nicht möglich",
+    "timeCheckNotPossiblePrompt": "Kontrolle der Zeiten ausständig. Bitte wende dich an deinen Mentor",
+    "commentsToDo": "Einige Anmerkungen sind abzuarbeiten",
+    "checkSuccess": "Deine Zeiten wurden kontrolliert und sind richtig. Bis nächsten Monat!",
+    "checkWip": "Monatsabschlusstätigkeiten sind im Gange.",
+    "pleaseCheckPrompt": "Bitte überprüfe deine Eingaben (Zeiten, Reisen, Belege, ...) in ZEP und beim Kunden und bestätige diese anschließend.",
+    "confirmBtnText": "Buchungen bestätigen",
+    "title": {
+      "emc": "Status zum Monatsabschluss",
+      "journey": "MEGA Reisen Check",
+      "time": "MEGA Pausen Check"
+    },
+    "table": {
+      "time": {
+        "day": "Tag",
+        "missingRestTime": "Zu wenig Ruhezeit",
+        "missingBreakTime": "Zu wenig Pausenzeit",
+        "excessWorkTime": "Zu viel Arbeitszeit"
+      },
+      "journey": {
+        "day": "Tag",
+        "warning": "Warnung"
+      }
+    }
+  },
+  "office-management": {
+    "filterPlaceholder": "Suche nach Name",
+    "selectedCount": "Person(en) ausgewählt",
+    "releaseBtnText": "Freigeben",
+    "table": {
+      "name": "Mitarbeiter",
+      "customerCheckState": "Kundenzeiten",
+      "internalCheckState": "Interne Zeiten",
+      "comments": "Anmerkungen",
+      "employeeCheckState": "MA Check",
+      "projectCheckState": "PM Check",
+      "releaseDate": "Freigabedatum"
+    },
+    "noOmEntriesFound": "Keine Einträge gefunden"
+  },
+  "project-management": {
+    "actions": "Aktionen",
+    "doneBtn": "Überprüft",
+    "notify": "Benachrichtigen",
+    "employeeDone": "Mitarbeiter überprüft",
+    "table": {
+      "employeeName": "Mitarbeiter",
+      "projectCheckState": "Überprüfung",
+      "employeeCheckState": "MA Check",
+      "internalCheckState": "Interne Zeiten",
+      "customerCheckState": "Kundenzeiten",
+      "comments": "Anmerkungen"
+    }
+  },
+  "comments-for-employee": {
+    "commentsFor": "Anmerkungen für {{firstAndSureName}}",
+    "writeCommentLabel": "Anmerkung verfassen",
+    "addCommentBtn": "Anmerkung hinzufügen",
+    "table": {
+      "lastChanged": "Zul. aktualisiert",
+      "done": "Abgearbeitet",
+      "author": "Verfasser",
+      "comment": "Anmerkung",
+      "edit": "Bearbeiten",
+      "delete": "Löschen"
+    },
+    "editCommentLabel": "Anmerkung bearbeiten",
+    "noCommentsYet": "Noch keine Anmerkungen vorhanden",
+    "cancel": "Abbrechen",
+    "save": "Änderungen speichern"
+  },
+  "info-dialog": {
+    "title": "MEGA Version",
+    "table": {
+      "version": "Version",
+      "commit": "Commit",
+      "branch": "Branch",
+      "buildNumber": "Build-Nummer",
+      "buildDate": "Build-Datum",
+      "startedAt": "Start-Datum",
+      "upTime": "Laufzeit"
+    },
+    "close": "Schließen"
+  }
+}

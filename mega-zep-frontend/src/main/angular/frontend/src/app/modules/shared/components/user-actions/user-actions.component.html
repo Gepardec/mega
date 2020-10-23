@@ -1,0 +1,15 @@
+<button [matMenuTriggerFor]="menu" id="userBtn" mat-button>
+  {{user?.firstname + " " + user?.lastname}}
+  <mat-icon matListIcon>keyboard_arrow_down</mat-icon>
+</button>
+
+<img [src]="user.pictureUrl" class="avatar"/>
+
+<mat-menu #menu id="menu">
+  <button (click)="openInfoDialog()" mat-menu-item>
+    {{'user-actions.info' | translate}}
+  </button>
+  <button (click)="doLogout()" id="logoutBtn" mat-menu-item>
+    {{'user-actions.logout' | translate}}
+  </button>
+</mat-menu>

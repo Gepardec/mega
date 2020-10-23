@@ -42,7 +42,6 @@ public class StepEntry {
     /**
      * The related project of the step entry
      */
-    @NotNull
     @Length(min = 1, max = 255)
     @Column(name = "project", updatable = false)
     private String project;
@@ -62,22 +61,22 @@ public class StepEntry {
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_employee_id",
+    @JoinColumn(name = "owner_employee_user_id",
             referencedColumnName = "id",
             updatable = false,
-            foreignKey = @ForeignKey(name = "fk_owner_employee_id", value = ConstraintMode.CONSTRAINT))
-    private Employee owner;
+            foreignKey = @ForeignKey(name = "fk_owner_employee_user_id", value = ConstraintMode.CONSTRAINT))
+    private User owner;
 
     /**
      * The assignee of the step entry who is the employee who marks the step entry done
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assignee_employee_id",
+    @JoinColumn(name = "assignee_employee_user_id",
             referencedColumnName = "id",
             updatable = false,
-            foreignKey = @ForeignKey(name = "fk_assignee_employee_id", value = ConstraintMode.CONSTRAINT))
-    private Employee assignee;
+            foreignKey = @ForeignKey(name = "fk_assignee_employee_user_id", value = ConstraintMode.CONSTRAINT))
+    private User assignee;
 
     /**
      * The related step of this step entry
@@ -127,19 +126,19 @@ public class StepEntry {
         this.updatedDate = updatedDate;
     }
 
-    public Employee getOwner() {
+    public User getOwner() {
         return owner;
     }
 
-    public void setOwner(Employee owner) {
+    public void setOwner(User owner) {
         this.owner = owner;
     }
 
-    public Employee getAssignee() {
+    public User getAssignee() {
         return assignee;
     }
 
-    public void setAssignee(Employee assignee) {
+    public void setAssignee(User assignee) {
         this.assignee = assignee;
     }
 

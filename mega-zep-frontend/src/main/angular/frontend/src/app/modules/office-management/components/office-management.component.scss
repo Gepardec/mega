@@ -1,0 +1,38 @@
+@import '../../../../styles/colors';
+
+.release {
+  color: black !important;
+  border-radius: 5px;
+  padding: 5px;
+  width: fit-content;
+  margin-top: 8px;
+}
+
+.done {
+  background-color: $mega-success-green-transparent;
+}
+
+.open {
+  background-color: $mega-danger-red-transparent;
+}
+
+.wip {
+  background-color: $mega-warning-yellow-transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: $mega-success-green;
+}
+
+th, td {
+  font-size: 17px;
+}
+
+table {
+  margin-bottom: 30px;
+}

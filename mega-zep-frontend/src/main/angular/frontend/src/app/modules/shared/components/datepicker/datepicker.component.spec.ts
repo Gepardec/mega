@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DatepickerComponent } from './datepicker.component';
-import { AngularMaterialModule } from '../../../../material-module';
+import { AngularMaterialModule } from '../../../material/material-module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('DatepickerComponent', () => {

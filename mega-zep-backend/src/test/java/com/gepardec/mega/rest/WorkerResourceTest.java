@@ -1,9 +1,7 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.Role;
-import com.gepardec.mega.domain.model.User;
-import com.gepardec.mega.domain.model.UserContext;
+import com.gepardec.mega.db.entity.State;
+import com.gepardec.mega.domain.model.*;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
@@ -33,6 +31,9 @@ public class WorkerResourceTest {
     private EmployeeService employeeService;
 
     @InjectMock
+    private SecurityContext securityContext;
+
+    @InjectMock
     private UserContext userContext;
 
     @Test
@@ -46,7 +47,6 @@ public class WorkerResourceTest {
     void monthlyReport_whenUserNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
         final User user = createUserForRole(Role.USER);
         when(userContext.user()).thenReturn(user);
-        when(userContext.loggedIn()).thenReturn(false);
 
         given().get("/worker/monthendreports")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
@@ -55,14 +55,14 @@ public class WorkerResourceTest {
     @Test
     void employeeMonthendReport_withReport_returnsReport() {
         final User user = createUserForRole(Role.USER);
+        when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
-        when(userContext.loggedIn()).thenReturn(true);
 
         final Employee employee = createEmployeeForUser(user);
         when(employeeService.getEmployee(anyString())).thenReturn(employee);
         final List<TimeWarning> timeWarnings = List.of(TimeWarning.of(LocalDate.now(), 0.0, 0.0, 0.0));
         final List<JourneyWarning> journeyWarnings = List.of(new JourneyWarning(LocalDate.now(), List.of("WARNING")));
-        final MonthlyReport expected = MonthlyReport.of(employee, timeWarnings, journeyWarnings);
+        final MonthlyReport expected = MonthlyReport.of(employee, timeWarnings, journeyWarnings, List.of(), State.OPEN, true);
         when(monthlyReportService.getMonthendReportForUser(anyString())).thenReturn(expected);
 
         final MonthlyReport actual = given().contentType(ContentType.JSON)

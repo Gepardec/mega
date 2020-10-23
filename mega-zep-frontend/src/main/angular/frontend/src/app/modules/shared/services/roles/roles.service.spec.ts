@@ -27,7 +27,7 @@ describe('RolesService', () => {
           component: MockComponent
         },
         {
-          path: configuration.PAGE_URLS.EMPLOYEES,
+          path: configuration.PAGE_URLS.OFFICE_MANAGEMENT,
           data: {
             roles: [Role.ADMINISTRATOR, Role.CONTROLLER]
           },
@@ -48,7 +48,7 @@ describe('RolesService', () => {
 
   it('should return false if no user is logged in', () => {
     const service: RolesService = TestBed.get(RolesService);
-    expect(service.isAllowed(configuration.PAGE_URLS.EMPLOYEES)).toBe(false);
+    expect(service.isAllowed(configuration.PAGE_URLS.OFFICE_MANAGEMENT)).toBe(false);
   });
 
   it('should return false if route is not found', () => {
@@ -61,7 +61,7 @@ describe('RolesService', () => {
       role: Role.USER,
       pictureUrl: undefined
     });
-    expect(service.isAllowed(configuration.PAGE_URLS.EMPLOYEES + 'somewrongroute')).toBe(false);
+    expect(service.isAllowed(configuration.PAGE_URLS.OFFICE_MANAGEMENT + 'somewrongroute')).toBe(false);
   });
 
   it('should return false if user roles are insufficient', () => {
@@ -74,7 +74,7 @@ describe('RolesService', () => {
       role: Role.USER,
       pictureUrl: undefined
     });
-    expect(service.isAllowed(configuration.PAGE_URLS.EMPLOYEES)).toBe(false);
+    expect(service.isAllowed(configuration.PAGE_URLS.OFFICE_MANAGEMENT)).toBe(false);
   });
 
   it('should return true if user roles are sufficient', () => {
@@ -87,7 +87,7 @@ describe('RolesService', () => {
       role: Role.CONTROLLER,
       pictureUrl: undefined
     });
-    expect(service.isAllowed(configuration.PAGE_URLS.EMPLOYEES)).toBe(true);
+    expect(service.isAllowed(configuration.PAGE_URLS.OFFICE_MANAGEMENT)).toBe(true);
   });
 
   it('should return true if no role is required', () => {

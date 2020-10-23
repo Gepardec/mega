@@ -16,13 +16,12 @@ class ResourceBundleProducerTest {
 
     @BeforeEach
     void beforeEach() {
-        producer = new ResourceBundleProducer(Locale.GERMAN);
+        producer = new ResourceBundleProducer();
     }
 
     @Test
     void init_whenCalled_thenInitializesResourceBundle() {
-        producer.init();
-        final ResourceBundle bundle = producer.getResourceBundle();
+        final ResourceBundle bundle = producer.getResourceBundle(Locale.GERMAN);
 
         Assertions.assertNotNull(bundle);
     }

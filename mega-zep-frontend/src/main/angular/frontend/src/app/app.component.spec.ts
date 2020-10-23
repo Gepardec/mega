@@ -7,6 +7,7 @@ import { ConfigService } from './modules/shared/services/config/config.service';
 import { UserService } from './modules/shared/services/user/user.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Config } from './modules/shared/models/Config';
+import { TranslateModule } from '@ngx-translate/core';
 
 describe('AppComponent', () => {
 
@@ -32,7 +33,8 @@ describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        TranslateModule.forRoot()
       ],
       declarations: [
         AppComponent

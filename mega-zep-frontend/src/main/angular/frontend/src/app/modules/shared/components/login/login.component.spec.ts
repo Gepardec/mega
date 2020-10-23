@@ -5,6 +5,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from '../../services/user/user.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -25,7 +26,8 @@ describe('LoginComponent', () => {
     TestBed.configureTestingModule({
       declarations: [LoginComponent],
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        TranslateModule.forRoot()
       ],
       providers: [
         {

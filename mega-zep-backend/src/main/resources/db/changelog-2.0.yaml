@@ -1,39 +1,39 @@
 databaseChangeLog:
   - changeSet:
-      id: 1600407511007-1
-      author: thoma (generated)
+      id: 1602230992399-1
+      author: mega (generated)
       changes:
         - createSequence:
             incrementBy: 1
             sequenceName: sequence_comment_id
             startValue: 1
   - changeSet:
-      id: 1600407511007-2
-      author: thoma (generated)
+      id: 1602230992399-2
+      author: mega (generated)
       changes:
         - createSequence:
             incrementBy: 1
             sequenceName: sequence_step_entry_id
             startValue: 1
   - changeSet:
-      id: 1600407511007-3
-      author: thoma (generated)
+      id: 1602230992399-3
+      author: mega (generated)
       changes:
         - createSequence:
             incrementBy: 1
             sequenceName: sequence_step_id
             startValue: 1
   - changeSet:
-      id: 1600407511007-4
-      author: thoma (generated)
+      id: 1602230992399-4
+      author: mega (generated)
       changes:
         - createSequence:
             incrementBy: 1
             sequenceName: sequence_user_id
             startValue: 1
   - changeSet:
-      id: 1600407511007-5
-      author: thoma (generated)
+      id: 1602230992399-5
+      author: mega (generated)
       changes:
         - createTable:
             columns:
@@ -71,8 +71,8 @@ databaseChangeLog:
                   type: BIGINT
             tableName: comment
   - changeSet:
-      id: 1600407511007-6
-      author: thoma (generated)
+      id: 1602230992399-6
+      author: mega (generated)
       changes:
         - createTable:
             columns:
@@ -80,9 +80,14 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: employeePK
+                    primaryKeyName: employee_userPK
                   name: id
                   type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: active
+                  type: BOOLEAN
               - column:
                   constraints:
                     nullable: false
@@ -98,10 +103,15 @@ databaseChangeLog:
                     nullable: false
                   name: update_date
                   type: TIMESTAMP WITHOUT TIME ZONE
-            tableName: employee
+              - column:
+                  constraints:
+                    nullable: false
+                  name: zep_id
+                  type: VARCHAR(100)
+            tableName: employee_user
   - changeSet:
-      id: 1600407511007-7
-      author: thoma (generated)
+      id: 1602230992399-7
+      author: mega (generated)
       changes:
         - createTable:
             columns:
@@ -113,9 +123,6 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
-                  name: group_name
-                  type: VARCHAR(50)
-              - column:
                   constraints:
                     nullable: false
                   name: name
@@ -126,14 +133,12 @@ databaseChangeLog:
                   name: ordinal
                   type: INTEGER
               - column:
-                  constraints:
-                    nullable: false
                   name: role
                   type: VARCHAR(255)
             tableName: step
   - changeSet:
-      id: 1600407511007-8
-      author: thoma (generated)
+      id: 1602230992399-8
+      author: mega (generated)
       changes:
         - createTable:
             columns:
@@ -155,8 +160,6 @@ databaseChangeLog:
                   name: entry_date
                   type: date
               - column:
-                  constraints:
-                    nullable: false
                   name: project
                   type: VARCHAR(255)
               - column:
@@ -172,12 +175,12 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
-                  name: assignee_employee_id
+                  name: assignee_employee_user_id
                   type: BIGINT
               - column:
                   constraints:
                     nullable: false
-                  name: owner_employee_id
+                  name: owner_employee_user_id
                   type: BIGINT
               - column:
                   constraints:
@@ -186,60 +189,58 @@ databaseChangeLog:
                   type: BIGINT
             tableName: step_entry
   - changeSet:
-      id: 1600407511007-9
-      author: thoma (generated)
+      id: 1602230992399-9
+      author: mega (generated)
       changes:
         - addUniqueConstraint:
             columnNames: email
             constraintName: uidx_email
-            tableName: employee
+            tableName: employee_user
   - changeSet:
-      id: 1600407511007-10
-      author: thoma (generated)
+      id: 1602230992399-10
+      author: mega (generated)
       changes:
         - addUniqueConstraint:
             columnNames: ordinal
             constraintName: uidx_ordinal
             tableName: step
   - changeSet:
-      id: 1600407511007-11
-      author: thoma (generated)
+      id: 1602230992399-11
+      author: mega (generated)
       changes:
-        - createIndex:
-            columns:
-              - column:
-                  name: group_name
-            indexName: idx_group_name
-            tableName: step
+        - addUniqueConstraint:
+            columnNames: zep_id
+            constraintName: uidx_zep_id
+            tableName: employee_user
   - changeSet:
-      id: 1600407511007-12
-      author: thoma (generated)
+      id: 1602230992399-12
+      author: mega (generated)
       changes:
         - addForeignKeyConstraint:
-            baseColumnNames: assignee_employee_id
+            baseColumnNames: assignee_employee_user_id
             baseTableName: step_entry
-            constraintName: fk_assignee_employee_id
+            constraintName: fk_assignee_employee_user_id
             deferrable: false
             initiallyDeferred: false
             referencedColumnNames: id
-            referencedTableName: employee
+            referencedTableName: employee_user
             validate: true
   - changeSet:
-      id: 1600407511007-13
-      author: thoma (generated)
+      id: 1602230992399-13
+      author: mega (generated)
       changes:
         - addForeignKeyConstraint:
-            baseColumnNames: owner_employee_id
+            baseColumnNames: owner_employee_user_id
             baseTableName: step_entry
-            constraintName: fk_owner_employee_id
+            constraintName: fk_owner_employee_user_id
             deferrable: false
             initiallyDeferred: false
             referencedColumnNames: id
-            referencedTableName: employee
+            referencedTableName: employee_user
             validate: true
   - changeSet:
-      id: 1600407511007-14
-      author: thoma (generated)
+      id: 1602230992399-14
+      author: mega (generated)
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: step_entry_id
@@ -251,8 +252,8 @@ databaseChangeLog:
             referencedTableName: step_entry
             validate: true
   - changeSet:
-      id: 1600407511007-15
-      author: thoma (generated)
+      id: 1602230992399-15
+      author: mega (generated)
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: step_id
