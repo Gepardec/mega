@@ -12,8 +12,8 @@ spec:
       tty: true
       resources:
         limits:
-          memory: 1Gi
-          cpu: 1000m
+          memory: 2Gi
+          cpu: 1500m
       volumeMounts:
         - name: mvn-repo
           mountPath: /home/jenkins/.m2/repository
