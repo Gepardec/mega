@@ -42,7 +42,7 @@ public class StepEntry {
     /**
      * The related project of the step entry
      */
-    @Length(min = 1, max = 255)
+    @Length(max = 255)
     @Column(name = "project", updatable = false)
     private String project;
 

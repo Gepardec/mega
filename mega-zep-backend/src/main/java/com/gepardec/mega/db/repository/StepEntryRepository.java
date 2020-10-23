@@ -29,5 +29,4 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
                         .and("ownerEmail", ownerEmail))
                 .list();
     }
-
 }

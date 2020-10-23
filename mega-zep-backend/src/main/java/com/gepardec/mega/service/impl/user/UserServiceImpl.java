@@ -13,6 +13,8 @@ import io.quarkus.cache.CacheResult;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class UserServiceImpl implements UserService {
@@ -31,16 +33,17 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(Transactional.TxType.SUPPORTS)
     public User getUser(@CacheKey final String email, final String pictureUrl) {
-        final String zepId = userRepository.findActiveByEmail(email)
-                .orElseThrow(() -> new ForbiddenException("User with email '" + email + "' is either unknown or inactive"))
-                .getZepId();
-        final Employee employee = employeeService.getEmployee(zepId);
+        final com.gepardec.mega.db.entity.User user = userRepository.findActiveByEmail(email)
+                .orElseThrow(() -> new ForbiddenException("User with email '" + email + "' is either unknown or inactive"));
+
+        final Employee employee = employeeService.getEmployee(user.getZepId());
 
         if (employee == null) {
-            throw new ForbiddenException("Could not find ZEP-User with userId '" + zepId + "'");
+            throw new ForbiddenException("Could not find ZEP-User with userId '" + user.getZepId() + "'");
         }
 
         return User.builder()
+                .dbId(user.getId())
                 .userId(employee.userId())
                 .email(employee.email())
                 .firstname(employee.firstName())
@@ -48,5 +51,19 @@ public class UserServiceImpl implements UserService {
                 .role(Role.forId(employee.role()).orElse(null))
                 .pictureUrl(pictureUrl)
                 .build();
+    }
+
+    @Override
+    @Transactional(Transactional.TxType.SUPPORTS)
+    public List<User> getActiveUsers() {
+        final List<com.gepardec.mega.db.entity.User> activeUsers = userRepository.findActive();
+        return activeUsers.stream()
+                .map(user -> User.builder()
+                        .dbId(user.getId())
+                        .userId(user.getZepId())
+                        .firstname("test")
+                        .lastname("test")
+                        .email(user.getEmail()).build())
+                .collect(Collectors.toList());
     }
 }

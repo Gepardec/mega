@@ -62,6 +62,7 @@ public class ForbiddenExceptionMapperTest {
 
     private User createUserForEmail(final String email) {
         return User.builder()
+                .dbId(1)
                 .userId("1")
                 .email(email)
                 .firstname("Thomas")

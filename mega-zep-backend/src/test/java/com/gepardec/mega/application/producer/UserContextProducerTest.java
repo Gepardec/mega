@@ -33,6 +33,7 @@ class UserContextProducerTest {
     void createUserContext_whenUserVerified_thenUserSetAndLogged() throws GeneralSecurityException, IOException {
         // Given
         final User user = User.builder()
+                .dbId(1)
                 .userId("1")
                 .firstname("Thomas")
                 .lastname("Herzog")

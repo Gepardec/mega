@@ -1,6 +1,7 @@
 package com.gepardec.mega.zep;
 
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.service.impl.employee.EmployeeMapper;
 import com.gepardec.mega.zep.mapper.ProjectTimeMapper;
@@ -10,10 +11,11 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.temporal.TemporalAdjusters;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -31,10 +33,10 @@ public class ZepServiceImpl implements ZepService {
 
     @Inject
     public ZepServiceImpl(final EmployeeMapper employeeMapper,
-            final Logger logger,
-            final ZepSoapPortType zepSoapPortType,
-            final ZepSoapProvider zepSoapProvider,
-            final ProjectTimeMapper projectTimeMapper) {
+                          final Logger logger,
+                          final ZepSoapPortType zepSoapPortType,
+                          final ZepSoapProvider zepSoapProvider,
+                          final ProjectTimeMapper projectTimeMapper) {
         this.employeeMapper = employeeMapper;
         this.logger = logger;
         this.zepSoapPortType = zepSoapPortType;
@@ -97,6 +99,59 @@ public class ZepServiceImpl implements ZepService {
         ReadProjektzeitenResponseType projectTimeResponse = zepSoapPortType.readProjektzeiten(projektzeitenRequest);
 
         return projectTimeMapper.mapToEntryList(projectTimeResponse.getProjektzeitListe().getProjektzeiten());
+    }
+
+    @Override
+    public Map<User, List<String>> getProjectsForUsersAndYear(final LocalDate monthYear, final List<User> users) {
+        final ReadProjekteResponseType readProjekteResponseType = getProjectsInternal(monthYear);
+        final Map<User, List<String>> projectsForUsers = new HashMap<>();
+
+        readProjekteResponseType.getProjektListe().getProjekt().forEach(p -> p.getProjektmitarbeiterListe().getProjektmitarbeiter()
+                .stream().filter(pm -> users.stream().anyMatch(u -> u.userId().equals(pm.getUserId())))
+                .forEach(pm -> {
+                    final User user = users.stream().filter(u -> u.userId().equals(pm.getUserId())).findFirst().orElse(null);
+                    if (projectsForUsers.containsKey(user)) {
+                        projectsForUsers.get(user).add(p.getProjektNr());
+                    } else {
+                        projectsForUsers.put(user, new ArrayList<>(Collections.singletonList(pm.getUserId())));
+                    }
+                }));
+
+        return projectsForUsers;
+    }
+
+    @Override
+    public Map<String, List<User>> getProjectLeadsForProjectsAndYear(final LocalDate monthYear, final List<User> users) {
+        final ReadProjekteResponseType readProjekteResponseType = getProjectsInternal(monthYear);
+        final Map<String, List<User>> projectLeadsForProjects = new HashMap<>();
+
+        readProjekteResponseType.getProjektListe().getProjekt().forEach(p -> p.getProjektmitarbeiterListe().getProjektmitarbeiter()
+                .forEach(pm -> {
+                    if (pm.getIstProjektleiter() == 1) {
+                        final User user = users.stream().filter(u -> u.userId().equals(pm.getUserId())).findFirst().orElse(null);
+                        if (user != null) {
+                            if (!projectLeadsForProjects.containsKey(p.getProjektNr())) {
+                                projectLeadsForProjects.put(p.getProjektNr(), new ArrayList<>(Collections.singletonList(user)));
+                            } else {
+                                projectLeadsForProjects.get(p.getProjektNr()).add(user);
+                            }
+                        }
+                    }
+                }));
+
+        return projectLeadsForProjects;
+    }
+
+    private ReadProjekteResponseType getProjectsInternal(final LocalDate monthYear) {
+        final ReadProjekteSearchCriteriaType readProjekteSearchCriteriaType = new ReadProjekteSearchCriteriaType();
+        readProjekteSearchCriteriaType.setVon(DateTimeFormatter.ISO_LOCAL_DATE.format(monthYear.with(TemporalAdjusters.firstDayOfMonth())));
+        readProjekteSearchCriteriaType.setBis(DateTimeFormatter.ISO_LOCAL_DATE.format(monthYear.with(TemporalAdjusters.lastDayOfMonth())));
+
+        final ReadProjekteRequestType readProjekteRequestType = new ReadProjekteRequestType();
+        readProjekteRequestType.setRequestHeader(zepSoapProvider.createRequestHeaderType());
+        readProjekteRequestType.setReadProjekteSearchCriteria(readProjekteSearchCriteriaType);
+
+        return zepSoapPortType.readProjekte(readProjekteRequestType);
     }
 
     private ReadProjektzeitenSearchCriteriaType createProjectTimeSearchCriteria(Employee employee) {

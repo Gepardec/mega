@@ -15,6 +15,7 @@ import javax.annotation.Nullable;
 @JsonDeserialize(builder = com.gepardec.mega.domain.model.AutoValue_User.Builder.class)
 public abstract class User {
 
+    @JsonProperty public abstract long dbId();
     @JsonProperty public abstract String userId();
     @JsonProperty public abstract String email();
     @JsonProperty public abstract String firstname();
@@ -28,6 +29,7 @@ public abstract class User {
 
     @AutoValue.Builder
     public abstract static class Builder {
+        @JsonProperty public abstract Builder dbId(long dbId);
         @JsonProperty public abstract Builder userId(String userId);
         @JsonProperty public abstract Builder email(String email);
         @JsonProperty public abstract Builder firstname(String firstname);
