@@ -179,4 +179,18 @@ public class User {
     public int hashCode() {
         return (id != null) ? Objects.hash(id) : super.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", creationDate=" + creationDate +
+                ", updatedDate=" + updatedDate +
+                ", email='" + email + '\'' +
+                ", zepId='" + zepId + '\'' +
+                ", active=" + active +
+                ", assignedStepEntries=" + assignedStepEntries +
+                ", ownedStepEntries=" + ownedStepEntries +
+                '}';
+    }
 }

@@ -23,6 +23,8 @@ public class StepServiceImpl implements StepService {
                 .stream()
                 .map(s -> Step.builder()
                         .dbId(s.getId())
+                        .name(s.getName())
+                        .ordinal(s.getOrdinal())
                         .role(s.getRole() != null ? s.getRole().name() : null)
                         .build())
                 .collect(Collectors.toList());

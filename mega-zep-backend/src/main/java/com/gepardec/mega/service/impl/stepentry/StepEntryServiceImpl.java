@@ -4,10 +4,12 @@ import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.StepEntry;
 import com.gepardec.mega.db.repository.StepEntryRepository;
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.Step;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -20,6 +22,9 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class StepEntryServiceImpl implements StepEntryService {
+
+    @Inject
+    Logger logger;
 
     @Inject
     StepEntryRepository stepEntryRepository;
@@ -50,7 +55,7 @@ public class StepEntryServiceImpl implements StepEntryService {
 
     @Override
     @Transactional(Transactional.TxType.SUPPORTS)
-    public void addStepEntry(final User owner, final LocalDate date, final String project, final Step step, final User assignee) {
+    public void addStepEntry(final User owner, final LocalDate date, final Project project, final Step step, final User assignee) {
         final LocalDateTime now = LocalDateTime.now();
 
         final com.gepardec.mega.db.entity.User ownerDb = new com.gepardec.mega.db.entity.User();
@@ -66,11 +71,13 @@ public class StepEntryServiceImpl implements StepEntryService {
         stepEntry.setCreationDate(now);
         stepEntry.setUpdatedDate(now);
         stepEntry.setDate(date);
-        stepEntry.setProject(project);
+        stepEntry.setProject(project != null ? project.projectId() : null);
         stepEntry.setState(State.OPEN);
         stepEntry.setOwner(ownerDb);
         stepEntry.setAssignee(assigneeDb);
         stepEntry.setStep(stepDb);
+
+        logger.info("inserting step entry {}", stepEntry);
 
         stepEntryRepository.persist(stepEntry);
     }

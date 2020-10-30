@@ -1,7 +1,7 @@
 package com.gepardec.mega.zep;
 
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.User;
+import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.service.impl.employee.EmployeeMapper;
 import com.gepardec.mega.zep.mapper.ProjectTimeMapper;
@@ -15,7 +15,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -102,44 +104,29 @@ public class ZepServiceImpl implements ZepService {
     }
 
     @Override
-    public Map<User, List<String>> getProjectsForUsersAndYear(final LocalDate monthYear, final List<User> users) {
+    public List<Project> getProjectsForYear(final LocalDate monthYear) {
         final ReadProjekteResponseType readProjekteResponseType = getProjectsInternal(monthYear);
-        final Map<User, List<String>> projectsForUsers = new HashMap<>();
+        final List<Project> projects = new ArrayList<>();
 
-        readProjekteResponseType.getProjektListe().getProjekt().forEach(p -> p.getProjektmitarbeiterListe().getProjektmitarbeiter()
-                .stream().filter(pm -> users.stream().anyMatch(u -> u.userId().equals(pm.getUserId())))
-                .forEach(pm -> {
-                    final User user = users.stream().filter(u -> u.userId().equals(pm.getUserId())).findFirst().orElse(null);
-                    if (projectsForUsers.containsKey(user)) {
-                        projectsForUsers.get(user).add(p.getProjektNr());
-                    } else {
-                        projectsForUsers.put(user, new ArrayList<>(Collections.singletonList(pm.getUserId())));
-                    }
-                }));
+        readProjekteResponseType.getProjektListe().getProjekt()
+                .forEach(p -> {
+                    final Project project = Project.builder()
+                            .projectId(p.getProjektNr())
+                            .employees(new ArrayList<>())
+                            .leads(new ArrayList<>())
+                            .build();
 
-        return projectsForUsers;
-    }
+                    p.getProjektmitarbeiterListe().getProjektmitarbeiter()
+                            .forEach(pm -> {
+                                project.employees().add(pm.getUserId());
+                                if (pm.getIstProjektleiter() == 1) {
+                                    project.leads().add(pm.getUserId());
+                                }
+                            });
 
-    @Override
-    public Map<String, List<User>> getProjectLeadsForProjectsAndYear(final LocalDate monthYear, final List<User> users) {
-        final ReadProjekteResponseType readProjekteResponseType = getProjectsInternal(monthYear);
-        final Map<String, List<User>> projectLeadsForProjects = new HashMap<>();
-
-        readProjekteResponseType.getProjektListe().getProjekt().forEach(p -> p.getProjektmitarbeiterListe().getProjektmitarbeiter()
-                .forEach(pm -> {
-                    if (pm.getIstProjektleiter() == 1) {
-                        final User user = users.stream().filter(u -> u.userId().equals(pm.getUserId())).findFirst().orElse(null);
-                        if (user != null) {
-                            if (!projectLeadsForProjects.containsKey(p.getProjektNr())) {
-                                projectLeadsForProjects.put(p.getProjektNr(), new ArrayList<>(Collections.singletonList(user)));
-                            } else {
-                                projectLeadsForProjects.get(p.getProjektNr()).add(user);
-                            }
-                        }
-                    }
-                }));
-
-        return projectLeadsForProjects;
+                    projects.add(project);
+                });
+        return projects;
     }
 
     private ReadProjekteResponseType getProjectsInternal(final LocalDate monthYear) {

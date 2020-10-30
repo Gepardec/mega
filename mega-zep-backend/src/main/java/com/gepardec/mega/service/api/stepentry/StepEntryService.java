@@ -2,6 +2,7 @@ package com.gepardec.mega.service.api.stepentry;
 
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.Step;
 import com.gepardec.mega.domain.model.User;
 
@@ -13,5 +14,5 @@ public interface StepEntryService {
 
     boolean areOtherChecksDone(final Employee employee);
 
-    void addStepEntry(User owner, LocalDate date, String project, Step step, User assignee);
+    void addStepEntry(final User owner, final LocalDate date, final Project project, final Step step, final User assignee);
 }

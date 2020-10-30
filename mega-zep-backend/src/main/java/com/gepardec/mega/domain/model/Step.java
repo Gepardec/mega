@@ -16,6 +16,12 @@ public abstract class Step {
     public abstract long dbId();
 
     @JsonProperty
+    public abstract String name();
+
+    @JsonProperty
+    public abstract long ordinal();
+
+    @JsonProperty
     @Nullable
     public abstract String role();
 
@@ -27,6 +33,12 @@ public abstract class Step {
     public abstract static class Builder {
         @JsonProperty
         public abstract com.gepardec.mega.domain.model.Step.Builder dbId(long dbId);
+
+        @JsonProperty
+        public abstract com.gepardec.mega.domain.model.Step.Builder name(String name);
+
+        @JsonProperty
+        public abstract com.gepardec.mega.domain.model.Step.Builder ordinal(long ordinal);
 
         @JsonProperty
         @Nullable

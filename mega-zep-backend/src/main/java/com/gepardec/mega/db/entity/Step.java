@@ -110,4 +110,15 @@ public class Step {
     public int hashCode() {
         return (id != null) ? Objects.hash(id) : super.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Step{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", role=" + role +
+                ", ordinal=" + ordinal +
+                ", stepEntries=" + stepEntries +
+                '}';
+    }
 }

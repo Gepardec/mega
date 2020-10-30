@@ -190,4 +190,19 @@ public class StepEntry {
     public int hashCode() {
         return (id != null) ? Objects.hash(id) : super.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "StepEntry{" +
+                "id=" + id +
+                ", creationDate=" + creationDate +
+                ", updatedDate=" + updatedDate +
+                ", date=" + date +
+                ", project='" + project + '\'' +
+                ", state=" + state +
+                ", owner=" + owner +
+                ", assignee=" + assignee +
+                ", step=" + step +
+                '}';
+    }
 }
