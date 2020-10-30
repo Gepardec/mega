@@ -9,12 +9,14 @@ import com.gepardec.mega.service.api.project.ProjectService;
 import com.gepardec.mega.service.api.step.StepService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.service.api.user.UserService;
+import org.apache.commons.lang3.time.StopWatch;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
@@ -46,6 +48,11 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
 
     @Override
     public void genereteStepEntries() {
+        final StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+
+        logger.info("started generation at {}", Instant.ofEpochMilli(stopWatch.getStartTime()));
+
         final LocalDate date = LocalDate.now().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth());
         logger.info("running step entry generation for {}", date);
 
@@ -80,6 +87,11 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
                     }
                 })
         );
+
+        stopWatch.stop();
+
+        logger.info("generation took {}ms", stopWatch.getTime());
+        logger.info("finished generation at {}", Instant.ofEpochMilli(stopWatch.getStartTime() + stopWatch.getTime()));
     }
 
     private Optional<User> findUserByUserId(final List<User> users, final String userId) {
