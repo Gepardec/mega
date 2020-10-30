@@ -9,5 +9,6 @@ export class MonthlyReport {
   journeyWarnings: Array<JourneyWarning>;
   employeeCheckState: string;
   otherChecksDone: boolean;
+  assigned: boolean;
   employee: Employee;
 }

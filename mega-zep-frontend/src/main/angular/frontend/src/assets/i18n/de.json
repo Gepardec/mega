@@ -44,7 +44,7 @@
     "timeCheckNotPossiblePrompt": "Kontrolle der Zeiten ausständig. Bitte wende dich an deinen Mentor",
     "commentsToDo": "Einige Anmerkungen sind abzuarbeiten",
     "checkSuccess": "Deine Zeiten wurden kontrolliert und sind richtig. Bis nächsten Monat!",
-    "checkWip": "Monatsabschlusstätigkeiten sind im Gange.",
+    "checkWip": "Die Kontrolle deiner Zeiten ist im Gange!",
     "pleaseCheckPrompt": "Bitte überprüfe deine Eingaben (Zeiten, Reisen, Belege, ...) in ZEP und beim Kunden und bestätige diese anschließend.",
     "confirmBtnText": "Buchungen bestätigen",
     "title": {

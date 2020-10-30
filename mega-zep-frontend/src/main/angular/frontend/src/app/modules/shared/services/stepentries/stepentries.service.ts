@@ -1,0 +1,21 @@
+import {Injectable} from '@angular/core';
+import {Employee} from "../../models/Employee";
+import {Observable} from "rxjs";
+import {HttpClient} from "@angular/common/http";
+import {ConfigService} from "../config/config.service";
+
+@Injectable({
+  providedIn: 'root'
+})
+export class StepentriesService {
+
+  constructor(
+    private httpClient: HttpClient,
+    private config: ConfigService
+  ) {
+  }
+
+  setOpenAndUnassignedStepEntriesDone(employee: Employee): Observable<boolean> {
+    return this.httpClient.put<boolean>(this.config.getBackendUrlWithContext('/stepentry/setopenandunassignedstepentriesdone'), employee);
+  }
+}

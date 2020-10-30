@@ -7,10 +7,13 @@ import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
+import com.gepardec.mega.service.api.stepentry.StepEntryService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -30,6 +33,9 @@ public class WorkerResource {
     @Inject
     EmployeeService employeeService;
 
+    @Inject
+    StepEntryService stepEntryService;
+
     @GET
     @Path("/monthendreports")
     @Produces(MediaType.APPLICATION_JSON)
@@ -38,7 +44,7 @@ public class WorkerResource {
         MonthlyReport monthlyReport = monthlyReportService.getMonthendReportForUser(employee.userId());
 
         if (monthlyReport == null) {
-            monthlyReport = MonthlyReport.of(employee, List.of(), List.of(), List.of(), State.OPEN, false);
+            monthlyReport = MonthlyReport.of(employee, List.of(), List.of(), List.of(), State.OPEN, false, false);
         }
 
         return monthlyReport;

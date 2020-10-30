@@ -9,4 +9,6 @@ public interface StepEntryService {
     Optional<State> findEmployeeCheckState(final Employee employee);
 
     boolean areOtherChecksDone(final Employee employee);
+
+    boolean setOpenAndAssignedStepEntriesDone(Employee employee);
 }

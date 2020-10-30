@@ -6,6 +6,7 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,4 +23,11 @@ public class CommentRepository implements PanacheRepository<Comment> {
                 .list();
     }
 
+    @Transactional
+    public int setStatusDone(Long id) {
+        return update("UPDATE Comment c SET c.state = :state WHERE id = :id",
+                Parameters
+                        .with("id", id)
+                        .and("state", State.DONE));
+    }
 }

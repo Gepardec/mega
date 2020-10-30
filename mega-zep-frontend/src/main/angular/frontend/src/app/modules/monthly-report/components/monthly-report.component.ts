@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MonthlyReport } from '../models/MonthlyReport';
-import { Subscription } from 'rxjs';
-import { MonthlyReportService } from '../services/monthly-report.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MonthlyReport} from '../models/MonthlyReport';
+import {Subscription} from 'rxjs';
+import {MonthlyReportService} from '../services/monthly-report.service';
 
 @Component({
   selector: 'app-monthly-report',
@@ -17,6 +17,8 @@ export class MonthlyReportComponent implements OnInit, OnDestroy {
   getAllTimeEntries() {
     this.monthlyReportSubscription = this.monthlyReportService.getAll().subscribe((monthlyReport: MonthlyReport) => {
       this.monthlyReport = monthlyReport;
+
+      console.log(monthlyReport);
     });
   }
 
@@ -28,5 +30,9 @@ export class MonthlyReportComponent implements OnInit, OnDestroy {
     if (this.monthlyReportSubscription) {
       this.monthlyReportSubscription.unsubscribe();
     }
+  }
+
+  refreshMonthlyReport() {
+    this.getAllTimeEntries();
   }
 }

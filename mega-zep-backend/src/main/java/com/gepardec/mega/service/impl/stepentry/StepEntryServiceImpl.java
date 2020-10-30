@@ -3,6 +3,7 @@ package com.gepardec.mega.service.impl.stepentry;
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.StepEntry;
 import com.gepardec.mega.db.repository.StepEntryRepository;
+import com.gepardec.mega.db.repository.StepRepository;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
@@ -19,6 +20,9 @@ public class StepEntryServiceImpl implements StepEntryService {
 
     @Inject
     StepEntryRepository stepEntryRepository;
+
+    @Inject
+    StepRepository stepRepository;
 
     @Override
     public Optional<State> findEmployeeCheckState(final Employee employee) {
@@ -42,5 +46,13 @@ public class StepEntryServiceImpl implements StepEntryService {
                 stepEntryRepository.findAllOwnedAndUnassignedStepEntriesInRange(fromDate, toDate, employee.email());
 
         return stepEntries.stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);
+    }
+
+    @Override
+    public boolean setOpenAndAssignedStepEntriesDone(Employee employee) {
+        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+
+        return stepEntryRepository.setAllOwnedAndAssignedStepEntriesInRangeDone(fromDate, toDate, employee.email()) > 0;
     }
 }

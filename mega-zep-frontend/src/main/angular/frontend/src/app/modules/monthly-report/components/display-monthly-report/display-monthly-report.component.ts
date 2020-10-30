@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { MonthlyReport } from '../../models/MonthlyReport';
-import { State } from '../../../shared/models/State';
-import { TranslateService } from '@ngx-translate/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {MonthlyReport} from '../../models/MonthlyReport';
+import {State} from '../../../shared/models/State';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-display-monthly-report',
@@ -13,6 +13,7 @@ export class DisplayMonthlyReportComponent implements OnInit {
   readonly State = State;
   employeeFunctions;
   @Input() monthlyReport: MonthlyReport;
+  @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(private translateService: TranslateService) {
   }
@@ -33,4 +34,7 @@ export class DisplayMonthlyReportComponent implements OnInit {
     return date.getTime() === date.getTime();
   }
 
+  emitRefreshMonthlyReport() {
+    this.refreshMonthlyReport.emit();
+  }
 }

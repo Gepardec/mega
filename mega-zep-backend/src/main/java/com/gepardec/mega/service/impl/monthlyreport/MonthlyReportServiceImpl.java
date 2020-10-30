@@ -3,7 +3,12 @@ package com.gepardec.mega.service.impl.monthlyreport;
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.monthlyreport.*;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
+import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
@@ -37,6 +42,11 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         return calcWarnings(zepService.getProjectTimes(employee), employee);
     }
 
+    @Override
+    public boolean setOpenAndUnassignedStepEntriesDone(Employee employee) {
+        return stepEntryService.setOpenAndAssignedStepEntriesDone(employee);
+    }
+
     private MonthlyReport calcWarnings(List<ProjectEntry> projectEntries, Employee employee) {
         if (projectEntries == null || projectEntries.isEmpty()) {
             return null;
@@ -45,9 +55,10 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(filterProjectTimeEntries(projectEntries));
         final List<Comment> comments = commentService.findCommentsForEmployee(employee);
         final Optional<State> employeeCheckState = stepEntryService.findEmployeeCheckState(employee);
+        final boolean isAssigned = employeeCheckState.isPresent();
         final boolean otherChecksDone = stepEntryService.areOtherChecksDone(employee);
 
-        return MonthlyReport.of(employee, timeWarnings, journeyWarnings, comments, employeeCheckState.orElse(State.OPEN), otherChecksDone);
+        return MonthlyReport.of(employee, timeWarnings, journeyWarnings, comments, employeeCheckState.orElse(State.OPEN), isAssigned, otherChecksDone);
     }
 
     private List<ProjectTimeEntry> filterProjectTimeEntries(List<ProjectEntry> projectEntries) {

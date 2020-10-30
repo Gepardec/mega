@@ -5,9 +5,12 @@
 
       <ng-container [ngSwitch]="monthlyReport.employeeCheckState">
         <ng-container *ngSwitchCase="State.OPEN">
-          <app-state-indicator [state]="State.OPEN" size="large"></app-state-indicator>
-          <p>{{'monthly-report.pleaseCheckPrompt' | translate}}</p>
-          <button mat-raised-button>{{'monthly-report.confirmBtnText' | translate}}</button>
+          <ng-container *ngIf="monthlyReport.assigned">
+            <app-state-indicator [state]="State.OPEN" size="large"></app-state-indicator>
+            <p>{{'monthly-report.pleaseCheckPrompt' | translate}}</p>
+            <button mat-raised-button
+                    (click)="setOpenAndUnassignedStepEntriesDone()">{{'monthly-report.confirmBtnText' | translate}}</button>
+          </ng-container>
         </ng-container>
 
         <ng-container *ngSwitchCase="State.DONE">

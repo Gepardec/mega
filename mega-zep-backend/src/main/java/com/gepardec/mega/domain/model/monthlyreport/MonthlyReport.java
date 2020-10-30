@@ -34,9 +34,10 @@ public abstract class MonthlyReport {
             @JsonProperty("journeyWarnings") final List<JourneyWarning> journeyWarnings,
             @JsonProperty("comments") final List<Comment> comments,
             @JsonProperty("employeeCheckState") final State employeeCheckState,
+            @JsonProperty("isAssigned") final boolean isAssigned,
             @JsonProperty("otherChecksDone") final boolean otherChecksDone) {
         return new com.gepardec.mega.domain.model.monthlyreport.AutoValue_MonthlyReport(
-                employee, timeWarnings, journeyWarnings, comments, employeeCheckState, otherChecksDone
+                employee, timeWarnings, journeyWarnings, comments, employeeCheckState, isAssigned, otherChecksDone
         );
     }
 
@@ -47,6 +48,9 @@ public abstract class MonthlyReport {
     @Nullable
     @JsonProperty
     public abstract State employeeCheckState();
+
+    @JsonProperty
+    public abstract boolean isAssigned();
 
     @JsonProperty
     public abstract boolean otherChecksDone();
