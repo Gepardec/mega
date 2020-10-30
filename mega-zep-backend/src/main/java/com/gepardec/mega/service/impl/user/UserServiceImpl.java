@@ -61,6 +61,7 @@ public class UserServiceImpl implements UserService {
                 .map(user -> User.builder()
                         .dbId(user.getId())
                         .userId(user.getZepId())
+                        // TODO: temporary, refactor employee <-> user handling
                         .firstname("test")
                         .lastname("test")
                         .email(user.getEmail()).build())
