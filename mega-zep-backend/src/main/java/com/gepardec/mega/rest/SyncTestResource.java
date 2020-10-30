@@ -10,6 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+// TODO: remove before release
 @RequestScoped
 @Path("/synctest")
 public class SyncTestResource {
