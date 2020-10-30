@@ -55,30 +55,26 @@ public class StepEntryServiceImpl implements StepEntryService {
 
     @Override
     @Transactional(Transactional.TxType.SUPPORTS)
-    public void addStepEntry(final User owner, final LocalDate date, final Project project, final Step step, final User assignee) {
-        final LocalDateTime now = LocalDateTime.now();
-
+    public void addStepEntry(com.gepardec.mega.domain.model.StepEntry stepEntry) {
         final com.gepardec.mega.db.entity.User ownerDb = new com.gepardec.mega.db.entity.User();
-        ownerDb.setId(owner.dbId());
+        ownerDb.setId(stepEntry.owner().dbId());
 
         final com.gepardec.mega.db.entity.Step stepDb = new com.gepardec.mega.db.entity.Step();
-        stepDb.setId(step.dbId());
+        stepDb.setId(stepEntry.step().dbId());
 
         final com.gepardec.mega.db.entity.User assigneeDb = new com.gepardec.mega.db.entity.User();
-        assigneeDb.setId(assignee.dbId());
+        assigneeDb.setId(stepEntry.assignee().dbId());
 
-        final StepEntry stepEntry = new StepEntry();
-        stepEntry.setCreationDate(now);
-        stepEntry.setUpdatedDate(now);
-        stepEntry.setDate(date);
-        stepEntry.setProject(project != null ? project.projectId() : null);
-        stepEntry.setState(State.OPEN);
-        stepEntry.setOwner(ownerDb);
-        stepEntry.setAssignee(assigneeDb);
-        stepEntry.setStep(stepDb);
+        final StepEntry stepEntryDb = new StepEntry();
+        stepEntryDb.setDate(stepEntry.date());
+        stepEntryDb.setProject(stepEntry.project() != null ? stepEntry.project().projectId() : null);
+        stepEntryDb.setState(State.OPEN);
+        stepEntryDb.setOwner(ownerDb);
+        stepEntryDb.setAssignee(assigneeDb);
+        stepEntryDb.setStep(stepDb);
 
-        logger.info("inserting step entry {}", stepEntry);
+        logger.info("inserting step entry {}", stepEntryDb);
 
-        stepEntryRepository.persist(stepEntry);
+        stepEntryRepository.persist(stepEntryDb);
     }
 }

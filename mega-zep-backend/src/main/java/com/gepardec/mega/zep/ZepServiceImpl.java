@@ -106,27 +106,11 @@ public class ZepServiceImpl implements ZepService {
     @Override
     public List<Project> getProjectsForYear(final LocalDate monthYear) {
         final ReadProjekteResponseType readProjekteResponseType = getProjectsInternal(monthYear);
-        final List<Project> projects = new ArrayList<>();
 
-        readProjekteResponseType.getProjektListe().getProjekt()
-                .forEach(p -> {
-                    final Project project = Project.builder()
-                            .projectId(p.getProjektNr())
-                            .employees(new ArrayList<>())
-                            .leads(new ArrayList<>())
-                            .build();
-
-                    p.getProjektmitarbeiterListe().getProjektmitarbeiter()
-                            .forEach(pm -> {
-                                project.employees().add(pm.getUserId());
-                                if (pm.getIstProjektleiter() == 1) {
-                                    project.leads().add(pm.getUserId());
-                                }
-                            });
-
-                    projects.add(project);
-                });
-        return projects;
+        return readProjekteResponseType.getProjektListe().getProjekt()
+                .stream()
+                .map(this::createProject)
+                .collect(Collectors.toList());
     }
 
     private ReadProjekteResponseType getProjectsInternal(final LocalDate monthYear) {
@@ -152,6 +136,29 @@ public class ZepServiceImpl implements ZepService {
         userIdListType.getUserId().add(employee.userId());
         searchCriteria.setUserIdListe(userIdListType);
         return searchCriteria;
+    }
+
+    private Project createProject(final ProjektType projektType) {
+        return Project.builder()
+                .projectId(projektType.getProjektNr())
+                .employees(createProjectEmployees(projektType.getProjektmitarbeiterListe()))
+                .leads(createProjectLeads(projektType.getProjektmitarbeiterListe()))
+                .build();
+    }
+
+    private List<String> createProjectEmployees(final ProjektMitarbeiterListeType projektMitarbeiterListeType) {
+        return projektMitarbeiterListeType.getProjektmitarbeiter()
+                .stream()
+                .map(ProjektMitarbeiterType::getUserId)
+                .collect(Collectors.toList());
+    }
+
+    private List<String> createProjectLeads(final ProjektMitarbeiterListeType projektMitarbeiterListeType) {
+        return projektMitarbeiterListeType.getProjektmitarbeiter()
+                .stream()
+                .filter(projektMitarbeiterType -> projektMitarbeiterType.getIstProjektleiter() == 1)
+                .map(ProjektMitarbeiterType::getUserId)
+                .collect(Collectors.toList());
     }
 
     /**

@@ -1,9 +1,7 @@
 package com.gepardec.mega.service.impl.init;
 
 import com.gepardec.mega.db.entity.Role;
-import com.gepardec.mega.domain.model.Project;
-import com.gepardec.mega.domain.model.Step;
-import com.gepardec.mega.domain.model.User;
+import com.gepardec.mega.domain.model.*;
 import com.gepardec.mega.service.api.init.StepEntrySyncService;
 import com.gepardec.mega.service.api.project.ProjectService;
 import com.gepardec.mega.service.api.step.StepService;
@@ -19,6 +17,8 @@ import javax.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,7 +57,10 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
         logger.info("running step entry generation for {}", date);
 
         final List<User> activeUsers = userService.getActiveUsers();
-        final List<Project> projectsForYear = projectService.getProjectsForYear(date);
+        final List<Project> projectsForYear = projectService.getProjectsForYear(date)
+                .stream()
+                .filter(project -> !project.leads().isEmpty())
+                .collect(Collectors.toList());
         final List<Step> steps = stepService.getSteps();
 
         final List<User> omUsers = List.of(omMailAddresses.split(","))
@@ -72,26 +75,88 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
         logger.info("steps are {}", steps);
         logger.info("omUsers are {}", omUsers);
 
-        activeUsers.forEach(user ->
-                steps.forEach(step -> {
-                    if (Role.PROJECT_LEAD.name().equals(step.role())) {
-                        projectsForYear.stream()
-                                .filter(project -> project.employees().contains(user.userId()))
-                                .filter(project -> !project.leads().isEmpty())
-                                .forEach(project -> project.leads()
-                                        .forEach(lead -> findUserByUserId(activeUsers, lead).ifPresent(leadUser -> stepEntryService.addStepEntry(user, date, project, step, leadUser))));
-                    } else if (Role.OFFICE_MANAGEMENT.name().equals(step.role())) {
-                        omUsers.forEach(omUser -> stepEntryService.addStepEntry(user, date, null, step, omUser));
-                    } else {
-                        stepEntryService.addStepEntry(user, date, null, step, user);
-                    }
-                })
-        );
+        final List<StepEntry> toBeCreatedStepEntries = new ArrayList<>();
+
+        steps.forEach(step -> {
+            if (Role.PROJECT_LEAD.name().equals(step.role())) {
+                toBeCreatedStepEntries.addAll(createStepEntriesProjectLeadForUsers(date, step, projectsForYear, activeUsers));
+            } else if (Role.OFFICE_MANAGEMENT.name().equals(step.role())) {
+                toBeCreatedStepEntries.addAll(createStepEntriesOmForUsers(date, step, omUsers, activeUsers));
+            } else {
+                toBeCreatedStepEntries.addAll(createStepEntriesForUsers(date, step, activeUsers));
+            }
+        });
+
+        toBeCreatedStepEntries.forEach(stepEntryService::addStepEntry);
 
         stopWatch.stop();
 
         logger.info("generation took {}ms", stopWatch.getTime());
         logger.info("finished generation at {}", Instant.ofEpochMilli(stopWatch.getStartTime() + stopWatch.getTime()));
+    }
+
+    private List<StepEntry> createStepEntriesProjectLeadForUsers(final LocalDate date, final Step step, final List<Project> projects, final List<User> users) {
+        return users.stream()
+                .map(owner -> createStepEntriesForOwnerProjects(date, step, projects, users, owner))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
+    private List<StepEntry> createStepEntriesForOwnerProjects(final LocalDate date, final Step step, final List<Project> projects, final List<User> users, final User owner) {
+        return projects.stream()
+                .map(project -> createStepEntriesForOwnerProject(date, step, project, users, owner))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
+    private List<StepEntry> createStepEntriesForOwnerProject(final LocalDate date, final Step step, final Project project, final List<User> users, final User owner) {
+        return project.leads()
+                .stream()
+                .map(lead -> findUserByUserId(users, lead))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(leadUser -> StepEntry.builder()
+                        .date(date)
+                        .project(project)
+                        .state(State.OPEN)
+                        .owner(owner)
+                        .assignee(leadUser)
+                        .step(step)
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    private List<StepEntry> createStepEntriesOmForUsers(final LocalDate date, final Step step, final List<User> omUsers, final List<User> users) {
+        return users.stream()
+                .map(owner -> createStepEntriesForOwnerOmUsers(date, step, omUsers, owner))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
+    private List<StepEntry> createStepEntriesForOwnerOmUsers(final LocalDate date, final Step step, final List<User> omUsers, final User owner) {
+        return omUsers.stream()
+                .map(leadUser -> StepEntry.builder()
+                        .date(date)
+                        .project(null)
+                        .state(State.OPEN)
+                        .owner(owner)
+                        .assignee(leadUser)
+                        .step(step)
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    private List<StepEntry> createStepEntriesForUsers(final LocalDate date, final Step step, final List<User> users) {
+        return users.stream()
+                .map(owner -> StepEntry.builder()
+                        .date(date)
+                        .project(null)
+                        .state(State.OPEN)
+                        .owner(owner)
+                        .assignee(owner)
+                        .step(step)
+                        .build())
+                .collect(Collectors.toList());
     }
 
     private Optional<User> findUserByUserId(final List<User> users, final String userId) {
