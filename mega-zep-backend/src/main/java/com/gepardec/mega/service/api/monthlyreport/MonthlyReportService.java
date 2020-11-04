@@ -7,5 +7,5 @@ public interface MonthlyReportService {
 
     MonthlyReport getMonthendReportForUser(final String userId);
 
-    boolean setOpenAndUnassignedStepEntriesDone(Employee employee);
+    boolean setOpenAndUnassignedStepEntriesDone(Employee employee, Long stepId);
 }

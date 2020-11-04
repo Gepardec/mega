@@ -49,10 +49,10 @@ public class StepEntryServiceImpl implements StepEntryService {
     }
 
     @Override
-    public boolean setOpenAndAssignedStepEntriesDone(Employee employee) {
+    public boolean setOpenAndAssignedStepEntriesDone(Employee employee, Long stepId) {
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
 
-        return stepEntryRepository.setAllOwnedAndAssignedStepEntriesInRangeDone(fromDate, toDate, employee.email()) > 0;
+        return stepEntryRepository.setAllOwnedAndAssignedStepEntriesInRangeDone(fromDate, toDate, employee.email(), stepId) > 0;
     }
 }

@@ -1,7 +1,7 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.application.interceptor.Secured;
-import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.rest.model.EmployeeStep;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 
 import javax.enterprise.context.RequestScoped;
@@ -23,7 +23,7 @@ public class StepEntryResource {
     @PUT
     @Path("/setopenandunassignedstepentriesdone")
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean setOpenAndUnassignedStepEntriesDone(@NotNull(message = "{workerResource.employee.notNull}") final Employee employee) {
-        return stepEntryService.setOpenAndAssignedStepEntriesDone(employee);
+    public boolean setOpenAndUnassignedStepEntriesDone(@NotNull(message = "{workerResource.employee.notNull}") final EmployeeStep employeeStep) {
+        return stepEntryService.setOpenAndAssignedStepEntriesDone(employeeStep.employee(), employeeStep.stepId());
     }
 }

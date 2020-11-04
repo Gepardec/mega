@@ -14,7 +14,7 @@ import java.util.List;
 public class StepEntryRepository implements PanacheRepository<StepEntry> {
 
     public List<StepEntry> findAllOwnedAndAssignedStepEntriesInRange(LocalDate startDate, LocalDate endDate, String ownerAndAssigneeEmail) {
-        return find("SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.assignee.email = :assigneeEmail",
+        return find("#StepEntry.findAllOwnedAndAssignedStepEntriesInRange",
                 Parameters
                         .with("start", startDate)
                         .and("end", endDate)
@@ -24,7 +24,7 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
     }
 
     public List<StepEntry> findAllOwnedAndUnassignedStepEntriesInRange(LocalDate startDate, LocalDate endDate, String ownerEmail) {
-        return find("SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.owner.email <> s.assignee.email",
+        return find("#StepEntry.findAllOwnedAndUnassignedStepEntriesInRange",
                 Parameters
                         .with("start", startDate)
                         .and("end", endDate)
@@ -33,13 +33,13 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
     }
 
     @Transactional
-    public int setAllOwnedAndAssignedStepEntriesInRangeDone(LocalDate startDate, LocalDate endDate, String ownerEmail) {
-        return update("UPDATE StepEntry s SET s.state = :state  WHERE s.id = (SELECT s.id FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.step.id = :controlTimesId)",
+    public int setAllOwnedAndAssignedStepEntriesInRangeDone(LocalDate startDate, LocalDate endDate, String ownerEmail, Long stepId) {
+        return update("UPDATE StepEntry s SET s.state = :state WHERE s.id = (SELECT s.id FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.step.id = :stepId)",
                 Parameters
                         .with("state", State.DONE)
                         .and("start", startDate)
                         .and("end", endDate)
                         .and("ownerEmail", ownerEmail)
-                        .and("controlTimesId", 1L));
+                        .and("stepId", stepId));
     }
 }

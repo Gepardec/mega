@@ -10,6 +10,10 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "step_entry")
+@NamedQueries({
+        @NamedQuery(name="StepEntry.findAllOwnedAndAssignedStepEntriesInRange", query = "SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.assignee.email = :assigneeEmail"),
+        @NamedQuery(name="StepEntry.findAllOwnedAndUnassignedStepEntriesInRange", query = "SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.owner.email <> s.assignee.email")
+})
 public class StepEntry {
 
     @Id

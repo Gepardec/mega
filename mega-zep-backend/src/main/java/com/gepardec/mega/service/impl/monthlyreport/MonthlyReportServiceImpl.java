@@ -43,8 +43,8 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     }
 
     @Override
-    public boolean setOpenAndUnassignedStepEntriesDone(Employee employee) {
-        return stepEntryService.setOpenAndAssignedStepEntriesDone(employee);
+    public boolean setOpenAndUnassignedStepEntriesDone(Employee employee, Long stepId) {
+        return stepEntryService.setOpenAndAssignedStepEntriesDone(employee, stepId);
     }
 
     private MonthlyReport calcWarnings(List<ProjectEntry> projectEntries, Employee employee) {
