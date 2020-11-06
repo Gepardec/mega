@@ -46,7 +46,7 @@ public class StepEntry {
     /**
      * The related project of the step entry
      */
-    @Length(min = 1, max = 255)
+    @Length(max = 255)
     @Column(name = "project", updatable = false)
     private String project;
 
@@ -193,5 +193,20 @@ public class StepEntry {
     @Override
     public int hashCode() {
         return (id != null) ? Objects.hash(id) : super.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "StepEntry{" +
+                "id=" + id +
+                ", creationDate=" + creationDate +
+                ", updatedDate=" + updatedDate +
+                ", date=" + date +
+                ", project='" + project + '\'' +
+                ", state=" + state +
+                ", owner=" + owner +
+                ", assignee=" + assignee +
+                ", step=" + step +
+                '}';
     }
 }

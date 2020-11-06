@@ -17,7 +17,8 @@ import java.util.Set;
                 @UniqueConstraint(name = "uidx_zep_id", columnNames = {"zep_id"})
         })
 @NamedQueries({
-        @NamedQuery(name = "User.findActiveByEmail", query = "select u from User u where u.email = :email and u.active = true")
+        @NamedQuery(name = "User.findActiveByEmail", query = "select u from User u where u.email = :email and u.active = true"),
+        @NamedQuery(name = "User.findActive", query = "select u from User u where u.active = true")
 })
 public class User {
 
@@ -177,5 +178,19 @@ public class User {
     @Override
     public int hashCode() {
         return (id != null) ? Objects.hash(id) : super.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", creationDate=" + creationDate +
+                ", updatedDate=" + updatedDate +
+                ", email='" + email + '\'' +
+                ", zepId='" + zepId + '\'' +
+                ", active=" + active +
+                ", assignedStepEntries=" + assignedStepEntries +
+                ", ownedStepEntries=" + ownedStepEntries +
+                '}';
     }
 }

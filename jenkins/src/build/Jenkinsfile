@@ -7,7 +7,7 @@ pipeline {
     environment {
         REVISION = buildRevisionForBranch('./mega-zep-backend')
         // POD must have' max_limits * 2' regarding memory
-        NODE_RESOURCE_LIMITS = "--initial-old-space-size=4096 --max-old-space-size=4096"
+        NODE_RESOURCE_LIMITS = "--initial-old-space-size=6144 --max-old-space-size=6144"
     }
 
     parameters {
@@ -52,12 +52,14 @@ pipeline {
                                 script {
                                     container('nodejs') {
                                         dir('mega-zep-frontend/src/main/angular/frontend') {
-                                            openshift.withCluster() {
-                                                sh "oc start-build mega-zep-frontend --commit=${env.GIT_COMMIT} \
+                                            lock('mega-build-openshift-nodejs') {
+                                                openshift.withCluster() {
+                                                    sh "oc start-build mega-zep-frontend --commit=${env.GIT_COMMIT} \
                                                                                          --from-dir=dist/frontend \
                                                                                          --follow \
                                                                                          --wait"
-                                                openshift.tag("mega-zep-frontend:latest", "mega-zep-frontend:${env.REVISION}")
+                                                    openshift.tag("mega-zep-frontend:latest", "mega-zep-frontend:${env.REVISION}")
+                                                }
                                             }
                                         }
                                     }
@@ -114,12 +116,13 @@ pipeline {
                                 script {
                                     container('quarkus') {
                                         dir('mega-zep-backend/target/') {
-                                            openshift.withCluster() {
-                                                def artifact = "mega-zep-backend-${env.REVISION}-runner.jar"
-                                                sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait"
-                                                openshift.tag("mega-zep-backend:latest", "mega-zep-backend:${env.REVISION}")
+                                            lock('mega-build-openshift-quarkus') {
+                                                openshift.withCluster() {
+                                                    def artifact = "mega-zep-backend-${env.REVISION}-runner.jar"
+                                                    sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait"
+                                                    openshift.tag("mega-zep-backend:latest", "mega-zep-backend:${env.REVISION}")
+                                                }
                                             }
-                                            copyImage("mega-zep-backend:${env.REVISION}")
                                         }
                                     }
                                 }

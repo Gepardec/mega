@@ -151,4 +151,16 @@ public class Comment {
     public int hashCode() {
         return (id != null) ? Objects.hash(id) : super.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", creationDate=" + creationDate +
+                ", updatedDate=" + updatedDate +
+                ", message='" + message + '\'' +
+                ", state=" + state +
+                ", stepEntry=" + stepEntry +
+                '}';
+    }
 }
