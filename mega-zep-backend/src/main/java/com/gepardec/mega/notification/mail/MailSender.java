@@ -33,7 +33,9 @@ public class MailSender {
         final String mailContent = mailTemplateText
                 .replace(notificationHelper.getNamePlaceholder(), firstName)
                 .replace(notificationHelper.getTemplateMailtextPlaceholder(), text)
-                .replace(notificationHelper.getEomWikiPlaceholder(), notificationConfig.getMegaWikiEomUrl());
+                .replace(notificationHelper.getEomWikiPlaceholder(), notificationConfig.getMegaWikiEomUrl())
+                // TODO: Is that the proper URL?
+                .replace(notificationHelper.getDashboardUrlPlaceholder(), notificationConfig.getMegaDashUrl());
 
 
         mailer.send(Mail.withHtml(eMail, subject, mailContent)

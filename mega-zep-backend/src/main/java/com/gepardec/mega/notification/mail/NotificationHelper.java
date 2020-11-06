@@ -16,8 +16,13 @@ import java.util.ResourceBundle;
 public class NotificationHelper {
 
     private static final String NAME_PLACEHOLDER = "$firstName$";
+
+    private static final String DASHBOARD_URL_PLACEHOLDER = "$dashboardUrl$";
+
     private static final String EOM_WIKI_PLACEHOLDER = "$wikiEomUrl$";
+
     private static final String MEGA_DASH_URL_PLACEHOLDER = "$megaDash$";
+
     private static final String TEMPLATE_MAILTEXT_PLACEHOLDER = "$mailText$";
 
     private static final String MESSAGE_KEY_TEMPLATE_REMINDER = "mail.reminder.%s.subject";
@@ -102,6 +107,10 @@ public class NotificationHelper {
 
     public String getEomWikiPlaceholder() {
         return EOM_WIKI_PLACEHOLDER;
+    }
+
+    public String getDashboardUrlPlaceholder() {
+        return DASHBOARD_URL_PLACEHOLDER;
     }
 
     public String getMegaDashUrlPlaceholder() {
