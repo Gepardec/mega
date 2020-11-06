@@ -31,7 +31,6 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
                         .and("ownerEmail", ownerEmail))
                 .list();
     }
-<<<<<<< HEAD
 
     @Transactional
     public int closeAssigned(LocalDate startDate, LocalDate endDate, String ownerEmail, Long stepId) {
@@ -43,6 +42,4 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
                         .and("ownerEmail", ownerEmail)
                         .and("stepId", stepId));
     }
-=======
->>>>>>> remotes/origin/develop
 }

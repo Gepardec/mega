@@ -67,6 +67,7 @@ public class StepEntryResourceTest {
     private User createUserForRole(final Role role) {
         return User.builder()
                 .userId("1")
+                .dbId(1)
                 .email("thomas.herzog@gpeardec.com")
                 .firstname("Thomas")
                 .lastname("Herzog")

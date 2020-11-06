@@ -73,6 +73,7 @@ public class CommentResourceTest {
     private com.gepardec.mega.domain.model.User createUserForRole(final Role role) {
         return com.gepardec.mega.domain.model.User.builder()
                 .userId("1")
+                .dbId(1)
                 .email("thomas.herzog@gpeardec.com")
                 .firstname("Thomas")
                 .lastname("Herzog")
