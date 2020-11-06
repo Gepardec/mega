@@ -1,0 +1,42 @@
+package com.gepardec.mega.domain.model;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.auto.value.AutoValue;
+
+import java.util.List;
+
+@AutoValue
+@JsonSerialize(as = Project.class)
+@JsonDeserialize(builder = com.gepardec.mega.domain.model.AutoValue_Project.Builder.class)
+public abstract class Project {
+
+    @JsonProperty
+    public abstract String projectId();
+
+    @JsonProperty
+    public abstract List<String> employees();
+
+    @JsonProperty
+    public abstract List<String> leads();
+
+    public static Project.Builder builder() {
+        return new com.gepardec.mega.domain.model.AutoValue_Project.Builder();
+    }
+
+    @AutoValue.Builder
+    public abstract static class Builder {
+        @JsonProperty
+        public abstract Project.Builder projectId(String projectId);
+
+        @JsonProperty
+        public abstract Project.Builder employees(List<String> employees);
+
+        @JsonProperty
+        public abstract Project.Builder leads(List<String> leads);
+
+        @JsonProperty
+        public abstract Project build();
+    }
+}

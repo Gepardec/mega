@@ -89,6 +89,7 @@ public class WorkerResourceTest {
 
     private User createUserForRole(final Role role) {
         return User.builder()
+                .dbId(1)
                 .userId("1")
                 .email("thomas.herzog@gpeardec.com")
                 .firstname("Thomas")

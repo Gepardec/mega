@@ -1,6 +1,7 @@
 package com.gepardec.mega.zep;
 
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.service.impl.employee.EmployeeMapper;
 import com.gepardec.mega.zep.mapper.ProjectTimeMapper;
@@ -10,7 +11,10 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,10 +35,10 @@ public class ZepServiceImpl implements ZepService {
 
     @Inject
     public ZepServiceImpl(final EmployeeMapper employeeMapper,
-            final Logger logger,
-            final ZepSoapPortType zepSoapPortType,
-            final ZepSoapProvider zepSoapProvider,
-            final ProjectTimeMapper projectTimeMapper) {
+                          final Logger logger,
+                          final ZepSoapPortType zepSoapPortType,
+                          final ZepSoapProvider zepSoapProvider,
+                          final ProjectTimeMapper projectTimeMapper) {
         this.employeeMapper = employeeMapper;
         this.logger = logger;
         this.zepSoapPortType = zepSoapPortType;
@@ -99,6 +103,28 @@ public class ZepServiceImpl implements ZepService {
         return projectTimeMapper.mapToEntryList(projectTimeResponse.getProjektzeitListe().getProjektzeiten());
     }
 
+    @Override
+    public List<Project> getProjectsForYear(final LocalDate monthYear) {
+        final ReadProjekteResponseType readProjekteResponseType = getProjectsInternal(monthYear);
+
+        return readProjekteResponseType.getProjektListe().getProjekt()
+                .stream()
+                .map(this::createProject)
+                .collect(Collectors.toList());
+    }
+
+    private ReadProjekteResponseType getProjectsInternal(final LocalDate monthYear) {
+        final ReadProjekteSearchCriteriaType readProjekteSearchCriteriaType = new ReadProjekteSearchCriteriaType();
+        readProjekteSearchCriteriaType.setVon(DateTimeFormatter.ISO_LOCAL_DATE.format(monthYear.with(TemporalAdjusters.firstDayOfMonth())));
+        readProjekteSearchCriteriaType.setBis(DateTimeFormatter.ISO_LOCAL_DATE.format(monthYear.with(TemporalAdjusters.lastDayOfMonth())));
+
+        final ReadProjekteRequestType readProjekteRequestType = new ReadProjekteRequestType();
+        readProjekteRequestType.setRequestHeader(zepSoapProvider.createRequestHeaderType());
+        readProjekteRequestType.setReadProjekteSearchCriteria(readProjekteSearchCriteriaType);
+
+        return zepSoapPortType.readProjekte(readProjekteRequestType);
+    }
+
     private ReadProjektzeitenSearchCriteriaType createProjectTimeSearchCriteria(Employee employee) {
         ReadProjektzeitenSearchCriteriaType searchCriteria = new ReadProjektzeitenSearchCriteriaType();
 
@@ -110,6 +136,29 @@ public class ZepServiceImpl implements ZepService {
         userIdListType.getUserId().add(employee.userId());
         searchCriteria.setUserIdListe(userIdListType);
         return searchCriteria;
+    }
+
+    private Project createProject(final ProjektType projektType) {
+        return Project.builder()
+                .projectId(projektType.getProjektNr())
+                .employees(createProjectEmployees(projektType.getProjektmitarbeiterListe()))
+                .leads(createProjectLeads(projektType.getProjektmitarbeiterListe()))
+                .build();
+    }
+
+    private List<String> createProjectEmployees(final ProjektMitarbeiterListeType projektMitarbeiterListeType) {
+        return projektMitarbeiterListeType.getProjektmitarbeiter()
+                .stream()
+                .map(ProjektMitarbeiterType::getUserId)
+                .collect(Collectors.toList());
+    }
+
+    private List<String> createProjectLeads(final ProjektMitarbeiterListeType projektMitarbeiterListeType) {
+        return projektMitarbeiterListeType.getProjektmitarbeiter()
+                .stream()
+                .filter(projektMitarbeiterType -> projektMitarbeiterType.getIstProjektleiter() == 1)
+                .map(ProjektMitarbeiterType::getUserId)
+                .collect(Collectors.toList());
     }
 
     /**
