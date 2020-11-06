@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 class StepEntryServiceImplTest {
 
     @Inject
-    private StepEntryService stepEntryService;
+    StepEntryService stepEntryService;
 
     @InjectMock
     private StepEntryRepository stepEntryRepository;
@@ -90,7 +90,23 @@ class StepEntryServiceImplTest {
     }
 
     @Test
-    void setOpenAndAssignedStepEntriesDone() {
+    void setOpenAndAssignedStepEntriesDone_when0_thenFalse() {
+        when(stepEntryRepository.closeAssigned(ArgumentMatchers.any(LocalDate.class),
+                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString(), ArgumentMatchers.anyLong()))
+                .thenReturn(0);
+
+        boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(createEmployee(), 0L);
+        Assertions.assertFalse(updated);
+    }
+
+    @Test
+    void setOpenAndAssignedStepEntriesDone_when1_thenTrue() {
+        when(stepEntryRepository.closeAssigned(ArgumentMatchers.any(LocalDate.class),
+                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString(), ArgumentMatchers.anyLong()))
+                .thenReturn(1);
+
+        boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(createEmployee(), 1L);
+        Assertions.assertTrue(updated);
     }
 
     private StepEntry createStepEntry(Long id) {

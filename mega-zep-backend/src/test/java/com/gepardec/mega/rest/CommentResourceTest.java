@@ -49,7 +49,7 @@ public class CommentResourceTest {
 
     @Test
     void setCommentsStatusDone_whenValid_thenReturnsUpdatedNumber() {
-        when(commentService.setCommentStatusDone(ArgumentMatchers.any(Comment.class))).thenReturn(1);
+        when(commentService.setDone(ArgumentMatchers.any(Comment.class))).thenReturn(1);
 
         final User user = createUserForRole(Role.USER);
         when(securityContext.email()).thenReturn(user.email());

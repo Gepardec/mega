@@ -38,7 +38,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public int setCommentStatusDone(final Comment comment) {
+    public int setDone(final Comment comment) {
         return commentRepository.setStatusDone(comment.id());
     }
 }
