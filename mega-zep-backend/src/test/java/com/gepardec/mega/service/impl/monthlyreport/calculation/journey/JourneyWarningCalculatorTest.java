@@ -1,189 +1,174 @@
 package com.gepardec.mega.service.impl.monthlyreport.calculation.journey;
 
 import com.gepardec.mega.domain.model.monthlyreport.*;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JourneyWarningCalculatorTest {
 
     private JourneyWarningCalculator calculator = new JourneyWarningCalculator();
 
-    /**
-     * This method creates journey entries and some project time entries to simulate a month with
-     * 4 invalid journey entries that have to be detected by the {@code WarningCalculator}.
-     * The aim is to cover as much cases that can occur as possible to guarantee a trustful detection of invalid
-     * journey entries
-     *
-     * @return A list that consists of project time entries distributed over 7 business days.
-     */
-    private static List<JourneyTimeEntry> createJourneyEntriesWithFourJourneyWarnings() {
-        List<JourneyTimeEntry> projectTimes = new ArrayList<>();
+    @Nested
+    class Calculate {
 
-        // Day 1 (TO_AIM missing)
-        // JourneyEntry with JourneyDirection set to BACK which is invalid because no journey TO_AIM booked before
-        projectTimes.add(
-                JourneyTimeEntry.of(LocalDateTime.of(2020, 7, 21, 15, 0),
-                        LocalDateTime.of(2020, 7, 21, 16, 0),
-                        Task.REISEN,
-                        JourneyDirection.BACK));
+        @Nested
+        class WithWarnings {
 
-        // Day 2 (valid)
-        // Just a usual day with journey TO_AIM and BACK to check correct working of the algorithm
-        projectTimes.add(
-                JourneyTimeEntry.of(LocalDateTime.of(2020, 7, 22, 8, 0),
-                        LocalDateTime.of(2020, 7, 22, 9, 0),
-                        Task.REISEN,
-                        JourneyDirection.TO));
-        projectTimes.add(
-                JourneyTimeEntry.of(LocalDateTime.of(2020, 7, 22, 15, 0),
-                        LocalDateTime.of(2020, 7, 22, 16, 0),
-                        Task.REISEN,
-                        JourneyDirection.BACK));
+            @Test
+            void whenOnlyDeparture_thenWarning() {
+                final JourneyTimeEntry journeyTimeEntry = journeyTimeEntryFor(1, 8, JourneyDirection.TO, WorkingLocation.MAIN);
 
-        // Day 3 (BACK missing)
-        // JourneyEntry with JourneyDirection set to TO_AIM which is valid
-        projectTimes.add(
-                JourneyTimeEntry.of(LocalDateTime.of(2020, 7, 23, 8, 0),
-                        LocalDateTime.of(2020, 7, 23, 9, 0),
-                        Task.REISEN,
-                        JourneyDirection.TO));
+                final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntry));
 
-        // Day 4 (valid)
-        // A usual day with journey TO_AIM and BACK but has to recognize that the BACK-journey is missing on the day before
-        projectTimes.add(
-                JourneyTimeEntry.of(LocalDateTime.of(2020, 7, 24, 15, 0),
-                        LocalDateTime.of(2020, 7, 24, 16, 0),
-                        Task.REISEN,
-                        JourneyDirection.TO));
-        projectTimes.add(
-                JourneyTimeEntry.of(LocalDateTime.of(2020, 7, 24, 16, 0),
-                        LocalDateTime.of(2020, 7, 24, 17, 0),
-                        Task.REISEN,
-                        JourneyDirection.BACK));
+                assertEquals(1, warnings.size());
+                assertEquals(1, warnings.get(0).getWarningTypes().size());
+                assertEquals(Warning.JOURNEY_BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
 
-        // Day 5 (TO_AIM missing)
-        // JourneyEntry with JourneyDirection set to BACK which is invalid because the most recent JourneyEntry is a TO_AIM-journey
-        projectTimes.add(
-                JourneyTimeEntry.of(LocalDateTime.of(2020, 7, 28, 15, 0),
-                        LocalDateTime.of(2020, 7, 28, 16, 0),
-                        Task.REISEN,
-                        JourneyDirection.BACK));
+            }
 
-        // Day 6 (BACK missing)
-        // Last JourneyEntry for this month with JourneyDirection set to TO_AIM which is valid at this point
-        projectTimes.add(
-                JourneyTimeEntry.of(LocalDateTime.of(2020, 7, 29, 15, 0),
-                        LocalDateTime.of(2020, 7, 29, 16, 0),
-                        Task.REISEN,
-                        JourneyDirection.TO));
+            @Test
+            void whenDepartureAndProjectTimeEntry_thenWarning() {
+                final JourneyTimeEntry journeyTimeEntry = journeyTimeEntryFor(1, 8, JourneyDirection.TO, WorkingLocation.MAIN);
+                final ProjectTimeEntry projectTimeEntry = projectTimeEntryFor(8, 10);
 
-        return projectTimes;
+                final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntry, projectTimeEntry));
+
+                assertEquals(1, warnings.size());
+                assertEquals(1, warnings.get(0).getWarningTypes().size());
+                assertEquals(Warning.JOURNEY_BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
+            }
+
+            @Test
+            void whenFurtherAndProjectTimeEntryAndArrival_thenWarning() {
+                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.FURTHER, WorkingLocation.MAIN);
+                final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(8, 10);
+                final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(10, 12, JourneyDirection.BACK, WorkingLocation.MAIN);
+
+                final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
+
+                // TODO: Both journey entries cause TO_MISSING Warning, because all are checked separately
+                assertEquals(2, warnings.size());
+                assertEquals(1, warnings.get(0).getWarningTypes().size());
+                assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(0).getWarningTypes().get(0));
+                assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(1).getWarningTypes().get(0));
+            }
+
+            @Test
+            void whenDepartureAndProjectTimeEntryAndDepartureAgain_thenWarning() {
+                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.TO, WorkingLocation.MAIN);
+                final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(8, 10);
+                final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(10, 12, JourneyDirection.TO, WorkingLocation.MAIN);
+
+                final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
+
+                // TODO: Both journey entries cause BACK_MISSING Warning, because all are checked separately
+                assertEquals(2, warnings.size());
+                assertEquals(1, warnings.get(0).getWarningTypes().size());
+                assertEquals(Warning.JOURNEY_BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
+                assertEquals(Warning.JOURNEY_BACK_MISSING, warnings.get(1).getWarningTypes().get(0));
+            }
+
+            @Test
+            void whenArrivalAndProjectTimeEntryAndArrivalAgain_thenWarning() {
+                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.BACK, WorkingLocation.MAIN);
+                final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(8, 10);
+                final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(10, 12, JourneyDirection.BACK, WorkingLocation.MAIN);
+
+                final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
+
+                // TODO: Both journey entries cause TO_MISSING Warning, because all are checked separately
+                assertEquals(2, warnings.size());
+                assertEquals(1, warnings.get(0).getWarningTypes().size());
+                assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(0).getWarningTypes().get(0));
+                assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(1).getWarningTypes().get(0));
+            }
+
+            @Test
+            void whenArrivalAndProjectTimeEntryAndFurther_thenWarning() {
+                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.BACK, WorkingLocation.MAIN);
+                final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(8, 10);
+                final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(10, 12, JourneyDirection.FURTHER, WorkingLocation.MAIN);
+
+                final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
+
+                // TODO: Both journey entries cause TO_MISSING Warning, because all are checked separately
+                assertEquals(2, warnings.size());
+                assertEquals(1, warnings.get(0).getWarningTypes().size());
+                assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(0).getWarningTypes().get(0));
+                assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(1).getWarningTypes().get(0));
+            }
+        }
+
+        @Nested
+        class WithoutWarnings {
+
+            @Test
+            void whenDepartureAndProjectTimeAndArrival_thenNoWarning() {
+                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.TO, WorkingLocation.MAIN);
+                final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(8, 14);
+                final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(14, 16, JourneyDirection.BACK, WorkingLocation.MAIN);
+
+                final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
+
+                assertTrue(warnings.isEmpty());
+            }
+
+            @Test
+            void whenDepartureAndArrival_thenNoWarning() {
+                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.TO, WorkingLocation.MAIN);
+                final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(14, 16, JourneyDirection.BACK, WorkingLocation.MAIN);
+
+                final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, journeyTimeEntryThree));
+
+                assertTrue(warnings.isEmpty());
+            }
+
+            @Test
+            void whenDepartureAndProjectTimeEntryAndFurtherAndProjectTimeEntryAndArrival_thenNoWarning() {
+                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(8, 9, JourneyDirection.TO, WorkingLocation.MAIN);
+                final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(9, 10);
+                final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(10, 11, JourneyDirection.FURTHER, WorkingLocation.MAIN);
+                final ProjectTimeEntry projectTimeEntryFour = projectTimeEntryFor(11, 12);
+                final JourneyTimeEntry journeyTimeEntryFive = journeyTimeEntryFor(12, 13, JourneyDirection.BACK, WorkingLocation.MAIN);
+
+                final List<JourneyWarning> warnings = calculator
+                        .calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree, projectTimeEntryFour, journeyTimeEntryFive));
+
+                assertTrue(warnings.isEmpty());
+            }
+        }
     }
 
-    @Test
-    void calculate_whenDataListEmpty_thenNoWarningsCreated() {
-        assertTrue(calculator.calculate(Collections.emptyList()).isEmpty());
+    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int endHour) {
+        return projectTimeEntryFor(startHour, 0, endHour, 0);
     }
 
-    @Test
-    void calculate_whenDataIsValid_thenNoWarningsFound() {
-        List<JourneyTimeEntry> projectTimeEntries = new ArrayList<>();
-        projectTimeEntries.addAll(List.of(
-                JourneyTimeEntry.of(LocalDateTime.now(), LocalDateTime.now().plusHours(1), Task.REISEN, JourneyDirection.TO),
-                JourneyTimeEntry.of(LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3), Task.REISEN, JourneyDirection.BACK)
-        ));
-
-        assertTrue(calculator.calculate(projectTimeEntries).isEmpty());
+    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int startMinute, final int endHour, final int endMinute) {
+        return ProjectTimeEntry.of(
+                LocalDateTime.of(2020, 1, 7, startHour, startMinute),
+                LocalDateTime.of(2020, 1, 7, endHour, endMinute),
+                Task.BEARBEITEN);
     }
 
-    @Test
-    void calculate_journeyToAimMissing_Warning() {
-        ArrayList<JourneyTimeEntry> projectTimes = new ArrayList<>();
-        projectTimes.add(
-                JourneyTimeEntry.of(LocalDateTime.of(2020, 1, 7, 14, 0),
-                        LocalDateTime.of(2020, 1, 7, 16, 0),
-                        Task.REISEN,
-                        JourneyDirection.BACK));
-
-        List<JourneyWarning> warnings = calculator.calculate(projectTimes);
-        assertAll(
-                () -> assertEquals(1, warnings.size()),
-                () -> assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate()),
-                () -> assertEquals(1, warnings.get(0).getWarningTypes().size()),
-                () -> assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(0).getWarningTypes().get(0))
-        );
+    private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int endHour, final JourneyDirection direction,
+            final WorkingLocation workingLocation) {
+        return journeyTimeEntryFor(startHour, 0, endHour, 0, direction, workingLocation);
     }
 
-    @Test
-    void calculate_journeyBackMissing_Warning() {
-        ArrayList<JourneyTimeEntry> projectTimes = new ArrayList<>();
-        projectTimes.add(
-                JourneyTimeEntry.of(LocalDateTime.of(2020, 1, 7, 10, 0),
-                        LocalDateTime.of(2020, 1, 7, 11, 0),
-                        Task.REISEN,
-                        JourneyDirection.TO));
-
-        List<JourneyWarning> warnings = calculator.calculate(projectTimes);
-        assertAll(
-                () -> assertEquals(1, warnings.size()),
-                () -> assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate()),
-                () -> assertEquals(1, warnings.get(0).getWarningTypes().size()),
-                () -> assertEquals(Warning.JOURNEY_BACK_MISSING, warnings.get(0).getWarningTypes().get(0)));
-    }
-
-    @Test
-    void calculate_TwoJourneyToAimMissingAndTwoJourneyBackMissing_Warning() {
-        List<JourneyTimeEntry> projectTimes = createJourneyEntriesWithFourJourneyWarnings();
-
-        List<JourneyWarning> warnings = calculator.calculate(projectTimes);
-        assertAll(
-                () -> assertEquals(4, warnings.size()),
-                () -> assertEquals(LocalDate.of(2020, 7, 21), warnings.get(0).getDate()),
-                () -> assertEquals(1, warnings.get(0).getWarningTypes().size()),
-                () -> assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(0).getWarningTypes().get(0)),
-
-                () -> assertEquals(LocalDate.of(2020, 7, 23), warnings.get(1).getDate()),
-                () -> assertEquals(1, warnings.get(1).getWarningTypes().size()),
-                () -> assertEquals(Warning.JOURNEY_BACK_MISSING, warnings.get(1).getWarningTypes().get(0)),
-
-                () -> assertEquals(LocalDate.of(2020, 7, 28), warnings.get(2).getDate()),
-                () -> assertEquals(1, warnings.get(2).getWarningTypes().size()),
-                () -> assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(2).getWarningTypes().get(0)),
-
-                () -> assertEquals(LocalDate.of(2020, 7, 29), warnings.get(3).getDate()),
-                () -> assertEquals(1, warnings.get(3).getWarningTypes().size()),
-                () -> assertEquals(Warning.JOURNEY_BACK_MISSING, warnings.get(3).getWarningTypes().get(0))
-        );
-    }
-
-    @Test
-    void calculate_ToAimMissingWhenFirstEntryEqualsFurther_Warning() {
-        List<JourneyTimeEntry> projectTimes = new ArrayList<>();
-        projectTimes.add(
-                JourneyTimeEntry.of(LocalDateTime.of(2020, 1, 7, 10, 0),
-                        LocalDateTime.of(2020, 1, 7, 11, 0),
-                        Task.REISEN,
-                        JourneyDirection.FURTHER));
-        projectTimes.add(
-                JourneyTimeEntry.of(LocalDateTime.of(2020, 1, 7, 11, 0),
-                        LocalDateTime.of(2020, 1, 7, 12, 0),
-                        Task.REISEN,
-                        JourneyDirection.BACK));
-
-        List<JourneyWarning> warnings = calculator.calculate(projectTimes);
-        assertAll(
-                () -> assertEquals(2, warnings.size()),
-                () -> assertEquals(1, warnings.get(0).getWarningTypes().size()),
-                () -> assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate()),
-                () -> assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(0).getWarningTypes().get(0)),
-                () -> assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(1).getWarningTypes().get(0))
-        );
+    private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int startMinute, final int endHour, final int endMinute,
+            final JourneyDirection direction, final WorkingLocation workingLocation) {
+        return JourneyTimeEntry.newBuilder()
+                .fromTime(LocalDateTime.of(2020, 1, 7, startHour, startMinute))
+                .toTime(LocalDateTime.of(2020, 1, 7, endHour, endMinute))
+                .task(Task.REISEN)
+                .workingLocation(workingLocation)
+                .journeyDirection(direction)
+                .build();
     }
 }

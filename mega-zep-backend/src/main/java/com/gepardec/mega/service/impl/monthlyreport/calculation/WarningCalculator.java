@@ -3,9 +3,9 @@ package com.gepardec.mega.service.impl.monthlyreport.calculation;
 import com.gepardec.mega.domain.model.monthlyreport.*;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.journey.JourneyWarningCalculationStrategy;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.journey.JourneyWarningCalculator;
-import com.gepardec.mega.service.impl.monthlyreport.calculation.time.ExceededMaximumWorkingHoursPerDayTimeWarningCalculator;
-import com.gepardec.mega.service.impl.monthlyreport.calculation.time.InsufficientBreakTimeForWorkingDayWithMoreThan6HoursCalculator;
-import com.gepardec.mega.service.impl.monthlyreport.calculation.time.InsufficientRestTimeTimeWarningCalculator;
+import com.gepardec.mega.service.impl.monthlyreport.calculation.time.ExceededMaximumWorkingHoursPerDayCalculator;
+import com.gepardec.mega.service.impl.monthlyreport.calculation.time.InsufficientBreakTimeCalculator;
+import com.gepardec.mega.service.impl.monthlyreport.calculation.time.InsufficientRestTimeCalculator;
 import com.gepardec.mega.service.impl.monthlyreport.calculation.time.TimeWarningCalculationStrategy;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -21,15 +21,15 @@ public class WarningCalculator {
     ResourceBundle messages;
 
     private static final List<TimeWarningCalculationStrategy> timeWarningCalculators = List.of(
-            new ExceededMaximumWorkingHoursPerDayTimeWarningCalculator(),
-            new InsufficientBreakTimeForWorkingDayWithMoreThan6HoursCalculator(),
-            new InsufficientRestTimeTimeWarningCalculator());
+            new ExceededMaximumWorkingHoursPerDayCalculator(),
+            new InsufficientBreakTimeCalculator(),
+            new InsufficientRestTimeCalculator());
 
     private static final List<JourneyWarningCalculationStrategy> journeyWarningCalculators = List.of(
             new JourneyWarningCalculator()
     );
 
-    public List<TimeWarning> determineTimeWarnings(List<ProjectTimeEntry> projectTimeList) {
+    public List<TimeWarning> determineTimeWarnings(List<ProjectEntry> projectTimeList) {
         final List<TimeWarning> warnings = new ArrayList<>();
         for (final TimeWarningCalculationStrategy calculation : timeWarningCalculators) {
             final List<TimeWarning> calculatedWarnings = calculation.calculate(projectTimeList);
@@ -40,7 +40,7 @@ public class WarningCalculator {
         return warnings;
     }
 
-    public List<JourneyWarning> determineJourneyWarnings(List<JourneyTimeEntry> projectTimeList) {
+    public List<JourneyWarning> determineJourneyWarnings(List<ProjectEntry> projectTimeList) {
         final List<JourneyWarning> warnings = new ArrayList<>();
         for (JourneyWarningCalculationStrategy calculator : journeyWarningCalculators) {
             final List<JourneyWarning> calculatedWarnings = calculator.calculate(projectTimeList);

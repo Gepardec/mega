@@ -1,23 +1,27 @@
 package com.gepardec.mega.service.impl.monthlyreport.calculation.journey;
 
-import com.gepardec.mega.domain.model.monthlyreport.JourneyDirection;
-import com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry;
-import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
-import com.gepardec.mega.domain.model.monthlyreport.Warning;
+import com.gepardec.mega.domain.model.monthlyreport.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JourneyWarningCalculator implements JourneyWarningCalculationStrategy {
 
     @Override
-    public List<JourneyWarning> calculate(List<JourneyTimeEntry> projectTimeEntries) {
+    public List<JourneyWarning> calculate(List<ProjectEntry> projectTimeEntries) {
         final JourneyDirectionValidator journeyDirectionValidator = new JourneyDirectionValidator();
         final List<JourneyWarning> warnings = new ArrayList<>();
 
-        for (int i = 0; i < projectTimeEntries.size(); i++) {
-            final JourneyTimeEntry current = projectTimeEntries.get(i);
-            final JourneyDirection nextDirection = tryToGetNextJourneyDirection(projectTimeEntries, i);
+        final List<JourneyTimeEntry> filteredProjectEntries = projectTimeEntries.stream()
+                .filter(entry -> Task.isJourney(entry.getTask()))
+                .map(JourneyTimeEntry.class::cast)
+                .sorted(Comparator.comparing(JourneyTimeEntry::getFromTime))
+                .collect(Collectors.toList());
+        for (int i = 0; i < filteredProjectEntries.size(); i++) {
+            final JourneyTimeEntry current = filteredProjectEntries.get(i);
+            final JourneyDirection nextDirection = tryToGetNextJourneyDirection(filteredProjectEntries, i);
             Warning warning = journeyDirectionValidator.validate(current.getJourneyDirection(), nextDirection);
             if (warning != null) {
                 warnings.add(createJourneyWarningWithEnumType(current, warning));
