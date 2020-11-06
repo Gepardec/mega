@@ -21,9 +21,6 @@ public class StepEntryServiceImpl implements StepEntryService {
     @Inject
     StepEntryRepository stepEntryRepository;
 
-    @Inject
-    StepRepository stepRepository;
-
     @Override
     public Optional<State> findEmployeeCheckState(final Employee employee) {
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));

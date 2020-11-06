@@ -46,7 +46,8 @@ describe('DisplayMonthlyReportComponent', () => {
         role: 1,
         title: null,
         active: true
-      }
+      },
+      assigned: false
     };
     fixture.detectChanges();
   });
