@@ -21,9 +21,9 @@ public class StepEntryResource {
     StepEntryService stepEntryService;
 
     @PUT
-    @Path("/setopenandunassignedstepentriesdone")
+    @Path("/close")
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean setOpenAndUnassignedStepEntriesDone(@NotNull(message = "{workerResource.employee.notNull}") final EmployeeStep employeeStep) {
+    public boolean close(@NotNull(message = "{workerResource.employee.notNull}") final EmployeeStep employeeStep) {
         return stepEntryService.setOpenAndAssignedStepEntriesDone(employeeStep.employee(), employeeStep.stepId());
     }
 }

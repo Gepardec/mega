@@ -21,7 +21,7 @@ public class CommentResource {
     @PUT
     @Path("/setdone")
     @Produces(MediaType.APPLICATION_JSON)
-    public int setCommentStatusDone(@NotNull(message = "{commentResource.comment.notNull}") final Comment comment) {
+    public int setDone(@NotNull(message = "{commentResource.comment.notNull}") final Comment comment) {
         return commentService.setCommentStatusDone(comment);
     }
 }

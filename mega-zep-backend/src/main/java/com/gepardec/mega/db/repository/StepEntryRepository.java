@@ -33,7 +33,7 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
     }
 
     @Transactional
-    public int setAllOwnedAndAssignedStepEntriesInRangeDone(LocalDate startDate, LocalDate endDate, String ownerEmail, Long stepId) {
+    public int closeAssigned(LocalDate startDate, LocalDate endDate, String ownerEmail, Long stepId) {
         return update("UPDATE StepEntry s SET s.state = :state WHERE s.id = (SELECT s.id FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.step.id = :stepId)",
                 Parameters
                         .with("state", State.DONE)
