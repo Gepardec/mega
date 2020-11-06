@@ -1,10 +1,13 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { EmployeeCheckComponent } from './employee-check.component';
-import { TranslateModule } from '@ngx-translate/core';
-import { AngularMaterialModule } from '../../../material/material-module';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { CommentService } from '../../../shared/services/comment/comment.service';
+import {EmployeeCheckComponent} from './employee-check.component';
+import {TranslateModule} from '@ngx-translate/core';
+import {AngularMaterialModule} from '../../../material/material-module';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {CommentService} from '../../../shared/services/comment/comment.service';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {RouterTestingModule} from "@angular/router/testing";
+import {OAuthModule} from "angular-oauth2-oidc";
 
 describe('EmployeeCheckComponent', () => {
   let component: EmployeeCheckComponent;
@@ -13,7 +16,7 @@ describe('EmployeeCheckComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [EmployeeCheckComponent],
-      imports: [TranslateModule.forRoot(), AngularMaterialModule],
+      imports: [TranslateModule.forRoot(), AngularMaterialModule, HttpClientTestingModule, RouterTestingModule, OAuthModule.forRoot()],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [CommentService]
     })
