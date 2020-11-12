@@ -1,5 +1,6 @@
 package com.gepardec.mega.service.impl.init;
 
+import com.gepardec.mega.application.configuration.NotificationConfig;
 import com.gepardec.mega.db.entity.Role;
 import com.gepardec.mega.domain.model.*;
 import com.gepardec.mega.service.api.init.StepEntrySyncService;
@@ -8,7 +9,6 @@ import com.gepardec.mega.service.api.step.StepService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.service.api.user.UserService;
 import org.apache.commons.lang3.time.StopWatch;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.Dependent;
@@ -43,8 +43,7 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
     StepEntryService stepEntryService;
 
     @Inject
-    @ConfigProperty(name = "mega.mail.reminder.om")
-    String omMailAddresses;
+    NotificationConfig notificationConfig;
 
     @Override
     public void genereteStepEntries() {
@@ -57,13 +56,12 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
         logger.info("Processing date: {}", date);
 
         final List<User> activeUsers = userService.getActiveUsers();
-        final List<Project> projectsForMonthYear = projectService.getProjectsForMonthYear(date, List.of(
-                ProjectFilter.IS_LEADS_AVAILABLE,
-                ProjectFilter.IS_CUSTOMER_PROJECT,
-                ProjectFilter.IS_ACTIVE));
+        final List<Project> projectsForMonthYear = projectService.getProjectsForMonthYear(date,
+                List.of(ProjectFilter.IS_LEADS_AVAILABLE,
+                        ProjectFilter.IS_CUSTOMER_PROJECT));
         final List<Step> steps = stepService.getSteps();
 
-        final List<User> omUsers = List.of(omMailAddresses.split(","))
+        final List<User> omUsers = List.of(notificationConfig.getOmMailAddresses().split(","))
                 .stream()
                 .map(email -> findUserByEmail(activeUsers, email))
                 .filter(Optional::isPresent)
