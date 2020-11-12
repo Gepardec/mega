@@ -11,6 +11,12 @@ import com.google.auto.value.AutoValue;
 public abstract class Config {
 
     @JsonProperty
+    public abstract String excelUrl();
+
+    @JsonProperty
+    public abstract String zepUrl();
+
+    @JsonProperty
     public abstract String clientId();
 
     @JsonProperty
@@ -28,6 +34,11 @@ public abstract class Config {
 
     @AutoValue.Builder
     public abstract static class Builder {
+
+        public abstract Builder excelUrl(String excelUrl);
+
+        public abstract Builder zepUrl(String zepUrl);
+
         public abstract Builder clientId(String clientId);
 
         public abstract Builder issuer(String issuer);

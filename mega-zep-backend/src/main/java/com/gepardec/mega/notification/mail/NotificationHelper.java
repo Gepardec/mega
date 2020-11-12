@@ -17,7 +17,7 @@ public class NotificationHelper {
 
     private static final String NAME_PLACEHOLDER = "$firstName$";
 
-    private static final String DASHBOARD_URL_PLACEHOLDER = "$dashboardUrl$";
+    private static final String EXCEL_URL_PLACEHOLDER = "$excelUrl$";
 
     private static final String EOM_WIKI_PLACEHOLDER = "$wikiEomUrl$";
 
@@ -109,8 +109,8 @@ public class NotificationHelper {
         return EOM_WIKI_PLACEHOLDER;
     }
 
-    public String getDashboardUrlPlaceholder() {
-        return DASHBOARD_URL_PLACEHOLDER;
+    public String getExcelUrlPlaceholder() {
+        return EXCEL_URL_PLACEHOLDER;
     }
 
     public String getMegaDashUrlPlaceholder() {

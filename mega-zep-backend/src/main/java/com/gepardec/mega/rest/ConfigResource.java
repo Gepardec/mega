@@ -2,6 +2,7 @@ package com.gepardec.mega.rest;
 
 import com.gepardec.mega.application.configuration.ApplicationConfig;
 import com.gepardec.mega.application.configuration.OAuthConfig;
+import com.gepardec.mega.application.configuration.ZepConfig;
 import com.gepardec.mega.rest.model.Config;
 
 import javax.inject.Inject;
@@ -22,11 +23,16 @@ public class ConfigResource {
     @Inject
     ApplicationConfig applicationConfig;
 
+    @Inject
+    ZepConfig zepConfig;
+
     @Path("/")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Config get() {
         return Config.newBuilder()
+                .excelUrl(applicationConfig.getExcelUrlAsString())
+                .zepUrl(zepConfig.getUrlAsString())
                 .clientId(oauthConfig.getClientId())
                 .issuer(oauthConfig.getIssuer())
                 .scope(oauthConfig.getScope())

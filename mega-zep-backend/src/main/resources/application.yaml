@@ -33,6 +33,7 @@ mega:
     eom-url: https://sites.google.com/a/gepardec.com/internal/zeiterfassung-mit-zep/monatsende-kontrolle-von-arbeitszeiten
   zep:
     admin-token: ${TOKEN}
+  excel-url: "https://docs.google.com/spreadsheets/d/1wUJHMtkY47RhLIGytg_MXVe_hgPAj_yzozLMcv5hrdU/"
   oauth:
     issuer: https://accounts.google.com
     scope: openid profile email

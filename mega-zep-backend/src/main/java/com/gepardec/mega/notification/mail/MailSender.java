@@ -1,5 +1,6 @@
 package com.gepardec.mega.notification.mail;
 
+import com.gepardec.mega.application.configuration.ApplicationConfig;
 import com.gepardec.mega.application.configuration.NotificationConfig;
 import com.google.common.net.MediaType;
 import io.quarkus.mailer.Mail;
@@ -10,6 +11,9 @@ import javax.inject.Inject;
 
 @ApplicationScoped
 public class MailSender {
+
+    @Inject
+    ApplicationConfig applicationConfig;
 
     @Inject
     NotificationHelper notificationHelper;
@@ -26,7 +30,6 @@ public class MailSender {
         sendMail(eMail, firstName, subject, text);
     }
 
-
     private void sendMail(String eMail, String firstName, String subject, String text) {
         final String mailTemplateText = notificationHelper.readEmailTemplateResourceFromStream(notificationHelper.getMailTemplateTextPath())
                 .replace(notificationHelper.getMegaDashUrlPlaceholder(), notificationConfig.getMegaDashUrl());
@@ -34,9 +37,7 @@ public class MailSender {
                 .replace(notificationHelper.getNamePlaceholder(), firstName)
                 .replace(notificationHelper.getTemplateMailtextPlaceholder(), text)
                 .replace(notificationHelper.getEomWikiPlaceholder(), notificationConfig.getMegaWikiEomUrl())
-                // TODO: Is that the proper URL?
-                .replace(notificationHelper.getDashboardUrlPlaceholder(), notificationConfig.getMegaDashUrl());
-
+                .replace(notificationHelper.getExcelUrlPlaceholder(), applicationConfig.getExcelUrlAsString());
 
         mailer.send(Mail.withHtml(eMail, subject, mailContent)
                 .addInlineAttachment("logo.png", notificationHelper.readLogo(), MediaType.PNG.type(), "<LogoMEGAdash@gepardec.com>"));
