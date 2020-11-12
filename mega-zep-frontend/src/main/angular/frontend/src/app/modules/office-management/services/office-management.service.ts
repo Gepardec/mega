@@ -15,11 +15,7 @@ export class OfficeManagementService {
   }
 
   getEntries(): Observable<Array<OfficeManagementEntry>> {
-    return this.httpClient.get<Array<OfficeManagementEntry>>(this.configService.getBackendUrlWithContext('/TODO'));
-  }
-
-  getEmployees(): Observable<Array<Employee>> {
-    return this.httpClient.get<Array<Employee>>(this.configService.getBackendUrlWithContext('/employees'));
+    return this.httpClient.get<Array<OfficeManagementEntry>>(this.configService.getBackendUrlWithContext('/employees/officemanagemententries'));
   }
 
   updateEmployees(employees: Array<Employee>): Observable<Response> {

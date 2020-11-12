@@ -105,7 +105,7 @@
           <span class="mobile-label">{{'office-management.table.comments' | translate}}</span>
           <button (click)="openDialog(omEntry)" mat-button>
             <mat-icon>comment</mat-icon>
-            <app-done-comments-indicator [comments]="omEntry.comments"></app-done-comments-indicator>
+            <app-done-comments-indicator [totalComments]="omEntry.totalComments" [finishedComments]="omEntry.finishedComments"></app-done-comments-indicator>
           </button>
         </mat-cell>
       </ng-container>

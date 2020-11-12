@@ -54,17 +54,20 @@ public class EmployeeResource {
         for(Employee empl : activeEmployees) {
             List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployee(empl);
 
-            FinishedAndTotalComments finishedAndTotalComments = commentService.cntFinishedAndTotalCommentsForEmployee(empl);
-            officeManagementEntries.add(OfficeManagementEntry.builder()
-                    .employee(empl)
-                    .customerCheckState(extractStateForStep(stepEntries, StepName.CONTROL_EXTRENAL_TIMES))
-                    .employeeCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIMES))
-                    .internalCheckState(extractStateForStep(stepEntries, StepName.CONTROL_INTERNAL_TIMES))
-                    .projectCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIME_EVIDENCES))
-                    .finishedComments(finishedAndTotalComments.finishedComments())
-                    .totalComments(finishedAndTotalComments.totalComments())
-                    .build()
-            );
+            // TODO check if stepentries could be null
+            if(!stepEntries.isEmpty()) {
+                FinishedAndTotalComments finishedAndTotalComments = commentService.cntFinishedAndTotalCommentsForEmployee(empl);
+                officeManagementEntries.add(OfficeManagementEntry.builder()
+                        .employee(empl)
+                        .customerCheckState(extractStateForStep(stepEntries, StepName.CONTROL_EXTERNAL_TIMES))
+                        .employeeCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIMES))
+                        .internalCheckState(extractStateForStep(stepEntries, StepName.CONTROL_INTERNAL_TIMES))
+                        .projectCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIME_EVIDENCES))
+                        .finishedComments(finishedAndTotalComments.finishedComments())
+                        .totalComments(finishedAndTotalComments.totalComments())
+                        .build()
+                );
+            }
         }
 
         return officeManagementEntries;
@@ -78,7 +81,8 @@ public class EmployeeResource {
                 .collect(Collectors.toList());
 
         if(res.size() != 1) {
-            throw new IllegalStateException();
+//            throw new IllegalStateException();
+            return com.gepardec.mega.domain.model.State.OPEN;
         }
 
         return com.gepardec.mega.domain.model.State.valueOf(res.get(0).name());
