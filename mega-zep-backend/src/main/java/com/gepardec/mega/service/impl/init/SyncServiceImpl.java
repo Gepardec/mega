@@ -1,15 +1,24 @@
 package com.gepardec.mega.service.impl.init;
 
+import com.gepardec.mega.application.configuration.ApplicationConfig;
 import com.gepardec.mega.db.entity.User;
 import com.gepardec.mega.db.repository.UserRepository;
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.init.SyncService;
+import com.gepardec.mega.service.api.project.ProjectService;
+import org.apache.commons.lang3.time.StopWatch;
+import org.slf4j.Logger;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -23,32 +32,60 @@ import java.util.stream.Collectors;
 public class SyncServiceImpl implements SyncService {
 
     @Inject
+    Logger log;
+
+    @Inject
     EmployeeService employeeService;
+
+    @Inject
+    ProjectService projectService;
 
     @Inject
     UserRepository userRepository;
 
+    @Inject
+    ApplicationConfig applicationConfig;
+
+    @Inject
+    SyncServiceMapper mapper;
+
     @Override
     public void syncEmployees() {
+        final StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        log.info("Started user sync: {}", Instant.ofEpochMilli(stopWatch.getStartTime()));
+
+        final List<Project> projects = projectService.getProjectsForMonthYear(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()));
+        log.info("Loaded projects: {}", projects.size());
+
         final List<Employee> employees = employeeService.getAllActiveEmployees();
+        log.info("Loaded employees: {}", employees.size());
+
         final List<User> users = userRepository.listAll();
-        createNonExistentUsers(employees, users);
-        updateModifiedUsers(employees, users);
+        log.info("Existing users: {}", users.size());
+
+        createNonExistentUsers(employees, users, projects);
+        updateModifiedUsers(employees, users, projects);
         deactivateDeletedOrInactiveUsers(employees, users);
+
+        log.info("User sync took: {}ms", stopWatch.getTime());
+        log.info("Finished user sync: {}", Instant.ofEpochMilli(stopWatch.getStartTime() + stopWatch.getTime()));
     }
 
-    private void createNonExistentUsers(final List<Employee> employees, final List<User> users) {
-        final List<User> notExistentUsers = filterNotExistingEmployeesAndMapToUser(employees, users);
+    private void createNonExistentUsers(final List<Employee> employees, final List<User> users, final List<Project> projects) {
+        final List<User> notExistentUsers = filterNotExistingEmployeesAndMapToUser(employees, users, projects);
         if (!notExistentUsers.isEmpty()) {
             notExistentUsers.forEach(userRepository::persist);
         }
+        log.info("Created users: {}", notExistentUsers.size());
     }
 
-    private void updateModifiedUsers(final List<Employee> employees, final List<User> users) {
-        final List<User> modifiedUsers = filterModifiedEmployeesAndUpdateUsers(employees, users);
+    private void updateModifiedUsers(final List<Employee> employees, final List<User> users, final List<Project> project) {
+        final List<User> modifiedUsers = filterModifiedEmployeesAndUpdateUsers(employees, users, project);
         if (!modifiedUsers.isEmpty()) {
             modifiedUsers.forEach(userRepository::update);
         }
+        log.info("Updated users: {}", modifiedUsers.size());
     }
 
     private void deactivateDeletedOrInactiveUsers(final List<Employee> employees, final List<User> users) {
@@ -56,13 +93,15 @@ public class SyncServiceImpl implements SyncService {
         if (!removedUsers.isEmpty()) {
             removedUsers.forEach(userRepository::update);
         }
+        log.info("Deleted users: {}", removedUsers.size());
     }
 
-    private List<User> filterNotExistingEmployeesAndMapToUser(final List<Employee> employees, final List<User> users) {
+    private List<User> filterNotExistingEmployeesAndMapToUser(final List<Employee> employees, final List<User> users, final List<Project> projects) {
         final Map<String, User> zepIdToUser = mapZepIdToUser(users);
+        final Locale defaultLocale = applicationConfig.getDefaultLocale();
         return employees.stream()
                 .filter(zepEmployee -> !zepIdToUser.containsKey(zepEmployee.userId()))
-                .map(this::employeeToUser)
+                .map(employee -> mapper.mapEmployeeToUser(employee, projects, defaultLocale))
                 .collect(Collectors.toList());
     }
 
@@ -74,39 +113,19 @@ public class SyncServiceImpl implements SyncService {
                 .collect(Collectors.toList());
     }
 
-    private List<User> filterModifiedEmployeesAndUpdateUsers(final List<Employee> employees, final List<User> users) {
+    private List<User> filterModifiedEmployeesAndUpdateUsers(final List<Employee> employees, final List<User> users, final List<Project> projects) {
         final Map<String, User> zepIdToUser = mapZepIdToUser(users);
         final Map<User, Employee> existingUserToEmployee = employees.stream()
                 .filter(zepEmployee -> zepIdToUser.containsKey(zepEmployee.userId()))
                 .collect(Collectors.toMap(employee -> zepIdToUser.get(employee.userId()), Function.identity()));
+        final Locale defaultLocale = applicationConfig.getDefaultLocale();
         return existingUserToEmployee.entrySet().stream()
-                .filter(entry -> hasEmployeeChanged(entry.getKey(), entry.getValue()))
-                .map(entry -> updateUserData(entry.getKey(), entry.getValue()))
+                .map(entry -> mapper.mapEmployeeToUser(entry.getKey(), entry.getValue(), projects, defaultLocale))
                 .collect(Collectors.toList());
-    }
-
-    private boolean hasEmployeeChanged(final User user, final Employee employee) {
-        return !user.getEmail().equals(employee.email())
-                || !user.getActive();
     }
 
     private User markUserDeactivated(User user) {
         user.setActive(false);
-        return user;
-    }
-
-    private User updateUserData(User user, Employee employee) {
-        user.setEmail(employee.email());
-        user.setActive(true);
-        return user;
-    }
-
-    private User employeeToUser(final Employee employee) {
-        final User user = new User();
-        user.setZepId(employee.userId());
-        user.setEmail(employee.email());
-        user.setActive(true);
-
         return user;
     }
 
