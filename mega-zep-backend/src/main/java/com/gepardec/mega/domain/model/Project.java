@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.auto.value.AutoValue;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 @AutoValue
@@ -15,14 +16,21 @@ public abstract class Project {
     @JsonProperty
     public abstract String projectId();
 
+    @Nullable
+    @JsonProperty
+    public abstract String description();
+
     @JsonProperty
     public abstract List<String> employees();
 
     @JsonProperty
     public abstract List<String> leads();
 
+    @JsonProperty
+    public abstract boolean active();
+
     public static Project.Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_Project.Builder();
+        return new com.gepardec.mega.domain.model.AutoValue_Project.Builder().active(false);
     }
 
     @AutoValue.Builder
@@ -31,10 +39,16 @@ public abstract class Project {
         public abstract Project.Builder projectId(String projectId);
 
         @JsonProperty
+        public abstract Project.Builder description(String description);
+
+        @JsonProperty
         public abstract Project.Builder employees(List<String> employees);
 
         @JsonProperty
         public abstract Project.Builder leads(List<String> leads);
+
+        @JsonProperty
+        public abstract Project.Builder active(boolean active);
 
         @JsonProperty
         public abstract Project build();
