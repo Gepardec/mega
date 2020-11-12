@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.*;
+import java.util.stream.Stream;
 
 @ApplicationScoped
 public class SyncServiceMapper {
@@ -20,12 +21,13 @@ public class SyncServiceMapper {
     @Inject
     NotificationConfig notificationConfig;
 
-    public User mapEmployeeToUser(final Employee employee, List<Project> projects, Locale defaultLocale) {
-        return mapEmployeeToUser(new User(), employee, projects, defaultLocale);
+    public User mapEmployeeToNewUser(final Employee employee, List<Project> projects, Locale defaultLocale) {
+        final User user = new User();
+        user.setZepId(employee.userId());
+        return mapEmployeeToUser(user, employee, projects, defaultLocale);
     }
 
     public User mapEmployeeToUser(User user, Employee employee, List<Project> projects, Locale defaultLocale) {
-        user.setZepId(employee.userId());
         user.setEmail(employee.email());
         user.setFirstname(employee.firstName());
         user.setLastname(employee.sureName());
@@ -60,6 +62,9 @@ public class SyncServiceMapper {
             user.setLocale(defaultLocale);
         } else {
             try {
+                if (Stream.of(Locale.getISOLanguages()).noneMatch(language -> language.equals(employee.language()))) {
+                    throw new IllegalArgumentException("Language is not a valid iso language");
+                }
                 user.setLocale(Locale.forLanguageTag(employee.language()));
             } catch (Exception e) {
                 log.warn("Employee '" + employee.email()

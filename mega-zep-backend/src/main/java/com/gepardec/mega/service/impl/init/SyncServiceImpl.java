@@ -101,7 +101,7 @@ public class SyncServiceImpl implements SyncService {
         final Locale defaultLocale = applicationConfig.getDefaultLocale();
         return employees.stream()
                 .filter(zepEmployee -> !zepIdToUser.containsKey(zepEmployee.userId()))
-                .map(employee -> mapper.mapEmployeeToUser(employee, projects, defaultLocale))
+                .map(employee -> mapper.mapEmployeeToNewUser(employee, projects, defaultLocale))
                 .collect(Collectors.toList());
     }
 
