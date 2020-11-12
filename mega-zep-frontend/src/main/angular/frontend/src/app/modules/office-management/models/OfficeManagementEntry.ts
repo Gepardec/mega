@@ -1,12 +1,12 @@
-import { Employee } from '../../shared/models/Employee';
-import { Comment } from '../../shared/models/Comment';
+import {Employee} from "../../shared/models/Employee";
+import {State} from "../../shared/models/State";
 
 export class OfficeManagementEntry {
-  id: number;
   employee: Employee;
-  employeeCheckState: string;
-  customerCheckState: string;
-  internalCheckState: string;
-  projectCheckState: string;
-  comments: Array<Comment>;
+  employeeCheckState: State;
+  customerCheckState: State;
+  internalCheckState: State;
+  projectCheckState: State;
+  totalComments: number;
+  finishedComments: number;
 }

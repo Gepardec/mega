@@ -18,6 +18,8 @@ import { CommentService } from '../../shared/services/comment/comment.service';
   styleUrls: ['./office-management.component.scss']
 })
 export class OfficeManagementComponent implements OnInit {
+  State = State;
+
   displayedColumns = [
     'select',
     'name',
@@ -28,7 +30,7 @@ export class OfficeManagementComponent implements OnInit {
     'projectCheckState',
     'releaseDate'
   ];
-  State = State;
+
   omEntries: Array<OfficeManagementEntry>;
   filteredOmEntries: Array<OfficeManagementEntry>;
   omSelectionModel = new SelectionModel<OfficeManagementEntry>(true, []);
@@ -113,7 +115,7 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   private fillOmEntries() {
-    this.omService.getEmployees().subscribe(employees => {
+    this.omService.getEntries().subscribe(employees => {
       this.omEntries = omEntriesMock;
       for (let i = 0; i < this.omEntries.length; i++) {
         if (employees.length > i) {

@@ -6,12 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gepardec.mega.domain.model.Employee;
+
 import com.google.auto.value.AutoValue;
 
 @AutoValue
 @JsonSerialize(as = OfficeManagementEntry.class)
 @JsonDeserialize(builder = com.gepardec.mega.rest.model.AutoValue_OfficeManagementEntry.Builder.class)
-
 public abstract class OfficeManagementEntry {
 
     @JsonProperty
