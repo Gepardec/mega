@@ -5,12 +5,17 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 
 @ApplicationScoped
 public class ApplicationConfig {
+
+    @Inject
+    @ConfigProperty(name = "mega.excel-url")
+    URL excelUrl;
 
     @Inject
     @ConfigProperty(name = "mega.info.build.version")
@@ -45,6 +50,14 @@ public class ApplicationConfig {
     @PostConstruct
     public void init() {
         startAt = LocalDateTime.now();
+    }
+
+    public String getExcelUrlAsString() {
+        return excelUrl.toString();
+    }
+
+    public URL getExcelUrl() {
+        return excelUrl;
     }
 
     public String getVersion() {

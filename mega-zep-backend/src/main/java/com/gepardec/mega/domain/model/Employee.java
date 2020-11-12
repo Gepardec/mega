@@ -20,6 +20,7 @@ public abstract class Employee {
     @Nullable @JsonProperty public abstract String salutation();
     @Nullable @JsonProperty public abstract String releaseDate();
     @Nullable @JsonProperty public abstract String workDescription();
+    @Nullable @JsonProperty public abstract String language();
     @Nullable @JsonProperty public abstract Integer role();
     @JsonProperty public abstract boolean active();
 
@@ -37,6 +38,7 @@ public abstract class Employee {
         @JsonProperty public abstract Builder salutation(String salutation);
         @JsonProperty public abstract Builder releaseDate(String releaseDate);
         @JsonProperty public abstract Builder workDescription(String workDescription);
+        @JsonProperty public abstract Builder language(String language);
         @JsonProperty public abstract Builder role(Integer role);
         @JsonProperty public abstract Builder active(boolean active);
         @JsonProperty public abstract Employee build();
