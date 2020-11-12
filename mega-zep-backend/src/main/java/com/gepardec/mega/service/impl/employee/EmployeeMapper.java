@@ -25,6 +25,7 @@ public class EmployeeMapper {
                 .salutation(mitarbeiterType.getAnrede())
                 .releaseDate(mitarbeiterType.getFreigabedatum())
                 .workDescription(mitarbeiterType.getPreisgruppe())
+                .language(mitarbeiterType.getSprache())
                 .role(mitarbeiterType.getRechte())
                 .active(hasEmployeeAndActiveEmployment(mitarbeiterType))
                 .build();

@@ -1,20 +1,23 @@
 package com.gepardec.mega.db.entity;
 
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "employee_user",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uidx_email", columnNames = {"email"}),
-                @UniqueConstraint(name = "uidx_zep_id", columnNames = {"zep_id"})
+                @UniqueConstraint(name = "uidx_email", columnNames = { "email" }),
+                @UniqueConstraint(name = "uidx_zep_id", columnNames = { "zep_id" })
         })
 @NamedQueries({
         @NamedQuery(name = "User.findActiveByEmail", query = "select u from User u where u.email = :email and u.active = true"),
@@ -47,9 +50,33 @@ public class User {
      */
     @NotNull
     @Email
-    @Length(min = 1, max = 255)
+    @Length(min = 1, max = 100)
     @Column(name = "email")
     private String email;
+
+    /**
+     * The firstname of the user
+     */
+    @NotNull
+    @Length(min = 1, max = 100)
+    @Column(name = "firstname")
+    private String firstname;
+
+    /**
+     * The lastname of the user
+     */
+    @NotNull
+    @Length(min = 1, max = 100)
+    @Column(name = "lastname")
+    private String lastname;
+
+    /**
+     * The locale of the user
+     */
+    @NotNull
+    @Type(type = "org.hibernate.type.LocaleType")
+    @Column(name = "locale", length = 10)
+    private Locale locale;
 
     /**
      * The ZEP internal user id
@@ -65,6 +92,15 @@ public class User {
     @NotNull
     @Column(name = "active")
     private Boolean active;
+
+    @NotNull
+    @Size(min = 1)
+    @ElementCollection(targetClass = Role.class)
+    @CollectionTable(name = "employee_user_roles",
+            joinColumns = @JoinColumn(name = "id", referencedColumnName = "id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Set<Role> roles = new HashSet<>(0);
 
     public User() {
     }
@@ -131,6 +167,30 @@ public class User {
         this.email = email;
     }
 
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
+
     public String getZepId() {
         return zepId;
     }
@@ -163,6 +223,14 @@ public class User {
         this.ownedStepEntries = ownedStepEntries;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -180,15 +248,18 @@ public class User {
         return (id != null) ? Objects.hash(id) : super.hashCode();
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return "User{" +
                 "id=" + id +
                 ", creationDate=" + creationDate +
                 ", updatedDate=" + updatedDate +
                 ", email='" + email + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", locale=" + locale +
                 ", zepId='" + zepId + '\'' +
                 ", active=" + active +
+                ", roles=" + roles +
                 ", assignedStepEntries=" + assignedStepEntries +
                 ", ownedStepEntries=" + ownedStepEntries +
                 '}';
