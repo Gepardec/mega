@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class ProjectServiceImpl implements ProjectService {
 
-    private static final String INTERN_PROJECT_PREFIX = "Intern-";
+    private static final String INTERN_PROJECT_PREFIX = "Intern";
 
     @Inject
     ZepService zepService;
