@@ -21,6 +21,11 @@ public class SyncServiceMapper {
     @Inject
     NotificationConfig notificationConfig;
 
+    public User mapToDeactivatedUser(User user) {
+        user.setActive(false);
+        return user;
+    }
+
     public User mapEmployeeToNewUser(final Employee employee, List<Project> projects, Locale defaultLocale) {
         final User user = new User();
         user.setZepId(employee.userId());

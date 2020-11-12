@@ -109,7 +109,7 @@ public class SyncServiceImpl implements SyncService {
         final Map<String, Employee> zepIdToEmployee = mapZepIdToEmployee(employees);
         return users.stream()
                 .filter(user -> !zepIdToEmployee.containsKey(user.getZepId()))
-                .map(this::markUserDeactivated)
+                .map(mapper::mapToDeactivatedUser)
                 .collect(Collectors.toList());
     }
 
@@ -122,11 +122,6 @@ public class SyncServiceImpl implements SyncService {
         return existingUserToEmployee.entrySet().stream()
                 .map(entry -> mapper.mapEmployeeToUser(entry.getKey(), entry.getValue(), projects, defaultLocale))
                 .collect(Collectors.toList());
-    }
-
-    private User markUserDeactivated(User user) {
-        user.setActive(false);
-        return user;
     }
 
     private Map<String, User> mapZepIdToUser(final List<User> users) {

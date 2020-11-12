@@ -36,6 +36,15 @@ class SyncServiceMapperTest {
     private SyncServiceMapper mapper;
 
     @Nested
+    class MapToDeactivatedUser {
+
+        @Test
+        void test() {
+
+        }
+    }
+
+    @Nested
     class MapEmployeeToUser {
 
         @Test
