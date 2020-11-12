@@ -27,6 +27,8 @@ import static com.gepardec.mega.domain.utils.DateUtils.getLastDayOfFollowingMont
 @RequestScoped
 public class ZepServiceImpl implements ZepService {
 
+    private static final String PROJECT_ACTIVE_STATE = "in Arbeit";
+
     private final EmployeeMapper employeeMapper;
     private final Logger logger;
     private final ZepSoapPortType zepSoapPortType;
@@ -141,8 +143,10 @@ public class ZepServiceImpl implements ZepService {
     private Project createProject(final ProjektType projektType) {
         return Project.builder()
                 .projectId(projektType.getProjektNr())
+                .description(projektType.getBezeichnung())
                 .employees(createProjectEmployees(projektType.getProjektmitarbeiterListe()))
                 .leads(createProjectLeads(projektType.getProjektmitarbeiterListe()))
+                .active(PROJECT_ACTIVE_STATE.equals(projektType.getStatus()))
                 .build();
     }
 

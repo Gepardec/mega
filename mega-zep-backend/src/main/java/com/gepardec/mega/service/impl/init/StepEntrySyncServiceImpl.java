@@ -17,10 +17,7 @@ import javax.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Dependent
@@ -57,10 +54,10 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
         logger.info("running step entry generation for {}", date);
 
         final List<User> activeUsers = userService.getActiveUsers();
-        final List<Project> projectsForYear = projectService.getProjectsForYear(date)
-                .stream()
-                .filter(project -> !project.leads().isEmpty())
-                .collect(Collectors.toList());
+        final List<Project> projectsForYear = projectService.getProjectsForYear(date, Arrays.asList(
+                ProjectFilter.IS_LEADS_AVAILABLE,
+                ProjectFilter.IS_CUSTOMER_PROJECT,
+                ProjectFilter.IS_ACTIVE));
         final List<Step> steps = stepService.getSteps();
 
         final List<User> omUsers = List.of(omMailAddresses.split(","))
@@ -77,7 +74,7 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
 
         final List<StepEntry> toBeCreatedStepEntries = new ArrayList<>();
 
-        steps.forEach(step -> {
+        for (Step step : steps) {// TODO: change to domain model after role refactoring
             if (Role.PROJECT_LEAD.name().equals(step.role())) {
                 toBeCreatedStepEntries.addAll(createStepEntriesProjectLeadForUsers(date, step, projectsForYear, activeUsers));
             } else if (Role.OFFICE_MANAGEMENT.name().equals(step.role())) {
@@ -85,7 +82,7 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
             } else {
                 toBeCreatedStepEntries.addAll(createStepEntriesForUsers(date, step, activeUsers));
             }
-        });
+        }
 
         toBeCreatedStepEntries.forEach(stepEntryService::addStepEntry);
 
