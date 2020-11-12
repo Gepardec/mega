@@ -30,7 +30,7 @@ public abstract class Project {
     public abstract boolean active();
 
     public static Project.Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_Project.Builder();
+        return new com.gepardec.mega.domain.model.AutoValue_Project.Builder().active(false);
     }
 
     @AutoValue.Builder
