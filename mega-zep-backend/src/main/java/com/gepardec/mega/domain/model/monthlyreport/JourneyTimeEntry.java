@@ -38,6 +38,7 @@ public abstract class JourneyTimeEntry implements ProjectEntry {
     @Override
     public abstract Task getTask();
 
+    @Override
     public abstract WorkingLocation getWorkingLocation();
 
     public abstract JourneyDirection getJourneyDirection();

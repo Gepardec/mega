@@ -2,10 +2,7 @@ package com.gepardec.mega.service.impl.monthlyreport;
 
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Role;
-import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
-import com.gepardec.mega.domain.model.monthlyreport.Task;
+import com.gepardec.mega.domain.model.monthlyreport.*;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.service.impl.monthlyreport.MonthlyReportServiceImpl;
@@ -114,10 +111,12 @@ public class MonthlyReportServiceImplTest {
 
         return List.of(ProjectTimeEntry.of(LocalDateTime.of(2020, 1, 31, 7, 0),
                 LocalDateTime.of(2020, 1, 31, bisHours, 0),
-                Task.BEARBEITEN),
+                Task.BEARBEITEN,
+                WorkingLocation.MAIN),
                 ProjectTimeEntry.of(LocalDateTime.of(2020, 1, 30, 7, 0),
                         LocalDateTime.of(2020, 1, 30, 10, 0),
-                        Task.BEARBEITEN));
+                        Task.BEARBEITEN,
+                        WorkingLocation.MAIN));
     }
 
     private Employee createEmployee(final int userId) {

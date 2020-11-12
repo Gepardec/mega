@@ -33,6 +33,7 @@ public class ProjectEntryMapper {
         Task task = toTask(projektzeitType.getTaetigkeit());
         LocalDateTime from = toLocalDateTime(projektzeitType.getDatum(), projektzeitType.getVon());
         LocalDateTime to = toLocalDateTime(projektzeitType.getDatum(), projektzeitType.getBis());
+        WorkingLocation workingLocation = toWorkingLocation(projektzeitType.getOrt());
 
         if (Task.isJourney(task)) {
             return JourneyTimeEntry.newBuilder()
@@ -42,10 +43,10 @@ public class ProjectEntryMapper {
                     .journeyDirection(JourneyDirection.fromString(projektzeitType.getReiseRichtung())
                             .orElseThrow(
                                     () -> new IllegalArgumentException("ProjektzeitType.getReiseRichtung could not be converted to JourneyDirection enum")))
-                    .workingLocation(toWorkingLocation(projektzeitType.getOrt()))
+                    .workingLocation(workingLocation)
                     .build();
         } else {
-            return ProjectTimeEntry.of(from, to, task);
+            return ProjectTimeEntry.of(from, to, task, workingLocation);
         }
     }
 

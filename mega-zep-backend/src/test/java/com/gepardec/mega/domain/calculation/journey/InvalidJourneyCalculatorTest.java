@@ -1,7 +1,7 @@
 package com.gepardec.mega.domain.calculation.journey;
 
-import com.gepardec.mega.domain.calculation.journey.JourneyWarningCalculator;
 import com.gepardec.mega.domain.model.monthlyreport.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -11,9 +11,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class JourneyWarningCalculatorTest {
+class InvalidJourneyCalculatorTest {
 
-    private JourneyWarningCalculator calculator = new JourneyWarningCalculator();
+    private InvalidJourneyCalculator calculator;
+
+    @BeforeEach
+    void beforeEach() {
+        calculator = new InvalidJourneyCalculator();
+    }
 
     @Nested
     class Calculate {
@@ -23,7 +28,7 @@ class JourneyWarningCalculatorTest {
 
             @Test
             void whenOnlyDeparture_thenWarning() {
-                final JourneyTimeEntry journeyTimeEntry = journeyTimeEntryFor(1, 8, JourneyDirection.TO, WorkingLocation.MAIN);
+                final JourneyTimeEntry journeyTimeEntry = journeyTimeEntryFor(8, 9, JourneyDirection.TO, WorkingLocation.MAIN);
 
                 final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntry));
 
@@ -154,7 +159,8 @@ class JourneyWarningCalculatorTest {
         return ProjectTimeEntry.of(
                 LocalDateTime.of(2020, 1, 7, startHour, startMinute),
                 LocalDateTime.of(2020, 1, 7, endHour, endMinute),
-                Task.BEARBEITEN);
+                Task.BEARBEITEN,
+                WorkingLocation.MAIN);
     }
 
     private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int endHour, final JourneyDirection direction,

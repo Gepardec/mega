@@ -1,11 +1,12 @@
 package com.gepardec.mega.service.impl.monthlyreport;
 
 import com.gepardec.mega.domain.calculation.WarningCalculationStrategy;
+import com.gepardec.mega.domain.calculation.journey.InvalidWorkingLocationInJourneyCalculator;
 import com.gepardec.mega.domain.calculation.time.ExceededMaximumWorkingHoursPerDayCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientBreakCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientRestCalculator;
 import com.gepardec.mega.domain.model.monthlyreport.*;
-import com.gepardec.mega.domain.calculation.journey.JourneyWarningCalculator;
+import com.gepardec.mega.domain.calculation.journey.InvalidJourneyCalculator;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -25,7 +26,8 @@ public class WarningCalculator {
             new InsufficientRestCalculator());
 
     private static final List<WarningCalculationStrategy<JourneyWarning>> journeyWarningCalculators = List.of(
-            new JourneyWarningCalculator()
+            new InvalidJourneyCalculator(),
+            new InvalidWorkingLocationInJourneyCalculator()
     );
 
     public List<TimeWarning> determineTimeWarnings(List<ProjectEntry> projectTimeList) {

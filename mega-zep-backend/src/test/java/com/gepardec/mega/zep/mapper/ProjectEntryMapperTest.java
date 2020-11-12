@@ -22,7 +22,7 @@ class ProjectEntryMapperTest {
     }
 
     private ProjektzeitType pojektzeitTypeFor(String taetigkeit) {
-        return projektzeitTypeFor(taetigkeit, null, null);
+        return projektzeitTypeFor(taetigkeit, WorkingLocation.MAIN.zepOrt, null);
     }
 
     private ProjektzeitType projektzeitTypeFor(String taetigkeit, String ort, String reiseRichtung) {
@@ -107,6 +107,7 @@ class ProjectEntryMapperTest {
                 projektzeitType.setVon("08:00");
                 projektzeitType.setBis("10:00");
                 projektzeitType.setTaetigkeit(Task.BEARBEITEN.name());
+                projektzeitType.setOrt(WorkingLocation.MAIN.zepOrt);
                 final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm");
 

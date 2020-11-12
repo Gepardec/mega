@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class JourneyWarningCalculator implements WarningCalculationStrategy<JourneyWarning> {
+public class InvalidJourneyCalculator implements WarningCalculationStrategy<JourneyWarning> {
 
     @Override
     public List<JourneyWarning> calculate(List<ProjectEntry> projectTimeEntries) {
         final Map<LocalDate, List<JourneyTimeEntry>> groupedProjectTimeEntries = projectTimeEntries.stream()
                 .filter(entry -> Task.isJourney(entry.getTask()))
                 .map(JourneyTimeEntry.class::cast)
-                .sorted(Comparator.comparing(JourneyTimeEntry::getFromTime))
+                .sorted(Comparator.comparing(ProjectEntry::getFromTime))
                 .collect(Collectors.groupingBy(ProjectEntry::getDate));
 
         final List<JourneyWarning> warnings = new ArrayList<>();

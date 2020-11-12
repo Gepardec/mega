@@ -1,7 +1,7 @@
 package com.gepardec.mega.domain.calculation;
 
-import com.gepardec.mega.service.impl.monthlyreport.WarningCalculator;
 import com.gepardec.mega.domain.model.monthlyreport.*;
+import com.gepardec.mega.service.impl.monthlyreport.WarningCalculator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +27,65 @@ class WarningCalculatorTest {
 
     @Nested
     class DetermineTimeWarnings {
+
+        @Nested
+        class InvalidWorkingLocationInJourneyCalculator {
+
+            @Test
+            void whenUnordered_thenOrdered() {
+                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 7, 8, JourneyDirection.TO, WorkingLocation.A);
+                final ProjectEntry projectEntryTwo = projectTimeEntryFor(1, 8, 9, WorkingLocation.MAIN);
+                final ProjectEntry projectEntryThree = projectTimeEntryFor(1, 9, 10, WorkingLocation.MAIN);
+                final JourneyTimeEntry journeyTimeEntryFour = journeyTimeEntryFor(1, 10, 11, JourneyDirection.BACK, WorkingLocation.A);
+
+                final List<JourneyWarning> warnings = calculator
+                        .determineJourneyWarnings(List.of(journeyTimeEntryFour, projectEntryThree, projectEntryTwo, journeyTimeEntryOne));
+
+                assertEquals(1, warnings.size());
+                assertEquals(1, warnings.get(0).getWarningTypes().size());
+                assertEquals(Warning.JOURNEY_INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
+            }
+
+            @Nested
+            class AndWarnings {
+
+                @Test
+                void whenTwoProjectTimeEntryWithinJourneyWithWorkingLocationMain_thenOneWarning() {
+                    final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 7, 8, JourneyDirection.TO, WorkingLocation.A);
+                    final ProjectEntry projectEntryTwo = projectTimeEntryFor(1, 8, 9, WorkingLocation.MAIN);
+                    final ProjectEntry projectEntryThree = projectTimeEntryFor(1, 9, 10, WorkingLocation.MAIN);
+                    final JourneyTimeEntry journeyTimeEntryFour = journeyTimeEntryFor(1, 10, 11, JourneyDirection.BACK, WorkingLocation.A);
+
+                    final List<JourneyWarning> warnings = calculator
+                            .determineJourneyWarnings(List.of(journeyTimeEntryOne, projectEntryTwo, projectEntryThree, journeyTimeEntryFour));
+
+                    assertEquals(1, warnings.size());
+                    assertEquals(1, warnings.get(0).getWarningTypes().size());
+                    assertEquals(Warning.JOURNEY_INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
+                }
+            }
+
+            @Nested
+            class AndWithoutWarnings {
+
+                @Test
+                void whenTwoProjectTimeEntryWithinTwoJourneys_thenNoWarning() {
+                    final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 7, 8, JourneyDirection.TO, WorkingLocation.A);
+                    final ProjectEntry projectEntryTwo = projectTimeEntryFor(1, 8, 9, WorkingLocation.A);
+                    final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(1, 9, 10, JourneyDirection.BACK, WorkingLocation.A);
+                    final JourneyTimeEntry journeyTimeEntryFour = journeyTimeEntryFor(1, 10, 11, JourneyDirection.TO, WorkingLocation.P);
+                    final ProjectEntry projectEntryFive = projectTimeEntryFor(1, 11, 12, WorkingLocation.P);
+                    final JourneyTimeEntry journeyTimeEntrySix = journeyTimeEntryFor(1, 12, 13, JourneyDirection.BACK, WorkingLocation.A);
+
+                    final List<JourneyWarning> warnings = calculator
+                            .determineJourneyWarnings(
+                                    List.of(journeyTimeEntryOne, projectEntryTwo, journeyTimeEntryThree, journeyTimeEntryFour, projectEntryFive,
+                                            journeyTimeEntrySix));
+
+                    assertTrue(warnings.isEmpty());
+                }
+            }
+        }
 
         @Nested
         class WithInsufficientBreakTime {
@@ -271,60 +330,48 @@ class WarningCalculatorTest {
                 }
             }
         }
+    }
 
-        @Nested
-        class WithJourneys {
-
-            @Nested
-            class AndWarnings {
-
-            }
-
-            @Nested
-            class AndWithoutWarnings {
-
-            }
-        }
-
-        @Nested
-        class WithMixedEntries {
-
-            @Nested
-            class AndWarnings {
-
-            }
-
-            @Nested
-            class AndWithoutWarnings {
-
-            }
-        }
+    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int endHour, final WorkingLocation workingLocation) {
+        return projectTimeEntryFor(1, startHour, 0, 1, endHour, 0, workingLocation);
     }
 
     private ProjectTimeEntry projectTimeEntryFor(final int day, final int startHour, final int endHour) {
-        return projectTimeEntryFor(day, startHour, 0, day, endHour, 0);
+        return projectTimeEntryFor(day, startHour, 0, day, endHour, 0, WorkingLocation.MAIN);
     }
 
     private ProjectTimeEntry projectTimeEntryFor(final int day, final int startHour, final int startMinute, final int endHour,
             final int endMinute) {
-        return projectTimeEntryFor(day, startHour, startMinute, day, endHour, endMinute);
+        return projectTimeEntryFor(day, startHour, startMinute, day, endHour, endMinute, WorkingLocation.MAIN);
+    }
+
+    private ProjectTimeEntry projectTimeEntryFor(final int day, final int startHour, final int endHour, WorkingLocation workingLocation) {
+        return projectTimeEntryFor(day, startHour, 0, day, endHour, 0, workingLocation);
     }
 
     private ProjectTimeEntry projectTimeEntryFor(final int startDay, final int startHour, final int startMinute, final int endDay, final int endHour,
-            final int endMinute) {
+            final int endMinute, WorkingLocation workingLocation) {
         return ProjectTimeEntry.of(
                 LocalDateTime.of(2020, 1, startDay, startHour, startMinute),
                 LocalDateTime.of(2020, 1, endDay, endHour, endMinute),
-                Task.BEARBEITEN);
+                Task.BEARBEITEN,
+                workingLocation);
     }
 
-    private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int startMinute, final int endHour, final int endMinute) {
+    private JourneyTimeEntry journeyTimeEntryFor(final int day, final int startHour, final int endHour, JourneyDirection journeyDirection,
+            WorkingLocation workingLocation) {
+        return journeyTimeEntryFor(day, startHour, 0, day, endHour, 0, journeyDirection, workingLocation);
+    }
+
+    private JourneyTimeEntry journeyTimeEntryFor(final int startDay, final int startHour, final int startMinute, final int endDay, final int endHour,
+            final int endMinute,
+            JourneyDirection journeyDirection, WorkingLocation workingLocation) {
         return JourneyTimeEntry.newBuilder()
-                .fromTime(LocalDateTime.of(2020, 1, 7, startHour, startMinute))
-                .toTime(LocalDateTime.of(2020, 1, 7, endHour, endMinute))
+                .fromTime(LocalDateTime.of(2020, 1, startDay, startHour, startMinute))
+                .toTime(LocalDateTime.of(2020, 1, endDay, endHour, endMinute))
                 .task(Task.REISEN)
-                .workingLocation(WorkingLocation.MAIN)
-                .journeyDirection(JourneyDirection.TO)
+                .journeyDirection(journeyDirection)
+                .workingLocation(workingLocation)
                 .build();
     }
 }

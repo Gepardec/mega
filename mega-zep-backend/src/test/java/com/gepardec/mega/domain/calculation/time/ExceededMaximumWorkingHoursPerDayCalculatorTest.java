@@ -116,7 +116,8 @@ class ExceededMaximumWorkingHoursPerDayCalculatorTest {
         return ProjectTimeEntry.of(
                 LocalDateTime.of(2020, 1, 7, startHour, startMinute),
                 LocalDateTime.of(2020, 1, 7, endHour, endMinute),
-                Task.BEARBEITEN);
+                Task.BEARBEITEN,
+                WorkingLocation.MAIN);
     }
 
     private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int endHour) {

@@ -117,7 +117,8 @@ class InsufficientRestTimeCalculatorTest {
         return ProjectTimeEntry.of(
                 LocalDateTime.of(2020, 1, startDay, startHour, startMinute),
                 LocalDateTime.of(2020, 1, endDay, endHour, endMinute),
-                Task.BEARBEITEN);
+                Task.BEARBEITEN,
+                WorkingLocation.MAIN);
     }
 
     private JourneyTimeEntry journeyTimeEntryFor(final int startDay, final int startHour, final int startMinute, final int endDay, final int endHour,
