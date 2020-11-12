@@ -39,8 +39,13 @@ class SyncServiceMapperTest {
     class MapToDeactivatedUser {
 
         @Test
-        void test() {
+        void whenCalled_thenActiveSetToFalse() {
+            final User user = new User();
+            user.setActive(true);
 
+            final User actual = mapper.mapToDeactivatedUser(user);
+
+            assertFalse(actual.getActive());
         }
     }
 
