@@ -5,6 +5,7 @@ import {State} from '../../../shared/models/State';
 import {MatSelectionListChange} from '@angular/material/list';
 import {ErrorHandlerService} from "../../../shared/services/error/error-handler.service";
 import {StepentriesService} from "../../../shared/services/stepentries/stepentries.service";
+import {Step} from "../../../shared/models/Step";
 
 @Component({
   selector: 'app-employee-check',
@@ -40,7 +41,7 @@ export class EmployeeCheckComponent implements OnInit {
   }
 
   setOpenAndUnassignedStepEntriesDone() {
-    this.stepentriesService.setOpenAndUnassignedStepEntriesDone(this.monthlyReport.employee).subscribe((success: boolean) => {
+    this.stepentriesService.setOpenAndUnassignedStepEntriesDone(Step.CONTROL_TIMES, this.monthlyReport.employee).subscribe((success: boolean) => {
       this.emitRefreshMonthlyReport();
     });
   }
