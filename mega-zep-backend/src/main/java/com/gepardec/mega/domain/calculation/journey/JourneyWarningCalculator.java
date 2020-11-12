@@ -1,5 +1,6 @@
-package com.gepardec.mega.service.impl.monthlyreport.calculation.journey;
+package com.gepardec.mega.domain.calculation.journey;
 
+import com.gepardec.mega.domain.calculation.WarningCalculationStrategy;
 import com.gepardec.mega.domain.model.monthlyreport.*;
 
 import java.util.ArrayList;
@@ -7,7 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JourneyWarningCalculator implements JourneyWarningCalculationStrategy {
+public class JourneyWarningCalculator implements WarningCalculationStrategy<JourneyWarning> {
 
     @Override
     public List<JourneyWarning> calculate(List<ProjectEntry> projectTimeEntries) {

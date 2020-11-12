@@ -1,5 +1,6 @@
-package com.gepardec.mega.service.impl.monthlyreport.calculation.time;
+package com.gepardec.mega.domain.calculation.time;
 
+import com.gepardec.mega.domain.calculation.time.InsufficientBreakCalculator;
 import com.gepardec.mega.domain.model.monthlyreport.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -12,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InsufficientBreakTimeCalculatorTest {
 
-    private InsufficientBreakTimeCalculator calculator;
+    private InsufficientBreakCalculator calculator;
 
     @BeforeEach
     void beforeEach() {
-        calculator = new InsufficientBreakTimeCalculator();
+        calculator = new InsufficientBreakCalculator();
     }
 
     @Nested

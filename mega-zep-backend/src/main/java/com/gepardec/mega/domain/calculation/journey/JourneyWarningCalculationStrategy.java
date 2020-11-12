@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.impl.monthlyreport.calculation.journey;
+package com.gepardec.mega.domain.calculation.journey;
 
 import com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;

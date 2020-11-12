@@ -1,17 +1,18 @@
-package com.gepardec.mega.service.impl.monthlyreport.calculation.time;
+package com.gepardec.mega.domain.calculation.time;
 
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
+import com.gepardec.mega.domain.calculation.WarningCalculationStrategy;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.gepardec.mega.domain.model.monthlyreport.TimeWarning.MAX_HOURS_A_DAY;
+public class ExceededMaximumWorkingHoursPerDayCalculator extends AbstractTimeWarningCalculationStrategy implements WarningCalculationStrategy<TimeWarning> {
 
-public class ExceededMaximumWorkingHoursPerDayCalculator extends AbstractTimeWarningCalculationStrategy implements TimeWarningCalculationStrategy {
+    static final double MAX_HOURS_A_DAY = 10d;
 
     @Override
     public List<TimeWarning> calculate(List<ProjectEntry> projectTimeEntries) {

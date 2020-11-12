@@ -1,5 +1,6 @@
-package com.gepardec.mega.service.impl.monthlyreport.calculation;
+package com.gepardec.mega.domain.calculation;
 
+import com.gepardec.mega.service.impl.monthlyreport.WarningCalculator;
 import com.gepardec.mega.domain.model.monthlyreport.*;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

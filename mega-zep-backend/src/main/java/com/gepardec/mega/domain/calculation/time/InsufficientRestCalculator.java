@@ -1,9 +1,10 @@
-package com.gepardec.mega.service.impl.monthlyreport.calculation.time;
+package com.gepardec.mega.domain.calculation.time;
 
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
+import com.gepardec.mega.domain.calculation.WarningCalculationStrategy;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -13,14 +14,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.gepardec.mega.domain.model.monthlyreport.TimeWarning.MIN_REQUIRED_REST_TIME;
-
 /**
  * This calculator calculates the 'rest time' between two working days.
  * At least n hours 'rest time' are necessary between two working days.
  * {@link com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry} are ignored for now, only {@link ProjectTimeEntry} are considered.
  */
-public class InsufficientRestTimeCalculator extends AbstractTimeWarningCalculationStrategy implements TimeWarningCalculationStrategy {
+public class InsufficientRestCalculator extends AbstractTimeWarningCalculationStrategy implements WarningCalculationStrategy<TimeWarning> {
+
+    static final double MIN_REQUIRED_REST_TIME = 11d;
 
     @Override
     public List<TimeWarning> calculate(List<ProjectEntry> projectTimeEntries) {

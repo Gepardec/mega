@@ -1,5 +1,6 @@
-package com.gepardec.mega.service.impl.monthlyreport.calculation.time;
+package com.gepardec.mega.domain.calculation.time;
 
+import com.gepardec.mega.domain.calculation.WarningCalculationStrategy;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
@@ -13,16 +14,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.gepardec.mega.domain.model.monthlyreport.TimeWarning.MAX_HOURS_OF_DAY_WITHOUT_BREAK;
-import static com.gepardec.mega.domain.model.monthlyreport.TimeWarning.MIN_REQUIRED_BREAK_TIME;
-
 /**
  * This calculator calculates the 'break time' on a single working day.
  * At least n hours 'break time' are necessary during one working day, whereby the break time can be distributed as intended.
  * {@link com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry} are ignored for now, only {@link ProjectTimeEntry} are considered.
  */
-public class InsufficientBreakTimeCalculator extends AbstractTimeWarningCalculationStrategy
-        implements TimeWarningCalculationStrategy {
+public class InsufficientBreakCalculator extends AbstractTimeWarningCalculationStrategy
+        implements WarningCalculationStrategy<TimeWarning> {
+
+    static final double MIN_REQUIRED_BREAK_TIME = 0.5d;
+
+    static final double MAX_HOURS_OF_DAY_WITHOUT_BREAK = 6d;
 
     @Override
     public List<TimeWarning> calculate(List<ProjectEntry> projectTimes) {

@@ -1,5 +1,6 @@
-package com.gepardec.mega.service.impl.monthlyreport.calculation.time;
+package com.gepardec.mega.domain.calculation.time;
 
+import com.gepardec.mega.domain.calculation.time.InsufficientRestCalculator;
 import com.gepardec.mega.domain.model.monthlyreport.*;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InsufficientRestTimeCalculatorTest {
 
-    private InsufficientRestTimeCalculator calculator = new InsufficientRestTimeCalculator();
+    private InsufficientRestCalculator calculator = new InsufficientRestCalculator();
 
     @Test
     void calculate_whenDataListEmpty_thenNoWarningsCreated() {

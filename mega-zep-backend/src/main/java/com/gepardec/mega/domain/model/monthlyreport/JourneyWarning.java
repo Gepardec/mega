@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class JourneyWarning {
+public class JourneyWarning implements ProjectEntryWarning {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
@@ -28,7 +28,7 @@ public class JourneyWarning {
         this.warnings = warnings;
     }
 
-    public LocalDate getDate() {
+    @Override public LocalDate getDate() {
         return date;
     }
 
