@@ -17,5 +17,5 @@ public interface ZepService {
 
     List<ProjectEntry> getProjectTimes(Employee employee);
 
-    List<Project> getProjectsForYear(final LocalDate monthYear);
+    List<Project> getProjectsForMonthYear(final LocalDate monthYear);
 }

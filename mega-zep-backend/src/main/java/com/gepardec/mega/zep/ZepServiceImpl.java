@@ -106,7 +106,7 @@ public class ZepServiceImpl implements ZepService {
     }
 
     @Override
-    public List<Project> getProjectsForYear(final LocalDate monthYear) {
+    public List<Project> getProjectsForMonthYear(final LocalDate monthYear) {
         final ReadProjekteResponseType readProjekteResponseType = getProjectsInternal(monthYear);
 
         return readProjekteResponseType.getProjektListe().getProjekt()

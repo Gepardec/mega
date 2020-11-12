@@ -17,7 +17,10 @@ import javax.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Dependent
@@ -54,7 +57,7 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
         logger.info("running step entry generation for {}", date);
 
         final List<User> activeUsers = userService.getActiveUsers();
-        final List<Project> projectsForYear = projectService.getProjectsForYear(date, Arrays.asList(
+        final List<Project> projectsForMonthYear = projectService.getProjectsForMonthYear(date, List.of(
                 ProjectFilter.IS_LEADS_AVAILABLE,
                 ProjectFilter.IS_CUSTOMER_PROJECT,
                 ProjectFilter.IS_ACTIVE));
@@ -68,7 +71,7 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
                 .collect(Collectors.toList());
 
         logger.info("active users are {}", activeUsers);
-        logger.info("projects are {}", projectsForYear);
+        logger.info("projects are {}", projectsForMonthYear);
         logger.info("steps are {}", steps);
         logger.info("omUsers are {}", omUsers);
 
@@ -76,7 +79,7 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
 
         for (Step step : steps) {// TODO: change to domain model after role refactoring
             if (Role.PROJECT_LEAD.name().equals(step.role())) {
-                toBeCreatedStepEntries.addAll(createStepEntriesProjectLeadForUsers(date, step, projectsForYear, activeUsers));
+                toBeCreatedStepEntries.addAll(createStepEntriesProjectLeadForUsers(date, step, projectsForMonthYear, activeUsers));
             } else if (Role.OFFICE_MANAGEMENT.name().equals(step.role())) {
                 toBeCreatedStepEntries.addAll(createStepEntriesOmForUsers(date, step, omUsers, activeUsers));
             } else {

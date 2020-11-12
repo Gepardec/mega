@@ -22,13 +22,13 @@ public class ProjectServiceImpl implements ProjectService {
     ZepService zepService;
 
     @Override
-    public List<Project> getProjectsForYear(LocalDate monthYear) {
-        return this.getProjectsForYear(monthYear, List.of());
+    public List<Project> getProjectsForMonthYear(LocalDate monthYear) {
+        return this.getProjectsForMonthYear(monthYear, List.of());
     }
 
     @Override
-    public List<Project> getProjectsForYear(final LocalDate monthYear, final List<ProjectFilter> projectFilters) {
-        return zepService.getProjectsForYear(monthYear)
+    public List<Project> getProjectsForMonthYear(final LocalDate monthYear, final List<ProjectFilter> projectFilters) {
+        return zepService.getProjectsForMonthYear(monthYear)
                 .stream()
                 .filter(project -> filterProject(project, Optional.ofNullable(projectFilters).orElse(List.of())))
                 .collect(Collectors.toList());

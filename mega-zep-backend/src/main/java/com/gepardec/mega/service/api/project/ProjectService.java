@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ProjectService {
 
-    List<Project> getProjectsForYear(final LocalDate monthYear);
+    List<Project> getProjectsForMonthYear(final LocalDate monthYear);
 
-    List<Project> getProjectsForYear(final LocalDate monthYear, final List<ProjectFilter> projectFilters);
+    List<Project> getProjectsForMonthYear(final LocalDate monthYear, final List<ProjectFilter> projectFilters);
 }
