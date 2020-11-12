@@ -1,5 +1,6 @@
 package com.gepardec.mega.domain.calculation.time;
 
+import com.gepardec.mega.domain.calculation.AbstractTimeWarningCalculationStrategy;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;

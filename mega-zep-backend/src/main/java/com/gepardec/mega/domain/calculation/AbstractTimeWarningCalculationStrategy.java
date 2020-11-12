@@ -1,4 +1,4 @@
-package com.gepardec.mega.domain.calculation.time;
+package com.gepardec.mega.domain.calculation;
 
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
