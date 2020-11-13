@@ -32,8 +32,8 @@ public abstract class Employee {
         @JsonProperty public abstract Builder userId(String userId);
         @JsonProperty public abstract Builder email(String email);
         @JsonProperty public abstract Builder title(String title);
-        @JsonProperty public abstract Builder firstname(String firstName);
-        @JsonProperty public abstract Builder lastname(String sureName);
+        @JsonProperty public abstract Builder firstname(String firstname);
+        @JsonProperty public abstract Builder lastname(String lastname);
         @JsonProperty public abstract Builder salutation(String salutation);
         @JsonProperty public abstract Builder releaseDate(String releaseDate);
         @JsonProperty public abstract Builder workDescription(String workDescription);

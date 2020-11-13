@@ -1,7 +1,7 @@
 export class Employee {
   userId: string;
-  sureName: string;
-  firstName: string;
+  firstname: string;
+  lastname: string;
   email: string;
   title: string;
   releaseDate: string;

@@ -65,7 +65,7 @@ export class OfficeManagementComponent implements OnInit {
       }
     );
 
-    dialogRef.componentInstance.employee = omEntry.employee.firstName + ' ' + omEntry.employee.sureName;
+    dialogRef.componentInstance.employee = omEntry.employee.firstname + ' ' + omEntry.employee.lastname;
     dialogRef.componentInstance.comments = omEntry.comments;
   }
 
@@ -80,8 +80,8 @@ export class OfficeManagementComponent implements OnInit {
     }
     filterString = filterString.toLowerCase();
     this.filteredOmEntries = this.omEntries.filter(omEntry => {
-      return omEntry.employee.firstName.toLowerCase().includes(filterString) ||
-        omEntry.employee.sureName.toLowerCase().includes(filterString);
+      return omEntry.employee.firstname.toLowerCase().includes(filterString) ||
+        omEntry.employee.lastname.toLowerCase().includes(filterString);
     });
   }
 
@@ -137,7 +137,7 @@ export class OfficeManagementComponent implements OnInit {
       }
     });
 
-    const sortFn = (a: OfficeManagementEntry, b: OfficeManagementEntry) => a.employee.sureName.localeCompare(b.employee.sureName);
+    const sortFn = (a: OfficeManagementEntry, b: OfficeManagementEntry) => a.employee.lastname.localeCompare(b.employee.lastname);
 
     doneOmEntries.sort(sortFn);
     openOmEntries.sort(sortFn);

@@ -37,8 +37,8 @@ describe('DisplayMonthlyReportComponent', () => {
       ],
       employee: {
         userId: '000-mustermann',
-        firstName: 'Max',
-        sureName: 'Mustermann',
+        firstname: 'Max',
+        lastname: 'Mustermann',
         salutation: null,
         releaseDate: '2020-07-01',
         workDescription: '05',
