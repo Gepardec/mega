@@ -123,6 +123,9 @@ databaseChangeLog:
                     nullable: false
                   name: zep_id
                   type: VARCHAR(100)
+              - column:
+                  name: release_date
+                  type: date
             tableName: employee_user
   - changeSet:
       id: 1605169381318-7

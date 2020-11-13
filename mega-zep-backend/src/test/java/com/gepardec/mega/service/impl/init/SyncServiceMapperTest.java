@@ -2,9 +2,9 @@ package com.gepardec.mega.service.impl.init;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
 import com.gepardec.mega.db.entity.User;
-import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
+import com.gepardec.mega.domain.model.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -92,6 +93,7 @@ class SyncServiceMapperTest {
                     () -> assertEquals("Thomas", actual.getFirstname()),
                     () -> assertEquals("Herzog", actual.getLastname()),
                     () -> assertEquals(Locale.GERMAN, actual.getLocale()),
+                    () -> assertNull(actual.getReleaseDate()),
                     () -> assertTrue(actual.getActive()),
                     () -> assertEquals(2, actual.getRoles().size()),
                     () -> assertTrue(actual.getRoles().contains(Role.EMPLOYEE)),
@@ -121,6 +123,7 @@ class SyncServiceMapperTest {
                     .firstname("Thomas")
                     .lastname("Herzog")
                     .language("de")
+                    .releaseDate("2020-11-12")
                     .active(true)
                     .build();
             final Project project = projectForLeadUserId("1");
@@ -133,6 +136,7 @@ class SyncServiceMapperTest {
                     () -> assertEquals("Thomas", actual.getFirstname()),
                     () -> assertEquals("Herzog", actual.getLastname()),
                     () -> assertEquals(Locale.GERMAN, actual.getLocale()),
+                    () -> assertEquals(LocalDate.of(2020, 11, 12), actual.getReleaseDate()),
                     () -> assertTrue(actual.getActive()),
                     () -> assertEquals(2, actual.getRoles().size()),
                     () -> assertTrue(actual.getRoles().contains(Role.EMPLOYEE)),
