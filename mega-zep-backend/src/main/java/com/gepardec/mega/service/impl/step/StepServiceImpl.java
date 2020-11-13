@@ -25,7 +25,7 @@ public class StepServiceImpl implements StepService {
                         .dbId(s.getId())
                         .name(s.getName())
                         .ordinal(s.getOrdinal())
-                        .role(s.getRole() != null ? s.getRole().name() : null)
+                        .role(s.getRole())
                         .build())
                 .collect(Collectors.toList());
     }

@@ -3,9 +3,8 @@ package com.gepardec.mega.domain.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gepardec.mega.domain.Role;
 import com.google.auto.value.AutoValue;
-
-import javax.annotation.Nullable;
 
 @AutoValue
 @JsonSerialize(as = Step.class)
@@ -22,8 +21,7 @@ public abstract class Step {
     public abstract long ordinal();
 
     @JsonProperty
-    @Nullable
-    public abstract String role();
+    public abstract Role role();
 
     public static Builder builder() {
         return new com.gepardec.mega.domain.model.AutoValue_Step.Builder();
@@ -41,7 +39,7 @@ public abstract class Step {
         public abstract com.gepardec.mega.domain.model.Step.Builder ordinal(long ordinal);
 
         @JsonProperty
-        public abstract com.gepardec.mega.domain.model.Step.Builder role(String role);
+        public abstract com.gepardec.mega.domain.model.Step.Builder role(Role role);
 
         @JsonProperty
         public abstract Step build();

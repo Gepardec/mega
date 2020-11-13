@@ -96,11 +96,11 @@ class StepEntrySyncServiceImplTest {
                         .build()
         ));
         when(stepService.getSteps()).thenReturn(
-                List.of(stepFor(1, "CONTROL_TIMES", null).build(),
-                        stepFor(2, "CONTROL_INTERNAL_TIMES", "OFFICE_MANAGEMENT").build(),
-                        stepFor(3, "CONTROL_EXTERNAL_TIMES", "OFFICE_MANAGEMENT").build(),
-                        stepFor(4, "CONTROL_TIME_EVIDENCES", "PROJECT_LEAD").build(),
-                        stepFor(5, "ACCEPT_TIMES", "OFFICE_MANAGEMENT").build()
+                List.of(stepFor(1, "CONTROL_TIMES", Role.EMPLOYEE).build(),
+                        stepFor(2, "CONTROL_INTERNAL_TIMES", Role.OFFICE_MANAGEMENT).build(),
+                        stepFor(3, "CONTROL_EXTERNAL_TIMES", Role.OFFICE_MANAGEMENT).build(),
+                        stepFor(4, "CONTROL_TIME_EVIDENCES", Role.PROJECT_LEAD).build(),
+                        stepFor(5, "ACCEPT_TIMES", Role.OFFICE_MANAGEMENT).build()
                 ));
         when(notificationConfig.getOmMailAddresses()).thenReturn(List.of(userForOm(3).email()));
     }
@@ -461,7 +461,7 @@ class StepEntrySyncServiceImplTest {
                 .description(String.format("Description of Project %s", id));
     }
 
-    private Step.Builder stepFor(final int id, final String name, final String role) {
+    private Step.Builder stepFor(final int id, final String name, final Role role) {
         return Step.builder()
                 .dbId(id)
                 .ordinal(id)

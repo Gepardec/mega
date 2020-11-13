@@ -36,6 +36,7 @@ public class Step {
     /**
      * The role who is responsible for the step completion state
      */
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;

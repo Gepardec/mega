@@ -167,6 +167,8 @@ databaseChangeLog:
                   name: ordinal
                   type: INTEGER
               - column:
+                  constraints:
+                    nullable: false
                   name: role
                   type: VARCHAR(255)
             tableName: step
