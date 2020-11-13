@@ -1,5 +1,6 @@
 package com.gepardec.mega.db.entity;
 
+import com.gepardec.mega.domain.Role;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Length;
 
@@ -21,7 +22,8 @@ import java.util.Set;
         })
 @NamedQueries({
         @NamedQuery(name = "User.findActiveByEmail", query = "select u from User u where u.email = :email and u.active = true"),
-        @NamedQuery(name = "User.findActive", query = "select u from User u where u.active = true")
+        @NamedQuery(name = "User.findActive", query = "select u from User u where u.active = true"),
+        @NamedQuery(name = "User.findByRoles", query = "select u from User u where u.active = true and u.roles in (:roles)")
 })
 public class User {
 

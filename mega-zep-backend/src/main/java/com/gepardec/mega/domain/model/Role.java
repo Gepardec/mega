@@ -7,6 +7,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * @deprecated This kind of roles are deprecated and shall not be used anymore
+ */
+@Deprecated(forRemoval = true)
 public enum Role {
     USER(0),
     ADMINISTRATOR(1),

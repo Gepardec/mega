@@ -1,13 +1,15 @@
 package com.gepardec.mega.db.repository;
 
+import com.gepardec.mega.domain.Role;
 import com.gepardec.mega.db.entity.User;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.quarkus.panache.common.Parameters;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -17,11 +19,15 @@ public class UserRepository implements PanacheRepository<User> {
     EntityManager em;
 
     public Optional<User> findActiveByEmail(final String email) {
-        return find("#User.findActiveByEmail", Map.of("email", email)).firstResultOptional();
+        return find("#User.findActiveByEmail", Parameters.with("email", email)).firstResultOptional();
     }
 
     public List<User> findActive() {
         return find("#User.findActive").list();
+    }
+
+    public List<User> findByRoles(final Role... roles) {
+        return find("#User.findByRoles", Parameters.with("roles", Arrays.asList(roles))).list();
     }
 
     public User persistOrUpdate(final User user) {

@@ -1,4 +1,4 @@
-package com.gepardec.mega.db.entity;
+package com.gepardec.mega.domain;
 
 public enum Role {
     EMPLOYEE,

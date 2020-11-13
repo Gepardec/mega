@@ -1,7 +1,7 @@
 package com.gepardec.mega.service.impl.init;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
-import com.gepardec.mega.db.entity.Role;
+import com.gepardec.mega.domain.Role;
 import com.gepardec.mega.db.entity.User;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
@@ -54,7 +54,7 @@ class SyncServiceMapperTest {
 
         @Test
         void whenZepIdIsDifferent_thenZepIsNotUpdated() {
-            when(notificationConfig.getOmMailAddresses()).thenReturn("");
+            when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
             final User user = new User();
             user.setZepId("2");
             final Employee employee = employeeForUserId("1");
@@ -66,7 +66,7 @@ class SyncServiceMapperTest {
 
         @Test
         void whenEmployeeDataDiffers_thenUserIsUpdated() {
-            when(notificationConfig.getOmMailAddresses()).thenReturn("");
+            when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
             final User user = new User();
             user.setZepId("2");
             user.setRoles(Set.of(Role.EMPLOYEE, Role.OFFICE_MANAGEMENT, Role.PROJECT_LEAD));
@@ -104,7 +104,7 @@ class SyncServiceMapperTest {
 
         @Test
         void whenCalled_thenUserHasRoleEmployee() {
-            when(notificationConfig.getOmMailAddresses()).thenReturn("");
+            when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
             final Employee employee = employeeForUserId("1");
 
             final User actual = mapper.mapEmployeeToNewUser(employee, List.of(), DEFAULT_FRENCH_LOCALE);
@@ -114,7 +114,7 @@ class SyncServiceMapperTest {
 
         @Test
         void whenEmployee_thenUser() {
-            when(notificationConfig.getOmMailAddresses()).thenReturn("");
+            when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
             final Employee employee = Employee.builder()
                     .userId("1")
                     .email("thomas.herzog@gepardec.com")
@@ -144,7 +144,7 @@ class SyncServiceMapperTest {
 
             @BeforeEach
             void init() {
-                when(notificationConfig.getOmMailAddresses()).thenReturn("");
+                when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
             }
 
             @Test
@@ -182,7 +182,7 @@ class SyncServiceMapperTest {
 
             @Test
             void whenNoOmEmails_thenNoUserHasRoleOfficeManagement() {
-                when(notificationConfig.getOmMailAddresses()).thenReturn("");
+                when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
                 final Employee employee = employeeForEmail("thomas.herzog@gepardec.com");
 
                 final User actual = mapper.mapEmployeeToNewUser(employee, List.of(), DEFAULT_FRENCH_LOCALE);
@@ -192,7 +192,7 @@ class SyncServiceMapperTest {
 
             @Test
             void whenOmEmailsAndNoEmployeeIsOm_thenNoUserHasRoleOfficeManagement() {
-                when(notificationConfig.getOmMailAddresses()).thenReturn("herzog.thomas81@gmail.com");
+                when(notificationConfig.getOmMailAddresses()).thenReturn(List.of("herzog.thomas81@gmail.com"));
                 final Employee employee = employeeForEmail("thomas.herzog@gepardec.com");
 
                 final User actual = mapper.mapEmployeeToNewUser(employee, List.of(), DEFAULT_FRENCH_LOCALE);
@@ -202,7 +202,7 @@ class SyncServiceMapperTest {
 
             @Test
             void whenOmEmailsAndEmployeeIsOm_thenUserHasRoleOfficeManagement() {
-                when(notificationConfig.getOmMailAddresses()).thenReturn("thomas.herzog@gepardec.com");
+                when(notificationConfig.getOmMailAddresses()).thenReturn(List.of("thomas.herzog@gepardec.com"));
                 final Employee employee = employeeForEmail("thomas.herzog@gepardec.com");
 
                 final User actual = mapper.mapEmployeeToNewUser(employee, List.of(), DEFAULT_FRENCH_LOCALE);
@@ -216,7 +216,7 @@ class SyncServiceMapperTest {
 
             @BeforeEach
             void init() {
-                when(notificationConfig.getOmMailAddresses()).thenReturn("");
+                when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
             }
 
             @Test

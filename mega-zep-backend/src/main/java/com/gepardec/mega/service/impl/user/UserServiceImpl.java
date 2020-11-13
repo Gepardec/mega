@@ -20,11 +20,12 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
     private final EmployeeService employeeService;
 
     @Inject
     public UserServiceImpl(final UserRepository userRepository,
-                           final EmployeeService employeeService) {
+            final EmployeeService employeeService) {
         this.userRepository = userRepository;
         this.employeeService = employeeService;
     }
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService {
     @CacheResult(cacheName = "user-email")
     @Override
     @Transactional(Transactional.TxType.SUPPORTS)
-    public User getUser(@CacheKey final String email, final String pictureUrl) {
+    public User findUserForEmail(@CacheKey final String email, final String pictureUrl) {
         final com.gepardec.mega.db.entity.User user = userRepository.findActiveByEmail(email)
                 .orElseThrow(() -> new ForbiddenException("User with email '" + email + "' is either unknown or inactive"));
 
@@ -44,10 +45,11 @@ public class UserServiceImpl implements UserService {
 
         return User.builder()
                 .dbId(user.getId())
-                .userId(employee.userId())
-                .email(employee.email())
-                .firstname(employee.firstName())
-                .lastname(employee.sureName())
+                .userId(user.getZepId())
+                .email(user.getEmail())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                // TODO: Do we need role anymore
                 .role(Role.forId(employee.role()).orElse(null))
                 .pictureUrl(pictureUrl)
                 .build();
@@ -55,16 +57,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(Transactional.TxType.SUPPORTS)
-    public List<User> getActiveUsers() {
+    public List<User> findActiveUsers() {
         final List<com.gepardec.mega.db.entity.User> activeUsers = userRepository.findActive();
         return activeUsers.stream()
-                .map(user -> User.builder()
-                        .dbId(user.getId())
-                        .userId(user.getZepId())
-                        // TODO: temporary, refactor employee <-> user handling
-                        .firstname("test")
-                        .lastname("test")
-                        .email(user.getEmail()).build())
+                .map(this::mapUser)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(Transactional.TxType.SUPPORTS)
+    public List<User> findByRoles(com.gepardec.mega.domain.Role... roles) {
+        if (roles == null || roles.length == 0) {
+            throw new IllegalArgumentException("Cannot load users if no 'roles' are given");
+        }
+
+        return userRepository.findByRoles(roles).stream()
+                .map(this::mapUser)
+                .collect(Collectors.toList());
+    }
+
+    private User mapUser(final com.gepardec.mega.db.entity.User user) {
+        return User.builder()
+                .dbId(user.getId())
+                .userId(user.getZepId())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .email(user.getEmail())
+                .build();
     }
 }

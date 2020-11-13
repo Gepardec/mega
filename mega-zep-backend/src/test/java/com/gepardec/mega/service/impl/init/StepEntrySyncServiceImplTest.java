@@ -9,7 +9,6 @@ import com.gepardec.mega.service.api.project.ProjectService;
 import com.gepardec.mega.service.api.step.StepService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.service.api.user.UserService;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -53,7 +52,7 @@ class StepEntrySyncServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        when(userService.getActiveUsers()).thenReturn(List.of(
+        when(userService.findActiveUsers()).thenReturn(List.of(
                 userForProjectLead(1),
                 userForProjectLead(2),
                 userForOm(3),
@@ -101,7 +100,7 @@ class StepEntrySyncServiceImplTest {
                         stepFor(4, "CONTROL_TIME_EVIDENCES", "PROJECT_LEAD").build(),
                         stepFor(5, "ACCEPT_TIMES", "OFFICE_MANAGEMENT").build()
                 ));
-        when(notificationConfig.getOmMailAddresses()).thenReturn(userForOm(3).email());
+        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of(userForOm(3).email()));
     }
 
     @Nested
@@ -130,7 +129,7 @@ class StepEntrySyncServiceImplTest {
 
         @BeforeEach
         void setUp() {
-            when(notificationConfig.getOmMailAddresses()).thenReturn(StringUtils.EMPTY);
+            when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
         }
 
         @Test
@@ -230,7 +229,7 @@ class StepEntrySyncServiceImplTest {
         @Test
         void whenOfficeManagmentIsInactive_thenDoNotInsertOfficeManagment() {
             // Given
-            when(notificationConfig.getOmMailAddresses()).thenReturn("some.user@gepardec.com");
+            when(notificationConfig.getOmMailAddresses()).thenReturn(List.of("some.user@gepardec.com"));
 
             // When
             stepEntrySyncService.genereteStepEntries();
@@ -253,7 +252,7 @@ class StepEntrySyncServiceImplTest {
         @Test
         void whenNoOfficeManagmentIsProvided_thenDoNotInsertOfficeManagment() {
             // Given
-            when(notificationConfig.getOmMailAddresses()).thenReturn(StringUtils.EMPTY);
+            when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
 
             // When
             stepEntrySyncService.genereteStepEntries();
@@ -308,7 +307,7 @@ class StepEntrySyncServiceImplTest {
         @Test
         void whenNoActiveUsers_thenDoNotInsertEmployees() {
             // Given
-            when(userService.getActiveUsers()).thenReturn(List.of());
+            when(userService.findActiveUsers()).thenReturn(List.of());
 
             // When
             stepEntrySyncService.genereteStepEntries();
