@@ -1,7 +1,7 @@
 package com.gepardec.mega.notification.mail.dates;
 
-import com.gepardec.mega.notification.mail.Reminder;
-import com.gepardec.mega.notification.mail.ReminderType;
+import com.gepardec.mega.notification.mail.Mail;
+import com.gepardec.mega.notification.mail.MailType;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -22,30 +22,30 @@ public class BusinessDayCalculator {
     @Inject
     Logger logger;
 
-    public Optional<Reminder> getEventForDate(LocalDate actualDate) {
+    public Optional<Mail> getEventForDate(LocalDate actualDate) {
 
         logger.info("starting getEventForDate with date {}", actualDate);
 
-        Map<LocalDate, Reminder> reminderByDate = new HashMap<>(0);
+        Map<LocalDate, Mail> reminderByDate = new HashMap<>(0);
         LocalDate firstWorkingDayOfMonth = calcFirstWorkingDayOfMonthForDate(actualDate);
 
-        Arrays.stream(Reminder.values())
+        Arrays.stream(Mail.values())
                 .forEach(reminder -> reminderByDate.put(calcDateForReminder(firstWorkingDayOfMonth, reminder), reminder));
 
-        Optional<Reminder> relevantReminder = Optional.ofNullable(reminderByDate.get(actualDate));
+        Optional<Mail> relevantReminder = Optional.ofNullable(reminderByDate.get(actualDate));
         relevantReminder.ifPresent(reminder -> logger.info("Reminder {} was calculated", reminder.name()));
 
         return relevantReminder;
     }
 
-    private LocalDate calcDateForReminder(LocalDate firstWorkingdayOfMonth, Reminder reminder) {
-        if (reminder.getType() == ReminderType.DAY_OF_MONTH_BASED) {
-            return calcNextWorkingdayForDayOfMonth(firstWorkingdayOfMonth, reminder.getDay());
-        } else if (reminder.getType() == ReminderType.WORKING_DAY_BASED) {
-            if (reminder.getDay() > 0) {
-                return addWorkingdays(firstWorkingdayOfMonth, reminder.getDay() - 1);
+    private LocalDate calcDateForReminder(LocalDate firstWorkingdayOfMonth, Mail mail) {
+        if (mail.getType() == MailType.DAY_OF_MONTH_BASED) {
+            return calcNextWorkingdayForDayOfMonth(firstWorkingdayOfMonth, mail.getDay());
+        } else if (mail.getType() == MailType.WORKING_DAY_BASED) {
+            if (mail.getDay() > 0) {
+                return addWorkingdays(firstWorkingdayOfMonth, mail.getDay() - 1);
             } else {
-                return removeWorkingdaysFromNextMonth(firstWorkingdayOfMonth, reminder.getDay());
+                return removeWorkingdaysFromNextMonth(firstWorkingdayOfMonth, mail.getDay());
             }
         } else {
             return LocalDate.MIN;

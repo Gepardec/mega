@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static com.gepardec.mega.notification.mail.Reminder.*;
+import static com.gepardec.mega.notification.mail.Mail.*;
 
 @ApplicationScoped
 @Transactional(Transactional.TxType.SUPPORTS)
@@ -40,7 +40,7 @@ public class ReminderEmailSender {
 
     public void sendReminder() {
         logger.info("Mail-Daemon-cron-job started at {}", DateUtils.today().toString());
-        Optional<Reminder> reminder = businessDayCalculator.getEventForDate(DateUtils.today());
+        Optional<Mail> reminder = businessDayCalculator.getEventForDate(DateUtils.today());
         if (reminder.isPresent()) {
             switch (reminder.get()) {
                 case EMPLOYEE_CHECK_PROJECTTIME: {
@@ -83,23 +83,23 @@ public class ReminderEmailSender {
             throw new IllegalStateException("No mail address for project-leaders available, check value for property 'mega.mail.reminder.pl'!");
         }
         List.of(notificationConfig.getPlMailAddresses().split("\\,"))
-                .forEach(mailAddress -> mailSender.sendReminder(mailAddress, getNameByMail(mailAddress), PL_PROJECT_CONTROLLING, applicationConfig.getDefaultLocale()));
+                .forEach(mailAddress -> mailSender.send(PL_PROJECT_CONTROLLING, mailAddress, getNameByMail(mailAddress), applicationConfig.getDefaultLocale()));
         logSentNotification(PL_PROJECT_CONTROLLING);
     }
 
-    void sendReminderToOm(Reminder reminder) {
+    void sendReminderToOm(Mail mail) {
         if (notificationConfig.getOmMailAddresses().trim().isEmpty()) {
             throw new IllegalStateException("No mail address for om available, check value for property 'mega.mail.reminder.om'!");
         }
         List.of(notificationConfig.getOmMailAddresses().split("\\,"))
-                .forEach(mailAddress -> mailSender.sendReminder(mailAddress, getNameByMail(mailAddress), reminder, applicationConfig.getDefaultLocale()));
-        logSentNotification(reminder);
+                .forEach(mailAddress -> mailSender.send(mail, mailAddress, getNameByMail(mailAddress), applicationConfig.getDefaultLocale()));
+        logSentNotification(mail);
     }
 
     void sendReminderToUser() {
         if (notificationConfig.isEmployeesNotification()) {
             userRepository.listAll()
-                    .forEach(user -> mailSender.sendReminder(user.getEmail(), getNameByMail(user.getEmail()), EMPLOYEE_CHECK_PROJECTTIME, applicationConfig.getDefaultLocale()));
+                    .forEach(user -> mailSender.send(EMPLOYEE_CHECK_PROJECTTIME, user.getEmail(), getNameByMail(user.getEmail()), applicationConfig.getDefaultLocale()));
             logSentNotification(EMPLOYEE_CHECK_PROJECTTIME);
         } else {
             logger.info("NO Reminder to employes sent, cause mega.mail.employees.notification-property is false");
@@ -115,7 +115,7 @@ public class ReminderEmailSender {
         return StringUtils.EMPTY;
     }
 
-    private void logSentNotification(Reminder reminder) {
-        logger.info("{}. working-day of month. Notification sent for Reminder {}", reminder.getDay(), reminder.name());
+    private void logSentNotification(Mail mail) {
+        logger.info("{}. working-day of month. Notification sent for Reminder {}", mail.getDay(), mail.name());
     }
 }

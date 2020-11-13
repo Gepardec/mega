@@ -7,6 +7,7 @@ import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.FinishedAndTotalComments;
 import com.gepardec.mega.domain.utils.DateUtils;
+import com.gepardec.mega.notification.mail.MailSender;
 import com.gepardec.mega.service.api.comment.CommentService;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -25,6 +26,9 @@ public class CommentServiceImpl implements CommentService {
     @Inject
     CommentMapper commentMapper;
 
+    @Inject
+    MailSender mailSender;
+
     @Override
     public List<Comment> findCommentsForEmployee(final Employee employee) {
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
@@ -42,6 +46,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public int setDone(final Comment comment) {
+        //TODO: Send email
         return commentRepository.setStatusDone(comment.id());
     }
 
