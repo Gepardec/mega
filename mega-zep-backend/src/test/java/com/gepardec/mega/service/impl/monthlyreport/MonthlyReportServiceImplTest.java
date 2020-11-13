@@ -125,8 +125,8 @@ public class MonthlyReportServiceImplTest {
 
         final Employee employee = Employee.builder()
                 .email(name + "@gepardec.com")
-                .firstName(name)
-                .sureName(name + "_Nachname")
+                .firstname(name)
+                .lastname(name + "_Nachname")
                 .title("Ing.")
                 .userId(String.valueOf(userId))
                 .salutation("Herr")

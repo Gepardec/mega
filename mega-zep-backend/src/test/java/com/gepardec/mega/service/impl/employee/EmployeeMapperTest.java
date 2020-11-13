@@ -155,8 +155,8 @@ class EmployeeMapperTest {
         Assertions.assertNotNull(employee);
         Assertions.assertEquals(employee.getUserId(), actual.userId());
         Assertions.assertEquals(employee.getEmail(), actual.email());
-        Assertions.assertEquals(employee.getVorname(), actual.firstName());
-        Assertions.assertEquals(employee.getNachname(), actual.sureName());
+        Assertions.assertEquals(employee.getVorname(), actual.firstname());
+        Assertions.assertEquals(employee.getNachname(), actual.lastname());
         Assertions.assertEquals(employee.getTitel(), actual.title());
         Assertions.assertEquals(employee.getAnrede(), actual.salutation());
         Assertions.assertEquals(employee.getPreisgruppe(), actual.workDescription());
