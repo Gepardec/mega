@@ -10,7 +10,6 @@ import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
-import com.gepardec.mega.service.impl.monthlyreport.calculation.WarningCalculator;
 import com.gepardec.mega.zep.ZepService;
 
 import javax.enterprise.context.RequestScoped;
