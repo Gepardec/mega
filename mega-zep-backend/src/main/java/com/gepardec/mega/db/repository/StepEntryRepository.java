@@ -10,18 +10,19 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class StepEntryRepository implements PanacheRepository<StepEntry> {
 
-    public List<StepEntry> findAllOwnedAndAssignedStepEntriesForEmployee(LocalDate entryDate, String ownerAndAssigneeEmail) {
+    public Optional<StepEntry> findAllOwnedAndAssignedStepEntriesForEmployee(LocalDate entryDate, String ownerAndAssigneeEmail) {
         return find("#StepEntry.findAllOwnedAndAssignedStepEntriesForEmployee",
                 Parameters
                         .with("entryDate", entryDate)
                         .and("ownerEmail", ownerAndAssigneeEmail)
                         .and("assigneeEmail", ownerAndAssigneeEmail)
                         .and("stepId", StepName.CONTROL_TIMES.getId()))
-                .list();
+                .singleResultOptional();
     }
 
     public List<StepEntry> findAllOwnedAndUnassignedStepEntriesForOtherChecks(LocalDate entryDate, String ownerEmail) {

@@ -14,7 +14,6 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class StepEntryServiceImpl implements StepEntryService {
@@ -29,12 +28,10 @@ public class StepEntryServiceImpl implements StepEntryService {
     public Optional<State> findEmployeeCheckState(final Employee employee) {
         LocalDate entryDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
 
-        List<StepEntry> stepEntries =
+        Optional<StepEntry> stepEntries =
                 stepEntryRepository.findAllOwnedAndAssignedStepEntriesForEmployee(entryDate, employee.email());
 
-        List<State> states = stepEntries.stream().map(StepEntry::getState).collect(Collectors.toList());
-
-        return states.isEmpty() ? Optional.empty() : Optional.ofNullable(states.get(0));
+        return stepEntries.stream().map(StepEntry::getState).findFirst();
     }
 
     @Override

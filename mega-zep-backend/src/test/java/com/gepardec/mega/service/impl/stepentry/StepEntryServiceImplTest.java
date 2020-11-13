@@ -30,10 +30,9 @@ class StepEntryServiceImplTest {
 
     @Test
     void findEmployeeCheckState_whenValidStepEntries_thenValidState() {
-        StepEntry stepEntry1 = createStepEntry(1L);
-        StepEntry stepEntry2 = createStepEntry(2L);
+        StepEntry stepEntry = createStepEntry(1L);
 
-        List<StepEntry> stepEntries = List.of(stepEntry1, stepEntry2);
+        Optional<StepEntry> stepEntries = Optional.of(stepEntry);
         when(stepEntryRepository.findAllOwnedAndAssignedStepEntriesForEmployee(ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.anyString())).thenReturn(stepEntries);
 
