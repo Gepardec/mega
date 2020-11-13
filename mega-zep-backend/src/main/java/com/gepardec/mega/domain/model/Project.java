@@ -26,11 +26,8 @@ public abstract class Project {
     @JsonProperty
     public abstract List<String> leads();
 
-    @JsonProperty
-    public abstract boolean active();
-
     public static Project.Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_Project.Builder().active(false);
+        return new com.gepardec.mega.domain.model.AutoValue_Project.Builder();
     }
 
     @AutoValue.Builder
@@ -46,9 +43,6 @@ public abstract class Project {
 
         @JsonProperty
         public abstract Project.Builder leads(List<String> leads);
-
-        @JsonProperty
-        public abstract Project.Builder active(boolean active);
 
         @JsonProperty
         public abstract Project build();

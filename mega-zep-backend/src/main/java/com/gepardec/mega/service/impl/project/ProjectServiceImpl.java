@@ -43,8 +43,6 @@ public class ProjectServiceImpl implements ProjectService {
         switch (projectFilter) {
             case IS_LEADS_AVAILABLE:
                 return !project.leads().isEmpty();
-            case IS_ACTIVE:
-                return project.active();
             case IS_CUSTOMER_PROJECT:
                 return !StringUtils.startsWith(project.projectId(), INTERN_PROJECT_PREFIX);
             default:
