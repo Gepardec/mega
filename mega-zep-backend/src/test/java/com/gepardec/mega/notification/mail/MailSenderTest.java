@@ -44,8 +44,8 @@ class MailSenderTest {
                 Arguments.of(Mail.OM_RELEASE, "UNIT-TEST: Reminder: Freigaben durchführen"),
                 Arguments.of(Mail.OM_ADMINISTRATIVE, "UNIT-TEST: Reminder: Administratives"),
                 Arguments.of(Mail.OM_SALARY, "UNIT-TEST: Reminder: Gehälter"),
-                Arguments.of(Mail.COMMENT_CREATED, "UNIT-TEST: MEGA: Anmerkung von [Thomas] erhalten"),
-                Arguments.of(Mail.COMMENT_CLOSED, "UNIT-TEST: MEGA: Anmerkung von [Thomas] erledigt")
+                Arguments.of(Mail.COMMENT_CREATED, "UNIT-TEST: MEGA: Anmerkung von Thomas erhalten"),
+                Arguments.of(Mail.COMMENT_CLOSED, "UNIT-TEST: MEGA: Anmerkung von Thomas erledigt")
         );
     }
 

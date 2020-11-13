@@ -8,13 +8,11 @@ import javax.inject.Inject;
 @ApplicationScoped
 public class NotificationConfig {
 
+    private static final String LOGO_PATH = "img/logo.png";
+
     @Inject
     @ConfigProperty(name = "mega.mail.subject-prefix", defaultValue = " ")
     String subjectPrefix;
-
-    @Inject
-    @ConfigProperty(name = "mega.logo-path")
-    String megaImageLogoUrl;
 
     @Inject
     @ConfigProperty(name = "mega.wiki.eom-url")
@@ -41,7 +39,7 @@ public class NotificationConfig {
     }
 
     public String getMegaImageLogoUrl() {
-        return megaImageLogoUrl;
+        return LOGO_PATH;
     }
 
     public String getMegaWikiEomUrl() {

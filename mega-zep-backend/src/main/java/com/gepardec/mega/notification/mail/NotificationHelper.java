@@ -71,7 +71,7 @@ public class NotificationHelper {
         final String subject = subjectPrefixOrEmptyString() + resourceBundleProducer.getResourceBundle(locale)
                 .getString(String.format(MESSAGE_KEY_TEMPLATE_REMINDER, mail.name()));
         if (parameter != null && !parameter.isEmpty()) {
-            return MessageFormat.format(subject, parameter);
+            return MessageFormat.format(subject, parameter.toArray());
         }
 
         return subject;

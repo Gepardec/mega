@@ -30,7 +30,6 @@ mega:
     git:
       branch: '${git.branch}'
       commit: '${git.commit}'
-  logo-path: img/logo.png
   wiki:
     eom-url: https://sites.google.com/a/gepardec.com/internal/zeiterfassung-mit-zep/monatsende-kontrolle-von-arbeitszeiten
   zep:
@@ -46,7 +45,7 @@ mega:
         "user-email":
           expire-after-write: 10M
     mailer:
-        mock: true
+        mock: false
     datasource:
       db-kind: postgresql
       username: mega
