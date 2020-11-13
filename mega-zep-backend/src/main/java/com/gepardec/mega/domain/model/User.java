@@ -23,7 +23,6 @@ public abstract class User {
     @JsonProperty public abstract String firstname();
     @JsonProperty public abstract String lastname();
     @JsonProperty public abstract Set<Role> roles();
-    @Nullable @JsonProperty public abstract String pictureUrl();
 
     public static Builder builder() {
         return new com.gepardec.mega.domain.model.AutoValue_User.Builder();
@@ -37,7 +36,6 @@ public abstract class User {
         @JsonProperty public abstract Builder firstname(String firstname);
         @JsonProperty public abstract Builder lastname(String lastname);
         @JsonProperty public abstract Builder roles(Set<Role> roles);
-        @JsonProperty public abstract Builder pictureUrl(String pictureUrl);
         @JsonProperty public abstract User build();
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserService {
 
-    User findUserForEmail(String email, String pictureUrl);
+    User findUserForEmail(String email);
 
     List<User> findActiveUsers();
 

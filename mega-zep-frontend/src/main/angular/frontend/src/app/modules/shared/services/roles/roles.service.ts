@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Route, Router } from '@angular/router';
 import { UserService } from '../user/user.service';
 import { User } from '../../models/User';
-import { Role } from '../../models/Role';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +26,7 @@ export class RolesService {
     }
 
     if (route.data) {
-      return (route.data.roles as Array<string>).find(role => Role[role] === user.role) !== undefined;
+      return user.roles.indexOf(route.data.role) > -1;
     } else {
       return true;
     }

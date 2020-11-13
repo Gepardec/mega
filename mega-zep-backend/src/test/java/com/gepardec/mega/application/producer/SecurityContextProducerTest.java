@@ -45,7 +45,6 @@ class SecurityContextProducerTest {
         // Then
         assertNotNull(securityContext.email());
         assertEquals("test@gepardec.com", securityContext.email());
-        assertEquals("picture", securityContext.pictureUrl());
     }
 
     @Test

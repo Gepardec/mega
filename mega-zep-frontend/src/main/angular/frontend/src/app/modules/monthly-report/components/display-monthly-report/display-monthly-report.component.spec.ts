@@ -43,7 +43,6 @@ describe('DisplayMonthlyReportComponent', () => {
         releaseDate: '2020-07-01',
         workDescription: '05',
         email: 'mario.aslan@gepardec.com',
-        role: 1,
         title: null,
         active: true
       }

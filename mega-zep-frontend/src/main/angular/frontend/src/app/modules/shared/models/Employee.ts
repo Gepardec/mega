@@ -3,7 +3,6 @@ export class Employee {
   sureName: string;
   firstName: string;
   email: string;
-  role: number;
   title: string;
   releaseDate: string;
   workDescription: string;

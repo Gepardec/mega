@@ -33,7 +33,7 @@ public class UserContextProducer {
 
     private User verifyAndLoadUser() {
         if (securityContext.email() != null) {
-            return userService.findUserForEmail(securityContext.email(), Optional.ofNullable(securityContext.pictureUrl()).orElse(StringUtils.EMPTY));
+            return userService.findUserForEmail(securityContext.email());
         } else {
             throw new UnauthorizedException("No security context provided");
         }

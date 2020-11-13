@@ -43,8 +43,7 @@ class UserContextProducerTest {
                 .roles(Set.of(Role.EMPLOYEE))
                 .build();
         when(securityContext.email()).thenReturn("test@gepardec.com");
-        when(securityContext.pictureUrl()).thenReturn("http://www.gepardec.com/test.jpg");
-        when(userService.findUserForEmail("test@gepardec.com", "http://www.gepardec.com/test.jpg")).thenReturn(user);
+        when(userService.findUserForEmail("test@gepardec.com")).thenReturn(user);
 
         // When
         final UserContext userContext = producer.createUserContext();

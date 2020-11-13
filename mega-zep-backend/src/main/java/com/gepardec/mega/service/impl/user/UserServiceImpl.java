@@ -25,11 +25,11 @@ public class UserServiceImpl implements UserService {
     @CacheResult(cacheName = "user-email")
     @Override
     @Transactional(Transactional.TxType.SUPPORTS)
-    public User findUserForEmail(@CacheKey final String email, final String pictureUrl) {
+    public User findUserForEmail(@CacheKey final String email) {
         final com.gepardec.mega.db.entity.User user = userRepository.findActiveByEmail(email)
                 .orElseThrow(() -> new ForbiddenException("User with email '" + email + "' is either unknown or inactive"));
 
-        return mapper.map(user, pictureUrl);
+        return mapper.map(user);
     }
 
     @Override
