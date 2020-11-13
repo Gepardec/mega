@@ -76,4 +76,11 @@ public class StepEntryServiceImpl implements StepEntryService {
 
         return stepEntryRepository.closeAssigned(fromDate, toDate, employee.email(), stepId) > 0;
     }
+
+    public List<StepEntry> findAllStepEntriesForEmployee(Employee employee) {
+        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+
+        return stepEntryRepository.findAllOwnedStepEntriesInRange(fromDate, toDate, employee.email());
+    }
 }

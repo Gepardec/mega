@@ -14,7 +14,7 @@ import java.util.List;
 public class CommentRepository implements PanacheRepository<Comment> {
 
     public List<Comment> findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(LocalDate startDate, LocalDate endDate, String email) {
-        return find("SELECT c FROM Comment c WHERE c.stepEntry.owner.email = :email AND ((c.stepEntry.date BETWEEN :start AND :end) OR (c.stepEntry.date < :start AND c.state = :state))",
+        return find("#Comment.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail",
                 Parameters
                         .with("start", startDate)
                         .and("end", endDate)
@@ -29,5 +29,14 @@ public class CommentRepository implements PanacheRepository<Comment> {
                 Parameters
                         .with("id", id)
                         .and("state", State.DONE));
+    }
+
+    public List<Comment> findAllCommentsBetweenStartAndEndDateForEmail(LocalDate startDate, LocalDate endDate, String email) {
+        return find("#Comment.findAllCommentsBetweenStartAndEndDateForEmail",
+                Parameters
+                        .with("start", startDate)
+                        .and("end", endDate)
+                        .and("email", email))
+                .list();
     }
 }

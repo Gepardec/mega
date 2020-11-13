@@ -1,5 +1,6 @@
 package com.gepardec.mega.service.api.employee;
 
+import com.gepardec.mega.db.entity.User;
 import com.gepardec.mega.domain.model.Employee;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface EmployeeService {
     void updateEmployeeReleaseDate(final String userId, final String releaseDate);
 
     List<String> updateEmployeesReleaseDate(List<Employee> employees);
+
+    List<User> getAll();
 }

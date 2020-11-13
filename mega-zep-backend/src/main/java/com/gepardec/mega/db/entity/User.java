@@ -93,6 +93,9 @@ public class User {
     @Column(name = "active")
     private Boolean active;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "stepEntry")
+    private Set<Comment> comments = new HashSet<>(0);
+
     @NotNull
     @Size(min = 1)
     @ElementCollection(targetClass = Role.class)
@@ -207,6 +210,14 @@ public class User {
         this.active = active;
     }
 
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
     public Set<StepEntry> getAssignedStepEntries() {
         return assignedStepEntries;
     }
@@ -221,14 +232,6 @@ public class User {
 
     public void setOwnedStepEntries(Set<StepEntry> ownedStepEntries) {
         this.ownedStepEntries = ownedStepEntries;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 
     @Override
@@ -248,18 +251,15 @@ public class User {
         return (id != null) ? Objects.hash(id) : super.hashCode();
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "User{" +
                 "id=" + id +
                 ", creationDate=" + creationDate +
                 ", updatedDate=" + updatedDate +
                 ", email='" + email + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", locale=" + locale +
                 ", zepId='" + zepId + '\'' +
                 ", active=" + active +
-                ", roles=" + roles +
                 ", assignedStepEntries=" + assignedStepEntries +
                 ", ownedStepEntries=" + ownedStepEntries +
                 '}';
