@@ -31,7 +31,7 @@ public class StepEntryServiceImpl implements StepEntryService {
         Optional<StepEntry> stepEntries =
                 stepEntryRepository.findAllOwnedAndAssignedStepEntriesForEmployee(entryDate, employee.email());
 
-        return stepEntries.stream().map(StepEntry::getState).findFirst();
+        return stepEntries.map(StepEntry::getState);
     }
 
     @Override
