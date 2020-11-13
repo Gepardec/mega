@@ -32,7 +32,6 @@ public class SecurityContextProducer {
         if (googleIdToken != null) {
             return SecurityContext.builder()
                     .email(googleIdToken.getPayload().getEmail())
-                    .pictureUrl(googleIdToken.getPayload().get("picture").toString())
                     .build();
         } else {
             return SecurityContext.builder().build();

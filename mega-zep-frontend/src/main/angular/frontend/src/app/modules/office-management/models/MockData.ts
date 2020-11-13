@@ -4,11 +4,10 @@ import { OfficeManagementEntry } from './OfficeManagementEntry';
 export const omEntriesMock: Array<OfficeManagementEntry> = [
   {
     employee: {
-      firstName: 'Mock',
-      sureName: 'Other',
+      firstname: 'Mock',
+      lastname: 'Other',
       workDescription: '02',
       email: 'someemail@example.com',
-      role: 1,
       salutation: 'Mister',
       title: 'Mag.',
       userId: '000-mother',
@@ -24,11 +23,10 @@ export const omEntriesMock: Array<OfficeManagementEntry> = [
   },
   {
     employee: {
-      firstName: 'A',
-      sureName: 'Aslary',
+      firstname: 'A',
+      lastname: 'Aslary',
       workDescription: '02',
       email: 'someemail@example.com',
-      role: 1,
       salutation: 'Mister',
       title: 'Mag.',
       userId: '000-mother',
@@ -44,11 +42,10 @@ export const omEntriesMock: Array<OfficeManagementEntry> = [
   },
   {
     employee: {
-      firstName: 'Mock',
-      sureName: 'Berto',
+      firstname: 'Mock',
+      lastname: 'Berto',
       workDescription: '02',
       email: 'someemail@example.com',
-      role: 1,
       salutation: 'Mister',
       title: 'Mag.',
       userId: '000-mother',
@@ -64,11 +61,10 @@ export const omEntriesMock: Array<OfficeManagementEntry> = [
   },
   {
     employee: {
-      firstName: 'Lincoln',
-      sureName: 'Burrows',
+      firstname: 'Lincoln',
+      lastname: 'Burrows',
       workDescription: '02',
       email: 'someemail@example.com',
-      role: 1,
       salutation: 'Mister',
       title: 'Mag.',
       userId: '000-mother',
@@ -141,11 +137,10 @@ export const omEntriesMock: Array<OfficeManagementEntry> = [
   },
   {
     employee: {
-      firstName: 'Italy',
-      sureName: 'Spritzer',
+      firstname: 'Italy',
+      lastname: 'Spritzer',
       workDescription: '02',
       email: 'someemail@example.com',
-      role: 1,
       salutation: 'Mister',
       title: 'Mag.',
       userId: '000-mother',
@@ -407,11 +402,10 @@ export const omEntriesMock: Array<OfficeManagementEntry> = [
   },
   {
     employee: {
-      firstName: 'Carlos',
-      sureName: 'Has no car',
+      firstname: 'Carlos',
+      lastname: 'Has no car',
       workDescription: '02',
       email: 'someemail@example.com',
-      role: 1,
       salutation: 'Mister',
       title: 'Mag.',
       userId: '000-mother',
@@ -456,11 +450,10 @@ export const omEntriesMock: Array<OfficeManagementEntry> = [
   },
   {
     employee: {
-      firstName: 'Pablo',
-      sureName: 'Escobar',
+      firstname: 'Pablo',
+      lastname: 'Escobar',
       workDescription: '02',
       email: 'someemail@example.com',
-      role: 1,
       salutation: 'Mister',
       title: 'Mag.',
       userId: '000-mother',
@@ -484,11 +477,10 @@ export const omEntriesMock: Array<OfficeManagementEntry> = [
   },
   {
     employee: {
-      firstName: 'Richard',
-      sureName: 'Stallman',
+      firstname: 'Richard',
+      lastname: 'Stallman',
       workDescription: '02',
       email: 'someemail@example.com',
-      role: 1,
       salutation: 'Mister',
       title: 'Mag.',
       userId: '000-mother',

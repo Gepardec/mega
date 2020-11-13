@@ -1,6 +1,7 @@
 package com.gepardec.mega.service.impl.init;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.Step;
 import com.gepardec.mega.domain.model.StepEntry;
@@ -9,7 +10,6 @@ import com.gepardec.mega.service.api.project.ProjectService;
 import com.gepardec.mega.service.api.step.StepService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.service.api.user.UserService;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -23,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.*;
@@ -53,7 +54,7 @@ class StepEntrySyncServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        when(userService.getActiveUsers()).thenReturn(List.of(
+        when(userService.findActiveUsers()).thenReturn(List.of(
                 userForProjectLead(1),
                 userForProjectLead(2),
                 userForOm(3),
@@ -95,13 +96,13 @@ class StepEntrySyncServiceImplTest {
                         .build()
         ));
         when(stepService.getSteps()).thenReturn(
-                List.of(stepFor(1, "CONTROL_TIMES", null).build(),
-                        stepFor(2, "CONTROL_INTERNAL_TIMES", "OFFICE_MANAGEMENT").build(),
-                        stepFor(3, "CONTROL_EXTERNAL_TIMES", "OFFICE_MANAGEMENT").build(),
-                        stepFor(4, "CONTROL_TIME_EVIDENCES", "PROJECT_LEAD").build(),
-                        stepFor(5, "ACCEPT_TIMES", "OFFICE_MANAGEMENT").build()
+                List.of(stepFor(1, "CONTROL_TIMES", Role.EMPLOYEE).build(),
+                        stepFor(2, "CONTROL_INTERNAL_TIMES", Role.OFFICE_MANAGEMENT).build(),
+                        stepFor(3, "CONTROL_EXTERNAL_TIMES", Role.OFFICE_MANAGEMENT).build(),
+                        stepFor(4, "CONTROL_TIME_EVIDENCES", Role.PROJECT_LEAD).build(),
+                        stepFor(5, "ACCEPT_TIMES", Role.OFFICE_MANAGEMENT).build()
                 ));
-        when(notificationConfig.getOmMailAddresses()).thenReturn(userForOm(3).email());
+        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of(userForOm(3).email()));
     }
 
     @Nested
@@ -130,7 +131,7 @@ class StepEntrySyncServiceImplTest {
 
         @BeforeEach
         void setUp() {
-            when(notificationConfig.getOmMailAddresses()).thenReturn(StringUtils.EMPTY);
+            when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
         }
 
         @Test
@@ -230,7 +231,7 @@ class StepEntrySyncServiceImplTest {
         @Test
         void whenOfficeManagmentIsInactive_thenDoNotInsertOfficeManagment() {
             // Given
-            when(notificationConfig.getOmMailAddresses()).thenReturn("some.user@gepardec.com");
+            when(notificationConfig.getOmMailAddresses()).thenReturn(List.of("some.user@gepardec.com"));
 
             // When
             stepEntrySyncService.genereteStepEntries();
@@ -253,7 +254,7 @@ class StepEntrySyncServiceImplTest {
         @Test
         void whenNoOfficeManagmentIsProvided_thenDoNotInsertOfficeManagment() {
             // Given
-            when(notificationConfig.getOmMailAddresses()).thenReturn(StringUtils.EMPTY);
+            when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
 
             // When
             stepEntrySyncService.genereteStepEntries();
@@ -308,7 +309,7 @@ class StepEntrySyncServiceImplTest {
         @Test
         void whenNoActiveUsers_thenDoNotInsertEmployees() {
             // Given
-            when(userService.getActiveUsers()).thenReturn(List.of());
+            when(userService.findActiveUsers()).thenReturn(List.of());
 
             // When
             stepEntrySyncService.genereteStepEntries();
@@ -450,6 +451,7 @@ class StepEntrySyncServiceImplTest {
                 .userId(id + "-userId")
                 .firstname(firstname + id)
                 .lastname(lastname)
+                .roles(Set.of(Role.EMPLOYEE))
                 .email(String.format("%s%s.%s@gepardec.com", firstname, id, lastname));
     }
 
@@ -459,7 +461,7 @@ class StepEntrySyncServiceImplTest {
                 .description(String.format("Description of Project %s", id));
     }
 
-    private Step.Builder stepFor(final int id, final String name, final String role) {
+    private Step.Builder stepFor(final int id, final String name, final Role role) {
         return Step.builder()
                 .dbId(id)
                 .ordinal(id)

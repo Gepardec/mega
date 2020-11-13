@@ -1,7 +1,5 @@
 package com.gepardec.mega.domain.calculation.journey;
 
-
-import com.gepardec.mega.domain.calculation.journey.JourneyDirectionValidator;
 import com.gepardec.mega.domain.model.monthlyreport.Warning;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

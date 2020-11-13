@@ -10,6 +10,8 @@ import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Set;
+
 import static io.restassured.RestAssured.given;
 import static org.mockito.Mockito.when;
 
@@ -24,7 +26,7 @@ class UserResourceTest {
 
     @Test
     void get_whenUserNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(userContext.user()).thenReturn(user);
 
         given().get("/user")
@@ -33,7 +35,7 @@ class UserResourceTest {
 
     @Test
     void get_whenUserIsLogged_thenReturnsHttpStatusOK() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -43,7 +45,7 @@ class UserResourceTest {
 
     @Test
     void get_whenUserIsLogged_thenReturnsUser() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -62,7 +64,7 @@ class UserResourceTest {
                 .email("thomas.herzog@gpeardec.com")
                 .firstname("Thomas")
                 .lastname("Herzog")
-                .role(role)
+                .roles(Set.of(role))
                 .build();
     }
 }
