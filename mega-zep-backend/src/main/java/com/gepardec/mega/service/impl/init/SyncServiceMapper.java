@@ -2,7 +2,7 @@ package com.gepardec.mega.service.impl.init;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
 import com.gepardec.mega.db.entity.User;
-import com.gepardec.mega.domain.Role;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
 import org.slf4j.Logger;

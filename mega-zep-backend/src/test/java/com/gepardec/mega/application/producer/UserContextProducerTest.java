@@ -1,7 +1,7 @@
 package com.gepardec.mega.application.producer;
 
 import com.gepardec.mega.application.exception.UnauthorizedException;
-import com.gepardec.mega.domain.Role;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.SecurityContext;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.UserContext;

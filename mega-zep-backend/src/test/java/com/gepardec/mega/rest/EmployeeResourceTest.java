@@ -1,10 +1,7 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.domain.Role;
-import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.SecurityContext;
-import com.gepardec.mega.domain.model.User;
-import com.gepardec.mega.domain.model.UserContext;
+import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.domain.model.*;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
@@ -53,7 +50,7 @@ public class EmployeeResourceTest {
 
     @Test
     void list_whenUserLoggedAndInRoleEMPLOYEE_thenReturnsHttpStatusFORBIDDEN() {
-        final User user = createUserForRole(com.gepardec.mega.domain.Role.EMPLOYEE);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -63,7 +60,7 @@ public class EmployeeResourceTest {
 
     @Test
     void list_whenUserLoggedAndInRoleOFFICE_MANAGEMENT_thenReturnsHttpStatusOK() {
-        final User user = createUserForRole(com.gepardec.mega.domain.Role.OFFICE_MANAGEMENT);
+        final User user = createUserForRole(Role.OFFICE_MANAGEMENT);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
         final Employee userAsEmployee = createEmployeeForUser(user);
@@ -190,7 +187,7 @@ public class EmployeeResourceTest {
                 .build();
     }
 
-    private User createUserForRole(final com.gepardec.mega.domain.Role role) {
+    private User createUserForRole(final Role role) {
         return User.builder()
                 .dbId(1)
                 .userId("1")

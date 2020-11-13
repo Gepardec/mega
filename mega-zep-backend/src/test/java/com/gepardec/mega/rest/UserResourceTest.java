@@ -1,6 +1,6 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.domain.Role;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.SecurityContext;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.UserContext;
@@ -57,7 +57,7 @@ class UserResourceTest {
         Assertions.assertEquals(user, actual);
     }
 
-    private User createUserForRole(final com.gepardec.mega.domain.Role role) {
+    private User createUserForRole(final Role role) {
         return User.builder()
                 .dbId(1)
                 .userId("1")

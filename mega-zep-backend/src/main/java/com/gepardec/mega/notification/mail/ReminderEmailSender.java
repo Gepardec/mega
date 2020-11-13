@@ -2,7 +2,7 @@ package com.gepardec.mega.notification.mail;
 
 import com.gepardec.mega.application.configuration.ApplicationConfig;
 import com.gepardec.mega.application.configuration.NotificationConfig;
-import com.gepardec.mega.domain.Role;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.notification.mail.dates.BusinessDayCalculator;

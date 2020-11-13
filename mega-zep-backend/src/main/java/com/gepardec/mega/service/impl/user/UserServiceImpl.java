@@ -2,6 +2,7 @@ package com.gepardec.mega.service.impl.user;
 
 import com.gepardec.mega.application.exception.ForbiddenException;
 import com.gepardec.mega.db.repository.UserRepository;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.service.api.user.UserService;
 import io.quarkus.cache.CacheKey;
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(Transactional.TxType.SUPPORTS)
-    public List<User> findByRoles(com.gepardec.mega.domain.Role... roles) {
+    public List<User> findByRoles(Role... roles) {
         if (roles == null || roles.length == 0) {
             throw new IllegalArgumentException("Cannot load users if no 'roles' are given");
         }

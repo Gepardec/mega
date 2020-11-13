@@ -1,7 +1,7 @@
 package com.gepardec.mega.application.interceptor;
 
 import com.gepardec.mega.application.exception.ForbiddenException;
-import com.gepardec.mega.domain.Role;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.UserContext;
 
 import javax.annotation.Priority;

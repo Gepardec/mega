@@ -1,6 +1,6 @@
 package com.gepardec.mega.application.interceptor;
 
-import com.gepardec.mega.domain.Role;
+import com.gepardec.mega.domain.model.Role;
 
 import javax.enterprise.util.Nonbinding;
 import javax.interceptor.InterceptorBinding;

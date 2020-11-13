@@ -1,6 +1,6 @@
 package com.gepardec.mega.db.entity;
 
-import com.gepardec.mega.domain.Role;
+import com.gepardec.mega.domain.model.Role;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;

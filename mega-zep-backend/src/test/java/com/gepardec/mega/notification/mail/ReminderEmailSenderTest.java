@@ -1,6 +1,6 @@
 package com.gepardec.mega.notification.mail;
 
-import com.gepardec.mega.domain.Role;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.service.api.user.UserService;
 import io.quarkus.mailer.MockMailbox;
