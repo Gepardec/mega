@@ -1,7 +1,7 @@
 package com.gepardec.mega.application.exception.mapper;
 
 import com.gepardec.mega.application.exception.ForbiddenException;
-import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.domain.Role;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.UserContext;
 import org.junit.jupiter.api.Assertions;
@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.Set;
 
 import static org.mockito.Mockito.*;
 
@@ -67,7 +68,7 @@ public class ForbiddenExceptionMapperTest {
                 .email(email)
                 .firstname("Thomas")
                 .lastname("Herzog")
-                .role(Role.USER)
+                .roles(Set.of(Role.EMPLOYEE))
                 .build();
     }
 }

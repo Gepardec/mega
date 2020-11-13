@@ -1,6 +1,7 @@
 package com.gepardec.mega.service.impl.init;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
+import com.gepardec.mega.domain.Role;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.Step;
 import com.gepardec.mega.domain.model.StepEntry;
@@ -22,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.*;
@@ -449,6 +451,7 @@ class StepEntrySyncServiceImplTest {
                 .userId(id + "-userId")
                 .firstname(firstname + id)
                 .lastname(lastname)
+                .roles(Set.of(Role.EMPLOYEE))
                 .email(String.format("%s%s.%s@gepardec.com", firstname, id, lastname));
     }
 

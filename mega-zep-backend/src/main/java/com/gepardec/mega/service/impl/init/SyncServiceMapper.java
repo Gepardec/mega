@@ -1,15 +1,18 @@
 package com.gepardec.mega.service.impl.init;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
-import com.gepardec.mega.domain.Role;
 import com.gepardec.mega.db.entity.User;
+import com.gepardec.mega.domain.Role;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Stream;
 
 @ApplicationScoped

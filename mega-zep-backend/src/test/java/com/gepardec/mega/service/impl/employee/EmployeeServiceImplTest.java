@@ -2,7 +2,6 @@ package com.gepardec.mega.service.impl.employee;
 
 
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.zep.ZepService;
 import com.gepardec.mega.zep.ZepServiceException;
 import org.eclipse.microprofile.context.ManagedExecutor;
@@ -143,7 +142,6 @@ public class EmployeeServiceImplTest {
                 .salutation("Herr")
                 .workDescription("ARCHITEKT")
                 .releaseDate("2020-01-01")
-                .role(Role.USER.roleId)
                 .active(active)
                 .build();
 

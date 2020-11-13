@@ -1,7 +1,11 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.db.entity.State;
-import com.gepardec.mega.domain.model.*;
+import com.gepardec.mega.domain.Role;
+import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.SecurityContext;
+import com.gepardec.mega.domain.model.User;
+import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
@@ -15,6 +19,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,7 +50,7 @@ public class WorkerResourceTest {
 
     @Test
     void monthlyReport_whenUserNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(userContext.user()).thenReturn(user);
 
         given().get("/worker/monthendreports")
@@ -54,7 +59,7 @@ public class WorkerResourceTest {
 
     @Test
     void employeeMonthendReport_withReport_returnsReport() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -82,7 +87,6 @@ public class WorkerResourceTest {
                 .title("Ing.")
                 .userId(user.userId())
                 .releaseDate("2020-01-01")
-                .role(user.role().roleId)
                 .active(true)
                 .build();
     }
@@ -94,7 +98,7 @@ public class WorkerResourceTest {
                 .email("thomas.herzog@gpeardec.com")
                 .firstname("Thomas")
                 .lastname("Herzog")
-                .role(role)
+                .roles(Set.of(role))
                 .build();
     }
 }

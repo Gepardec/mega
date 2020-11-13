@@ -1,12 +1,9 @@
 package com.gepardec.mega.service.impl.monthlyreport;
 
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.monthlyreport.*;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
-import com.gepardec.mega.service.impl.monthlyreport.MonthlyReportServiceImpl;
-import com.gepardec.mega.service.impl.monthlyreport.WarningCalculator;
 import com.gepardec.mega.zep.ZepService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -135,7 +132,6 @@ public class MonthlyReportServiceImplTest {
                 .salutation("Herr")
                 .workDescription("ARCHITEKT")
                 .releaseDate(releaseDate)
-                .role(Role.USER.roleId)
                 .active(true)
                 .build();
 

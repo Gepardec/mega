@@ -1,5 +1,6 @@
 package com.gepardec.mega.service.impl.project;
 
+import com.gepardec.mega.domain.Role;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.ProjectFilter;
 import com.gepardec.mega.domain.model.User;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.when;
@@ -94,7 +96,8 @@ class ProjectServiceImplTest {
                                     .userId("userId")
                                     .firstname("Gepard")
                                     .lastname("Gepardec")
-                                    .email(String.format("%s%s.%s@gepardec.com", "Gepard", 1, "Gepardec")).build())
+                                    .email(String.format("%s%s.%s@gepardec.com", "Gepard", 1, "Gepardec"))
+                                    .roles(Set.of(Role.EMPLOYEE)).build())
                                     .stream().map(User::userId).collect(Collectors.toList()))
                             .employees(List.of())
                             .build(),

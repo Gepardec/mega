@@ -3,9 +3,11 @@ package com.gepardec.mega.domain.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gepardec.mega.domain.Role;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nullable;
+import java.util.Set;
 
 /**
  * Represents the logged user in mega.
@@ -20,7 +22,7 @@ public abstract class User {
     @JsonProperty public abstract String email();
     @JsonProperty public abstract String firstname();
     @JsonProperty public abstract String lastname();
-    @Nullable @JsonProperty public abstract Role role();
+    @JsonProperty public abstract Set<Role> roles();
     @Nullable @JsonProperty public abstract String pictureUrl();
 
     public static Builder builder() {
@@ -34,7 +36,7 @@ public abstract class User {
         @JsonProperty public abstract Builder email(String email);
         @JsonProperty public abstract Builder firstname(String firstname);
         @JsonProperty public abstract Builder lastname(String lastname);
-        @JsonProperty public abstract Builder role(Role role);
+        @JsonProperty public abstract Builder roles(Set<Role> roles);
         @JsonProperty public abstract Builder pictureUrl(String pictureUrl);
         @JsonProperty public abstract User build();
     }

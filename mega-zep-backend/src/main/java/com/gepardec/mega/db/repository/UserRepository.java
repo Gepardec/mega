@@ -1,7 +1,7 @@
 package com.gepardec.mega.db.repository;
 
-import com.gepardec.mega.domain.Role;
 import com.gepardec.mega.db.entity.User;
+import com.gepardec.mega.domain.Role;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
 

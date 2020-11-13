@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Set;
 
 import static com.gepardec.mega.notification.mail.Reminder.OM_RELEASE;
 import static org.junit.jupiter.api.Assertions.*;
@@ -109,6 +110,7 @@ public class ReminderEmailSenderTest {
                 .email(email)
                 .firstname(firstname)
                 .lastname(firstname)
+                .roles(Set.of(Role.EMPLOYEE))
                 .build();
     }
 }
