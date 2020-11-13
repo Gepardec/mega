@@ -38,11 +38,11 @@
     "reload": "Neu laden"
   },
   "monthly-report": {
-    "ok": "Alle Eingaben sind korrekt",
+    "ok": "Alle Eingaben sind korrekt.",
     "notReleasedYet": "Noch nicht freigegeben",
-    "timeCheckNotPossible": "Zeitenkontrolle nicht möglich",
-    "timeCheckNotPossiblePrompt": "Kontrolle der Zeiten ausständig. Bitte wende dich an deinen Mentor",
-    "commentsToDo": "Einige Anmerkungen sind abzuarbeiten",
+    "timeCheckNotPossible": "Zeitenkontrolle nicht möglich!",
+    "timeCheckNotPossiblePrompt": "Kontrolle der Zeiten ausständig. Bitte wende dich an deinen Mentor.",
+    "commentsToDo": "Einige Anmerkungen sind abzuarbeiten.",
     "checkSuccess": "Deine Zeiten wurden kontrolliert und sind richtig. Bis nächsten Monat!",
     "checkWip": "Die Kontrolle deiner Zeiten ist im Gange!",
     "noTimesCurrentMonth": "Du hast dieses Monat keine Zeiten eingetragen!",

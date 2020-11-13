@@ -25,10 +25,6 @@ export class CommentService {
     return comments.filter(comment => comment.state === State.DONE);
   }
 
-  areAllCommentsDone(comments: Array<Comment>): boolean {
-    return this.getDoneCommentsCount(comments) === comments.length;
-  }
-
   setStatusDone(comment: Comment): Observable<number> {
     return this.httpClient.put<number>(this.config.getBackendUrlWithContext('/comments/setdone'), comment);
   }
