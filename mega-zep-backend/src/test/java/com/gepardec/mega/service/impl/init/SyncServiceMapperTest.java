@@ -77,8 +77,8 @@ class SyncServiceMapperTest {
             final Employee employee = Employee.builder()
                     .userId("2")
                     .email("thomas.herzog@gepardec.com")
-                    .firstName("Thomas")
-                    .sureName("Herzog")
+                    .firstname("Thomas")
+                    .lastname("Herzog")
                     .language("de")
                     .active(true)
                     .build();
@@ -118,8 +118,8 @@ class SyncServiceMapperTest {
             final Employee employee = Employee.builder()
                     .userId("1")
                     .email("thomas.herzog@gepardec.com")
-                    .firstName("Thomas")
-                    .sureName("Herzog")
+                    .firstname("Thomas")
+                    .lastname("Herzog")
                     .language("de")
                     .active(true)
                     .build();
@@ -273,8 +273,8 @@ class SyncServiceMapperTest {
         return Employee.builder()
                 .userId(userId)
                 .email(email)
-                .firstName("Thomas")
-                .sureName("Herzog")
+                .firstname("Thomas")
+                .lastname("Herzog")
                 .language(language)
                 .active(true)
                 .build();

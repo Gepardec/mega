@@ -37,8 +37,8 @@ public class SyncServiceMapper {
 
     public User mapEmployeeToUser(User user, Employee employee, List<Project> projects, Locale defaultLocale) {
         user.setEmail(employee.email());
-        user.setFirstname(employee.firstName());
-        user.setLastname(employee.sureName());
+        user.setFirstname(employee.firstname());
+        user.setLastname(employee.lastname());
         user.setActive(employee.active());
         user.setRoles(determineRoles(employee, projects));
         setUserLocaleFromEmployeeLanguage(user, employee, defaultLocale);

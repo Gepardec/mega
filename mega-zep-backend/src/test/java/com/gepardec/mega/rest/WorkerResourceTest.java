@@ -82,8 +82,8 @@ public class WorkerResourceTest {
     private Employee createEmployeeForUser(final User user) {
         return Employee.builder()
                 .email(user.email())
-                .firstName(user.firstname())
-                .sureName(user.lastname())
+                .firstname(user.firstname())
+                .lastname(user.lastname())
                 .title("Ing.")
                 .userId(user.userId())
                 .releaseDate("2020-01-01")
