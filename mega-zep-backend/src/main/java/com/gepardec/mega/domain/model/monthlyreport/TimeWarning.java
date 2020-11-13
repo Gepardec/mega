@@ -1,20 +1,16 @@
 package com.gepardec.mega.domain.model.monthlyreport;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Objects;
 
-public class TimeWarning {
-    public static final double MAX_HOURS_A_DAY = 10d;
-    public static final double MAX_HOURS_OF_DAY_WITHOUT_BREAK = 6d;
-    public static final double MIN_REQUIRED_BREAK_TIME = 0.5d;
-    public static final double MIN_REQUIRED_REST_TIME = 11d;
-    public static final LocalTime EARLIEST_START_TIME = LocalTime.of(6, 0);
-    public static final LocalTime LATEST_END_TIME = LocalTime.of(22, 0);
+public class TimeWarning implements ProjectEntryWarning {
 
     private LocalDate date;
+
     private Double missingRestTime;
+
     private Double missingBreakTime;
+
     private Double excessWorkTime;
 
     public TimeWarning() {

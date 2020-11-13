@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1602230992399-1
+      id: 1605169381318-1
       author: mega (generated)
       changes:
         - createSequence:
@@ -8,7 +8,7 @@ databaseChangeLog:
             sequenceName: sequence_comment_id
             startValue: 1
   - changeSet:
-      id: 1602230992399-2
+      id: 1605169381318-2
       author: mega (generated)
       changes:
         - createSequence:
@@ -16,7 +16,7 @@ databaseChangeLog:
             sequenceName: sequence_step_entry_id
             startValue: 1
   - changeSet:
-      id: 1602230992399-3
+      id: 1605169381318-3
       author: mega (generated)
       changes:
         - createSequence:
@@ -24,7 +24,7 @@ databaseChangeLog:
             sequenceName: sequence_step_id
             startValue: 1
   - changeSet:
-      id: 1602230992399-4
+      id: 1605169381318-4
       author: mega (generated)
       changes:
         - createSequence:
@@ -32,7 +32,7 @@ databaseChangeLog:
             sequenceName: sequence_user_id
             startValue: 1
   - changeSet:
-      id: 1602230992399-5
+      id: 1605169381318-5
       author: mega (generated)
       changes:
         - createTable:
@@ -71,7 +71,7 @@ databaseChangeLog:
                   type: BIGINT
             tableName: comment
   - changeSet:
-      id: 1602230992399-6
+      id: 1605169381318-6
       author: mega (generated)
       changes:
         - createTable:
@@ -101,6 +101,21 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
+                  name: firstname
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: lastname
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: locale
+                  type: VARCHAR(10)
+              - column:
+                  constraints:
+                    nullable: false
                   name: update_date
                   type: TIMESTAMP WITHOUT TIME ZONE
               - column:
@@ -110,7 +125,26 @@ databaseChangeLog:
                   type: VARCHAR(100)
             tableName: employee_user
   - changeSet:
-      id: 1602230992399-7
+      id: 1605169381318-7
+      author: mega (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: role
+                  type: VARCHAR(255)
+            tableName: employee_user_roles
+  - changeSet:
+      id: 1605169381318-8
       author: mega (generated)
       changes:
         - createTable:
@@ -137,7 +171,7 @@ databaseChangeLog:
                   type: VARCHAR(255)
             tableName: step
   - changeSet:
-      id: 1602230992399-8
+      id: 1605169381318-9
       author: mega (generated)
       changes:
         - createTable:
@@ -189,7 +223,7 @@ databaseChangeLog:
                   type: BIGINT
             tableName: step_entry
   - changeSet:
-      id: 1602230992399-9
+      id: 1605169381318-10
       author: mega (generated)
       changes:
         - addUniqueConstraint:
@@ -197,7 +231,7 @@ databaseChangeLog:
             constraintName: uidx_email
             tableName: employee_user
   - changeSet:
-      id: 1602230992399-10
+      id: 1605169381318-11
       author: mega (generated)
       changes:
         - addUniqueConstraint:
@@ -205,7 +239,7 @@ databaseChangeLog:
             constraintName: uidx_ordinal
             tableName: step
   - changeSet:
-      id: 1602230992399-11
+      id: 1605169381318-12
       author: mega (generated)
       changes:
         - addUniqueConstraint:
@@ -213,7 +247,20 @@ databaseChangeLog:
             constraintName: uidx_zep_id
             tableName: employee_user
   - changeSet:
-      id: 1602230992399-12
+      id: 1605169381318-13
+      author: mega (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: id
+            baseTableName: employee_user_roles
+            constraintName: FKjulmxy756d87nr7mkoyh5ahbu
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: employee_user
+            validate: true
+  - changeSet:
+      id: 1605169381318-14
       author: mega (generated)
       changes:
         - addForeignKeyConstraint:
@@ -226,7 +273,7 @@ databaseChangeLog:
             referencedTableName: employee_user
             validate: true
   - changeSet:
-      id: 1602230992399-13
+      id: 1605169381318-15
       author: mega (generated)
       changes:
         - addForeignKeyConstraint:
@@ -239,7 +286,7 @@ databaseChangeLog:
             referencedTableName: employee_user
             validate: true
   - changeSet:
-      id: 1602230992399-14
+      id: 1605169381318-16
       author: mega (generated)
       changes:
         - addForeignKeyConstraint:
@@ -252,7 +299,7 @@ databaseChangeLog:
             referencedTableName: step_entry
             validate: true
   - changeSet:
-      id: 1602230992399-15
+      id: 1605169381318-17
       author: mega (generated)
       changes:
         - addForeignKeyConstraint:

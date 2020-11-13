@@ -67,7 +67,7 @@ public class StepEntryServiceImpl implements StepEntryService {
         stepEntryDb.setAssignee(assigneeDb);
         stepEntryDb.setStep(stepDb);
 
-        logger.info("inserting step entry {}", stepEntryDb);
+        logger.debug("inserting step entry {}", stepEntryDb);
 
         stepEntryRepository.persist(stepEntryDb);
     }

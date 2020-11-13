@@ -1,5 +1,6 @@
 package com.gepardec.mega.service.impl.init;
 
+import com.gepardec.mega.application.configuration.NotificationConfig;
 import com.gepardec.mega.db.entity.Role;
 import com.gepardec.mega.domain.model.*;
 import com.gepardec.mega.service.api.init.StepEntrySyncService;
@@ -8,7 +9,6 @@ import com.gepardec.mega.service.api.step.StepService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.service.api.user.UserService;
 import org.apache.commons.lang3.time.StopWatch;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.Dependent;
@@ -43,56 +43,59 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
     StepEntryService stepEntryService;
 
     @Inject
-    @ConfigProperty(name = "mega.mail.reminder.om")
-    String omMailAddresses;
+    NotificationConfig notificationConfig;
 
     @Override
     public void genereteStepEntries() {
         final StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
-        logger.info("started generation at {}", Instant.ofEpochMilli(stopWatch.getStartTime()));
+        logger.info("Started step entry generation: {}", Instant.ofEpochMilli(stopWatch.getStartTime()));
 
         final LocalDate date = LocalDate.now().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth());
-        logger.info("running step entry generation for {}", date);
+        logger.info("Processing date: {}", date);
 
         final List<User> activeUsers = userService.getActiveUsers();
-        final List<Project> projectsForYear = projectService.getProjectsForYear(date)
-                .stream()
-                .filter(project -> !project.leads().isEmpty())
-                .collect(Collectors.toList());
+        final List<Project> projectsForMonthYear = projectService.getProjectsForMonthYear(date,
+                List.of(ProjectFilter.IS_LEADS_AVAILABLE,
+                        ProjectFilter.IS_CUSTOMER_PROJECT));
         final List<Step> steps = stepService.getSteps();
 
-        final List<User> omUsers = List.of(omMailAddresses.split(","))
+        final List<User> omUsers = List.of(notificationConfig.getOmMailAddresses().split(","))
                 .stream()
                 .map(email -> findUserByEmail(activeUsers, email))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
 
-        logger.info("active users are {}", activeUsers);
-        logger.info("projects are {}", projectsForYear);
-        logger.info("steps are {}", steps);
-        logger.info("omUsers are {}", omUsers);
+        logger.info("Loaded projects: {}", projectsForMonthYear.size());
+        logger.debug("projects are {}", projectsForMonthYear);
+        logger.info("Loaded users: {}", activeUsers.size());
+        logger.debug("Users are: {}", activeUsers);
+        logger.info("Loaded steps: {}", steps.size());
+        logger.debug("Steps are: {}", steps);
+        logger.info("Loaded omUsers: {}", omUsers.size());
+        logger.debug("omUsers are: {}", omUsers);
 
         final List<StepEntry> toBeCreatedStepEntries = new ArrayList<>();
 
-        steps.forEach(step -> {
+        for (Step step : steps) {// TODO: change to domain model after role refactoring
             if (Role.PROJECT_LEAD.name().equals(step.role())) {
-                toBeCreatedStepEntries.addAll(createStepEntriesProjectLeadForUsers(date, step, projectsForYear, activeUsers));
+                toBeCreatedStepEntries.addAll(createStepEntriesProjectLeadForUsers(date, step, projectsForMonthYear, activeUsers));
             } else if (Role.OFFICE_MANAGEMENT.name().equals(step.role())) {
                 toBeCreatedStepEntries.addAll(createStepEntriesOmForUsers(date, step, omUsers, activeUsers));
             } else {
                 toBeCreatedStepEntries.addAll(createStepEntriesForUsers(date, step, activeUsers));
             }
-        });
+        }
 
         toBeCreatedStepEntries.forEach(stepEntryService::addStepEntry);
 
         stopWatch.stop();
 
-        logger.info("generation took {}ms", stopWatch.getTime());
-        logger.info("finished generation at {}", Instant.ofEpochMilli(stopWatch.getStartTime() + stopWatch.getTime()));
+        logger.info("Processed step entries: {}", toBeCreatedStepEntries.size());
+        logger.info("Step entry generation took: {}ms", stopWatch.getTime());
+        logger.info("Finished step entry generation: {}", Instant.ofEpochMilli(stopWatch.getStartTime() + stopWatch.getTime()));
     }
 
     private List<StepEntry> createStepEntriesProjectLeadForUsers(final LocalDate date, final Step step, final List<Project> projects, final List<User> users) {
@@ -102,14 +105,15 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
                 .collect(Collectors.toList());
     }
 
-    private List<StepEntry> createStepEntriesForOwnerProjects(final LocalDate date, final Step step, final List<Project> projects, final List<User> users, final User owner) {
+    private List<StepEntry> createStepEntriesForOwnerProjects(final LocalDate date, final Step step, final List<Project> projects, final List<User> users, final User ownerUser) {
         return projects.stream()
-                .map(project -> createStepEntriesForOwnerProject(date, step, project, users, owner))
+                .filter(project -> project.employees().contains(ownerUser.userId()))
+                .map(project -> createStepEntriesForOwnerProject(date, step, project, users, ownerUser))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
 
-    private List<StepEntry> createStepEntriesForOwnerProject(final LocalDate date, final Step step, final Project project, final List<User> users, final User owner) {
+    private List<StepEntry> createStepEntriesForOwnerProject(final LocalDate date, final Step step, final Project project, final List<User> users, final User ownerUser) {
         return project.leads()
                 .stream()
                 .map(lead -> findUserByUserId(users, lead))
@@ -119,7 +123,7 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
                         .date(date)
                         .project(project)
                         .state(State.OPEN)
-                        .owner(owner)
+                        .owner(ownerUser)
                         .assignee(leadUser)
                         .step(step)
                         .build())
@@ -128,19 +132,19 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
 
     private List<StepEntry> createStepEntriesOmForUsers(final LocalDate date, final Step step, final List<User> omUsers, final List<User> users) {
         return users.stream()
-                .map(owner -> createStepEntriesForOwnerOmUsers(date, step, omUsers, owner))
+                .map(ownerUser -> createStepEntriesForOwnerOmUsers(date, step, omUsers, ownerUser))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
 
-    private List<StepEntry> createStepEntriesForOwnerOmUsers(final LocalDate date, final Step step, final List<User> omUsers, final User owner) {
+    private List<StepEntry> createStepEntriesForOwnerOmUsers(final LocalDate date, final Step step, final List<User> omUsers, final User ownerUser) {
         return omUsers.stream()
-                .map(leadUser -> StepEntry.builder()
+                .map(omUser -> StepEntry.builder()
                         .date(date)
                         .project(null)
                         .state(State.OPEN)
-                        .owner(owner)
-                        .assignee(leadUser)
+                        .owner(ownerUser)
+                        .assignee(omUser)
                         .step(step)
                         .build())
                 .collect(Collectors.toList());
@@ -148,12 +152,12 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
 
     private List<StepEntry> createStepEntriesForUsers(final LocalDate date, final Step step, final List<User> users) {
         return users.stream()
-                .map(owner -> StepEntry.builder()
+                .map(ownerUser -> StepEntry.builder()
                         .date(date)
                         .project(null)
                         .state(State.OPEN)
-                        .owner(owner)
-                        .assignee(owner)
+                        .owner(ownerUser)
+                        .assignee(ownerUser)
                         .step(step)
                         .build())
                 .collect(Collectors.toList());

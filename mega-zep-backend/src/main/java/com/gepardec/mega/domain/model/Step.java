@@ -41,7 +41,6 @@ public abstract class Step {
         public abstract com.gepardec.mega.domain.model.Step.Builder ordinal(long ordinal);
 
         @JsonProperty
-        @Nullable
         public abstract com.gepardec.mega.domain.model.Step.Builder role(String role);
 
         @JsonProperty

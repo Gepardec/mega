@@ -144,11 +144,8 @@ pipeline {
 
         stage('Deploy DEV') {
             when {
-                anyOf {
-                    branch "develop"
-                    expression {
-                        return params.deployToDev
-                    }
+                expression {
+                    return params.deployToDev
                 }
             }
             steps {
