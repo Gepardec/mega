@@ -2,6 +2,7 @@ package com.gepardec.mega.rest;
 
 import com.gepardec.mega.application.configuration.ApplicationConfig;
 import com.gepardec.mega.application.configuration.OAuthConfig;
+import com.gepardec.mega.application.configuration.ZepConfig;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
@@ -21,6 +22,9 @@ public class ConfigResourceTest {
     @Inject
     ApplicationConfig applicationConfig;
 
+    @Inject
+    ZepConfig zepConfig;
+
     @Test
     void get_whenPOST_thenReturnsHttpStatusMETHOD_NOT_ALLOWED() {
         given().contentType(ContentType.TEXT)
@@ -33,6 +37,8 @@ public class ConfigResourceTest {
         given().contentType(ContentType.TEXT)
                 .get("/config")
                 .then().statusCode(HttpStatus.SC_OK)
+                .body("excelUrl", equalTo(applicationConfig.getExcelUrlAsString()))
+                .body("zepUrl", equalTo(zepConfig.getUrlAsString()))
                 .body("clientId", equalTo(oAuthConfig.getClientId()))
                 .body("issuer", equalTo(oAuthConfig.getIssuer()))
                 .body("scope", equalTo(oAuthConfig.getScope()))

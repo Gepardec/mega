@@ -3,7 +3,7 @@ package com.gepardec.mega.zep;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.service.impl.employee.EmployeeMapper;
-import com.gepardec.mega.zep.mapper.ProjectTimeMapper;
+import com.gepardec.mega.zep.mapper.ProjectEntryMapper;
 import de.provantis.zep.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,11 +30,11 @@ public class ZepServiceImplTest {
 
     private ZepServiceImpl beanUnderTest;
 
-    private ProjectTimeMapper projectTimeMapper = new ProjectTimeMapper();
+    private ProjectEntryMapper projectEntryMapper = new ProjectEntryMapper();
 
     @BeforeEach
     void setUp() {
-        beanUnderTest = new ZepServiceImpl(new EmployeeMapper(), logger, zepSoapPortType, zepSoapProvider, projectTimeMapper);
+        beanUnderTest = new ZepServiceImpl(new EmployeeMapper(), logger, zepSoapPortType, zepSoapProvider, projectEntryMapper);
     }
 
     @Test

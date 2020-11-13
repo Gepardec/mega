@@ -30,12 +30,11 @@ class StepEntryServiceImplTest {
 
     @Test
     void findEmployeeCheckState_whenValidStepEntries_thenValidState() {
-        StepEntry stepEntry1 = createStepEntry(1L);
-        StepEntry stepEntry2 = createStepEntry(2L);
+        StepEntry stepEntry = createStepEntry(1L);
 
-        List<StepEntry> stepEntries = List.of(stepEntry1, stepEntry2);
-        when(stepEntryRepository.findAllOwnedAndAssignedStepEntriesInRange(ArgumentMatchers.any(LocalDate.class),
-                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString())).thenReturn(stepEntries);
+        Optional<StepEntry> stepEntries = Optional.of(stepEntry);
+        when(stepEntryRepository.findAllOwnedAndAssignedStepEntriesForEmployee(ArgumentMatchers.any(LocalDate.class),
+                ArgumentMatchers.anyString())).thenReturn(stepEntries);
 
         Optional<State> states = stepEntryService.findEmployeeCheckState(createEmployee());
         Assertions.assertTrue(states.isPresent());
@@ -44,8 +43,8 @@ class StepEntryServiceImplTest {
 
     @Test
     void findEmployeeCheckState_whenNoStepEntries_thenEmpty() {
-        when(stepEntryRepository.findAllOwnedAndAssignedStepEntriesInRange(ArgumentMatchers.any(LocalDate.class),
-                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString())).thenReturn(List.of());
+        when(stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(ArgumentMatchers.any(LocalDate.class),
+                ArgumentMatchers.anyString())).thenReturn(List.of());
 
         Optional<State> states = stepEntryService.findEmployeeCheckState(createEmployee());
         Assertions.assertTrue(states.isEmpty());
@@ -57,8 +56,8 @@ class StepEntryServiceImplTest {
         StepEntry stepEntry2 = createStepEntry(2L);
 
         List<StepEntry> stepEntries = List.of(stepEntry1, stepEntry2);
-        when(stepEntryRepository.findAllOwnedAndUnassignedStepEntriesInRange(ArgumentMatchers.any(LocalDate.class),
-                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString())).thenReturn(stepEntries);
+        when(stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(ArgumentMatchers.any(LocalDate.class),
+                ArgumentMatchers.anyString())).thenReturn(stepEntries);
 
         boolean areOtherChecksDone = stepEntryService.areOtherChecksDone(createEmployee());
         Assertions.assertFalse(areOtherChecksDone);
@@ -66,8 +65,8 @@ class StepEntryServiceImplTest {
 
     @Test
     void areOtherChecksDone_whenNoStepEntries_thenTrue() {
-        when(stepEntryRepository.findAllOwnedAndUnassignedStepEntriesInRange(ArgumentMatchers.any(LocalDate.class),
-                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString())).thenReturn(List.of());
+        when(stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(ArgumentMatchers.any(LocalDate.class),
+                ArgumentMatchers.anyString())).thenReturn(List.of());
 
         boolean areOtherChecksDone = stepEntryService.areOtherChecksDone(createEmployee());
         Assertions.assertTrue(areOtherChecksDone);
@@ -82,8 +81,8 @@ class StepEntryServiceImplTest {
         stepEntry2.setState(State.DONE);
 
         List<StepEntry> stepEntries = List.of(stepEntry1, stepEntry2);
-        when(stepEntryRepository.findAllOwnedAndUnassignedStepEntriesInRange(ArgumentMatchers.any(LocalDate.class),
-                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString())).thenReturn(stepEntries);
+        when(stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(ArgumentMatchers.any(LocalDate.class),
+                ArgumentMatchers.anyString())).thenReturn(stepEntries);
 
         boolean areOtherChecksDone = stepEntryService.areOtherChecksDone(createEmployee());
         Assertions.assertTrue(areOtherChecksDone);

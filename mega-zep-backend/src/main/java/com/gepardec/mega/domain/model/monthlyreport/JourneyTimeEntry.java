@@ -1,42 +1,61 @@
 package com.gepardec.mega.domain.model.monthlyreport;
 
+import com.google.auto.value.AutoValue;
+
 import java.time.LocalDateTime;
 
-public class JourneyTimeEntry implements ProjectEntry {
+@AutoValue
+public abstract class JourneyTimeEntry implements ProjectEntry {
 
-    private final LocalDateTime fromTime;
-    private final LocalDateTime toTime;
-    private final Task task;
-    private final JourneyDirection journeyDirection;
-
-    JourneyTimeEntry(LocalDateTime fromTime, LocalDateTime toTime, Task task, JourneyDirection journeyDirection) {
-        this.fromTime = fromTime;
-        this.toTime = toTime;
-        this.task = task;
-        this.journeyDirection = journeyDirection;
-    }
-
+    /**
+     * @deprecated Us {@link #of(LocalDateTime, LocalDateTime, Task, JourneyDirection, WorkingLocation)} instead
+     */
+    @Deprecated(forRemoval = true)
     public static JourneyTimeEntry of(LocalDateTime fromTime, LocalDateTime toTime, Task task, JourneyDirection journeyDirection) {
-        return new JourneyTimeEntry(fromTime, toTime, task, journeyDirection);
+        return of(fromTime, toTime, task, journeyDirection, WorkingLocation.MAIN);
     }
 
+    public static JourneyTimeEntry of(LocalDateTime fromTime, LocalDateTime toTime, Task task, JourneyDirection journeyDirection,
+            WorkingLocation workingLocation) {
+        return newBuilder().fromTime(fromTime)
+                .toTime(toTime)
+                .task(task)
+                .journeyDirection(journeyDirection)
+                .workingLocation(workingLocation)
+                .build();
+    }
+
+    public static Builder newBuilder() {
+        return new com.gepardec.mega.domain.model.monthlyreport.AutoValue_JourneyTimeEntry.Builder();
+    }
 
     @Override
-    public LocalDateTime getFromTime() {
-        return fromTime;
-    }
+    public abstract LocalDateTime getFromTime();
 
     @Override
-    public LocalDateTime getToTime() {
-        return toTime;
-    }
+    public abstract LocalDateTime getToTime();
 
     @Override
-    public Task getTask() {
-        return task;
-    }
+    public abstract Task getTask();
 
-    public JourneyDirection getJourneyDirection() {
-        return journeyDirection;
+    @Override
+    public abstract WorkingLocation getWorkingLocation();
+
+    public abstract JourneyDirection getJourneyDirection();
+
+    @AutoValue.Builder
+    public static abstract class Builder {
+
+        public abstract Builder fromTime(LocalDateTime fromTime);
+
+        public abstract Builder toTime(LocalDateTime toTime);
+
+        public abstract Builder task(Task task);
+
+        public abstract Builder workingLocation(WorkingLocation workingLocation);
+
+        public abstract Builder journeyDirection(JourneyDirection journeyDirection);
+
+        public abstract JourneyTimeEntry build();
     }
 }

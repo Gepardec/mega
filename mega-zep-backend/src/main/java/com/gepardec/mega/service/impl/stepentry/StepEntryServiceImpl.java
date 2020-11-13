@@ -3,11 +3,7 @@ package com.gepardec.mega.service.impl.stepentry;
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.StepEntry;
 import com.gepardec.mega.db.repository.StepEntryRepository;
-import com.gepardec.mega.db.repository.StepRepository;
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.Project;
-import com.gepardec.mega.domain.model.Step;
-import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import org.slf4j.Logger;
@@ -16,10 +12,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class StepEntryServiceImpl implements StepEntryService {
@@ -32,24 +26,20 @@ public class StepEntryServiceImpl implements StepEntryService {
 
     @Override
     public Optional<State> findEmployeeCheckState(final Employee employee) {
-        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate entryDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
 
-        List<StepEntry> stepEntries =
-                stepEntryRepository.findAllOwnedAndAssignedStepEntriesInRange(fromDate, toDate, employee.email());
+        Optional<StepEntry> stepEntries =
+                stepEntryRepository.findAllOwnedAndAssignedStepEntriesForEmployee(entryDate, employee.email());
 
-        List<State> states = stepEntries.stream().map(StepEntry::getState).collect(Collectors.toList());
-
-        return states.isEmpty() ? Optional.empty() : Optional.ofNullable(states.get(0));
+        return stepEntries.map(StepEntry::getState);
     }
 
     @Override
     public boolean areOtherChecksDone(Employee employee) {
-        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate entryDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
 
         List<StepEntry> stepEntries =
-                stepEntryRepository.findAllOwnedAndUnassignedStepEntriesInRange(fromDate, toDate, employee.email());
+                stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(entryDate, employee.email());
 
         return stepEntries.stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);
     }
@@ -74,7 +64,7 @@ public class StepEntryServiceImpl implements StepEntryService {
         stepEntryDb.setAssignee(assigneeDb);
         stepEntryDb.setStep(stepDb);
 
-        logger.info("inserting step entry {}", stepEntryDb);
+        logger.debug("inserting step entry {}", stepEntryDb);
 
         stepEntryRepository.persist(stepEntryDb);
     }

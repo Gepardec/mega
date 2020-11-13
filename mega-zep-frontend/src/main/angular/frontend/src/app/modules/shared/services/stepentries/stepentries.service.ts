@@ -17,10 +17,10 @@ export class StepentriesService {
   ) {
   }
 
-  setOpenAndUnassignedStepEntriesDone(step: Step, employee: Employee): Observable<boolean> {
+  close(employee: Employee): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      this.config.getBackendUrlWithContext('/stepentry/setopenandunassignedstepentriesdone'),
-      new EmployeeStep(step, employee)
+      this.config.getBackendUrlWithContext('/stepentry/close'),
+      new EmployeeStep(Step.CONTROL_TIMES, employee)
     );
   }
 }

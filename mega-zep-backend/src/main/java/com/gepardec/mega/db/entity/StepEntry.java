@@ -2,7 +2,24 @@ package com.gepardec.mega.db.entity;
 
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,9 +28,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "step_entry")
 @NamedQueries({
-        @NamedQuery(name="StepEntry.findAllOwnedAndAssignedStepEntriesInRange", query = "SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.assignee.email = :assigneeEmail"),
-        @NamedQuery(name="StepEntry.findAllOwnedAndUnassignedStepEntriesInRange", query = "SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.owner.email <> s.assignee.email"),
-        @NamedQuery(name="StepEntry.findAllOwnedStepEntriesInRange", query = "SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail")
+        @NamedQuery(name="StepEntry.findAllOwnedStepEntriesInRange", query = "SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail"),
+        @NamedQuery(name = "StepEntry.findAllOwnedAndAssignedStepEntriesForEmployee", query = "SELECT s FROM StepEntry s WHERE s.date = :entryDate AND s.owner.email = :ownerEmail AND s.assignee.email = :assigneeEmail AND s.step.id = :stepId"),
+        @NamedQuery(name = "StepEntry.findAllOwnedAndUnassignedStepEntriesForOtherChecks", query = "SELECT s FROM StepEntry s WHERE s.date = :entryDate AND s.owner.email = :ownerEmail AND s.owner.email <> s.assignee.email AND s.step.id <> :stepId")
 })
 public class StepEntry {
 

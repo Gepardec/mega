@@ -13,6 +13,8 @@ public interface ProjectEntry {
 
     Task getTask();
 
+    WorkingLocation getWorkingLocation();
+
     default double getDurationInHours() {
         return DateUtils.calcDiffInHours(getFromTime(), getToTime());
     }

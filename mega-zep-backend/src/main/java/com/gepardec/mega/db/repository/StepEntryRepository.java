@@ -2,6 +2,7 @@ package com.gepardec.mega.db.repository;
 
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.StepEntry;
+import com.gepardec.mega.domain.model.StepName;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
 
@@ -9,26 +10,27 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class StepEntryRepository implements PanacheRepository<StepEntry> {
 
-    public List<StepEntry> findAllOwnedAndAssignedStepEntriesInRange(LocalDate startDate, LocalDate endDate, String ownerAndAssigneeEmail) {
-        return find("#StepEntry.findAllOwnedAndAssignedStepEntriesInRange",
+    public Optional<StepEntry> findAllOwnedAndAssignedStepEntriesForEmployee(LocalDate entryDate, String ownerAndAssigneeEmail) {
+        return find("#StepEntry.findAllOwnedAndAssignedStepEntriesForEmployee",
                 Parameters
-                        .with("start", startDate)
-                        .and("end", endDate)
+                        .with("entryDate", entryDate)
                         .and("ownerEmail", ownerAndAssigneeEmail)
-                        .and("assigneeEmail", ownerAndAssigneeEmail))
-                .list();
+                        .and("assigneeEmail", ownerAndAssigneeEmail)
+                        .and("stepId", StepName.CONTROL_TIMES.getId()))
+                .singleResultOptional();
     }
 
-    public List<StepEntry> findAllOwnedAndUnassignedStepEntriesInRange(LocalDate startDate, LocalDate endDate, String ownerEmail) {
-        return find("#StepEntry.findAllOwnedAndUnassignedStepEntriesInRange",
+    public List<StepEntry> findAllOwnedAndUnassignedStepEntriesForOtherChecks(LocalDate entryDate, String ownerEmail) {
+        return find("#StepEntry.findAllOwnedAndUnassignedStepEntriesForOtherChecks",
                 Parameters
-                        .with("start", startDate)
-                        .and("end", endDate)
-                        .and("ownerEmail", ownerEmail))
+                        .with("entryDate", entryDate)
+                        .and("ownerEmail", ownerEmail)
+                        .and("stepId", StepName.CONTROL_TIMES.getId()))
                 .list();
     }
 
