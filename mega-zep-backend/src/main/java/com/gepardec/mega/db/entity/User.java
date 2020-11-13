@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Locale;
@@ -44,7 +45,7 @@ public class User {
      * The updated date of the user
      */
     @NotNull
-    @Column(name = "update_date", updatable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "update_date", columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedDate;
 
     /**
@@ -87,6 +88,12 @@ public class User {
     @Length(min = 1, max = 100)
     @Column(name = "zep_id")
     private String zepId;
+
+    /**
+     * The ZEP release date
+     */
+    @Column(name = "release_date", columnDefinition = "DATE")
+    private LocalDate releaseDate;
 
     /**
      * The flag which indicates the user is active
@@ -209,6 +216,14 @@ public class User {
         this.active = active;
     }
 
+    public LocalDate getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
     public Set<StepEntry> getAssignedStepEntries() {
         return assignedStepEntries;
     }
@@ -260,6 +275,7 @@ public class User {
                 ", lastname='" + lastname + '\'' +
                 ", locale=" + locale +
                 ", zepId='" + zepId + '\'' +
+                ", releaseDate=" + releaseDate +
                 ", active=" + active +
                 ", roles=" + roles +
                 ", assignedStepEntries=" + assignedStepEntries +

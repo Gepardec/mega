@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.auto.value.AutoValue;
 
+import javax.annotation.Nullable;
+import java.time.LocalDate;
 import java.util.Set;
 
 /**
@@ -20,6 +22,7 @@ public abstract class User {
     @JsonProperty public abstract String email();
     @JsonProperty public abstract String firstname();
     @JsonProperty public abstract String lastname();
+    @JsonProperty @Nullable public abstract LocalDate releaseDate();
     @JsonProperty public abstract Set<Role> roles();
 
     public static Builder builder() {
@@ -33,6 +36,7 @@ public abstract class User {
         @JsonProperty public abstract Builder email(String email);
         @JsonProperty public abstract Builder firstname(String firstname);
         @JsonProperty public abstract Builder lastname(String lastname);
+        @JsonProperty public abstract Builder releaseDate(LocalDate releaseDate);
         @JsonProperty public abstract Builder roles(Set<Role> roles);
         @JsonProperty public abstract User build();
     }

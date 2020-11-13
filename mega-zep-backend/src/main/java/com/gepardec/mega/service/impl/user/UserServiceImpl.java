@@ -5,8 +5,6 @@ import com.gepardec.mega.db.repository.UserRepository;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.service.api.user.UserService;
-import io.quarkus.cache.CacheKey;
-import io.quarkus.cache.CacheResult;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -23,10 +21,9 @@ public class UserServiceImpl implements UserService {
     @Inject
     UserRepository userRepository;
 
-    @CacheResult(cacheName = "user-email")
     @Override
     @Transactional(Transactional.TxType.SUPPORTS)
-    public User findUserForEmail(@CacheKey final String email) {
+    public User findUserForEmail(final String email) {
         final com.gepardec.mega.db.entity.User user = userRepository.findActiveByEmail(email)
                 .orElseThrow(() -> new ForbiddenException("User with email '" + email + "' is either unknown or inactive"));
 
