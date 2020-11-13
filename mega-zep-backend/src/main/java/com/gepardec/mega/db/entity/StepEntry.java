@@ -12,7 +12,7 @@ import java.util.Objects;
 @Table(name = "step_entry")
 @NamedQueries({
         @NamedQuery(name = "StepEntry.findAllOwnedAndAssignedStepEntriesForEmployee", query = "SELECT s FROM StepEntry s WHERE s.date = :entryDate AND s.owner.email = :ownerEmail AND s.assignee.email = :assigneeEmail AND s.step.id = :stepId"),
-        @NamedQuery(name = "StepEntry.findAllOwnedAndUnassignedStepEntriesForOtherChecks", query = "SELECT s FROM StepEntry s WHERE s.date = :entryDate AND s.owner.email = :ownerEmail AND s.owner.email <> s.assignee.email AND s.step.id <> :stepId")
+        @NamedQuery(name = "StepEntry.findAllOwnedAndUnassignedStepEntriesForOtherChecks", query = "SELECT s FROM StepEntry s WHERE s.date = :entryDate AND s.owner.email = :ownerEmail AND s.owner.email <> s.assignee.email AND s.step.id <> :stepId"),
         @NamedQuery(name="StepEntry.findAllOwnedStepEntriesInRange", query = "SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail")
 })
 public class StepEntry {

@@ -226,6 +226,14 @@ public class User {
         this.assignedStepEntries = assignedStepEntries;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     public Set<StepEntry> getOwnedStepEntries() {
         return ownedStepEntries;
     }
