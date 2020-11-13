@@ -42,10 +42,6 @@ mega:
 ## DEV Properties
 "%dev":
   quarkus:
-    cache:
-      caffeine:
-        "user-email":
-          expire-after-write: 10M
     mailer:
         mock: true
     datasource:
@@ -94,10 +90,6 @@ mega:
 # PROD Properties
 "%prod":
   quarkus:
-    cache:
-      caffeine:
-        "user-email":
-          expire-after-write: "5M"
     mailer:
       mock: true
     datasource:

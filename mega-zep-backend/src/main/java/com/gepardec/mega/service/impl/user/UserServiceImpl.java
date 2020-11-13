@@ -5,8 +5,6 @@ import com.gepardec.mega.db.repository.UserRepository;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.service.api.user.UserService;
-import io.quarkus.cache.CacheKey;
-import io.quarkus.cache.CacheResult;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
