@@ -280,6 +280,7 @@ class SyncServiceMapperTest {
                 .firstname("Thomas")
                 .lastname("Herzog")
                 .language(language)
+                .releaseDate("NULL")
                 .active(true)
                 .build();
     }

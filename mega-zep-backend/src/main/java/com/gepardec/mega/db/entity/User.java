@@ -92,7 +92,7 @@ public class User {
     /**
      * The ZEP release date
      */
-    @Column(name = "release_date")
+    @Column(name = "release_date", columnDefinition = "DATE")
     private LocalDate releaseDate;
 
     /**

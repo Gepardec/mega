@@ -12,6 +12,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalQueries;
 import java.util.HashSet;
 import java.util.List;
@@ -53,10 +54,13 @@ public class SyncServiceMapper {
 
     private LocalDate parseReleaseDate(Employee employee) {
         if (StringUtils.isNotEmpty(employee.releaseDate())) {
-            return DateTimeFormatter.ISO_LOCAL_DATE.parse(employee.releaseDate(), TemporalQueries.localDate());
-        } else {
-            return null;
+            try {
+                return DateTimeFormatter.ISO_LOCAL_DATE.parse(employee.releaseDate(), TemporalQueries.localDate());
+            } catch (DateTimeParseException exception) {
+                log.warn("could not parse date {} for employee {}", employee.releaseDate(), employee.userId());
+            }
         }
+        return null;
     }
 
     private Set<Role> determineRoles(final Employee employee, final List<Project> projects) {
