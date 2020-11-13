@@ -1,12 +1,12 @@
-package com.gepardec.mega.service.impl.monthlyreport.calculation;
+package com.gepardec.mega.service.impl.monthlyreport;
 
+import com.gepardec.mega.domain.calculation.WarningCalculationStrategy;
+import com.gepardec.mega.domain.calculation.journey.InvalidWorkingLocationInJourneyCalculator;
+import com.gepardec.mega.domain.calculation.time.ExceededMaximumWorkingHoursPerDayCalculator;
+import com.gepardec.mega.domain.calculation.time.InsufficientBreakCalculator;
+import com.gepardec.mega.domain.calculation.time.InsufficientRestCalculator;
 import com.gepardec.mega.domain.model.monthlyreport.*;
-import com.gepardec.mega.service.impl.monthlyreport.calculation.journey.JourneyWarningCalculationStrategy;
-import com.gepardec.mega.service.impl.monthlyreport.calculation.journey.JourneyWarningCalculator;
-import com.gepardec.mega.service.impl.monthlyreport.calculation.time.ExceededMaximumWorkingHoursPerDayTimeWarningCalculator;
-import com.gepardec.mega.service.impl.monthlyreport.calculation.time.InsufficientBreakTimeForWorkingDayWithMoreThan6HoursCalculator;
-import com.gepardec.mega.service.impl.monthlyreport.calculation.time.InsufficientRestTimeTimeWarningCalculator;
-import com.gepardec.mega.service.impl.monthlyreport.calculation.time.TimeWarningCalculationStrategy;
+import com.gepardec.mega.domain.calculation.journey.InvalidJourneyCalculator;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -20,29 +20,30 @@ public class WarningCalculator {
     @Inject
     ResourceBundle messages;
 
-    private static final List<TimeWarningCalculationStrategy> timeWarningCalculators = List.of(
-            new ExceededMaximumWorkingHoursPerDayTimeWarningCalculator(),
-            new InsufficientBreakTimeForWorkingDayWithMoreThan6HoursCalculator(),
-            new InsufficientRestTimeTimeWarningCalculator());
+    private static final List<WarningCalculationStrategy<TimeWarning>> timeWarningCalculators = List.of(
+            new ExceededMaximumWorkingHoursPerDayCalculator(),
+            new InsufficientBreakCalculator(),
+            new InsufficientRestCalculator());
 
-    private static final List<JourneyWarningCalculationStrategy> journeyWarningCalculators = List.of(
-            new JourneyWarningCalculator()
+    private static final List<WarningCalculationStrategy<JourneyWarning>> journeyWarningCalculators = List.of(
+            new InvalidJourneyCalculator(),
+            new InvalidWorkingLocationInJourneyCalculator()
     );
 
-    public List<TimeWarning> determineTimeWarnings(List<ProjectTimeEntry> projectTimeList) {
+    public List<TimeWarning> determineTimeWarnings(List<ProjectEntry> projectTimeList) {
         final List<TimeWarning> warnings = new ArrayList<>();
-        for (final TimeWarningCalculationStrategy calculation : timeWarningCalculators) {
+        for (final WarningCalculationStrategy<TimeWarning> calculation : timeWarningCalculators) {
             final List<TimeWarning> calculatedWarnings = calculation.calculate(projectTimeList);
             calculatedWarnings.forEach(warning -> addToTimeWarnings(warnings, warning));
         }
 
-        warnings.sort(Comparator.comparing(TimeWarning::getDate));
+        warnings.sort(Comparator.comparing(ProjectEntryWarning::getDate));
         return warnings;
     }
 
-    public List<JourneyWarning> determineJourneyWarnings(List<JourneyTimeEntry> projectTimeList) {
+    public List<JourneyWarning> determineJourneyWarnings(List<ProjectEntry> projectTimeList) {
         final List<JourneyWarning> warnings = new ArrayList<>();
-        for (JourneyWarningCalculationStrategy calculator : journeyWarningCalculators) {
+        for (WarningCalculationStrategy<JourneyWarning> calculator : journeyWarningCalculators) {
             final List<JourneyWarning> calculatedWarnings = calculator.calculate(projectTimeList);
             calculatedWarnings.forEach(warning -> addToJourneyWarnings(warnings, warning));
         }

@@ -1,35 +1,25 @@
 package com.gepardec.mega.domain.model.monthlyreport;
 
+import com.google.auto.value.AutoValue;
+
 import java.time.LocalDateTime;
 
-public class ProjectTimeEntry implements ProjectEntry {
+@AutoValue
+public abstract class ProjectTimeEntry implements ProjectEntry {
 
-    private final LocalDateTime fromTime;
-    private final LocalDateTime toTime;
-    private final Task task;
-
-    ProjectTimeEntry(LocalDateTime fromTime, LocalDateTime toTime, Task task) {
-        this.fromTime = fromTime;
-        this.toTime = toTime;
-        this.task = task;
-    }
-
-    public static ProjectTimeEntry of(LocalDateTime fromTime, LocalDateTime toTime, Task task) {
-        return new ProjectTimeEntry(fromTime, toTime, task);
+    public static ProjectTimeEntry of(LocalDateTime fromTime, LocalDateTime toTime, Task task, WorkingLocation workingLocation) {
+        return new com.gepardec.mega.domain.model.monthlyreport.AutoValue_ProjectTimeEntry(fromTime, toTime, task, workingLocation);
     }
 
     @Override
-    public LocalDateTime getFromTime() {
-        return fromTime;
-    }
+    public abstract LocalDateTime getFromTime();
 
     @Override
-    public LocalDateTime getToTime() {
-        return toTime;
-    }
+    public abstract LocalDateTime getToTime();
 
     @Override
-    public Task getTask() {
-        return task;
-    }
+    public abstract Task getTask();
+
+    @Override
+    public abstract WorkingLocation getWorkingLocation();
 }

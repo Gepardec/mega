@@ -1,5 +1,6 @@
 package com.gepardec.mega.notification.mail;
 
+import com.gepardec.mega.application.configuration.ApplicationConfig;
 import com.gepardec.mega.application.configuration.NotificationConfig;
 import com.google.common.net.MediaType;
 import io.quarkus.mailer.Mail;
@@ -11,6 +12,9 @@ import java.util.Locale;
 
 @ApplicationScoped
 public class MailSender {
+
+    @Inject
+    ApplicationConfig applicationConfig;
 
     @Inject
     NotificationHelper notificationHelper;
@@ -33,7 +37,8 @@ public class MailSender {
         final String mailContent = mailTemplateText
                 .replace(notificationHelper.getNamePlaceholder(), firstName)
                 .replace(notificationHelper.getTemplateMailtextPlaceholder(), text)
-                .replace(notificationHelper.getEomWikiPlaceholder(), notificationConfig.getMegaWikiEomUrl());
+                .replace(notificationHelper.getEomWikiPlaceholder(), notificationConfig.getMegaWikiEomUrl())
+                .replace(notificationHelper.getExcelUrlPlaceholder(), applicationConfig.getExcelUrlAsString());
 
         mailer.send(Mail.withHtml(eMail, subject, mailContent)
                 .addInlineAttachment("logo.png", notificationHelper.readLogo(), MediaType.PNG.type(), "<LogoMEGAdash@gepardec.com>"));

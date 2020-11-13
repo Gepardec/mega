@@ -43,7 +43,6 @@ public abstract class StepEntry {
         public abstract com.gepardec.mega.domain.model.StepEntry.Builder date(LocalDate date);
 
         @JsonProperty
-        @Nullable
         public abstract com.gepardec.mega.domain.model.StepEntry.Builder project(Project project);
 
         @JsonProperty
