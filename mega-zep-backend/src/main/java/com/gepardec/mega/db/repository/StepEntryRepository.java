@@ -53,4 +53,14 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
                         .and("ownerEmail", ownerEmail)
                         .and("stepId", stepId));
     }
+
+    public Optional<StepEntry> findStepEntryForEmployeeAtStepInRange(LocalDate startDate, LocalDate endDate, String ownerEmail, Long stepId) {
+        return find("#StepEntry.findStepEntryForEmployeeAtStepInRange",
+                Parameters
+                        .with("start", startDate)
+                        .and("end", endDate)
+                        .and("ownerEmail", ownerEmail)
+                        .and("stepId", stepId))
+                .singleResultOptional();
+    }
 }

@@ -9,6 +9,8 @@ import {OfficeManagementService} from '../services/office-management.service';
 import {NotificationService} from '../../shared/services/notification/notification.service';
 import {TranslateService} from '@ngx-translate/core';
 import {CommentService} from '../../shared/services/comment/comment.service';
+import {Comment} from '../../shared/models/Comment';
+import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
 
 @Component({
   selector: 'app-office-management',
@@ -58,15 +60,17 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   openDialog(omEntry: OfficeManagementEntry): void {
-    // const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
-    //   {
-    //     width: '100%',
-    //     autoFocus: false
-    //   }
-    // );
-    //
-    // dialogRef.componentInstance.employee = omEntry.employee.firstName + ' ' + omEntry.employee.sureName;
-    // dialogRef.componentInstance.comments = omEntry.comments;
+    this.commentService.getCommentsForEmployee(omEntry.employee).subscribe((comments: Array<Comment>) => {
+      const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
+        {
+          width: '100%',
+          autoFocus: false
+        }
+      );
+
+      dialogRef.componentInstance.employee = omEntry.employee;
+      dialogRef.componentInstance.comments = comments;
+    });
   }
 
   changeDate(emittedDate: string): void {

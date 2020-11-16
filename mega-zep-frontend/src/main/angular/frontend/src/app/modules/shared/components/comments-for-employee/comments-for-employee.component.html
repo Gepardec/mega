@@ -1,6 +1,6 @@
 <ng-container *ngIf="comments && employee">
   <h2 mat-dialog-title>
-    {{'comments-for-employee.commentsFor' | translate:{'firstAndSureName': employee} }}
+    {{'comments-for-employee.commentsFor' | translate:{'firstAndSureName': employee.firstName + " " + employee.sureName} }}
   </h2>
 
   <mat-dialog-content>
@@ -16,7 +16,7 @@
       <mat-hint align="end">{{newMessage.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
     </mat-form-field>
 
-    <button mat-raised-button>
+    <button mat-raised-button (click)="createCommentForEmployee(newMessage.value)">
       {{'comments-for-employee.addCommentBtn' | translate}}
     </button>
 
@@ -71,10 +71,10 @@
 
         <td class="mat-cell">
           <ng-container *ngIf="comment.isEditing">
-            <button (click)="comment.message = editMessageInput.value; toggleIsEditing(comment)" mat-icon-button>
+            <button (click)="comment.message = editMessageInput.value; toggleIsEditing(comment); updateCommentForEmployee(comment);" mat-icon-button>
               <mat-icon>done</mat-icon>
             </button>
-            <button (click)="editMessageInput.value = comment.message; toggleIsEditing(comment)" mat-icon-button>
+            <button (click)="editMessageInput.value = comment.message; toggleIsEditing(comment);" mat-icon-button>
               <mat-icon>clear</mat-icon>
             </button>
           </ng-container>
@@ -84,7 +84,7 @@
         </td>
 
         <td class="mat-cell">
-          <button mat-icon-button>
+          <button mat-icon-button (click)="deleteCommentOfEmployee(comment)">
             <mat-icon>delete</mat-icon>
           </button>
         </td>

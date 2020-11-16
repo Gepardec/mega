@@ -1,13 +1,25 @@
 package com.gepardec.mega.rest;
 
+import com.gepardec.mega.db.entity.State;
+import com.gepardec.mega.db.repository.CommentRepository;
+import com.gepardec.mega.domain.mapper.CommentMapper;
 import com.gepardec.mega.domain.model.*;
+import com.gepardec.mega.notification.mail.MailSender;
+import com.gepardec.mega.rest.model.OfficeManagementEntry;
+import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.employee.EmployeeService;
+import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.common.mapper.TypeRef;
+import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -23,6 +35,24 @@ public class EmployeeResourceTest {
 
     @InjectMock
     EmployeeService employeeService;
+
+    @InjectMocks
+    @Mock
+    StepEntryService stepEntryService;
+
+
+    @Mock
+    CommentRepository commentRepository;
+
+    @Mock
+    CommentMapper commentMapper;
+
+    @Mock
+    MailSender mailSender;
+
+
+    @InjectMocks
+    CommentService commentService;
 
     @InjectMock
     private SecurityContext securityContext;
@@ -161,6 +191,58 @@ public class EmployeeResourceTest {
     void noMethod_whenHttpMethodIsPOST_returns405() {
         given().post("/employees")
                 .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
+    }
+
+    @Test
+    void getAllOfficeManagementEntries_whenNotLoggedIn_thenReturnsHttpStatusUNAUTHORIZED() {
+        given().contentType(ContentType.JSON)
+                .delete("/employees/officemanagemententries")
+                .then().assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
+    }
+
+    @Test
+    void getAllOfficeManagementEntries_whenValid_thenReturnsListOfEntries() {
+        final User user = createUserForRole(Role.USER);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
+
+        when(employeeService.getAllActiveEmployees())
+                .thenReturn(List.of(Employee.builder().releaseDate("2020-01-01").email("marko.gattringer@gepardec.com").build()));
+
+
+        List<com.gepardec.mega.db.entity.StepEntry> entries = List.of(
+                createStepEntryForStep(StepName.CONTROL_EXTERNAL_TIMES, State.DONE),
+                createStepEntryForStep(StepName.CONTROL_INTERNAL_TIMES, State.OPEN),
+                createStepEntryForStep(StepName.CONTROL_TIME_EVIDENCES, State.DONE),
+                createStepEntryForStep(StepName.CONTROL_TIMES, State.OPEN)
+        );
+
+        when(commentService.cntFinishedAndTotalCommentsForEmployee(ArgumentMatchers.any(Employee.class)))
+                .thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
+
+
+        when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class)))
+                .thenReturn(entries);
+
+
+        List<OfficeManagementEntry> result = given().contentType(ContentType.JSON)
+                .get("/employees/officemanagemententries")
+                .as(new TypeRef<>() {});
+
+        assertEquals(1L, result.size());
+    }
+
+    private com.gepardec.mega.db.entity.Step createStep(StepName stepName) {
+        com.gepardec.mega.db.entity.Step step = new com.gepardec.mega.db.entity.Step();
+        step.setName(stepName.name());
+        return step;
+    }
+
+    private com.gepardec.mega.db.entity.StepEntry createStepEntryForStep(StepName stepName, State state) {
+        com.gepardec.mega.db.entity.StepEntry stepEntry = new com.gepardec.mega.db.entity.StepEntry();
+        stepEntry.setStep(createStep(stepName));
+        stepEntry.setState(state);
+        return stepEntry;
     }
 
     private Employee createEmployeeForUser(final User user) {

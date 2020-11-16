@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Comment } from '../../models/Comment';
 import { State } from '../../models/State';
 import { configuration } from '../../constants/configuration';
+import {Employee} from '../../models/Employee';
+import {CommentService} from "../../services/comment/comment.service";
 
 @Component({
   selector: 'app-comments-for-employee',
@@ -12,14 +14,13 @@ export class CommentsForEmployeeComponent implements OnInit {
   MAXIMUM_LETTERS = 500;
   DATE_FORMAT = configuration.dateFormat;
   State = State;
-  employee: string;
+  employee: Employee;
   comments: Array<Comment>;
 
-  constructor() {
+  constructor(private commentService: CommentService) {
   }
 
   ngOnInit(): void {
-    this.employee = JSON.parse(JSON.stringify(this.employee || null));
     this.comments = JSON.parse(JSON.stringify(this.comments || null));
     if (this.comments) {
       this.comments.forEach(comment => comment.isEditing = false);
@@ -46,5 +47,27 @@ export class CommentsForEmployeeComponent implements OnInit {
     replacedText = replacedText.replace(emailAddressPattern, '<a href="mailto:$1">$1</a>');
 
     return replacedText;
+  }
+
+  createCommentForEmployee(comment: string): void {
+    this.commentService.createNewComment(this.employee, comment).subscribe(() => {
+      this.commentService.getCommentsForEmployee(this.employee).subscribe((comments: Array<Comment>) => {
+        this.comments = comments;
+        // TODO update finishedComments / totalComments
+      });
+    });
+  }
+
+  updateCommentForEmployee(comment: Comment): void {
+    this.commentService.updateComment(comment).subscribe(() => {
+      console.log('SUCCESS');
+    });
+  }
+
+  deleteCommentOfEmployee(commentToRemove: Comment): void {
+    this.commentService.deleteComment(commentToRemove).subscribe(() => {
+      console.log('SUCCESS');
+      this.comments = this.comments.filter(item => item.id !== commentToRemove.id);
+    });
   }
 }

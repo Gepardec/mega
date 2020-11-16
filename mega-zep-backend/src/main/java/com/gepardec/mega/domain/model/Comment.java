@@ -1,5 +1,6 @@
 package com.gepardec.mega.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -11,6 +12,7 @@ import javax.annotation.Nullable;
 @AutoValue
 @JsonSerialize(as = Comment.class)
 @JsonDeserialize(builder = com.gepardec.mega.domain.model.AutoValue_Comment.Builder.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class Comment {
     public static Comment.Builder builder() {
         return new com.gepardec.mega.domain.model.AutoValue_Comment.Builder();
@@ -37,6 +39,7 @@ public abstract class Comment {
     public abstract State state();
 
     @AutoValue.Builder
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public abstract static class Builder {
         @JsonProperty
         public abstract Comment.Builder id(Long id);

@@ -53,8 +53,6 @@ public class EmployeeResource {
         List<Employee> activeEmployees = employeeService.getAllActiveEmployees();
         for(Employee empl : activeEmployees) {
             List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployee(empl);
-
-            // TODO check if stepentries could be null
             if(!stepEntries.isEmpty()) {
                 FinishedAndTotalComments finishedAndTotalComments = commentService.cntFinishedAndTotalCommentsForEmployee(empl);
                 officeManagementEntries.add(OfficeManagementEntry.builder()
@@ -81,7 +79,6 @@ public class EmployeeResource {
                 .collect(Collectors.toList());
 
         if(res.size() != 1) {
-//            throw new IllegalStateException();
             return com.gepardec.mega.domain.model.State.OPEN;
         }
 

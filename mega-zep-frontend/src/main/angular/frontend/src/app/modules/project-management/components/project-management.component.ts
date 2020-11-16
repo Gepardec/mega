@@ -54,7 +54,7 @@ export class ProjectManagementComponent implements OnInit {
       }
     );
 
-    dialogRef.componentInstance.employee = pmEntry.employeeName;
+    dialogRef.componentInstance.employee = null; // FIXME pmEntry.employee;
     dialogRef.componentInstance.comments = pmEntry.comments;
   }
 
