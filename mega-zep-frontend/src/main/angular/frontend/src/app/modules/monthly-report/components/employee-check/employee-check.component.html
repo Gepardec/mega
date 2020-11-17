@@ -29,7 +29,7 @@
         </ng-container>
       </ng-container>
 
-      <p>{{'monthly-report.commentsToDo' | translate}}</p>
+      <p *ngIf="monthlyReport.comments?.length > 0">{{'monthly-report.commentsToDo' | translate}}</p>
       <mat-selection-list (selectionChange)="selectionChange($event)">
         <mat-list-option
           #option
