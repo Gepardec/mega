@@ -5,6 +5,7 @@ import {State} from '../../../shared/models/State';
 import {MatSelectionListChange} from '@angular/material/list';
 import {ErrorHandlerService} from "../../../shared/services/error/error-handler.service";
 import {StepentriesService} from "../../../shared/services/stepentries/stepentries.service";
+import {Step} from "../../../shared/models/Step";
 
 @Component({
   selector: 'app-employee-check',
@@ -39,8 +40,19 @@ export class EmployeeCheckComponent implements OnInit {
     });
   }
 
+
+  getFullNameFromEmail(email: string): string {
+    if (!email) {
+      return;
+    }
+    return email.split('@')[0]
+      .split('.')
+      .map(name => name.charAt(0).toUpperCase() + name.slice(1))
+      .join(' ');
+  }
+
   setOpenAndUnassignedStepEntriesDone() {
-    this.stepentriesService.close(this.monthlyReport.employee).subscribe((success: boolean) => {
+    this.stepentriesService.close(this.monthlyReport.employee, Step.CONTROL_TIMES).subscribe((success: boolean) => {
       this.emitRefreshMonthlyReport();
     });
   }

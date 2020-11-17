@@ -53,20 +53,17 @@ export class CommentsForEmployeeComponent implements OnInit {
     this.commentService.createNewComment(this.employee, comment).subscribe(() => {
       this.commentService.getCommentsForEmployee(this.employee).subscribe((comments: Array<Comment>) => {
         this.comments = comments;
-        // TODO update finishedComments / totalComments
+        // TODO gattma: update finishedComments / totalComments
       });
     });
   }
 
   updateCommentForEmployee(comment: Comment): void {
-    this.commentService.updateComment(comment).subscribe(() => {
-      console.log('SUCCESS');
-    });
+    this.commentService.updateComment(comment);
   }
 
   deleteCommentOfEmployee(commentToRemove: Comment): void {
     this.commentService.deleteComment(commentToRemove).subscribe(() => {
-      console.log('SUCCESS');
       this.comments = this.comments.filter(item => item.id !== commentToRemove.id);
     });
   }
