@@ -11,6 +11,10 @@ import {TranslateService} from '@ngx-translate/core';
 import {CommentService} from '../../shared/services/comment/comment.service';
 import {Comment} from '../../shared/models/Comment';
 import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
+import {MatSelectChange} from "@angular/material/select";
+import {StepentriesService} from "../../shared/services/stepentries/stepentries.service";
+import {Employee} from "../../shared/models/Employee";
+import {Step} from "../../shared/models/Step";
 
 @Component({
   selector: 'app-office-management',
@@ -44,7 +48,8 @@ export class OfficeManagementComponent implements OnInit {
     private omService: OfficeManagementService,
     private notificationService: NotificationService,
     private translateService: TranslateService,
-    private commentService: CommentService) {
+    private commentService: CommentService,
+    private stepEntryService: StepentriesService) {
   }
 
   ngOnInit(): void {
@@ -114,6 +119,14 @@ export class OfficeManagementComponent implements OnInit {
       const successMessage = await this.translateService.get('notifications.employeesUpdatedSuccess').toPromise();
       this.notificationService.showSuccess(successMessage);
     });
+  }
+
+  closeCustomerCheck(employee: Employee) {
+    this.stepEntryService.close(employee, Step.CONTROL_EXTERNAL_TIMES).subscribe(() => console.log('closed'));
+  }
+
+  closeInternalCheck(employee: Employee) {
+    this.stepEntryService.close(employee, Step.CONTROL_INTERNAL_TIMES).subscribe(() => {});
   }
 
   private getOmEntries() {
