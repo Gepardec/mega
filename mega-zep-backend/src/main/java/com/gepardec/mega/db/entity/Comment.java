@@ -40,7 +40,7 @@ public class Comment {
      */
     @NotNull
     @Length(min = 1, max = 255)
-    @Column(name = "message", updatable = false) // FIXME updateable = false????
+    @Column(name = "message")
     private String message;
 
     /**

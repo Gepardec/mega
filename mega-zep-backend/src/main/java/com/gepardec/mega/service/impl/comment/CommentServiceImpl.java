@@ -7,15 +7,21 @@ import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.FinishedAndTotalComments;
 import com.gepardec.mega.domain.utils.DateUtils;
+import com.gepardec.mega.notification.mail.Mail;
+import com.gepardec.mega.notification.mail.MailParameter;
 import com.gepardec.mega.notification.mail.MailSender;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -56,6 +62,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public FinishedAndTotalComments cntFinishedAndTotalCommentsForEmployee(Employee employee) {
+        Objects.requireNonNull(employee, "Employee must not be null!");
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
 
@@ -71,13 +78,25 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment createNewCommentForEmployee(Long stepId, Employee employee, String comment) {
+        Objects.requireNonNull(employee);
         com.gepardec.mega.db.entity.StepEntry stepEntry = stepEntryService.findStepEntryForEmployeeAtStep(stepId, employee);
         com.gepardec.mega.db.entity.Comment newComment = new com.gepardec.mega.db.entity.Comment();
         newComment.setMessage(comment);
         newComment.setStepEntry(stepEntry);
         commentRepository.save(newComment);
-
+        sendMail(employee, newComment);
         return commentMapper.mapDbCommentToDomainComment(newComment);
+    }
+
+    private void sendMail(Employee employee, com.gepardec.mega.db.entity.Comment comment) {
+        String creator = comment.getStepEntry().getAssignee().getFirstname();
+        Map<String, String> mailParameter = Map.of(
+                MailParameter.CREATOR, creator,
+                MailParameter.RECIPIENT, employee.firstName(),
+                MailParameter.COMMENT, comment.getMessage()
+        );
+
+        mailSender.send(Mail.COMMENT_CREATED, employee.email(), employee.firstName(), Locale.GERMAN, mailParameter, List.of(creator));
     }
 
     @Override
@@ -89,7 +108,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional(Transactional.TxType.SUPPORTS)
     public Comment updateComment(Long id, String message) {
-        com.gepardec.mega.db.entity.Comment commentDb = commentRepository.findById(id); // TODO ACHTUNG: kann null sein!
+        com.gepardec.mega.db.entity.Comment commentDb = commentRepository.findById(id);
+        if(commentDb == null) {
+            throw new EntityNotFoundException(String.format("No entity found for id = %d", id));
+        }
+
         commentDb.setMessage(message);
         commentRepository.update(commentDb);
 

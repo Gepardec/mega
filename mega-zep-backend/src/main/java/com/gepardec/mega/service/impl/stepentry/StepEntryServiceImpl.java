@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -79,6 +80,7 @@ public class StepEntryServiceImpl implements StepEntryService {
 
     @Override
     public List<StepEntry> findAllStepEntriesForEmployee(Employee employee) {
+        Objects.requireNonNull(employee, "Employee must not be null!");
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
 
@@ -87,6 +89,7 @@ public class StepEntryServiceImpl implements StepEntryService {
 
     @Override
     public StepEntry findStepEntryForEmployeeAtStep(Long stepId, Employee employee) {
+        Objects.requireNonNull(employee, "Employee must not be null!");
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
         Optional<StepEntry> stepEntry = stepEntryRepository.findStepEntryForEmployeeAtStepInRange(fromDate, toDate, employee.email(), stepId);

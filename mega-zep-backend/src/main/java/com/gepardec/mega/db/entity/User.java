@@ -226,20 +226,20 @@ public class User {
         this.assignedStepEntries = assignedStepEntries;
     }
 
-    public Set<StepEntry> getOwnedStepEntries() {
-        return ownedStepEntries;
-    }
-
-    public void setOwnedStepEntries(Set<StepEntry> ownedStepEntries) {
-        this.ownedStepEntries = ownedStepEntries;
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<StepEntry> getOwnedStepEntries() {
+        return ownedStepEntries;
+    }
+
+    public void setOwnedStepEntries(Set<StepEntry> ownedStepEntries) {
+        this.ownedStepEntries = ownedStepEntries;
     }
 
     @Override
@@ -259,18 +259,15 @@ public class User {
         return (id != null) ? Objects.hash(id) : super.hashCode();
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "User{" +
                 "id=" + id +
                 ", creationDate=" + creationDate +
                 ", updatedDate=" + updatedDate +
                 ", email='" + email + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", locale=" + locale +
                 ", zepId='" + zepId + '\'' +
                 ", active=" + active +
-                ", roles=" + roles +
                 ", assignedStepEntries=" + assignedStepEntries +
                 ", ownedStepEntries=" + ownedStepEntries +
                 '}';
