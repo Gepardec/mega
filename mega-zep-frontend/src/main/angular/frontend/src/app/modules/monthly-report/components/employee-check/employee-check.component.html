@@ -29,7 +29,7 @@
         </ng-container>
       </ng-container>
 
-      <p>{{'monthly-report.commentsToDo' | translate}}:</p>
+      <p>{{'monthly-report.commentsToDo' | translate}}</p>
       <mat-selection-list (selectionChange)="selectionChange($event)">
         <mat-list-option
           #option
@@ -39,7 +39,7 @@
           [selected]="comment.state === State.DONE"
           [value]="comment">
           {{comment.updateDate | date: 'dd.MM.yyyy'}}
-          {{comment.author}}:
+          {{getFullNameFromEmail(comment?.author)}}:
           {{comment.message}}
         </mat-list-option>
       </mat-selection-list>
