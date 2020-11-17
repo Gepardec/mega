@@ -73,18 +73,25 @@ class CommentServiceImplTest {
                 "Expected NullpointerException was not thrown!"
         );
 
-        assertTrue(thrown.getMessage().equalsIgnoreCase("Employee must not be null!"));
+        assertEquals("Employee must not be null!", thrown.getMessage());
     }
 
     @Test
     void cntFinishedAndTotalCommentsForEmployee_whenReleaseDateIsNull_thenThrowsException() {
+        Employee empl = Employee.builder()
+                .userId("1")
+                .email("thomas.herzog@gpeardec.com")
+                .releaseDate(null)
+                .firstName("Thomas")
+                .build();
+
         NullPointerException thrown = assertThrows(
                 NullPointerException.class,
-                () -> commentService.cntFinishedAndTotalCommentsForEmployee(null),
+                () -> commentService.cntFinishedAndTotalCommentsForEmployee(empl),
                 "Expected NullpointerException was not thrown!"
         );
 
-        assertTrue(thrown.getMessage().equalsIgnoreCase("Date must not be null!"));
+        assertEquals("Date must not be null!", thrown.getMessage());
     }
 
     @Test
@@ -145,7 +152,7 @@ class CommentServiceImplTest {
                 "Expected NullpointerException was not thrown!"
         );
 
-        assertTrue(thrown.getMessage().equalsIgnoreCase("Employee must not be null!"));
+        assertEquals("Employee must not be null!", thrown.getMessage());
     }
 
     @Test
@@ -203,7 +210,7 @@ class CommentServiceImplTest {
                 "Expected EntityNotFoundException was not thrown!"
         );
 
-        assertTrue(thrown.getMessage().equalsIgnoreCase("No entity found for id = 1"));
+        assertEquals("No entity found for id = 1", thrown.getMessage());
     }
 
     @Test

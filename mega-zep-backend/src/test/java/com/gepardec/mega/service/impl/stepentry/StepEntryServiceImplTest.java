@@ -118,7 +118,7 @@ class StepEntryServiceImplTest {
                 "Expected NullpointerException was not thrown!"
         );
 
-        assertTrue(thrown.getMessage().equalsIgnoreCase("Employee must not be null!"));
+        assertEquals("Employee must not be null!", thrown.getMessage());
     }
 
     @Test
@@ -150,7 +150,7 @@ class StepEntryServiceImplTest {
                 "Expected NullpointerException was not thrown!"
         );
 
-        assertTrue(thrown.getMessage().equalsIgnoreCase("Employee must not be null!"));
+        assertEquals("Employee must not be null!", thrown.getMessage());
     }
 
     @Test
