@@ -3,7 +3,7 @@ import { Comment } from '../../models/Comment';
 import { State } from '../../models/State';
 import { configuration } from '../../constants/configuration';
 import {Employee} from '../../models/Employee';
-import {CommentService} from "../../services/comment/comment.service";
+import {CommentService} from '../../services/comment/comment.service';
 
 @Component({
   selector: 'app-comments-for-employee',

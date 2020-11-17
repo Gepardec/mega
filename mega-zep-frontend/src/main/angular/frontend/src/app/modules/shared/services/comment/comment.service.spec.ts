@@ -1,7 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 
 import { CommentService } from './comment.service';
-import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {OAuthService} from 'angular-oauth2-oidc';
+import {HttpClient} from '@angular/common/http';
 
 describe('CommentService', () => {
   let service: CommentService;

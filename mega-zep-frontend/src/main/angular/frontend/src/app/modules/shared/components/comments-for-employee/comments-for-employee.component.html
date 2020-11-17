@@ -16,38 +16,23 @@
       <mat-hint align="end">{{newMessage.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
     </mat-form-field>
 
-    <button mat-raised-button (click)="createCommentForEmployee(newMessage.value)">
+    <button mat-raised-button (click)="createCommentForEmployee(newMessage.value);newMessage.value = ''">
       {{'comments-for-employee.addCommentBtn' | translate}}
     </button>
 
     <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table">
-      <colgroup>
-        <col style="width:8%">
-        <col style="width:7%">
-        <col style="width:10%">
-        <col style="max-width:60%">
-        <col style="width:7.5%">
-        <col style="width:7.5%">
-      </colgroup>
 
       <tr class="mat-header-row">
-        <th class="mat-header-cell">{{'comments-for-employee.table.lastChanged' | translate}}</th>
         <th class="mat-header-cell text-center">{{'comments-for-employee.table.done' | translate}}</th>
-        <th class="mat-header-cell">{{'comments-for-employee.table.author' | translate}}</th>
         <th class="mat-header-cell">{{'comments-for-employee.table.comment' | translate}}</th>
         <th class="mat-header-cell">{{'comments-for-employee.table.edit' | translate}}</th>
         <th class="mat-header-cell">{{'comments-for-employee.table.delete' | translate}}</th>
       </tr>
 
       <tr *ngFor="let comment of comments" class="mat-row">
-        <td class="mat-cell">{{comment.updateDate | date: DATE_FORMAT}}</td>
 
         <td class="mat-cell text-center">
           <app-state-indicator [state]="comment.state"></app-state-indicator>
-        </td>
-
-        <td class="mat-cell">
-          {{comment.author}}
         </td>
 
         <td class="mat-cell">

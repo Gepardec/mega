@@ -4,6 +4,8 @@ import { CommentsForEmployeeComponent } from './comments-for-employee.component'
 import { TranslateModule } from '@ngx-translate/core';
 import { AngularMaterialModule } from '../../../material/material-module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {HttpClientModule} from '@angular/common/http';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('CommentsForEmployeeComponent', () => {
   let component: CommentsForEmployeeComponent;
@@ -14,7 +16,8 @@ describe('CommentsForEmployeeComponent', () => {
       declarations: [CommentsForEmployeeComponent],
       imports: [
         AngularMaterialModule,
-        TranslateModule.forRoot()
+        TranslateModule.forRoot(),
+        HttpClientTestingModule
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })

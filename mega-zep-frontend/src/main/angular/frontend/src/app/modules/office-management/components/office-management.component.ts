@@ -11,7 +11,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {CommentService} from '../../shared/services/comment/comment.service';
 import {Comment} from '../../shared/models/Comment';
 import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
-import {MatSelectChange} from "@angular/material/select";
 import {StepentriesService} from "../../shared/services/stepentries/stepentries.service";
 import {Employee} from "../../shared/models/Employee";
 import {Step} from "../../shared/models/Step";
