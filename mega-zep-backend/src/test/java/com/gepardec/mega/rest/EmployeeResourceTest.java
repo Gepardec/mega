@@ -21,6 +21,7 @@ import org.mockito.Mock;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
+import java.util.Collections;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -36,22 +37,10 @@ public class EmployeeResourceTest {
     @InjectMock
     EmployeeService employeeService;
 
-    @InjectMocks
-    @Mock
+    @InjectMock
     StepEntryService stepEntryService;
 
-
-    @Mock
-    CommentRepository commentRepository;
-
-    @Mock
-    CommentMapper commentMapper;
-
-    @Mock
-    MailSender mailSender;
-
-
-    @InjectMocks
+    @InjectMock
     CommentService commentService;
 
     @InjectMock
@@ -202,13 +191,12 @@ public class EmployeeResourceTest {
 
     @Test
     void getAllOfficeManagementEntries_whenValid_thenReturnsListOfEntries() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.CONTROLLER);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
         when(employeeService.getAllActiveEmployees())
                 .thenReturn(List.of(Employee.builder().releaseDate("2020-01-01").email("marko.gattringer@gepardec.com").build()));
-
 
         List<com.gepardec.mega.db.entity.StepEntry> entries = List.of(
                 createStepEntryForStep(StepName.CONTROL_EXTERNAL_TIMES, State.DONE),
@@ -230,6 +218,69 @@ public class EmployeeResourceTest {
                 .as(new TypeRef<>() {});
 
         assertEquals(1L, result.size());
+        OfficeManagementEntry entry = result.get(0);
+        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
+        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
+        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.employeeCheckState());
+        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.projectCheckState());
+        assertEquals("marko.gattringer@gepardec.com", entry.employee().email());
+        assertEquals("2020-01-01", entry.employee().releaseDate());
+        assertEquals(3L, entry.totalComments());
+        assertEquals(2L, entry.finishedComments());
+    }
+
+    @Test
+    void getAllOfficeManagementEntries_whenNoActiveEmployeesFound_thenReturnsEmptyResultList() {
+        final User user = createUserForRole(Role.CONTROLLER);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
+
+        when(employeeService.getAllActiveEmployees()).thenReturn(Collections.emptyList());
+
+        List<com.gepardec.mega.db.entity.StepEntry> entries = List.of(
+                createStepEntryForStep(StepName.CONTROL_EXTERNAL_TIMES, State.DONE),
+                createStepEntryForStep(StepName.CONTROL_INTERNAL_TIMES, State.OPEN),
+                createStepEntryForStep(StepName.CONTROL_TIME_EVIDENCES, State.DONE),
+                createStepEntryForStep(StepName.CONTROL_TIMES, State.OPEN)
+        );
+
+        when(commentService.cntFinishedAndTotalCommentsForEmployee(ArgumentMatchers.any(Employee.class)))
+                .thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
+
+
+        when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class)))
+                .thenReturn(entries);
+
+
+        List<OfficeManagementEntry> result = given().contentType(ContentType.JSON)
+                .get("/employees/officemanagemententries")
+                .as(new TypeRef<>() {
+                });
+
+        assertEquals(0L, result.size());
+    }
+
+    @Test
+    void getAllOfficeManagementEntries_whenNoStepEntriesFound_thenReturnsEmptyResultList() {
+        final User user = createUserForRole(Role.CONTROLLER);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
+
+        when(commentService.cntFinishedAndTotalCommentsForEmployee(ArgumentMatchers.any(Employee.class)))
+                .thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
+
+        when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class)))
+                .thenReturn(Collections.emptyList());
+
+        when(employeeService.getAllActiveEmployees())
+                .thenReturn(List.of(Employee.builder().releaseDate("2020-01-01").email("marko.gattringer@gepardec.com").build()));
+
+        List<OfficeManagementEntry> result = given().contentType(ContentType.JSON)
+                .get("/employees/officemanagemententries")
+                .as(new TypeRef<>() {
+                });
+
+        assertEquals(0L, result.size());
     }
 
     private com.gepardec.mega.db.entity.Step createStep(StepName stepName) {
