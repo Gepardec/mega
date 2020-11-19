@@ -1,7 +1,7 @@
-import {Employee} from "../../shared/models/Employee";
-import {State} from "../../shared/models/State";
+import {Employee} from './Employee';
+import {State} from './State';
 
-export class OfficeManagementEntry {
+export class ManagementEntry {
   employee: Employee;
   employeeCheckState: State;
   customerCheckState: State;

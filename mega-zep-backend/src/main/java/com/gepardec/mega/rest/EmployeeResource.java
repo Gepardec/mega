@@ -5,7 +5,7 @@ import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.db.entity.StepEntry;
 import com.gepardec.mega.domain.model.*;
 import com.gepardec.mega.db.entity.State;
-import com.gepardec.mega.rest.model.OfficeManagementEntry;
+import com.gepardec.mega.rest.model.ManagementEntry;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
@@ -26,12 +26,6 @@ public class EmployeeResource {
     @Inject
     EmployeeService employeeService;
 
-    @Inject
-    StepEntryService stepEntryService;
-
-    @Inject
-    CommentService commentService;
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Employee> list() {
@@ -45,43 +39,4 @@ public class EmployeeResource {
         return employeeService.updateEmployeesReleaseDate(employees);
     }
 
-    @GET
-    @Path("/officemanagemententries")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<OfficeManagementEntry> getAllOfficeManagementEntries() {
-        List<OfficeManagementEntry> officeManagementEntries = new ArrayList<>();
-        List<Employee> activeEmployees = employeeService.getAllActiveEmployees();
-        for(Employee empl : activeEmployees) {
-            List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployee(empl);
-            if(!stepEntries.isEmpty()) {
-                FinishedAndTotalComments finishedAndTotalComments = commentService.cntFinishedAndTotalCommentsForEmployee(empl);
-                officeManagementEntries.add(OfficeManagementEntry.builder()
-                        .employee(empl)
-                        .customerCheckState(extractStateForStep(stepEntries, StepName.CONTROL_EXTERNAL_TIMES))
-                        .employeeCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIMES))
-                        .internalCheckState(extractStateForStep(stepEntries, StepName.CONTROL_INTERNAL_TIMES))
-                        .projectCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIME_EVIDENCES))
-                        .finishedComments(finishedAndTotalComments.finishedComments())
-                        .totalComments(finishedAndTotalComments.totalComments())
-                        .build()
-                );
-            }
-        }
-
-        return officeManagementEntries;
-    }
-
-    private com.gepardec.mega.domain.model.State extractStateForStep(List<StepEntry> stepEntries, StepName step) {
-        List<State> res = stepEntries
-                .stream()
-                .filter(se -> step.name().equalsIgnoreCase(se.getStep().getName()))
-                .map(StepEntry::getState)
-                .collect(Collectors.toList());
-
-        if(res.size() != 1) {
-            return com.gepardec.mega.domain.model.State.OPEN;
-        }
-
-        return com.gepardec.mega.domain.model.State.valueOf(res.get(0).name());
-    }
 }

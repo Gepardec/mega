@@ -11,25 +11,25 @@
   </mat-card>
 
   <mat-accordion [multi]="true">
-    <mat-expansion-panel *ngFor="let pmEntry of pmEntries | keyvalue, let i = index" [expanded]="true">
+    <mat-expansion-panel *ngFor="let pmEntry of pmEntries, let i = index" [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <strong>{{pmEntry.key}}</strong>
+          <strong>{{pmEntry.projectName}}</strong>
         </mat-panel-title>
         <mat-panel-description>
-          <span [ngClass]="areAllProjectCheckStatesDone(pmEntry.key) ? 'green' : 'red'">
+          <span [ngClass]="areAllProjectCheckStatesDone(pmEntry.projectName) ? 'green' : 'red'">
             {{'project-management.employeeDone' | translate}}
           </span>
         </mat-panel-description>
       </mat-expansion-panel-header>
 
       <div class="table-container">
-        <mat-table [dataSource]="pmEntry.value">
+        <mat-table [dataSource]="pmEntry.entries">
           <ng-container matColumnDef="select">
             <mat-header-cell *matHeaderCellDef>
-              <mat-checkbox (change)="$event ? masterToggle(i, pmEntry.key) : null"
-                            [checked]="pmSelectionModels[i].hasValue() && areAllSelected(i, pmEntry.key)"
-                            [indeterminate]="pmSelectionModels[i].hasValue() && !areAllSelected(i, pmEntry.key)">
+              <mat-checkbox (change)="$event ? masterToggle(i, pmEntry.projectName) : null"
+                            [checked]="pmSelectionModels[i].hasValue() && areAllSelected(i, pmEntry.projectName)"
+                            [indeterminate]="pmSelectionModels[i].hasValue() && !areAllSelected(i, pmEntry.projectName)">
               </mat-checkbox>
             </mat-header-cell>
             <mat-cell *matCellDef="let row">
@@ -44,7 +44,7 @@
             <mat-header-cell *matHeaderCellDef>{{'project-management.table.employeeName' | translate}}</mat-header-cell>
             <mat-cell *matCellDef="let pmEntry">
               <span class="mobile-label">{{'project-management.table.employeeName' | translate}}</span>
-              {{pmEntry.employeeName}}
+              {{pmEntry.employee.firstName}} {{pmEntry.employee.sureName}}
             </mat-cell>
           </ng-container>
 
@@ -53,7 +53,7 @@
             >{{'project-management.table.projectCheckState' | translate}}</mat-header-cell>
             <mat-cell *matCellDef="let pmEntry" class="text-center">
               <span class="mobile-label">{{'project-management.table.projectCheckState' | translate}}</span>
-              <app-state-select [value]="pmEntry.projectCheckState"></app-state-select>
+              <app-state-select [value]="pmEntry.projectCheckState" (selectionChange)="closeProjectCheck(pmEntry.employee)"></app-state-select>
             </mat-cell>
           </ng-container>
 

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {OfficeManagementEntry} from '../models/OfficeManagementEntry';
+import {ManagementEntry} from '../../shared/models/ManagementEntry';
 import {State} from '../../shared/models/State';
 import {MatDialog} from '@angular/material/dialog';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -34,9 +34,9 @@ export class OfficeManagementComponent implements OnInit {
     'releaseDate'
   ];
 
-  omEntries: Array<OfficeManagementEntry>;
-  filteredOmEntries: Array<OfficeManagementEntry>;
-  omSelectionModel = new SelectionModel<OfficeManagementEntry>(true, []);
+  omEntries: Array<ManagementEntry>;
+  filteredOmEntries: Array<ManagementEntry>;
+  omSelectionModel = new SelectionModel<ManagementEntry>(true, []);
   selectedDate: string;
   dayOfMonthForWarning = 5;
   configuration = configuration;
@@ -63,7 +63,7 @@ export class OfficeManagementComponent implements OnInit {
     this.areAllSelected() ? this.omSelectionModel.clear() : this.omEntries.forEach(row => this.omSelectionModel.select(row));
   }
 
-  openDialog(omEntry: OfficeManagementEntry): void {
+  openDialog(omEntry: ManagementEntry): void {
     this.commentService.getCommentsForEmployee(omEntry.employee).subscribe((comments: Array<Comment>) => {
       const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
         {
@@ -137,14 +137,14 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   private getOmEntries() {
-    this.omService.getEntries().subscribe((omEntries: Array<OfficeManagementEntry>) => {
+    this.omService.getEntries().subscribe((omEntries: Array<ManagementEntry>) => {
       this.omEntries = omEntries;
       this.sortOmEntries();
     });
   }
 
   private sortOmEntries(): void {
-    const sortFn = (a: OfficeManagementEntry, b: OfficeManagementEntry) => a.employee.sureName.localeCompare(b.employee.sureName);
+    const sortFn = (a: ManagementEntry, b: ManagementEntry) => a.employee.sureName.localeCompare(b.employee.sureName);
     this.omEntries = this.omEntries.sort(sortFn);
     this.filteredOmEntries = this.omEntries.slice();
   }

@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { ProjectManagementEntry } from '../models/ProjectManagementEntry';
-import projectManagementResponseMock from '../models/MockData';
-import { MatDialog } from '@angular/material/dialog';
-import { CommentsForEmployeeComponent } from '../../shared/components/comments-for-employee/comments-for-employee.component';
-import { SelectionModel } from '@angular/cdk/collections';
-import { State } from '../../shared/models/State';
+import {Component, OnInit} from '@angular/core';
+import {ProjectManagementEntry} from '../models/ProjectManagementEntry';
+import {MatDialog} from '@angular/material/dialog';
+import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
+import {SelectionModel} from '@angular/cdk/collections';
+import {State} from '../../shared/models/State';
+import {ProjectManagementService} from '../services/project-management.service';
+import {ManagementEntry} from '../../shared/models/ManagementEntry';
+import {Employee} from "../../shared/models/Employee";
+import {Step} from "../../shared/models/Step";
+import {StepentriesService} from "../../shared/services/stepentries/stepentries.service";
 
 @Component({
   selector: 'app-project-management',
@@ -12,7 +16,7 @@ import { State } from '../../shared/models/State';
   styleUrls: ['./project-management.component.scss']
 })
 export class ProjectManagementComponent implements OnInit {
-  pmEntries: Map<string, Array<ProjectManagementEntry>> = projectManagementResponseMock;
+  pmEntries: Array<ProjectManagementEntry>;
   displayedColumns = [
     'select',
     'employeeName',
@@ -22,28 +26,25 @@ export class ProjectManagementComponent implements OnInit {
     'customerCheckState',
     'doneCommentsIndicator'
   ];
-  pmSelectionModels: Array<SelectionModel<ProjectManagementEntry>>;
+  pmSelectionModels: Array<SelectionModel<ManagementEntry>>;
 
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog,
+              private pmService: ProjectManagementService,
+              private stepEntryService: StepentriesService) {
   }
 
   ngOnInit(): void {
-    if (this.pmEntries) {
-      this.pmSelectionModels = [];
-      for (let i = 0; i < this.pmEntries.size; i++) {
-        this.pmSelectionModels.push(new SelectionModel<ProjectManagementEntry>(true, []));
-      }
-    }
+    this.getPmEntries();
   }
 
-  areAllSelected(projectIndex: number, projectKey: string) {
-    return this.pmSelectionModels[projectIndex].selected.length === this.pmEntries.get(projectKey).length;
+  areAllSelected(projectIndex: number, projectName: string) {
+    return this.pmSelectionModels[projectIndex].selected.length === this.findEntriesForProject(projectName).length;
   }
 
-  masterToggle(projectIndex: number, projectKey: string) {
-    this.areAllSelected(projectIndex, projectKey) ?
+  masterToggle(projectIndex: number, projectName: string) {
+    this.areAllSelected(projectIndex, projectName) ?
       this.pmSelectionModels[projectIndex].clear() :
-      this.pmEntries.get(projectKey).forEach(row => this.pmSelectionModels[projectIndex].select(row));
+      this.findEntriesForProject(projectName).forEach(row => this.pmSelectionModels[projectIndex].select(row));
   }
 
   openDialog(pmEntry: ProjectManagementEntry): void {
@@ -55,14 +56,36 @@ export class ProjectManagementComponent implements OnInit {
     );
 
     dialogRef.componentInstance.employee = null; // FIXME pmEntry.employee;
-    dialogRef.componentInstance.comments = pmEntry.comments;
+    // dialogRef.componentInstance.comments = pmEntry.comments; // TODO load comments for employee
   }
 
   isAnySelected(): boolean {
-    return this.pmSelectionModels.filter(pmSelectionModel => pmSelectionModel.selected.length > 0).length > 0;
+    if (this.pmSelectionModels) {
+      return this.pmSelectionModels.filter(pmSelectionModel => pmSelectionModel.selected.length > 0).length > 0;
+    }
   }
 
-  areAllProjectCheckStatesDone(projectKey: string): boolean {
-    return this.pmEntries.get(projectKey).every(pmEntry => pmEntry.projectCheckState === State.DONE);
+  areAllProjectCheckStatesDone(projectName: string): boolean {
+    return this.findEntriesForProject(projectName).every(entry => entry.projectCheckState === State.DONE);
+  }
+
+  closeProjectCheck(employee: Employee) {
+    this.stepEntryService.close(employee, Step.CONTROL_TIME_EVIDENCES).subscribe(() => console.log('closed'));
+  }
+
+  private getPmEntries() {
+    this.pmService.getEntries().subscribe((pmEntries: Array<ProjectManagementEntry>) => {
+      this.pmEntries = pmEntries;
+      this.pmSelectionModels = [];
+      this.pmEntries.forEach(
+        () => this.pmSelectionModels.push(new SelectionModel<ManagementEntry>(true, []))
+      );
+    });
+  }
+
+  private findEntriesForProject(projectName: string) {
+    return this.pmEntries.filter(entry => {
+      return entry.projectName === projectName;
+    })[0].entries;
   }
 }

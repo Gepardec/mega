@@ -1,11 +1,8 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.db.entity.State;
-import com.gepardec.mega.db.repository.CommentRepository;
-import com.gepardec.mega.domain.mapper.CommentMapper;
 import com.gepardec.mega.domain.model.*;
-import com.gepardec.mega.notification.mail.MailSender;
-import com.gepardec.mega.rest.model.OfficeManagementEntry;
+import com.gepardec.mega.rest.model.ManagementEntry;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
@@ -16,10 +13,7 @@ import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 
-import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import java.util.Collections;
 import java.util.List;
@@ -213,12 +207,12 @@ public class EmployeeResourceTest {
                 .thenReturn(entries);
 
 
-        List<OfficeManagementEntry> result = given().contentType(ContentType.JSON)
+        List<ManagementEntry> result = given().contentType(ContentType.JSON)
                 .get("/employees/officemanagemententries")
                 .as(new TypeRef<>() {});
 
         assertEquals(1L, result.size());
-        OfficeManagementEntry entry = result.get(0);
+        ManagementEntry entry = result.get(0);
         assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.employeeCheckState());
@@ -252,7 +246,7 @@ public class EmployeeResourceTest {
                 .thenReturn(entries);
 
 
-        List<OfficeManagementEntry> result = given().contentType(ContentType.JSON)
+        List<ManagementEntry> result = given().contentType(ContentType.JSON)
                 .get("/employees/officemanagemententries")
                 .as(new TypeRef<>() {
                 });
@@ -275,7 +269,7 @@ public class EmployeeResourceTest {
         when(employeeService.getAllActiveEmployees())
                 .thenReturn(List.of(Employee.builder().releaseDate("2020-01-01").email("marko.gattringer@gepardec.com").build()));
 
-        List<OfficeManagementEntry> result = given().contentType(ContentType.JSON)
+        List<ManagementEntry> result = given().contentType(ContentType.JSON)
                 .get("/employees/officemanagemententries")
                 .as(new TypeRef<>() {
                 });
