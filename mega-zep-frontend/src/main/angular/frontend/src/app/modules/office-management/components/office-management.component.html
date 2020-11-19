@@ -1,18 +1,22 @@
 <div *ngIf="omEntries && filteredOmEntries" fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px">
   <mat-toolbar class="mat-elevation-z8" color="accent">
-    <mat-form-field floatLabel="never">
-      <mat-label>{{'office-management.filterPlaceholder' | translate}}</mat-label>
-      <input
-        #employeeNameInput
-        (keyup)="filterOmEntriesByEmployeeName(employeeNameInput.value)"
-        matInput>
-      <button (click)="employeeNameInput.value=''; filterOmEntriesByEmployeeName(employeeNameInput.value)"
-              *ngIf="employeeNameInput.value"
-              mat-button mat-icon-button
-              matSuffix>
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
+    <mat-toolbar-row>
+      Filter
+    </mat-toolbar-row>
+    <mat-toolbar-row>
+      <mat-form-field floatLabel="never">
+        <mat-label>{{'office-management.filterPlaceholder' | translate}}</mat-label>
+        <input
+          #employeeNameInput
+          (keyup)="filterOmEntriesByEmployeeName(employeeNameInput.value)"
+          matInput>
+        <button (click)="employeeNameInput.value=''; filterOmEntriesByEmployeeName(employeeNameInput.value)"
+                *ngIf="employeeNameInput.value"
+                mat-button mat-icon-button
+                matSuffix>
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
 
     <span fxFlex="1 1 auto"></span>
 
@@ -34,6 +38,10 @@
         {{'office-management.releaseBtnText' | translate}}
       </button>
     </div>
+    </mat-toolbar-row>
+    <mat-toolbar-row>
+      <mat-checkbox (change)="filterOmEntriesByOMC1Status($event.checked)">{{'office-management.omc1StateOpen' | translate}}</mat-checkbox>
+    </mat-toolbar-row>
   </mat-toolbar>
 
   <div class="mat-elevation-z10 table-container">

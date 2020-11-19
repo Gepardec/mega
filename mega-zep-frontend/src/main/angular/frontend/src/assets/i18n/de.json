@@ -68,6 +68,7 @@
   },
   "office-management": {
     "filterPlaceholder": "Suche nach Name",
+    "omc1StateOpen": "Kundenzeiten NICHT abgeschlossen",
     "selectedCount": "Person(en) ausgewählt",
     "releaseBtnText": "Freigeben",
     "table": {

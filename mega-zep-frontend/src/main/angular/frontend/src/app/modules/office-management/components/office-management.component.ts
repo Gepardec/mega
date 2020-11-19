@@ -93,6 +93,14 @@ export class OfficeManagementComponent implements OnInit {
     });
   }
 
+  filterOmEntriesByOMC1Status(checked: boolean) {
+    if (checked === true) {
+      this.filteredOmEntries = this.omEntries.filter(val => val.customerCheckState === State.OPEN);
+    } else {
+      this.filteredOmEntries = this.omEntries.slice();
+    }
+  }
+
   getReleaseDateCssClass(date: string): string {
     const today = new Date();
     const releaseDate = new Date(date);
