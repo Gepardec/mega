@@ -10,9 +10,9 @@ import com.gepardec.mega.domain.model.Employee;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-@JsonSerialize(as = OfficeManagementEntry.class)
+@JsonSerialize(as = ManagementEntry.class)
 @JsonDeserialize(builder = com.gepardec.mega.rest.model.AutoValue_OfficeManagementEntry.Builder.class)
-public abstract class OfficeManagementEntry {
+public abstract class ManagementEntry {
 
     @JsonProperty
     public abstract Employee employee();
@@ -36,7 +36,7 @@ public abstract class OfficeManagementEntry {
     public abstract long finishedComments();
 
     public static Builder builder() {
-        return new com.gepardec.mega.rest.model.AutoValue_OfficeManagementEntry.Builder();
+        return new com.gepardec.mega.rest.model.AutoValue_ManagementEntry.Builder();
     }
 
     @AutoValue.Builder
@@ -55,6 +55,6 @@ public abstract class OfficeManagementEntry {
 
         @JsonProperty public abstract Builder finishedComments(long totalComments);
 
-        @JsonProperty public abstract OfficeManagementEntry build();
+        @JsonProperty public abstract ManagementEntry build();
     }
 }

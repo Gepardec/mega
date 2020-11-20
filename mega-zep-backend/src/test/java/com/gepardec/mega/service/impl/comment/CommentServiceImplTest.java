@@ -48,8 +48,8 @@ class CommentServiceImplTest {
 
     @Test
     void findCommentsForEmployee_when1DbComment_thenMap1DomainComment() {
-        when(commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(ArgumentMatchers.any(LocalDate.class),
-                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString())).thenReturn(List.of(createComment(1L, State.IN_PROGRESS)));
+        when(commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(ArgumentMatchers.any(LocalDateTime.class),
+                ArgumentMatchers.any(LocalDateTime.class), ArgumentMatchers.anyString())).thenReturn(List.of(createComment(1L, State.OPEN)));
 
         List<com.gepardec.mega.domain.model.Comment> domainComments = commentService.findCommentsForEmployee(createEmployee());
         Assertions.assertFalse(domainComments.isEmpty());
@@ -97,8 +97,8 @@ class CommentServiceImplTest {
     @Test
     void cntFinishedAndTotalCommentsForEmployee_whenValid_thenReturnsCnt() {
         when(commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(
-                ArgumentMatchers.any(LocalDate.class),
-                ArgumentMatchers.any(LocalDate.class),
+                ArgumentMatchers.any(LocalDateTime.class),
+                ArgumentMatchers.any(LocalDateTime.class),
                 ArgumentMatchers.anyString()
         )).thenReturn(List.of(
                 createComment(1L, State.IN_PROGRESS),
@@ -115,8 +115,8 @@ class CommentServiceImplTest {
     @Test
     void cntFinishedAndTotalCommentsForEmployee_whenNoFinishedComments_thenReturnsCnt() {
         when(commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(
-                ArgumentMatchers.any(LocalDate.class),
-                ArgumentMatchers.any(LocalDate.class),
+                ArgumentMatchers.any(LocalDateTime.class),
+                ArgumentMatchers.any(LocalDateTime.class),
                 ArgumentMatchers.anyString()
         )).thenReturn(List.of(
                 createComment(1L, State.IN_PROGRESS),
@@ -133,8 +133,8 @@ class CommentServiceImplTest {
     @Test
     void cntFinishedAndTotalCommentsForEmployee_whenNoComments_thenReturnsCnt() {
         when(commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(
-                ArgumentMatchers.any(LocalDate.class),
-                ArgumentMatchers.any(LocalDate.class),
+                ArgumentMatchers.any(LocalDateTime.class),
+                ArgumentMatchers.any(LocalDateTime.class),
                 ArgumentMatchers.anyString()
         )).thenReturn(Collections.emptyList());
 

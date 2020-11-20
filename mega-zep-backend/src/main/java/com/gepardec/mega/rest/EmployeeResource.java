@@ -5,7 +5,7 @@ import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.db.entity.StepEntry;
 import com.gepardec.mega.domain.model.*;
 import com.gepardec.mega.db.entity.State;
-import com.gepardec.mega.rest.model.OfficeManagementEntry;
+import com.gepardec.mega.rest.model.ManagementEntry;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
@@ -48,14 +48,14 @@ public class EmployeeResource {
     @GET
     @Path("/officemanagemententries")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<OfficeManagementEntry> getAllOfficeManagementEntries() {
-        List<OfficeManagementEntry> officeManagementEntries = new ArrayList<>();
+    public List<ManagementEntry> getAllOfficeManagementEntries() {
+        List<ManagementEntry> officeManagementEntries = new ArrayList<>();
         List<Employee> activeEmployees = employeeService.getAllActiveEmployees();
         for(Employee empl : activeEmployees) {
             List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployee(empl);
             if(!stepEntries.isEmpty()) {
                 FinishedAndTotalComments finishedAndTotalComments = commentService.cntFinishedAndTotalCommentsForEmployee(empl);
-                officeManagementEntries.add(OfficeManagementEntry.builder()
+                officeManagementEntries.add(ManagementEntry.builder()
                         .employee(empl)
                         .customerCheckState(extractStateForStep(stepEntries, StepName.CONTROL_EXTERNAL_TIMES))
                         .employeeCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIMES))
