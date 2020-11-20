@@ -11,9 +11,9 @@ import {TranslateService} from '@ngx-translate/core';
 import {CommentService} from '../../shared/services/comment/comment.service';
 import {Comment} from '../../shared/models/Comment';
 import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
-import {StepentriesService} from "../../shared/services/stepentries/stepentries.service";
-import {Employee} from "../../shared/models/Employee";
-import {Step} from "../../shared/models/Step";
+import {StepentriesService} from '../../shared/services/stepentries/stepentries.service';
+import {Employee} from '../../shared/models/Employee';
+import {Step} from '../../shared/models/Step';
 
 @Component({
   selector: 'app-office-management',
@@ -74,6 +74,7 @@ export class OfficeManagementComponent implements OnInit {
 
       dialogRef.componentInstance.employee = omEntry.employee;
       dialogRef.componentInstance.comments = comments;
+      dialogRef.afterClosed().subscribe(() => this.getOmEntries());
     });
   }
 
