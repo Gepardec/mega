@@ -11,7 +11,7 @@ import com.google.auto.value.AutoValue;
 
 @AutoValue
 @JsonSerialize(as = ManagementEntry.class)
-@JsonDeserialize(builder = com.gepardec.mega.rest.model.AutoValue_OfficeManagementEntry.Builder.class)
+@JsonDeserialize(builder = com.gepardec.mega.rest.model.AutoValue_ManagementEntry.Builder.class)
 public abstract class ManagementEntry {
 
     @JsonProperty
