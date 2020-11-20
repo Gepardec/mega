@@ -31,7 +31,7 @@ public class CommentServiceImpl implements CommentService {
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
 
         List<com.gepardec.mega.db.entity.Comment> dbComments =
-                commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(fromDate, toDate, employee.email());
+                commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(fromDate.atTime(0, 0), toDate.atTime(23, 59), employee.email());
 
         List<Comment> domainComments = dbComments
                 .stream()

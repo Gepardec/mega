@@ -35,8 +35,8 @@ class CommentServiceImplTest {
 
     @Test
     void findCommentsForEmployee_when1DbComment_thenMap1DomainComment() {
-        when(commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(ArgumentMatchers.any(LocalDate.class),
-                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString())).thenReturn(List.of(createComment(1L)));
+        when(commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(ArgumentMatchers.any(LocalDateTime.class),
+                ArgumentMatchers.any(LocalDateTime.class), ArgumentMatchers.anyString())).thenReturn(List.of(createComment(1L)));
 
         List<com.gepardec.mega.domain.model.Comment> domainComments = commentService.findCommentsForEmployee(createEmployee());
         Assertions.assertFalse(domainComments.isEmpty());
