@@ -19,7 +19,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,27 +36,27 @@ public class ManagementResource {
     @Inject
     CommentService commentService;
 
+    @Inject
+    UserContext userContext;
+
+    @Inject
+    ProjectService projectService;
+
     @GET
     @Path("/officemanagemententries")
     @Produces(MediaType.APPLICATION_JSON)
     public List<ManagementEntry> getAllOfficeManagementEntries() {
         List<ManagementEntry> officeManagementEntries = new ArrayList<>();
         List<Employee> activeEmployees = employeeService.getAllActiveEmployees();
-        for(Employee empl : activeEmployees) {
+        for (Employee empl : activeEmployees) {
             ManagementEntry newManagementEntry = createManagemenEntryForEmployee(empl);
-            if(newManagementEntry != null) {
+            if (newManagementEntry != null) {
                 officeManagementEntries.add(newManagementEntry);
             }
         }
 
         return officeManagementEntries;
     }
-
-    @Inject
-    UserContext userContext;
-
-    @Inject
-    ProjectService projectService;
 
     @GET
     @Path("/projectmanagemententries")
@@ -72,12 +71,12 @@ public class ManagementResource {
                 .collect(Collectors.toList());
 
         List<ProjectManagementEntry> projectManagementEntries = new ArrayList<>();
-        for(Project currentProject : projects) {
+        for (Project currentProject : projects) {
             List<ManagementEntry> entries = new ArrayList<>();
-            for(String userId : currentProject.employees()) {
+            for (String userId : currentProject.employees()) {
                 Employee empl = employeeService.getEmployee(userId);
                 ManagementEntry newManagementEntry = createManagemenEntryForEmployee(empl);
-                if(newManagementEntry != null) {
+                if (newManagementEntry != null) {
                     entries.add(newManagementEntry);
                 }
             }
@@ -94,7 +93,7 @@ public class ManagementResource {
 
     private ManagementEntry createManagemenEntryForEmployee(Employee employee) {
         List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployee(employee);
-        if(!stepEntries.isEmpty()) {
+        if (!stepEntries.isEmpty()) {
             FinishedAndTotalComments finishedAndTotalComments = commentService.cntFinishedAndTotalCommentsForEmployee(employee);
             return ManagementEntry.builder()
                     .employee(employee)
@@ -117,7 +116,7 @@ public class ManagementResource {
                 .map(StepEntry::getState)
                 .collect(Collectors.toList());
 
-        if(res.size() != 1) {
+        if (res.size() != 1) {
             return com.gepardec.mega.domain.model.State.OPEN;
         }
 
