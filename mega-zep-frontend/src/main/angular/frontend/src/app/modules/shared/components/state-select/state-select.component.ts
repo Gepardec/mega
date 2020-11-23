@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { State } from '../../models/State';
-import { MatSelectChange } from '@angular/material/select';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {State} from '../../models/State';
+import {MatSelectChange} from '@angular/material/select';
 
 @Component({
   selector: 'app-state-select',
@@ -20,5 +20,6 @@ export class StateSelectComponent implements OnInit {
 
   onSelectionChange(selectChange: MatSelectChange): void {
     this.selectionChange.emit(selectChange);
+    this.value = State.DONE;
   }
 }

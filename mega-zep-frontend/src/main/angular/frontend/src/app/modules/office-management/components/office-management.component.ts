@@ -12,7 +12,6 @@ import {CommentService} from '../../shared/services/comment/comment.service';
 import {Comment} from '../../shared/models/Comment';
 import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
 import {StepentriesService} from '../../shared/services/stepentries/stepentries.service';
-import {Employee} from '../../shared/models/Employee';
 import {Step} from '../../shared/models/Step';
 
 @Component({
@@ -129,12 +128,16 @@ export class OfficeManagementComponent implements OnInit {
     });
   }
 
-  closeCustomerCheck(employee: Employee) {
-    this.stepEntryService.close(employee, Step.CONTROL_EXTERNAL_TIMES).subscribe(() => console.log('closed'));
+  closeCustomerCheck(omEntry: OfficeManagementEntry) {
+    this.stepEntryService.close(omEntry.employee, Step.CONTROL_EXTERNAL_TIMES).subscribe(() => {
+      omEntry.customerCheckState = State.DONE;
+    });
   }
 
-  closeInternalCheck(employee: Employee) {
-    this.stepEntryService.close(employee, Step.CONTROL_INTERNAL_TIMES).subscribe(() => {});
+  closeInternalCheck(omEntry: OfficeManagementEntry) {
+    this.stepEntryService.close(omEntry.employee, Step.CONTROL_INTERNAL_TIMES).subscribe(() => {
+      omEntry.internalCheckState = State.DONE;
+    });
   }
 
   private getOmEntries() {
