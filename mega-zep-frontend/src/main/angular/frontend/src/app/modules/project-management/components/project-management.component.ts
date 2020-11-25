@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProjectManagementEntry} from '../models/ProjectManagementEntry';
 import {MatDialog} from '@angular/material/dialog';
 import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
@@ -6,8 +6,8 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {State} from '../../shared/models/State';
 import {ProjectManagementService} from '../services/project-management.service';
 import {ManagementEntry} from '../../shared/models/ManagementEntry';
-import {Employee} from '../../shared/models/Employee';
 import {StepentriesService} from '../../shared/services/stepentries/stepentries.service';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-project-management',
@@ -23,9 +23,11 @@ export class ProjectManagementComponent implements OnInit {
     'employeeCheckState',
     'internalCheckState',
     'customerCheckState',
-    'doneCommentsIndicator'
+    'doneCommentsIndicator',
+    'releaseDate'
   ];
   pmSelectionModels: Array<SelectionModel<ManagementEntry>>;
+  environment = environment;
 
   constructor(private dialog: MatDialog,
               private pmService: ProjectManagementService,

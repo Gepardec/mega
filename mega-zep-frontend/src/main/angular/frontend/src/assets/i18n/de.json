@@ -93,7 +93,8 @@
       "employeeCheckState": "MA Check",
       "internalCheckState": "Interne Zeiten",
       "customerCheckState": "Kundenzeiten",
-      "comments": "Anmerkungen"
+      "comments": "Anmerkungen",
+      "releaseDate": "Freigabedatum"
     }
   },
   "comments-for-employee": {

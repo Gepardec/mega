@@ -44,7 +44,10 @@
             <mat-header-cell *matHeaderCellDef>{{'project-management.table.employeeName' | translate}}</mat-header-cell>
             <mat-cell *matCellDef="let row">
               <span class="mobile-label">{{'project-management.table.employeeName' | translate}}</span>
-              {{row.employee.firstName}} {{row.employee.sureName}}
+              <a [href]="environment.ZEP_URL_OFFICE_MANAGEMENT + row.employee.userId"
+                 target="_blank">
+                {{row.employee.firstName}} {{row.employee.sureName}}
+              </a>
             </mat-cell>
           </ng-container>
 
@@ -85,13 +88,21 @@
           </ng-container>
 
           <ng-container matColumnDef="doneCommentsIndicator">
-            <mat-header-cell *matHeaderCellDef>{{'project-management.table.comments' | translate}}</mat-header-cell>
-            <mat-cell *matCellDef="let row">
+            <mat-header-cell *matHeaderCellDef class="text-center">{{'project-management.table.comments' | translate}}</mat-header-cell>
+            <mat-cell *matCellDef="let row" class="text-center">
               <span class="mobile-label">{{'project-management.table.comments' | translate}}</span>
               <button (click)="openDialog(row)" mat-button>
                 <mat-icon>comment</mat-icon>
                 <app-done-comments-indicator [totalComments]="row.totalComments" [finishedComments]="row.finishedComments"></app-done-comments-indicator>
               </button>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="releaseDate">
+            <mat-header-cell *matHeaderCellDef class="text-center">{{'project-management.table.releaseDate' | translate}}</mat-header-cell>
+            <mat-cell *matCellDef="let row" class="text-center">
+              <span class="mobile-label">{{'project-management.table.releaseDate' | translate}}</span>
+              {{row.employee.releaseDate | date:'dd.MM.yyyy'}}
             </mat-cell>
           </ng-container>
 
