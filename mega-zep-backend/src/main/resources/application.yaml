@@ -46,7 +46,7 @@ mega:
         "user-email":
           expire-after-write: 10M
     mailer:
-        mock: false
+        mock: true
     datasource:
       db-kind: postgresql
       username: mega

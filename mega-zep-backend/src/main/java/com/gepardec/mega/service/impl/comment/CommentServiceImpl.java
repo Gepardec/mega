@@ -81,9 +81,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment createNewCommentForEmployee(Long stepId, Employee employee, String comment) {
+    public Comment createNewCommentForEmployee(Long stepId, Employee employee, String comment, String assigneeEmail) {
         Objects.requireNonNull(employee);
-        com.gepardec.mega.db.entity.StepEntry stepEntry = stepEntryService.findStepEntryForEmployeeAtStep(stepId, employee);
+        com.gepardec.mega.db.entity.StepEntry stepEntry = stepEntryService.findStepEntryForEmployeeAtStep(stepId, employee, assigneeEmail);
         com.gepardec.mega.db.entity.Comment newComment = new com.gepardec.mega.db.entity.Comment();
         newComment.setMessage(comment);
         newComment.setStepEntry(stepEntry);

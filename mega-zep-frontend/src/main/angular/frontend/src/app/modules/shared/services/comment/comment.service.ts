@@ -43,10 +43,10 @@ export class CommentService {
       });
   }
 
-  createNewComment(employee: Employee, message: string): Observable<any> {
+  createNewComment(employee: Employee, message: string, assigneeEmail: string): Observable<any> {
     return this.httpClient.post(
       this.config.getBackendUrlWithContext('/comments'),
-      new NewCommentEntry(Step.CONTROL_INTERNAL_TIMES, employee, message)
+      new NewCommentEntry(Step.CONTROL_INTERNAL_TIMES, employee, message, assigneeEmail)
     );
   }
 

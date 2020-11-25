@@ -4,6 +4,8 @@ import { State } from '../../models/State';
 import { configuration } from '../../constants/configuration';
 import {Employee} from '../../models/Employee';
 import {CommentService} from '../../services/comment/comment.service';
+import {User} from '../../models/User';
+import {UserService} from '../../services/user/user.service';
 
 @Component({
   selector: 'app-comments-for-employee',
@@ -15,9 +17,10 @@ export class CommentsForEmployeeComponent implements OnInit {
   DATE_FORMAT = configuration.dateFormat;
   State = State;
   employee: Employee;
+  user: User;
   comments: Array<Comment>;
 
-  constructor(private commentService: CommentService) {
+  constructor(private commentService: CommentService, private userService: UserService) {
   }
 
   ngOnInit(): void {
@@ -25,10 +28,18 @@ export class CommentsForEmployeeComponent implements OnInit {
     if (this.comments) {
       this.comments.forEach(comment => comment.isEditing = false);
     }
+
+    this.userService.user.subscribe((user) => {
+      this.user = user;
+    });
   }
 
   toggleIsEditing(comment: Comment) {
     comment.isEditing = !comment.isEditing;
+  }
+
+  editCommentBtnVisible(comment: Comment) {
+    return !comment.isEditing && this.user.email === comment.author && comment.state !== State.DONE;
   }
 
   parseAnchorTags(plainText): string {
@@ -50,7 +61,7 @@ export class CommentsForEmployeeComponent implements OnInit {
   }
 
   createCommentForEmployee(comment: string): void {
-    this.commentService.createNewComment(this.employee, comment).subscribe(() => {
+    this.commentService.createNewComment(this.employee, comment, this.user.email).subscribe(() => {
       this.commentService.getCommentsForEmployee(this.employee).subscribe((comments: Array<Comment>) => {
         this.comments = comments;
         // TODO gattma: update finishedComments / totalComments

@@ -23,6 +23,8 @@
     <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table">
 
       <tr class="mat-header-row">
+        <th class="mat-header-cell text-center">{{'comments-for-employee.table.lastChanged' | translate}}</th>
+        <th class="mat-header-cell text-center">{{'comments-for-employee.table.author' | translate}}</th>
         <th class="mat-header-cell text-center">{{'comments-for-employee.table.done' | translate}}</th>
         <th class="mat-header-cell">{{'comments-for-employee.table.comment' | translate}}</th>
         <th class="mat-header-cell">{{'comments-for-employee.table.edit' | translate}}</th>
@@ -30,6 +32,13 @@
       </tr>
 
       <tr *ngFor="let comment of comments" class="mat-row">
+        <td class="mat-cell text-center">
+          <p>{{comment.updateDate | date:'dd.LL.yyyy, HH:mm'}}</p>
+        </td>
+
+        <td class="mat-cell text-center">
+          <p>{{comment.author}}</p>
+        </td>
 
         <td class="mat-cell text-center">
           <app-state-indicator [state]="comment.state"></app-state-indicator>
@@ -63,13 +72,13 @@
               <mat-icon>clear</mat-icon>
             </button>
           </ng-container>
-          <button (click)="toggleIsEditing(comment)" *ngIf="!comment.isEditing" mat-icon-button>
+          <button (click)="toggleIsEditing(comment)" *ngIf="editCommentBtnVisible(comment)" mat-icon-button>
             <mat-icon>edit</mat-icon>
           </button>
         </td>
 
         <td class="mat-cell">
-          <button mat-icon-button (click)="deleteCommentOfEmployee(comment)">
+          <button mat-icon-button (click)="deleteCommentOfEmployee(comment)" *ngIf="editCommentBtnVisible(comment)">
             <mat-icon>delete</mat-icon>
           </button>
         </td>

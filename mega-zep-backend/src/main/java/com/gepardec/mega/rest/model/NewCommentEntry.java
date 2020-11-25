@@ -20,6 +20,9 @@ public abstract class NewCommentEntry {
     @JsonProperty
     public abstract String comment();
 
+    @JsonProperty
+    public abstract String assigneeEmail();
+
     public NewCommentEntry() {
         super();
     }
@@ -35,6 +38,8 @@ public abstract class NewCommentEntry {
         @JsonProperty public abstract NewCommentEntry.Builder employee(Employee employee);
 
         @JsonProperty public abstract NewCommentEntry.Builder comment(String comment);
+
+        @JsonProperty public abstract NewCommentEntry.Builder assigneeEmail(String assigneeEmail);
 
         @JsonProperty public abstract NewCommentEntry build();
 

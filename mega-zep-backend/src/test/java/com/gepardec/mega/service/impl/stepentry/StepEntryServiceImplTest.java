@@ -146,7 +146,7 @@ class StepEntryServiceImplTest {
     void findStepEntryForEmployeeAtStep_whenEmployeeIsNull_thenThrowsException() {
         NullPointerException thrown = assertThrows(
                 NullPointerException.class,
-                () -> stepEntryService.findStepEntryForEmployeeAtStep(2L, null),
+                () -> stepEntryService.findStepEntryForEmployeeAtStep(2L, null, ""),
                 "Expected NullpointerException was not thrown!"
         );
 
@@ -159,12 +159,13 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.anyString(),
-                ArgumentMatchers.anyLong()
+                ArgumentMatchers.anyLong(),
+                ArgumentMatchers.anyString()
         )).thenReturn(Optional.empty());
 
         IllegalStateException thrown = assertThrows(
                 IllegalStateException.class,
-                () -> stepEntryService.findStepEntryForEmployeeAtStep(2L, createEmployee()),
+                () -> stepEntryService.findStepEntryForEmployeeAtStep(2L, createEmployee(), ""),
                 "Expected IllegalStateException was not thrown!"
         );
 
@@ -177,10 +178,11 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.anyString(),
-                ArgumentMatchers.anyLong()
+                ArgumentMatchers.anyLong(),
+                ArgumentMatchers.anyString()
         )).thenReturn(Optional.of(createStepEntry(1L)));
 
-        StepEntry stepEntry = stepEntryService.findStepEntryForEmployeeAtStep(2L, createEmployee());
+        StepEntry stepEntry = stepEntryService.findStepEntryForEmployeeAtStep(2L, createEmployee(), "");
         assertNotNull(stepEntry);
         assertEquals(1L, stepEntry.getId());
         assertEquals("Liwest-EMS", stepEntry.getProject());
