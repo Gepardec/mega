@@ -15,6 +15,9 @@ import java.util.Optional;
 @ApplicationScoped
 public class StepEntryRepository implements PanacheRepository<StepEntry> {
 
+    private static final String ALL_PROJECTS = "%";
+    private static final String ALL_ASSIGNEES = "%";
+
     public Optional<StepEntry> findAllOwnedAndAssignedStepEntriesForEmployee(LocalDate entryDate, String ownerAndAssigneeEmail) {
         return find("#StepEntry.findAllOwnedAndAssignedStepEntriesForEmployee",
                 Parameters
@@ -35,11 +38,17 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
     }
 
     public List<StepEntry> findAllOwnedStepEntriesInRange(LocalDate startDate, LocalDate endDate, String ownerEmail) {
+        return findAllOwnedStepEntriesInRange(startDate, endDate, ownerEmail, ALL_PROJECTS, ALL_ASSIGNEES);
+    }
+
+    public List<StepEntry> findAllOwnedStepEntriesInRange(LocalDate startDate, LocalDate endDate, String ownerEmail, String projectId, String assigneEmail) {
         return find("#StepEntry.findAllOwnedStepEntriesInRange",
                 Parameters
                         .with("start", startDate)
                         .and("end", endDate)
-                        .and("ownerEmail", ownerEmail))
+                        .and("ownerEmail", ownerEmail)
+                        .and("assigneEmail", assigneEmail)
+                        .and("projectId", projectId))
                 .list();
     }
 
@@ -51,6 +60,19 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
                         .and("start", startDate)
                         .and("end", endDate)
                         .and("ownerEmail", ownerEmail)
+                        .and("stepId", stepId));
+    }
+
+    @Transactional
+    public int closeAssigned(LocalDate startDate, LocalDate endDate, String ownerEmail, String assigneeEmail, Long stepId, String project) {
+        return update("UPDATE StepEntry s SET s.state = :state WHERE s.id IN (SELECT s.id FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.step.id = :stepId AND s.project like :project AND s.assignee.email = :assigneeEmail)",
+                Parameters
+                        .with("state", State.DONE)
+                        .and("start", startDate)
+                        .and("end", endDate)
+                        .and("ownerEmail", ownerEmail)
+                        .and("assigneeEmail", assigneeEmail)
+                        .and("project", project)
                         .and("stepId", stepId));
     }
 

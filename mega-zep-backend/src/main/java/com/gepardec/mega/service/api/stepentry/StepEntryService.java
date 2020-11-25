@@ -17,7 +17,11 @@ public interface StepEntryService {
 
     boolean setOpenAndAssignedStepEntriesDone(Employee employee, Long stepId);
 
+    boolean closeStepEntryForEmployeeInProject(Employee employee, Long stepId, String project, String assigneeEmail);
+
     List<com.gepardec.mega.db.entity.StepEntry> findAllStepEntriesForEmployee(Employee employee);
+
+    List<com.gepardec.mega.db.entity.StepEntry> findAllStepEntriesForEmployeeAndProject(Employee employee, String projectId, String assigneEmail);
 
     com.gepardec.mega.db.entity.StepEntry findStepEntryForEmployeeAtStep(Long stepId, Employee employee);
 }

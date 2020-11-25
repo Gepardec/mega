@@ -20,6 +20,8 @@ import javax.ws.rs.core.MediaType;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Secured
@@ -49,7 +51,10 @@ public class ManagementResource {
         List<ManagementEntry> officeManagementEntries = new ArrayList<>();
         List<Employee> activeEmployees = employeeService.getAllActiveEmployees();
         for (Employee empl : activeEmployees) {
-            ManagementEntry newManagementEntry = createManagemenEntryForEmployee(empl);
+            ManagementEntry newManagementEntry = createManagementEntryForEmployee(
+                    empl,
+                    (employee) -> stepEntryService.findAllStepEntriesForEmployee(empl)
+            );
             if (newManagementEntry != null) {
                 officeManagementEntries.add(newManagementEntry);
             }
@@ -66,21 +71,14 @@ public class ManagementResource {
                 .getProjectsForMonthYear(LocalDate.now(), List.of(ProjectFilter.IS_LEADS_AVAILABLE))
                 .stream()
                 .filter(project -> project.leads().stream().allMatch(lead -> lead.equalsIgnoreCase(
-                        "005-wbruckmueller" // FIXME: userContext.user().userId()
+                        userContext.user().userId()
                 )))
                 .collect(Collectors.toList());
 
         List<ProjectManagementEntry> projectManagementEntries = new ArrayList<>();
+        Map<String, Employee> employees = createEmployeeCache();
         for (Project currentProject : projects) {
-            List<ManagementEntry> entries = new ArrayList<>();
-            for (String userId : currentProject.employees()) {
-                Employee empl = employeeService.getEmployee(userId);
-                ManagementEntry newManagementEntry = createManagemenEntryForEmployee(empl);
-                if (newManagementEntry != null) {
-                    entries.add(newManagementEntry);
-                }
-            }
-
+            List<ManagementEntry> entries = createManagementEntriesForProject(currentProject, employees);
             projectManagementEntries.add(ProjectManagementEntry.builder()
                     .projectName(currentProject.projectId())
                     .entries(entries)
@@ -91,16 +89,46 @@ public class ManagementResource {
         return projectManagementEntries;
     }
 
-    private ManagementEntry createManagemenEntryForEmployee(Employee employee) {
-        List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployee(employee);
+    private Map<String, Employee> createEmployeeCache() {
+        return employeeService.getAllActiveEmployees().stream()
+                .collect(Collectors.toMap(Employee::userId, employee -> employee));
+    }
+
+    private List<ManagementEntry> createManagementEntriesForProject(Project project, Map<String, Employee> employees) {
+        List<ManagementEntry> entries = new ArrayList<>();
+        for (String userId : project.employees()) {
+            if (employees.containsKey(userId)) {
+                Employee empl = employees.get(userId);
+                ManagementEntry newManagementEntry = createManagementEntryForEmployee(
+                        empl,
+                        project.projectId(),
+                        (employee -> stepEntryService.findAllStepEntriesForEmployeeAndProject(
+                                employee, project.projectId(), userContext.user().email()
+                        ))
+                );
+                if (newManagementEntry != null) {
+                    entries.add(newManagementEntry);
+                }
+            }
+        }
+
+        return entries;
+    }
+
+    private ManagementEntry createManagementEntryForEmployee(Employee employee, Function<Employee, List<StepEntry>> findStepEntries) {
+        return createManagementEntryForEmployee(employee, null, findStepEntries);
+    }
+
+    private ManagementEntry createManagementEntryForEmployee(Employee employee, String projectId, Function<Employee, List<StepEntry>> findStepEntries) {
+        List<StepEntry> stepEntries = findStepEntries.apply(employee);
         if (!stepEntries.isEmpty()) {
             FinishedAndTotalComments finishedAndTotalComments = commentService.cntFinishedAndTotalCommentsForEmployee(employee);
             return ManagementEntry.builder()
                     .employee(employee)
-                    .customerCheckState(extractStateForStep(stepEntries, StepName.CONTROL_EXTERNAL_TIMES))
-                    .employeeCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIMES))
-                    .internalCheckState(extractStateForStep(stepEntries, StepName.CONTROL_INTERNAL_TIMES))
-                    .projectCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIME_EVIDENCES))
+                    .customerCheckState(extractStateForStep(stepEntries, StepName.CONTROL_EXTERNAL_TIMES, projectId))
+                    .employeeCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIMES, projectId))
+                    .internalCheckState(extractStateForStep(stepEntries, StepName.CONTROL_INTERNAL_TIMES, projectId))
+                    .projectCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIME_EVIDENCES, projectId))
                     .finishedComments(finishedAndTotalComments.finishedComments())
                     .totalComments(finishedAndTotalComments.totalComments())
                     .build();
@@ -109,10 +137,16 @@ public class ManagementResource {
         return null;
     }
 
-    private com.gepardec.mega.domain.model.State extractStateForStep(List<StepEntry> stepEntries, StepName step) {
+    private com.gepardec.mega.domain.model.State extractStateForStep(List<StepEntry> stepEntries, StepName step, String projectId) {
         List<State> res = stepEntries
                 .stream()
-                .filter(se -> step.name().equalsIgnoreCase(se.getStep().getName()))
+                .filter(se -> {
+                    if (projectId == null) {
+                        return step.name().equalsIgnoreCase(se.getStep().getName());
+                    } else {
+                        return step.name().equalsIgnoreCase(se.getStep().getName()) && projectId.equalsIgnoreCase(se.getProject());
+                    }
+                })
                 .map(StepEntry::getState)
                 .collect(Collectors.toList());
 

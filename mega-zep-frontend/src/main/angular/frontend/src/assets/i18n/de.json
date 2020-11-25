@@ -90,7 +90,7 @@
     "table": {
       "employeeName": "Mitarbeiter",
       "projectCheckState": "Überprüfung",
-      "employeeCheckState": "MA ChMAeck",
+      "employeeCheckState": "MA Check",
       "internalCheckState": "Interne Zeiten",
       "customerCheckState": "Kundenzeiten",
       "comments": "Anmerkungen"

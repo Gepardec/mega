@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ProjectManagementEntry} from '../models/ProjectManagementEntry';
 import {MatDialog} from '@angular/material/dialog';
 import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
@@ -6,9 +6,8 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {State} from '../../shared/models/State';
 import {ProjectManagementService} from '../services/project-management.service';
 import {ManagementEntry} from '../../shared/models/ManagementEntry';
-import {Employee} from "../../shared/models/Employee";
-import {Step} from "../../shared/models/Step";
-import {StepentriesService} from "../../shared/services/stepentries/stepentries.service";
+import {Employee} from '../../shared/models/Employee';
+import {StepentriesService} from '../../shared/services/stepentries/stepentries.service';
 
 @Component({
   selector: 'app-project-management',
@@ -69,8 +68,9 @@ export class ProjectManagementComponent implements OnInit {
     return this.findEntriesForProject(projectName).every(entry => entry.projectCheckState === State.DONE);
   }
 
-  closeProjectCheck(employee: Employee) {
-    this.stepEntryService.close(employee, Step.CONTROL_TIME_EVIDENCES).subscribe(() => console.log('closed'));
+  closeProjectCheck(projectName: string, row: ManagementEntry) {
+    this.stepEntryService.closeProjectCheck(row.employee, projectName).subscribe(() => {});
+    row.projectCheckState = State.DONE;
   }
 
   private getPmEntries() {

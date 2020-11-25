@@ -128,13 +128,13 @@ export class OfficeManagementComponent implements OnInit {
     });
   }
 
-  closeCustomerCheck(omEntry: OfficeManagementEntry) {
+  closeCustomerCheck(omEntry: ManagementEntry) {
     this.stepEntryService.close(omEntry.employee, Step.CONTROL_EXTERNAL_TIMES).subscribe(() => {
       omEntry.customerCheckState = State.DONE;
     });
   }
 
-  closeInternalCheck(omEntry: OfficeManagementEntry) {
+  closeInternalCheck(omEntry: ManagementEntry) {
     this.stepEntryService.close(omEntry.employee, Step.CONTROL_INTERNAL_TIMES).subscribe(() => {
       omEntry.internalCheckState = State.DONE;
     });
