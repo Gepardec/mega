@@ -49,6 +49,7 @@ public class ManagementResourceTest {
 
     @Test
     void getAllOfficeManagementEntries_whenNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
+        when(userContext.user()).thenReturn(createUserForRole(Role.ADMINISTRATOR));
         given().contentType(ContentType.JSON)
                 .get("/management/officemanagemententries")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
@@ -153,6 +154,7 @@ public class ManagementResourceTest {
 
     @Test
     void getAllProjectManagementEntries_whenNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
+        when(userContext.user()).thenReturn(createUserForRole(Role.ADMINISTRATOR));
         given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
@@ -181,8 +183,7 @@ public class ManagementResourceTest {
         when(projectService.getProjectsForMonthYear(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyList()))
                 .thenReturn(List.of(rgkkcc, rgkkwc));
 
-        when(employeeService.getEmployee(mgattringer.userId())).thenReturn(mgattringer);
-        when(employeeService.getEmployee(jgartner.userId())).thenReturn(jgartner);
+        when(employeeService.getAllActiveEmployees()).thenReturn(List.of(mgattringer, jgartner));
 
         List<com.gepardec.mega.db.entity.StepEntry> entries = List.of(
                 createStepEntryForStep(StepName.CONTROL_EXTERNAL_TIMES, State.DONE),
@@ -194,7 +195,7 @@ public class ManagementResourceTest {
         when(commentService.cntFinishedAndTotalCommentsForEmployee(ArgumentMatchers.any(Employee.class)))
                 .thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
 
-        when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class)))
+        when(stepEntryService.findAllStepEntriesForEmployeeAndProject(ArgumentMatchers.any(Employee.class), ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
                 .thenReturn(entries);
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
@@ -213,10 +214,10 @@ public class ManagementResourceTest {
                 .findFirst();
         Assert.assertTrue(entryMgattringer.isPresent());
         ManagementEntry entry = entryMgattringer.get();
-        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
+        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.customerCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.employeeCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.projectCheckState());
+        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.projectCheckState());
         assertEquals(mgattringer.email(), entry.employee().email());
         assertEquals(mgattringer.releaseDate(), entry.employee().releaseDate());
         assertEquals(3L, entry.totalComments());
