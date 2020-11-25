@@ -4,8 +4,9 @@ import { CommentsForEmployeeComponent } from './comments-for-employee.component'
 import { TranslateModule } from '@ngx-translate/core';
 import { AngularMaterialModule } from '../../../material/material-module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import {HttpClientModule} from '@angular/common/http';
-import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {OAuthModule} from 'angular-oauth2-oidc';
 
 describe('CommentsForEmployeeComponent', () => {
   let component: CommentsForEmployeeComponent;
@@ -17,7 +18,9 @@ describe('CommentsForEmployeeComponent', () => {
       imports: [
         AngularMaterialModule,
         TranslateModule.forRoot(),
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule,
+        OAuthModule.forRoot()
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
