@@ -2,20 +2,16 @@ package com.gepardec.mega.rest;
 
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.domain.model.*;
-import com.gepardec.mega.rest.model.ManagementEntry;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.common.mapper.TypeRef;
-import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 
 import javax.ws.rs.core.MediaType;
-import java.util.Collections;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -174,107 +170,6 @@ public class EmployeeResourceTest {
     void noMethod_whenHttpMethodIsPOST_returns405() {
         given().post("/employees")
                 .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
-    }
-
-    @Test
-    void getAllOfficeManagementEntries_whenNotLoggedIn_thenReturnsHttpStatusUNAUTHORIZED() {
-        given().contentType(ContentType.JSON)
-                .delete("/employees/officemanagemententries")
-                .then().assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
-    }
-
-    @Test
-    void getAllOfficeManagementEntries_whenValid_thenReturnsListOfEntries() {
-        final User user = createUserForRole(Role.CONTROLLER);
-        when(securityContext.email()).thenReturn(user.email());
-        when(userContext.user()).thenReturn(user);
-
-        when(employeeService.getAllActiveEmployees())
-                .thenReturn(List.of(Employee.builder().releaseDate("2020-01-01").email("marko.gattringer@gepardec.com").build()));
-
-        List<com.gepardec.mega.db.entity.StepEntry> entries = List.of(
-                createStepEntryForStep(StepName.CONTROL_EXTERNAL_TIMES, State.DONE),
-                createStepEntryForStep(StepName.CONTROL_INTERNAL_TIMES, State.OPEN),
-                createStepEntryForStep(StepName.CONTROL_TIME_EVIDENCES, State.DONE),
-                createStepEntryForStep(StepName.CONTROL_TIMES, State.OPEN)
-        );
-
-        when(commentService.cntFinishedAndTotalCommentsForEmployee(ArgumentMatchers.any(Employee.class)))
-                .thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
-
-
-        when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class)))
-                .thenReturn(entries);
-
-
-        List<ManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/employees/officemanagemententries")
-                .as(new TypeRef<>() {});
-
-        assertEquals(1L, result.size());
-        ManagementEntry entry = result.get(0);
-        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.employeeCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.projectCheckState());
-        assertEquals("marko.gattringer@gepardec.com", entry.employee().email());
-        assertEquals("2020-01-01", entry.employee().releaseDate());
-        assertEquals(3L, entry.totalComments());
-        assertEquals(2L, entry.finishedComments());
-    }
-
-    @Test
-    void getAllOfficeManagementEntries_whenNoActiveEmployeesFound_thenReturnsEmptyResultList() {
-        final User user = createUserForRole(Role.CONTROLLER);
-        when(securityContext.email()).thenReturn(user.email());
-        when(userContext.user()).thenReturn(user);
-
-        when(employeeService.getAllActiveEmployees()).thenReturn(Collections.emptyList());
-
-        List<com.gepardec.mega.db.entity.StepEntry> entries = List.of(
-                createStepEntryForStep(StepName.CONTROL_EXTERNAL_TIMES, State.DONE),
-                createStepEntryForStep(StepName.CONTROL_INTERNAL_TIMES, State.OPEN),
-                createStepEntryForStep(StepName.CONTROL_TIME_EVIDENCES, State.DONE),
-                createStepEntryForStep(StepName.CONTROL_TIMES, State.OPEN)
-        );
-
-        when(commentService.cntFinishedAndTotalCommentsForEmployee(ArgumentMatchers.any(Employee.class)))
-                .thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
-
-
-        when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class)))
-                .thenReturn(entries);
-
-
-        List<ManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/employees/officemanagemententries")
-                .as(new TypeRef<>() {
-                });
-
-        assertEquals(0L, result.size());
-    }
-
-    @Test
-    void getAllOfficeManagementEntries_whenNoStepEntriesFound_thenReturnsEmptyResultList() {
-        final User user = createUserForRole(Role.CONTROLLER);
-        when(securityContext.email()).thenReturn(user.email());
-        when(userContext.user()).thenReturn(user);
-
-        when(commentService.cntFinishedAndTotalCommentsForEmployee(ArgumentMatchers.any(Employee.class)))
-                .thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
-
-        when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class)))
-                .thenReturn(Collections.emptyList());
-
-        when(employeeService.getAllActiveEmployees())
-                .thenReturn(List.of(Employee.builder().releaseDate("2020-01-01").email("marko.gattringer@gepardec.com").build()));
-
-        List<ManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/employees/officemanagemententries")
-                .as(new TypeRef<>() {
-                });
-
-        assertEquals(0L, result.size());
     }
 
     private com.gepardec.mega.db.entity.Step createStep(StepName stepName) {
