@@ -160,7 +160,8 @@ class CommentServiceImplTest {
         StepEntry stepEntry = createStepEntry(1L);
         when(stepEntryService.findStepEntryForEmployeeAtStep(
                 ArgumentMatchers.anyLong(),
-                ArgumentMatchers.any(Employee.class)
+                ArgumentMatchers.any(Employee.class),
+                ArgumentMatchers.anyString()
         )).thenReturn(createStepEntry(1L));
 
         doAnswer(invocation -> {
@@ -181,7 +182,7 @@ class CommentServiceImplTest {
 
         Employee employee = createEmployee();
         String newComment = "My new comment!";
-        com.gepardec.mega.domain.model.Comment createdComment = commentService.createNewCommentForEmployee(2L, employee, newComment);
+        com.gepardec.mega.domain.model.Comment createdComment = commentService.createNewCommentForEmployee(2L, employee, newComment, "");
 
         String creator = stepEntry.getAssignee().getFirstname();
         Map<String, String> expectedMailParameter = Map.of(

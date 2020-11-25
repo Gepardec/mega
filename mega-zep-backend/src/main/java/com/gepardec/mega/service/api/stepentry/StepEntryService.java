@@ -19,5 +19,5 @@ public interface StepEntryService {
 
     List<com.gepardec.mega.db.entity.StepEntry> findAllStepEntriesForEmployee(Employee employee);
 
-    com.gepardec.mega.db.entity.StepEntry findStepEntryForEmployeeAtStep(Long stepId, Employee employee);
+    com.gepardec.mega.db.entity.StepEntry findStepEntryForEmployeeAtStep(Long stepId, Employee employee, String assigneeEmail);
 }

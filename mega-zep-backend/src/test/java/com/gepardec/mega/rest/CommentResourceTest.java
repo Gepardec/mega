@@ -174,8 +174,12 @@ public class CommentResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        when(commentService.createNewCommentForEmployee(ArgumentMatchers.anyLong(), ArgumentMatchers.any(Employee.class), ArgumentMatchers.anyString()))
-                .thenReturn(Comment.builder().message("Pausen eintragen!").build());
+        when(commentService.createNewCommentForEmployee(
+                ArgumentMatchers.anyLong(),
+                ArgumentMatchers.any(Employee.class),
+                ArgumentMatchers.anyString(),
+                ArgumentMatchers.anyString()
+        )).thenReturn(Comment.builder().message("Pausen eintragen!").build());
 
         Employee employee = Employee.builder().build();
         NewCommentEntry newCommentEntry = NewCommentEntry.builder().comment("Pausen eintragen!").employee(employee).stepId(2L).build();
