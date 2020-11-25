@@ -64,7 +64,6 @@ export class CommentsForEmployeeComponent implements OnInit {
     this.commentService.createNewComment(this.employee, comment, this.user.email).subscribe(() => {
       this.commentService.getCommentsForEmployee(this.employee).subscribe((comments: Array<Comment>) => {
         this.comments = comments;
-        // TODO gattma: update finishedComments / totalComments
       });
     });
   }
