@@ -13,7 +13,8 @@ import java.util.Objects;
 @NamedQueries({
         @NamedQuery(name = "StepEntry.findAllOwnedAndAssignedStepEntriesForEmployee", query = "SELECT s FROM StepEntry s WHERE s.date = :entryDate AND s.owner.email = :ownerEmail AND s.assignee.email = :assigneeEmail AND s.step.id = :stepId"),
         @NamedQuery(name = "StepEntry.findAllOwnedAndUnassignedStepEntriesForOtherChecks", query = "SELECT s FROM StepEntry s WHERE s.date = :entryDate AND s.owner.email = :ownerEmail AND s.owner.email <> s.assignee.email AND s.step.id <> :stepId"),
-        @NamedQuery(name="StepEntry.findAllOwnedStepEntriesInRange", query = "SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.assignee.email like :assigneEmail AND s.project like :projectId"),
+        @NamedQuery(name="StepEntry.findAllOwnedStepEntriesInRange", query = "SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail"),
+        @NamedQuery(name="StepEntry.findAllOwnedStepEntriesInRangeForProject", query = "SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.assignee.email like :assigneEmail AND s.project like :projectId"),
         @NamedQuery(name="StepEntry.findStepEntryForEmployeeAtStepInRange", query = "SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.step.id = :stepId and s.owner.email = :ownerEmail and s.assignee.email = :assigneeEmail"),
 })
 public class StepEntry {

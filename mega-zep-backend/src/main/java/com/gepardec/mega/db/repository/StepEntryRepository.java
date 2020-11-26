@@ -15,9 +15,6 @@ import java.util.Optional;
 @ApplicationScoped
 public class StepEntryRepository implements PanacheRepository<StepEntry> {
 
-    private static final String ALL_PROJECTS = "%";
-    private static final String ALL_ASSIGNEES = "%";
-
     public Optional<StepEntry> findAllOwnedAndAssignedStepEntriesForEmployee(LocalDate entryDate, String ownerAndAssigneeEmail) {
         return find("#StepEntry.findAllOwnedAndAssignedStepEntriesForEmployee",
                 Parameters
@@ -38,11 +35,16 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
     }
 
     public List<StepEntry> findAllOwnedStepEntriesInRange(LocalDate startDate, LocalDate endDate, String ownerEmail) {
-        return findAllOwnedStepEntriesInRange(startDate, endDate, ownerEmail, ALL_PROJECTS, ALL_ASSIGNEES);
+        return find("#StepEntry.findAllOwnedStepEntriesInRange",
+                Parameters
+                        .with("start", startDate)
+                        .and("end", endDate)
+                        .and("ownerEmail", ownerEmail)
+                ).list();
     }
 
     public List<StepEntry> findAllOwnedStepEntriesInRange(LocalDate startDate, LocalDate endDate, String ownerEmail, String projectId, String assigneEmail) {
-        return find("#StepEntry.findAllOwnedStepEntriesInRange",
+        return find("#StepEntry.findAllOwnedStepEntriesInRangeForProject",
                 Parameters
                         .with("start", startDate)
                         .and("end", endDate)

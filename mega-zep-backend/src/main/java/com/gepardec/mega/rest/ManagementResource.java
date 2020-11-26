@@ -150,10 +150,13 @@ public class ManagementResource {
                 .map(StepEntry::getState)
                 .collect(Collectors.toList());
 
-        if (res.size() != 1) {
-            return com.gepardec.mega.domain.model.State.OPEN;
+        if(res.size() == 1) {
+            return com.gepardec.mega.domain.model.State.valueOf(res.get(0).name());
+        } else if(res.size() > 1) {
+            return res.stream().anyMatch(state -> state.equals(State.OPEN)) ?
+                    com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
         }
 
-        return com.gepardec.mega.domain.model.State.valueOf(res.get(0).name());
+        return com.gepardec.mega.domain.model.State.OPEN;
     }
 }
