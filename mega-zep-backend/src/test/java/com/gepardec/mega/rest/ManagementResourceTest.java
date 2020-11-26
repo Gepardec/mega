@@ -142,7 +142,7 @@ public class ManagementResourceTest {
                 .thenReturn(Collections.emptyList());
 
         when(employeeService.getAllActiveEmployees())
-                .thenReturn(List.of(Employee.builder().releaseDate("2020-01-01").email("marko.gattringer@gepardec.com").build()));
+                .thenReturn(Collections.emptyList());
 
         List<ManagementEntry> result = given().contentType(ContentType.JSON)
                 .get("/management/officemanagemententries")
