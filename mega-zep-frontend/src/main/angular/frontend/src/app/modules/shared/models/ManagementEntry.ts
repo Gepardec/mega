@@ -9,4 +9,5 @@ export class ManagementEntry {
   projectCheckState: State;
   totalComments: number;
   finishedComments: number;
+  entryDate: string;
 }

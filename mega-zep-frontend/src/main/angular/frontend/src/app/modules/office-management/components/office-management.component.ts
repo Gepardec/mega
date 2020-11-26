@@ -101,6 +101,21 @@ export class OfficeManagementComponent implements OnInit {
     }
   }
 
+  getCurrentReleaseDate(): Date {
+    const entries = this.omEntries.filter(entry => {
+        return entry.projectCheckState === State.OPEN ||
+          entry.customerCheckState === State.OPEN ||
+          entry.employeeCheckState === State.OPEN ||
+          entry.internalCheckState === State.OPEN;
+    });
+
+    if (entries.length > 0) {
+      return new Date(entries[0].entryDate);
+    }
+
+    return new Date();
+  }
+
   getReleaseDateCssClass(date: string): string {
     const today = new Date();
     const releaseDate = new Date(date);

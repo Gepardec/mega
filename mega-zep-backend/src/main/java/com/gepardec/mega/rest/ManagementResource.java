@@ -1,5 +1,6 @@
 package com.gepardec.mega.rest;
 
+import com.gepardec.mega.application.constant.DateTimeConstants;
 import com.gepardec.mega.application.interceptor.RolesAllowed;
 import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.db.entity.State;
@@ -18,6 +19,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -128,6 +130,7 @@ public class ManagementResource {
                     .projectCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIME_EVIDENCES, projectId))
                     .finishedComments(finishedAndTotalComments.finishedComments())
                     .totalComments(finishedAndTotalComments.totalComments())
+                    .entryDate(stepEntries.get(0).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                     .build();
         }
 
@@ -139,6 +142,7 @@ public class ManagementResource {
                 .projectCheckState(com.gepardec.mega.domain.model.State.DONE)
                 .finishedComments(0L)
                 .totalComments(0L)
+                .entryDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .build();
     }
 
