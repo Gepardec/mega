@@ -297,6 +297,7 @@ public class ManagementResourceTest {
         com.gepardec.mega.db.entity.StepEntry stepEntry = new com.gepardec.mega.db.entity.StepEntry();
         stepEntry.setStep(createStep(stepName));
         stepEntry.setState(state);
+        stepEntry.setDate(LocalDate.now());
         return stepEntry;
     }
 
