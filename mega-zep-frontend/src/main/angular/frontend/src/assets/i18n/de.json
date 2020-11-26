@@ -78,7 +78,7 @@
       "comments": "Anmerkungen",
       "employeeCheckState": "MA Check",
       "projectCheckState": "PM Check",
-      "releaseDate": "Freigabedatum"
+      "releaseDate": "Freigegeben bis"
     },
     "noOmEntriesFound": "Keine Einträge gefunden"
   },

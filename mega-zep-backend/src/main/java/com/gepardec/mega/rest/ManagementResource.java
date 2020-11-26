@@ -99,16 +99,13 @@ public class ManagementResource {
         for (String userId : project.employees()) {
             if (employees.containsKey(userId)) {
                 Employee empl = employees.get(userId);
-                ManagementEntry newManagementEntry = createManagementEntryForEmployee(
+                entries.add(createManagementEntryForEmployee(
                         empl,
                         project.projectId(),
                         (employee -> stepEntryService.findAllStepEntriesForEmployeeAndProject(
                                 employee, project.projectId(), userContext.user().email()
                         ))
-                );
-                if (newManagementEntry != null) {
-                    entries.add(newManagementEntry);
-                }
+                ));
             }
         }
 
@@ -134,7 +131,15 @@ public class ManagementResource {
                     .build();
         }
 
-        return null;
+        return ManagementEntry.builder()
+                .employee(employee)
+                .customerCheckState(com.gepardec.mega.domain.model.State.DONE)
+                .employeeCheckState(com.gepardec.mega.domain.model.State.DONE)
+                .internalCheckState(com.gepardec.mega.domain.model.State.DONE)
+                .projectCheckState(com.gepardec.mega.domain.model.State.DONE)
+                .finishedComments(0L)
+                .totalComments(0L)
+                .build();
     }
 
     private com.gepardec.mega.domain.model.State extractStateForStep(List<StepEntry> stepEntries, StepName step, String projectId) {
