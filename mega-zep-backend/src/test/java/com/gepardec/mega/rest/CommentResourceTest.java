@@ -183,7 +183,12 @@ public class CommentResourceTest {
         )).thenReturn(Comment.builder().message("Pausen eintragen!").build());
 
         Employee employee = Employee.builder().build();
-        NewCommentEntry newCommentEntry = NewCommentEntry.builder().comment("Pausen eintragen!").employee(employee).stepId(2L).assigneeEmail("marko.gattringer@gepardec.com").build();
+        NewCommentEntry newCommentEntry = NewCommentEntry.builder()
+                .comment("Pausen eintragen!")
+                .employee(employee).stepId(2L)
+                .assigneeEmail("marko.gattringer@gepardec.com")
+                .project("")
+                .build();
         Comment createdComment = given().contentType(ContentType.JSON)
                 .body(newCommentEntry)
                 .post("/comments")
