@@ -19,7 +19,7 @@ public class CommentRepository implements PanacheRepository<Comment> {
     @Inject
     EntityManager em;
 
-    public List<Comment> findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(LocalDateTime startDate, LocalDateTime endDate, String email) {
+    public List<Comment> findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(LocalDate startDate, LocalDate endDate, String email) {
         return find("#Comment.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail",
                 Parameters
                         .with("start", startDate)

@@ -6,6 +6,7 @@ import {Employee} from '../../models/Employee';
 import {CommentService} from '../../services/comment/comment.service';
 import {User} from '../../models/User';
 import {UserService} from '../../services/user/user.service';
+import {Step} from '../../models/Step';
 
 @Component({
   selector: 'app-comments-for-employee',
@@ -19,6 +20,8 @@ export class CommentsForEmployeeComponent implements OnInit {
   employee: Employee;
   user: User;
   comments: Array<Comment>;
+  step: Step;
+  project = '';
 
   constructor(private commentService: CommentService, private userService: UserService) {
   }
@@ -61,8 +64,10 @@ export class CommentsForEmployeeComponent implements OnInit {
   }
 
   createCommentForEmployee(comment: string): void {
-    this.commentService.createNewComment(this.employee, comment, this.user.email).subscribe(() => {
+    this.commentService.createNewComment(this.employee, comment, this.user.email, this.step, this.project).subscribe(() => {
       this.commentService.getCommentsForEmployee(this.employee).subscribe((comments: Array<Comment>) => {
+        console.log('DONE');
+        console.log(comments.length);
         this.comments = comments;
       });
     });

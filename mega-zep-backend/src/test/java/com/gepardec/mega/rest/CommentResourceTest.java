@@ -178,6 +178,7 @@ public class CommentResourceTest {
                 ArgumentMatchers.anyLong(),
                 ArgumentMatchers.any(Employee.class),
                 ArgumentMatchers.anyString(),
+                ArgumentMatchers.anyString(),
                 ArgumentMatchers.anyString()
         )).thenReturn(Comment.builder().message("Pausen eintragen!").build());
 

@@ -12,6 +12,7 @@ import com.gepardec.mega.notification.mail.MailParameter;
 import com.gepardec.mega.notification.mail.MailSender;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -45,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
 
         List<com.gepardec.mega.db.entity.Comment> dbComments =
-                commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(fromDate.atTime(0, 0), toDate.atTime(23, 59), employee.email());
+                commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(fromDate, toDate, employee.email());
 
         List<Comment> domainComments = dbComments
                 .stream()
@@ -68,8 +69,8 @@ public class CommentServiceImpl implements CommentService {
 
         List<com.gepardec.mega.db.entity.Comment> allComments =
                 commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(
-                        fromDate.atTime(0,0),
-                        toDate.atTime(23, 59),
+                        fromDate,
+                        toDate,
                         employee.email()
                 );
 
@@ -81,9 +82,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment createNewCommentForEmployee(Long stepId, Employee employee, String comment, String assigneeEmail) {
+    public Comment createNewCommentForEmployee(Long stepId, Employee employee, String comment, String assigneeEmail, String project) {
         Objects.requireNonNull(employee);
-        com.gepardec.mega.db.entity.StepEntry stepEntry = stepEntryService.findStepEntryForEmployeeAtStep(stepId, employee, assigneeEmail);
+        com.gepardec.mega.db.entity.StepEntry stepEntry = StringUtils.isBlank(project) ?
+                stepEntryService.findStepEntryForEmployeeAtStep(stepId, employee, assigneeEmail) :
+                stepEntryService.findStepEntryForEmployeeAndProjectAtStep(stepId, employee, assigneeEmail, project);
         com.gepardec.mega.db.entity.Comment newComment = new com.gepardec.mega.db.entity.Comment();
         newComment.setMessage(comment);
         newComment.setStepEntry(stepEntry);

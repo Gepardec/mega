@@ -23,6 +23,9 @@ public abstract class NewCommentEntry {
     @JsonProperty
     public abstract String assigneeEmail();
 
+    @JsonProperty
+    public abstract String project();
+
     public NewCommentEntry() {
         super();
     }
@@ -33,15 +36,23 @@ public abstract class NewCommentEntry {
 
     @AutoValue.Builder
     public abstract static class Builder {
-        @JsonProperty public abstract NewCommentEntry.Builder stepId(Long stepId);
+        @JsonProperty
+        public abstract NewCommentEntry.Builder stepId(Long stepId);
 
-        @JsonProperty public abstract NewCommentEntry.Builder employee(Employee employee);
+        @JsonProperty
+        public abstract NewCommentEntry.Builder employee(Employee employee);
 
-        @JsonProperty public abstract NewCommentEntry.Builder comment(String comment);
+        @JsonProperty
+        public abstract NewCommentEntry.Builder comment(String comment);
 
-        @JsonProperty public abstract NewCommentEntry.Builder assigneeEmail(String assigneeEmail);
+        @JsonProperty
+        public abstract NewCommentEntry.Builder assigneeEmail(String assigneeEmail);
 
-        @JsonProperty public abstract NewCommentEntry build();
+        @JsonProperty
+        public abstract NewCommentEntry.Builder project(String project);
+
+        @JsonProperty
+        public abstract NewCommentEntry build();
 
     }
 

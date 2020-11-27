@@ -118,4 +118,19 @@ public class StepEntryServiceImpl implements StepEntryService {
 
         return stepEntry.get();
     }
+
+    @Override
+    public StepEntry findStepEntryForEmployeeAndProjectAtStep(Long stepId, Employee employee, String assigneeEmail, String project) {
+        Objects.requireNonNull(employee, "Employee must not be null!");
+        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        Optional<StepEntry> stepEntry =  stepEntryRepository.findStepEntryForEmployeeAndProjectAtStepInRange(
+                fromDate, toDate, employee.email(), stepId, assigneeEmail, project
+        );
+        if(stepEntry.isEmpty()) {
+            throw new IllegalStateException(String.format("No StepEntries found for Employee %s", employee.email()));
+        }
+
+        return stepEntry.get();
+    }
 }

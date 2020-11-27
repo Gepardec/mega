@@ -10,7 +10,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "comment")
 @NamedQueries({
-        @NamedQuery(name="Comment.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail", query = "SELECT c FROM Comment c WHERE c.stepEntry.owner.email = :email AND ((c.creationDate BETWEEN :start AND :end) OR (c.creationDate < :start AND c.state = :state))"),
+        @NamedQuery(name="Comment.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail", query = "SELECT c FROM Comment c WHERE c.stepEntry.owner.email = :email AND ((c.stepEntry.date BETWEEN :start AND :end) OR (c.stepEntry.date < :start AND c.state = :state))"),
         @NamedQuery(name="Comment.findAllCommentsBetweenStartAndEndDateForEmail", query="SELECT c FROM Comment c WHERE c.stepEntry.owner.email = :email AND ((c.stepEntry.date BETWEEN :start AND :end) OR (c.stepEntry.date < :start))")
 })
 public class Comment {
