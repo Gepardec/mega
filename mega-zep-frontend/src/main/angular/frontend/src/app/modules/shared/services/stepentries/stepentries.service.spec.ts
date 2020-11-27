@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CommentService } from './comment.service';
+import { StepentriesService } from './stepentries.service';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 
-describe('CommentService', () => {
-  let service: CommentService;
+describe('StepentriesService', () => {
+  let service: StepentriesService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule]
     });
-    service = TestBed.inject(CommentService);
+    service = TestBed.inject(StepentriesService);
   });
 
   it('should be created', () => {

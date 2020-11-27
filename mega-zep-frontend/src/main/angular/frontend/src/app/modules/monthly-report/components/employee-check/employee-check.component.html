@@ -1,13 +1,20 @@
 <mat-card *ngIf="monthlyReport" class="mat-elevation-z10">
   <mat-card-title>{{'monthly-report.title.emc' | translate}}</mat-card-title>
   <mat-card-content class="text-center" fxLayout="column" fxLayoutAlign="center center">
-    <ng-container *ngIf="commentService.areAllCommentsDone(monthlyReport.comments), else openComments">
-
+    <ng-container>
       <ng-container [ngSwitch]="monthlyReport.employeeCheckState">
         <ng-container *ngSwitchCase="State.OPEN">
-          <app-state-indicator [state]="State.OPEN" size="large"></app-state-indicator>
-          <p>{{'monthly-report.pleaseCheckPrompt' | translate}}</p>
-          <button mat-raised-button>{{'monthly-report.confirmBtnText' | translate}}</button>
+          <ng-container *ngIf="monthlyReport.assigned; else noTimesThisMonth">
+            <app-state-indicator [state]="State.OPEN" size="large"></app-state-indicator>
+            <p>{{'monthly-report.pleaseCheckPrompt' | translate}}</p>
+            <button mat-raised-button
+                    (click)="setOpenAndUnassignedStepEntriesDone()">{{'monthly-report.confirmBtnText' | translate}}</button>
+          </ng-container>
+
+          <ng-template #noTimesThisMonth>
+            <app-state-indicator [state]="State.DONE" size="large"></app-state-indicator>
+            <p>{{'monthly-report.noTimesCurrentMonth' | translate}}</p>
+          </ng-template>
         </ng-container>
 
         <ng-container *ngSwitchCase="State.DONE">
@@ -21,11 +28,8 @@
           </ng-container>
         </ng-container>
       </ng-container>
-    </ng-container>
 
-    <ng-template #openComments>
-      <app-state-indicator [state]="State.OPEN" size="large"></app-state-indicator>
-      <p>{{'monthly-report.commentsToDo' | translate}}:</p>
+      <p *ngIf="monthlyReport.comments?.length > 0">{{'monthly-report.commentsToDo' | translate}}</p>
       <mat-selection-list (selectionChange)="selectionChange($event)">
         <mat-list-option
           #option
@@ -35,10 +39,10 @@
           [selected]="comment.state === State.DONE"
           [value]="comment">
           {{comment.updateDate | date: 'dd.MM.yyyy'}}
-          {{comment.author}}:
+          {{getFullNameFromEmail(comment?.author)}}:
           {{comment.message}}
         </mat-list-option>
       </mat-selection-list>
-    </ng-template>
+    </ng-container>
   </mat-card-content>
 </mat-card>

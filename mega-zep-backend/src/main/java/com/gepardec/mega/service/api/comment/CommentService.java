@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface CommentService {
     List<Comment> findCommentsForEmployee(final Employee employee);
+    int setDone(final Comment comment);
 }

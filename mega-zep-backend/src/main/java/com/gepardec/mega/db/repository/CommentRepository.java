@@ -6,14 +6,16 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @ApplicationScoped
 public class CommentRepository implements PanacheRepository<Comment> {
 
-    public List<Comment> findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(LocalDate startDate, LocalDate endDate, String email) {
-        return find("SELECT c FROM Comment c WHERE c.stepEntry.owner.email = :email AND ((c.stepEntry.date BETWEEN :start AND :end) OR (c.stepEntry.date < :start AND c.state = :state))",
+    public List<Comment> findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(LocalDateTime startDate, LocalDateTime endDate, String email) {
+        return find("SELECT c FROM Comment c WHERE c.stepEntry.owner.email = :email AND ((c.creationDate BETWEEN :start AND :end) OR (c.creationDate < :start AND c.state = :state))",
                 Parameters
                         .with("start", startDate)
                         .and("end", endDate)
@@ -22,4 +24,11 @@ public class CommentRepository implements PanacheRepository<Comment> {
                 .list();
     }
 
+    @Transactional
+    public int setStatusDone(Long id) {
+        return update("UPDATE Comment c SET c.state = :state WHERE id = :id",
+                Parameters
+                        .with("id", id)
+                        .and("state", State.DONE));
+    }
 }

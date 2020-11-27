@@ -38,6 +38,11 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         return calcWarnings(zepService.getProjectTimes(employee), employee);
     }
 
+    @Override
+    public boolean setOpenAndUnassignedStepEntriesDone(Employee employee, Long stepId) {
+        return stepEntryService.setOpenAndAssignedStepEntriesDone(employee, stepId);
+    }
+
     private MonthlyReport calcWarnings(List<ProjectEntry> projectEntries, Employee employee) {
         if (projectEntries == null || projectEntries.isEmpty()) {
             return null;
@@ -46,8 +51,9 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectEntries);
         final List<Comment> comments = commentService.findCommentsForEmployee(employee);
         final Optional<State> employeeCheckState = stepEntryService.findEmployeeCheckState(employee);
+        final boolean isAssigned = employeeCheckState.isPresent();
         final boolean otherChecksDone = stepEntryService.areOtherChecksDone(employee);
 
-        return MonthlyReport.of(employee, timeWarnings, journeyWarnings, comments, employeeCheckState.orElse(State.OPEN), otherChecksDone);
+        return MonthlyReport.of(employee, timeWarnings, journeyWarnings, comments, employeeCheckState.orElse(State.OPEN), isAssigned, otherChecksDone);
     }
 }

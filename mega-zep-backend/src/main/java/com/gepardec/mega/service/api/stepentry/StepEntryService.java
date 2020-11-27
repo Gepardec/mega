@@ -12,4 +12,6 @@ public interface StepEntryService {
     boolean areOtherChecksDone(final Employee employee);
 
     void addStepEntry(final StepEntry stepEntry);
+
+    boolean setOpenAndAssignedStepEntriesDone(Employee employee, Long stepId);
 }

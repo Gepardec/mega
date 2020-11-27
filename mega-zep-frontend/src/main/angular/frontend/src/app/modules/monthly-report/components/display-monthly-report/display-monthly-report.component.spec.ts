@@ -45,7 +45,8 @@ describe('DisplayMonthlyReportComponent', () => {
         email: 'mario.aslan@gepardec.com',
         title: null,
         active: true
-      }
+      },
+      assigned: false
     };
     fixture.detectChanges();
   });

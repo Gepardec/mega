@@ -67,7 +67,7 @@ public class WorkerResourceTest {
         when(employeeService.getEmployee(anyString())).thenReturn(employee);
         final List<TimeWarning> timeWarnings = List.of(TimeWarning.of(LocalDate.now(), 0.0, 0.0, 0.0));
         final List<JourneyWarning> journeyWarnings = List.of(new JourneyWarning(LocalDate.now(), List.of("WARNING")));
-        final MonthlyReport expected = MonthlyReport.of(employee, timeWarnings, journeyWarnings, List.of(), State.OPEN, true);
+        final MonthlyReport expected = MonthlyReport.of(employee, timeWarnings, journeyWarnings, List.of(), State.OPEN, false,true);
         when(monthlyReportService.getMonthendReportForUser(anyString())).thenReturn(expected);
 
         final MonthlyReport actual = given().contentType(ContentType.JSON)
