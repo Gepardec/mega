@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Comment } from '../../models/Comment';
-import { State } from '../../models/State';
-import { configuration } from '../../constants/configuration';
+import {Component, OnInit} from '@angular/core';
+import {Comment} from '../../models/Comment';
+import {State} from '../../models/State';
+import {configuration} from '../../constants/configuration';
 import {Employee} from '../../models/Employee';
 import {CommentService} from '../../services/comment/comment.service';
 import {User} from '../../models/User';
@@ -40,6 +40,20 @@ export class CommentsForEmployeeComponent implements OnInit {
 
   editCommentBtnVisible(comment: Comment) {
     return !comment.isEditing && this.user.email === comment.author && comment.state !== State.DONE;
+  }
+
+  isReleased(date: string): boolean {
+    const today = new Date();
+    const releaseDate = new Date(date);
+    const monthDiff = this.monthDiff(releaseDate, today);
+    return (monthDiff === 1 || monthDiff === 0 || releaseDate > today);
+  }
+
+  private monthDiff(d1: Date, d2: Date) {
+    let months = (d2.getFullYear() - d1.getFullYear()) * 12;
+    months -= d1.getMonth();
+    months += d2.getMonth();
+    return Math.abs(months);
   }
 
   parseAnchorTags(plainText): string {
