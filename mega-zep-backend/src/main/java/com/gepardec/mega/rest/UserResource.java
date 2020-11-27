@@ -1,6 +1,8 @@
 package com.gepardec.mega.rest;
 
+import com.gepardec.mega.application.interceptor.RolesAllowed;
 import com.gepardec.mega.application.interceptor.Secured;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.UserContext;
 
@@ -14,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 @Secured
 @RequestScoped
 @Path("/user")
+@RolesAllowed(Role.EMPLOYEE)
 public class UserResource {
 
     @Inject

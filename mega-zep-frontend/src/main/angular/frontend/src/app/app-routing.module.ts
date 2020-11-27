@@ -8,21 +8,31 @@ import { ErrorComponent } from './modules/shared/components/error/error.componen
 import { MonthlyReportComponent } from './modules/monthly-report/components/monthly-report.component';
 import { OfficeManagementComponent } from './modules/office-management/components/office-management.component';
 import { ProjectManagementComponent } from './modules/project-management/components/project-management.component';
+import { Role } from './modules/shared/models/Role';
 
 export const routes: Routes = [
   {
     path: configuration.PAGE_URLS.MONTHLY_REPORT,
     component: MonthlyReportComponent,
-    canActivate: [LoginGuard]
+    data: {
+      role: Role.EMPLOYEE
+    },
+    canActivate: [LoginGuard, RolesGuard]
   },
   {
     path: configuration.PAGE_URLS.OFFICE_MANAGEMENT,
     component: OfficeManagementComponent,
+    data: {
+      role: Role.OFFICE_MANAGEMENT
+    },
     canActivate: [LoginGuard, RolesGuard]
   },
   {
     path: configuration.PAGE_URLS.PROJECT_MANAGEMENT,
     component: ProjectManagementComponent,
+    data: {
+      role: Role.PROJECT_LEAD
+    },
     canActivate: [LoginGuard, RolesGuard]
   },
   {

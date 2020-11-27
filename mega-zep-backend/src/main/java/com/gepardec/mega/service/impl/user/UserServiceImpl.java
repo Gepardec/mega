@@ -2,13 +2,9 @@ package com.gepardec.mega.service.impl.user;
 
 import com.gepardec.mega.application.exception.ForbiddenException;
 import com.gepardec.mega.db.repository.UserRepository;
-import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
-import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.user.UserService;
-import io.quarkus.cache.CacheKey;
-import io.quarkus.cache.CacheResult;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -19,52 +15,39 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final EmployeeService employeeService;
+    @Inject
+    UserMapper mapper;
 
     @Inject
-    public UserServiceImpl(final UserRepository userRepository,
-                           final EmployeeService employeeService) {
-        this.userRepository = userRepository;
-        this.employeeService = employeeService;
-    }
+    UserRepository userRepository;
 
-    @CacheResult(cacheName = "user-email")
     @Override
     @Transactional(Transactional.TxType.SUPPORTS)
-    public User getUser(@CacheKey final String email, final String pictureUrl) {
+    public User findUserForEmail(final String email) {
         final com.gepardec.mega.db.entity.User user = userRepository.findActiveByEmail(email)
                 .orElseThrow(() -> new ForbiddenException("User with email '" + email + "' is either unknown or inactive"));
 
-        final Employee employee = employeeService.getEmployee(user.getZepId());
-
-        if (employee == null) {
-            throw new ForbiddenException("Could not find ZEP-User with userId '" + user.getZepId() + "'");
-        }
-
-        return User.builder()
-                .dbId(user.getId())
-                .userId(employee.userId())
-                .email(employee.email())
-                .firstname(employee.firstName())
-                .lastname(employee.sureName())
-                .role(Role.forId(employee.role()).orElse(null))
-                .pictureUrl(pictureUrl)
-                .build();
+        return mapper.map(user);
     }
 
     @Override
     @Transactional(Transactional.TxType.SUPPORTS)
-    public List<User> getActiveUsers() {
+    public List<User> findActiveUsers() {
         final List<com.gepardec.mega.db.entity.User> activeUsers = userRepository.findActive();
         return activeUsers.stream()
-                .map(user -> User.builder()
-                        .dbId(user.getId())
-                        .userId(user.getZepId())
-                        // TODO: temporary, refactor employee <-> user handling
-                        .firstname("test")
-                        .lastname("test")
-                        .email(user.getEmail()).build())
+                .map(mapper::map)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(Transactional.TxType.SUPPORTS)
+    public List<User> findByRoles(Role... roles) {
+        if (roles == null || roles.length == 0) {
+            throw new IllegalArgumentException("Cannot load users if no 'roles' are given");
+        }
+
+        return userRepository.findByRoles(roles).stream()
+                .map(mapper::map)
                 .collect(Collectors.toList());
     }
 }

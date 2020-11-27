@@ -6,6 +6,7 @@ import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.service.impl.employee.EmployeeMapper;
 import com.gepardec.mega.zep.mapper.ProjectEntryMapper;
 import de.provantis.zep.*;
+import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
@@ -26,6 +27,8 @@ import static com.gepardec.mega.domain.utils.DateUtils.getLastDayOfFollowingMont
 
 @RequestScoped
 public class ZepServiceImpl implements ZepService {
+
+    private static final Range<Integer> PROJECT_LEAD_RANGE = Range.between(1, 2);
 
     private final EmployeeMapper employeeMapper;
     private final Logger logger;
@@ -157,7 +160,7 @@ public class ZepServiceImpl implements ZepService {
     private List<String> createProjectLeads(final ProjektMitarbeiterListeType projektMitarbeiterListeType) {
         return projektMitarbeiterListeType.getProjektmitarbeiter()
                 .stream()
-                .filter(projektMitarbeiterType -> projektMitarbeiterType.getIstProjektleiter() == 1)
+                .filter(projektMitarbeiterType -> PROJECT_LEAD_RANGE.contains(projektMitarbeiterType.getIstProjektleiter()))
                 .map(ProjektMitarbeiterType::getUserId)
                 .collect(Collectors.toList());
     }

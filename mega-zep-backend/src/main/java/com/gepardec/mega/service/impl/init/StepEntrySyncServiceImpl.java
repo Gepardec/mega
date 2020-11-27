@@ -1,7 +1,6 @@
 package com.gepardec.mega.service.impl.init;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
-import com.gepardec.mega.db.entity.Role;
 import com.gepardec.mega.domain.model.*;
 import com.gepardec.mega.service.api.init.StepEntrySyncService;
 import com.gepardec.mega.service.api.project.ProjectService;
@@ -55,13 +54,13 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
         final LocalDate date = LocalDate.now().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth());
         logger.info("Processing date: {}", date);
 
-        final List<User> activeUsers = userService.getActiveUsers();
+        final List<User> activeUsers = userService.findActiveUsers();
         final List<Project> projectsForMonthYear = projectService.getProjectsForMonthYear(date,
                 List.of(ProjectFilter.IS_LEADS_AVAILABLE,
                         ProjectFilter.IS_CUSTOMER_PROJECT));
         final List<Step> steps = stepService.getSteps();
 
-        final List<User> omUsers = List.of(notificationConfig.getOmMailAddresses().split(","))
+        final List<User> omUsers = notificationConfig.getOmMailAddresses()
                 .stream()
                 .map(email -> findUserByEmail(activeUsers, email))
                 .filter(Optional::isPresent)
@@ -79,13 +78,19 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
 
         final List<StepEntry> toBeCreatedStepEntries = new ArrayList<>();
 
-        for (Step step : steps) {// TODO: change to domain model after role refactoring
-            if (Role.PROJECT_LEAD.name().equals(step.role())) {
-                toBeCreatedStepEntries.addAll(createStepEntriesProjectLeadForUsers(date, step, projectsForMonthYear, activeUsers));
-            } else if (Role.OFFICE_MANAGEMENT.name().equals(step.role())) {
-                toBeCreatedStepEntries.addAll(createStepEntriesOmForUsers(date, step, omUsers, activeUsers));
-            } else {
-                toBeCreatedStepEntries.addAll(createStepEntriesForUsers(date, step, activeUsers));
+        for (Step step : steps) {
+            switch (step.role()) {
+                case EMPLOYEE:
+                    toBeCreatedStepEntries.addAll(createStepEntriesForUsers(date, step, activeUsers));
+                    break;
+                case OFFICE_MANAGEMENT:
+                    toBeCreatedStepEntries.addAll(createStepEntriesOmForUsers(date, step, omUsers, activeUsers));
+                    break;
+                case PROJECT_LEAD:
+                    toBeCreatedStepEntries.addAll(createStepEntriesProjectLeadForUsers(date, step, projectsForMonthYear, activeUsers));
+                    break;
+                default:
+                    throw new IllegalArgumentException("no logic implemented for provided role");
             }
         }
 

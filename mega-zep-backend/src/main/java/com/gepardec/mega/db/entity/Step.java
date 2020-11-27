@@ -1,5 +1,6 @@
 package com.gepardec.mega.db.entity;
 
+import com.gepardec.mega.domain.model.Role;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -35,6 +36,7 @@ public class Step {
     /**
      * The role who is responsible for the step completion state
      */
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;

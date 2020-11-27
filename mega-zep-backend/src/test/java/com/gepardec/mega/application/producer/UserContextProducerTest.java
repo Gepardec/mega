@@ -1,6 +1,7 @@
 package com.gepardec.mega.application.producer;
 
 import com.gepardec.mega.application.exception.UnauthorizedException;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.SecurityContext;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.UserContext;
@@ -13,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -38,10 +40,10 @@ class UserContextProducerTest {
                 .firstname("Thomas")
                 .lastname("Herzog")
                 .email("thomas.herzog@gepardec.com")
+                .roles(Set.of(Role.EMPLOYEE))
                 .build();
         when(securityContext.email()).thenReturn("test@gepardec.com");
-        when(securityContext.pictureUrl()).thenReturn("http://www.gepardec.com/test.jpg");
-        when(userService.getUser("test@gepardec.com", "http://www.gepardec.com/test.jpg")).thenReturn(user);
+        when(userService.findUserForEmail("test@gepardec.com")).thenReturn(user);
 
         // When
         final UserContext userContext = producer.createUserContext();
