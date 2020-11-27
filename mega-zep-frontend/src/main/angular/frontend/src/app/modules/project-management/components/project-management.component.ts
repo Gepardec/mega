@@ -90,7 +90,8 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   closeProjectCheck(projectName: string, row: ManagementEntry) {
-    this.stepEntryService.closeProjectCheck(row.employee, projectName).subscribe(() => {});
+    this.stepEntryService.closeProjectCheck(row.employee, projectName).subscribe(() => {
+    });
     row.projectCheckState = State.DONE;
   }
 
@@ -108,5 +109,26 @@ export class ProjectManagementComponent implements OnInit {
     return this.pmEntries.filter(entry => {
       return entry.projectName === projectName;
     })[0].entries;
+  }
+
+  getCurrentReleaseDate(): Date {
+    if (this.pmEntries) {
+      const entries = [];
+
+      this.pmEntries.forEach(pmEntry => {
+        entries.push(pmEntry.entries.filter(entry => {
+          return entry.projectCheckState === State.OPEN ||
+            entry.customerCheckState === State.OPEN ||
+            entry.employeeCheckState === State.OPEN ||
+            entry.internalCheckState === State.OPEN;
+        }));
+      })
+
+      if (entries.length > 0) {
+        return new Date(entries[0][0].entryDate);
+      }
+    }
+
+    return new Date();
   }
 }
