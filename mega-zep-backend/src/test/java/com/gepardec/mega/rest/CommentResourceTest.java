@@ -14,6 +14,9 @@ import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static io.restassured.RestAssured.given;
 import static org.mockito.Mockito.when;
 
@@ -40,7 +43,7 @@ public class CommentResourceTest {
 
     @Test
     void setCommentsStatusDone_whenUserNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON).put("/comments/setdone")
@@ -51,7 +54,7 @@ public class CommentResourceTest {
     void setCommentsStatusDone_whenValid_thenReturnsUpdatedNumber() {
         when(commentService.setDone(ArgumentMatchers.any(Comment.class))).thenReturn(1);
 
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -71,13 +74,15 @@ public class CommentResourceTest {
     }
 
     private com.gepardec.mega.domain.model.User createUserForRole(final Role role) {
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
         return com.gepardec.mega.domain.model.User.builder()
                 .userId("1")
                 .dbId(1)
                 .email("thomas.herzog@gpeardec.com")
                 .firstname("Thomas")
                 .lastname("Herzog")
-                .role(role)
+                .roles(roles)
                 .build();
     }
 }
