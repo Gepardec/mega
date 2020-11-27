@@ -1,3 +1,10 @@
+<mat-toolbar class="mat-elevation-z8" color="accent">
+  <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+    <span>
+        {{getCurrentReleaseDate() | date: 'MMMM yyyy' : null : 'de-AT' }}
+    </span>
+  </mat-toolbar-row>
+</mat-toolbar>
 <div fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px">
   <mat-card *ngIf="isAnySelected()" class="actions">
     <mat-card-content fxFlexAlign="space-around center" fxLayout="row" fxLayoutGap="10px">
