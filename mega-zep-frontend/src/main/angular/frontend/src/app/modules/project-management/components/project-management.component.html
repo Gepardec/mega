@@ -4,8 +4,7 @@
       <h2>{{'project-management.actions' | translate}}</h2>
       <span fxFlex="1 1 auto"></span>
       <span fxLayoutGap="10px">
-        <button mat-raised-button>{{'project-management.doneBtn' | translate}}</button>
-        <button mat-raised-button>{{'project-management.notify' | translate}}</button>
+        <button (click)="closeProjectCheckForSelected()" mat-raised-button>{{'project-management.doneBtn' | translate}}</button>
       </span>
     </mat-card-content>
   </mat-card>

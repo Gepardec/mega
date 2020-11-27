@@ -70,6 +70,15 @@ export class ProjectManagementComponent implements OnInit {
     return this.findEntriesForProject(projectName).every(entry => entry.projectCheckState === State.DONE);
   }
 
+  closeProjectCheckForSelected() {
+    this.pmSelectionModels
+      .filter(pmSelectionModel => pmSelectionModel.selected.length > 0)
+      .forEach(selectionModel => selectionModel.selected.forEach(entry => {
+        console.log(entry.employee.email);
+        // TODO call stepEntryService.closeProjectCheck
+      }));
+  }
+
   closeProjectCheck(projectName: string, row: ManagementEntry) {
     this.stepEntryService.closeProjectCheck(row.employee, projectName).subscribe(() => {});
     row.projectCheckState = State.DONE;

@@ -85,7 +85,6 @@
   "project-management": {
     "actions": "Aktionen",
     "doneBtn": "Überprüft",
-    "notify": "Benachrichtigen",
     "employeeDone": "Mitarbeiter überprüft",
     "table": {
       "employeeName": "Mitarbeiter",
