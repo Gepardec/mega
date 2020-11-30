@@ -1,18 +1,22 @@
 <div *ngIf="omEntries && filteredOmEntries" fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px">
   <mat-toolbar class="mat-elevation-z8" color="accent">
-    <mat-form-field floatLabel="never">
-      <mat-label>{{'office-management.filterPlaceholder' | translate}}</mat-label>
-      <input
-        #employeeNameInput
-        (keyup)="filterOmEntriesByEmployeeName(employeeNameInput.value)"
-        matInput>
-      <button (click)="employeeNameInput.value=''; filterOmEntriesByEmployeeName(employeeNameInput.value)"
-              *ngIf="employeeNameInput.value"
-              mat-button mat-icon-button
-              matSuffix>
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
+    <mat-toolbar-row>
+      Filter
+    </mat-toolbar-row>
+    <mat-toolbar-row>
+      <mat-form-field floatLabel="never">
+        <mat-label>{{'office-management.filterPlaceholder' | translate}}</mat-label>
+        <input
+          #employeeNameInput
+          (keyup)="filterOmEntriesByEmployeeName(employeeNameInput.value)"
+          matInput>
+        <button (click)="employeeNameInput.value=''; filterOmEntriesByEmployeeName(employeeNameInput.value)"
+                *ngIf="employeeNameInput.value"
+                mat-button mat-icon-button
+                matSuffix>
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
 
     <span fxFlex="1 1 auto"></span>
 
@@ -34,6 +38,10 @@
         {{'office-management.releaseBtnText' | translate}}
       </button>
     </div>
+    </mat-toolbar-row>
+    <mat-toolbar-row>
+      <mat-checkbox (change)="filterOmEntriesByOMC1Status($event.checked)">{{'office-management.omc1StateOpen' | translate}}</mat-checkbox>
+    </mat-toolbar-row>
   </mat-toolbar>
 
   <div class="mat-elevation-z10 table-container">
@@ -69,7 +77,7 @@
         <mat-header-cell *matHeaderCellDef>{{'office-management.table.customerCheckState' | translate}}</mat-header-cell>
         <mat-cell *matCellDef="let omEntry">
           <span class="mobile-label">{{'office-management.table.customerCheckState' | translate}}</span>
-          <app-state-select [value]="omEntry.customerCheckState"></app-state-select>
+          <app-state-select [value]="omEntry.customerCheckState" (selectionChange)="closeCustomerCheck(omEntry)"></app-state-select>
         </mat-cell>
       </ng-container>
 
@@ -77,7 +85,7 @@
         <mat-header-cell *matHeaderCellDef>{{'office-management.table.internalCheckState' | translate}}</mat-header-cell>
         <mat-cell *matCellDef="let omEntry">
           <span class="mobile-label">{{'office-management.table.internalCheckState' | translate}}</span>
-          <app-state-select [value]="omEntry.internalCheckState"></app-state-select>
+          <app-state-select [value]="omEntry.internalCheckState" (selectionChange)="closeInternalCheck(omEntry)"></app-state-select>
         </mat-cell>
       </ng-container>
 
@@ -105,7 +113,7 @@
           <span class="mobile-label">{{'office-management.table.comments' | translate}}</span>
           <button (click)="openDialog(omEntry)" mat-button>
             <mat-icon>comment</mat-icon>
-            <app-done-comments-indicator [comments]="omEntry.comments"></app-done-comments-indicator>
+            <app-done-comments-indicator [totalComments]="omEntry.totalComments" [finishedComments]="omEntry.finishedComments"></app-done-comments-indicator>
           </button>
         </mat-cell>
       </ng-container>

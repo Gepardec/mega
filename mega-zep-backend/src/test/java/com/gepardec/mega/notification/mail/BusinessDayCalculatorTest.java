@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static com.gepardec.mega.notification.mail.Reminder.*;
+import static com.gepardec.mega.notification.mail.Mail.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -142,13 +142,13 @@ class BusinessDayCalculatorTest {
     }
 
 
-    private void assertReminderEmpty(Optional<Reminder> actualReminder) {
+    private void assertReminderEmpty(Optional<Mail> actualReminder) {
         assertEquals(Optional.empty(), actualReminder);
     }
 
 
-    private void assertReminderEquals(Reminder expectedReminder, Optional<Reminder> actualReminder) {
-        assertEquals(expectedReminder, actualReminder.get());
+    private void assertReminderEquals(Mail expectedMail, Optional<Mail> actualReminder) {
+        assertEquals(expectedMail, actualReminder.get());
     }
 
 }

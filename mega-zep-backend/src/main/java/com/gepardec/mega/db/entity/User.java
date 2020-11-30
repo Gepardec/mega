@@ -102,6 +102,9 @@ public class User {
     @Column(name = "active")
     private Boolean active;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "stepEntry")
+    private Set<Comment> comments = new HashSet<>(0);
+
     @NotNull
     @Size(min = 1)
     @ElementCollection(targetClass = Role.class)
@@ -216,7 +219,15 @@ public class User {
         this.active = active;
     }
 
-    public LocalDate getReleaseDate() {
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
+        public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
@@ -232,20 +243,20 @@ public class User {
         this.assignedStepEntries = assignedStepEntries;
     }
 
-    public Set<StepEntry> getOwnedStepEntries() {
-        return ownedStepEntries;
-    }
-
-    public void setOwnedStepEntries(Set<StepEntry> ownedStepEntries) {
-        this.ownedStepEntries = ownedStepEntries;
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<StepEntry> getOwnedStepEntries() {
+        return ownedStepEntries;
+    }
+
+    public void setOwnedStepEntries(Set<StepEntry> ownedStepEntries) {
+        this.ownedStepEntries = ownedStepEntries;
     }
 
     @Override
@@ -265,19 +276,16 @@ public class User {
         return (id != null) ? Objects.hash(id) : super.hashCode();
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "User{" +
                 "id=" + id +
                 ", creationDate=" + creationDate +
                 ", updatedDate=" + updatedDate +
                 ", email='" + email + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", locale=" + locale +
                 ", zepId='" + zepId + '\'' +
                 ", releaseDate=" + releaseDate +
                 ", active=" + active +
-                ", roles=" + roles +
                 ", assignedStepEntries=" + assignedStepEntries +
                 ", ownedStepEntries=" + ownedStepEntries +
                 '}';

@@ -6,6 +6,8 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,8 +16,11 @@ import java.util.List;
 @ApplicationScoped
 public class CommentRepository implements PanacheRepository<Comment> {
 
-    public List<Comment> findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(LocalDateTime startDate, LocalDateTime endDate, String email) {
-        return find("SELECT c FROM Comment c WHERE c.stepEntry.owner.email = :email AND ((c.creationDate BETWEEN :start AND :end) OR (c.creationDate < :start AND c.state = :state))",
+    @Inject
+    EntityManager em;
+
+    public List<Comment> findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(LocalDate startDate, LocalDate endDate, String email) {
+        return find("#Comment.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail",
                 Parameters
                         .with("start", startDate)
                         .and("end", endDate)
@@ -30,5 +35,21 @@ public class CommentRepository implements PanacheRepository<Comment> {
                 Parameters
                         .with("id", id)
                         .and("state", State.DONE));
+    }
+
+    @Transactional
+    public Comment save(final Comment comment) {
+        this.persist(comment);
+        return comment;
+    }
+
+    @Transactional
+    public Comment update(final Comment comment) {
+        return em.merge(comment);
+    }
+
+    @Transactional
+    public boolean deleteComment(Long id) {
+        return deleteById(id);
     }
 }

@@ -1,7 +1,7 @@
 <span
-  *ngIf="comments?.length > 0; else noCommentsYet"
-  [ngClass]="{'red': doneCommentsCount < comments.length, 'green': doneCommentsCount === comments.length}">
-  {{doneCommentsCount}} / {{comments.length}}
+  *ngIf="totalComments > 0; else noCommentsYet"
+  [ngClass]="{'red': finishedComments < totalComments, 'green': finishedComments === totalComments}">
+  {{finishedComments}} / {{totalComments}}
 </span>
 <ng-template #noCommentsYet>
   <span> &minus; / &minus;</span>

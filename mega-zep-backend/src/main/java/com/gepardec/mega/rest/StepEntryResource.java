@@ -7,6 +7,7 @@ import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -23,6 +24,7 @@ public class StepEntryResource {
     @PUT
     @Path("/close")
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public boolean close(@NotNull(message = "{workerResource.employee.notNull}") final EmployeeStep employeeStep) {
         return stepEntryService.setOpenAndAssignedStepEntriesDone(employeeStep.employee(), employeeStep.stepId());
     }

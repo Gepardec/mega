@@ -68,6 +68,7 @@
   },
   "office-management": {
     "filterPlaceholder": "Suche nach Name",
+    "omc1StateOpen": "Kundenzeiten NICHT abgeschlossen",
     "selectedCount": "Person(en) ausgewählt",
     "releaseBtnText": "Freigeben",
     "table": {
@@ -89,7 +90,7 @@
     "table": {
       "employeeName": "Mitarbeiter",
       "projectCheckState": "Überprüfung",
-      "employeeCheckState": "MA Check",
+      "employeeCheckState": "MA ChMAeck",
       "internalCheckState": "Interne Zeiten",
       "customerCheckState": "Kundenzeiten",
       "comments": "Anmerkungen"

@@ -22,7 +22,6 @@ describe('DoneCommentsIndicatorComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DoneCommentsIndicatorComponent);
     component = fixture.componentInstance;
-    component.comments = [];
     fixture.detectChanges();
   });
 

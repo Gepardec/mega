@@ -34,14 +34,34 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
                 .list();
     }
 
+    public List<StepEntry> findAllOwnedStepEntriesInRange(LocalDate startDate, LocalDate endDate, String ownerEmail) {
+        return find("#StepEntry.findAllOwnedStepEntriesInRange",
+                Parameters
+                        .with("start", startDate)
+                        .and("end", endDate)
+                        .and("ownerEmail", ownerEmail))
+                .list();
+    }
+
     @Transactional
     public int closeAssigned(LocalDate startDate, LocalDate endDate, String ownerEmail, Long stepId) {
-        return update("UPDATE StepEntry s SET s.state = :state WHERE s.id = (SELECT s.id FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.step.id = :stepId)",
+        return update("UPDATE StepEntry s SET s.state = :state WHERE s.id IN (SELECT s.id FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.step.id = :stepId)",
                 Parameters
                         .with("state", State.DONE)
                         .and("start", startDate)
                         .and("end", endDate)
                         .and("ownerEmail", ownerEmail)
                         .and("stepId", stepId));
+    }
+
+    public Optional<StepEntry> findStepEntryForEmployeeAtStepInRange(LocalDate startDate, LocalDate endDate, String ownerEmail, Long stepId, String assigneeEmail) {
+        return find("#StepEntry.findStepEntryForEmployeeAtStepInRange",
+                Parameters
+                        .with("start", startDate)
+                        .and("end", endDate)
+                        .and("ownerEmail", ownerEmail)
+                        .and("stepId", stepId)
+                        .and("assigneeEmail", assigneeEmail))
+                .singleResultOptional();
     }
 }

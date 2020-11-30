@@ -1,6 +1,6 @@
 <ng-container *ngIf="comments && employee">
   <h2 mat-dialog-title>
-    {{'comments-for-employee.commentsFor' | translate:{'firstAndSureName': employee} }}
+    {{'comments-for-employee.commentsFor' | translate:{'firstAndSureName': employee.firstname + " " + employee.lastname} }}
   </h2>
 
   <mat-dialog-content>
@@ -16,38 +16,32 @@
       <mat-hint align="end">{{newMessage.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
     </mat-form-field>
 
-    <button mat-raised-button>
+    <button mat-raised-button (click)="createCommentForEmployee(newMessage.value);newMessage.value = ''">
       {{'comments-for-employee.addCommentBtn' | translate}}
     </button>
 
     <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table">
-      <colgroup>
-        <col style="width:8%">
-        <col style="width:7%">
-        <col style="width:10%">
-        <col style="max-width:60%">
-        <col style="width:7.5%">
-        <col style="width:7.5%">
-      </colgroup>
 
       <tr class="mat-header-row">
-        <th class="mat-header-cell">{{'comments-for-employee.table.lastChanged' | translate}}</th>
+        <th class="mat-header-cell text-center">{{'comments-for-employee.table.lastChanged' | translate}}</th>
+        <th class="mat-header-cell text-center">{{'comments-for-employee.table.author' | translate}}</th>
         <th class="mat-header-cell text-center">{{'comments-for-employee.table.done' | translate}}</th>
-        <th class="mat-header-cell">{{'comments-for-employee.table.author' | translate}}</th>
         <th class="mat-header-cell">{{'comments-for-employee.table.comment' | translate}}</th>
         <th class="mat-header-cell">{{'comments-for-employee.table.edit' | translate}}</th>
         <th class="mat-header-cell">{{'comments-for-employee.table.delete' | translate}}</th>
       </tr>
 
       <tr *ngFor="let comment of comments" class="mat-row">
-        <td class="mat-cell">{{comment.updateDate | date: DATE_FORMAT}}</td>
+        <td class="mat-cell text-center">
+          <p>{{comment.updateDate | date:'dd.LL.yyyy, HH:mm'}}</p>
+        </td>
+
+        <td class="mat-cell text-center">
+          <p>{{comment.author}}</p>
+        </td>
 
         <td class="mat-cell text-center">
           <app-state-indicator [state]="comment.state"></app-state-indicator>
-        </td>
-
-        <td class="mat-cell">
-          {{comment.author}}
         </td>
 
         <td class="mat-cell">
@@ -71,20 +65,20 @@
 
         <td class="mat-cell">
           <ng-container *ngIf="comment.isEditing">
-            <button (click)="comment.message = editMessageInput.value; toggleIsEditing(comment)" mat-icon-button>
+            <button (click)="comment.message = editMessageInput.value; toggleIsEditing(comment); updateCommentForEmployee(comment);" mat-icon-button>
               <mat-icon>done</mat-icon>
             </button>
-            <button (click)="editMessageInput.value = comment.message; toggleIsEditing(comment)" mat-icon-button>
+            <button (click)="editMessageInput.value = comment.message; toggleIsEditing(comment);" mat-icon-button>
               <mat-icon>clear</mat-icon>
             </button>
           </ng-container>
-          <button (click)="toggleIsEditing(comment)" *ngIf="!comment.isEditing" mat-icon-button>
+          <button (click)="toggleIsEditing(comment)" *ngIf="editCommentBtnVisible(comment)" mat-icon-button>
             <mat-icon>edit</mat-icon>
           </button>
         </td>
 
         <td class="mat-cell">
-          <button mat-icon-button>
+          <button mat-icon-button (click)="deleteCommentOfEmployee(comment)" *ngIf="editCommentBtnVisible(comment)">
             <mat-icon>delete</mat-icon>
           </button>
         </td>

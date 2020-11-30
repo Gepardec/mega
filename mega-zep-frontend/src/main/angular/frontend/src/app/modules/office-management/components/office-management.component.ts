@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { OfficeManagementEntry } from '../models/OfficeManagementEntry';
-import { State } from '../../shared/models/State';
-import { MatDialog } from '@angular/material/dialog';
-import { CommentsForEmployeeComponent } from '../../shared/components/comments-for-employee/comments-for-employee.component';
-import { SelectionModel } from '@angular/cdk/collections';
-import { configuration } from '../../shared/constants/configuration';
-import { environment } from '../../../../environments/environment';
-import { OfficeManagementService } from '../services/office-management.service';
-import { omEntriesMock } from '../models/MockData';
-import { NotificationService } from '../../shared/services/notification/notification.service';
-import { TranslateService } from '@ngx-translate/core';
-import { CommentService } from '../../shared/services/comment/comment.service';
+import {Component, OnInit} from '@angular/core';
+import {OfficeManagementEntry} from '../models/OfficeManagementEntry';
+import {State} from '../../shared/models/State';
+import {MatDialog} from '@angular/material/dialog';
+import {SelectionModel} from '@angular/cdk/collections';
+import {configuration} from '../../shared/constants/configuration';
+import {environment} from '../../../../environments/environment';
+import {OfficeManagementService} from '../services/office-management.service';
+import {NotificationService} from '../../shared/services/notification/notification.service';
+import {TranslateService} from '@ngx-translate/core';
+import {CommentService} from '../../shared/services/comment/comment.service';
+import {Comment} from '../../shared/models/Comment';
+import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
+import {StepentriesService} from '../../shared/services/stepentries/stepentries.service';
+import {Step} from '../../shared/models/Step';
 
 @Component({
   selector: 'app-office-management',
@@ -18,6 +20,8 @@ import { CommentService } from '../../shared/services/comment/comment.service';
   styleUrls: ['./office-management.component.scss']
 })
 export class OfficeManagementComponent implements OnInit {
+  State = State;
+
   displayedColumns = [
     'select',
     'name',
@@ -28,7 +32,7 @@ export class OfficeManagementComponent implements OnInit {
     'projectCheckState',
     'releaseDate'
   ];
-  State = State;
+
   omEntries: Array<OfficeManagementEntry>;
   filteredOmEntries: Array<OfficeManagementEntry>;
   omSelectionModel = new SelectionModel<OfficeManagementEntry>(true, []);
@@ -42,11 +46,12 @@ export class OfficeManagementComponent implements OnInit {
     private omService: OfficeManagementService,
     private notificationService: NotificationService,
     private translateService: TranslateService,
-    private commentService: CommentService) {
+    private commentService: CommentService,
+    private stepEntryService: StepentriesService) {
   }
 
   ngOnInit(): void {
-    this.fillOmEntries();
+    this.getOmEntries();
   }
 
   areAllSelected() {
@@ -58,15 +63,18 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   openDialog(omEntry: OfficeManagementEntry): void {
-    const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
-      {
-        width: '100%',
-        autoFocus: false
-      }
-    );
+    this.commentService.getCommentsForEmployee(omEntry.employee).subscribe((comments: Array<Comment>) => {
+      const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
+        {
+          width: '100%',
+          autoFocus: false
+        }
+      );
 
-    dialogRef.componentInstance.employee = omEntry.employee.firstname + ' ' + omEntry.employee.lastname;
-    dialogRef.componentInstance.comments = omEntry.comments;
+      dialogRef.componentInstance.employee = omEntry.employee;
+      dialogRef.componentInstance.comments = comments;
+      dialogRef.afterClosed().subscribe(() => this.getOmEntries());
+    });
   }
 
   changeDate(emittedDate: string): void {
@@ -83,6 +91,14 @@ export class OfficeManagementComponent implements OnInit {
       return omEntry.employee.firstname.toLowerCase().includes(filterString) ||
         omEntry.employee.lastname.toLowerCase().includes(filterString);
     });
+  }
+
+  filterOmEntriesByOMC1Status(checked: boolean) {
+    if (checked === true) {
+      this.filteredOmEntries = this.omEntries.filter(val => val.customerCheckState === State.OPEN);
+    } else {
+      this.filteredOmEntries = this.omEntries.slice();
+    }
   }
 
   getReleaseDateCssClass(date: string): string {
@@ -106,44 +122,34 @@ export class OfficeManagementComponent implements OnInit {
 
     this.omService.updateEmployees(employees).subscribe(async (res) => {
       this.filteredOmEntries = null;
-      this.fillOmEntries();
+      this.getOmEntries();
       const successMessage = await this.translateService.get('notifications.employeesUpdatedSuccess').toPromise();
       this.notificationService.showSuccess(successMessage);
     });
   }
 
-  private fillOmEntries() {
-    this.omService.getEmployees().subscribe(employees => {
-      this.omEntries = omEntriesMock;
-      for (let i = 0; i < this.omEntries.length; i++) {
-        if (employees.length > i) {
-          this.omEntries[i].employee = employees[i];
-        }
-      }
+  closeCustomerCheck(omEntry: OfficeManagementEntry) {
+    this.stepEntryService.close(omEntry.employee, Step.CONTROL_EXTERNAL_TIMES).subscribe(() => {
+      omEntry.customerCheckState = State.DONE;
+    });
+  }
+
+  closeInternalCheck(omEntry: OfficeManagementEntry) {
+    this.stepEntryService.close(omEntry.employee, Step.CONTROL_INTERNAL_TIMES).subscribe(() => {
+      omEntry.internalCheckState = State.DONE;
+    });
+  }
+
+  private getOmEntries() {
+    this.omService.getEntries().subscribe((omEntries: Array<OfficeManagementEntry>) => {
+      this.omEntries = omEntries;
       this.sortOmEntries();
     });
   }
 
   private sortOmEntries(): void {
-    const doneOmEntries = [];
-    const openOmEntries = [];
-
-    this.omEntries.forEach(omEntry => {
-      const diff = this.commentService.getDoneCommentsCount(omEntry.comments) - omEntry.comments.length;
-      if (diff === 0 && omEntry.customerCheckState === State.DONE && omEntry.internalCheckState === State.DONE) {
-        doneOmEntries.push(omEntry);
-      } else {
-        openOmEntries.push(omEntry);
-      }
-    });
-
     const sortFn = (a: OfficeManagementEntry, b: OfficeManagementEntry) => a.employee.lastname.localeCompare(b.employee.lastname);
-
-    doneOmEntries.sort(sortFn);
-    openOmEntries.sort(sortFn);
-
-    this.omEntries = [].concat(openOmEntries, doneOmEntries);
-
+    this.omEntries = this.omEntries.sort(sortFn);
     this.filteredOmEntries = this.omEntries.slice();
   }
 

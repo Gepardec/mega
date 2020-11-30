@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Set;
 
-import static com.gepardec.mega.notification.mail.Reminder.OM_RELEASE;
+import static com.gepardec.mega.notification.mail.Mail.OM_RELEASE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;

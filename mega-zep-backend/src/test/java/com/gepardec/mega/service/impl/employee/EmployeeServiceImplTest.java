@@ -1,6 +1,7 @@
 package com.gepardec.mega.service.impl.employee;
 
 
+import com.gepardec.mega.db.repository.UserRepository;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.zep.ZepService;
 import com.gepardec.mega.zep.ZepServiceException;
@@ -33,11 +34,14 @@ public class EmployeeServiceImplTest {
     @Mock
     private ManagedExecutor managedExecutor;
 
+    @Mock
+    private UserRepository userRepository;
+
     private EmployeeServiceImpl beanUnderTest;
 
     @BeforeEach
     void setUp() {
-        beanUnderTest = new EmployeeServiceImpl(logger, zepService, managedExecutor, 10);
+        beanUnderTest = new EmployeeServiceImpl(logger, zepService, managedExecutor, userRepository,10);
     }
 
     @Test

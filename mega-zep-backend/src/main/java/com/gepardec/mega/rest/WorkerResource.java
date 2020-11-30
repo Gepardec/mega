@@ -3,6 +3,7 @@ package com.gepardec.mega.rest;
 import com.gepardec.mega.application.interceptor.RolesAllowed;
 import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.db.entity.State;
+import com.gepardec.mega.db.entity.User;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.UserContext;
@@ -13,9 +14,7 @@ import com.gepardec.mega.service.api.stepentry.StepEntryService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -51,5 +50,12 @@ public class WorkerResource {
         }
 
         return monthlyReport;
+    }
+
+    @GET
+    @Path("/getall")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<User> getAll() {
+        return employeeService.getAll();
     }
 }

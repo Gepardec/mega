@@ -30,7 +30,6 @@ mega:
     git:
       branch: '${git.branch}'
       commit: '${git.commit}'
-  logo-path: img/logo.png
   wiki:
     eom-url: https://sites.google.com/a/gepardec.com/internal/zeiterfassung-mit-zep/monatsende-kontrolle-von-arbeitszeiten
   zep:
@@ -62,6 +61,7 @@ mega:
       employees:
         notification: true
       reminder:
+        pl: thomas.herzog@gepardec.com
         om: thomas.herzog@gepardec.com
 ## DEV Properties
 "%test":
@@ -86,6 +86,7 @@ mega:
       employees:
         notification: true
       reminder:
+        pl: thomas.herzog@gepardec.com
         om: thomas.herzog@gepardec.com
 # PROD Properties
 "%prod":
@@ -115,6 +116,7 @@ mega:
       employees:
         notification: false
       reminder:
+        pl: thomas.herzog@gepardec.com
         om: thomas.herzog@gepardec.com
 # TEST-STAGE Properties
 "%teststage":
@@ -133,6 +135,7 @@ mega:
       employees:
         notification: false
       reminder:
+        pl: werner.bruckmueller@gepardec.com,guenter.pirklbauer@gepardec.com
         om: werner.bruckmueller@gepardec.com,guenter.pirklbauer@gepardec.com
 # TEST-STAGE Properties
 "%prodstage":
@@ -150,4 +153,5 @@ mega:
       employees:
         notification: true
       reminder:
+        pl: guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com,christoph.kofler@gepardec.com,erhard.siegl@gepardec.com,stefan.kovar@gepardec.com,ludwig.steindl@gepardec.com
         om: evelyn.pirklbauer@gepardec.com

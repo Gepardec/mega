@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -75,5 +76,29 @@ public class StepEntryServiceImpl implements StepEntryService {
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
 
         return stepEntryRepository.closeAssigned(fromDate, toDate, employee.email(), stepId) > 0;
+    }
+
+    @Override
+    public List<StepEntry> findAllStepEntriesForEmployee(Employee employee) {
+        Objects.requireNonNull(employee, "Employee must not be null!");
+        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+
+        return stepEntryRepository.findAllOwnedStepEntriesInRange(fromDate, toDate, employee.email());
+    }
+
+    @Override
+    public StepEntry findStepEntryForEmployeeAtStep(Long stepId, Employee employee, String assigneeEmail) {
+        Objects.requireNonNull(employee, "Employee must not be null!");
+        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        Optional<StepEntry> stepEntry = stepEntryRepository.findStepEntryForEmployeeAtStepInRange(
+                fromDate, toDate, employee.email(), stepId, assigneeEmail
+        );
+        if(stepEntry.isEmpty()) {
+            throw new IllegalStateException(String.format("No StepEntries found for Employee %s", employee.email()));
+        }
+
+        return stepEntry.get();
     }
 }

@@ -17,10 +17,10 @@ export class StepentriesService {
   ) {
   }
 
-  close(employee: Employee): Observable<boolean> {
+  close(employee: Employee, step: Step): Observable<boolean> {
     return this.httpClient.put<boolean>(
       this.config.getBackendUrlWithContext('/stepentry/close'),
-      new EmployeeStep(Step.CONTROL_TIMES, employee)
+      new EmployeeStep(step, employee)
     );
   }
 }
