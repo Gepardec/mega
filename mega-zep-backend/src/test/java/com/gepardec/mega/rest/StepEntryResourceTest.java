@@ -14,6 +14,9 @@ import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -39,7 +42,7 @@ public class StepEntryResourceTest {
 
     @Test
     void close_whenUserNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON).put("/stepentry/close")
@@ -50,7 +53,7 @@ public class StepEntryResourceTest {
     void close_whenValid_thenReturnsUpdatedNumber() {
         when(stepEntryService.setOpenAndAssignedStepEntriesDone(ArgumentMatchers.any(Employee.class), ArgumentMatchers.anyLong())).thenReturn(true);
 
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -65,13 +68,15 @@ public class StepEntryResourceTest {
     }
 
     private User createUserForRole(final Role role) {
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
         return User.builder()
                 .userId("1")
                 .dbId(1)
                 .email("thomas.herzog@gpeardec.com")
                 .firstname("Thomas")
                 .lastname("Herzog")
-                .role(role)
+                .roles(roles)
                 .build();
     }
 

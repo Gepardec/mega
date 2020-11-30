@@ -12,12 +12,14 @@ import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @QuarkusTest
 public class CommentResourceTest {
@@ -40,7 +42,7 @@ public class CommentResourceTest {
 
     @Test
     void setDone_whenUserNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON).put("/comments/setdone")
@@ -51,7 +53,7 @@ public class CommentResourceTest {
     void setDone_whenValid_thenReturnsUpdatedNumber() {
         when(commentService.setDone(ArgumentMatchers.any(Comment.class))).thenReturn(1);
 
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -81,7 +83,7 @@ public class CommentResourceTest {
 
     @Test
     void getAllCommentsForEmployee_whenNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON)
@@ -93,7 +95,7 @@ public class CommentResourceTest {
 
     @Test
     void getAllCommentsForEmployee_whenInvalidEmail_thenReturnsHttpStatusBAD_REQUEST() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -106,7 +108,7 @@ public class CommentResourceTest {
 
     @Test
     void getAllCommentsForEmployee_whenEmailIsMissing_thenReturnsHttpStatusBAD_REQUEST() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -118,7 +120,7 @@ public class CommentResourceTest {
 
     @Test
     void getAllCommentsForEmployee_whenReleaseDateIsMissing_thenReturnsHttpStatusBAD_REQUEST() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -130,7 +132,7 @@ public class CommentResourceTest {
 
     @Test
     void getAllCommentsForEmployee_whenValid_thenReturnsListOfCommentsForEmployee() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -158,7 +160,7 @@ public class CommentResourceTest {
 
     @Test
     void newCommentForEmployee_whenInvalidRequest_thenReturnsHttpStatusBAD_REQUEST() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -167,10 +169,9 @@ public class CommentResourceTest {
                 .then().assertThat().statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
-
     @Test
     void newCommentForEmployee_whenValid_thenReturnsCreatedComment() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -208,7 +209,7 @@ public class CommentResourceTest {
 
     @Test
     void deleteComment_whenValid_thenReturnsTrue() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -231,7 +232,7 @@ public class CommentResourceTest {
 
     @Test
     void updateCommentForEmployee_whenInvalidRequest_henReturnsHttpStatusBAD_REQUEST() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -242,7 +243,7 @@ public class CommentResourceTest {
 
     @Test
     void updateCommentForEmployee_whenValid_thenReturnsUpdatedComment() {
-        final User user = createUserForRole(Role.USER);
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -259,13 +260,15 @@ public class CommentResourceTest {
     }
 
     private com.gepardec.mega.domain.model.User createUserForRole(final Role role) {
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
         return com.gepardec.mega.domain.model.User.builder()
                 .userId("1")
                 .dbId(1)
                 .email("thomas.herzog@gpeardec.com")
                 .firstname("Thomas")
                 .lastname("Herzog")
-                .role(role)
+                .roles(roles)
                 .build();
     }
 }

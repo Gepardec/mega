@@ -1,10 +1,7 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.domain.model.*;
-import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.employee.EmployeeService;
-import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.common.mapper.TypeRef;
@@ -13,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.Set;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,28 +26,30 @@ public class EmployeeResourceTest {
     EmployeeService employeeService;
 
     @InjectMock
-    StepEntryService stepEntryService;
-
-    @InjectMock
-    CommentService commentService;
-
-    @InjectMock
     private SecurityContext securityContext;
 
     @InjectMock
     private UserContext userContext;
 
     @Test
-    void list_whenUserNotLoggedAndInRoleADMINISTRATOR_thenReturnsHttpStatusUNAUTHORIZED() {
-        when(userContext.user()).thenReturn(createUserForRole(Role.ADMINISTRATOR));
+    void list_whenUserNotLoggedAndInRoleOFFICE_MANAGEMENT_thenReturnsHttpStatusUNAUTHORIZED() {
+        when(userContext.user()).thenReturn(createUserForRole(Role.OFFICE_MANAGEMENT));
 
         given().get("/employees")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @Test
-    void list_whenUserLoggedAndInRoleUSER_thenReturnsHttpStatusFORBIDDEN() {
-        final User user = createUserForRole(Role.USER);
+    void list_whenUserNotLoggedAndInRolePROJECT_LEAD_thenReturnsHttpStatusUNAUTHORIZED() {
+        when(userContext.user()).thenReturn(createUserForRole(Role.PROJECT_LEAD));
+
+        given().get("/employees")
+                .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
+    }
+
+    @Test
+    void list_whenUserLoggedAndInRoleEMPLOYEE_thenReturnsHttpStatusFORBIDDEN() {
+        final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -58,8 +58,8 @@ public class EmployeeResourceTest {
     }
 
     @Test
-    void list_whenUserLoggedAndInRoleCONTROLLER_thenReturnsHttpStatusOK() {
-        final User user = createUserForRole(Role.CONTROLLER);
+    void list_whenUserLoggedAndInRoleOFFICE_MANAGEMENT_thenReturnsHttpStatusOK() {
+        final User user = createUserForRole(Role.OFFICE_MANAGEMENT);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
         final Employee userAsEmployee = createEmployeeForUser(user);
@@ -70,8 +70,8 @@ public class EmployeeResourceTest {
     }
 
     @Test
-    void list_whenUserLoggedAndInRoleADMINISTRATOR_thenReturnsHttpStatusOK() {
-        final User user = createUserForRole(Role.ADMINISTRATOR);
+    void list_whenUserLoggedAndInRolePROJECT_LEAD_thenReturnsHttpStatusOK() {
+        final User user = createUserForRole(Role.PROJECT_LEAD);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -80,14 +80,15 @@ public class EmployeeResourceTest {
     }
 
     @Test
-    void list_whenUserLoggedAndInRoleADMINISTRATOR_thenReturnsEmployees() {
-        final User user = createUserForRole(Role.ADMINISTRATOR);
+    void list_whenUserLoggedAndInRoleOFFICE_MANAGEMENT_thenReturnsEmployees() {
+        final User user = createUserForRole(Role.OFFICE_MANAGEMENT);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
         final Employee userAsEmployee = createEmployeeForUser(user);
         when(employeeService.getAllActiveEmployees()).thenReturn(List.of(userAsEmployee));
 
         final List<Employee> employees = given().get("/employees").as(new TypeRef<>() {
+
         });
 
         assertEquals(1, employees.size());
@@ -103,7 +104,7 @@ public class EmployeeResourceTest {
 
     @Test
     void update_whenContentTypeIsTextPlain_returnsHttpStatusUNSUPPORTED_MEDIA_TYPE() {
-        final User user = createUserForRole(Role.ADMINISTRATOR);
+        final User user = createUserForRole(Role.PROJECT_LEAD);
         when(userContext.user()).thenReturn(user);
 
         given().contentType(MediaType.TEXT_PLAIN)
@@ -113,7 +114,7 @@ public class EmployeeResourceTest {
 
     @Test
     void update_whenEmptyBody_returnsHttpStatusBAD_REQUEST() {
-        final User user = createUserForRole(Role.ADMINISTRATOR);
+        final User user = createUserForRole(Role.PROJECT_LEAD);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -124,7 +125,7 @@ public class EmployeeResourceTest {
 
     @Test
     void update_whenEmptyList_returnsHttpStatusBAD_REQUEST() {
-        final User user = createUserForRole(Role.ADMINISTRATOR);
+        final User user = createUserForRole(Role.PROJECT_LEAD);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -136,7 +137,7 @@ public class EmployeeResourceTest {
 
     @Test
     void update_whenValidRequest_returnsHttpStatusOK() {
-        final User user = createUserForRole(Role.ADMINISTRATOR);
+        final User user = createUserForRole(Role.PROJECT_LEAD);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
         final Employee employee = createEmployeeForUser(user);
@@ -149,7 +150,7 @@ public class EmployeeResourceTest {
 
     @Test
     void update_whenValidRequestAndEmployeeServiceReturnsInvalidEmails_returnsInvalidEmails() {
-        final User user = createUserForRole(Role.ADMINISTRATOR);
+        final User user = createUserForRole(Role.PROJECT_LEAD);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
         final Employee userAsEmployee = createEmployeeForUser(user);
@@ -160,6 +161,7 @@ public class EmployeeResourceTest {
                 .body(List.of(userAsEmployee))
                 .put("/employees")
                 .as(new TypeRef<>() {
+
                 });
 
         assertEquals(2, emails.size());
@@ -172,28 +174,14 @@ public class EmployeeResourceTest {
                 .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
     }
 
-    private com.gepardec.mega.db.entity.Step createStep(StepName stepName) {
-        com.gepardec.mega.db.entity.Step step = new com.gepardec.mega.db.entity.Step();
-        step.setName(stepName.name());
-        return step;
-    }
-
-    private com.gepardec.mega.db.entity.StepEntry createStepEntryForStep(StepName stepName, State state) {
-        com.gepardec.mega.db.entity.StepEntry stepEntry = new com.gepardec.mega.db.entity.StepEntry();
-        stepEntry.setStep(createStep(stepName));
-        stepEntry.setState(state);
-        return stepEntry;
-    }
-
     private Employee createEmployeeForUser(final User user) {
         return Employee.builder()
                 .email(user.email())
-                .firstName(user.firstname())
-                .sureName(user.lastname())
+                .firstname(user.firstname())
+                .lastname(user.lastname())
                 .title("Ing.")
                 .userId(user.userId())
                 .releaseDate("2020-01-01")
-                .role(user.role().roleId)
                 .active(true)
                 .build();
     }
@@ -205,7 +193,7 @@ public class EmployeeResourceTest {
                 .email("thomas.herzog@gpeardec.com")
                 .firstname("Thomas")
                 .lastname("Herzog")
-                .role(role)
+                .roles(Set.of(role))
                 .build();
     }
 }

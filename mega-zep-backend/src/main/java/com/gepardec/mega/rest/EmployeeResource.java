@@ -13,7 +13,8 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Secured
-@RolesAllowed(allowedRoles = {Role.ADMINISTRATOR, Role.CONTROLLER})
+// PL, OM
+@RolesAllowed({ Role.PROJECT_LEAD, Role.OFFICE_MANAGEMENT })
 @Path("/employees")
 public class EmployeeResource {
 

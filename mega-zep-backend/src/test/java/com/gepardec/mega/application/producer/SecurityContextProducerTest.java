@@ -37,7 +37,6 @@ class SecurityContextProducerTest {
         final GoogleIdToken googleIdToken = mock(GoogleIdToken.class, Answers.RETURNS_DEEP_STUBS);
         when(googleIdTokenVerifier.verify(anyString())).thenReturn(googleIdToken);
         when(googleIdToken.getPayload().getEmail()).thenReturn("test@gepardec.com");
-        when(googleIdToken.getPayload().get("picture")).thenReturn("picture");
 
         // When
         final SecurityContext securityContext = producer.createSecurityContext();
@@ -45,7 +44,6 @@ class SecurityContextProducerTest {
         // Then
         assertNotNull(securityContext.email());
         assertEquals("test@gepardec.com", securityContext.email());
-        assertEquals("picture", securityContext.pictureUrl());
     }
 
     @Test

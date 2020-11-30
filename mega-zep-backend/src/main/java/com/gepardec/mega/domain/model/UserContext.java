@@ -16,6 +16,7 @@ public abstract class UserContext {
 
     @AutoValue.Builder
     public abstract static class Builder {
+
         public abstract Builder user(User user);
 
         public abstract UserContext build();
