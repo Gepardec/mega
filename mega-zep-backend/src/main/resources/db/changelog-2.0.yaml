@@ -123,6 +123,9 @@ databaseChangeLog:
                     nullable: false
                   name: zep_id
                   type: VARCHAR(100)
+              - column:
+                  name: release_date
+                  type: date
             tableName: employee_user
   - changeSet:
       id: 1605169381318-7
@@ -167,6 +170,8 @@ databaseChangeLog:
                   name: ordinal
                   type: INTEGER
               - column:
+                  constraints:
+                    nullable: false
                   name: role
                   type: VARCHAR(255)
             tableName: step

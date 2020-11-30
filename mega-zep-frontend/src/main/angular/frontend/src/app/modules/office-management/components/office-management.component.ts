@@ -89,8 +89,8 @@ export class OfficeManagementComponent implements OnInit {
     }
     filterString = filterString.toLowerCase();
     this.filteredOmEntries = this.omEntries.filter(omEntry => {
-      return omEntry.employee.firstName.toLowerCase().includes(filterString) ||
-        omEntry.employee.sureName.toLowerCase().includes(filterString);
+      return omEntry.employee.firstname.toLowerCase().includes(filterString) ||
+        omEntry.employee.lastname.toLowerCase().includes(filterString);
     });
   }
 
@@ -164,7 +164,7 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   private sortOmEntries(): void {
-    const sortFn = (a: ManagementEntry, b: ManagementEntry) => a.employee.sureName.localeCompare(b.employee.sureName);
+    const sortFn = (a: ManagementEntry, b: ManagementEntry) => a.employee.lastname.localeCompare(b.employee.lastname);
     this.omEntries = this.omEntries.sort(sortFn);
     this.filteredOmEntries = this.omEntries.slice();
   }

@@ -8,10 +8,18 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { User } from '../../models/User';
 import { TranslateModule } from '@ngx-translate/core';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { UserInfo } from 'angular-oauth2-oidc/types';
 
 describe('UserActionsComponent', () => {
   let component: UserActionsComponent;
   let fixture: ComponentFixture<UserActionsComponent>;
+
+  class OAuthServiceMock {
+    loadUserProfile(): Promise<UserInfo> {
+      return new Promise(() => Promise.resolve({sub: 'sub', picture: 'picture'}));
+    }
+  }
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -23,7 +31,11 @@ describe('UserActionsComponent', () => {
         BrowserAnimationsModule
       ],
       declarations: [],
-      providers: []
+      providers: [
+        {
+          provide: OAuthService, useClass: OAuthServiceMock
+        }
+      ]
     })
       .compileComponents();
   }));
@@ -40,7 +52,6 @@ describe('UserActionsComponent', () => {
     user.email = 'max.mustermann@gmail.com';
     user.firstname = 'Max';
     user.lastname = 'Mustermann';
-    user.pictureUrl = undefined;
     return user;
   }
 

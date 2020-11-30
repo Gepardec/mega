@@ -66,8 +66,6 @@ export class CommentsForEmployeeComponent implements OnInit {
   createCommentForEmployee(comment: string): void {
     this.commentService.createNewComment(this.employee, comment, this.user.email, this.step, this.project).subscribe(() => {
       this.commentService.getCommentsForEmployee(this.employee).subscribe((comments: Array<Comment>) => {
-        console.log('DONE');
-        console.log(comments.length);
         this.comments = comments;
       });
     });

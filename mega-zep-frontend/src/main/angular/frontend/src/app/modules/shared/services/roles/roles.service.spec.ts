@@ -7,6 +7,10 @@ import { BehaviorSubject } from 'rxjs';
 import { User } from '../../models/User';
 import { configuration } from '../../constants/configuration';
 import { Role } from '../../models/Role';
+import { routes } from '../../../../app-routing.module';
+import { MonthlyReportModule } from '../../../monthly-report/monthly-report.module';
+import { OfficeManagementModule } from '../../../office-management/office-management.module';
+import { ProjectManagementModule } from '../../../project-management/project-management.module';
 
 describe('RolesService', () => {
   let userSubject: BehaviorSubject<User> = new BehaviorSubject<User>(undefined);
@@ -21,19 +25,10 @@ describe('RolesService', () => {
 
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
-      RouterTestingModule.withRoutes([
-        {
-          path: configuration.PAGE_URLS.MONTHLY_REPORT,
-          component: MockComponent
-        },
-        {
-          path: configuration.PAGE_URLS.OFFICE_MANAGEMENT,
-          data: {
-            roles: [Role.ADMINISTRATOR, Role.CONTROLLER]
-          },
-          component: MockComponent
-        },
-      ])
+      MonthlyReportModule,
+      OfficeManagementModule,
+      ProjectManagementModule,
+      RouterTestingModule.withRoutes(routes)
     ],
     providers: [
       {
@@ -46,60 +41,100 @@ describe('RolesService', () => {
     userSubject = new BehaviorSubject<User>(undefined);
   });
 
-  it('should return false if no user is logged in', () => {
-    const service: RolesService = TestBed.get(RolesService);
-    expect(service.isAllowed(configuration.PAGE_URLS.OFFICE_MANAGEMENT)).toBe(false);
+  describe('on common', () => {
+    it('should return false if no user is logged in', () => {
+      const service: RolesService = TestBed.get(RolesService);
+      expect(service.isAllowed(configuration.PAGE_URLS.OFFICE_MANAGEMENT)).toBe(false);
+    });
+
+    it('should return false if route is not found', () => {
+      const service: RolesService = TestBed.get(RolesService);
+      userSubject.next({
+        userId: '07-johndoe',
+        firstname: 'john',
+        lastname: 'doe',
+        email: 'john.doe@gepardec.com',
+        roles: [Role.EMPLOYEE]
+      });
+      expect(service.isAllowed(configuration.PAGE_URLS.OFFICE_MANAGEMENT + 'somewrongroute')).toBe(false);
+    });
   });
 
-  it('should return false if route is not found', () => {
-    const service: RolesService = TestBed.get(RolesService);
-    userSubject.next({
-      userId: '07-johndoe',
-      firstname: 'john',
-      lastname: 'doe',
-      email: 'john.doe@gepardec.com',
-      role: Role.USER,
-      pictureUrl: undefined
+  describe('on employee', () => {
+    it('should return true if user roles are sufficient', () => {
+      const service: RolesService = TestBed.get(RolesService);
+      userSubject.next({
+        userId: '07-johndoe',
+        firstname: 'john',
+        lastname: 'doe',
+        email: 'john.doe@gepardec.com',
+        roles: [Role.EMPLOYEE]
+      });
+      expect(service.isAllowed(configuration.PAGE_URLS.MONTHLY_REPORT)).toBe(true);
     });
-    expect(service.isAllowed(configuration.PAGE_URLS.OFFICE_MANAGEMENT + 'somewrongroute')).toBe(false);
+
+    it('should return false if user roles are insufficient', () => {
+      const service: RolesService = TestBed.get(RolesService);
+      userSubject.next({
+        userId: '07-johndoe',
+        firstname: 'john',
+        lastname: 'doe',
+        email: 'john.doe@gepardec.com',
+        roles: [Role.EMPLOYEE]
+      });
+      expect(service.isAllowed(configuration.PAGE_URLS.OFFICE_MANAGEMENT)).toBe(false);
+    });
   });
 
-  it('should return false if user roles are insufficient', () => {
-    const service: RolesService = TestBed.get(RolesService);
-    userSubject.next({
-      userId: '07-johndoe',
-      firstname: 'john',
-      lastname: 'doe',
-      email: 'john.doe@gepardec.com',
-      role: Role.USER,
-      pictureUrl: undefined
+  describe('on office managment', () => {
+    it('should return true if user roles are sufficient', () => {
+      const service: RolesService = TestBed.get(RolesService);
+      userSubject.next({
+        userId: '07-johndoe',
+        firstname: 'john',
+        lastname: 'doe',
+        email: 'john.doe@gepardec.com',
+        roles: [Role.EMPLOYEE, Role.OFFICE_MANAGEMENT]
+      });
+      expect(service.isAllowed(configuration.PAGE_URLS.OFFICE_MANAGEMENT)).toBe(true);
     });
-    expect(service.isAllowed(configuration.PAGE_URLS.OFFICE_MANAGEMENT)).toBe(false);
+
+    it('should return false if user roles are sufficient', () => {
+      const service: RolesService = TestBed.get(RolesService);
+      userSubject.next({
+        userId: '07-johndoe',
+        firstname: 'john',
+        lastname: 'doe',
+        email: 'john.doe@gepardec.com',
+        roles: [Role.EMPLOYEE, Role.OFFICE_MANAGEMENT]
+      });
+      expect(service.isAllowed(configuration.PAGE_URLS.PROJECT_MANAGEMENT)).toBe(false);
+    });
   });
 
-  it('should return true if user roles are sufficient', () => {
-    const service: RolesService = TestBed.get(RolesService);
-    userSubject.next({
-      userId: '07-johndoe',
-      firstname: 'john',
-      lastname: 'doe',
-      email: 'john.doe@gepardec.com',
-      role: Role.CONTROLLER,
-      pictureUrl: undefined
+  describe('on project lead', () => {
+    it('should return true if user roles are sufficient', () => {
+      const service: RolesService = TestBed.get(RolesService);
+      userSubject.next({
+        userId: '07-johndoe',
+        firstname: 'john',
+        lastname: 'doe',
+        email: 'john.doe@gepardec.com',
+        roles: [Role.EMPLOYEE, Role.PROJECT_LEAD]
+      });
+      expect(service.isAllowed(configuration.PAGE_URLS.PROJECT_MANAGEMENT)).toBe(true);
     });
-    expect(service.isAllowed(configuration.PAGE_URLS.OFFICE_MANAGEMENT)).toBe(true);
-  });
 
-  it('should return true if no role is required', () => {
-    const service: RolesService = TestBed.get(RolesService);
-    userSubject.next({
-      userId: '07-johndoe',
-      firstname: 'john',
-      lastname: 'doe',
-      email: 'john.doe@gepardec.com',
-      role: Role.USER,
-      pictureUrl: undefined
+    it('should return false if user roles are sufficient', () => {
+      const service: RolesService = TestBed.get(RolesService);
+      userSubject.next({
+        userId: '07-johndoe',
+        firstname: 'john',
+        lastname: 'doe',
+        email: 'john.doe@gepardec.com',
+        roles: [Role.EMPLOYEE, Role.PROJECT_LEAD]
+      });
+      expect(service.isAllowed(configuration.PAGE_URLS.OFFICE_MANAGEMENT)).toBe(false);
     });
-    expect(service.isAllowed(configuration.PAGE_URLS.MONTHLY_REPORT)).toBe(true);
   });
 });

@@ -17,8 +17,6 @@ export class MonthlyReportComponent implements OnInit, OnDestroy {
   getAllTimeEntries() {
     this.monthlyReportSubscription = this.monthlyReportService.getAll().subscribe((monthlyReport: MonthlyReport) => {
       this.monthlyReport = monthlyReport;
-
-      console.log(monthlyReport);
     });
   }
 

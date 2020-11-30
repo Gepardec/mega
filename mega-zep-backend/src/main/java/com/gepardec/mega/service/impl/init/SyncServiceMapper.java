@@ -1,15 +1,23 @@
 package com.gepardec.mega.service.impl.init;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
-import com.gepardec.mega.db.entity.Role;
 import com.gepardec.mega.db.entity.User;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
+import com.gepardec.mega.domain.model.Role;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalQueries;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Stream;
 
 @ApplicationScoped
@@ -34,20 +42,31 @@ public class SyncServiceMapper {
 
     public User mapEmployeeToUser(User user, Employee employee, List<Project> projects, Locale defaultLocale) {
         user.setEmail(employee.email());
-        user.setFirstname(employee.firstName());
-        user.setLastname(employee.sureName());
+        user.setFirstname(employee.firstname());
+        user.setLastname(employee.lastname());
         user.setActive(employee.active());
+        user.setReleaseDate(parseReleaseDate(employee));
         user.setRoles(determineRoles(employee, projects));
         setUserLocaleFromEmployeeLanguage(user, employee, defaultLocale);
 
         return user;
     }
 
+    private LocalDate parseReleaseDate(Employee employee) {
+        if (StringUtils.isNotEmpty(employee.releaseDate())) {
+            try {
+                return DateTimeFormatter.ISO_LOCAL_DATE.parse(employee.releaseDate(), TemporalQueries.localDate());
+            } catch (DateTimeParseException exception) {
+                log.warn("could not parse date {} for employee {}", employee.releaseDate(), employee.userId());
+            }
+        }
+        return null;
+    }
+
     private Set<Role> determineRoles(final Employee employee, final List<Project> projects) {
         final boolean projectLead = projects.stream()
                 .anyMatch(project -> project.leads().contains(employee.userId()));
-        final boolean omEmployee = Arrays.stream(notificationConfig.getOmMailAddresses().trim().split(","))
-                .anyMatch(omEmail -> omEmail.equals(employee.email()));
+        final boolean omEmployee = notificationConfig.getOmMailAddresses().stream().anyMatch(omEmail -> omEmail.equals(employee.email()));
 
         final Set<Role> roles = new HashSet<>();
         // Everyone if employee

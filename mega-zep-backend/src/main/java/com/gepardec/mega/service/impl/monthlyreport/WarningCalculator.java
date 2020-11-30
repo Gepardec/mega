@@ -1,12 +1,12 @@
 package com.gepardec.mega.service.impl.monthlyreport;
 
 import com.gepardec.mega.domain.calculation.WarningCalculationStrategy;
+import com.gepardec.mega.domain.calculation.journey.InvalidJourneyCalculator;
 import com.gepardec.mega.domain.calculation.journey.InvalidWorkingLocationInJourneyCalculator;
 import com.gepardec.mega.domain.calculation.time.ExceededMaximumWorkingHoursPerDayCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientBreakCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientRestCalculator;
 import com.gepardec.mega.domain.model.monthlyreport.*;
-import com.gepardec.mega.domain.calculation.journey.InvalidJourneyCalculator;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

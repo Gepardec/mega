@@ -19,14 +19,6 @@ public class NotificationHelper {
 
     private static final String MESSAGE_KEY_TEMPLATE_REMINDER = "mail.%s.subject";
 
-    private static final String EXCEL_URL_PLACEHOLDER = "$excelUrl$";
-
-    private static final String EOM_WIKI_PLACEHOLDER = "$wikiEomUrl$";
-
-    private static final String MEGA_DASH_URL_PLACEHOLDER = "$megaDash$";
-
-    private static final String TEMPLATE_MAILTEXT_PLACEHOLDER = "$mailText$";
-
     private static final String EMAIL_PATH = "emails";
 
     @Inject
@@ -100,21 +92,5 @@ public class NotificationHelper {
         } else {
             return null;
         }
-    }
-
-    public String getEomWikiPlaceholder() {
-        return EOM_WIKI_PLACEHOLDER;
-    }
-
-    public String getExcelUrlPlaceholder() {
-        return EXCEL_URL_PLACEHOLDER;
-    }
-
-    public String getMegaDashUrlPlaceholder() {
-        return MEGA_DASH_URL_PLACEHOLDER;
-    }
-
-    public String getTemplateMailtextPlaceholder() {
-        return TEMPLATE_MAILTEXT_PLACEHOLDER;
     }
 }

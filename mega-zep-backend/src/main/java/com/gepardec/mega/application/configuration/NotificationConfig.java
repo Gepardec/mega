@@ -4,6 +4,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.util.List;
 
 @ApplicationScoped
 public class NotificationConfig {
@@ -28,7 +29,7 @@ public class NotificationConfig {
 
     @Inject
     @ConfigProperty(name = "mega.mail.reminder.om")
-    String omMailAddresses;
+    List<String> omMailAddresses;
 
     @Inject
     @ConfigProperty(name = "mega.mail.employees.notification")
@@ -54,7 +55,7 @@ public class NotificationConfig {
         return plMailAddresses;
     }
 
-    public String getOmMailAddresses() {
+    public List<String> getOmMailAddresses() {
         return omMailAddresses;
     }
 

@@ -1,7 +1,6 @@
 package com.gepardec.mega.service.impl.employee;
 
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.utils.DateUtils;
 import de.provantis.zep.BeschaeftigungszeitListeType;
 import de.provantis.zep.BeschaeftigungszeitType;
@@ -150,20 +149,18 @@ class EmployeeMapperTest {
         employee.setAnrede("Herr");
         employee.setPreisgruppe("ARCHITEKT");
         employee.setFreigabedatum("2020-01-01");
-        employee.setRechte(Role.USER.roleId);
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
         Assertions.assertNotNull(employee);
         Assertions.assertEquals(employee.getUserId(), actual.userId());
         Assertions.assertEquals(employee.getEmail(), actual.email());
-        Assertions.assertEquals(employee.getVorname(), actual.firstName());
-        Assertions.assertEquals(employee.getNachname(), actual.sureName());
+        Assertions.assertEquals(employee.getVorname(), actual.firstname());
+        Assertions.assertEquals(employee.getNachname(), actual.lastname());
         Assertions.assertEquals(employee.getTitel(), actual.title());
         Assertions.assertEquals(employee.getAnrede(), actual.salutation());
         Assertions.assertEquals(employee.getPreisgruppe(), actual.workDescription());
         Assertions.assertEquals(employee.getFreigabedatum(), actual.releaseDate());
-        Assertions.assertEquals(employee.getRechte(), actual.role());
         Assertions.assertTrue(actual.active());
     }
 

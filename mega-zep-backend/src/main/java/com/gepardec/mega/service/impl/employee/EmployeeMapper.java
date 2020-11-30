@@ -20,13 +20,12 @@ public class EmployeeMapper {
                 .userId(mitarbeiterType.getUserId())
                 .email(mitarbeiterType.getEmail())
                 .title(mitarbeiterType.getTitel())
-                .firstName(mitarbeiterType.getVorname())
-                .sureName(mitarbeiterType.getNachname())
+                .firstname(mitarbeiterType.getVorname())
+                .lastname(mitarbeiterType.getNachname())
                 .salutation(mitarbeiterType.getAnrede())
                 .releaseDate(mitarbeiterType.getFreigabedatum())
                 .workDescription(mitarbeiterType.getPreisgruppe())
                 .language(mitarbeiterType.getSprache())
-                .role(mitarbeiterType.getRechte())
                 .active(hasEmployeeAndActiveEmployment(mitarbeiterType))
                 .build();
     }

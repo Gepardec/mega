@@ -27,7 +27,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Secured
-@RolesAllowed(allowedRoles = {Role.ADMINISTRATOR, Role.CONTROLLER})
+@RolesAllowed(value = {Role.PROJECT_LEAD, Role.OFFICE_MANAGEMENT})
 @Path("/management")
 public class ManagementResource {
 

@@ -82,7 +82,7 @@ class CommentServiceImplTest {
                 .userId("1")
                 .email("thomas.herzog@gpeardec.com")
                 .releaseDate(null)
-                .firstName("Thomas")
+                .firstname("Thomas")
                 .build();
 
         NullPointerException thrown = assertThrows(
@@ -187,12 +187,12 @@ class CommentServiceImplTest {
         String creator = stepEntry.getAssignee().getFirstname();
         Map<String, String> expectedMailParameter = Map.of(
                 MailParameter.CREATOR, creator,
-                MailParameter.RECIPIENT, employee.firstName(),
+                MailParameter.RECIPIENT, employee.firstname(),
                 MailParameter.COMMENT, newComment
         );
 
         verify(mailSender, times(1)).send(
-                Mail.COMMENT_CREATED, employee.email(), employee.firstName(), Locale.GERMAN, expectedMailParameter, List.of(creator)
+                Mail.COMMENT_CREATED, employee.email(), employee.firstname(), Locale.GERMAN, expectedMailParameter, List.of(creator)
         );
 
         assertNotNull(createdComment);
@@ -241,7 +241,7 @@ class CommentServiceImplTest {
                 .userId("1")
                 .email("thomas.herzog@gpeardec.com")
                 .releaseDate(LocalDate.now().toString())
-                .firstName("Thomas")
+                .firstname("Thomas")
                 .build();
     }
 

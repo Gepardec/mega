@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,7 +50,7 @@ public class ManagementResourceTest {
 
     @Test
     void getAllOfficeManagementEntries_whenNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
-        when(userContext.user()).thenReturn(createUserForRole(Role.ADMINISTRATOR));
+        when(userContext.user()).thenReturn(createUserForRole(Role.OFFICE_MANAGEMENT));
         given().contentType(ContentType.JSON)
                 .get("/management/officemanagemententries")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
@@ -64,7 +65,7 @@ public class ManagementResourceTest {
 
     @Test
     void getAllOfficeManagementEntries_whenValid_thenReturnsListOfEntries() {
-        final User user = createUserForRole(Role.CONTROLLER);
+        final User user = createUserForRole(Role.OFFICE_MANAGEMENT);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -86,7 +87,8 @@ public class ManagementResourceTest {
 
         List<ManagementEntry> result = given().contentType(ContentType.JSON)
                 .get("/management/officemanagemententries")
-                .as(new TypeRef<>() {});
+                .as(new TypeRef<>() {
+                });
 
         assertEquals(1L, result.size());
         ManagementEntry entry = result.get(0);
@@ -102,7 +104,7 @@ public class ManagementResourceTest {
 
     @Test
     void getAllOfficeManagementEntries_whenNoActiveEmployeesFound_thenReturnsEmptyResultList() {
-        final User user = createUserForRole(Role.CONTROLLER);
+        final User user = createUserForRole(Role.OFFICE_MANAGEMENT);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -131,7 +133,7 @@ public class ManagementResourceTest {
 
     @Test
     void getAllOfficeManagementEntries_whenNoStepEntriesFound_thenReturnsEmptyResultList() {
-        final User user = createUserForRole(Role.CONTROLLER);
+        final User user = createUserForRole(Role.OFFICE_MANAGEMENT);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -154,7 +156,7 @@ public class ManagementResourceTest {
 
     @Test
     void getAllProjectManagementEntries_whenNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
-        when(userContext.user()).thenReturn(createUserForRole(Role.ADMINISTRATOR));
+        when(userContext.user()).thenReturn(createUserForRole(Role.PROJECT_LEAD));
         given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
@@ -169,7 +171,7 @@ public class ManagementResourceTest {
 
     @Test
     void getAllProjectManagementEntries_whenValid_thenReturnsListOfEntries() {
-        final User user = createUserForRole(Role.CONTROLLER);
+        final User user = createUserForRole(Role.PROJECT_LEAD);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -200,7 +202,8 @@ public class ManagementResourceTest {
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries")
-                .as(new TypeRef<>() {});
+                .as(new TypeRef<>() {
+                });
 
         assertEquals(2, result.size());
         Optional<ProjectManagementEntry> projectRgkkcc = result.stream()
@@ -227,20 +230,21 @@ public class ManagementResourceTest {
 
     @Test
     void getAllProjectManagementEntries_whenNoProjectsFound_thenReturnsEmptyList() {
-        final User user = createUserForRole(Role.CONTROLLER);
+        final User user = createUserForRole(Role.PROJECT_LEAD);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries")
-                .as(new TypeRef<>() {});
+                .as(new TypeRef<>() {
+                });
 
         assertEquals(0L, result.size());
     }
 
     @Test
     void getAllProjectManagementEntries_whenNoEmployeesAssignedToProject_thenReturnResultList() {
-        final User user = createUserForRole(Role.CONTROLLER);
+        final User user = createUserForRole(Role.PROJECT_LEAD);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -251,7 +255,8 @@ public class ManagementResourceTest {
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries")
-                .as(new TypeRef<>() {});
+                .as(new TypeRef<>() {
+                });
 
         assertEquals(1L, result.size());
         ProjectManagementEntry entry = result.get(0);
@@ -261,7 +266,7 @@ public class ManagementResourceTest {
 
     @Test
     void getAllProjectManagementEntries_whenNoStepEntriesFound_thenReturnsResultList() {
-        final User user = createUserForRole(Role.CONTROLLER);
+        final User user = createUserForRole(Role.PROJECT_LEAD);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
@@ -279,7 +284,8 @@ public class ManagementResourceTest {
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries")
-                .as(new TypeRef<>() {});
+                .as(new TypeRef<>() {
+                });
 
         assertEquals(1L, result.size());
         ProjectManagementEntry entry = result.get(0);
@@ -308,7 +314,7 @@ public class ManagementResourceTest {
                 .email("werner.bruckmueller@gpeardec.com")
                 .firstname("Werner")
                 .lastname("Bruckmüller")
-                .role(role)
+                .roles(Set.of(role))
                 .build();
     }
 
@@ -320,11 +326,11 @@ public class ManagementResourceTest {
                 .build();
     }
 
-    private Employee createEmployee(String userId, String email, String firstName, String sureName) {
+    private Employee createEmployee(String userId, String email, String firstname, String lastname) {
         return Employee.builder()
                 .userId(userId)
-                .firstName(firstName)
-                .sureName(sureName)
+                .firstname(firstname)
+                .lastname(lastname)
                 .email(email)
                 .build();
     }
