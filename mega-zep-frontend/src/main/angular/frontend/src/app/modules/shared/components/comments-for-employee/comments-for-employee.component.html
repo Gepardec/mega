@@ -3,23 +3,25 @@
     {{'comments-for-employee.commentsFor' | translate:{'firstAndSureName': employee.firstname + " " + employee.lastname} }}
   </h2>
 
+
   <mat-dialog-content>
-    <mat-form-field appearance="outline">
-      <mat-label>{{'comments-for-employee.writeCommentLabel'|translate}}</mat-label>
-      <textarea
-        #newMessage
-        [maxLength]="MAXIMUM_LETTERS"
-        cdkAutosizeMaxRows="10"
-        cdkAutosizeMinRows="5"
-        cdkTextareaAutosize
-        matInput></textarea>
-      <mat-hint align="end">{{newMessage.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
-    </mat-form-field>
+    <div *ngIf="!isReleased(employee.releaseDate)">
+      <mat-form-field appearance="outline">
+        <mat-label>{{'comments-for-employee.writeCommentLabel'|translate}}</mat-label>
+        <textarea
+          #newMessage
+          [maxLength]="MAXIMUM_LETTERS"
+          cdkAutosizeMaxRows="10"
+          cdkAutosizeMinRows="5"
+          cdkTextareaAutosize
+          matInput></textarea>
+        <mat-hint align="end">{{newMessage.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
+      </mat-form-field>
 
-    <button mat-raised-button (click)="createCommentForEmployee(newMessage.value);newMessage.value = ''">
-      {{'comments-for-employee.addCommentBtn' | translate}}
-    </button>
-
+      <button mat-raised-button (click)="createCommentForEmployee(newMessage.value);newMessage.value = ''">
+        {{'comments-for-employee.addCommentBtn' | translate}}
+      </button>
+    </div>
     <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table">
 
       <tr class="mat-header-row">
@@ -65,7 +67,9 @@
 
         <td class="mat-cell">
           <ng-container *ngIf="comment.isEditing">
-            <button (click)="comment.message = editMessageInput.value; toggleIsEditing(comment); updateCommentForEmployee(comment);" mat-icon-button>
+            <button
+              (click)="comment.message = editMessageInput.value; toggleIsEditing(comment); updateCommentForEmployee(comment);"
+              mat-icon-button>
               <mat-icon>done</mat-icon>
             </button>
             <button (click)="editMessageInput.value = comment.message; toggleIsEditing(comment);" mat-icon-button>

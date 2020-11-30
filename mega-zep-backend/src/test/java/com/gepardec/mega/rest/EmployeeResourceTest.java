@@ -1,9 +1,7 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.domain.model.*;
-import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.employee.EmployeeService;
-import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.common.mapper.TypeRef;

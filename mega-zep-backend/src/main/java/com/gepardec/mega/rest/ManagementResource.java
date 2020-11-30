@@ -1,6 +1,5 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.application.constant.DateTimeConstants;
 import com.gepardec.mega.application.interceptor.RolesAllowed;
 import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.db.entity.State;
@@ -159,9 +158,9 @@ public class ManagementResource {
                 .map(StepEntry::getState)
                 .collect(Collectors.toList());
 
-        if(res.size() == 1) {
+        if (res.size() == 1) {
             return com.gepardec.mega.domain.model.State.valueOf(res.get(0).name());
-        } else if(res.size() > 1) {
+        } else if (res.size() > 1) {
             return res.stream().anyMatch(state -> state.equals(State.OPEN)) ?
                     com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
         }
