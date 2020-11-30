@@ -73,6 +73,7 @@ export class OfficeManagementComponent implements OnInit {
 
       dialogRef.componentInstance.employee = omEntry.employee;
       dialogRef.componentInstance.comments = comments;
+      dialogRef.componentInstance.step = Step.CONTROL_INTERNAL_TIMES;
       dialogRef.afterClosed().subscribe(() => this.getOmEntries());
     });
   }

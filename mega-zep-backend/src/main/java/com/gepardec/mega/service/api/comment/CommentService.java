@@ -11,7 +11,7 @@ public interface CommentService {
     List<Comment> findCommentsForEmployee(final Employee employee);
     int setDone(final Comment comment);
     FinishedAndTotalComments cntFinishedAndTotalCommentsForEmployee(final Employee employee);
-    Comment createNewCommentForEmployee(Long stepId, Employee employee, String comment, String assigneeEmail);
+    Comment createNewCommentForEmployee(Long stepId, Employee employee, String comment, String assigneeEmail, String project);
     boolean deleteCommentWithId(Long id);
     Comment updateComment(Long id, String message);
 }

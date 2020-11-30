@@ -41,7 +41,13 @@ public class CommentResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Comment newCommentForEmployee(@NotNull(message = "{commentResource.commentEntry.notNull}") NewCommentEntry newComment) {
-        return commentService.createNewCommentForEmployee(newComment.stepId(), newComment.employee(), newComment.comment(), newComment.assigneeEmail());
+        return commentService.createNewCommentForEmployee(
+                newComment.stepId(),
+                newComment.employee(),
+                newComment.comment(),
+                newComment.assigneeEmail(),
+                newComment.project()
+        );
     }
 
     @DELETE

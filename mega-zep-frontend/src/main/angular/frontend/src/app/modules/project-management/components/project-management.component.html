@@ -1,3 +1,10 @@
+<mat-toolbar class="mat-elevation-z8" color="accent">
+  <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+    <span>
+        {{getCurrentReleaseDate() | date: 'MMMM yyyy' : null : 'de-AT' }}
+    </span>
+  </mat-toolbar-row>
+</mat-toolbar>
 <div fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px">
   <mat-card *ngIf="isAnySelected()" class="actions">
     <mat-card-content fxFlexAlign="space-around center" fxLayout="row" fxLayoutGap="10px">
@@ -90,7 +97,7 @@
             <mat-header-cell *matHeaderCellDef class="text-center">{{'project-management.table.comments' | translate}}</mat-header-cell>
             <mat-cell *matCellDef="let row" class="text-center">
               <span class="mobile-label">{{'project-management.table.comments' | translate}}</span>
-              <button (click)="openDialog(row)" mat-button>
+              <button (click)="openDialog(row.employee, pmEntry.projectName)" mat-button>
                 <mat-icon>comment</mat-icon>
                 <app-done-comments-indicator [totalComments]="row.totalComments" [finishedComments]="row.finishedComments"></app-done-comments-indicator>
               </button>

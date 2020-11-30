@@ -182,7 +182,7 @@ class CommentServiceImplTest {
 
         Employee employee = createEmployee();
         String newComment = "My new comment!";
-        com.gepardec.mega.domain.model.Comment createdComment = commentService.createNewCommentForEmployee(2L, employee, newComment, "");
+        com.gepardec.mega.domain.model.Comment createdComment = commentService.createNewCommentForEmployee(2L, employee, newComment, "", null);
 
         String creator = stepEntry.getAssignee().getFirstname();
         Map<String, String> expectedMailParameter = Map.of(

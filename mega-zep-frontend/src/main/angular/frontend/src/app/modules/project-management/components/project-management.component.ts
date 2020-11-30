@@ -8,6 +8,10 @@ import {ProjectManagementService} from '../services/project-management.service';
 import {ManagementEntry} from '../../shared/models/ManagementEntry';
 import {StepentriesService} from '../../shared/services/stepentries/stepentries.service';
 import {environment} from '../../../../environments/environment';
+import {CommentService} from '../../shared/services/comment/comment.service';
+import {Comment} from "../../shared/models/Comment";
+import {Employee} from "../../shared/models/Employee";
+import {Step} from "../../shared/models/Step";
 
 @Component({
   selector: 'app-project-management',
@@ -31,7 +35,8 @@ export class ProjectManagementComponent implements OnInit {
 
   constructor(private dialog: MatDialog,
               private pmService: ProjectManagementService,
-              private stepEntryService: StepentriesService) {
+              private stepEntryService: StepentriesService,
+              private commentService: CommentService) {
   }
 
   ngOnInit(): void {
@@ -48,16 +53,21 @@ export class ProjectManagementComponent implements OnInit {
       this.findEntriesForProject(projectName).forEach(row => this.pmSelectionModels[projectIndex].select(row));
   }
 
-  openDialog(pmEntry: ProjectManagementEntry): void {
-    const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
-      {
-        width: '100%',
-        autoFocus: false,
-      }
-    );
+  openDialog(employee: Employee, project: string): void {
+    this.commentService.getCommentsForEmployee(employee).subscribe((comments: Array<Comment>) => {
+      const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
+        {
+          width: '100%',
+          autoFocus: false
+        }
+      );
 
-    dialogRef.componentInstance.employee = null; // FIXME pmEntry.employee;
-    // dialogRef.componentInstance.comments = pmEntry.comments; // TODO load comments for employee
+      dialogRef.componentInstance.employee = employee;
+      dialogRef.componentInstance.comments = comments;
+      dialogRef.componentInstance.step = Step.CONTROL_TIME_EVIDENCES;
+      dialogRef.componentInstance.project = project;
+      dialogRef.afterClosed().subscribe(() => this.getPmEntries());
+    });
   }
 
   isAnySelected(): boolean {
@@ -80,7 +90,8 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   closeProjectCheck(projectName: string, row: ManagementEntry) {
-    this.stepEntryService.closeProjectCheck(row.employee, projectName).subscribe(() => {});
+    this.stepEntryService.closeProjectCheck(row.employee, projectName).subscribe(() => {
+    });
     row.projectCheckState = State.DONE;
   }
 
@@ -98,5 +109,26 @@ export class ProjectManagementComponent implements OnInit {
     return this.pmEntries.filter(entry => {
       return entry.projectName === projectName;
     })[0].entries;
+  }
+
+  getCurrentReleaseDate(): Date {
+    if (this.pmEntries) {
+      const entries = [];
+
+      this.pmEntries.forEach(pmEntry => {
+        entries.push(pmEntry.entries.filter(entry => {
+          return entry.projectCheckState === State.OPEN ||
+            entry.customerCheckState === State.OPEN ||
+            entry.employeeCheckState === State.OPEN ||
+            entry.internalCheckState === State.OPEN;
+        }));
+      })
+
+      if (entries.length > 0) {
+        return new Date(entries[0][0].entryDate);
+      }
+    }
+
+    return new Date();
   }
 }
