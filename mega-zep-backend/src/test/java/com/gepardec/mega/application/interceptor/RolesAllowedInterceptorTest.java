@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.interceptor.InvocationContext;
 import java.lang.annotation.Annotation;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -20,7 +21,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class RolesAllowedInterceptorTest {
 
-    @RolesAllowed(allowedRoles = Role.USER)
+    @RolesAllowed(Role.EMPLOYEE)
     private static class TargetWithAnnotation {
 
     }
@@ -42,7 +43,7 @@ class RolesAllowedInterceptorTest {
     void invoke_whenAnnotationOnClassLevel_thenUsesClassLevelAnnotation() throws Exception {
         when(invocationContext.getMethod().getAnnotation(any())).thenReturn(null);
         when(invocationContext.getTarget()).thenReturn(new TargetWithAnnotation());
-        when(userContext.user().role()).thenReturn(Role.USER);
+        when(userContext.user().roles()).thenReturn(Set.of(Role.EMPLOYEE));
 
         rolesAllowedInterceptor.intercept(invocationContext);
 
@@ -59,15 +60,15 @@ class RolesAllowedInterceptorTest {
 
     @Test
     void intercept_whenNotLogged_thenThrowsForbiddenException() {
-        when(invocationContext.getMethod().getAnnotation(any())).thenReturn(createAnnotation(new Role[]{Role.USER}));
+        when(invocationContext.getMethod().getAnnotation(any())).thenReturn(createAnnotation(new Role[]{Role.EMPLOYEE}));
 
         assertThrows(ForbiddenException.class, () -> rolesAllowedInterceptor.intercept(invocationContext));
     }
 
     @Test
     void invoke_whenLoggedAndNotInRole_thenThrowsForbiddenException() {
-        when(invocationContext.getMethod().getAnnotation(any())).thenReturn(createAnnotation(new Role[]{Role.ADMINISTRATOR}));
-        when(userContext.user().role()).thenReturn(Role.USER);
+        when(invocationContext.getMethod().getAnnotation(any())).thenReturn(createAnnotation(new Role[]{Role.OFFICE_MANAGEMENT}));
+        when(userContext.user().roles()).thenReturn(Set.of(Role.EMPLOYEE));
 
         assertThrows(ForbiddenException.class, () -> rolesAllowedInterceptor.intercept(invocationContext));
     }
@@ -75,7 +76,7 @@ class RolesAllowedInterceptorTest {
     @Test
     void invoke_whenLoggedAndInRoleMethodAnnotated_thenThrowsForbiddenException() throws Exception {
         when(invocationContext.getMethod().getAnnotation(any())).thenReturn(createAnnotation(Role.values()));
-        when(userContext.user().role()).thenReturn(Role.USER);
+        when(userContext.user().roles()).thenReturn(Set.of(Role.EMPLOYEE));
 
         rolesAllowedInterceptor.intercept(invocationContext);
 
@@ -85,7 +86,7 @@ class RolesAllowedInterceptorTest {
     private RolesAllowed createAnnotation(final Role[] roles) {
         return new RolesAllowed() {
             @Override
-            public Role[] allowedRoles() {
+            public Role[] value() {
                 return roles;
             }
 

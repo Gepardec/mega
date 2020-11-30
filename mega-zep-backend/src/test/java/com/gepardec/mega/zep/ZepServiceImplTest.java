@@ -1,7 +1,6 @@
 package com.gepardec.mega.zep;
 
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.service.impl.employee.EmployeeMapper;
 import com.gepardec.mega.zep.mapper.ProjectEntryMapper;
 import de.provantis.zep.*;
@@ -158,7 +157,6 @@ public class ZepServiceImplTest {
         mitarbeiter.setAnrede("Herr");
         mitarbeiter.setPreisgruppe("ARCHITEKT");
         mitarbeiter.setFreigabedatum("2020-01-01");
-        mitarbeiter.setRechte(Role.USER.roleId);
 
         return mitarbeiter;
     }

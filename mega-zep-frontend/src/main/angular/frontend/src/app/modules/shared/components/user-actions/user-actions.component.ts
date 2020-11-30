@@ -1,14 +1,15 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { User } from '../../models/User';
 import { InfoDialogComponent } from '../info-dialog/info-dialog.component';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
   selector: 'app-user-actions',
   templateUrl: './user-actions.component.html',
   styleUrls: ['./user-actions.component.scss']
 })
-export class UserActionsComponent {
+export class UserActionsComponent implements OnInit {
 
   @Input()
   user: User;
@@ -16,7 +17,14 @@ export class UserActionsComponent {
   @Output()
   logout: EventEmitter<void> = new EventEmitter();
 
-  constructor(private dialog: MatDialog) {
+  pictureUrl: string;
+
+  constructor(private dialog: MatDialog,
+              private oAuthService: OAuthService) {
+  }
+
+  ngOnInit(): void {
+    this.oAuthService.loadUserProfile().then(userInfo => this.pictureUrl = userInfo.picture);
   }
 
   doLogout() {

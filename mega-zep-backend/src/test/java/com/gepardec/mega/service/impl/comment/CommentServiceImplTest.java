@@ -48,8 +48,8 @@ class CommentServiceImplTest {
 
     @Test
     void findCommentsForEmployee_when1DbComment_thenMap1DomainComment() {
-        when(commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(ArgumentMatchers.any(LocalDateTime.class),
-                ArgumentMatchers.any(LocalDateTime.class), ArgumentMatchers.anyString())).thenReturn(List.of(createComment(1L, State.OPEN)));
+        when(commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(ArgumentMatchers.any(LocalDate.class),
+                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString())).thenReturn(List.of(createComment(1L, State.OPEN)));
 
         List<com.gepardec.mega.domain.model.Comment> domainComments = commentService.findCommentsForEmployee(createEmployee());
         Assertions.assertFalse(domainComments.isEmpty());
@@ -82,7 +82,7 @@ class CommentServiceImplTest {
                 .userId("1")
                 .email("thomas.herzog@gpeardec.com")
                 .releaseDate(null)
-                .firstName("Thomas")
+                .firstname("Thomas")
                 .build();
 
         NullPointerException thrown = assertThrows(
@@ -97,8 +97,8 @@ class CommentServiceImplTest {
     @Test
     void cntFinishedAndTotalCommentsForEmployee_whenValid_thenReturnsCnt() {
         when(commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(
-                ArgumentMatchers.any(LocalDateTime.class),
-                ArgumentMatchers.any(LocalDateTime.class),
+                ArgumentMatchers.any(LocalDate.class),
+                ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.anyString()
         )).thenReturn(List.of(
                 createComment(1L, State.IN_PROGRESS),
@@ -115,8 +115,8 @@ class CommentServiceImplTest {
     @Test
     void cntFinishedAndTotalCommentsForEmployee_whenNoFinishedComments_thenReturnsCnt() {
         when(commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(
-                ArgumentMatchers.any(LocalDateTime.class),
-                ArgumentMatchers.any(LocalDateTime.class),
+                ArgumentMatchers.any(LocalDate.class),
+                ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.anyString()
         )).thenReturn(List.of(
                 createComment(1L, State.IN_PROGRESS),
@@ -133,8 +133,8 @@ class CommentServiceImplTest {
     @Test
     void cntFinishedAndTotalCommentsForEmployee_whenNoComments_thenReturnsCnt() {
         when(commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(
-                ArgumentMatchers.any(LocalDateTime.class),
-                ArgumentMatchers.any(LocalDateTime.class),
+                ArgumentMatchers.any(LocalDate.class),
+                ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.anyString()
         )).thenReturn(Collections.emptyList());
 
@@ -187,12 +187,12 @@ class CommentServiceImplTest {
         String creator = stepEntry.getAssignee().getFirstname();
         Map<String, String> expectedMailParameter = Map.of(
                 MailParameter.CREATOR, creator,
-                MailParameter.RECIPIENT, employee.firstName(),
+                MailParameter.RECIPIENT, employee.firstname(),
                 MailParameter.COMMENT, newComment
         );
 
         verify(mailSender, times(1)).send(
-                Mail.COMMENT_CREATED, employee.email(), employee.firstName(), Locale.GERMAN, expectedMailParameter, List.of(creator)
+                Mail.COMMENT_CREATED, employee.email(), employee.firstname(), Locale.GERMAN, expectedMailParameter, List.of(creator)
         );
 
         assertNotNull(createdComment);
@@ -241,7 +241,7 @@ class CommentServiceImplTest {
                 .userId("1")
                 .email("thomas.herzog@gpeardec.com")
                 .releaseDate(LocalDate.now().toString())
-                .firstName("Thomas")
+                .firstname("Thomas")
                 .build();
     }
 

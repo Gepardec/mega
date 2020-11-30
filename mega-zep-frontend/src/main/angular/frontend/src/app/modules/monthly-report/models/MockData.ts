@@ -5,8 +5,8 @@ export const monthlyReportMock: MonthlyReport = {
   employeeCheckState: State.DONE,
   otherChecksDone: true,
   employee: {
-    firstName: 'Mock',
-    sureName: 'Other',
+    firstname: 'Mock',
+    lastname: 'Other',
     workDescription: '02',
     email: 'someemail@example.com',
     role: 1,

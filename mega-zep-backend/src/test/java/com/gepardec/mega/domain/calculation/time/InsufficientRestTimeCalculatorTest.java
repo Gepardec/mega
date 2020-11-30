@@ -1,6 +1,5 @@
 package com.gepardec.mega.domain.calculation.time;
 
-import com.gepardec.mega.domain.calculation.time.InsufficientRestCalculator;
 import com.gepardec.mega.domain.model.monthlyreport.*;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

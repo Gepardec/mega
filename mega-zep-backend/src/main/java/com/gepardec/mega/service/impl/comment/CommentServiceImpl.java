@@ -45,7 +45,7 @@ public class CommentServiceImpl implements CommentService {
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
 
         List<com.gepardec.mega.db.entity.Comment> dbComments =
-                commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(fromDate.atTime(0, 0), toDate.atTime(23, 59), employee.email());
+                commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(fromDate, toDate, employee.email());
 
         List<Comment> domainComments = dbComments
                 .stream()
@@ -68,8 +68,8 @@ public class CommentServiceImpl implements CommentService {
 
         List<com.gepardec.mega.db.entity.Comment> allComments =
                 commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(
-                        fromDate.atTime(0,0),
-                        toDate.atTime(23, 59),
+                        fromDate,
+                        toDate,
                         employee.email()
                 );
 
@@ -96,11 +96,11 @@ public class CommentServiceImpl implements CommentService {
         String creator = comment.getStepEntry().getAssignee().getFirstname();
         Map<String, String> mailParameter = Map.of(
                 MailParameter.CREATOR, creator,
-                MailParameter.RECIPIENT, employee.firstName(),
+                MailParameter.RECIPIENT, employee.firstname(),
                 MailParameter.COMMENT, comment.getMessage()
         );
 
-        mailSender.send(Mail.COMMENT_CREATED, employee.email(), employee.firstName(), Locale.GERMAN, mailParameter, List.of(creator));
+        mailSender.send(Mail.COMMENT_CREATED, employee.email(), employee.firstname(), Locale.GERMAN, mailParameter, List.of(creator));
     }
 
     @Override

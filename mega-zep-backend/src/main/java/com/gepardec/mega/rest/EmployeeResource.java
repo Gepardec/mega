@@ -26,7 +26,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Secured
-@RolesAllowed(allowedRoles = {Role.ADMINISTRATOR, Role.CONTROLLER})
+// PL, OM
+@RolesAllowed({ Role.PROJECT_LEAD, Role.OFFICE_MANAGEMENT })
 @Path("/employees")
 public class EmployeeResource {
 

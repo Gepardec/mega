@@ -2,10 +2,11 @@ package com.gepardec.mega.notification.mail;
 
 import com.gepardec.mega.application.configuration.ApplicationConfig;
 import com.gepardec.mega.application.configuration.NotificationConfig;
-import com.gepardec.mega.db.repository.UserRepository;
+import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.notification.mail.dates.BusinessDayCalculator;
-import org.apache.commons.lang3.StringUtils;
+import com.gepardec.mega.service.api.user.UserService;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -30,7 +31,7 @@ public class ReminderEmailSender {
     MailSender mailSender;
 
     @Inject
-    UserRepository userRepository;
+    UserService userService;
 
     @Inject
     Logger logger;
@@ -79,40 +80,33 @@ public class ReminderEmailSender {
 
 
     void sendReminderToPl() {
-        if (notificationConfig.getPlMailAddresses().trim().isEmpty()) {
-            throw new IllegalStateException("No mail address for project-leaders available, check value for property 'mega.mail.reminder.pl'!");
+        final List<User> users = userService.findByRoles(Role.PROJECT_LEAD);
+        if (users.isEmpty()) {
+            logger.warn("No PL email addresses configured, there sending nothing");
+            return;
         }
-        List.of(notificationConfig.getPlMailAddresses().split("\\,"))
-                .forEach(mailAddress -> mailSender.send(PL_PROJECT_CONTROLLING, mailAddress, getNameByMail(mailAddress), applicationConfig.getDefaultLocale()));
+        users.forEach(user -> mailSender.send(PL_PROJECT_CONTROLLING, user.email(), user.firstname(), applicationConfig.getDefaultLocale()));
         logSentNotification(PL_PROJECT_CONTROLLING);
     }
 
     void sendReminderToOm(Mail mail) {
-        if (notificationConfig.getOmMailAddresses().trim().isEmpty()) {
-            throw new IllegalStateException("No mail address for om available, check value for property 'mega.mail.reminder.om'!");
+        final List<User> users = userService.findByRoles(Role.OFFICE_MANAGEMENT);
+        if (users.isEmpty()) {
+            logger.warn("No OM email addresses configured, there sending nothing");
+            return;
         }
-        List.of(notificationConfig.getOmMailAddresses().split("\\,"))
-                .forEach(mailAddress -> mailSender.send(mail, mailAddress, getNameByMail(mailAddress), applicationConfig.getDefaultLocale()));
+        users.forEach(user -> mailSender.send(mail, user.email(), user.firstname(), applicationConfig.getDefaultLocale()));
         logSentNotification(mail);
     }
 
     void sendReminderToUser() {
         if (notificationConfig.isEmployeesNotification()) {
-            userRepository.listAll()
-                    .forEach(user -> mailSender.send(EMPLOYEE_CHECK_PROJECTTIME, user.getEmail(), getNameByMail(user.getEmail()), applicationConfig.getDefaultLocale()));
+            userService.findActiveUsers()
+                    .forEach(user -> mailSender.send(EMPLOYEE_CHECK_PROJECTTIME, user.email(), user.firstname(), applicationConfig.getDefaultLocale()));
             logSentNotification(EMPLOYEE_CHECK_PROJECTTIME);
         } else {
             logger.info("NO Reminder to employes sent, cause mega.mail.employees.notification-property is false");
         }
-    }
-
-    static String getNameByMail(String eMail) {
-        String[] mailParts = StringUtils.defaultIfBlank(eMail, "").split("\\.");
-        if (!StringUtils.isBlank(mailParts[0])) {
-            String firstName = mailParts[0];
-            return firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
-        }
-        return StringUtils.EMPTY;
     }
 
     private void logSentNotification(Mail mail) {

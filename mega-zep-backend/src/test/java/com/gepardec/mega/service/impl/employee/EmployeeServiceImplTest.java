@@ -3,7 +3,6 @@ package com.gepardec.mega.service.impl.employee;
 
 import com.gepardec.mega.db.repository.UserRepository;
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.zep.ZepService;
 import com.gepardec.mega.zep.ZepServiceException;
 import org.eclipse.microprofile.context.ManagedExecutor;
@@ -52,7 +51,7 @@ public class EmployeeServiceImplTest {
         final Employee employee = beanUnderTest.getEmployee("someuserid");
         Assertions.assertNotNull(employee);
         Assertions.assertEquals("0", employee.userId());
-        Assertions.assertEquals("Thomas_0", employee.firstName());
+        Assertions.assertEquals("Thomas_0", employee.firstname());
     }
 
     @Test
@@ -67,7 +66,7 @@ public class EmployeeServiceImplTest {
         Assertions.assertFalse(employees.isEmpty());
         Assertions.assertEquals(1, employees.size());
         Assertions.assertEquals("0", employees.get(0).userId());
-        Assertions.assertEquals("Thomas_0", employees.get(0).firstName());
+        Assertions.assertEquals("Thomas_0", employees.get(0).firstname());
     }
 
     @Test
@@ -140,14 +139,13 @@ public class EmployeeServiceImplTest {
 
         final Employee employee = Employee.builder()
                 .email(name + "@gepardec.com")
-                .firstName(name)
-                .sureName(name + "_Nachname")
+                .firstname(name)
+                .lastname(name + "_Nachname")
                 .title("Ing.")
                 .userId(String.valueOf(userId))
                 .salutation("Herr")
                 .workDescription("ARCHITEKT")
                 .releaseDate("2020-01-01")
-                .role(Role.USER.roleId)
                 .active(active)
                 .build();
 

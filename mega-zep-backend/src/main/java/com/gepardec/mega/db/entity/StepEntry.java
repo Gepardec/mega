@@ -35,7 +35,7 @@ public class StepEntry {
      * The update date of the step entry
      */
     @NotNull
-    @Column(name = "update_date", updatable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "update_date", columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedDate;
 
     /**

@@ -9,8 +9,9 @@ import java.lang.annotation.*;
 @InterceptorBinding
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target({ ElementType.TYPE, ElementType.METHOD })
 public @interface RolesAllowed {
+
     @Nonbinding
-    Role[] allowedRoles();
+    Role[] value() default { Role.EMPLOYEE };
 }

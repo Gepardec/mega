@@ -1,6 +1,5 @@
 package com.gepardec.mega.domain.calculation.time;
 
-import com.gepardec.mega.domain.calculation.time.ExceededMaximumWorkingHoursPerDayCalculator;
 import com.gepardec.mega.domain.model.monthlyreport.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
