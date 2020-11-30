@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {OfficeManagementEntry} from '../models/OfficeManagementEntry';
+import {ManagementEntry} from '../../shared/models/ManagementEntry';
 import {State} from '../../shared/models/State';
 import {MatDialog} from '@angular/material/dialog';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -33,9 +33,9 @@ export class OfficeManagementComponent implements OnInit {
     'releaseDate'
   ];
 
-  omEntries: Array<OfficeManagementEntry>;
-  filteredOmEntries: Array<OfficeManagementEntry>;
-  omSelectionModel = new SelectionModel<OfficeManagementEntry>(true, []);
+  omEntries: Array<ManagementEntry>;
+  filteredOmEntries: Array<ManagementEntry>;
+  omSelectionModel = new SelectionModel<ManagementEntry>(true, []);
   selectedDate: string;
   dayOfMonthForWarning = 5;
   configuration = configuration;
@@ -62,7 +62,7 @@ export class OfficeManagementComponent implements OnInit {
     this.areAllSelected() ? this.omSelectionModel.clear() : this.omEntries.forEach(row => this.omSelectionModel.select(row));
   }
 
-  openDialog(omEntry: OfficeManagementEntry): void {
+  openDialog(omEntry: ManagementEntry): void {
     this.commentService.getCommentsForEmployee(omEntry.employee).subscribe((comments: Array<Comment>) => {
       const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
         {
@@ -101,6 +101,21 @@ export class OfficeManagementComponent implements OnInit {
     }
   }
 
+  getCurrentReleaseDate(): Date {
+    const entries = this.omEntries.filter(entry => {
+        return entry.projectCheckState === State.OPEN ||
+          entry.customerCheckState === State.OPEN ||
+          entry.employeeCheckState === State.OPEN ||
+          entry.internalCheckState === State.OPEN;
+    });
+
+    if (entries.length > 0) {
+      return new Date(entries[0].entryDate);
+    }
+
+    return new Date();
+  }
+
   getReleaseDateCssClass(date: string): string {
     const today = new Date();
     const releaseDate = new Date(date);
@@ -128,27 +143,27 @@ export class OfficeManagementComponent implements OnInit {
     });
   }
 
-  closeCustomerCheck(omEntry: OfficeManagementEntry) {
+  closeCustomerCheck(omEntry: ManagementEntry) {
     this.stepEntryService.close(omEntry.employee, Step.CONTROL_EXTERNAL_TIMES).subscribe(() => {
       omEntry.customerCheckState = State.DONE;
     });
   }
 
-  closeInternalCheck(omEntry: OfficeManagementEntry) {
+  closeInternalCheck(omEntry: ManagementEntry) {
     this.stepEntryService.close(omEntry.employee, Step.CONTROL_INTERNAL_TIMES).subscribe(() => {
       omEntry.internalCheckState = State.DONE;
     });
   }
 
   private getOmEntries() {
-    this.omService.getEntries().subscribe((omEntries: Array<OfficeManagementEntry>) => {
+    this.omService.getEntries().subscribe((omEntries: Array<ManagementEntry>) => {
       this.omEntries = omEntries;
       this.sortOmEntries();
     });
   }
 
   private sortOmEntries(): void {
-    const sortFn = (a: OfficeManagementEntry, b: OfficeManagementEntry) => a.employee.lastname.localeCompare(b.employee.lastname);
+    const sortFn = (a: ManagementEntry, b: ManagementEntry) => a.employee.lastname.localeCompare(b.employee.lastname);
     this.omEntries = this.omEntries.sort(sortFn);
     this.filteredOmEntries = this.omEntries.slice();
   }

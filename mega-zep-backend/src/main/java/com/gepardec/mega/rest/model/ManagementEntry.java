@@ -1,12 +1,10 @@
 package com.gepardec.mega.rest.model;
 
-import com.gepardec.mega.domain.model.State;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gepardec.mega.domain.model.Employee;
-
+import com.gepardec.mega.domain.model.State;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
@@ -35,26 +33,40 @@ public abstract class ManagementEntry {
     @JsonProperty
     public abstract long finishedComments();
 
+    @JsonProperty
+    public abstract String entryDate();
+
     public static Builder builder() {
         return new com.gepardec.mega.rest.model.AutoValue_ManagementEntry.Builder();
     }
 
     @AutoValue.Builder
     public abstract static class Builder {
-        @JsonProperty public abstract Builder employee(Employee employee);
+        @JsonProperty
+        public abstract Builder employee(Employee employee);
 
-        @JsonProperty public abstract Builder employeeCheckState(State state);
+        @JsonProperty
+        public abstract Builder employeeCheckState(State state);
 
-        @JsonProperty public abstract Builder customerCheckState(State state);
+        @JsonProperty
+        public abstract Builder customerCheckState(State state);
 
-        @JsonProperty public abstract Builder internalCheckState(State state);
+        @JsonProperty
+        public abstract Builder internalCheckState(State state);
 
-        @JsonProperty public abstract Builder projectCheckState(State state);
+        @JsonProperty
+        public abstract Builder projectCheckState(State state);
 
-        @JsonProperty public abstract Builder totalComments(long totalComments);
+        @JsonProperty
+        public abstract Builder totalComments(long totalComments);
 
-        @JsonProperty public abstract Builder finishedComments(long totalComments);
+        @JsonProperty
+        public abstract Builder finishedComments(long totalComments);
 
-        @JsonProperty public abstract ManagementEntry build();
+        @JsonProperty
+        public abstract Builder entryDate(String entryDate);
+
+        @JsonProperty
+        public abstract ManagementEntry build();
     }
 }

@@ -1,49 +1,49 @@
 <div *ngIf="omEntries && filteredOmEntries" fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px">
-  <mat-toolbar class="mat-elevation-z8" color="accent">
-    <mat-toolbar-row>
-      Filter
-    </mat-toolbar-row>
-    <mat-toolbar-row>
-      <mat-form-field floatLabel="never">
-        <mat-label>{{'office-management.filterPlaceholder' | translate}}</mat-label>
-        <input
-          #employeeNameInput
-          (keyup)="filterOmEntriesByEmployeeName(employeeNameInput.value)"
-          matInput>
-        <button (click)="employeeNameInput.value=''; filterOmEntriesByEmployeeName(employeeNameInput.value)"
-                *ngIf="employeeNameInput.value"
-                mat-button mat-icon-button
-                matSuffix>
-          <mat-icon>close</mat-icon>
-        </button>
-      </mat-form-field>
+  <div>
+    <mat-toolbar class="mat-elevation-z8" color="accent">
+      <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-form-field floatLabel="never">
+          <mat-label>{{'office-management.filterPlaceholder' | translate}}</mat-label>
+          <input
+            #employeeNameInput
+            (keyup)="filterOmEntriesByEmployeeName(employeeNameInput.value)"
+            matInput>
+          <button (click)="employeeNameInput.value=''; filterOmEntriesByEmployeeName(employeeNameInput.value)"
+                  *ngIf="employeeNameInput.value"
+                  mat-button mat-icon-button
+                  matSuffix>
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+        <span>
+        {{getCurrentReleaseDate() | date: 'MMMM yyyy' : null : 'de-AT' }}
+      </span>
+      </mat-toolbar-row>
+      <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-checkbox style="font-size: 18px"
+                      (change)="filterOmEntriesByOMC1Status($event.checked)">{{'office-management.omc1StateOpen' | translate}}</mat-checkbox>
+        <span fxFlex="1 1 auto"></span>
+        <div>
+          <small
+            *ngIf="omSelectionModel.selected.length > 0">
+            {{omSelectionModel.selected.length}} {{'office-management.selectedCount' | translate}}
+          </small>
 
-    <span fxFlex="1 1 auto"></span>
+          <app-datepicker
+            (dateEmitter)="changeDate($event)"
+            *ngIf="filteredOmEntries && omSelectionModel.selected.length > 0"
+            [selectedDate]="selectedDate">
+          </app-datepicker>
 
-    <div>
-      <small
-        *ngIf="omSelectionModel.selected.length > 0">
-        {{omSelectionModel.selected.length}} {{'office-management.selectedCount' | translate}}
-      </small>
-
-      <app-datepicker
-        (dateEmitter)="changeDate($event)"
-        *ngIf="filteredOmEntries && omSelectionModel.selected.length > 0"
-        [selectedDate]="selectedDate">
-      </app-datepicker>
-
-      <button (click)="releaseEmployees()"
-              *ngIf="omSelectionModel.selected.length > 0 && selectedDate"
-              mat-button>
-        {{'office-management.releaseBtnText' | translate}}
-      </button>
-    </div>
-    </mat-toolbar-row>
-    <mat-toolbar-row>
-      <mat-checkbox (change)="filterOmEntriesByOMC1Status($event.checked)">{{'office-management.omc1StateOpen' | translate}}</mat-checkbox>
-    </mat-toolbar-row>
-  </mat-toolbar>
-
+          <button (click)="releaseEmployees()"
+                  *ngIf="omSelectionModel.selected.length > 0 && selectedDate"
+                  mat-button>
+            {{'office-management.releaseBtnText' | translate}}
+          </button>
+        </div>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </div>
   <div class="mat-elevation-z10 table-container">
     <mat-table *ngIf="filteredOmEntries.length > 0; else noOmEntriesFound" style="width: 100%;"
                [dataSource]="filteredOmEntries">
@@ -74,18 +74,22 @@
       </ng-container>
 
       <ng-container matColumnDef="customerCheckState">
-        <mat-header-cell *matHeaderCellDef>{{'office-management.table.customerCheckState' | translate}}</mat-header-cell>
+        <mat-header-cell
+          *matHeaderCellDef>{{'office-management.table.customerCheckState' | translate}}</mat-header-cell>
         <mat-cell *matCellDef="let omEntry">
           <span class="mobile-label">{{'office-management.table.customerCheckState' | translate}}</span>
-          <app-state-select [value]="omEntry.customerCheckState" (selectionChange)="closeCustomerCheck(omEntry)"></app-state-select>
+          <app-state-select [value]="omEntry.customerCheckState"
+                            (selectionChange)="closeCustomerCheck(omEntry)"></app-state-select>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="internalCheckState">
-        <mat-header-cell *matHeaderCellDef>{{'office-management.table.internalCheckState' | translate}}</mat-header-cell>
+        <mat-header-cell
+          *matHeaderCellDef>{{'office-management.table.internalCheckState' | translate}}</mat-header-cell>
         <mat-cell *matCellDef="let omEntry">
           <span class="mobile-label">{{'office-management.table.internalCheckState' | translate}}</span>
-          <app-state-select [value]="omEntry.internalCheckState" (selectionChange)="closeInternalCheck(omEntry)"></app-state-select>
+          <app-state-select [value]="omEntry.internalCheckState"
+                            (selectionChange)="closeInternalCheck(omEntry)"></app-state-select>
         </mat-cell>
       </ng-container>
 
@@ -113,7 +117,8 @@
           <span class="mobile-label">{{'office-management.table.comments' | translate}}</span>
           <button (click)="openDialog(omEntry)" mat-button>
             <mat-icon>comment</mat-icon>
-            <app-done-comments-indicator [totalComments]="omEntry.totalComments" [finishedComments]="omEntry.finishedComments"></app-done-comments-indicator>
+            <app-done-comments-indicator [totalComments]="omEntry.totalComments"
+                                         [finishedComments]="omEntry.finishedComments"></app-done-comments-indicator>
           </button>
         </mat-cell>
       </ng-container>

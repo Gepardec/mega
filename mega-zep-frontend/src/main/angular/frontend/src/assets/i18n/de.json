@@ -78,22 +78,22 @@
       "comments": "Anmerkungen",
       "employeeCheckState": "MA Check",
       "projectCheckState": "PM Check",
-      "releaseDate": "Freigabedatum"
+      "releaseDate": "Freigegeben bis"
     },
     "noOmEntriesFound": "Keine Einträge gefunden"
   },
   "project-management": {
     "actions": "Aktionen",
     "doneBtn": "Überprüft",
-    "notify": "Benachrichtigen",
     "employeeDone": "Mitarbeiter überprüft",
     "table": {
       "employeeName": "Mitarbeiter",
       "projectCheckState": "Überprüfung",
-      "employeeCheckState": "MA ChMAeck",
+      "employeeCheckState": "MA Check",
       "internalCheckState": "Interne Zeiten",
       "customerCheckState": "Kundenzeiten",
-      "comments": "Anmerkungen"
+      "comments": "Anmerkungen",
+      "releaseDate": "Freigabedatum"
     }
   },
   "comments-for-employee": {
@@ -110,7 +110,7 @@
     },
     "editCommentLabel": "Anmerkung bearbeiten",
     "noCommentsYet": "Noch keine Anmerkungen vorhanden",
-    "cancel": "Abbrechen",
+    "close": "Schließen",
     "save": "Änderungen speichern"
   },
   "info-dialog": {

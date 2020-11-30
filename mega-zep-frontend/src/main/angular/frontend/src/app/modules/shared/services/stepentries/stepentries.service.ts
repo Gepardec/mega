@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {ConfigService} from '../config/config.service';
 import {EmployeeStep} from '../../models/EmployeeStep';
 import {Step} from '../../models/Step';
+import {ProjectStep} from '../../models/ProjectStep';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,13 @@ export class StepentriesService {
     return this.httpClient.put<boolean>(
       this.config.getBackendUrlWithContext('/stepentry/close'),
       new EmployeeStep(step, employee)
+    );
+  }
+
+  closeProjectCheck(employee: Employee, projectName: string): Observable<boolean> {
+    return this.httpClient.put<boolean>(
+      this.config.getBackendUrlWithContext('/stepentry/closeforproject'),
+      new ProjectStep(Step.CONTROL_TIME_EVIDENCES, employee, projectName)
     );
   }
 }
