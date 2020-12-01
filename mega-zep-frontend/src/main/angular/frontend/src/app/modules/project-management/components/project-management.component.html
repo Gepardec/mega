@@ -34,14 +34,14 @@
           <ng-container matColumnDef="select">
             <mat-header-cell *matHeaderCellDef>
               <mat-checkbox (change)="$event ? masterToggle(i, pmEntry.projectName) : null"
-                            [checked]="pmSelectionModels[i].hasValue() && areAllSelected(i, pmEntry.projectName)"
-                            [indeterminate]="pmSelectionModels[i].hasValue() && !areAllSelected(i, pmEntry.projectName)">
+                            [checked]="pmSelectionModels.get(pmEntry.projectName)?.hasValue() && areAllSelected(i, pmEntry.projectName)"
+                            [indeterminate]="pmSelectionModels.get(pmEntry.projectName)?.hasValue() && !areAllSelected(i, pmEntry.projectName)">
               </mat-checkbox>
             </mat-header-cell>
             <mat-cell *matCellDef="let row">
-              <mat-checkbox (change)="$event ? pmSelectionModels[i].toggle(row) : null"
+              <mat-checkbox (change)="$event ? pmSelectionModels.get(pmEntry.projectName).toggle(row) : null"
                             (click)="$event.stopPropagation()"
-                            [checked]="pmSelectionModels[i].isSelected(row)">
+                            [checked]="pmSelectionModels.get(pmEntry.projectName)?.isSelected(row)">
               </mat-checkbox>
             </mat-cell>
           </ng-container>

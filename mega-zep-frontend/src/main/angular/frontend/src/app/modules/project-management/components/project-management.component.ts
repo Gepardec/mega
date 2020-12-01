@@ -9,9 +9,9 @@ import {ManagementEntry} from '../../shared/models/ManagementEntry';
 import {StepentriesService} from '../../shared/services/stepentries/stepentries.service';
 import {environment} from '../../../../environments/environment';
 import {CommentService} from '../../shared/services/comment/comment.service';
-import {Comment} from "../../shared/models/Comment";
-import {Employee} from "../../shared/models/Employee";
-import {Step} from "../../shared/models/Step";
+import {Comment} from '../../shared/models/Comment';
+import {Employee} from '../../shared/models/Employee';
+import {Step} from '../../shared/models/Step';
 
 @Component({
   selector: 'app-project-management',
@@ -30,7 +30,7 @@ export class ProjectManagementComponent implements OnInit {
     'doneCommentsIndicator',
     'releaseDate'
   ];
-  pmSelectionModels: Array<SelectionModel<ManagementEntry>>;
+  pmSelectionModels: Map<string, SelectionModel<ManagementEntry>>;
   environment = environment;
 
   constructor(private dialog: MatDialog,
@@ -44,13 +44,13 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   areAllSelected(projectIndex: number, projectName: string) {
-    return this.pmSelectionModels[projectIndex].selected.length === this.findEntriesForProject(projectName).length;
+    return this.pmSelectionModels.get(projectName).selected.length === this.findEntriesForProject(projectName).length;
   }
 
   masterToggle(projectIndex: number, projectName: string) {
     this.areAllSelected(projectIndex, projectName) ?
-      this.pmSelectionModels[projectIndex].clear() :
-      this.findEntriesForProject(projectName).forEach(row => this.pmSelectionModels[projectIndex].select(row));
+      this.pmSelectionModels.get(projectName).clear() :
+      this.findEntriesForProject(projectName).forEach(row => this.pmSelectionModels.get(projectName).select(row));
   }
 
   openDialog(employee: Employee, project: string): void {
@@ -72,7 +72,8 @@ export class ProjectManagementComponent implements OnInit {
 
   isAnySelected(): boolean {
     if (this.pmSelectionModels) {
-      return this.pmSelectionModels.filter(pmSelectionModel => pmSelectionModel.selected.length > 0).length > 0;
+      return Array.from(this.pmSelectionModels.values())
+        .filter(pmSelectionModel => pmSelectionModel?.selected.length > 0).length > 0;
     }
   }
 
@@ -81,26 +82,25 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   closeProjectCheckForSelected() {
-    this.pmSelectionModels
-      .filter(pmSelectionModel => pmSelectionModel.selected.length > 0)
-      .forEach(selectionModel => selectionModel.selected.forEach(entry => {
-        console.log(entry.employee.email);
-        // TODO call stepEntryService.closeProjectCheck
-      }));
+    for (const [projectName, selectionModel] of this.pmSelectionModels.entries()) {
+      if (selectionModel.selected.length > 0) {
+        for (const entry of selectionModel.selected) {
+          this.stepEntryService.closeProjectCheck(entry.employee, projectName).subscribe(() => entry.projectCheckState = State.DONE);
+        }
+      }
+    }
   }
 
   closeProjectCheck(projectName: string, row: ManagementEntry) {
-    this.stepEntryService.closeProjectCheck(row.employee, projectName).subscribe(() => {
-    });
-    row.projectCheckState = State.DONE;
+    this.stepEntryService.closeProjectCheck(row.employee, projectName).subscribe(() => row.projectCheckState = State.DONE);
   }
 
   private getPmEntries() {
     this.pmService.getEntries().subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
-      this.pmSelectionModels = [];
-      this.pmEntries.forEach(
-        () => this.pmSelectionModels.push(new SelectionModel<ManagementEntry>(true, []))
+      this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
+      this.pmEntries.forEach(pmEntry =>
+         this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []))
       );
     });
   }
@@ -122,7 +122,7 @@ export class ProjectManagementComponent implements OnInit {
             entry.employeeCheckState === State.OPEN ||
             entry.internalCheckState === State.OPEN;
         }));
-      })
+      });
 
       if (entries.length > 0) {
         return new Date(entries[0][0].entryDate);
