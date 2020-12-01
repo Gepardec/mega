@@ -62,7 +62,7 @@ mega:
         notification: true
       reminder:
         pl: thomas.herzog@gepardec.com
-        om: thomas.herzog@gepardec.com
+        om: thomas.herzog@gepardec.com,werner.bruckmueller@gepardec.com
 ## DEV Properties
 "%test":
   quarkus:
@@ -87,7 +87,7 @@ mega:
         notification: true
       reminder:
         pl: thomas.herzog@gepardec.com
-        om: thomas.herzog@gepardec.com
+        om: thomas.herzog@gepardec.com,werner.bruckmueller@gepardec.com
 # PROD Properties
 "%prod":
   quarkus:
@@ -117,7 +117,7 @@ mega:
         notification: false
       reminder:
         pl: thomas.herzog@gepardec.com
-        om: thomas.herzog@gepardec.com
+        om: thomas.herzog@gepardec.com,werner.bruckmueller@gepardec.com
 # TEST-STAGE Properties
 "%teststage":
   quarkus:
