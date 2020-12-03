@@ -71,7 +71,7 @@ public class ManagementResource {
         List<Project> projects = projectService
                 .getProjectsForMonthYear(LocalDate.now(), List.of(ProjectFilter.IS_LEADS_AVAILABLE))
                 .stream()
-                .filter(project -> project.leads().stream().allMatch(lead -> lead.equalsIgnoreCase(
+                .filter(project -> project.leads().stream().anyMatch(lead -> lead.equalsIgnoreCase(
                         userContext.user().userId()
                 )))
                 .collect(Collectors.toList());
