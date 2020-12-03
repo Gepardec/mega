@@ -68,7 +68,7 @@
           <span class="mobile-label">{{'office-management.table.name' | translate}}</span>
           <a [href]="environment.ZEP_URL_OFFICE_MANAGEMENT + omEntry.employee.userId"
              target="_blank">
-            {{omEntry.employee.firstname}} {{omEntry.employee.lastname}}
+            <b>{{omEntry.employee.firstname}} {{omEntry.employee.lastname}}</b>
           </a>
         </mat-cell>
       </ng-container>
