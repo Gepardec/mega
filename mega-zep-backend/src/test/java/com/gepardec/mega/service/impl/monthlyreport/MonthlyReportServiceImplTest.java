@@ -45,34 +45,24 @@ public class MonthlyReportServiceImplTest {
     void testGetMonthendReportForUser_MitarbeiterNull() {
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(null);
 
-        Assertions.assertNull(workerService.getMonthendReportForUser("0"));
+        Assertions.assertNotNull(workerService.getMonthendReportForUser("0"));
     }
 
     @Test
-    void testGetMonthendReportForUser_MitarbeiterInvalid() {
+    void testGetMonthendReportForUser_MitarbeiterValid() {
         final Employee employee = createEmployeeWithReleaseDate(0, "NULL");
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
 
-        Assertions.assertNull(workerService.getMonthendReportForUser("0"));
+        Assertions.assertNotNull(workerService.getMonthendReportForUser("0"));
     }
 
     @Test
-    void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenNull() {
-        final Employee employee = createEmployee(0);
-        Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
-        Mockito.when(zepService.getProjectTimes(Mockito.any())).thenReturn(null);
-
-        Assertions.assertNull(workerService.getMonthendReportForUser("0"));
-    }
-
-
-    @Test
-    void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenInvalid() {
+    void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenValid() {
         final Employee employee = createEmployee(0);
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
         Mockito.when(zepService.getProjectTimes(Mockito.any())).thenReturn(new ArrayList<>());
 
-        Assertions.assertNull(workerService.getMonthendReportForUser("0"));
+        Assertions.assertNotNull(workerService.getMonthendReportForUser("0"));
     }
 
     @Test

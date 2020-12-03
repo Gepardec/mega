@@ -44,9 +44,6 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     }
 
     private MonthlyReport calcWarnings(List<ProjectEntry> projectEntries, Employee employee) {
-        if (projectEntries == null || projectEntries.isEmpty()) {
-            return null;
-        }
         final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(projectEntries);
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectEntries);
         final List<Comment> comments = commentService.findCommentsForEmployee(employee);
