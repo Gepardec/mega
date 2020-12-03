@@ -33,9 +33,9 @@
         <mat-table [dataSource]="pmEntry.entries">
           <ng-container matColumnDef="select">
             <mat-header-cell *matHeaderCellDef>
-              <mat-checkbox (change)="$event ? masterToggle(i, pmEntry.projectName) : null"
-                            [checked]="pmSelectionModels.get(pmEntry.projectName)?.hasValue() && areAllSelected(i, pmEntry.projectName)"
-                            [indeterminate]="pmSelectionModels.get(pmEntry.projectName)?.hasValue() && !areAllSelected(i, pmEntry.projectName)">
+              <mat-checkbox (change)="$event ? masterToggle(pmEntry.projectName) : null"
+                            [checked]="pmSelectionModels.get(pmEntry.projectName)?.hasValue() && areAllSelected(pmEntry.projectName)"
+                            [indeterminate]="pmSelectionModels.get(pmEntry.projectName)?.hasValue() && !areAllSelected(pmEntry.projectName)">
               </mat-checkbox>
             </mat-header-cell>
             <mat-cell *matCellDef="let row">

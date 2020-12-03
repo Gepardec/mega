@@ -11,6 +11,7 @@ import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.project.ProjectService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -22,12 +23,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Secured
 @RolesAllowed(value = {Role.PROJECT_LEAD, Role.OFFICE_MANAGEMENT})
-@Path("/management")
+@Path("/management" )
 public class ManagementResource {
 
     @Inject
@@ -52,10 +52,8 @@ public class ManagementResource {
         List<ManagementEntry> officeManagementEntries = new ArrayList<>();
         List<Employee> activeEmployees = employeeService.getAllActiveEmployees();
         for (Employee empl : activeEmployees) {
-            ManagementEntry newManagementEntry = createManagementEntryForEmployee(
-                    empl,
-                    (employee) -> stepEntryService.findAllStepEntriesForEmployee(empl)
-            );
+            List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployee(empl);
+            ManagementEntry newManagementEntry = createManagementEntryForEmployee(empl, stepEntries);
             if (newManagementEntry != null) {
                 officeManagementEntries.add(newManagementEntry);
             }
@@ -100,36 +98,32 @@ public class ManagementResource {
         for (String userId : project.employees()) {
             if (employees.containsKey(userId)) {
                 Employee empl = employees.get(userId);
-                entries.add(createManagementEntryForEmployee(
-                        empl,
-                        project.projectId(),
-                        (employee -> stepEntryService.findAllStepEntriesForEmployeeAndProject(
-                                employee, project.projectId(), userContext.user().email()
-                        ))
-                ));
+                List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployeeAndProject(
+                        empl, project.projectId(), userContext.user().email()
+                );
+                entries.add(createManagementEntryForEmployee(empl, project.projectId(), stepEntries));
             }
         }
 
         return entries;
     }
 
-    private ManagementEntry createManagementEntryForEmployee(Employee employee, Function<Employee, List<StepEntry>> findStepEntries) {
-        return createManagementEntryForEmployee(employee, null, findStepEntries);
+    private ManagementEntry createManagementEntryForEmployee(Employee employee, List<StepEntry> stepEntries) {
+        return createManagementEntryForEmployee(employee, null, stepEntries);
     }
 
-    private ManagementEntry createManagementEntryForEmployee(Employee employee, String projectId, Function<Employee, List<StepEntry>> findStepEntries) {
-        List<StepEntry> stepEntries = findStepEntries.apply(employee);
+    private ManagementEntry createManagementEntryForEmployee(Employee employee, String projectId, List<StepEntry> stepEntries) {
         FinishedAndTotalComments finishedAndTotalComments = commentService.cntFinishedAndTotalCommentsForEmployee(employee);
         if (!stepEntries.isEmpty()) {
             return ManagementEntry.builder()
                     .employee(employee)
-                    .customerCheckState(extractStateForStep(stepEntries, StepName.CONTROL_EXTERNAL_TIMES, projectId))
-                    .employeeCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIMES, projectId))
-                    .internalCheckState(extractStateForStep(stepEntries, StepName.CONTROL_INTERNAL_TIMES, projectId))
-                    .projectCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIME_EVIDENCES, projectId))
+                    .customerCheckState(extractCustomerCheckState(stepEntries))
+                    .employeeCheckState(extractEmployeeCheckState(stepEntries))
+                    .internalCheckState(extractInternalCheckState(stepEntries))
+                    .projectCheckState(extractStateForProject(stepEntries, projectId))
                     .finishedComments(finishedAndTotalComments.finishedComments())
                     .totalComments(finishedAndTotalComments.totalComments())
-                    .entryDate(stepEntries.get(0).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .entryDate(stepEntries.get(0).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd" )))
                     .build();
         }
 
@@ -141,30 +135,52 @@ public class ManagementResource {
                 .projectCheckState(com.gepardec.mega.domain.model.State.DONE)
                 .finishedComments(finishedAndTotalComments.finishedComments())
                 .totalComments(finishedAndTotalComments.totalComments())
-                .entryDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .entryDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd" )))
                 .build();
     }
 
-    private com.gepardec.mega.domain.model.State extractStateForStep(List<StepEntry> stepEntries, StepName step, String projectId) {
-        List<State> res = stepEntries
+    private com.gepardec.mega.domain.model.State extractEmployeeCheckState(List<StepEntry> stepEntries) {
+        boolean employeeCheckStateOpen = stepEntries.stream()
+                .filter(stepEntry -> StepName.CONTROL_TIMES.name().equalsIgnoreCase(stepEntry.getStep().getName()))
+                .anyMatch(stepEntry -> State.OPEN.equals(stepEntry.getState()));
+
+        return employeeCheckStateOpen ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
+    }
+
+    private com.gepardec.mega.domain.model.State extractCustomerCheckState(List<StepEntry> stepEntries) {
+        boolean customerCheckStateOpen = stepEntries.stream()
+                .filter(stepEntry ->
+                        StepName.CONTROL_EXTERNAL_TIMES.name().equalsIgnoreCase(stepEntry.getStep().getName())
+                                && StringUtils.equalsIgnoreCase(userContext.user().email(), stepEntry.getAssignee().getEmail())
+                ).anyMatch(stepEntry -> State.OPEN.equals(stepEntry.getState()));
+
+        return customerCheckStateOpen ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
+    }
+
+    private com.gepardec.mega.domain.model.State extractInternalCheckState(List<StepEntry> stepEntries) {
+        boolean customerCheckStateOpen = stepEntries.stream()
+                .filter(stepEntry ->
+                        StepName.CONTROL_INTERNAL_TIMES.name().equalsIgnoreCase(stepEntry.getStep().getName())
+                                && StringUtils.equalsIgnoreCase(userContext.user().email(), stepEntry.getAssignee().getEmail())
+                ).anyMatch(stepEntry -> State.OPEN.equals(stepEntry.getState()));
+
+        return customerCheckStateOpen ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
+    }
+
+    private com.gepardec.mega.domain.model.State extractStateForProject(List<StepEntry> stepEntries, String projectId) {
+        return stepEntries
                 .stream()
                 .filter(se -> {
-                    if (projectId == null) {
-                        return step.name().equalsIgnoreCase(se.getStep().getName());
+                    if (StringUtils.isBlank(projectId)) {
+                        return StepName.CONTROL_TIME_EVIDENCES.name().equalsIgnoreCase(se.getStep().getName());
                     } else {
-                        return step.name().equalsIgnoreCase(se.getStep().getName()) && projectId.equalsIgnoreCase(se.getProject());
+                        return StepName.CONTROL_TIME_EVIDENCES.name().equalsIgnoreCase(se.getStep().getName()) &&
+                                StringUtils.equalsIgnoreCase(se.getProject(), projectId) &&
+                                StringUtils.equalsIgnoreCase(se.getAssignee().getEmail(), userContext.user().email());
                     }
                 })
                 .map(StepEntry::getState)
-                .collect(Collectors.toList());
-
-        if (res.size() == 1) {
-            return com.gepardec.mega.domain.model.State.valueOf(res.get(0).name());
-        } else if (res.size() > 1) {
-            return res.stream().anyMatch(state -> state.equals(State.OPEN)) ?
-                    com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
-        }
-
-        return com.gepardec.mega.domain.model.State.OPEN;
+                .anyMatch(state -> state.equals(State.OPEN)) ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
     }
+
 }

@@ -12,6 +12,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -101,7 +102,10 @@ public class StepEntryServiceImpl implements StepEntryService {
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
 
-        return stepEntryRepository.findAllOwnedStepEntriesInRange(fromDate, toDate, employee.email(), projectId, assigneEmail);
+        List<StepEntry> stepEntries = new ArrayList<>();
+        stepEntries.addAll(stepEntryRepository.findAllOwnedStepEntriesInRange(fromDate, toDate, employee.email(), projectId, assigneEmail));
+        stepEntries.addAll(stepEntryRepository.findAllOwnedStepEntriesInRange(fromDate, toDate, employee.email()));
+        return stepEntries;
     }
 
     @Override

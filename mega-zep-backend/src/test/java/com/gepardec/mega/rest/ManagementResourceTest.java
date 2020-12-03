@@ -217,10 +217,10 @@ public class ManagementResourceTest {
                 .findFirst();
         Assert.assertTrue(entryMgattringer.isPresent());
         ManagementEntry entry = entryMgattringer.get();
-        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.customerCheckState());
+        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.employeeCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.projectCheckState());
+        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.projectCheckState());
         assertEquals(mgattringer.email(), entry.employee().email());
         assertEquals(mgattringer.releaseDate(), entry.employee().releaseDate());
         assertEquals(3L, entry.totalComments());
@@ -304,7 +304,14 @@ public class ManagementResourceTest {
         stepEntry.setStep(createStep(stepName));
         stepEntry.setState(state);
         stepEntry.setDate(LocalDate.now());
+        stepEntry.setAssignee(createUser());
         return stepEntry;
+    }
+
+    private com.gepardec.mega.db.entity.User createUser() {
+        com.gepardec.mega.db.entity.User user = new com.gepardec.mega.db.entity.User();
+        user.setEmail("werner.bruckmueller@gpeardec.com");
+        return user;
     }
 
     private User createUserForRole(final Role role) {
