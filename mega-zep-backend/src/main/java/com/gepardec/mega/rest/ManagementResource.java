@@ -123,9 +123,9 @@ public class ManagementResource {
         if (!stepEntries.isEmpty()) {
             return ManagementEntry.builder()
                     .employee(employee)
-                    .customerCheckState(extractStateForStep(stepEntries, StepName.CONTROL_EXTERNAL_TIMES, projectId))
-                    .employeeCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIMES, projectId))
-                    .internalCheckState(extractStateForStep(stepEntries, StepName.CONTROL_INTERNAL_TIMES, projectId))
+                    .customerCheckState(extractStateForStep(stepEntries, StepName.CONTROL_EXTERNAL_TIMES))
+                    .employeeCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIMES))
+                    .internalCheckState(extractStateForStep(stepEntries, StepName.CONTROL_INTERNAL_TIMES))
                     .projectCheckState(extractStateForStep(stepEntries, StepName.CONTROL_TIME_EVIDENCES, projectId))
                     .finishedComments(finishedAndTotalComments.finishedComments())
                     .totalComments(finishedAndTotalComments.totalComments())
@@ -143,6 +143,10 @@ public class ManagementResource {
                 .totalComments(finishedAndTotalComments.totalComments())
                 .entryDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .build();
+    }
+
+    private com.gepardec.mega.domain.model.State extractStateForStep(List<StepEntry> stepEntries, StepName step) {
+        return extractStateForStep(stepEntries, step, null);
     }
 
     private com.gepardec.mega.domain.model.State extractStateForStep(List<StepEntry> stepEntries, StepName step, String projectId) {

@@ -43,12 +43,12 @@ export class ProjectManagementComponent implements OnInit {
     this.getPmEntries();
   }
 
-  areAllSelected(projectIndex: number, projectName: string) {
+  areAllSelected(projectName: string) {
     return this.pmSelectionModels.get(projectName).selected.length === this.findEntriesForProject(projectName).length;
   }
 
-  masterToggle(projectIndex: number, projectName: string) {
-    this.areAllSelected(projectIndex, projectName) ?
+  masterToggle(projectName: string) {
+    this.areAllSelected(projectName) ?
       this.pmSelectionModels.get(projectName).clear() :
       this.findEntriesForProject(projectName).forEach(row => this.pmSelectionModels.get(projectName).select(row));
   }

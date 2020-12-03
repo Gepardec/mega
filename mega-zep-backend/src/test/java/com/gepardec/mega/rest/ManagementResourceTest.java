@@ -217,7 +217,7 @@ public class ManagementResourceTest {
                 .findFirst();
         Assert.assertTrue(entryMgattringer.isPresent());
         ManagementEntry entry = entryMgattringer.get();
-        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.customerCheckState());
+        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.employeeCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.projectCheckState());
