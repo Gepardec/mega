@@ -4,7 +4,13 @@ import com.gepardec.mega.application.interceptor.RolesAllowed;
 import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.StepEntry;
-import com.gepardec.mega.domain.model.*;
+import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.FinishedAndTotalComments;
+import com.gepardec.mega.domain.model.Project;
+import com.gepardec.mega.domain.model.ProjectFilter;
+import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.domain.model.StepName;
+import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.rest.model.ManagementEntry;
 import com.gepardec.mega.rest.model.ProjectManagementEntry;
 import com.gepardec.mega.service.api.comment.CommentService;
@@ -27,7 +33,7 @@ import java.util.stream.Collectors;
 
 @Secured
 @RolesAllowed(value = {Role.PROJECT_LEAD, Role.OFFICE_MANAGEMENT})
-@Path("/management" )
+@Path("/management")
 public class ManagementResource {
 
     @Inject
@@ -67,7 +73,8 @@ public class ManagementResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<ProjectManagementEntry> getAllProjectManagementEntries() {
         List<Project> projects = projectService
-                .getProjectsForMonthYear(LocalDate.now(), List.of(ProjectFilter.IS_LEADS_AVAILABLE))
+                .getProjectsForMonthYear(LocalDate.now(), List.of(ProjectFilter.IS_LEADS_AVAILABLE,
+                        ProjectFilter.IS_CUSTOMER_PROJECT))
                 .stream()
                 .filter(project -> project.leads().stream().anyMatch(lead -> lead.equalsIgnoreCase(
                         userContext.user().userId()
@@ -123,7 +130,7 @@ public class ManagementResource {
                     .projectCheckState(extractStateForProject(stepEntries, projectId))
                     .finishedComments(finishedAndTotalComments.finishedComments())
                     .totalComments(finishedAndTotalComments.totalComments())
-                    .entryDate(stepEntries.get(0).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd" )))
+                    .entryDate(stepEntries.get(0).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                     .build();
         }
 
@@ -135,7 +142,7 @@ public class ManagementResource {
                 .projectCheckState(com.gepardec.mega.domain.model.State.DONE)
                 .finishedComments(finishedAndTotalComments.finishedComments())
                 .totalComments(finishedAndTotalComments.totalComments())
-                .entryDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd" )))
+                .entryDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .build();
     }
 
@@ -182,5 +189,4 @@ public class ManagementResource {
                 .map(StepEntry::getState)
                 .anyMatch(state -> state.equals(State.OPEN)) ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
     }
-
 }
