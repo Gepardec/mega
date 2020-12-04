@@ -30,7 +30,7 @@ mega:
       commit: '${git.commit}'
   logo-path: img/logo.png
   wiki:
-    eom-url: https://sites.google.com/a/gepardec.com/internal/zeiterfassung-mit-zep/monatsende-kontrolle-von-arbeitszeiten
+    eom-url: https://sites.google.com/a/gepardec.com/internal/home/zeiterfassung-mit-zep/monatsende-kontrolle-von-arbeitszeiten
   zep:
     admin-token: ${TOKEN}
   excel-url: "https://docs.google.com/spreadsheets/d/1wUJHMtkY47RhLIGytg_MXVe_hgPAj_yzozLMcv5hrdU/"
