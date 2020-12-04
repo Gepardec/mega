@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
 
 import {FormControl} from '@angular/forms';
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
@@ -6,16 +6,16 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 import {MatDatepicker} from '@angular/material/datepicker';
 
 import * as _moment from 'moment';
-import {default as _rollupMoment, Moment} from 'moment';
+import {Moment} from 'moment';
 
-const moment = _rollupMoment || _moment;
+const moment = _moment;
 
 export const MY_FORMATS = {
   parse: {
-    dateInput: 'MM/YYYY',
+    dateInput: 'YYYY-MM',
   },
   display: {
-    dateInput: 'MM/YYYY',
+    dateInput: 'YYYY-MM',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',
@@ -38,13 +38,12 @@ export const MY_FORMATS = {
 })
 export class DatepickerMonthYearComponent {
 
-  private readonly DATE_FORMAT = 'YYYY-MM-DD';
-  private readonly MOMENT_MONTH_KEY = 'month';
-
-  pickerDate: any;
+  private readonly DATE_FORMAT = 'YYYY-MM';
 
   @ViewChild('picker') datePicker: MatDatepicker<any>;
+  @Output() dateChanged: EventEmitter<Moment> = new EventEmitter<Moment>();
 
+  pickerDate: MatDatepicker<any>;
   date = new FormControl(moment());
 
   chosenYearHandler(normalizedYear: Moment) {
@@ -59,6 +58,8 @@ export class DatepickerMonthYearComponent {
     this.date.setValue(ctrlValue);
     datepicker.close();
 
-    console.log(moment(this.date.value).startOf(this.MOMENT_MONTH_KEY).format(this.DATE_FORMAT));
+    const changedDate = moment(this.date.value);
+    console.log("DATE: " + changedDate);
+    this.dateChanged.emit(changedDate);
   }
 }

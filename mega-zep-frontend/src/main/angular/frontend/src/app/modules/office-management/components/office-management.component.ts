@@ -13,17 +13,11 @@ import {Comment} from '../../shared/models/Comment';
 import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
 import {StepentriesService} from '../../shared/services/stepentries/stepentries.service';
 import {Step} from '../../shared/models/Step';
-import {MatOptionSelectionChange} from '@angular/material/core';
 
-interface Month {
-  value: number;
-  viewValue: string;
-}
+import * as _moment from 'moment';
+import {Moment} from 'moment';
 
-interface Year {
-  value: number;
-  viewValue: string;
-}
+const moment = _moment;
 
 @Component({
   selector: 'app-office-management',
@@ -44,27 +38,6 @@ export class OfficeManagementComponent implements OnInit {
     'releaseDate'
   ];
 
-  months: Month[] = [
-    {value: 1, viewValue: 'January'},
-    {value: 2, viewValue: 'February'},
-    {value: 3, viewValue: 'March'},
-    {value: 4, viewValue: 'April'},
-    {value: 5, viewValue: 'May'},
-    {value: 6, viewValue: 'June'},
-    {value: 7, viewValue: 'July'},
-    {value: 8, viewValue: 'August'},
-    {value: 9, viewValue: 'September'},
-    {value: 10, viewValue: 'October'},
-    {value: 11, viewValue: 'November'},
-    {value: 12, viewValue: 'December'}
-  ];
-
-  years: Year[] = [
-    {value: 2018, viewValue: '2018'},
-    {value: 2019, viewValue: '2019'},
-    {value: 2020, viewValue: '2020'}
-  ];
-
   omEntries: Array<ManagementEntry>;
   filteredOmEntries: Array<ManagementEntry>;
   omSelectionModel = new SelectionModel<ManagementEntry>(true, []);
@@ -72,8 +45,8 @@ export class OfficeManagementComponent implements OnInit {
   dayOfMonthForWarning = 5;
   configuration = configuration;
   environment = environment;
-  selectedYear = 2020;
-  selectedMonth = 11;
+  selectedYear = moment().year();
+  selectedMonth = moment().month();
 
   constructor(
     private dialog: MatDialog,
@@ -88,18 +61,12 @@ export class OfficeManagementComponent implements OnInit {
     this.getOmEntries();
   }
 
-  yearChanged(event: MatOptionSelectionChange): void {
-    if (event.isUserInput === true) {
-      this.selectedYear = event.source.value;
-      this.getOmEntries();
-    }
-  }
+  dateChanged(date: Moment) {
+    console.log(moment(date))
+    this.selectedYear = moment(date).year();
+    this.selectedMonth = moment(date).month();
 
-  monthChanged(event: MatOptionSelectionChange): void {
-    if (event.isUserInput === true) {
-      this.selectedMonth = event.source.value;
-      this.getOmEntries();
-    }
+    this.getOmEntries();
   }
 
   areAllSelected() {
@@ -114,19 +81,19 @@ export class OfficeManagementComponent implements OnInit {
     this.commentService
       .getCommentsForEmployee(omEntry.employee.email, this.getFormattedDate())
       .subscribe((comments: Array<Comment>) => {
-      const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
-        {
-          width: '100%',
-          autoFocus: false
-        }
-      );
+        const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
+          {
+            width: '100%',
+            autoFocus: false
+          }
+        );
 
-      dialogRef.componentInstance.employee = omEntry.employee;
-      dialogRef.componentInstance.comments = comments;
-      dialogRef.componentInstance.step = Step.CONTROL_INTERNAL_TIMES;
-      dialogRef.componentInstance.currentMonthYear = this.getFormattedDate();
-      dialogRef.afterClosed().subscribe(() => this.getOmEntries());
-    });
+        dialogRef.componentInstance.employee = omEntry.employee;
+        dialogRef.componentInstance.comments = comments;
+        dialogRef.componentInstance.step = Step.CONTROL_INTERNAL_TIMES;
+        dialogRef.componentInstance.currentMonthYear = this.getFormattedDate();
+        dialogRef.afterClosed().subscribe(() => this.getOmEntries());
+      });
   }
 
   changeDate(emittedDate: string): void {
@@ -155,10 +122,10 @@ export class OfficeManagementComponent implements OnInit {
 
   getCurrentReleaseDate(): Date {
     const entries = this.omEntries.filter(entry => {
-        return entry.projectCheckState === State.OPEN ||
-          entry.customerCheckState === State.OPEN ||
-          entry.employeeCheckState === State.OPEN ||
-          entry.internalCheckState === State.OPEN;
+      return entry.projectCheckState === State.OPEN ||
+        entry.customerCheckState === State.OPEN ||
+        entry.employeeCheckState === State.OPEN ||
+        entry.internalCheckState === State.OPEN;
     });
 
     if (entries.length > 0) {
@@ -199,16 +166,16 @@ export class OfficeManagementComponent implements OnInit {
     this.stepEntryService
       .close(omEntry.employee, Step.CONTROL_EXTERNAL_TIMES, this.getFormattedDate())
       .subscribe(() => {
-      omEntry.customerCheckState = State.DONE;
-    });
+        omEntry.customerCheckState = State.DONE;
+      });
   }
 
   closeInternalCheck(omEntry: ManagementEntry) {
     this.stepEntryService
       .close(omEntry.employee, Step.CONTROL_INTERNAL_TIMES, this.getFormattedDate())
       .subscribe(() => {
-      omEntry.internalCheckState = State.DONE;
-    });
+        omEntry.internalCheckState = State.DONE;
+      });
   }
 
   private getFormattedDate() {

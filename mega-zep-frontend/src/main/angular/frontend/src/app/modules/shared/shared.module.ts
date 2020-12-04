@@ -56,6 +56,7 @@ import { DatepickerMonthYearComponent } from './components/datepicker-month-year
     StateSelectComponent,
     DoneCommentsIndicatorComponent,
     StateIndicatorComponent,
+    DatepickerMonthYearComponent,
   ],
   entryComponents: [
     CommentsForEmployeeComponent,

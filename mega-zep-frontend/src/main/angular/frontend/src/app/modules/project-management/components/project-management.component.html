@@ -1,16 +1,7 @@
 <mat-toolbar class="mat-elevation-z8" color="accent">
   <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
     <span style="width: 10%">
-      <mat-select [(ngModel)]="selectedMonth" name="month">
-        <mat-option *ngFor="let month of months" [value]="month.value" (onSelectionChange)="monthChanged($event)">
-          {{month.viewValue}}
-        </mat-option>
-      </mat-select>
-      <mat-select [(ngModel)]="selectedYear" name="year">
-        <mat-option *ngFor="let year of years" [value]="year.value" (onSelectionChange)="yearChanged($event)">
-          {{year.viewValue}}
-        </mat-option>
-      </mat-select>
+      <app-datepicker-month-year (dateChanged)="dateChanged($event)"></app-datepicker-month-year>
     </span>
   </mat-toolbar-row>
 </mat-toolbar>

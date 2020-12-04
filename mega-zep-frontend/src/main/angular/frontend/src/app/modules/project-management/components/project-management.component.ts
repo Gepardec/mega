@@ -12,17 +12,10 @@ import {CommentService} from '../../shared/services/comment/comment.service';
 import {Comment} from '../../shared/models/Comment';
 import {Employee} from '../../shared/models/Employee';
 import {Step} from '../../shared/models/Step';
-import {MatOptionSelectionChange} from '@angular/material/core';
 
-interface Month {
-  value: number;
-  viewValue: string;
-}
-
-interface Year {
-  value: number;
-  viewValue: string;
-}
+import * as _moment from 'moment';
+import {Moment} from 'moment';
+const moment = _moment;
 
 @Component({
   selector: 'app-project-management',
@@ -42,32 +35,10 @@ export class ProjectManagementComponent implements OnInit {
     'releaseDate'
   ];
 
-
-  months: Month[] = [
-    {value: 1, viewValue: 'January'},
-    {value: 2, viewValue: 'February'},
-    {value: 3, viewValue: 'March'},
-    {value: 4, viewValue: 'April'},
-    {value: 5, viewValue: 'May'},
-    {value: 6, viewValue: 'June'},
-    {value: 7, viewValue: 'July'},
-    {value: 8, viewValue: 'August'},
-    {value: 9, viewValue: 'September'},
-    {value: 10, viewValue: 'October'},
-    {value: 11, viewValue: 'November'},
-    {value: 12, viewValue: 'December'}
-  ];
-
-  years: Year[] = [
-    {value: 2018, viewValue: '2018'},
-    {value: 2019, viewValue: '2019'},
-    {value: 2020, viewValue: '2020'}
-  ];
-
   pmSelectionModels: Map<string, SelectionModel<ManagementEntry>>;
   environment = environment;
-  selectedYear = 2020;
-  selectedMonth = 11;
+  selectedYear = moment().year();
+  selectedMonth = moment().month();
 
   constructor(private dialog: MatDialog,
               private pmService: ProjectManagementService,
@@ -79,18 +50,12 @@ export class ProjectManagementComponent implements OnInit {
     this.getPmEntries();
   }
 
-  yearChanged(event: MatOptionSelectionChange): void {
-    if (event.isUserInput === true) {
-      this.selectedYear = event.source.value;
-      this.getPmEntries();
-    }
-  }
+  dateChanged(date: Moment) {
+    console.log(moment(date))
+    this.selectedYear = moment(date).year();
+    this.selectedMonth = moment(date).month();
 
-  monthChanged(event: MatOptionSelectionChange): void {
-    if (event.isUserInput === true) {
-      this.selectedMonth = event.source.value;
-      this.getPmEntries();
-    }
+    this.getPmEntries();
   }
 
   areAllSelected(projectName: string) {
@@ -106,20 +71,20 @@ export class ProjectManagementComponent implements OnInit {
   openDialog(employee: Employee, project: string): void {
     this.commentService.getCommentsForEmployee(employee.email, this.getFormattedDate())
       .subscribe((comments: Array<Comment>) => {
-      const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
-        {
-          width: '100%',
-          autoFocus: false
-        }
-      );
+        const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
+          {
+            width: '100%',
+            autoFocus: false
+          }
+        );
 
-      dialogRef.componentInstance.employee = employee;
-      dialogRef.componentInstance.comments = comments;
-      dialogRef.componentInstance.step = Step.CONTROL_TIME_EVIDENCES;
-      dialogRef.componentInstance.project = project;
-      dialogRef.componentInstance.currentMonthYear = this.getFormattedDate();
-      dialogRef.afterClosed().subscribe(() => this.getPmEntries());
-    });
+        dialogRef.componentInstance.employee = employee;
+        dialogRef.componentInstance.comments = comments;
+        dialogRef.componentInstance.step = Step.CONTROL_TIME_EVIDENCES;
+        dialogRef.componentInstance.project = project;
+        dialogRef.componentInstance.currentMonthYear = this.getFormattedDate();
+        dialogRef.afterClosed().subscribe(() => this.getPmEntries());
+      });
   }
 
   isAnySelected(): boolean {
@@ -156,7 +121,7 @@ export class ProjectManagementComponent implements OnInit {
       this.pmEntries = pmEntries;
       this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
       this.pmEntries.forEach(pmEntry =>
-         this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []))
+        this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []))
       );
     });
   }
