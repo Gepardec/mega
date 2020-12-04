@@ -39,8 +39,8 @@ public class Comment {
      * The message of the comment for the related step entry
      */
     @NotNull
-    @Length(min = 1, max = 255)
-    @Column(name = "message")
+    @Length(min = 1, max = 500)
+    @Column(columnDefinition = "TEXT", name = "message")
     private String message;
 
     /**
