@@ -18,17 +18,17 @@ export class StepentriesService {
   ) {
   }
 
-  close(employee: Employee, step: Step): Observable<boolean> {
+  close(employee: Employee, step: Step, currentMonthYear: string): Observable<boolean> {
     return this.httpClient.put<boolean>(
       this.config.getBackendUrlWithContext('/stepentry/close'),
-      new EmployeeStep(step, employee)
+      new EmployeeStep(step, employee, currentMonthYear)
     );
   }
 
-  closeProjectCheck(employee: Employee, projectName: string): Observable<boolean> {
+  closeProjectCheck(employee: Employee, projectName: string, currentMonthYear: string): Observable<boolean> {
     return this.httpClient.put<boolean>(
       this.config.getBackendUrlWithContext('/stepentry/closeforproject'),
-      new ProjectStep(Step.CONTROL_TIME_EVIDENCES, employee, projectName)
+      new ProjectStep(Step.CONTROL_TIME_EVIDENCES, employee, projectName, currentMonthYear)
     );
   }
 }

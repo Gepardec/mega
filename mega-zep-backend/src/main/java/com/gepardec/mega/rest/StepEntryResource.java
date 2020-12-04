@@ -31,7 +31,7 @@ public class StepEntryResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public boolean close(@NotNull(message = "{stepEntryResource.parameter.notNull}") final EmployeeStep employeeStep) {
-        return stepEntryService.setOpenAndAssignedStepEntriesDone(employeeStep.employee(), employeeStep.stepId());
+        return stepEntryService.setOpenAndAssignedStepEntriesDone(employeeStep.employee(), employeeStep.stepId(), employeeStep.currentMonthYear());
     }
 
     @PUT
@@ -43,7 +43,8 @@ public class StepEntryResource {
                 projectStep.employee(),
                 projectStep.stepId(),
                 projectStep.projectName(),
-                userContext.user().email()
+                userContext.user().email(),
+                projectStep.currentMonthYear()
         );
     }
 }

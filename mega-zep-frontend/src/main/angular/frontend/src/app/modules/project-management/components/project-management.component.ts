@@ -12,6 +12,17 @@ import {CommentService} from '../../shared/services/comment/comment.service';
 import {Comment} from '../../shared/models/Comment';
 import {Employee} from '../../shared/models/Employee';
 import {Step} from '../../shared/models/Step';
+import {MatOptionSelectionChange} from '@angular/material/core';
+
+interface Month {
+  value: number;
+  viewValue: string;
+}
+
+interface Year {
+  value: number;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-project-management',
@@ -30,8 +41,33 @@ export class ProjectManagementComponent implements OnInit {
     'doneCommentsIndicator',
     'releaseDate'
   ];
+
+
+  months: Month[] = [
+    {value: 1, viewValue: 'January'},
+    {value: 2, viewValue: 'February'},
+    {value: 3, viewValue: 'March'},
+    {value: 4, viewValue: 'April'},
+    {value: 5, viewValue: 'May'},
+    {value: 6, viewValue: 'June'},
+    {value: 7, viewValue: 'July'},
+    {value: 8, viewValue: 'August'},
+    {value: 9, viewValue: 'September'},
+    {value: 10, viewValue: 'October'},
+    {value: 11, viewValue: 'November'},
+    {value: 12, viewValue: 'December'}
+  ];
+
+  years: Year[] = [
+    {value: 2018, viewValue: '2018'},
+    {value: 2019, viewValue: '2019'},
+    {value: 2020, viewValue: '2020'}
+  ];
+
   pmSelectionModels: Map<string, SelectionModel<ManagementEntry>>;
   environment = environment;
+  selectedYear = 2020;
+  selectedMonth = 11;
 
   constructor(private dialog: MatDialog,
               private pmService: ProjectManagementService,
@@ -41,6 +77,20 @@ export class ProjectManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.getPmEntries();
+  }
+
+  yearChanged(event: MatOptionSelectionChange): void {
+    if (event.isUserInput === true) {
+      this.selectedYear = event.source.value;
+      this.getPmEntries();
+    }
+  }
+
+  monthChanged(event: MatOptionSelectionChange): void {
+    if (event.isUserInput === true) {
+      this.selectedMonth = event.source.value;
+      this.getPmEntries();
+    }
   }
 
   areAllSelected(projectName: string) {
@@ -54,7 +104,8 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   openDialog(employee: Employee, project: string): void {
-    this.commentService.getCommentsForEmployee(employee).subscribe((comments: Array<Comment>) => {
+    this.commentService.getCommentsForEmployee(employee.email, this.getFormattedDate())
+      .subscribe((comments: Array<Comment>) => {
       const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
         {
           width: '100%',
@@ -66,6 +117,7 @@ export class ProjectManagementComponent implements OnInit {
       dialogRef.componentInstance.comments = comments;
       dialogRef.componentInstance.step = Step.CONTROL_TIME_EVIDENCES;
       dialogRef.componentInstance.project = project;
+      dialogRef.componentInstance.currentMonthYear = this.getFormattedDate();
       dialogRef.afterClosed().subscribe(() => this.getPmEntries());
     });
   }
@@ -85,18 +137,22 @@ export class ProjectManagementComponent implements OnInit {
     for (const [projectName, selectionModel] of this.pmSelectionModels.entries()) {
       if (selectionModel.selected.length > 0) {
         for (const entry of selectionModel.selected) {
-          this.stepEntryService.closeProjectCheck(entry.employee, projectName).subscribe(() => entry.projectCheckState = State.DONE);
+          this.stepEntryService
+            .closeProjectCheck(entry.employee, projectName, this.getFormattedDate())
+            .subscribe(() => entry.projectCheckState = State.DONE);
         }
       }
     }
   }
 
   closeProjectCheck(projectName: string, row: ManagementEntry) {
-    this.stepEntryService.closeProjectCheck(row.employee, projectName).subscribe(() => row.projectCheckState = State.DONE);
+    this.stepEntryService
+      .closeProjectCheck(row.employee, projectName, this.getFormattedDate())
+      .subscribe(() => row.projectCheckState = State.DONE);
   }
 
   private getPmEntries() {
-    this.pmService.getEntries().subscribe((pmEntries: Array<ProjectManagementEntry>) => {
+    this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
       this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
       this.pmEntries.forEach(pmEntry =>
@@ -130,5 +186,9 @@ export class ProjectManagementComponent implements OnInit {
     }
 
     return new Date();
+  }
+
+  private getFormattedDate() {
+    return this.selectedYear + '-' + this.selectedMonth + '-01';
   }
 }

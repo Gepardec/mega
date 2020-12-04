@@ -15,9 +15,18 @@
             <mat-icon>close</mat-icon>
           </button>
         </mat-form-field>
-        <span>
-        {{getCurrentReleaseDate() | date: 'MMMM yyyy' : null : 'de-AT' }}
-      </span>
+        <span style="width: 10%">
+          <mat-select [(ngModel)]="selectedMonth" name="month">
+            <mat-option *ngFor="let month of months" [value]="month.value" (onSelectionChange)="monthChanged($event)">
+              {{month.viewValue}}
+            </mat-option>
+          </mat-select>
+          <mat-select [(ngModel)]="selectedYear" name="year">
+            <mat-option *ngFor="let year of years" [value]="year.value" (onSelectionChange)="yearChanged($event)">
+              {{year.viewValue}}
+            </mat-option>
+          </mat-select>
+        </span>
       </mat-toolbar-row>
       <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
         <mat-checkbox style="font-size: 18px"

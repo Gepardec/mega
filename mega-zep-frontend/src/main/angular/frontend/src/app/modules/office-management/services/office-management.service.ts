@@ -14,10 +14,9 @@ export class OfficeManagementService {
   constructor(private configService: ConfigService, private httpClient: HttpClient) {
   }
 
-  getEntries(): Observable<Array<ManagementEntry>> {
+  getEntries(year: number, month: number): Observable<Array<ManagementEntry>> {
     return this.httpClient.get<Array<ManagementEntry>>(
-      this.configService.getBackendUrlWithContext('/management/officemanagemententries')
-    );
+      this.configService.getBackendUrlWithContext('/management/officemanagemententries/' + year + '/' + month));
   }
 
   updateEmployees(employees: Array<Employee>): Observable<Response> {

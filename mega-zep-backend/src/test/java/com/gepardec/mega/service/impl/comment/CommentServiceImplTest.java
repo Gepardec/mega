@@ -8,6 +8,7 @@ import com.gepardec.mega.db.repository.CommentRepository;
 import com.gepardec.mega.domain.mapper.CommentMapper;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.FinishedAndTotalComments;
+import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.notification.mail.Mail;
 import com.gepardec.mega.notification.mail.MailParameter;
 import com.gepardec.mega.notification.mail.MailSender;
@@ -69,7 +70,7 @@ class CommentServiceImplTest {
     void cntFinishedAndTotalCommentsForEmployee_whenEmployeeIsNull_thenThrowsException() {
         NullPointerException thrown = assertThrows(
                 NullPointerException.class,
-                () -> commentService.cntFinishedAndTotalCommentsForEmployee(null),
+                () -> commentService.cntFinishedAndTotalCommentsForEmployee(null, null, null),
                 "Expected NullpointerException was not thrown!"
         );
 
@@ -87,7 +88,7 @@ class CommentServiceImplTest {
 
         NullPointerException thrown = assertThrows(
                 NullPointerException.class,
-                () -> commentService.cntFinishedAndTotalCommentsForEmployee(empl),
+                () -> commentService.cntFinishedAndTotalCommentsForEmployee(empl, null, null),
                 "Expected NullpointerException was not thrown!"
         );
 
@@ -106,7 +107,10 @@ class CommentServiceImplTest {
                 createComment(3L, State.OPEN)
                 ));
 
-        FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(createEmployee());
+        Employee employee = createEmployee();
+        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
         assertNotNull(result);
         assertEquals(3L, result.totalComments());
         assertEquals(1L, result.finishedComments());
@@ -124,7 +128,10 @@ class CommentServiceImplTest {
                 createComment(3L, State.OPEN)
         ));
 
-        FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(createEmployee());
+        Employee employee = createEmployee();
+        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
         assertNotNull(result);
         assertEquals(3L, result.totalComments());
         assertEquals(0L, result.finishedComments());
@@ -138,7 +145,10 @@ class CommentServiceImplTest {
                 ArgumentMatchers.anyString()
         )).thenReturn(Collections.emptyList());
 
-        FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(createEmployee());
+        Employee employee = createEmployee();
+        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
         assertNotNull(result);
         assertEquals(0L, result.totalComments());
         assertEquals(0L, result.finishedComments());
@@ -148,7 +158,7 @@ class CommentServiceImplTest {
     void createNewCommentForEmployee_whenEmployeeIsNull_thenThrowsException() {
         NullPointerException thrown = assertThrows(
                 NullPointerException.class,
-                () -> commentService.cntFinishedAndTotalCommentsForEmployee(null),
+                () -> commentService.cntFinishedAndTotalCommentsForEmployee(null, null, null),
                 "Expected NullpointerException was not thrown!"
         );
 
@@ -161,6 +171,7 @@ class CommentServiceImplTest {
         when(stepEntryService.findStepEntryForEmployeeAtStep(
                 ArgumentMatchers.anyLong(),
                 ArgumentMatchers.any(Employee.class),
+                ArgumentMatchers.anyString(),
                 ArgumentMatchers.anyString()
         )).thenReturn(createStepEntry(1L));
 
@@ -182,7 +193,9 @@ class CommentServiceImplTest {
 
         Employee employee = createEmployee();
         String newComment = "My new comment!";
-        com.gepardec.mega.domain.model.Comment createdComment = commentService.createNewCommentForEmployee(2L, employee, newComment, "", null);
+        com.gepardec.mega.domain.model.Comment createdComment = commentService.createNewCommentForEmployee(
+                2L, employee, newComment, "", null, LocalDate.now().toString()
+        );
 
         String creator = stepEntry.getAssignee().getFirstname();
         Map<String, String> expectedMailParameter = Map.of(

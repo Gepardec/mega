@@ -22,6 +22,7 @@ export class CommentsForEmployeeComponent implements OnInit {
   comments: Array<Comment>;
   step: Step;
   project = '';
+  currentMonthYear: string;
 
   constructor(private commentService: CommentService, private userService: UserService) {
   }
@@ -78,15 +79,17 @@ export class CommentsForEmployeeComponent implements OnInit {
   }
 
   createCommentForEmployee(comment: string): void {
-    this.commentService.createNewComment(this.employee, comment, this.user.email, this.step, this.project).subscribe(() => {
-      this.commentService.getCommentsForEmployee(this.employee).subscribe((comments: Array<Comment>) => {
+    this.commentService
+      .createNewComment(this.employee, comment, this.user.email, this.step, this.project, this.currentMonthYear)
+      .subscribe(() => {
+      this.commentService.getCommentsForEmployee(this.employee.email, this.employee.releaseDate).subscribe((comments: Array<Comment>) => {
         this.comments = comments;
       });
     });
   }
 
   updateCommentForEmployee(comment: Comment): void {
-    this.commentService.updateComment(comment);
+    this.commentService.updateComment(comment).subscribe(() => {});
   }
 
   deleteCommentOfEmployee(commentToRemove: Comment): void {

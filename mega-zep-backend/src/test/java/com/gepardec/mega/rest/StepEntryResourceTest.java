@@ -51,7 +51,8 @@ public class StepEntryResourceTest {
 
     @Test
     void close_whenValid_thenReturnsUpdatedNumber() {
-        when(stepEntryService.setOpenAndAssignedStepEntriesDone(ArgumentMatchers.any(Employee.class), ArgumentMatchers.anyLong())).thenReturn(true);
+        when(stepEntryService.setOpenAndAssignedStepEntriesDone(ArgumentMatchers.any(Employee.class), ArgumentMatchers.anyLong(), ArgumentMatchers.anyString()))
+                .thenReturn(true);
 
         final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());

@@ -33,8 +33,8 @@ public class CommentResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Comment> getAllCommentsForEmployee(
             @QueryParam("email") @NotNull(message = "{commentResource.email.notNull}") @Email(message = "{commentResource.email.invalid}") String employeeEmail,
-            @QueryParam("releasedate") @NotNull(message = "{commentResource.releaseDate.notNull}") String releaseDate) {
-        return commentService.findCommentsForEmployee(Employee.builder().email(employeeEmail).releaseDate(releaseDate).build());
+            @QueryParam("date") @NotNull(message = "{commentResource.date.notNull}") String currentMonthYear) {
+        return commentService.findCommentsForEmployee(Employee.builder().email(employeeEmail).releaseDate(currentMonthYear).build());
     }
 
     @POST
@@ -46,7 +46,8 @@ public class CommentResource {
                 newComment.employee(),
                 newComment.comment(),
                 newComment.assigneeEmail(),
-                newComment.project()
+                newComment.project(),
+                newComment.currentMonthYear()
         );
     }
 

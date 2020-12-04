@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
 import { ErrorComponent } from './components/error/error.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommentsForEmployeeComponent } from './components/comments-for-employee/comments-for-employee.component';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { InfoComponent } from './components/info/info.component';
 import { HttpClientModule } from '@angular/common/http';
 import { InfoDialogComponent } from './components/info-dialog/info-dialog.component';
@@ -17,6 +17,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { StateSelectComponent } from './components/state-select/state-select.component';
 import { DoneCommentsIndicatorComponent } from './components/done-comments-indicator/done-comments-indicator.component';
 import { StateIndicatorComponent } from './components/state-indicator/state-indicator.component';
+import { DatepickerMonthYearComponent } from './components/datepicker-month-year/datepicker-month-year.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { StateIndicatorComponent } from './components/state-indicator/state-indi
     CommentsForEmployeeComponent,
     StateSelectComponent,
     DoneCommentsIndicatorComponent,
-    StateIndicatorComponent
+    StateIndicatorComponent,
+    DatepickerMonthYearComponent
   ],
   imports: [
     CommonModule,
@@ -40,7 +42,8 @@ import { StateIndicatorComponent } from './components/state-indicator/state-indi
     TranslateModule.forRoot(),
     FlexLayoutModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   exports: [
     DatepickerComponent,
