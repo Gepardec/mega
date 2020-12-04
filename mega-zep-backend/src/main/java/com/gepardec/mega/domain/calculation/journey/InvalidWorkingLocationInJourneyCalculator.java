@@ -12,6 +12,10 @@ import java.util.stream.Collectors;
 
 public class InvalidWorkingLocationInJourneyCalculator implements WarningCalculationStrategy<JourneyWarning> {
 
+    private static final Map<WorkingLocation, List<WorkingLocation>> MAPPED_SUPPORTED_WORKING_LOCATIONS = Map.of(
+            WorkingLocation.A,
+            List.of(WorkingLocation.A, WorkingLocation.MAIN));
+
     @Override
     public List<JourneyWarning> calculate(List<ProjectEntry> projectTimeEntries) {
         final Map<LocalDate, List<ProjectEntry>> groupedProjectTimeEntries = projectTimeEntries.stream()
@@ -24,10 +28,12 @@ public class InvalidWorkingLocationInJourneyCalculator implements WarningCalcula
             if (hasJourneyEntries(entriesPerDay.getValue())) {
                 final List<ProjectEntry> projectEntriesOfDay = entriesPerDay.getValue();
                 WorkingLocation workingLocation = null;
+                JourneyDirection journeyDirection = null;
                 for (final ProjectEntry projectEntry : projectEntriesOfDay) {
                     if (Task.isJourney(projectEntry.getTask())) {
                         workingLocation = projectEntry.getWorkingLocation();
-                    } else if (workingLocation != null && !workingLocation.equals(projectEntry.getWorkingLocation())) {
+                        journeyDirection = ((JourneyTimeEntry) projectEntry).getJourneyDirection();
+                    } else if (!isProjectEntryValid(projectEntry, workingLocation, journeyDirection)) {
                         warnings.add(createJourneyWarningWithEnumType(projectEntry, Warning.JOURNEY_INVALID_WORKING_LOCATION));
                         break;
                     }
@@ -36,6 +42,25 @@ public class InvalidWorkingLocationInJourneyCalculator implements WarningCalcula
         }
 
         return warnings;
+    }
+
+    private boolean isProjectEntryValid(final ProjectEntry projectEntry, final WorkingLocation workingLocation, final JourneyDirection journeyDirection) {
+        if (JourneyDirection.BACK.equals(journeyDirection)) {
+            return isProjectEntryValidAfterJourneyBack(projectEntry, workingLocation);
+        }
+
+        return isProjectEntryValidAfterJourneyToOrFurther(projectEntry, workingLocation);
+    }
+
+    private boolean isProjectEntryValidAfterJourneyToOrFurther(final ProjectEntry projectEntry, final WorkingLocation journeyBackWorkingLocation) {
+        return journeyBackWorkingLocation == null || projectEntry.getWorkingLocation().equals(journeyBackWorkingLocation);
+    }
+
+    private boolean isProjectEntryValidAfterJourneyBack(final ProjectEntry projectEntry, final WorkingLocation journeyBackWorkingLocation) {
+        final WorkingLocation workingLocation = projectEntry.getWorkingLocation();
+        return (MAPPED_SUPPORTED_WORKING_LOCATIONS.containsKey(journeyBackWorkingLocation))
+                ? MAPPED_SUPPORTED_WORKING_LOCATIONS.get(journeyBackWorkingLocation).contains(workingLocation)
+                : journeyBackWorkingLocation == null || projectEntry.getWorkingLocation().equals(journeyBackWorkingLocation);
     }
 
     private boolean hasJourneyEntries(final List<ProjectEntry> projectEntries) {
