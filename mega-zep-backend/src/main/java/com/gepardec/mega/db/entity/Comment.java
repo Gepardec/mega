@@ -40,7 +40,7 @@ public class Comment {
      */
     @NotNull
     @Length(min = 1, max = 500)
-    @Column(columnDefinition = "TEXT", name = "message")
+    @Column(name = "message", length = 500)
     private String message;
 
     /**

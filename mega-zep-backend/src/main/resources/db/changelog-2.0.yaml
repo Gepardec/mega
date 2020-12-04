@@ -53,7 +53,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: message
-                  type: VARCHAR(255)
+                  type: VARCHAR(500)
               - column:
                   constraints:
                     nullable: false
