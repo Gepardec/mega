@@ -136,7 +136,9 @@ class StepEntryServiceImplTest {
         )).thenReturn(List.of(createStepEntry(1L)));
 
         Employee empl = createEmployee();
-        List<StepEntry> result = stepEntryService.findAllStepEntriesForEmployee(empl, null, null); // FIXME
+        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(empl.releaseDate()));
+        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(empl.releaseDate()));
+        List<StepEntry> result = stepEntryService.findAllStepEntriesForEmployee(empl, from, to);
         verify(stepEntryRepository, times(1)).findAllOwnedStepEntriesInRange(
                 LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(empl.releaseDate())),
                 LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(empl.releaseDate())),
@@ -169,9 +171,10 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.anyString()
         )).thenReturn(Optional.empty());
 
+        Employee empl = createEmployee();
         IllegalStateException thrown = assertThrows(
                 IllegalStateException.class,
-                () -> stepEntryService.findStepEntryForEmployeeAtStep(2L, createEmployee(), "", ""),
+                () -> stepEntryService.findStepEntryForEmployeeAtStep(2L, empl, "", empl.releaseDate()),
                 "Expected IllegalStateException was not thrown!"
         );
 
@@ -188,7 +191,8 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.anyString()
         )).thenReturn(Optional.of(createStepEntry(1L)));
 
-        StepEntry stepEntry = stepEntryService.findStepEntryForEmployeeAtStep(2L, createEmployee(), "", "");
+        Employee empl = createEmployee();
+        StepEntry stepEntry = stepEntryService.findStepEntryForEmployeeAtStep(2L, empl, "", empl.releaseDate());
         assertNotNull(stepEntry);
         assertEquals(1L, stepEntry.getId());
         assertEquals("Liwest-EMS", stepEntry.getProject());

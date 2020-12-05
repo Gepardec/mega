@@ -92,6 +92,7 @@ public class StepEntryResourceTest {
         return EmployeeStep.builder()
                 .employee(employee)
                 .stepId(1L)
+                .currentMonthYear("2020-01-01")
                 .build();
     }
 }

@@ -143,7 +143,7 @@ public class CommentResourceTest {
 
         List<Comment> comments = given().contentType(ContentType.JSON)
                 .queryParam("email", "marko.gattringer@gmx.at")
-                .queryParam("releasedate", "2020-10-01")
+                .queryParam("date", "2020-10-01")
                 .get("/comments/getallcommentsforemployee")
                 .as(new TypeRef<>() {
                 });
@@ -190,6 +190,7 @@ public class CommentResourceTest {
                 .comment("Pausen eintragen!")
                 .employee(employee).stepId(2L)
                 .assigneeEmail("marko.gattringer@gepardec.com")
+                .currentMonthYear("2020-10-01")
                 .project("")
                 .build();
         Comment createdComment = given().contentType(ContentType.JSON)

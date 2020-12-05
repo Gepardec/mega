@@ -52,14 +52,14 @@ public class ManagementResourceTest {
     void getAllOfficeManagementEntries_whenNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
         when(userContext.user()).thenReturn(createUserForRole(Role.OFFICE_MANAGEMENT));
         given().contentType(ContentType.JSON)
-                .get("/management/officemanagemententries")
+                .get("/management/officemanagemententries/2020/11")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @Test
     void getAllOfficeManagementEntries_whenPOST_thenReturnsHttpStatusMETHOD_NOT_ALLOWED() {
         given().contentType(ContentType.JSON)
-                .post("/management/officemanagemententries")
+                .post("/management/officemanagemententries/2020/11")
                 .then().assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
     }
 
@@ -88,7 +88,7 @@ public class ManagementResourceTest {
         ).thenReturn(entries);
 
         List<ManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/management/officemanagemententries")
+                .get("/management/officemanagemententries/2020/01")
                 .as(new TypeRef<>() {
                 });
 
@@ -127,7 +127,7 @@ public class ManagementResourceTest {
                 .thenReturn(entries);
 
         List<ManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/management/officemanagemententries")
+                .get("/management/officemanagemententries/2020/10")
                 .as(new TypeRef<>() {
                 });
 
@@ -151,7 +151,7 @@ public class ManagementResourceTest {
                 .thenReturn(Collections.emptyList());
 
         List<ManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/management/officemanagemententries")
+                .get("/management/officemanagemententries/2020/11")
                 .as(new TypeRef<>() {
                 });
 
@@ -162,14 +162,14 @@ public class ManagementResourceTest {
     void getAllProjectManagementEntries_whenNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
         when(userContext.user()).thenReturn(createUserForRole(Role.PROJECT_LEAD));
         given().contentType(ContentType.JSON)
-                .get("/management/projectmanagemententries")
+                .get("/management/projectmanagemententries/2020/11")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @Test
     void getAllProjectManagementEntries_whenPOST_thenReturnsStatusMETHOD_NOT_ALLOWED() {
         given().contentType(ContentType.JSON)
-                .post("/management/projectmanagemententries")
+                .post("/management/projectmanagemententries/2020/11")
                 .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
     }
 
@@ -208,7 +208,7 @@ public class ManagementResourceTest {
         ).thenReturn(entries);
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/management/projectmanagemententries")
+                .get("/management/projectmanagemententries/2020/10")
                 .as(new TypeRef<>() {
                 });
 
@@ -242,7 +242,7 @@ public class ManagementResourceTest {
         when(userContext.user()).thenReturn(user);
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/management/projectmanagemententries")
+                .get("/management/projectmanagemententries/2020/11")
                 .as(new TypeRef<>() {
                 });
 
@@ -261,7 +261,7 @@ public class ManagementResourceTest {
                 .thenReturn(List.of(rgkkcc));
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/management/projectmanagemententries")
+                .get("/management/projectmanagemententries/2020/11")
                 .as(new TypeRef<>() {
                 });
 
@@ -290,7 +290,7 @@ public class ManagementResourceTest {
                 .thenReturn(Collections.emptyList());
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/management/projectmanagemententries")
+                .get("/management/projectmanagemententries/2020/11")
                 .as(new TypeRef<>() {
                 });
 
