@@ -82,7 +82,7 @@ export class CommentsForEmployeeComponent implements OnInit {
     this.commentService
       .createNewComment(this.employee, comment, this.user.email, this.step, this.project, this.currentMonthYear)
       .subscribe(() => {
-      this.commentService.getCommentsForEmployee(this.employee.email, this.employee.releaseDate).subscribe((comments: Array<Comment>) => {
+      this.commentService.getCommentsForEmployee(this.employee.email, this.currentMonthYear).subscribe((comments: Array<Comment>) => {
         this.comments = comments;
       });
     });

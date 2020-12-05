@@ -51,10 +51,8 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   dateChanged(date: Moment) {
-    console.log(moment(date))
     this.selectedYear = moment(date).year();
-    this.selectedMonth = moment(date).month();
-
+    this.selectedMonth = moment(date).month() + 1;
     this.getPmEntries();
   }
 

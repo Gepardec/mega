@@ -47,11 +47,25 @@ public class DateUtils {
                         .with(TemporalAdjusters.firstDayOfNextMonth()));
     }
 
+    public static String getFirstDayOfCurrentMonth(String dateAsString) {
+        Objects.requireNonNull(dateAsString, "Date must not be null!");
+        return formatDate(
+                parseDate(dateAsString)
+                        .with(TemporalAdjusters.firstDayOfMonth()));
+    }
+
     public static String getLastDayOfFollowingMonth(String dateAsString) {
         Objects.requireNonNull(dateAsString, "Date must not be null!");
         return formatDate(
                 parseDate(dateAsString)
                         .plusMonths(1)
+                        .with(TemporalAdjusters.lastDayOfMonth()));
+    }
+
+    public static String getLastDayOfCurrentMonth(String dateAsString) {
+        Objects.requireNonNull(dateAsString, "Date must not be null!");
+        return formatDate(
+                parseDate(dateAsString)
                         .with(TemporalAdjusters.lastDayOfMonth()));
     }
 

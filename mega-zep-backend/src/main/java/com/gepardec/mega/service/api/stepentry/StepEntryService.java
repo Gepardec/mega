@@ -16,7 +16,7 @@ public interface StepEntryService {
 
     void addStepEntry(final StepEntry stepEntry);
 
-    boolean setOpenAndAssignedStepEntriesDone(Employee employee, Long stepId, String currentMonthYear);
+    boolean setOpenAndAssignedStepEntriesDone(Employee employee, Long stepId, LocalDate from, LocalDate to);
 
     boolean closeStepEntryForEmployeeInProject(Employee employee, Long stepId, String project, String assigneeEmail, String currentMonthYear);
 

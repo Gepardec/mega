@@ -15,7 +15,7 @@ export const MY_FORMATS = {
     dateInput: 'YYYY-MM',
   },
   display: {
-    dateInput: 'YYYY-MM',
+    dateInput: 'MMMM YY',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',
@@ -44,7 +44,8 @@ export class DatepickerMonthYearComponent {
   @Output() dateChanged: EventEmitter<Moment> = new EventEmitter<Moment>();
 
   pickerDate: MatDatepicker<any>;
-  date = new FormControl(moment());
+  date = new FormControl(moment().subtract(1, 'month'));
+  maxDate = moment().subtract(1, 'month').format('YYYY-MM-DD');
 
   chosenYearHandler(normalizedYear: Moment) {
     const ctrlValue = this.date.value;
@@ -59,7 +60,6 @@ export class DatepickerMonthYearComponent {
     datepicker.close();
 
     const changedDate = moment(this.date.value);
-    console.log("DATE: " + changedDate);
     this.dateChanged.emit(changedDate);
   }
 }

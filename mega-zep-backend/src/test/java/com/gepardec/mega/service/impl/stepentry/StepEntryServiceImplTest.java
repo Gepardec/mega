@@ -97,7 +97,9 @@ class StepEntryServiceImplTest {
                 .thenReturn(0);
 
         Employee employee = createEmployee();
-        boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(employee, 0L, employee.releaseDate());
+        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(employee, 0L, from, to);
         Assertions.assertFalse(updated);
     }
 
@@ -108,7 +110,9 @@ class StepEntryServiceImplTest {
                 .thenReturn(1);
 
         Employee employee = createEmployee();
-        boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(employee, 1L, employee.releaseDate());
+        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(employee, 1L, from, to);
         assertTrue(updated);
     }
 

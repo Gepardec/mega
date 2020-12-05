@@ -62,9 +62,10 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   dateChanged(date: Moment) {
-    console.log(moment(date))
+    console.log('dateChanged: ' + moment(date).format('yyyy-MM-DD'));
     this.selectedYear = moment(date).year();
     this.selectedMonth = moment(date).month();
+    console.log(this.selectedMonth);
 
     this.getOmEntries();
   }
@@ -179,11 +180,12 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   private getFormattedDate() {
-    return this.selectedYear + '-' + this.selectedMonth + '-01';
+    console.log(moment().year(this.selectedYear).month(this.selectedMonth).date(1).format('yyyy-MM-DD'));
+    return moment().year(this.selectedYear).month(this.selectedMonth).date(1).format('yyyy-MM-DD');
   }
 
   private getOmEntries() {
-    this.omService.getEntries(this.selectedYear, this.selectedMonth).subscribe((omEntries: Array<ManagementEntry>) => {
+    this.omService.getEntries(this.selectedYear, this.selectedMonth + 1).subscribe((omEntries: Array<ManagementEntry>) => {
       this.omEntries = omEntries;
       this.sortOmEntries();
     });

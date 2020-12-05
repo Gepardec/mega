@@ -12,6 +12,7 @@ import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -137,7 +138,7 @@ public class CommentResourceTest {
         when(userContext.user()).thenReturn(user);
 
         Comment comment = Comment.builder().id(0L).message("Pausen eintragen!").author("evelyn.pirklbauer@gepardec.com").state(State.IN_PROGRESS).build();
-        when(commentService.findCommentsForEmployee(ArgumentMatchers.any(Employee.class)))
+        when(commentService.findCommentsForEmployee(ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(List.of(comment));
 
         List<Comment> comments = given().contentType(ContentType.JSON)

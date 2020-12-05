@@ -52,7 +52,12 @@ class CommentServiceImplTest {
         when(commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString())).thenReturn(List.of(createComment(1L, State.OPEN)));
 
-        List<com.gepardec.mega.domain.model.Comment> domainComments = commentService.findCommentsForEmployee(createEmployee());
+        Employee employee = createEmployee();
+        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        List<com.gepardec.mega.domain.model.Comment> domainComments = commentService.findCommentsForEmployee(
+                employee, fromDate, toDate
+        );
         Assertions.assertFalse(domainComments.isEmpty());
         Assertions.assertEquals(1, domainComments.size());
         Assertions.assertEquals(1, domainComments.get(0).id());
@@ -78,7 +83,7 @@ class CommentServiceImplTest {
     }
 
     @Test
-    void cntFinishedAndTotalCommentsForEmployee_whenReleaseDateIsNull_thenThrowsException() {
+    void cntFinishedAndTotalCommentsForEmployee_whenFromDateIsNull_thenThrowsException() {
         Employee empl = Employee.builder()
                 .userId("1")
                 .email("thomas.herzog@gpeardec.com")
@@ -92,7 +97,25 @@ class CommentServiceImplTest {
                 "Expected NullpointerException was not thrown!"
         );
 
-        assertEquals("Date must not be null!", thrown.getMessage());
+        assertEquals("From date must not be null!", thrown.getMessage());
+    }
+
+    @Test
+    void cntFinishedAndTotalCommentsForEmployee_whenToDateIsNull_thenThrowsException() {
+        Employee empl = Employee.builder()
+                .userId("1")
+                .email("thomas.herzog@gpeardec.com")
+                .releaseDate(null)
+                .firstname("Thomas")
+                .build();
+
+        NullPointerException thrown = assertThrows(
+                NullPointerException.class,
+                () -> commentService.cntFinishedAndTotalCommentsForEmployee(empl, LocalDate.now(), null),
+                "Expected NullpointerException was not thrown!"
+        );
+
+        assertEquals("To date must not be null!", thrown.getMessage());
     }
 
     @Test

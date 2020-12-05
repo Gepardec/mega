@@ -7,6 +7,7 @@ import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
+import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
@@ -14,6 +15,7 @@ import com.gepardec.mega.zep.ZepService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,13 +42,19 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
 
     @Override
     public boolean setOpenAndUnassignedStepEntriesDone(Employee employee, Long stepId) {
-        return stepEntryService.setOpenAndAssignedStepEntriesDone(employee, stepId, employee.releaseDate());
+        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+
+        return stepEntryService.setOpenAndAssignedStepEntriesDone(employee, stepId, from, to);
     }
 
     private MonthlyReport calcWarnings(List<ProjectEntry> projectEntries, Employee employee) {
         final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(projectEntries);
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectEntries);
-        final List<Comment> comments = commentService.findCommentsForEmployee(employee);
+
+        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        final List<Comment> comments = commentService.findCommentsForEmployee(employee, fromDate, toDate);
         final Optional<State> employeeCheckState = stepEntryService.findEmployeeCheckState(employee);
         final boolean isAssigned = employeeCheckState.isPresent();
         final boolean otherChecksDone = stepEntryService.areOtherChecksDone(employee);

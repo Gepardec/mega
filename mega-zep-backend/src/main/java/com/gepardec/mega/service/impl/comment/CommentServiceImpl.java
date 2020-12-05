@@ -41,12 +41,9 @@ public class CommentServiceImpl implements CommentService {
     StepEntryService stepEntryService;
 
     @Override
-    public List<Comment> findCommentsForEmployee(final Employee employee) {
-        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
-
+    public List<Comment> findCommentsForEmployee(final Employee employee, LocalDate from, LocalDate to) {
         List<com.gepardec.mega.db.entity.Comment> dbComments =
-                commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(fromDate, toDate, employee.email());
+                commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(from, to, employee.email());
 
         List<Comment> domainComments = dbComments
                 .stream()
@@ -64,6 +61,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public FinishedAndTotalComments cntFinishedAndTotalCommentsForEmployee(Employee employee, LocalDate from, LocalDate to) {
         Objects.requireNonNull(employee, "Employee must not be null!");
+        Objects.requireNonNull(from, "From date must not be null!");
+        Objects.requireNonNull(to, "To date must not be null!");
 
         List<com.gepardec.mega.db.entity.Comment> allComments =
                 commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(
