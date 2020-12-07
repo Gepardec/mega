@@ -46,7 +46,7 @@ export class OfficeManagementComponent implements OnInit {
   configuration = configuration;
   environment = environment;
   selectedYear = moment().year();
-  selectedMonth = moment().month();
+  selectedMonth = moment().subtract(1, 'month').month();
 
   constructor(
     private dialog: MatDialog,

@@ -15,7 +15,7 @@ export const MY_FORMATS = {
     dateInput: 'YYYY-MM',
   },
   display: {
-    dateInput: 'MMMM YY',
+    dateInput: 'MMMM YYYY',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',
@@ -37,8 +37,6 @@ export const MY_FORMATS = {
   ]
 })
 export class DatepickerMonthYearComponent {
-
-  private readonly DATE_FORMAT = 'YYYY-MM';
 
   @ViewChild('picker') datePicker: MatDatepicker<any>;
   @Output() dateChanged: EventEmitter<Moment> = new EventEmitter<Moment>();

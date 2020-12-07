@@ -33,8 +33,8 @@ public class StepEntryResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public boolean close(@NotNull(message = "{stepEntryResource.parameter.notNull}") final EmployeeStep employeeStep) {
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(employeeStep.currentMonthYear()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(employeeStep.currentMonthYear()));
+        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employeeStep.currentMonthYear()));
+        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employeeStep.currentMonthYear()));
 
         return stepEntryService.setOpenAndAssignedStepEntriesDone(employeeStep.employee(), employeeStep.stepId(), from, to);
     }
