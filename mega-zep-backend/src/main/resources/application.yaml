@@ -103,7 +103,7 @@ mega:
 "%devstage":
   quarkus:
     mailer:
-      mock: true
+      mock: false
   mega:
     dash-url: https://mega-zep-frontend-57-mega-dev.cloud.itandtel.at/index.html
     oauth:
