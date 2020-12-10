@@ -1,6 +1,10 @@
 package com.gepardec.mega.domain.model.monthlyreport;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,6 +13,8 @@ import java.util.Objects;
 
 public class TimeWarning implements ProjectEntryWarning {
 
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
 
     private Double missingRestTime;
@@ -96,23 +102,21 @@ public class TimeWarning implements ProjectEntryWarning {
         this.excessWorkTime = excessWorkTime;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    @Override public boolean equals(Object o) {
+        if (this == o)
             return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
+        if (o == null || getClass() != o.getClass())
             return false;
-        }
-        TimeWarning that = (TimeWarning) o;
-        return Objects.equals(date, that.date) &&
-                Objects.equals(missingRestTime, that.missingRestTime) &&
-                Objects.equals(missingBreakTime, that.missingBreakTime) &&
-                Objects.equals(excessWorkTime, that.excessWorkTime);
+        TimeWarning warning = (TimeWarning) o;
+        return Objects.equals(date, warning.date) &&
+                Objects.equals(missingRestTime, warning.missingRestTime) &&
+                Objects.equals(missingBreakTime, warning.missingBreakTime) &&
+                Objects.equals(excessWorkTime, warning.excessWorkTime) &&
+                Objects.equals(warnings, warning.warnings) &&
+                Objects.equals(warningTypes, warning.warningTypes);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(date, missingRestTime, missingBreakTime, excessWorkTime);
+    @Override public int hashCode() {
+        return Objects.hash(date, missingRestTime, missingBreakTime, excessWorkTime, warnings, warningTypes);
     }
 }
