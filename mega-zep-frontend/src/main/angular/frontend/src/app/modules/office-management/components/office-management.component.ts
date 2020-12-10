@@ -32,9 +32,9 @@ export class OfficeManagementComponent implements OnInit {
     'name',
     'customerCheckState',
     'internalCheckState',
-    'actions',
     'employeeCheckState',
     'projectCheckState',
+    'actions',
     'releaseDate'
   ];
 
