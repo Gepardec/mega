@@ -1,13 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Comment} from '../../models/Comment';
 import {State} from '../../models/State';
-import {MonthlyReport} from "../../../monthly-report/models/MonthlyReport";
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {ConfigService} from "../config/config.service";
-import {Observable} from "rxjs";
-import {Employee} from "../../models/Employee";
-import {NewCommentEntry} from "../../models/NewCommentEntry";
-import {Step} from "../../models/Step";
+import {HttpClient} from '@angular/common/http';
+import {ConfigService} from '../config/config.service';
+import {Observable} from 'rxjs';
+import {Employee} from '../../models/Employee';
+import {NewCommentEntry} from '../../models/NewCommentEntry';
+import {Step} from '../../models/Step';
 
 @Injectable({
   providedIn: 'root'
