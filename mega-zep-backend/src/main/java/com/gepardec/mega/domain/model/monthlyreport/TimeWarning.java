@@ -43,6 +43,9 @@ public class TimeWarning implements ProjectEntryWarning {
     }
 
     public void mergeBreakWarnings(TimeWarning newTimeWarning) {
+        warnings = new ArrayList<>(newTimeWarning.warnings);
+        warningTypes = new ArrayList<>(warningTypes);
+
         if (newTimeWarning.missingBreakTime != null) {
             missingBreakTime = newTimeWarning.missingBreakTime;
         }

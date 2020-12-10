@@ -65,6 +65,17 @@ class WarningCalculatorTest {
 
                     verify(messages, times(1)).getString(eq("warning.time.OUTSIDE_CORE_WORKING_TIME"));
                 }
+
+                @Test
+                void whenWarning_thenTranslatedWarning() {
+                    final ProjectTimeEntry start = projectTimeEntryFor(5, 12);
+                    final ProjectTimeEntry end = projectTimeEntryFor(18, 23);
+                    when(messages.getString(eq("warning.time.OUTSIDE_CORE_WORKING_TIME"))).thenReturn("WARNING_STRING");
+
+                    final List<TimeWarning> warnings = calculator.determineTimeWarnings(List.of(start, end));
+
+                    assertEquals("WARNING_STRING", warnings.get(0).getWarnings().get(0));
+                }
             }
 
             @Nested
