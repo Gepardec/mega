@@ -52,14 +52,14 @@ public class ManagementResourceTest {
     void getAllOfficeManagementEntries_whenNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
         when(userContext.user()).thenReturn(createUserForRole(Role.OFFICE_MANAGEMENT));
         given().contentType(ContentType.JSON)
-                .get("/management/officemanagemententries")
+                .get("/management/officemanagemententries/2020/11")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @Test
     void getAllOfficeManagementEntries_whenPOST_thenReturnsHttpStatusMETHOD_NOT_ALLOWED() {
         given().contentType(ContentType.JSON)
-                .post("/management/officemanagemententries")
+                .post("/management/officemanagemententries/2020/11")
                 .then().assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
     }
 
@@ -79,14 +79,16 @@ public class ManagementResourceTest {
                 createStepEntryForStep(StepName.CONTROL_TIMES, State.OPEN)
         );
 
-        when(commentService.cntFinishedAndTotalCommentsForEmployee(ArgumentMatchers.any(Employee.class)))
-                .thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
+        when(commentService.cntFinishedAndTotalCommentsForEmployee(
+                ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
+        ).thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
 
-        when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class)))
-                .thenReturn(entries);
+        when(stepEntryService.findAllStepEntriesForEmployee(
+                ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
+        ).thenReturn(entries);
 
         List<ManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/management/officemanagemententries")
+                .get("/management/officemanagemententries/2020/01")
                 .as(new TypeRef<>() {
                 });
 
@@ -117,14 +119,15 @@ public class ManagementResourceTest {
                 createStepEntryForStep(StepName.CONTROL_TIMES, State.OPEN)
         );
 
-        when(commentService.cntFinishedAndTotalCommentsForEmployee(ArgumentMatchers.any(Employee.class)))
-                .thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
+        when(commentService.cntFinishedAndTotalCommentsForEmployee(
+                ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
+        ).thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
 
-        when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class)))
+        when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(entries);
 
         List<ManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/management/officemanagemententries")
+                .get("/management/officemanagemententries/2020/10")
                 .as(new TypeRef<>() {
                 });
 
@@ -137,17 +140,18 @@ public class ManagementResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        when(commentService.cntFinishedAndTotalCommentsForEmployee(ArgumentMatchers.any(Employee.class)))
-                .thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
+        when(commentService.cntFinishedAndTotalCommentsForEmployee(
+                ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
+        ).thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
 
-        when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class)))
+        when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(Collections.emptyList());
 
         when(employeeService.getAllActiveEmployees())
                 .thenReturn(Collections.emptyList());
 
         List<ManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/management/officemanagemententries")
+                .get("/management/officemanagemententries/2020/11")
                 .as(new TypeRef<>() {
                 });
 
@@ -158,14 +162,14 @@ public class ManagementResourceTest {
     void getAllProjectManagementEntries_whenNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
         when(userContext.user()).thenReturn(createUserForRole(Role.PROJECT_LEAD));
         given().contentType(ContentType.JSON)
-                .get("/management/projectmanagemententries")
+                .get("/management/projectmanagemententries/2020/11")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @Test
     void getAllProjectManagementEntries_whenPOST_thenReturnsStatusMETHOD_NOT_ALLOWED() {
         given().contentType(ContentType.JSON)
-                .post("/management/projectmanagemententries")
+                .post("/management/projectmanagemententries/2020/11")
                 .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
     }
 
@@ -194,14 +198,17 @@ public class ManagementResourceTest {
                 createStepEntryForStep(StepName.CONTROL_TIMES, State.OPEN)
         );
 
-        when(commentService.cntFinishedAndTotalCommentsForEmployee(ArgumentMatchers.any(Employee.class)))
-                .thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
+        when(commentService.cntFinishedAndTotalCommentsForEmployee(
+                ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
+        ).thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
 
-        when(stepEntryService.findAllStepEntriesForEmployeeAndProject(ArgumentMatchers.any(Employee.class), ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
-                .thenReturn(entries);
+        when(stepEntryService.findAllStepEntriesForEmployeeAndProject(
+                ArgumentMatchers.any(Employee.class), ArgumentMatchers.anyString(), ArgumentMatchers.anyString(),
+                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
+        ).thenReturn(entries);
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/management/projectmanagemententries")
+                .get("/management/projectmanagemententries/2020/10")
                 .as(new TypeRef<>() {
                 });
 
@@ -235,7 +242,7 @@ public class ManagementResourceTest {
         when(userContext.user()).thenReturn(user);
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/management/projectmanagemententries")
+                .get("/management/projectmanagemententries/2020/11")
                 .as(new TypeRef<>() {
                 });
 
@@ -254,7 +261,7 @@ public class ManagementResourceTest {
                 .thenReturn(List.of(rgkkcc));
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/management/projectmanagemententries")
+                .get("/management/projectmanagemententries/2020/11")
                 .as(new TypeRef<>() {
                 });
 
@@ -279,11 +286,11 @@ public class ManagementResourceTest {
         when(projectService.getProjectsForMonthYear(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyList()))
                 .thenReturn(List.of(rgkkcc));
 
-        when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class)))
+        when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(Collections.emptyList());
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
-                .get("/management/projectmanagemententries")
+                .get("/management/projectmanagemententries/2020/11")
                 .as(new TypeRef<>() {
                 });
 

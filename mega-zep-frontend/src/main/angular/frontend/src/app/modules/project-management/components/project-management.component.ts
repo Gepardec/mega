@@ -13,6 +13,10 @@ import {Comment} from '../../shared/models/Comment';
 import {Employee} from '../../shared/models/Employee';
 import {Step} from '../../shared/models/Step';
 
+import * as _moment from 'moment';
+import {Moment} from 'moment';
+const moment = _moment;
+
 @Component({
   selector: 'app-project-management',
   templateUrl: './project-management.component.html',
@@ -30,8 +34,11 @@ export class ProjectManagementComponent implements OnInit {
     'doneCommentsIndicator',
     'releaseDate'
   ];
+
   pmSelectionModels: Map<string, SelectionModel<ManagementEntry>>;
   environment = environment;
+  selectedYear = moment().year();
+  selectedMonth = moment().month();
 
   constructor(private dialog: MatDialog,
               private pmService: ProjectManagementService,
@@ -40,6 +47,12 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getPmEntries();
+  }
+
+  dateChanged(date: Moment) {
+    this.selectedYear = moment(date).year();
+    this.selectedMonth = moment(date).month() + 1;
     this.getPmEntries();
   }
 
@@ -54,20 +67,22 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   openDialog(employee: Employee, project: string): void {
-    this.commentService.getCommentsForEmployee(employee).subscribe((comments: Array<Comment>) => {
-      const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
-        {
-          width: '100%',
-          autoFocus: false
-        }
-      );
+    this.commentService.getCommentsForEmployee(employee.email, this.getFormattedDate())
+      .subscribe((comments: Array<Comment>) => {
+        const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
+          {
+            width: '100%',
+            autoFocus: false
+          }
+        );
 
-      dialogRef.componentInstance.employee = employee;
-      dialogRef.componentInstance.comments = comments;
-      dialogRef.componentInstance.step = Step.CONTROL_TIME_EVIDENCES;
-      dialogRef.componentInstance.project = project;
-      dialogRef.afterClosed().subscribe(() => this.getPmEntries());
-    });
+        dialogRef.componentInstance.employee = employee;
+        dialogRef.componentInstance.comments = comments;
+        dialogRef.componentInstance.step = Step.CONTROL_TIME_EVIDENCES;
+        dialogRef.componentInstance.project = project;
+        dialogRef.componentInstance.currentMonthYear = this.getFormattedDate();
+        dialogRef.afterClosed().subscribe(() => this.getPmEntries());
+      });
   }
 
   isAnySelected(): boolean {
@@ -85,22 +100,26 @@ export class ProjectManagementComponent implements OnInit {
     for (const [projectName, selectionModel] of this.pmSelectionModels.entries()) {
       if (selectionModel.selected.length > 0) {
         for (const entry of selectionModel.selected) {
-          this.stepEntryService.closeProjectCheck(entry.employee, projectName).subscribe(() => entry.projectCheckState = State.DONE);
+          this.stepEntryService
+            .closeProjectCheck(entry.employee, projectName, this.getFormattedDate())
+            .subscribe(() => entry.projectCheckState = State.DONE);
         }
       }
     }
   }
 
   closeProjectCheck(projectName: string, row: ManagementEntry) {
-    this.stepEntryService.closeProjectCheck(row.employee, projectName).subscribe(() => row.projectCheckState = State.DONE);
+    this.stepEntryService
+      .closeProjectCheck(row.employee, projectName, this.getFormattedDate())
+      .subscribe(() => row.projectCheckState = State.DONE);
   }
 
   private getPmEntries() {
-    this.pmService.getEntries().subscribe((pmEntries: Array<ProjectManagementEntry>) => {
+    this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
       this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
       this.pmEntries.forEach(pmEntry =>
-         this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []))
+        this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []))
       );
     });
   }
@@ -130,5 +149,9 @@ export class ProjectManagementComponent implements OnInit {
     }
 
     return new Date();
+  }
+
+  private getFormattedDate() {
+    return this.selectedYear + '-' + this.selectedMonth + '-01';
   }
 }

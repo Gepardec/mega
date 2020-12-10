@@ -41,12 +41,9 @@ public class CommentServiceImpl implements CommentService {
     StepEntryService stepEntryService;
 
     @Override
-    public List<Comment> findCommentsForEmployee(final Employee employee) {
-        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
-
+    public List<Comment> findCommentsForEmployee(final Employee employee, LocalDate from, LocalDate to) {
         List<com.gepardec.mega.db.entity.Comment> dbComments =
-                commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(fromDate, toDate, employee.email());
+                commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(from, to, employee.email());
 
         List<Comment> domainComments = dbComments
                 .stream()
@@ -62,16 +59,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public FinishedAndTotalComments cntFinishedAndTotalCommentsForEmployee(Employee employee) {
+    public FinishedAndTotalComments cntFinishedAndTotalCommentsForEmployee(Employee employee, LocalDate from, LocalDate to) {
         Objects.requireNonNull(employee, "Employee must not be null!");
-        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        Objects.requireNonNull(from, "From date must not be null!");
+        Objects.requireNonNull(to, "To date must not be null!");
 
         List<com.gepardec.mega.db.entity.Comment> allComments =
                 commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(
-                        fromDate,
-                        toDate,
-                        employee.email()
+                        from, to, employee.email()
                 );
 
         long finishedCommands = allComments.stream().filter(comment -> State.DONE.equals(comment.getState())).count();
@@ -82,11 +77,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment createNewCommentForEmployee(Long stepId, Employee employee, String comment, String assigneeEmail, String project) {
+    public Comment createNewCommentForEmployee(Long stepId, Employee employee, String comment, String assigneeEmail, String project, String currentMonthYear) {
         Objects.requireNonNull(employee);
         com.gepardec.mega.db.entity.StepEntry stepEntry = StringUtils.isBlank(project) ?
-                stepEntryService.findStepEntryForEmployeeAtStep(stepId, employee, assigneeEmail) :
-                stepEntryService.findStepEntryForEmployeeAndProjectAtStep(stepId, employee, assigneeEmail, project);
+                stepEntryService.findStepEntryForEmployeeAtStep(stepId, employee, assigneeEmail, currentMonthYear) :
+                stepEntryService.findStepEntryForEmployeeAndProjectAtStep(stepId, employee, assigneeEmail, project, currentMonthYear);
         com.gepardec.mega.db.entity.Comment newComment = new com.gepardec.mega.db.entity.Comment();
         newComment.setMessage(comment);
         newComment.setStepEntry(stepEntry);

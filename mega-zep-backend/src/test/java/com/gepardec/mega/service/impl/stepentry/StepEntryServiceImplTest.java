@@ -96,7 +96,10 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString(), ArgumentMatchers.anyLong()))
                 .thenReturn(0);
 
-        boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(createEmployee(), 0L);
+        Employee employee = createEmployee();
+        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(employee, 0L, from, to);
         Assertions.assertFalse(updated);
     }
 
@@ -106,7 +109,10 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString(), ArgumentMatchers.anyLong()))
                 .thenReturn(1);
 
-        boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(createEmployee(), 1L);
+        Employee employee = createEmployee();
+        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(employee, 1L, from, to);
         assertTrue(updated);
     }
 
@@ -114,7 +120,7 @@ class StepEntryServiceImplTest {
     void findAllStepEntriesForEmployee_whenEmployeeIsNull_thenThrowsException() {
         NullPointerException thrown = assertThrows(
                 NullPointerException.class,
-                () -> stepEntryService.findAllStepEntriesForEmployee(null),
+                () -> stepEntryService.findAllStepEntriesForEmployee(null, null, null),
                 "Expected NullpointerException was not thrown!"
         );
 
@@ -130,7 +136,9 @@ class StepEntryServiceImplTest {
         )).thenReturn(List.of(createStepEntry(1L)));
 
         Employee empl = createEmployee();
-        List<StepEntry> result = stepEntryService.findAllStepEntriesForEmployee(empl);
+        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(empl.releaseDate()));
+        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(empl.releaseDate()));
+        List<StepEntry> result = stepEntryService.findAllStepEntriesForEmployee(empl, from, to);
         verify(stepEntryRepository, times(1)).findAllOwnedStepEntriesInRange(
                 LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(empl.releaseDate())),
                 LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(empl.releaseDate())),
@@ -146,7 +154,7 @@ class StepEntryServiceImplTest {
     void findStepEntryForEmployeeAtStep_whenEmployeeIsNull_thenThrowsException() {
         NullPointerException thrown = assertThrows(
                 NullPointerException.class,
-                () -> stepEntryService.findStepEntryForEmployeeAtStep(2L, null, ""),
+                () -> stepEntryService.findStepEntryForEmployeeAtStep(2L, null, "", ""),
                 "Expected NullpointerException was not thrown!"
         );
 
@@ -163,9 +171,10 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.anyString()
         )).thenReturn(Optional.empty());
 
+        Employee empl = createEmployee();
         IllegalStateException thrown = assertThrows(
                 IllegalStateException.class,
-                () -> stepEntryService.findStepEntryForEmployeeAtStep(2L, createEmployee(), ""),
+                () -> stepEntryService.findStepEntryForEmployeeAtStep(2L, empl, "", empl.releaseDate()),
                 "Expected IllegalStateException was not thrown!"
         );
 
@@ -182,7 +191,8 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.anyString()
         )).thenReturn(Optional.of(createStepEntry(1L)));
 
-        StepEntry stepEntry = stepEntryService.findStepEntryForEmployeeAtStep(2L, createEmployee(), "");
+        Employee empl = createEmployee();
+        StepEntry stepEntry = stepEntryService.findStepEntryForEmployeeAtStep(2L, empl, "", empl.releaseDate());
         assertNotNull(stepEntry);
         assertEquals(1L, stepEntry.getId());
         assertEquals("Liwest-EMS", stepEntry.getProject());

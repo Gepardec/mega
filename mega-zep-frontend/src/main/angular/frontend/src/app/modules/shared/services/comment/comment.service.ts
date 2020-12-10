@@ -32,21 +32,21 @@ export class CommentService {
     return this.httpClient.put<number>(this.config.getBackendUrlWithContext('/comments/setdone'), comment);
   }
 
-  getCommentsForEmployee(employee: Employee): Observable<Array<Comment>> {
+  getCommentsForEmployee(employeeEmail: string, montYear: string): Observable<Array<Comment>> {
     return this.httpClient.get<Array<Comment>>(
       this.config.getBackendUrlWithContext('/comments/getallcommentsforemployee'),
       {
         params: {
-          email: employee.email,
-          releasedate: employee.releaseDate
+          email: employeeEmail,
+          date: montYear
         }
       });
   }
 
-  createNewComment(employee: Employee, message: string, assigneeEmail: string, step: Step, project: string): Observable<any> {
+  createNewComment(employee: Employee, message: string, assigneeEmail: string, step: Step, project: string, currentMonthYear: string): Observable<any> {
     return this.httpClient.post(
       this.config.getBackendUrlWithContext('/comments'),
-      new NewCommentEntry(step, employee, message, assigneeEmail, project)
+      new NewCommentEntry(step, employee, message, assigneeEmail, project, currentMonthYear)
     );
   }
 

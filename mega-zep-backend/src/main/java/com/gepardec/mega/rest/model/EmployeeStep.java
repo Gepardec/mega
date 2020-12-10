@@ -17,6 +17,9 @@ public abstract class EmployeeStep {
     @JsonProperty
     public abstract Employee employee();
 
+    @JsonProperty
+    public abstract String currentMonthYear();
+
     public EmployeeStep() {
         super();
     }
@@ -30,6 +33,8 @@ public abstract class EmployeeStep {
         @JsonProperty public abstract Builder stepId(Long stepId);
 
         @JsonProperty public abstract Builder employee(Employee employee);
+
+        @JsonProperty public abstract Builder currentMonthYear(String currentMonthYear);
 
         @JsonProperty public abstract EmployeeStep build();
 

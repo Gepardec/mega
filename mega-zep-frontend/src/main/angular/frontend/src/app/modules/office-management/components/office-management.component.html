@@ -16,8 +16,8 @@
           </button>
         </mat-form-field>
         <span>
-        {{getCurrentReleaseDate() | date: 'MMMM yyyy' : null : 'de-AT' }}
-      </span>
+          <app-datepicker-month-year (dateChanged)="dateChanged($event)"></app-datepicker-month-year>
+        </span>
       </mat-toolbar-row>
       <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
         <mat-checkbox style="font-size: 18px"

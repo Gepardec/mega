@@ -14,6 +14,11 @@ import {CommentsForEmployeeComponent} from '../../shared/components/comments-for
 import {StepentriesService} from '../../shared/services/stepentries/stepentries.service';
 import {Step} from '../../shared/models/Step';
 
+import * as _moment from 'moment';
+import {Moment} from 'moment';
+
+const moment = _moment;
+
 @Component({
   selector: 'app-office-management',
   templateUrl: './office-management.component.html',
@@ -40,6 +45,8 @@ export class OfficeManagementComponent implements OnInit {
   dayOfMonthForWarning = 5;
   configuration = configuration;
   environment = environment;
+  selectedYear = moment().year();
+  selectedMonth = moment().subtract(1, 'month').month();
 
   constructor(
     private dialog: MatDialog,
@@ -54,6 +61,15 @@ export class OfficeManagementComponent implements OnInit {
     this.getOmEntries();
   }
 
+  dateChanged(date: Moment) {
+    console.log('dateChanged: ' + moment(date).format('yyyy-MM-DD'));
+    this.selectedYear = moment(date).year();
+    this.selectedMonth = moment(date).month();
+    console.log(this.selectedMonth);
+
+    this.getOmEntries();
+  }
+
   areAllSelected() {
     return this.omEntries && this.omSelectionModel.selected.length === this.omEntries.length;
   }
@@ -63,19 +79,22 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   openDialog(omEntry: ManagementEntry): void {
-    this.commentService.getCommentsForEmployee(omEntry.employee).subscribe((comments: Array<Comment>) => {
-      const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
-        {
-          width: '100%',
-          autoFocus: false
-        }
-      );
+    this.commentService
+      .getCommentsForEmployee(omEntry.employee.email, this.getFormattedDate())
+      .subscribe((comments: Array<Comment>) => {
+        const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
+          {
+            width: '100%',
+            autoFocus: false
+          }
+        );
 
-      dialogRef.componentInstance.employee = omEntry.employee;
-      dialogRef.componentInstance.comments = comments;
-      dialogRef.componentInstance.step = Step.CONTROL_INTERNAL_TIMES;
-      dialogRef.afterClosed().subscribe(() => this.getOmEntries());
-    });
+        dialogRef.componentInstance.employee = omEntry.employee;
+        dialogRef.componentInstance.comments = comments;
+        dialogRef.componentInstance.step = Step.CONTROL_INTERNAL_TIMES;
+        dialogRef.componentInstance.currentMonthYear = this.getFormattedDate();
+        dialogRef.afterClosed().subscribe(() => this.getOmEntries());
+      });
   }
 
   changeDate(emittedDate: string): void {
@@ -104,10 +123,10 @@ export class OfficeManagementComponent implements OnInit {
 
   getCurrentReleaseDate(): Date {
     const entries = this.omEntries.filter(entry => {
-        return entry.projectCheckState === State.OPEN ||
-          entry.customerCheckState === State.OPEN ||
-          entry.employeeCheckState === State.OPEN ||
-          entry.internalCheckState === State.OPEN;
+      return entry.projectCheckState === State.OPEN ||
+        entry.customerCheckState === State.OPEN ||
+        entry.employeeCheckState === State.OPEN ||
+        entry.internalCheckState === State.OPEN;
     });
 
     if (entries.length > 0) {
@@ -145,19 +164,28 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   closeCustomerCheck(omEntry: ManagementEntry) {
-    this.stepEntryService.close(omEntry.employee, Step.CONTROL_EXTERNAL_TIMES).subscribe(() => {
-      omEntry.customerCheckState = State.DONE;
-    });
+    this.stepEntryService
+      .close(omEntry.employee, Step.CONTROL_EXTERNAL_TIMES, this.getFormattedDate())
+      .subscribe(() => {
+        omEntry.customerCheckState = State.DONE;
+      });
   }
 
   closeInternalCheck(omEntry: ManagementEntry) {
-    this.stepEntryService.close(omEntry.employee, Step.CONTROL_INTERNAL_TIMES).subscribe(() => {
-      omEntry.internalCheckState = State.DONE;
-    });
+    this.stepEntryService
+      .close(omEntry.employee, Step.CONTROL_INTERNAL_TIMES, this.getFormattedDate())
+      .subscribe(() => {
+        omEntry.internalCheckState = State.DONE;
+      });
+  }
+
+  private getFormattedDate() {
+    console.log(moment().year(this.selectedYear).month(this.selectedMonth).date(1).format('yyyy-MM-DD'));
+    return moment().year(this.selectedYear).month(this.selectedMonth).date(1).format('yyyy-MM-DD');
   }
 
   private getOmEntries() {
-    this.omService.getEntries().subscribe((omEntries: Array<ManagementEntry>) => {
+    this.omService.getEntries(this.selectedYear, this.selectedMonth + 1).subscribe((omEntries: Array<ManagementEntry>) => {
       this.omEntries = omEntries;
       this.sortOmEntries();
     });

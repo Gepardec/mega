@@ -5,13 +5,14 @@ import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.FinishedAndTotalComments;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface CommentService {
-    List<Comment> findCommentsForEmployee(final Employee employee);
+    List<Comment> findCommentsForEmployee(final Employee employee, LocalDate from, LocalDate to);
     int setDone(final Comment comment);
-    FinishedAndTotalComments cntFinishedAndTotalCommentsForEmployee(final Employee employee);
-    Comment createNewCommentForEmployee(Long stepId, Employee employee, String comment, String assigneeEmail, String project);
+    FinishedAndTotalComments cntFinishedAndTotalCommentsForEmployee(final Employee employee, LocalDate from, LocalDate to);
+    Comment createNewCommentForEmployee(Long stepId, Employee employee, String comment, String assigneeEmail, String project, String currentMonthYear);
     boolean deleteCommentWithId(Long id);
     Comment updateComment(Long id, String message);
 }

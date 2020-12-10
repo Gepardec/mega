@@ -3,6 +3,7 @@ package com.gepardec.mega.rest;
 import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.rest.model.NewCommentEntry;
 import com.gepardec.mega.service.api.comment.CommentService;
 
@@ -11,6 +12,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.time.LocalDate;
 import java.util.List;
 
 @Secured
@@ -33,8 +35,10 @@ public class CommentResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Comment> getAllCommentsForEmployee(
             @QueryParam("email") @NotNull(message = "{commentResource.email.notNull}") @Email(message = "{commentResource.email.invalid}") String employeeEmail,
-            @QueryParam("releasedate") @NotNull(message = "{commentResource.releaseDate.notNull}") String releaseDate) {
-        return commentService.findCommentsForEmployee(Employee.builder().email(employeeEmail).releaseDate(releaseDate).build());
+            @QueryParam("date") @NotNull(message = "{commentResource.date.notNull}") String currentMonthYear) {
+        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(currentMonthYear));
+        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(currentMonthYear));
+        return commentService.findCommentsForEmployee(Employee.builder().email(employeeEmail).build(), from, to);
     }
 
     @POST
@@ -46,7 +50,8 @@ public class CommentResource {
                 newComment.employee(),
                 newComment.comment(),
                 newComment.assigneeEmail(),
-                newComment.project()
+                newComment.project(),
+                newComment.currentMonthYear()
         );
     }
 

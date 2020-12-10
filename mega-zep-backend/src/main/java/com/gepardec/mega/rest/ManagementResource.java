@@ -22,10 +22,12 @@ import org.apache.commons.lang3.StringUtils;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -52,14 +54,17 @@ public class ManagementResource {
     ProjectService projectService;
 
     @GET
-    @Path("/officemanagemententries")
+    @Path("/officemanagemententries/{year}/{month}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ManagementEntry> getAllOfficeManagementEntries() {
+    public List<ManagementEntry> getAllOfficeManagementEntries(@PathParam("year") Integer year, @PathParam("month") Integer month) {
+        LocalDate from = LocalDate.of(year, month, 1);
+        LocalDate to = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
+
         List<ManagementEntry> officeManagementEntries = new ArrayList<>();
         List<Employee> activeEmployees = employeeService.getAllActiveEmployees();
         for (Employee empl : activeEmployees) {
-            List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployee(empl);
-            ManagementEntry newManagementEntry = createManagementEntryForEmployee(empl, stepEntries);
+            List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployee(empl, from, to);
+            ManagementEntry newManagementEntry = createManagementEntryForEmployee(empl, stepEntries, from, to);
             if (newManagementEntry != null) {
                 officeManagementEntries.add(newManagementEntry);
             }
@@ -69,11 +74,14 @@ public class ManagementResource {
     }
 
     @GET
-    @Path("/projectmanagemententries")
+    @Path("/projectmanagemententries/{year}/{month}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ProjectManagementEntry> getAllProjectManagementEntries() {
+    public List<ProjectManagementEntry> getAllProjectManagementEntries(@PathParam("year") Integer year, @PathParam("month") Integer month) {
+        LocalDate from = LocalDate.of(year, month, 1);
+        LocalDate to = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
+
         List<Project> projects = projectService
-                .getProjectsForMonthYear(LocalDate.now(), List.of(ProjectFilter.IS_LEADS_AVAILABLE,
+                .getProjectsForMonthYear(from, List.of(ProjectFilter.IS_LEADS_AVAILABLE,
                         ProjectFilter.IS_CUSTOMER_PROJECT))
                 .stream()
                 .filter(project -> project.leads().stream().anyMatch(lead -> lead.equalsIgnoreCase(
@@ -84,7 +92,7 @@ public class ManagementResource {
         List<ProjectManagementEntry> projectManagementEntries = new ArrayList<>();
         Map<String, Employee> employees = createEmployeeCache();
         for (Project currentProject : projects) {
-            List<ManagementEntry> entries = createManagementEntriesForProject(currentProject, employees);
+            List<ManagementEntry> entries = createManagementEntriesForProject(currentProject, employees, from, to);
             projectManagementEntries.add(ProjectManagementEntry.builder()
                     .projectName(currentProject.projectId())
                     .entries(entries)
@@ -100,27 +108,30 @@ public class ManagementResource {
                 .collect(Collectors.toMap(Employee::userId, employee -> employee));
     }
 
-    private List<ManagementEntry> createManagementEntriesForProject(Project project, Map<String, Employee> employees) {
+    private List<ManagementEntry> createManagementEntriesForProject(Project project, Map<String, Employee> employees, LocalDate from, LocalDate to) {
         List<ManagementEntry> entries = new ArrayList<>();
         for (String userId : project.employees()) {
             if (employees.containsKey(userId)) {
                 Employee empl = employees.get(userId);
                 List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployeeAndProject(
-                        empl, project.projectId(), userContext.user().email()
+                        empl, project.projectId(), userContext.user().email(), from, to
                 );
-                entries.add(createManagementEntryForEmployee(empl, project.projectId(), stepEntries));
+                ManagementEntry entry = createManagementEntryForEmployee(empl, project.projectId(), stepEntries, from, to);
+                if(entry != null) {
+                    entries.add(entry);
+                }
             }
         }
 
         return entries;
     }
 
-    private ManagementEntry createManagementEntryForEmployee(Employee employee, List<StepEntry> stepEntries) {
-        return createManagementEntryForEmployee(employee, null, stepEntries);
+    private ManagementEntry createManagementEntryForEmployee(Employee employee, List<StepEntry> stepEntries, LocalDate from, LocalDate to) {
+        return createManagementEntryForEmployee(employee, null, stepEntries, from, to);
     }
 
-    private ManagementEntry createManagementEntryForEmployee(Employee employee, String projectId, List<StepEntry> stepEntries) {
-        FinishedAndTotalComments finishedAndTotalComments = commentService.cntFinishedAndTotalCommentsForEmployee(employee);
+    private ManagementEntry createManagementEntryForEmployee(Employee employee, String projectId, List<StepEntry> stepEntries, LocalDate from, LocalDate to) {
+        FinishedAndTotalComments finishedAndTotalComments = commentService.cntFinishedAndTotalCommentsForEmployee(employee, from, to);
         if (!stepEntries.isEmpty()) {
             return ManagementEntry.builder()
                     .employee(employee)
@@ -134,16 +145,7 @@ public class ManagementResource {
                     .build();
         }
 
-        return ManagementEntry.builder()
-                .employee(employee)
-                .customerCheckState(com.gepardec.mega.domain.model.State.DONE)
-                .employeeCheckState(com.gepardec.mega.domain.model.State.DONE)
-                .internalCheckState(com.gepardec.mega.domain.model.State.DONE)
-                .projectCheckState(com.gepardec.mega.domain.model.State.DONE)
-                .finishedComments(finishedAndTotalComments.finishedComments())
-                .totalComments(finishedAndTotalComments.totalComments())
-                .entryDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                .build();
+        return null;
     }
 
     private com.gepardec.mega.domain.model.State extractEmployeeCheckState(List<StepEntry> stepEntries) {

@@ -52,9 +52,11 @@ export class EmployeeCheckComponent implements OnInit {
   }
 
   setOpenAndUnassignedStepEntriesDone() {
-    this.stepentriesService.close(this.monthlyReport.employee, Step.CONTROL_TIMES).subscribe((success: boolean) => {
-      this.emitRefreshMonthlyReport();
-    });
+    this.stepentriesService
+      .close(this.monthlyReport.employee, Step.CONTROL_TIMES, this.monthlyReport.employee.releaseDate)
+      .subscribe((success: boolean) => {
+        this.emitRefreshMonthlyReport();
+      });
   }
 
   emitRefreshMonthlyReport() {

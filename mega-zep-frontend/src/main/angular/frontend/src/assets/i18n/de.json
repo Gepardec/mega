@@ -45,7 +45,7 @@
     "commentsToDo": "Einige Anmerkungen sind abzuarbeiten:",
     "checkSuccess": "Deine Zeiten wurden kontrolliert und sind richtig. Bis nächsten Monat!",
     "checkWip": "Die Kontrolle deiner Zeiten ist im Gange!",
-    "noTimesCurrentMonth": "Du hast dieses Monat keine Zeiten eingetragen!",
+    "noTimesCurrentMonth": "Dieses Monat ist nicht verfügbar!",
     "pleaseCheckPrompt": "Bitte überprüfe deine Eingaben (Zeiten, Reisen, Belege, ...) in ZEP und beim Kunden und bestätige diese anschließend.",
     "confirmBtnText": "Buchungen bestätigen",
     "title": {

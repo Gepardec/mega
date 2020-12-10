@@ -26,6 +26,9 @@ public abstract class NewCommentEntry {
     @JsonProperty
     public abstract String project();
 
+    @JsonProperty
+    public abstract String currentMonthYear();
+
     public NewCommentEntry() {
         super();
     }
@@ -50,6 +53,9 @@ public abstract class NewCommentEntry {
 
         @JsonProperty
         public abstract NewCommentEntry.Builder project(String project);
+
+        @JsonProperty
+        public abstract NewCommentEntry.Builder currentMonthYear(String currentMonthYear);
 
         @JsonProperty
         public abstract NewCommentEntry build();
