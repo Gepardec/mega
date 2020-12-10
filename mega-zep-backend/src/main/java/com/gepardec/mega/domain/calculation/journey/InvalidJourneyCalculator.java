@@ -28,7 +28,7 @@ public class InvalidJourneyCalculator implements WarningCalculationStrategy<Jour
             for (int i = 0; i < entries.size(); i++) {
                 final JourneyTimeEntry current = entries.get(i);
                 final JourneyDirection nextDirection = tryToGetNextJourneyDirection(entries, i);
-                Warning warning = journeyDirectionValidator.validate(current.getJourneyDirection(), nextDirection);
+                JourneyWarningType warning = journeyDirectionValidator.validate(current.getJourneyDirection(), nextDirection);
                 if (warning != null) {
                     warnings.add(createJourneyWarningWithEnumType(current, warning));
                 }
@@ -43,7 +43,7 @@ public class InvalidJourneyCalculator implements WarningCalculationStrategy<Jour
         return (idx + 1 < journeyTimeEntries.size()) ? journeyTimeEntries.get(idx + 1).getJourneyDirection() : null;
     }
 
-    private JourneyWarning createJourneyWarningWithEnumType(JourneyTimeEntry journeyEntry, Warning warning) {
+    private JourneyWarning createJourneyWarningWithEnumType(JourneyTimeEntry journeyEntry, JourneyWarningType warning) {
         JourneyWarning newJourneyWarning = new JourneyWarning();
         newJourneyWarning.setDate(journeyEntry.getDate());
         newJourneyWarning.getWarningTypes().add(warning);

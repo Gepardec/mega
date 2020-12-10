@@ -34,7 +34,7 @@ class InvalidJourneyCalculatorTest {
 
                 assertEquals(1, warnings.size());
                 assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(Warning.JOURNEY_BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
+                assertEquals(JourneyWarningType.BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
 
             }
 
@@ -47,7 +47,7 @@ class InvalidJourneyCalculatorTest {
 
                 assertEquals(1, warnings.size());
                 assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(Warning.JOURNEY_BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
+                assertEquals(JourneyWarningType.BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
             }
 
             @Test
@@ -61,8 +61,8 @@ class InvalidJourneyCalculatorTest {
                 // TODO: Both journey entries cause TO_MISSING Warning, because all are checked separately
                 assertEquals(2, warnings.size());
                 assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(0).getWarningTypes().get(0));
-                assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(1).getWarningTypes().get(0));
+                assertEquals(JourneyWarningType.TO_MISSING, warnings.get(0).getWarningTypes().get(0));
+                assertEquals(JourneyWarningType.TO_MISSING, warnings.get(1).getWarningTypes().get(0));
             }
 
             @Test
@@ -76,8 +76,8 @@ class InvalidJourneyCalculatorTest {
                 // TODO: Both journey entries cause BACK_MISSING Warning, because all are checked separately
                 assertEquals(2, warnings.size());
                 assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(Warning.JOURNEY_BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
-                assertEquals(Warning.JOURNEY_BACK_MISSING, warnings.get(1).getWarningTypes().get(0));
+                assertEquals(JourneyWarningType.BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
+                assertEquals(JourneyWarningType.BACK_MISSING, warnings.get(1).getWarningTypes().get(0));
             }
 
             @Test
@@ -91,8 +91,8 @@ class InvalidJourneyCalculatorTest {
                 // TODO: Both journey entries cause TO_MISSING Warning, because all are checked separately
                 assertEquals(2, warnings.size());
                 assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(0).getWarningTypes().get(0));
-                assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(1).getWarningTypes().get(0));
+                assertEquals(JourneyWarningType.TO_MISSING, warnings.get(0).getWarningTypes().get(0));
+                assertEquals(JourneyWarningType.TO_MISSING, warnings.get(1).getWarningTypes().get(0));
             }
 
             @Test
@@ -106,8 +106,8 @@ class InvalidJourneyCalculatorTest {
                 // TODO: Both journey entries cause TO_MISSING Warning, because all are checked separately
                 assertEquals(2, warnings.size());
                 assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(0).getWarningTypes().get(0));
-                assertEquals(Warning.JOURNEY_TO_MISSING, warnings.get(1).getWarningTypes().get(0));
+                assertEquals(JourneyWarningType.TO_MISSING, warnings.get(0).getWarningTypes().get(0));
+                assertEquals(JourneyWarningType.TO_MISSING, warnings.get(1).getWarningTypes().get(0));
             }
         }
 

@@ -110,7 +110,7 @@ public class ManagementResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        when(employeeService.getAllActiveEmployees()).thenReturn(Collections.emptyList());
+        when(employeeService.getAllActiveEmployees()).thenReturn(List.of());
 
         List<com.gepardec.mega.db.entity.StepEntry> entries = List.of(
                 createStepEntryForStep(StepName.CONTROL_EXTERNAL_TIMES, State.DONE),
@@ -145,10 +145,10 @@ public class ManagementResourceTest {
         ).thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
 
         when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
-                .thenReturn(Collections.emptyList());
+                .thenReturn(List.of());
 
         when(employeeService.getAllActiveEmployees())
-                .thenReturn(Collections.emptyList());
+                .thenReturn(List.of());
 
         List<ManagementEntry> result = given().contentType(ContentType.JSON)
                 .get("/management/officemanagemententries/2020/11")
@@ -256,7 +256,7 @@ public class ManagementResourceTest {
         when(userContext.user()).thenReturn(user);
 
         List<String> leads = List.of("005-wbruckmueller");
-        Project rgkkcc = createProject("ÖGK-RGKKCC-2020", Collections.emptyList(), leads);
+        Project rgkkcc = createProject("ÖGK-RGKKCC-2020", List.of(), leads);
         when(projectService.getProjectsForMonthYear(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyList()))
                 .thenReturn(List.of(rgkkcc));
 
@@ -287,7 +287,7 @@ public class ManagementResourceTest {
                 .thenReturn(List.of(rgkkcc));
 
         when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
-                .thenReturn(Collections.emptyList());
+                .thenReturn(List.of());
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/11")

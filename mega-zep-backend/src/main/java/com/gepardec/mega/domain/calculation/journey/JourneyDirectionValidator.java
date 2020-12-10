@@ -1,25 +1,25 @@
 package com.gepardec.mega.domain.calculation.journey;
 
 import com.gepardec.mega.domain.model.monthlyreport.JourneyDirection;
-import com.gepardec.mega.domain.model.monthlyreport.Warning;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyWarningType;
 
 public class JourneyDirectionValidator {
 
     private JourneyDirection formerDirection = null;
 
-    public Warning validate(JourneyDirection currentDirection, JourneyDirection nextDirection) {
-        Warning warning = null;
+    public JourneyWarningType validate(JourneyDirection currentDirection, JourneyDirection nextDirection) {
+        JourneyWarningType warning = null;
         switch (currentDirection) {
             case TO:
                 if (formerDirection == JourneyDirection.TO || formerDirection == JourneyDirection.FURTHER) {
-                    warning = Warning.JOURNEY_BACK_MISSING;
+                    warning = JourneyWarningType.BACK_MISSING;
                 }
                 formerDirection = currentDirection;
                 break;
             case FURTHER:
             case BACK:
                 if (formerDirection == null || formerDirection == JourneyDirection.BACK) {
-                    warning = Warning.JOURNEY_TO_MISSING;
+                    warning = JourneyWarningType.TO_MISSING;
                 }
                 if (formerDirection != null) {
                     formerDirection = currentDirection;
@@ -32,7 +32,7 @@ public class JourneyDirectionValidator {
         if (warning == null && !isFinished()) {
             if (nextDirection == null || isStartingNewJourney(nextDirection)) {
                 formerDirection = null;
-                return Warning.JOURNEY_BACK_MISSING;
+                return JourneyWarningType.BACK_MISSING;
             }
         }
         return warning;

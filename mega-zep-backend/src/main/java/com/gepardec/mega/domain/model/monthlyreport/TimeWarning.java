@@ -1,6 +1,10 @@
 package com.gepardec.mega.domain.model.monthlyreport;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class TimeWarning implements ProjectEntryWarning {
@@ -12,6 +16,11 @@ public class TimeWarning implements ProjectEntryWarning {
     private Double missingBreakTime;
 
     private Double excessWorkTime;
+
+    private List<String> warnings = new ArrayList<>(0);
+
+    @JsonIgnore
+    private List<TimeWarningType> warningTypes = new ArrayList<>(0);
 
     public TimeWarning() {
     }
@@ -45,6 +54,22 @@ public class TimeWarning implements ProjectEntryWarning {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public List<String> getWarnings() {
+        return warnings;
+    }
+
+    public void setWarnings(List<String> warnings) {
+        this.warnings = warnings;
+    }
+
+    public List<TimeWarningType> getWarningTypes() {
+        return warningTypes;
+    }
+
+    public void setWarningTypes(List<TimeWarningType> warningTypes) {
+        this.warningTypes = warningTypes;
     }
 
     public Double getMissingRestTime() {
