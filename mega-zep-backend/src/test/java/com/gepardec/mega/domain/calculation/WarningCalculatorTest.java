@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class WarningCalculatorTest {
@@ -27,6 +28,70 @@ class WarningCalculatorTest {
 
     @Nested
     class DetermineTimeWarnings {
+
+        @Nested
+        class CoreWorkingHoursCalculator {
+
+            @Test
+            void whenUnordered_thenOrdered() {
+
+                final ProjectTimeEntry start = projectTimeEntryFor(6, 10);
+                final ProjectTimeEntry end = projectTimeEntryFor(18, 22);
+
+                final List<TimeWarning> result = calculator.determineTimeWarnings(List.of(end, start));
+
+                assertTrue(result.isEmpty());
+            }
+
+            @Nested
+            class AndWarnings {
+
+                @Test
+                void whenStartedToEarlyAt5AndStoppedToLateAt23_thenWarning() {
+                    final ProjectTimeEntry start = projectTimeEntryFor(5, 12);
+                    final ProjectTimeEntry end = projectTimeEntryFor(18, 23);
+
+                    final List<TimeWarning> result = calculator.determineTimeWarnings(List.of(start, end));
+
+                    assertEquals(1, result.size());
+                }
+
+                @Test
+                void whenWarning_thenWarningTypeTranslatedToMessage() {
+                    final ProjectTimeEntry start = projectTimeEntryFor(5, 12);
+                    final ProjectTimeEntry end = projectTimeEntryFor(18, 23);
+
+                    calculator.determineTimeWarnings(List.of(start, end));
+
+                    verify(messages, times(1)).getString(eq("warning.time.OUTSIDE_CORE_WORKING_TIME"));
+                }
+
+                @Test
+                void whenWarning_thenTranslatedWarning() {
+                    final ProjectTimeEntry start = projectTimeEntryFor(5, 12);
+                    final ProjectTimeEntry end = projectTimeEntryFor(18, 23);
+                    when(messages.getString(eq("warning.time.OUTSIDE_CORE_WORKING_TIME"))).thenReturn("WARNING_STRING");
+
+                    final List<TimeWarning> warnings = calculator.determineTimeWarnings(List.of(start, end));
+
+                    assertEquals("WARNING_STRING", warnings.get(0).getWarnings().get(0));
+                }
+            }
+
+            @Nested
+            class AndWithoutWarnings {
+
+                @Test
+                void whenValid_thenNoWarning() {
+                    final ProjectTimeEntry start = projectTimeEntryFor(6, 10);
+                    final ProjectTimeEntry end = projectTimeEntryFor(18, 22);
+
+                    final List<TimeWarning> result = calculator.determineTimeWarnings(List.of(start, end));
+
+                    assertTrue(result.isEmpty());
+                }
+            }
+        }
 
         @Nested
         class InvalidWorkingLocationInJourneyCalculator {
@@ -43,7 +108,7 @@ class WarningCalculatorTest {
 
                 assertEquals(1, warnings.size());
                 assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(Warning.JOURNEY_INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
+                assertEquals(JourneyWarningType.INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
             }
 
             @Nested
@@ -61,7 +126,7 @@ class WarningCalculatorTest {
 
                     assertEquals(1, warnings.size());
                     assertEquals(1, warnings.get(0).getWarningTypes().size());
-                    assertEquals(Warning.JOURNEY_INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
+                    assertEquals(JourneyWarningType.INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
                 }
             }
 
@@ -332,8 +397,8 @@ class WarningCalculatorTest {
         }
     }
 
-    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int endHour, final WorkingLocation workingLocation) {
-        return projectTimeEntryFor(1, startHour, 0, 1, endHour, 0, workingLocation);
+    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int endHour) {
+        return projectTimeEntryFor(1, startHour, 0, 1, endHour, 0, WorkingLocation.MAIN);
     }
 
     private ProjectTimeEntry projectTimeEntryFor(final int day, final int startHour, final int endHour) {

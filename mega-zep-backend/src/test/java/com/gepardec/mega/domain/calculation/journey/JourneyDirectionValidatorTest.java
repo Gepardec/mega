@@ -1,6 +1,6 @@
 package com.gepardec.mega.domain.calculation.journey;
 
-import com.gepardec.mega.domain.model.monthlyreport.Warning;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyWarningType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -40,30 +40,30 @@ class JourneyDirectionValidatorTest {
 
         @Test
         void whenOnlyJourneyStarted_thenReturnsNoWarning() {
-            assertEquals(Warning.JOURNEY_BACK_MISSING, handler.validate(TO, null));
+            assertEquals(JourneyWarningType.BACK_MISSING, handler.validate(TO, null));
         }
 
         @Test
         void whenOnlyJourneyFurther_thenReturnsWarningJourneyToMissing() {
-            assertEquals(Warning.JOURNEY_TO_MISSING, handler.validate(FURTHER, null));
+            assertEquals(JourneyWarningType.TO_MISSING, handler.validate(FURTHER, null));
         }
 
         @Test
         void whenOnlyJourneyFinished_thenReturnsWarningJourneyToMissing() {
-            assertEquals(Warning.JOURNEY_TO_MISSING, handler.validate(BACK, null));
+            assertEquals(JourneyWarningType.TO_MISSING, handler.validate(BACK, null));
         }
 
         @Test
         void whenFirstJourneyNotFinishedAndNewJourneyStarted_thenReturnsTwoTimesWarningJourneyBackMissing() {
             assertAll(
-                    () -> assertEquals(Warning.JOURNEY_BACK_MISSING, handler.validate(TO, TO)),
-                    () -> assertEquals(Warning.JOURNEY_BACK_MISSING, handler.validate(TO, null)));
+                    () -> assertEquals(JourneyWarningType.BACK_MISSING, handler.validate(TO, TO)),
+                    () -> assertEquals(JourneyWarningType.BACK_MISSING, handler.validate(TO, null)));
         }
 
         @Test
         void whenFirstJourneyNotStartedAndSecondReturnsTrue_thenOnFirstJourneyReturnsJourneyToMissingWarning() {
             assertAll(
-                    () -> assertEquals(Warning.JOURNEY_TO_MISSING, handler.validate(BACK, TO)),
+                    () -> assertEquals(JourneyWarningType.TO_MISSING, handler.validate(BACK, TO)),
                     () -> assertNull(handler.validate(TO, BACK)),
                     () -> assertNull(handler.validate(BACK, null)));
         }
@@ -71,7 +71,7 @@ class JourneyDirectionValidatorTest {
         @Test
         void whenFirstJourneyNotStartedAndNotFinishedAndSecondReturnsTrue_thenOnFirstJourneyReturnsJourneyToMissingWarning() {
             Assertions.assertAll(
-                    () -> assertEquals(Warning.JOURNEY_TO_MISSING, handler.validate(FURTHER, TO)),
+                    () -> assertEquals(JourneyWarningType.TO_MISSING, handler.validate(FURTHER, TO)),
                     () -> assertNull(handler.validate(TO, BACK)),
                     () -> assertNull(handler.validate(BACK, null)));
         }
@@ -79,7 +79,7 @@ class JourneyDirectionValidatorTest {
         @Test
         void whenFirstJourneyOnlyFinishedAndSecondJourneyIsValid_thenOnFirstJourneyReturnsJourneyToMissingWarning() {
             Assertions.assertAll(
-                    () -> assertEquals(Warning.JOURNEY_TO_MISSING, handler.validate(BACK, TO)),
+                    () -> assertEquals(JourneyWarningType.TO_MISSING, handler.validate(BACK, TO)),
                     () -> assertNull(handler.validate(TO, BACK)),
                     () -> assertNull(handler.validate(BACK, null)));
         }
@@ -89,7 +89,7 @@ class JourneyDirectionValidatorTest {
             assertAll(
                     () -> assertNull(handler.validate(TO, BACK)),
                     () -> assertNull(handler.validate(BACK, TO)),
-                    () -> assertEquals(Warning.JOURNEY_BACK_MISSING, handler.validate(TO, null)));
+                    () -> assertEquals(JourneyWarningType.BACK_MISSING, handler.validate(TO, null)));
         }
 
         @Test
@@ -97,7 +97,7 @@ class JourneyDirectionValidatorTest {
             assertAll(
                     () -> assertNull(handler.validate(TO, BACK)),
                     () -> assertNull(handler.validate(BACK, FURTHER)),
-                    () -> assertEquals(Warning.JOURNEY_TO_MISSING, handler.validate(FURTHER, null)));
+                    () -> assertEquals(JourneyWarningType.TO_MISSING, handler.validate(FURTHER, null)));
         }
 
 
@@ -106,27 +106,27 @@ class JourneyDirectionValidatorTest {
             assertAll(
                     () -> assertNull(handler.validate(TO, BACK)),
                     () -> assertNull(handler.validate(BACK, BACK)),
-                    () -> assertEquals(Warning.JOURNEY_TO_MISSING, handler.validate(BACK, null)));
+                    () -> assertEquals(JourneyWarningType.TO_MISSING, handler.validate(BACK, null)));
         }
 
         @Test
         void whenFirstJourneyIsRunningAndSecondJourneyIsStarted_thenOnSecondJourneyReturnsJourneyBackMissingWarning() {
             assertAll(
                     () -> assertNull(handler.validate(TO, FURTHER)),
-                    () -> assertEquals(Warning.JOURNEY_BACK_MISSING, handler.validate(FURTHER, TO)),
-                    () -> assertEquals(Warning.JOURNEY_BACK_MISSING, handler.validate(TO, null)));
+                    () -> assertEquals(JourneyWarningType.BACK_MISSING, handler.validate(FURTHER, TO)),
+                    () -> assertEquals(JourneyWarningType.BACK_MISSING, handler.validate(TO, null)));
         }
 
         @Test
         void whenMultipleValidAndInvalidJourneys_thenReturnsCorrespondingWarnings() {
             assertAll(
-                    () -> assertEquals(Warning.JOURNEY_TO_MISSING, handler.validate(BACK, TO)),
+                    () -> assertEquals(JourneyWarningType.TO_MISSING, handler.validate(BACK, TO)),
                     () -> assertNull(handler.validate(TO, BACK)),
                     () -> assertNull(handler.validate(BACK, TO)),
-                    () -> assertEquals(Warning.JOURNEY_BACK_MISSING, handler.validate(TO, TO)),
+                    () -> assertEquals(JourneyWarningType.BACK_MISSING, handler.validate(TO, TO)),
                     () -> assertNull(handler.validate(TO, BACK)),
                     () -> assertNull(handler.validate(BACK, BACK)),
-                    () -> assertEquals(Warning.JOURNEY_TO_MISSING, handler.validate(BACK, null)));
+                    () -> assertEquals(JourneyWarningType.TO_MISSING, handler.validate(BACK, null)));
         }
     }
 

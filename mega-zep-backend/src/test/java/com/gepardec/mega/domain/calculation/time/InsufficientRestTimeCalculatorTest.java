@@ -16,7 +16,7 @@ class InsufficientRestTimeCalculatorTest {
 
     @Test
     void calculate_whenDataListEmpty_thenNoWarningsCreated() {
-        assertTrue(calculator.calculate(Collections.emptyList()).isEmpty());
+        assertTrue(calculator.calculate(List.of()).isEmpty());
     }
 
     @Nested

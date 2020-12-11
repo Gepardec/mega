@@ -3,6 +3,7 @@ package com.gepardec.mega.service.impl.monthlyreport;
 import com.gepardec.mega.domain.calculation.WarningCalculationStrategy;
 import com.gepardec.mega.domain.calculation.journey.InvalidJourneyCalculator;
 import com.gepardec.mega.domain.calculation.journey.InvalidWorkingLocationInJourneyCalculator;
+import com.gepardec.mega.domain.calculation.time.CoreWorkingHoursCalculator;
 import com.gepardec.mega.domain.calculation.time.ExceededMaximumWorkingHoursPerDayCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientBreakCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientRestCalculator;
@@ -15,15 +16,14 @@ import java.util.*;
 @ApplicationScoped
 public class WarningCalculator {
 
-    private static final String MESSAGE_KEY_TEMPLATE = "warning.%s";
-
     @Inject
     ResourceBundle messages;
 
     private static final List<WarningCalculationStrategy<TimeWarning>> timeWarningCalculators = List.of(
             new ExceededMaximumWorkingHoursPerDayCalculator(),
             new InsufficientBreakCalculator(),
-            new InsufficientRestCalculator());
+            new InsufficientRestCalculator(),
+            new CoreWorkingHoursCalculator());
 
     private static final List<WarningCalculationStrategy<JourneyWarning>> journeyWarningCalculators = List.of(
             new InvalidJourneyCalculator(),
@@ -52,6 +52,10 @@ public class WarningCalculator {
     }
 
     private void addToTimeWarnings(final List<TimeWarning> warnings, TimeWarning newTimeWarning) {
+        // convert enum type to string message
+        newTimeWarning.getWarningTypes()
+                .forEach(warningType -> newTimeWarning.getWarnings().add(textForWarningType(warningType)));
+
         Optional<TimeWarning> breakWarning = warnings.stream()
                 .filter(bw -> bw.getDate().isEqual(newTimeWarning.getDate()))
                 .findAny();
@@ -67,7 +71,7 @@ public class WarningCalculator {
 
         // convert enum type to string message
         newJourneyWarning.getWarningTypes()
-                .forEach(warningType -> newJourneyWarning.getWarnings().add(getTextByWarning(warningType)));
+                .forEach(warningType -> newJourneyWarning.getWarnings().add(textForWarningType(warningType)));
 
         Optional<JourneyWarning> journeyWarning = warnings.stream()
                 .filter(warn -> warn.getDate().isEqual(newJourneyWarning.getDate()))
@@ -81,7 +85,7 @@ public class WarningCalculator {
         }
     }
 
-    private String getTextByWarning(Warning warning) {
-        return messages.getString(String.format(MESSAGE_KEY_TEMPLATE, warning.name()));
+    private String textForWarningType(WarningType warning) {
+        return messages.getString(warning.messageTemplate());
     }
 }

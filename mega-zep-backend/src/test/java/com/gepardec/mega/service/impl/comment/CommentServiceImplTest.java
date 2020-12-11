@@ -166,7 +166,7 @@ class CommentServiceImplTest {
                 ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.anyString()
-        )).thenReturn(Collections.emptyList());
+        )).thenReturn(List.of());
 
         Employee employee = createEmployee();
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));

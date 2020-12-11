@@ -10,6 +10,15 @@
   <ng-template #timeContent>
     <mat-card-content>
       <mat-table [dataSource]="monthlyReport.timeWarnings">
+        <ng-container matColumnDef="warning">
+          <mat-header-cell *matHeaderCellDef>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let timeEntry" style="max-width: 50px;">
+            <span *ngIf="displayWarningsTooltip(timeEntry)">
+            <app-state-indicator size="small"></app-state-indicator>
+            </span>
+          </mat-cell>
+        </ng-container>
         <ng-container matColumnDef="dateTime">
           <mat-header-cell *matHeaderCellDef>
             {{'monthly-report.table.time.day' | translate}}
@@ -39,7 +48,7 @@
           <mat-cell *matCellDef="let timeEntry"> {{timeEntry.excessWorkTime}} </mat-cell>
         </ng-container>
 
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" [matTooltip]="displayWarningsTooltip(row)"></mat-row>
         <mat-header-row
           *matHeaderRowDef="displayedColumns; sticky: true"
           mat-header-row>
