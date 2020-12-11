@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gepardec.mega.db.entity.State;
+import com.gepardec.mega.db.entity.StepEntry;
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.rest.model.EmployeeProgress;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nullable;
@@ -35,9 +37,10 @@ public abstract class MonthlyReport {
             @JsonProperty("comments") final List<Comment> comments,
             @JsonProperty("employeeCheckState") final State employeeCheckState,
             @JsonProperty("assigned") final boolean assigned,
+            @JsonProperty("employeeProgresses") final List<EmployeeProgress> employeeProgresses,
             @JsonProperty("otherChecksDone") final boolean otherChecksDone) {
         return new com.gepardec.mega.domain.model.monthlyreport.AutoValue_MonthlyReport(
-                employee, timeWarnings, journeyWarnings, comments, employeeCheckState, assigned, otherChecksDone
+                employee, timeWarnings, journeyWarnings, comments, employeeCheckState, assigned, employeeProgresses, otherChecksDone
         );
     }
 
@@ -51,6 +54,9 @@ public abstract class MonthlyReport {
 
     @JsonProperty
     public abstract boolean isAssigned();
+
+    @JsonProperty
+    public abstract List<EmployeeProgress> employeeProgresses();
 
     @JsonProperty
     public abstract boolean otherChecksDone();
