@@ -47,7 +47,7 @@
         </td>
 
         <td class="mat-cell">
-          <pre [hidden]="comment.isEditing" [innerHTML]="parseAnchorTags(comment.message)">{{comment.message}}</pre>
+          <pre style="white-space: pre-wrap" [hidden]="comment.isEditing" [innerHTML]="parseAnchorTags(comment.message)">{{comment.message}}</pre>
           <div [hidden]="!comment.isEditing">
             <mat-form-field floatLabel="never">
               <mat-label>{{'comments-for-employee.editCommentLabel' | translate}}</mat-label>
