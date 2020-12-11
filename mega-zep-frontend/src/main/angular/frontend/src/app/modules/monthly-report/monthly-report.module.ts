@@ -9,6 +9,7 @@ import { SharedModule } from '../shared/shared.module';
 import { TimeCheckComponent } from './components/time-check/time-check.component';
 import { JourneyCheckComponent } from './components/journey-check/journey-check.component';
 import { EmployeeCheckComponent } from './components/employee-check/employee-check.component';
+import { EmployeeProgressComponent } from './components/employee-check/employee-progress/employee-progress.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { EmployeeCheckComponent } from './components/employee-check/employee-che
     DisplayMonthlyReportComponent,
     TimeCheckComponent,
     JourneyCheckComponent,
-    EmployeeCheckComponent
+    EmployeeCheckComponent,
+    EmployeeProgressComponent
   ],
   imports: [
     CommonModule,

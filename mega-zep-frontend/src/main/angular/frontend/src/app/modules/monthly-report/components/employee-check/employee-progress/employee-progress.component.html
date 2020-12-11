@@ -1,0 +1,17 @@
+<table mat-table [dataSource]="displayedEmployees" class="mat-elevation-z8">
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef>Projektleiter</th>
+    <td mat-cell *matCellDef="let element" style="padding-right: 20px;"> {{getFullNameFromEmail(element.email)}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="checked">
+    <th mat-header-cell *matHeaderCellDef>Fertig</th>
+    <td mat-cell *matCellDef="let element">
+      <app-state-indicator size="small" [state]="element.state"></app-state-indicator>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+

@@ -1,6 +1,7 @@
 package com.gepardec.mega.service.impl.monthlyreport;
 
 import com.gepardec.mega.db.entity.State;
+import com.gepardec.mega.db.entity.StepEntry;
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
@@ -8,6 +9,7 @@ import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.utils.DateUtils;
+import com.gepardec.mega.rest.model.EmployeeProgress;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
@@ -54,15 +56,25 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectEntries);
 
         final List<Comment> comments = new ArrayList<>();
-        if(employee != null) {
+        if (employee != null) {
             LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
             LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
             comments.addAll(commentService.findCommentsForEmployee(employee, fromDate, toDate));
         }
         final Optional<State> employeeCheckState = stepEntryService.findEmployeeCheckState(employee);
         final boolean isAssigned = employeeCheckState.isPresent();
-        final boolean otherChecksDone = stepEntryService.areOtherChecksDone(employee);
+        final List<StepEntry> allOwnedAndAssignedStepEntries = stepEntryService.findAllOwnedAndAssigned(employee);
+        List<EmployeeProgress> employeeProgresses = new ArrayList<>();
+        allOwnedAndAssignedStepEntries.forEach(stepEntry -> employeeProgresses.add(
+                EmployeeProgress.builder()
+                        .project(stepEntry.getProject())
+                        .assigneeEmail(stepEntry.getAssignee().getEmail())
+                        .state(stepEntry.getState())
+                        .stepId(stepEntry.getStep().getId())
+                        .build()
+        ));
+        final boolean otherChecksDone = allOwnedAndAssignedStepEntries.stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);
 
-        return MonthlyReport.of(employee, timeWarnings, journeyWarnings, comments, employeeCheckState.orElse(State.OPEN), isAssigned, otherChecksDone);
+        return MonthlyReport.of(employee, timeWarnings, journeyWarnings, comments, employeeCheckState.orElse(State.OPEN), isAssigned, employeeProgresses, otherChecksDone);
     }
 }

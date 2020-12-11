@@ -37,13 +37,10 @@ public class StepEntryServiceImpl implements StepEntryService {
     }
 
     @Override
-    public boolean areOtherChecksDone(Employee employee) {
+    public List<StepEntry> findAllOwnedAndAssigned(Employee employee) {
         LocalDate entryDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
 
-        List<StepEntry> stepEntries =
-                stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(entryDate, employee.email());
-
-        return stepEntries.stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);
+        return stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(entryDate, employee.email());
     }
 
     @Override

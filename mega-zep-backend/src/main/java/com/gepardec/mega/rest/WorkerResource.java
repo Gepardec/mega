@@ -46,7 +46,7 @@ public class WorkerResource {
         MonthlyReport monthlyReport = monthlyReportService.getMonthendReportForUser(employee.userId());
 
         if (monthlyReport == null) {
-            monthlyReport = MonthlyReport.of(employee, List.of(), List.of(), List.of(), State.OPEN, false, false);
+            monthlyReport = MonthlyReport.of(employee, List.of(), List.of(), List.of(), State.OPEN, false, List.of(), false);
         }
 
         return monthlyReport;
