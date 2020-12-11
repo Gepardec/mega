@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MonthlyReport } from '../../models/MonthlyReport';
 import { State } from '../../../shared/models/State';
+import {TimeWarning} from "../../models/TimeWarning";
 
 @Component({
   selector: 'app-time-check',
@@ -9,7 +10,7 @@ import { State } from '../../../shared/models/State';
 })
 export class TimeCheckComponent implements OnInit {
   @Input() monthlyReport: MonthlyReport;
-  displayedColumns = ['dateTime', 'restTime', 'breakTime', 'workingTime'];
+  displayedColumns = ['warning', 'dateTime', 'restTime', 'breakTime', 'workingTime'];
   State = State;
 
   constructor() {
@@ -18,4 +19,11 @@ export class TimeCheckComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  displayWarningsTooltip(timeWarning: TimeWarning){
+    if(timeWarning.warnings == null || timeWarning.warnings.length == 0){
+      return null;
+    } else {
+      return timeWarning.warnings.join("<br>");
+    }
+  }
 }
