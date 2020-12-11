@@ -25,6 +25,13 @@ export class StepentriesService {
     );
   }
 
+  closeOfficeCheck(employee: Employee, step: Step, currentMonthYear: string): Observable<boolean> {
+    return this.httpClient.put<boolean>(
+      this.config.getBackendUrlWithContext('/stepentry/closeforoffice'),
+      new EmployeeStep(step, employee, currentMonthYear)
+    );
+  }
+
   closeProjectCheck(employee: Employee, projectName: string, currentMonthYear: string): Observable<boolean> {
     return this.httpClient.put<boolean>(
       this.config.getBackendUrlWithContext('/stepentry/closeforproject'),

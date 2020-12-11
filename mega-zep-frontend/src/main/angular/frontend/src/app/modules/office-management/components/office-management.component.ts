@@ -62,11 +62,8 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   dateChanged(date: Moment) {
-    console.log('dateChanged: ' + moment(date).format('yyyy-MM-DD'));
     this.selectedYear = moment(date).year();
     this.selectedMonth = moment(date).month();
-    console.log(this.selectedMonth);
-
     this.getOmEntries();
   }
 
@@ -155,7 +152,7 @@ export class OfficeManagementComponent implements OnInit {
       return omEntry.employee;
     });
 
-    this.omService.updateEmployees(employees).subscribe(async (res) => {
+    this.omService.updateEmployees(employees).subscribe(async () => {
       this.filteredOmEntries = null;
       this.getOmEntries();
       const successMessage = await this.translateService.get('notifications.employeesUpdatedSuccess').toPromise();
@@ -165,7 +162,7 @@ export class OfficeManagementComponent implements OnInit {
 
   closeCustomerCheck(omEntry: ManagementEntry) {
     this.stepEntryService
-      .close(omEntry.employee, Step.CONTROL_EXTERNAL_TIMES, this.getFormattedDate())
+      .closeOfficeCheck(omEntry.employee, Step.CONTROL_EXTERNAL_TIMES, this.getFormattedDate())
       .subscribe(() => {
         omEntry.customerCheckState = State.DONE;
       });
@@ -173,14 +170,13 @@ export class OfficeManagementComponent implements OnInit {
 
   closeInternalCheck(omEntry: ManagementEntry) {
     this.stepEntryService
-      .close(omEntry.employee, Step.CONTROL_INTERNAL_TIMES, this.getFormattedDate())
+      .closeOfficeCheck(omEntry.employee, Step.CONTROL_INTERNAL_TIMES, this.getFormattedDate())
       .subscribe(() => {
         omEntry.internalCheckState = State.DONE;
       });
   }
 
   private getFormattedDate() {
-    console.log(moment().year(this.selectedYear).month(this.selectedMonth).date(1).format('yyyy-MM-DD'));
     return moment().year(this.selectedYear).month(this.selectedMonth).date(1).format('yyyy-MM-DD');
   }
 
@@ -197,7 +193,6 @@ export class OfficeManagementComponent implements OnInit {
     this.filteredOmEntries = this.omEntries.slice();
   }
 
-  // TODO: maybe switch to a library that does this kind of calculations
   private monthDiff(d1: Date, d2: Date) {
     let months = (d2.getFullYear() - d1.getFullYear()) * 12;
     months -= d1.getMonth();

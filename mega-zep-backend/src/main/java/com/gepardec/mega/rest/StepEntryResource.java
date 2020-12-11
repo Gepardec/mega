@@ -40,6 +40,17 @@ public class StepEntryResource {
     }
 
     @PUT
+    @Path("/closeforoffice")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public boolean closeForOffice(@NotNull(message = "{stepEntryResource.parameter.notNull}") final EmployeeStep employeeStep) {
+        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(employeeStep.currentMonthYear()));
+        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(employeeStep.currentMonthYear()));
+
+        return stepEntryService.setOpenAndAssignedStepEntriesDone(employeeStep.employee(), employeeStep.stepId(), from, to);
+    }
+
+    @PUT
     @Path("/closeforproject")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
