@@ -19,10 +19,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -92,11 +89,11 @@ public class CommentServiceImpl implements CommentService {
 
     private void sendMail(Employee employee, com.gepardec.mega.db.entity.Comment comment) {
         String creator = comment.getStepEntry().getAssignee().getFirstname();
-        Map<String, String> mailParameter = Map.of(
-                MailParameter.CREATOR, creator,
-                MailParameter.RECIPIENT, employee.firstname(),
-                MailParameter.COMMENT, comment.getMessage()
-        );
+        Map<String, String> mailParameter = new HashMap<>() {{
+                put(MailParameter.CREATOR, creator);
+                put(MailParameter.RECIPIENT, employee.firstname());
+                put(MailParameter.COMMENT, comment.getMessage());
+        }};
 
         mailSender.send(Mail.COMMENT_CREATED, employee.email(), employee.firstname(), Locale.GERMAN, mailParameter, List.of(creator));
     }

@@ -97,4 +97,14 @@ export class CommentsForEmployeeComponent implements OnInit {
       this.comments = this.comments.filter(item => item.id !== commentToRemove.id);
     });
   }
+
+  extractNameofEmail(email: string): string {
+    const splitted = email.split('@');
+    const name = splitted[0].split('.');
+    return this.firstToUppercase(name[0]) + ' ' + this.firstToUppercase(name[1]);
+  }
+
+  firstToUppercase(s: string): string {
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
 }

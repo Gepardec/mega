@@ -3,6 +3,7 @@ package com.gepardec.mega.notification.mail;
 import com.gepardec.mega.application.configuration.NotificationConfig;
 import com.google.common.net.MediaType;
 import io.quarkus.mailer.Mailer;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -13,6 +14,9 @@ import java.util.Map;
 
 @ApplicationScoped
 public class MailSender {
+
+    private static final String NEW_LINE_STRING = "\n";
+    private static final String NEW_LINE_HTML = "<br>";
 
     @Inject
     NotificationHelper notificationHelper;
@@ -40,6 +44,14 @@ public class MailSender {
                 put(MailParameter.MEGA_DASH, notificationConfig.getMegaDashUrl());
             }
         };
+
+        if(mailParameter.containsKey(MailParameter.COMMENT)) {
+            mailParameter.put(
+                    MailParameter.COMMENT,
+                    StringUtils.replace(mailParameter.get(MailParameter.COMMENT), NEW_LINE_STRING, NEW_LINE_HTML)
+            );
+        }
+
         templateParameters.putAll(mailParameter);
         String replacedContent = replaceTextParameters(mailTemplateText, templateParameters);
 
