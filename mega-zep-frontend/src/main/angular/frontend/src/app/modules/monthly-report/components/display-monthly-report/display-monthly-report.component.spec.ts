@@ -5,6 +5,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { State } from '../../../shared/models/State';
 import { TranslateModule } from '@ngx-translate/core';
 import { AngularMaterialModule } from '../../../material/material-module';
+import {SharedModule} from "../../../shared/shared.module";
 
 describe('DisplayMonthlyReportComponent', () => {
   let component: DisplayMonthlyReportComponent;
@@ -15,7 +16,8 @@ describe('DisplayMonthlyReportComponent', () => {
       declarations: [DisplayMonthlyReportComponent],
       imports: [
         AngularMaterialModule,
-        TranslateModule.forRoot()
+        TranslateModule.forRoot(),
+        SharedModule
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
@@ -46,7 +48,8 @@ describe('DisplayMonthlyReportComponent', () => {
         title: null,
         active: true
       },
-      assigned: false
+      assigned: false,
+      employeeProgresses: null
     };
     fixture.detectChanges();
   });
