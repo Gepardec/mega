@@ -1,10 +1,20 @@
 package com.gepardec.mega.domain.model.monthlyreport;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class TimeWarning implements ProjectEntryWarning {
 
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
 
     private Double missingRestTime;
@@ -12,6 +22,11 @@ public class TimeWarning implements ProjectEntryWarning {
     private Double missingBreakTime;
 
     private Double excessWorkTime;
+
+    private List<String> warnings = new ArrayList<>(0);
+
+    @JsonIgnore
+    private List<TimeWarningType> warningTypes = new ArrayList<>(0);
 
     public TimeWarning() {
     }
@@ -28,6 +43,9 @@ public class TimeWarning implements ProjectEntryWarning {
     }
 
     public void mergeBreakWarnings(TimeWarning newTimeWarning) {
+        warnings = new ArrayList<>(newTimeWarning.warnings);
+        warningTypes = new ArrayList<>(warningTypes);
+
         if (newTimeWarning.missingBreakTime != null) {
             missingBreakTime = newTimeWarning.missingBreakTime;
         }
@@ -45,6 +63,22 @@ public class TimeWarning implements ProjectEntryWarning {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public List<String> getWarnings() {
+        return warnings;
+    }
+
+    public void setWarnings(List<String> warnings) {
+        this.warnings = warnings;
+    }
+
+    public List<TimeWarningType> getWarningTypes() {
+        return warningTypes;
+    }
+
+    public void setWarningTypes(List<TimeWarningType> warningTypes) {
+        this.warningTypes = warningTypes;
     }
 
     public Double getMissingRestTime() {
@@ -71,23 +105,21 @@ public class TimeWarning implements ProjectEntryWarning {
         this.excessWorkTime = excessWorkTime;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    @Override public boolean equals(Object o) {
+        if (this == o)
             return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
+        if (o == null || getClass() != o.getClass())
             return false;
-        }
-        TimeWarning that = (TimeWarning) o;
-        return Objects.equals(date, that.date) &&
-                Objects.equals(missingRestTime, that.missingRestTime) &&
-                Objects.equals(missingBreakTime, that.missingBreakTime) &&
-                Objects.equals(excessWorkTime, that.excessWorkTime);
+        TimeWarning warning = (TimeWarning) o;
+        return Objects.equals(date, warning.date) &&
+                Objects.equals(missingRestTime, warning.missingRestTime) &&
+                Objects.equals(missingBreakTime, warning.missingBreakTime) &&
+                Objects.equals(excessWorkTime, warning.excessWorkTime) &&
+                Objects.equals(warnings, warning.warnings) &&
+                Objects.equals(warningTypes, warning.warningTypes);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(date, missingRestTime, missingBreakTime, excessWorkTime);
+    @Override public int hashCode() {
+        return Objects.hash(date, missingRestTime, missingBreakTime, excessWorkTime, warnings, warningTypes);
     }
 }

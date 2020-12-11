@@ -36,7 +36,7 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
 
                 assertEquals(1, warnings.size());
                 assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(Warning.JOURNEY_INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
+                assertEquals(JourneyWarningType.INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
             }
 
             @Test
@@ -49,7 +49,7 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
 
                 assertEquals(1, warnings.size());
                 assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(Warning.JOURNEY_INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
+                assertEquals(JourneyWarningType.INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
             }
 
             @Test
@@ -64,7 +64,7 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
 
                 assertEquals(1, warnings.size());
                 assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(Warning.JOURNEY_INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
+                assertEquals(JourneyWarningType.INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
             }
 
             @Test
@@ -79,7 +79,7 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
 
                 assertEquals(1, warnings.size());
                 assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(Warning.JOURNEY_INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
+                assertEquals(JourneyWarningType.INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
             }
 
             @Test
@@ -97,7 +97,7 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
 
                 assertEquals(1, warnings.size());
                 assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(Warning.JOURNEY_INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
+                assertEquals(JourneyWarningType.INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
             }
 
             @Test

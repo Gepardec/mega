@@ -26,6 +26,9 @@ public abstract class Project {
     @JsonProperty
     public abstract List<String> leads();
 
+    @JsonProperty
+    public abstract List<String> categories();
+
     public static Project.Builder builder() {
         return new com.gepardec.mega.domain.model.AutoValue_Project.Builder();
     }
@@ -43,6 +46,9 @@ public abstract class Project {
 
         @JsonProperty
         public abstract Project.Builder leads(List<String> leads);
+
+        @JsonProperty
+        public abstract Project.Builder categories(List<String> categories);
 
         @JsonProperty
         public abstract Project build();

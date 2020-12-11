@@ -15,10 +15,11 @@ public class JourneyWarning implements ProjectEntryWarning {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
+
     private List<String> warnings = new ArrayList<>(0);
 
     @JsonIgnore
-    private List<Warning> warningTypes = new ArrayList<>(0);
+    private List<JourneyWarningType> warningTypes = new ArrayList<>(0);
 
     public JourneyWarning() {
     }
@@ -44,11 +45,11 @@ public class JourneyWarning implements ProjectEntryWarning {
         this.warnings = warnings;
     }
 
-    public List<Warning> getWarningTypes() {
+    public List<JourneyWarningType> getWarningTypes() {
         return warningTypes;
     }
 
-    public void setWarningTypes(List<Warning> warningTypes) {
+    public void setWarningTypes(List<JourneyWarningType> warningTypes) {
         this.warningTypes = warningTypes;
     }
 

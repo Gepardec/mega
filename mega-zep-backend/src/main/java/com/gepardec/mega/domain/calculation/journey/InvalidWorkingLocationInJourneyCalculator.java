@@ -34,7 +34,7 @@ public class InvalidWorkingLocationInJourneyCalculator implements WarningCalcula
                         workingLocation = projectEntry.getWorkingLocation();
                         journeyDirection = ((JourneyTimeEntry) projectEntry).getJourneyDirection();
                     } else if (!isProjectEntryValid(projectEntry, workingLocation, journeyDirection)) {
-                        warnings.add(createJourneyWarningWithEnumType(projectEntry, Warning.JOURNEY_INVALID_WORKING_LOCATION));
+                        warnings.add(createJourneyWarningWithEnumType(projectEntry, JourneyWarningType.INVALID_WORKING_LOCATION));
                         break;
                     }
                 }
@@ -67,7 +67,7 @@ public class InvalidWorkingLocationInJourneyCalculator implements WarningCalcula
         return projectEntries.stream().anyMatch(entry -> Task.isTask(entry.getTask()));
     }
 
-    private JourneyWarning createJourneyWarningWithEnumType(ProjectEntry projectEntry, Warning warning) {
+    private JourneyWarning createJourneyWarningWithEnumType(ProjectEntry projectEntry, JourneyWarningType warning) {
         JourneyWarning newJourneyWarning = new JourneyWarning();
         newJourneyWarning.setDate(projectEntry.getDate());
         newJourneyWarning.getWarningTypes().add(warning);
