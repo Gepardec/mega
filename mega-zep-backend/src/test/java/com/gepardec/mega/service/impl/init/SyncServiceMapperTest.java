@@ -290,6 +290,7 @@ class SyncServiceMapperTest {
                 .projectId("1")
                 .employees(List.of())
                 .leads(List.of(userId))
+                .categories(List.of())
                 .build();
     }
 }
