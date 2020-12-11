@@ -1,8 +1,10 @@
 package com.gepardec.mega.notification.mail;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
+import com.google.common.collect.Maps;
 import com.google.common.net.MediaType;
 import io.quarkus.mailer.Mailer;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -13,6 +15,9 @@ import java.util.Map;
 
 @ApplicationScoped
 public class MailSender {
+
+    private static final String NEW_LINE_STRING = "\n";
+    private static final String NEW_LINE_HTML = "<br>";
 
     @Inject
     NotificationHelper notificationHelper;
@@ -40,7 +45,16 @@ public class MailSender {
                 put(MailParameter.MEGA_DASH, notificationConfig.getMegaDashUrl());
             }
         };
-        templateParameters.putAll(mailParameter);
+
+        Map<String, String> modifiableMap = Maps.newHashMap(mailParameter);
+        if(modifiableMap.containsKey(MailParameter.COMMENT)) {
+            modifiableMap.put(
+                    MailParameter.COMMENT,
+                    StringUtils.replace(modifiableMap.get(MailParameter.COMMENT), NEW_LINE_STRING, NEW_LINE_HTML)
+            );
+        }
+
+        templateParameters.putAll(modifiableMap);
         String replacedContent = replaceTextParameters(mailTemplateText, templateParameters);
 
         mailer.send(io.quarkus.mailer.Mail.withHtml(eMail, subject, replacedContent)

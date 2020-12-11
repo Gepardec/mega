@@ -9,7 +9,9 @@ public enum Mail {
     OM_SALARY(-3, MailType.WORKING_DAY_BASED, "emails/reminder-template.html"),
     OM_CONTROL_PROJECTTIMES(-1, MailType.WORKING_DAY_BASED, "emails/reminder-template.html"),
     COMMENT_CLOSED(MailType.MANUAL),
-    COMMENT_CREATED(MailType.MANUAL);
+    COMMENT_CREATED(MailType.MANUAL),
+    COMMENT_DELETED(MailType.MANUAL),
+    COMMENT_MODIFIED(MailType.MANUAL);
 
     private final Integer day;
 

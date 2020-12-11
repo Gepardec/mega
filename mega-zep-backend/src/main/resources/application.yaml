@@ -42,7 +42,7 @@ mega:
 "%dev":
   quarkus:
     mailer:
-        mock: true
+        mock: false
     datasource:
       db-kind: postgresql
       username: mega

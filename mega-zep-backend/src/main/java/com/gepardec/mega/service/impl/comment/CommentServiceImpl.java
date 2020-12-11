@@ -1,12 +1,12 @@
 package com.gepardec.mega.service.impl.comment;
 
 import com.gepardec.mega.db.entity.State;
+import com.gepardec.mega.db.entity.StepEntry;
 import com.gepardec.mega.db.repository.CommentRepository;
 import com.gepardec.mega.domain.mapper.CommentMapper;
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.FinishedAndTotalComments;
-import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.notification.mail.Mail;
 import com.gepardec.mega.notification.mail.MailParameter;
 import com.gepardec.mega.notification.mail.MailSender;
@@ -19,10 +19,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -45,16 +42,15 @@ public class CommentServiceImpl implements CommentService {
         List<com.gepardec.mega.db.entity.Comment> dbComments =
                 commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(from, to, employee.email());
 
-        List<Comment> domainComments = dbComments
+        return dbComments
                 .stream()
                 .map(commentMapper::mapDbCommentToDomainComment).collect(Collectors.toList());
-
-        return domainComments;
     }
 
     @Override
     public int setDone(final Comment comment) {
-        //TODO: Send email
+        com.gepardec.mega.db.entity.Comment commentDb = commentRepository.findById(comment.id());
+        sendMail(Mail.COMMENT_CLOSED, commentDb);
         return commentRepository.setStatusDone(comment.id());
     }
 
@@ -86,25 +82,20 @@ public class CommentServiceImpl implements CommentService {
         newComment.setMessage(comment);
         newComment.setStepEntry(stepEntry);
         commentRepository.save(newComment);
-        sendMail(employee, newComment);
+        sendMail(Mail.COMMENT_CREATED, newComment);
         return commentMapper.mapDbCommentToDomainComment(newComment);
-    }
-
-    private void sendMail(Employee employee, com.gepardec.mega.db.entity.Comment comment) {
-        String creator = comment.getStepEntry().getAssignee().getFirstname();
-        Map<String, String> mailParameter = Map.of(
-                MailParameter.CREATOR, creator,
-                MailParameter.RECIPIENT, employee.firstname(),
-                MailParameter.COMMENT, comment.getMessage()
-        );
-
-        mailSender.send(Mail.COMMENT_CREATED, employee.email(), employee.firstname(), Locale.GERMAN, mailParameter, List.of(creator));
     }
 
     @Override
     @Transactional(Transactional.TxType.SUPPORTS)
     public boolean deleteCommentWithId(Long id) {
-        return commentRepository.deleteComment(id);
+        com.gepardec.mega.db.entity.Comment comment = commentRepository.findById(id);
+        boolean deleted = commentRepository.deleteComment(id);
+        if(deleted) {
+            sendMail(Mail.COMMENT_DELETED, comment);
+        }
+
+        return deleted;
     }
 
     @Override
@@ -117,7 +108,27 @@ public class CommentServiceImpl implements CommentService {
 
         commentDb.setMessage(message);
         commentRepository.update(commentDb);
-
+        sendMail(Mail.COMMENT_MODIFIED, commentDb);
         return commentMapper.mapDbCommentToDomainComment(commentDb);
     }
+
+    private void sendMail(Mail mail, com.gepardec.mega.db.entity.Comment comment) {
+        StepEntry stepEntry = comment.getStepEntry();
+        String creator = comment.getStepEntry().getAssignee().getFirstname();
+        Map<String, String> mailParameter = new HashMap<>() {{
+            put(MailParameter.CREATOR, creator);
+            put(MailParameter.RECIPIENT, stepEntry.getOwner().getFirstname());
+            put(MailParameter.COMMENT, comment.getMessage());
+        }};
+
+        mailSender.send(
+                mail,
+                stepEntry.getOwner().getEmail(),
+                stepEntry.getOwner().getFirstname(),
+                Locale.GERMAN,
+                mailParameter,
+                List.of(creator)
+        );
+    }
+
 }
