@@ -65,6 +65,7 @@ class CommentServiceImplTest {
 
     @Test
     void setDone_whenNoneUpdated_then0() {
+        when(commentRepository.findById(ArgumentMatchers.anyLong())).thenReturn(createComment(1L, State.IN_PROGRESS));
         when(commentRepository.setStatusDone(ArgumentMatchers.anyLong())).thenReturn(0);
 
         int updatedCount = commentService.setDone(commentMapper.mapDbCommentToDomainComment(createComment(1L, State.IN_PROGRESS)));
@@ -290,13 +291,14 @@ class CommentServiceImplTest {
         stepEntry.setState(State.IN_PROGRESS);
         stepEntry.setUpdatedDate(LocalDateTime.now());
         stepEntry.setAssignee(createUser());
+        stepEntry.setOwner(createUser());
         return stepEntry;
     }
 
     private User createUser() {
         User user = new User();
-        user.setEmail("christoph.ruhsam@gepardec.com");
-        user.setFirstname("Christoph");
+        user.setEmail("thomas.herzog@gpeardec.com");
+        user.setFirstname("Thomas");
         return user;
     }
 }
