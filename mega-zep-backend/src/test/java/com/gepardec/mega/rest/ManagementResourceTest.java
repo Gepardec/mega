@@ -337,6 +337,7 @@ public class ManagementResourceTest {
                 .projectId(projectId)
                 .employees(employees)
                 .leads(leads)
+                .categories(List.of())
                 .build();
     }
 

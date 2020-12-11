@@ -147,6 +147,7 @@ public class ZepServiceImpl implements ZepService {
                 .description(projektType.getBezeichnung())
                 .employees(createProjectEmployees(projektType.getProjektmitarbeiterListe()))
                 .leads(createProjectLeads(projektType.getProjektmitarbeiterListe()))
+                .categories(createCategories(projektType))
                 .build();
     }
 
@@ -162,6 +163,14 @@ public class ZepServiceImpl implements ZepService {
                 .stream()
                 .filter(projektMitarbeiterType -> PROJECT_LEAD_RANGE.contains(projektMitarbeiterType.getIstProjektleiter()))
                 .map(ProjektMitarbeiterType::getUserId)
+                .collect(Collectors.toList());
+    }
+
+    private List<String> createCategories(final ProjektType projektType) {
+        return Optional.ofNullable(projektType.getKategorieListe()).orElse(new KategorieListeType())
+                .getKategorie()
+                .stream()
+                .map(KategorieType::getKurzform)
                 .collect(Collectors.toList());
     }
 

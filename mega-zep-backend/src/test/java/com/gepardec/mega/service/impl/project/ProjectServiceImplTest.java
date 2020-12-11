@@ -51,6 +51,7 @@ class ProjectServiceImplTest {
             when(zepService.getProjectsForMonthYear(Mockito.any())).thenReturn(List.of(projectFor("1")
                     .leads(List.of())
                     .employees(List.of())
+                    .categories(List.of())
                     .build()));
 
             // When
@@ -71,10 +72,12 @@ class ProjectServiceImplTest {
                     projectFor("Intern")
                             .leads(List.of())
                             .employees(List.of())
+                            .categories(List.of("INT"))
                             .build(),
                     projectFor("Kunde")
                             .leads(List.of())
                             .employees(List.of())
+                            .categories(List.of())
                             .build()));
 
             // When
@@ -100,10 +103,12 @@ class ProjectServiceImplTest {
                                     .roles(Set.of(Role.EMPLOYEE)).build())
                                     .stream().map(User::userId).collect(Collectors.toList()))
                             .employees(List.of())
+                            .categories(List.of())
                             .build(),
                     projectFor("2")
                             .leads(List.of())
                             .employees(List.of())
+                            .categories(List.of())
                             .build()));
 
             // When

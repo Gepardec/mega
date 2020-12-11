@@ -458,7 +458,8 @@ class StepEntrySyncServiceImplTest {
     private Project.Builder projectFor(final int id) {
         return Project.builder()
                 .projectId(String.valueOf(id))
-                .description(String.format("Description of Project %s", id));
+                .description(String.format("Description of Project %s", id))
+                .categories(List.of());
     }
 
     private Step.Builder stepFor(final int id, final String name, final Role role) {
