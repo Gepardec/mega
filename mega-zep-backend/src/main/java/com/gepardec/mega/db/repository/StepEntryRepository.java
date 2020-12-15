@@ -34,6 +34,15 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
                 .list();
     }
 
+    public List<StepEntry> findAllOwnedAndUnassignedStepEntriesForPMProgress(LocalDate entryDate, String ownerEmail) {
+        return find("#StepEntry.findAllOwnedAndUnassignedStepEntriesForPMProgress",
+                Parameters
+                        .with("entryDate", entryDate)
+                        .and("ownerEmail", ownerEmail)
+                        .and("stepId", StepName.CONTROL_TIME_EVIDENCES.getId()))
+                .list();
+    }
+
     public List<StepEntry> findAllOwnedStepEntriesInRange(LocalDate startDate, LocalDate endDate, String ownerEmail) {
         return find("#StepEntry.findAllOwnedStepEntriesInRange",
                 Parameters

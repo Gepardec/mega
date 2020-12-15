@@ -37,10 +37,17 @@ public class StepEntryServiceImpl implements StepEntryService {
     }
 
     @Override
-    public List<StepEntry> findAllOwnedAndAssigned(Employee employee) {
+    public List<StepEntry> findAllOwnedAndUnassignedStepEntriesForOtherChecks(Employee employee) {
         LocalDate entryDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
 
         return stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(entryDate, employee.email());
+    }
+
+    @Override
+    public List<StepEntry> findAllOwnedAndUnassignedStepEntriesForPMProgress(Employee employee) {
+        LocalDate entryDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+
+        return stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForPMProgress(entryDate, employee.email());
     }
 
     @Override
