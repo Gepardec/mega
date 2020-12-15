@@ -4,6 +4,7 @@ import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.StepEntry;
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.StepName;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
@@ -65,14 +66,16 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         final boolean isAssigned = employeeCheckState.isPresent();
         final List<StepEntry> allOwnedAndAssignedStepEntries = stepEntryService.findAllOwnedAndAssigned(employee);
         List<EmployeeProgress> employeeProgresses = new ArrayList<>();
-        allOwnedAndAssignedStepEntries.forEach(stepEntry -> employeeProgresses.add(
-                EmployeeProgress.builder()
-                        .project(stepEntry.getProject())
-                        .assigneeEmail(stepEntry.getAssignee().getEmail())
-                        .state(stepEntry.getState())
-                        .stepId(stepEntry.getStep().getId())
-                        .build()
-        ));
+        allOwnedAndAssignedStepEntries.stream()
+                .filter(stepEntry -> StepName.CONTROL_TIME_EVIDENCES.getId() == stepEntry.getStep().getId())
+                .forEach(stepEntry -> employeeProgresses.add(
+                        EmployeeProgress.builder()
+                                .project(stepEntry.getProject())
+                                .assigneeEmail(stepEntry.getAssignee().getEmail())
+                                .state(stepEntry.getState())
+                                .stepId(stepEntry.getStep().getId())
+                                .build()
+                ));
         final boolean otherChecksDone = allOwnedAndAssignedStepEntries.stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);
 
         return MonthlyReport.of(employee, timeWarnings, journeyWarnings, comments, employeeCheckState.orElse(State.OPEN), isAssigned, employeeProgresses, otherChecksDone);
