@@ -26,6 +26,9 @@ import { EmployeeProgressComponent } from './components/employee-check/employee-
     TranslateModule.forRoot(),
     FlexLayoutModule,
     SharedModule
+  ],
+  entryComponents: [
+    EmployeeProgressComponent
   ]
 })
 export class MonthlyReportModule {

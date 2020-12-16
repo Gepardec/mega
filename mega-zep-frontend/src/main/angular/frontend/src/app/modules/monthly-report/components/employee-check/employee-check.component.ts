@@ -6,6 +6,8 @@ import {MatSelectionListChange} from '@angular/material/list';
 import {ErrorHandlerService} from "../../../shared/services/error/error-handler.service";
 import {StepentriesService} from "../../../shared/services/stepentries/stepentries.service";
 import {Step} from "../../../shared/models/Step";
+import {MatBottomSheet, MatBottomSheetRef} from "@angular/material/bottom-sheet";
+import {EmployeeProgressComponent} from "./employee-progress/employee-progress.component";
 
 @Component({
   selector: 'app-employee-check',
@@ -17,10 +19,13 @@ export class EmployeeCheckComponent implements OnInit {
   @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>();
   State = State;
 
+  employeeProgressRef: MatBottomSheetRef;
+
   constructor(
     public commentService: CommentService,
     public errorHandlerService: ErrorHandlerService,
-    public stepentriesService: StepentriesService) {
+    public stepentriesService: StepentriesService,
+    private _bottomSheet: MatBottomSheet) {
   }
 
   ngOnInit(): void {
@@ -61,5 +66,17 @@ export class EmployeeCheckComponent implements OnInit {
 
   emitRefreshMonthlyReport() {
     this.refreshMonthlyReport.emit();
+  }
+
+  openEmployeeProgress() {
+    this.employeeProgressRef = this._bottomSheet.open(EmployeeProgressComponent, {
+      data: {employeeProgresses: this.monthlyReport.employeeProgresses},
+      autoFocus: false,
+      hasBackdrop: false
+    });
+  }
+
+  closeEmployeeProgress() {
+    this.employeeProgressRef.dismiss();
   }
 }

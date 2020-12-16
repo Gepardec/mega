@@ -5,7 +5,7 @@
       <ng-container [ngSwitch]="monthlyReport.employeeCheckState">
         <ng-container *ngSwitchCase="State.OPEN">
           <ng-container *ngIf="monthlyReport.assigned; else noTimesThisMonth">
-            <app-state-indicator [state]="State.OPEN" size="large"></app-state-indicator>
+            <app-state-indicator (mouseenter)="openEmployeeProgress()" (mouseleave)="closeEmployeeProgress()" [state]="State.OPEN" size="large"></app-state-indicator>
             <p>{{'monthly-report.pleaseCheckPrompt' | translate}}</p>
             <button mat-raised-button
                     (click)="setOpenAndUnassignedStepEntriesDone()">{{'monthly-report.confirmBtnText' | translate}}</button>
@@ -45,6 +45,6 @@
       </mat-selection-list>
     </ng-container>
 
-    <app-employee-progress [employeeProgresses]="monthlyReport.employeeProgresses"></app-employee-progress>
+<!--    <app-employee-progress [employeeProgresses]="monthlyReport.employeeProgresses"></app-employee-progress>-->
   </mat-card-content>
 </mat-card>

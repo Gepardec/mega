@@ -1,6 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {EmployeeProgress} from "../../../models/EmployeeProgress";
 import {State} from "../../../../shared/models/State";
+import {MAT_BOTTOM_SHEET_DATA} from "@angular/material/bottom-sheet";
 
 class DisplayedEmployees {
   email: string;
@@ -20,13 +21,14 @@ class DisplayedEmployees {
 export class EmployeeProgressComponent implements OnInit {
 
 
-  @Input() employeeProgresses: Array<EmployeeProgress>;
+  employeeProgresses: Array<EmployeeProgress>;
 
   displayedEmployees: Array<DisplayedEmployees>;
 
   displayedColumns = ['email', 'checked']
 
-  constructor() {
+  constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: any) {
+    this.employeeProgresses = data.employeeProgresses;
   }
 
   ngOnInit(): void {
