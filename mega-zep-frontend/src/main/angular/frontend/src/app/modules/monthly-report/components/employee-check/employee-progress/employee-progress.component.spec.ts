@@ -7,6 +7,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {SharedModule} from "../../../../shared/shared.module";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {RouterTestingModule} from "@angular/router/testing";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_BOTTOM_SHEET_DATA} from "@angular/material/bottom-sheet";
 
 describe('EmployeeProgressComponent', () => {
   let component: EmployeeProgressComponent;
@@ -23,6 +25,10 @@ describe('EmployeeProgressComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule
       ],
+      providers: [
+        { provide: MAT_BOTTOM_SHEET_DATA, useValue: {} },
+        { provide: MatDialogRef, useValue: {} }
+      ]
     })
       .compileComponents();
   }));
