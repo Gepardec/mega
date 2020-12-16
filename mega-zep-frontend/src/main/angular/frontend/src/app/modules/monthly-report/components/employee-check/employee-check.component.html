@@ -12,25 +12,25 @@
           </ng-container>
 
           <ng-template #noTimesThisMonth>
-            <app-state-indicator size="large"></app-state-indicator>
+            <app-state-indicator (mouseenter)="openEmployeeProgress()" (mouseleave)="closeEmployeeProgress()" size="large"></app-state-indicator>
             <p>{{'monthly-report.noTimesCurrentMonth' | translate}}</p>
           </ng-template>
         </ng-container>
 
         <ng-container *ngSwitchCase="State.DONE">
           <ng-container *ngIf="!monthlyReport.otherChecksDone">
-            <app-state-indicator size="large"></app-state-indicator>
+            <app-state-indicator (mouseenter)="openEmployeeProgress()" (mouseleave)="closeEmployeeProgress()" size="large"></app-state-indicator>
             <p>{{'monthly-report.checkWip' | translate}}</p>
           </ng-container>
           <ng-container *ngIf="monthlyReport.otherChecksDone">
-            <app-state-indicator [state]="State.DONE" size="large"></app-state-indicator>
+            <app-state-indicator (mouseenter)="openEmployeeProgress()" (mouseleave)="closeEmployeeProgress()" [state]="State.DONE" size="large"></app-state-indicator>
             <p>{{'monthly-report.checkSuccess' | translate}}</p>
           </ng-container>
         </ng-container>
       </ng-container>
 
       <p *ngIf="monthlyReport.comments?.length > 0">{{'monthly-report.commentsToDo' | translate}}</p>
-      <mat-selection-list (selectionChange)="selectionChange($event)">
+      <mat-selection-list (selectionChange)="selectionChange($event)" style="width: 80%">
         <mat-list-option
           #option
           *ngFor="let comment of monthlyReport.comments"
@@ -44,7 +44,5 @@
         </mat-list-option>
       </mat-selection-list>
     </ng-container>
-
-<!--    <app-employee-progress [employeeProgresses]="monthlyReport.employeeProgresses"></app-employee-progress>-->
   </mat-card-content>
 </mat-card>
