@@ -66,7 +66,7 @@ class StepEntryServiceImplTest {
         when(stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.anyString())).thenReturn(stepEntries);
 
-        boolean areOtherChecksDone = stepEntryService.findAllOwnedAndAssigned(createEmployee())
+        boolean areOtherChecksDone = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(createEmployee())
                 .stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);
         Assertions.assertFalse(areOtherChecksDone);
     }
@@ -76,7 +76,7 @@ class StepEntryServiceImplTest {
         when(stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.anyString())).thenReturn(List.of());
 
-        boolean areOtherChecksDone = stepEntryService.findAllOwnedAndAssigned(createEmployee())
+        boolean areOtherChecksDone = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(createEmployee())
                 .stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);
         assertTrue(areOtherChecksDone);
     }
@@ -93,7 +93,7 @@ class StepEntryServiceImplTest {
         when(stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.anyString())).thenReturn(stepEntries);
 
-        boolean areOtherChecksDone = stepEntryService.findAllOwnedAndAssigned(createEmployee())
+        boolean areOtherChecksDone = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(createEmployee())
                 .stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);;
         assertTrue(areOtherChecksDone);
     }

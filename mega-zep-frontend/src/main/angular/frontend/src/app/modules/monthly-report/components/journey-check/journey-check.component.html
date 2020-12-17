@@ -14,10 +14,11 @@
     <mat-card-content>
       <mat-table [dataSource]="monthlyReport.journeyWarnings">
         <ng-container matColumnDef="dateJourney">
-          <mat-header-cell *matHeaderCellDef style="max-width: 150px">
+          <mat-header-cell *matHeaderCellDef>
             {{'monthly-report.table.journey.day' | translate}}
           </mat-header-cell>
-          <mat-cell *matCellDef="let journeyEntry" style="max-width: 150px">
+          <mat-cell *matCellDef="let journeyEntry">
+            <span class="mobile-label">{{'monthly-report.table.journey.day' | translate}}</span>
             {{journeyEntry.date | date:'E dd.MM.yyyy' : null : 'de-AT'}}
           </mat-cell>
         </ng-container>
@@ -27,6 +28,7 @@
             {{'monthly-report.table.journey.warning' | translate}}
           </mat-header-cell>
           <mat-cell *matCellDef="let journeyEntry">
+            <span class="mobile-label">{{'monthly-report.table.journey.warning' | translate}}</span>
             {{getJourneyWarningString(journeyEntry.warnings)}}
           </mat-cell>
         </ng-container>

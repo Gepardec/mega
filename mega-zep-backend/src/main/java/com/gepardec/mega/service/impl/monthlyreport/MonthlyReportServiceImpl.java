@@ -64,10 +64,10 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         }
         final Optional<State> employeeCheckState = stepEntryService.findEmployeeCheckState(employee);
         final boolean isAssigned = employeeCheckState.isPresent();
-        final List<StepEntry> allOwnedAndAssignedStepEntries = stepEntryService.findAllOwnedAndAssigned(employee);
+
+        final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(employee);
         List<EmployeeProgress> employeeProgresses = new ArrayList<>();
-        allOwnedAndAssignedStepEntries.stream()
-                .filter(stepEntry -> StepName.CONTROL_TIME_EVIDENCES.getId() == stepEntry.getStep().getId())
+        allOwnedStepEntriesForPMProgress.stream()
                 .forEach(stepEntry -> employeeProgresses.add(
                         EmployeeProgress.builder()
                                 .project(stepEntry.getProject())
@@ -76,6 +76,8 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                                 .stepId(stepEntry.getStep().getId())
                                 .build()
                 ));
+
+        final List<StepEntry> allOwnedAndAssignedStepEntries = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(employee);
         final boolean otherChecksDone = allOwnedAndAssignedStepEntries.stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);
 
         return MonthlyReport.of(employee, timeWarnings, journeyWarnings, comments, employeeCheckState.orElse(State.OPEN), isAssigned, employeeProgresses, otherChecksDone);

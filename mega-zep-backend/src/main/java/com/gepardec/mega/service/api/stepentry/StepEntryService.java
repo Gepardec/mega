@@ -11,7 +11,9 @@ import java.util.Optional;
 public interface StepEntryService {
     Optional<State> findEmployeeCheckState(final Employee employee);
 
-    List<com.gepardec.mega.db.entity.StepEntry> findAllOwnedAndAssigned(final Employee employee);
+    List<com.gepardec.mega.db.entity.StepEntry> findAllOwnedAndUnassignedStepEntriesForOtherChecks(final Employee employee);
+
+    List<com.gepardec.mega.db.entity.StepEntry> findAllOwnedAndUnassignedStepEntriesForPMProgress(final Employee employee);
 
     void addStepEntry(final StepEntry stepEntry);
 
