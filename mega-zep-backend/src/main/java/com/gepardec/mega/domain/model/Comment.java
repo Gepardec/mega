@@ -28,7 +28,11 @@ public abstract class Comment {
 
     @JsonProperty
     @Nullable
-    public abstract String author();
+    public abstract String authorEmail();
+
+    @JsonProperty
+    @Nullable
+    public abstract String authorName();
 
     @JsonProperty
     @Nullable
@@ -48,7 +52,10 @@ public abstract class Comment {
         public abstract Comment.Builder message(String message);
 
         @JsonProperty
-        public abstract Comment.Builder author(String author);
+        public abstract Comment.Builder authorEmail(String authorEmail);
+
+        @JsonProperty
+        public abstract Comment.Builder authorName(String authorName);
 
         @JsonProperty
         public abstract Comment.Builder state(State state);

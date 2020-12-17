@@ -39,7 +39,7 @@
           [selected]="comment.state === State.DONE"
           [value]="comment">
           {{comment.updateDate | date: 'dd.MM.yyyy'}}
-          {{getFullNameFromEmail(comment?.author)}}:
+          {{comment?.authorName}}:
           <div style="white-space: pre-line">{{comment.message}}</div>
         </mat-list-option>
       </mat-selection-list>

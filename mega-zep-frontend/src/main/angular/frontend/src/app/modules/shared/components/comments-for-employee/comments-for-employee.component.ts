@@ -43,7 +43,7 @@ export class CommentsForEmployeeComponent implements OnInit {
   }
 
   editCommentBtnVisible(comment: Comment) {
-    return !comment.isEditing && this.user.email === comment.author && comment.state !== State.DONE;
+    return !comment.isEditing && this.user.email === comment.authorEmail && comment.state !== State.DONE;
   }
 
   isReleased(date: string): boolean {
@@ -96,15 +96,5 @@ export class CommentsForEmployeeComponent implements OnInit {
     this.commentService.deleteComment(commentToRemove).subscribe(() => {
       this.comments = this.comments.filter(item => item.id !== commentToRemove.id);
     });
-  }
-
-  extractNameofEmail(email: string): string {
-    const splitted = email.split('@');
-    const name = splitted[0].split('.');
-    return this.firstToUppercase(name[0]) + ' ' + this.firstToUppercase(name[1]);
-  }
-
-  firstToUppercase(s: string): string {
-    return s.charAt(0).toUpperCase() + s.slice(1);
   }
 }
