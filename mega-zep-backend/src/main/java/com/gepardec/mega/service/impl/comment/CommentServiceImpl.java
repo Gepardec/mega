@@ -115,15 +115,17 @@ public class CommentServiceImpl implements CommentService {
     private void sendMail(Mail mail, com.gepardec.mega.db.entity.Comment comment) {
         StepEntry stepEntry = comment.getStepEntry();
         String creator = comment.getStepEntry().getAssignee().getFirstname();
+        String recipient = Mail.COMMENT_CLOSED.equals(mail) ? stepEntry.getAssignee().getFirstname() : stepEntry.getOwner().getFirstname();
+        String recipientEmail = Mail.COMMENT_CLOSED.equals(mail) ? stepEntry.getAssignee().getEmail() : stepEntry.getOwner().getEmail();
         Map<String, String> mailParameter = new HashMap<>() {{
             put(MailParameter.CREATOR, creator);
-            put(MailParameter.RECIPIENT, stepEntry.getOwner().getFirstname());
+            put(MailParameter.RECIPIENT, recipient);
             put(MailParameter.COMMENT, comment.getMessage());
         }};
 
         mailSender.send(
                 mail,
-                stepEntry.getOwner().getEmail(),
+                recipientEmail,
                 stepEntry.getOwner().getFirstname(),
                 Locale.GERMAN,
                 mailParameter,
