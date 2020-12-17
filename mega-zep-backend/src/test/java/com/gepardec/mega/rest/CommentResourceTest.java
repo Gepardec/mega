@@ -61,7 +61,7 @@ public class CommentResourceTest {
         Comment comment = Comment.builder()
                 .id(0L)
                 .message("Pausen eintragen!")
-                .author("evelyn.pirklbauer@gepardec.com")
+                .authorEmail("evelyn.pirklbauer@gepardec.com")
                 .state(State.IN_PROGRESS)
                 .build();
 
@@ -137,7 +137,7 @@ public class CommentResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        Comment comment = Comment.builder().id(0L).message("Pausen eintragen!").author("evelyn.pirklbauer@gepardec.com").state(State.IN_PROGRESS).build();
+        Comment comment = Comment.builder().id(0L).message("Pausen eintragen!").authorEmail("evelyn.pirklbauer@gepardec.com").state(State.IN_PROGRESS).build();
         when(commentService.findCommentsForEmployee(ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(List.of(comment));
 

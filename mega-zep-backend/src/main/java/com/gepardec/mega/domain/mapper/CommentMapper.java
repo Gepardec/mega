@@ -11,7 +11,10 @@ public class CommentMapper {
         Comment domainComment = Comment
                 .builder()
                 .id(dbComment.getId())
-                .author(dbComment.getStepEntry().getAssignee().getEmail())
+                .authorEmail(dbComment.getStepEntry().getAssignee().getEmail())
+                .authorName(String.format("%s %s",
+                        dbComment.getStepEntry().getAssignee().getFirstname(),
+                        dbComment.getStepEntry().getAssignee().getLastname()))
                 .updateDate(dbComment.getUpdatedDate().toString())
                 .message(dbComment.getMessage())
                 .state(dbComment.getState())

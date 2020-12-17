@@ -234,7 +234,7 @@ class CommentServiceImplTest {
 
         assertNotNull(createdComment);
         assertEquals("My new comment!", createdComment.message());
-        assertEquals(stepEntry.getAssignee().getEmail(), createdComment.author());
+        assertEquals(stepEntry.getAssignee().getEmail(), createdComment.authorEmail());
         assertEquals(State.OPEN, createdComment.state());
     }
 

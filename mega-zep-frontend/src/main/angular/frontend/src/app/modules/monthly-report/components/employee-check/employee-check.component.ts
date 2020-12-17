@@ -45,17 +45,6 @@ export class EmployeeCheckComponent implements OnInit {
     });
   }
 
-
-  getFullNameFromEmail(email: string): string {
-    if (!email) {
-      return;
-    }
-    return email.split('@')[0]
-      .split('.')
-      .map(name => name.charAt(0).toUpperCase() + name.slice(1))
-      .join(' ');
-  }
-
   setOpenAndUnassignedStepEntriesDone() {
     this.stepentriesService
       .close(this.monthlyReport.employee, Step.CONTROL_TIMES, this.monthlyReport.employee.releaseDate)
