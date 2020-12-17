@@ -61,7 +61,9 @@ class MailSenderTest {
         List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
         assertAll(
                 () -> assertEquals(1, sent.size()),
-                () -> assertTrue(sent.get(0).getHtml().startsWith("<p>Hallo " + "Jamal")),
+                () -> assertTrue(Mail.COMMENT_CLOSED.equals(mail) ?
+                        sent.get(0).getHtml().startsWith("<p>Hallo " + "Herbert") :
+                        sent.get(0).getHtml().startsWith("<p>Hallo " + "Jamal")),
                 () -> assertEquals(subject, sent.get(0).getSubject()));
     }
 
