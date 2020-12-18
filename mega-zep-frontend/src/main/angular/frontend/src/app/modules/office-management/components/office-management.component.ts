@@ -112,10 +112,25 @@ export class OfficeManagementComponent implements OnInit {
 
   filterOmEntriesByOMC1Status(checked: boolean) {
     if (checked === true) {
-      this.filteredOmEntries = this.omEntries.filter(val => val.customerCheckState === State.OPEN);
+      let allDoneEntries = this.getFilteredAndSortedOmEntries(State.DONE, State.DONE);
+      let projectEntriesDone = this.getFilteredAndSortedOmEntries(State.DONE, State.OPEN);
+      let internalEntriesDone = this.getFilteredAndSortedOmEntries(State.OPEN, State.DONE);
+      let allOpenEntries = this.getFilteredAndSortedOmEntries(State.OPEN, State.OPEN);
+
+      this.filteredOmEntries = allOpenEntries
+        .concat(projectEntriesDone)
+        .concat(internalEntriesDone)
+        .concat(allDoneEntries);
     } else {
       this.filteredOmEntries = this.omEntries.slice();
     }
+  }
+
+  getFilteredAndSortedOmEntries(customerCheckState: State, internalCheckState: State) {
+    return this.omEntries
+      .filter(val => val.customerCheckState === customerCheckState && val.internalCheckState === internalCheckState)
+      .sort((a, b) => a.employee.firstname.concat(a.employee.lastname)
+        .localeCompare(b.employee.firstname.concat(b.employee.lastname)));
   }
 
   getCurrentReleaseDate(): Date {
