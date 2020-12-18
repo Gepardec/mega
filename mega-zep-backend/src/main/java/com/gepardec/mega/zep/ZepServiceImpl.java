@@ -3,6 +3,7 @@ package com.gepardec.mega.zep;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
+import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.service.impl.employee.EmployeeMapper;
 import com.gepardec.mega.zep.mapper.ProjectEntryMapper;
 import de.provantis.zep.*;
@@ -112,7 +113,7 @@ public class ZepServiceImpl implements ZepService {
 
         return readProjekteResponseType.getProjektListe().getProjekt()
                 .stream()
-                .map(this::createProject)
+                .map(pt -> createProject(pt, monthYear))
                 .collect(Collectors.toList());
     }
 
@@ -141,21 +142,33 @@ public class ZepServiceImpl implements ZepService {
         return searchCriteria;
     }
 
-    private Project createProject(final ProjektType projektType) {
+    private Project createProject(final ProjektType projektType, final LocalDate monthYear) {
         return Project.builder()
                 .projectId(projektType.getProjektNr())
                 .description(projektType.getBezeichnung())
-                .employees(createProjectEmployees(projektType.getProjektmitarbeiterListe()))
+                .employees(createProjectEmployees(projektType.getProjektmitarbeiterListe(), monthYear))
                 .leads(createProjectLeads(projektType.getProjektmitarbeiterListe()))
                 .categories(createCategories(projektType))
                 .build();
     }
 
-    private List<String> createProjectEmployees(final ProjektMitarbeiterListeType projektMitarbeiterListeType) {
+    private List<String> createProjectEmployees(final ProjektMitarbeiterListeType projektMitarbeiterListeType, final LocalDate monthYear) {
         return projektMitarbeiterListeType.getProjektmitarbeiter()
                 .stream()
+                .filter(e -> filterActiveEmployees(monthYear, e.getVon(), e.getBis()))
                 .map(ProjektMitarbeiterType::getUserId)
                 .collect(Collectors.toList());
+    }
+
+    private boolean filterActiveEmployees(final LocalDate monthYear, final String inProjectFrom, final String inProjectUntil) {
+        LocalDate from = inProjectFrom != null ? DateUtils.parseDate(inProjectFrom) : null;
+        LocalDate until = inProjectUntil != null ? DateUtils.parseDate(inProjectUntil) : null;
+
+        if(until == null) {
+            return from == null || from.isBefore(monthYear);
+        } else {
+            return from == null ? until.isAfter(monthYear) : from.isBefore(monthYear) && until.isAfter(monthYear);
+        }
     }
 
     private List<String> createProjectLeads(final ProjektMitarbeiterListeType projektMitarbeiterListeType) {
