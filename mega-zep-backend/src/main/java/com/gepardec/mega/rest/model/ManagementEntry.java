@@ -7,6 +7,9 @@ import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.State;
 import com.google.auto.value.AutoValue;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 @AutoValue
 @JsonSerialize(as = ManagementEntry.class)
 @JsonDeserialize(builder = com.gepardec.mega.rest.model.AutoValue_ManagementEntry.Builder.class)
@@ -26,6 +29,10 @@ public abstract class ManagementEntry {
 
     @JsonProperty
     public abstract State projectCheckState();
+
+    @JsonProperty
+    @Nullable
+    public abstract List<PmProgress> employeeProgresses();
 
     @JsonProperty
     public abstract long totalComments();
@@ -56,6 +63,9 @@ public abstract class ManagementEntry {
 
         @JsonProperty
         public abstract Builder projectCheckState(State state);
+
+        @JsonProperty
+        public abstract Builder employeeProgresses(List<PmProgress> pmProgresses);
 
         @JsonProperty
         public abstract Builder totalComments(long totalComments);

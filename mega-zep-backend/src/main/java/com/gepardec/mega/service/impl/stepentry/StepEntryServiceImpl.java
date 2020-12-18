@@ -6,12 +6,14 @@ import com.gepardec.mega.db.repository.StepEntryRepository;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,14 +40,13 @@ public class StepEntryServiceImpl implements StepEntryService {
 
     @Override
     public List<StepEntry> findAllOwnedAndUnassignedStepEntriesForOtherChecks(Employee employee) {
-        LocalDate entryDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-
+        LocalDate entryDate = parseReleaseDate(employee.releaseDate());
         return stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(entryDate, employee.email());
     }
 
     @Override
     public List<StepEntry> findAllOwnedAndUnassignedStepEntriesForPMProgress(Employee employee) {
-        LocalDate entryDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate entryDate = parseReleaseDate(employee.releaseDate());
 
         return stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForPMProgress(entryDate, employee.email());
     }
@@ -113,7 +114,7 @@ public class StepEntryServiceImpl implements StepEntryService {
         Optional<StepEntry> stepEntry = stepEntryRepository.findStepEntryForEmployeeAtStepInRange(
                 fromDate, toDate, employee.email(), stepId, assigneeEmail
         );
-        if(stepEntry.isEmpty()) {
+        if (stepEntry.isEmpty()) {
             throw new IllegalStateException(String.format("No StepEntries found for Employee %s", employee.email()));
         }
 
@@ -125,13 +126,23 @@ public class StepEntryServiceImpl implements StepEntryService {
         Objects.requireNonNull(employee, "Employee must not be null!");
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(currentMonthYear));
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(currentMonthYear));
-        Optional<StepEntry> stepEntry =  stepEntryRepository.findStepEntryForEmployeeAndProjectAtStepInRange(
+        Optional<StepEntry> stepEntry = stepEntryRepository.findStepEntryForEmployeeAndProjectAtStepInRange(
                 fromDate, toDate, employee.email(), stepId, assigneeEmail, project
         );
-        if(stepEntry.isEmpty()) {
+        if (stepEntry.isEmpty()) {
             throw new IllegalStateException(String.format("No StepEntries found for Employee %s", employee.email()));
         }
 
         return stepEntry.get();
+    }
+
+    private LocalDate parseReleaseDate(String releaseDate) {
+        LocalDate entryDate;
+        if (StringUtils.isBlank(releaseDate) || StringUtils.equalsIgnoreCase(releaseDate, "NULL")) {
+            entryDate = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+        } else {
+            entryDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(releaseDate));
+        }
+        return entryDate;
     }
 }

@@ -9,7 +9,7 @@ import { SharedModule } from '../shared/shared.module';
 import { TimeCheckComponent } from './components/time-check/time-check.component';
 import { JourneyCheckComponent } from './components/journey-check/journey-check.component';
 import { EmployeeCheckComponent } from './components/employee-check/employee-check.component';
-import { EmployeeProgressComponent } from './components/employee-check/employee-progress/employee-progress.component';
+import { PmProgressComponent } from '../shared/components/pm-progress/pm-progress.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import { EmployeeProgressComponent } from './components/employee-check/employee-
     TimeCheckComponent,
     JourneyCheckComponent,
     EmployeeCheckComponent,
-    EmployeeProgressComponent
+    PmProgressComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +28,7 @@ import { EmployeeProgressComponent } from './components/employee-check/employee-
     SharedModule
   ],
   entryComponents: [
-    EmployeeProgressComponent
+    PmProgressComponent
   ]
 })
 export class MonthlyReportModule {

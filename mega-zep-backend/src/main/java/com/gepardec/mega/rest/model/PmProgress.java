@@ -4,15 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gepardec.mega.db.entity.State;
-import com.gepardec.mega.db.entity.User;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nullable;
 
 @AutoValue
-@JsonSerialize(as = EmployeeProgress.class)
-@JsonDeserialize(builder = com.gepardec.mega.rest.model.AutoValue_EmployeeProgress.Builder.class)
-public abstract class EmployeeProgress {
+@JsonSerialize(as = PmProgress.class)
+@JsonDeserialize(builder = com.gepardec.mega.rest.model.AutoValue_PmProgress.Builder.class)
+public abstract class PmProgress {
 
     @JsonProperty
     @Nullable
@@ -22,17 +21,23 @@ public abstract class EmployeeProgress {
     public abstract String assigneeEmail();
 
     @JsonProperty
+    public abstract String firstname();
+
+    @JsonProperty
+    public abstract String lastname();
+
+    @JsonProperty
     public abstract State state();
 
     @JsonProperty
     public abstract Long stepId();
 
-    public EmployeeProgress() {
+    public PmProgress() {
         super();
     }
 
     public static Builder builder() {
-        return new com.gepardec.mega.rest.model.AutoValue_EmployeeProgress.Builder();
+        return new com.gepardec.mega.rest.model.AutoValue_PmProgress.Builder();
     }
 
     @AutoValue.Builder
@@ -45,6 +50,10 @@ public abstract class EmployeeProgress {
 
         @JsonProperty public abstract Builder stepId(Long stepId);
 
-        @JsonProperty public abstract EmployeeProgress build();
+        @JsonProperty public abstract Builder firstname(String firstname);
+
+        @JsonProperty public abstract Builder lastname(String lastname);
+
+        @JsonProperty public abstract PmProgress build();
     }
 }

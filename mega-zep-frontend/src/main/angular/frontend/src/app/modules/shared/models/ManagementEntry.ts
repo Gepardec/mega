@@ -1,5 +1,6 @@
 import {Employee} from './Employee';
 import {State} from './State';
+import {PmProgress} from "../../monthly-report/models/PmProgress";
 
 export class ManagementEntry {
   employee: Employee;
@@ -7,6 +8,7 @@ export class ManagementEntry {
   customerCheckState: State;
   internalCheckState: State;
   projectCheckState: State;
+  employeeProgresses: Array<PmProgress>;
   totalComments: number;
   finishedComments: number;
   entryDate: string;

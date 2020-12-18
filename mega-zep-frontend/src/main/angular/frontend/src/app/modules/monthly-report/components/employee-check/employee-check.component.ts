@@ -7,7 +7,7 @@ import {ErrorHandlerService} from "../../../shared/services/error/error-handler.
 import {StepentriesService} from "../../../shared/services/stepentries/stepentries.service";
 import {Step} from "../../../shared/models/Step";
 import {MatBottomSheet, MatBottomSheetRef} from "@angular/material/bottom-sheet";
-import {EmployeeProgressComponent} from "./employee-progress/employee-progress.component";
+import {PmProgressComponent} from "../../../shared/components/pm-progress/pm-progress.component";
 
 @Component({
   selector: 'app-employee-check',
@@ -58,7 +58,7 @@ export class EmployeeCheckComponent implements OnInit {
   }
 
   openEmployeeProgress() {
-    this.employeeProgressRef = this._bottomSheet.open(EmployeeProgressComponent, {
+    this.employeeProgressRef = this._bottomSheet.open(PmProgressComponent, {
       data: {employeeProgresses: this.monthlyReport.employeeProgresses},
       autoFocus: false,
       hasBackdrop: false

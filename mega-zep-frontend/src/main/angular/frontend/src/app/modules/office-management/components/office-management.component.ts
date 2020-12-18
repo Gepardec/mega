@@ -16,6 +16,8 @@ import {Step} from '../../shared/models/Step';
 
 import * as _moment from 'moment';
 import {Moment} from 'moment';
+import {PmProgressComponent} from "../../shared/components/pm-progress/pm-progress.component";
+import {MatBottomSheet, MatBottomSheetRef} from "@angular/material/bottom-sheet";
 
 const moment = _moment;
 
@@ -26,6 +28,8 @@ const moment = _moment;
 })
 export class OfficeManagementComponent implements OnInit {
   State = State;
+
+  employeeProgressRef: MatBottomSheetRef;
 
   displayedColumns = [
     'select',
@@ -54,7 +58,8 @@ export class OfficeManagementComponent implements OnInit {
     private notificationService: NotificationService,
     private translateService: TranslateService,
     private commentService: CommentService,
-    private stepEntryService: StepentriesService) {
+    private stepEntryService: StepentriesService,
+    private _bottomSheet: MatBottomSheet) {
   }
 
   ngOnInit(): void {
@@ -203,5 +208,18 @@ export class OfficeManagementComponent implements OnInit {
     months -= d1.getMonth();
     months += d2.getMonth();
     return Math.abs(months);
+  }
+
+  openEmployeeProgress(omEntry: ManagementEntry) {
+    console.log(omEntry)
+    this.employeeProgressRef = this._bottomSheet.open(PmProgressComponent, {
+      data: {employeeProgresses: omEntry.employeeProgresses},
+      autoFocus: false,
+      hasBackdrop: false
+    });
+  }
+
+  closeEmployeeProgress() {
+    this.employeeProgressRef.dismiss();
   }
 }
