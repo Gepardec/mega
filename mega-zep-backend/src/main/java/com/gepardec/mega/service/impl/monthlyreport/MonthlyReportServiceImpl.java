@@ -4,13 +4,12 @@ import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.StepEntry;
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.StepName;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.utils.DateUtils;
-import com.gepardec.mega.rest.model.EmployeeProgress;
+import com.gepardec.mega.rest.model.PmProgress;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
@@ -66,10 +65,10 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         final boolean isAssigned = employeeCheckState.isPresent();
 
         final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(employee);
-        List<EmployeeProgress> employeeProgresses = new ArrayList<>();
+        List<PmProgress> pmProgresses = new ArrayList<>();
         allOwnedStepEntriesForPMProgress.stream()
-                .forEach(stepEntry -> employeeProgresses.add(
-                        EmployeeProgress.builder()
+                .forEach(stepEntry -> pmProgresses.add(
+                        PmProgress.builder()
                                 .project(stepEntry.getProject())
                                 .assigneeEmail(stepEntry.getAssignee().getEmail())
                                 .state(stepEntry.getState())
@@ -80,6 +79,6 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         final List<StepEntry> allOwnedAndAssignedStepEntries = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(employee);
         final boolean otherChecksDone = allOwnedAndAssignedStepEntries.stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);
 
-        return MonthlyReport.of(employee, timeWarnings, journeyWarnings, comments, employeeCheckState.orElse(State.OPEN), isAssigned, employeeProgresses, otherChecksDone);
+        return MonthlyReport.of(employee, timeWarnings, journeyWarnings, comments, employeeCheckState.orElse(State.OPEN), isAssigned, pmProgresses, otherChecksDone);
     }
 }

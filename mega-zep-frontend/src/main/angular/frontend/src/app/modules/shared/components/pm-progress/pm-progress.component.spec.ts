@@ -1,22 +1,22 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {EmployeeProgressComponent} from './employee-progress.component';
-import {AngularMaterialModule} from "../../../../material/material-module";
+import {PmProgressComponent} from './pm-progress.component';
+import {AngularMaterialModule} from "../../../material/material-module";
 import {TranslateModule} from "@ngx-translate/core";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {SharedModule} from "../../../../shared/shared.module";
+import {SharedModule} from "../../shared.module";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {RouterTestingModule} from "@angular/router/testing";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {MAT_BOTTOM_SHEET_DATA} from "@angular/material/bottom-sheet";
 
 describe('EmployeeProgressComponent', () => {
-  let component: EmployeeProgressComponent;
-  let fixture: ComponentFixture<EmployeeProgressComponent>;
+  let component: PmProgressComponent;
+  let fixture: ComponentFixture<PmProgressComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [EmployeeProgressComponent],
+      declarations: [PmProgressComponent],
       imports: [
         BrowserAnimationsModule,
         SharedModule,
@@ -34,9 +34,9 @@ describe('EmployeeProgressComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EmployeeProgressComponent);
+    fixture = TestBed.createComponent(PmProgressComponent);
     component = fixture.componentInstance;
-    component.employeeProgresses = []
+    component.pmProgresses = []
 
     fixture.detectChanges();
   });

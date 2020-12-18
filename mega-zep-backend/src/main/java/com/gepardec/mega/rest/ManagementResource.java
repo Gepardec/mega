@@ -11,6 +11,7 @@ import com.gepardec.mega.domain.model.ProjectFilter;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.StepName;
 import com.gepardec.mega.domain.model.UserContext;
+import com.gepardec.mega.rest.model.PmProgress;
 import com.gepardec.mega.rest.model.ManagementEntry;
 import com.gepardec.mega.rest.model.ProjectManagementEntry;
 import com.gepardec.mega.service.api.comment.CommentService;
@@ -64,11 +65,29 @@ public class ManagementResource {
         List<Employee> activeEmployees = employeeService.getAllActiveEmployees();
         for (Employee empl : activeEmployees) {
             List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployee(empl, from, to);
-            ManagementEntry newManagementEntry = createManagementEntryForEmployee(empl, stepEntries, from, to);
+
+            final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(empl);
+            List<PmProgress> pmProgresses = new ArrayList<>();
+            allOwnedStepEntriesForPMProgress.stream()
+                    .forEach(stepEntry -> pmProgresses.add(
+                            PmProgress.builder()
+                                    .project(stepEntry.getProject())
+                                    .assigneeEmail(stepEntry.getAssignee().getEmail())
+                                    .state(stepEntry.getState())
+                                    .stepId(stepEntry.getStep().getId())
+                                    .firstname(stepEntry.getAssignee().getFirstname())
+                                    .lastname(stepEntry.getAssignee().getLastname())
+                                    .build()
+                    ));
+
+            ManagementEntry newManagementEntry = createManagementEntryForEmployee(empl, stepEntries, from, to, pmProgresses);
             if (newManagementEntry != null) {
                 officeManagementEntries.add(newManagementEntry);
             }
+
+
         }
+
 
         return officeManagementEntries;
     }
@@ -116,7 +135,7 @@ public class ManagementResource {
                 List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployeeAndProject(
                         empl, project.projectId(), userContext.user().email(), from, to
                 );
-                ManagementEntry entry = createManagementEntryForEmployee(empl, project.projectId(), stepEntries, from, to);
+                ManagementEntry entry = createManagementEntryForEmployee(empl, project.projectId(), stepEntries, from, to, null);
                 if(entry != null) {
                     entries.add(entry);
                 }
@@ -126,11 +145,11 @@ public class ManagementResource {
         return entries;
     }
 
-    private ManagementEntry createManagementEntryForEmployee(Employee employee, List<StepEntry> stepEntries, LocalDate from, LocalDate to) {
-        return createManagementEntryForEmployee(employee, null, stepEntries, from, to);
+    private ManagementEntry createManagementEntryForEmployee(Employee employee, List<StepEntry> stepEntries, LocalDate from, LocalDate to, List<PmProgress> pmProgresses) {
+        return createManagementEntryForEmployee(employee, null, stepEntries, from, to, pmProgresses);
     }
 
-    private ManagementEntry createManagementEntryForEmployee(Employee employee, String projectId, List<StepEntry> stepEntries, LocalDate from, LocalDate to) {
+    private ManagementEntry createManagementEntryForEmployee(Employee employee, String projectId, List<StepEntry> stepEntries, LocalDate from, LocalDate to, List<PmProgress> pmProgresses) {
         FinishedAndTotalComments finishedAndTotalComments = commentService.cntFinishedAndTotalCommentsForEmployee(employee, from, to);
         if (!stepEntries.isEmpty()) {
             return ManagementEntry.builder()
@@ -139,6 +158,7 @@ public class ManagementResource {
                     .employeeCheckState(extractEmployeeCheckState(stepEntries))
                     .internalCheckState(extractInternalCheckState(stepEntries))
                     .projectCheckState(extractStateForProject(stepEntries, projectId))
+                    .employeeProgresses(pmProgresses)
                     .finishedComments(finishedAndTotalComments.finishedComments())
                     .totalComments(finishedAndTotalComments.totalComments())
                     .entryDate(stepEntries.get(0).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))

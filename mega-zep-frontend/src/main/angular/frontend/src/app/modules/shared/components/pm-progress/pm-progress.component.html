@@ -1,7 +1,7 @@
 <table mat-table style="width: 100%" [dataSource]="displayedEmployees" class="mat-elevation-z8">
   <ng-container matColumnDef="email">
     <th mat-header-cell *matHeaderCellDef>Projektleiter</th>
-    <td mat-cell *matCellDef="let element" style="padding-right: 20px;"> {{getFullNameFromEmail(element.email)}} </td>
+    <td mat-cell *matCellDef="let element" style="padding-right: 20px;"> {{element.name}} </td>
   </ng-container>
 
   <ng-container matColumnDef="checked">
