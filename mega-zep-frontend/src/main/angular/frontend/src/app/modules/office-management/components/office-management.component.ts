@@ -110,12 +110,11 @@ export class OfficeManagementComponent implements OnInit {
     });
   }
 
-  filterOmEntriesByOMC1Status(checked: boolean) {
-    if (checked === true) {
-      this.filteredOmEntries = this.omEntries.filter(val => val.customerCheckState === State.OPEN);
-    } else {
-      this.filteredOmEntries = this.omEntries.slice();
-    }
+  getFilteredAndSortedOmEntries(customerCheckState: State, internalCheckState: State) {
+    return this.omEntries
+      .filter(val => val.customerCheckState === customerCheckState && val.internalCheckState === internalCheckState)
+      .sort((a, b) => a.employee.lastname.concat(a.employee.firstname)
+        .localeCompare(b.employee.lastname.concat(b.employee.firstname)));
   }
 
   getCurrentReleaseDate(): Date {
@@ -188,9 +187,15 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   private sortOmEntries(): void {
-    const sortFn = (a: ManagementEntry, b: ManagementEntry) => a.employee.lastname.localeCompare(b.employee.lastname);
-    this.omEntries = this.omEntries.sort(sortFn);
-    this.filteredOmEntries = this.omEntries.slice();
+    let allDoneEntries = this.getFilteredAndSortedOmEntries(State.DONE, State.DONE);
+    let projectEntriesDone = this.getFilteredAndSortedOmEntries(State.DONE, State.OPEN);
+    let internalEntriesDone = this.getFilteredAndSortedOmEntries(State.OPEN, State.DONE);
+    let allOpenEntries = this.getFilteredAndSortedOmEntries(State.OPEN, State.OPEN);
+
+    this.filteredOmEntries = allOpenEntries
+      .concat(projectEntriesDone)
+      .concat(internalEntriesDone)
+      .concat(allDoneEntries);
   }
 
   private monthDiff(d1: Date, d2: Date) {
@@ -199,5 +204,4 @@ export class OfficeManagementComponent implements OnInit {
     months += d2.getMonth();
     return Math.abs(months);
   }
-
 }
