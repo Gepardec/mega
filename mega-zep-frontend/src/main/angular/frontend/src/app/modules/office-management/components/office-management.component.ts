@@ -211,7 +211,6 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   openEmployeeProgress(omEntry: ManagementEntry) {
-    console.log(omEntry)
     this.employeeProgressRef = this._bottomSheet.open(PmProgressComponent, {
       data: {employeeProgresses: omEntry.employeeProgresses},
       autoFocus: false,
