@@ -26,7 +26,7 @@ public class ZepSoapProvider {
                 .getContextClassLoader()
                 .getResource("wsdl/zep_v7.wsdl"));
         final ZepSoapPortType port = zs.getZepSOAP();
-        configureWebserviceClient((BindingProvider) port, zepConfig.getUrlAsString(), 5l, 10L, TimeUnit.SECONDS);
+        configureWebserviceClient((BindingProvider) port, zepConfig.getUrlAsString(), 10L, 20L, TimeUnit.SECONDS);
         return port;
     }
 

@@ -49,8 +49,8 @@ export class OfficeManagementComponent implements OnInit {
   dayOfMonthForWarning = 5;
   configuration = configuration;
   environment = environment;
-  selectedYear = moment().year();
-  selectedMonth = moment().subtract(1, 'month').month();
+  selectedYear = moment().subtract(1, 'month').year();
+  selectedMonth = moment().subtract(1, 'month').month() + 1;
 
   constructor(
     private dialog: MatDialog,
@@ -185,7 +185,7 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   private getOmEntries() {
-    this.omService.getEntries(this.selectedYear, this.selectedMonth + 1).subscribe((omEntries: Array<ManagementEntry>) => {
+    this.omService.getEntries(this.selectedYear, this.selectedMonth).subscribe((omEntries: Array<ManagementEntry>) => {
       this.omEntries = omEntries;
       this.sortOmEntries();
     });
