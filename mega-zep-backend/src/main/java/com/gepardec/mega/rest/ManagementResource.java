@@ -39,6 +39,8 @@ import java.util.stream.Collectors;
 @Path("/management")
 public class ManagementResource {
 
+    private static final String DATE_FORMAT_PATTERN = "YYYY-MM-dd";
+
     @Inject
     EmployeeService employeeService;
 
@@ -66,7 +68,8 @@ public class ManagementResource {
         for (Employee empl : activeEmployees) {
             List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployee(empl, from, to);
 
-            final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(empl);
+            String entryDate = LocalDate.of(year, month, 1).minusMonths(1).format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN));
+            final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(empl.email(), entryDate);
             List<PmProgress> pmProgresses = new ArrayList<>();
             allOwnedStepEntriesForPMProgress.stream()
                     .forEach(stepEntry -> pmProgresses.add(

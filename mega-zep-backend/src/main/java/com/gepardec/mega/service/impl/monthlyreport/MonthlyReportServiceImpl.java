@@ -64,7 +64,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         final Optional<State> employeeCheckState = stepEntryService.findEmployeeCheckState(employee);
         final boolean isAssigned = employeeCheckState.isPresent();
 
-        final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(employee);
+        final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(employee.email(), employee.releaseDate());
         List<PmProgress> pmProgresses = new ArrayList<>();
         allOwnedStepEntriesForPMProgress.stream()
                 .forEach(stepEntry -> pmProgresses.add(

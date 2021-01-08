@@ -13,7 +13,7 @@ public interface StepEntryService {
 
     List<com.gepardec.mega.db.entity.StepEntry> findAllOwnedAndUnassignedStepEntriesForOtherChecks(final Employee employee);
 
-    List<com.gepardec.mega.db.entity.StepEntry> findAllOwnedAndUnassignedStepEntriesForPMProgress(final Employee employee);
+    List<com.gepardec.mega.db.entity.StepEntry> findAllOwnedAndUnassignedStepEntriesForPMProgress(final String email, final String date);
 
     void addStepEntry(final StepEntry stepEntry);
 
