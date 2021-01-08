@@ -37,8 +37,9 @@ export class ProjectManagementComponent implements OnInit {
 
   pmSelectionModels: Map<string, SelectionModel<ManagementEntry>>;
   environment = environment;
-  selectedYear = moment().year();
-  selectedMonth = moment().month();
+  selectedYear = moment().subtract(1, 'month').year();
+  selectedMonth = moment().subtract(1, 'month').month() + 1; // months 0 - 11
+
 
   constructor(private dialog: MatDialog,
               private pmService: ProjectManagementService,
@@ -115,6 +116,8 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   private getPmEntries() {
+    console.log(this.selectedYear);
+    console.log(this.selectedMonth)
     this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
       this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();

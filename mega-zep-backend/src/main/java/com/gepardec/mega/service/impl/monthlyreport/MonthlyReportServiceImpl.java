@@ -71,6 +71,8 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                         PmProgress.builder()
                                 .project(stepEntry.getProject())
                                 .assigneeEmail(stepEntry.getAssignee().getEmail())
+                                .firstname(stepEntry.getAssignee().getFirstname())
+                                .lastname(stepEntry.getAssignee().getLastname())
                                 .state(stepEntry.getState())
                                 .stepId(stepEntry.getStep().getId())
                                 .build()
