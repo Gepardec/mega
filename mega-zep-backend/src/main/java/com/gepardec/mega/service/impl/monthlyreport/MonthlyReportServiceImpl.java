@@ -56,27 +56,28 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectEntries);
 
         final List<Comment> comments = new ArrayList<>();
+        List<PmProgress> pmProgresses = new ArrayList<>();
         if (employee != null) {
             LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
             LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
             comments.addAll(commentService.findCommentsForEmployee(employee, fromDate, toDate));
+
+            final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(employee.email(), employee.releaseDate());
+            allOwnedStepEntriesForPMProgress.stream()
+                    .forEach(stepEntry -> pmProgresses.add(
+                            PmProgress.builder()
+                                    .project(stepEntry.getProject())
+                                    .assigneeEmail(stepEntry.getAssignee().getEmail())
+                                    .firstname(stepEntry.getAssignee().getFirstname())
+                                    .lastname(stepEntry.getAssignee().getLastname())
+                                    .state(stepEntry.getState())
+                                    .stepId(stepEntry.getStep().getId())
+                                    .build()
+                    ));
         }
+
         final Optional<State> employeeCheckState = stepEntryService.findEmployeeCheckState(employee);
         final boolean isAssigned = employeeCheckState.isPresent();
-
-        final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(employee.email(), employee.releaseDate());
-        List<PmProgress> pmProgresses = new ArrayList<>();
-        allOwnedStepEntriesForPMProgress.stream()
-                .forEach(stepEntry -> pmProgresses.add(
-                        PmProgress.builder()
-                                .project(stepEntry.getProject())
-                                .assigneeEmail(stepEntry.getAssignee().getEmail())
-                                .firstname(stepEntry.getAssignee().getFirstname())
-                                .lastname(stepEntry.getAssignee().getLastname())
-                                .state(stepEntry.getState())
-                                .stepId(stepEntry.getStep().getId())
-                                .build()
-                ));
 
         final List<StepEntry> allOwnedAndAssignedStepEntries = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(employee);
         final boolean otherChecksDone = allOwnedAndAssignedStepEntries.stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);
