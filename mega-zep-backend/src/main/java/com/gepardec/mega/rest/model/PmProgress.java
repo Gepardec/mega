@@ -7,6 +7,7 @@ import com.gepardec.mega.db.entity.State;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nullable;
+import javax.validation.constraints.Null;
 
 @AutoValue
 @JsonSerialize(as = PmProgress.class)
@@ -21,9 +22,11 @@ public abstract class PmProgress {
     public abstract String assigneeEmail();
 
     @JsonProperty
+    @Nullable
     public abstract String firstname();
 
     @JsonProperty
+    @Nullable
     public abstract String lastname();
 
     @JsonProperty
