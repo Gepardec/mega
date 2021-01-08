@@ -34,6 +34,7 @@ export const MY_FORMATS = {
     },
 
     {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
+    {provide: MAT_DATE_LOCALE, useValue: 'de-AT'}
   ]
 })
 export class DatepickerMonthYearComponent {

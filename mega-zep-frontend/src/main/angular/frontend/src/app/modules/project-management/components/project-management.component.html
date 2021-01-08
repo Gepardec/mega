@@ -3,7 +3,7 @@
       <app-datepicker-month-year (dateChanged)="dateChanged($event)"></app-datepicker-month-year>
   </mat-toolbar-row>
 </mat-toolbar>
-<div fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px">
+<div fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px" *ngIf="pmEntries?.length > 0; else noPmEntriesFound">
   <mat-card *ngIf="isAnySelected()" class="actions">
     <mat-card-content fxFlexAlign="space-around center" fxLayout="row" fxLayoutGap="10px">
       <h2>{{'project-management.actions' | translate}}</h2>
@@ -122,3 +122,7 @@
     </mat-expansion-panel>
   </mat-accordion>
 </div>
+
+<ng-template #noPmEntriesFound>
+  <mat-card>{{'project-management.noPmEntriesFound' | translate}}</mat-card>
+</ng-template>

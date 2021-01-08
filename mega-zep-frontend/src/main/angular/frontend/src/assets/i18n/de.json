@@ -93,7 +93,8 @@
       "customerCheckState": "Kundenzeiten",
       "comments": "Anmerkungen",
       "releaseDate": "Freigabedatum"
-    }
+    },
+    "noPmEntriesFound": "Keine Projekteinträge gefunden"
   },
   "comments-for-employee": {
     "commentsFor": "Anmerkungen für {{firstAndSureName}}",
