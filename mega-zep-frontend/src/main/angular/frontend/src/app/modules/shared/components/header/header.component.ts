@@ -8,6 +8,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { configuration } from '../../constants/configuration';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
+import {ConfigService} from "../../services/config/config.service";
+import {Config} from "../../models/Config";
 
 @Component({
   selector: 'app-header',
@@ -19,19 +21,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
     .pipe(map(result => result.matches));
 
   readonly links = new Array<Link>();
-  readonly spreadSheetUrl = configuration.SPREADSHEET_URL;
   readonly zepUrl = configuration.ZEP_URL;
   readonly assetsPath = '../../../../../assets/';
   readonly logoMega = 'logo-MEGA.png';
   readonly excelLogo = 'excel-logo.png';
   readonly zepLogo = 'zep-eye.png';
   user: User;
+  spreadSheetUrl: string;
   private userSubscription: Subscription;
 
   constructor(private rolesService: RolesService,
               private userService: UserService,
               private translate: TranslateService,
-              private breakpointObserver: BreakpointObserver) {
+              private breakpointObserver: BreakpointObserver,
+              private configService: ConfigService) {
     translate.get('PAGE_NAMES').subscribe(
       PAGE_NAMES => {
         this.links.push({name: PAGE_NAMES.MONTHLY_REPORT, path: configuration.PAGE_URLS.MONTHLY_REPORT});
@@ -44,6 +47,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.userSubscription = this.userService.user.subscribe((user) => {
       this.user = user;
+    });
+    this.configService.getConfig().subscribe((config: Config) => {
+      this.spreadSheetUrl = config.excelUrl;
     });
   }
 
