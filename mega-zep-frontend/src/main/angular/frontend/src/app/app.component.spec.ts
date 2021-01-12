@@ -21,7 +21,8 @@ describe('AppComponent', () => {
         clientId: 'DUMMY',
         scope: 'email',
         issuer: 'https://accounts.google.com',
-        version: '1'
+        version: '1',
+        excelUrl: "DUMMY"
       });
     }
   }
