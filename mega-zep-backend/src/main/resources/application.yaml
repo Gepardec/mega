@@ -61,7 +61,6 @@ mega:
       employees:
         notification: true
       reminder:
-        pl: thomas.herzog@gepardec.com
         om: thomas.herzog@gepardec.com,werner.bruckmueller@gepardec.com,marko.gattringer@gepardec.com,christoph.ruhsam@gepardec.com
 ## DEV Properties
 "%test":
@@ -86,7 +85,6 @@ mega:
       employees:
         notification: true
       reminder:
-        pl: thomas.herzog@gepardec.com
         om: thomas.herzog@gepardec.com,werner.bruckmueller@gepardec.com
 # PROD Properties
 "%prod":
@@ -116,7 +114,6 @@ mega:
       employees:
         notification: false
       reminder:
-        pl: thomas.herzog@gepardec.com
         om: thomas.herzog@gepardec.com,werner.bruckmueller@gepardec.com,marko.gattringer@gepardec.com,christoph.ruhsam@gepardec.com
 # TEST-STAGE Properties
 "%teststage":
@@ -135,8 +132,7 @@ mega:
       employees:
         notification: false
       reminder:
-        pl: werner.bruckmueller@gepardec.com,guenter.pirklbauer@gepardec.com
-        om: werner.bruckmueller@gepardec.com,guenter.pirklbauer@gepardec.com
+        om: evelyn.pirklbauer@gepardec.com,guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com
 # TEST-STAGE Properties
 "%prodstage":
   quarkus:
@@ -153,5 +149,4 @@ mega:
       employees:
         notification: true
       reminder:
-        pl: guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com,christoph.kofler@gepardec.com,erhard.siegl@gepardec.com,stefan.kovar@gepardec.com,ludwig.steindl@gepardec.com
-        om: evelyn.pirklbauer@gepardec.com
+        om: evelyn.pirklbauer@gepardec.com,guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com
