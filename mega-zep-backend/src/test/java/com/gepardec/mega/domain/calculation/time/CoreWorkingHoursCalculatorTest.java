@@ -110,12 +110,15 @@ class CoreWorkingHoursCalculatorTest {
 
             @Test
             void whenValid_thenNoWarning() {
-                final JourneyTimeEntry travelBefore = journeyTimeEntryFor(1, 6, Vehicle.OTHER_INACTIVE);
-                final ProjectTimeEntry start = projectTimeEntryFor(6, 12);
-                final ProjectTimeEntry end = projectTimeEntryFor(13, 22);
-                final JourneyTimeEntry travelAfter = journeyTimeEntryFor(22, 23, Vehicle.OTHER_INACTIVE);
+                final JourneyTimeEntry travelInactiveBefore = journeyTimeEntryFor(1, 6, Vehicle.OTHER_INACTIVE);
+                final JourneyTimeEntry travelActiveBefore = journeyTimeEntryFor(6, 10, Vehicle.CAR_ACTIVE);
+                final ProjectTimeEntry start = projectTimeEntryFor(10, 12);
+                final ProjectTimeEntry end = projectTimeEntryFor(13, 16);
+                final JourneyTimeEntry travelActiveAfter = journeyTimeEntryFor(17, 22, Vehicle.CAR_ACTIVE);
+                final JourneyTimeEntry travelInactiveAfter = journeyTimeEntryFor(22, 23, Vehicle.OTHER_INACTIVE);
 
-                final List<TimeWarning> result = calculator.calculate(List.of(travelBefore, start, end, travelAfter));
+                final List<TimeWarning> result = calculator
+                        .calculate(List.of(travelInactiveBefore, travelActiveBefore, start, end, travelActiveAfter, travelInactiveAfter));
 
                 assertTrue(result.isEmpty());
             }
