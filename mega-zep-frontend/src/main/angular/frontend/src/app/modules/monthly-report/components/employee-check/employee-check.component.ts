@@ -68,4 +68,11 @@ export class EmployeeCheckComponent implements OnInit {
   closeEmployeeProgress() {
     this.employeeProgressRef.dismiss();
   }
+
+  parseBody(body:string) {
+    console.log(body)
+    let test = body.replace(/^((https?:\/\/)?([\da-z\.-]+\.[a-z\.]{2,6}|[\d\.]+)([\/:?=&#]{1}[\da-z\.-]+)*[\/\?]?$)/igm, "<a href=\$1\>$1</a>")
+    console.log(test)
+    return test;
+  }
 }
