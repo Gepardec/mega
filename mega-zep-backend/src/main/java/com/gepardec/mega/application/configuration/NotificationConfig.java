@@ -24,10 +24,6 @@ public class NotificationConfig {
     String megaDashUrl;
 
     @Inject
-    @ConfigProperty(name = "mega.mail.reminder.pl")
-    String plMailAddresses;
-
-    @Inject
     @ConfigProperty(name = "mega.mail.reminder.om")
     List<String> omMailAddresses;
 
@@ -49,10 +45,6 @@ public class NotificationConfig {
 
     public String getMegaDashUrl() {
         return megaDashUrl;
-    }
-
-    public String getPlMailAddresses() {
-        return plMailAddresses;
     }
 
     public List<String> getOmMailAddresses() {
