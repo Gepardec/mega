@@ -18,6 +18,8 @@ import * as _moment from 'moment';
 import {Moment} from 'moment';
 import {PmProgressComponent} from "../../shared/components/pm-progress/pm-progress.component";
 import {MatBottomSheet, MatBottomSheetRef} from "@angular/material/bottom-sheet";
+import {ConfigService} from "../../shared/services/config/config.service";
+import {Config} from "../../shared/models/Config";
 
 const moment = _moment;
 
@@ -42,6 +44,7 @@ export class OfficeManagementComponent implements OnInit {
     'releaseDate'
   ];
 
+  officeManagementUrl: string;
   omEntries: Array<ManagementEntry>;
   filteredOmEntries: Array<ManagementEntry>;
   omSelectionModel = new SelectionModel<ManagementEntry>(true, []);
@@ -59,10 +62,14 @@ export class OfficeManagementComponent implements OnInit {
     private translateService: TranslateService,
     private commentService: CommentService,
     private stepEntryService: StepentriesService,
-    private _bottomSheet: MatBottomSheet) {
+    private _bottomSheet: MatBottomSheet,
+    private configService: ConfigService) {
   }
 
   ngOnInit(): void {
+    this.configService.getConfig().subscribe((config: Config) => {
+      this.officeManagementUrl = config.zepUrl + '/' + configuration.OFFICE_MANAGEMENT_SEGMENT;
+    });
     this.getOmEntries();
   }
 

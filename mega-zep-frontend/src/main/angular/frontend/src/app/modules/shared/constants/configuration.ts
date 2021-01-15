@@ -6,9 +6,7 @@ export const configuration = {
     LOGIN: 'login',
     ERROR: 'error'
   },
-
-  /* TODO: Remove these obsolete properties, because these properties are provided via the /config endpoint */
-  ZEP_URL: 'https://www.zep-online.de/zepgepardecservices',
+  
   OFFICE_MANAGEMENT_SEGMENT: `view/index.php?menu=MitarbeiterVerwaltungMgr&
   modelContentMenu=true&mgr=MitarbeiterProjektzeitMgr&contentModelId=`,
 

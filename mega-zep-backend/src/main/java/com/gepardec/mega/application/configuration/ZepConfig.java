@@ -17,7 +17,15 @@ public class ZepConfig {
     @ConfigProperty(name = "mega.zep.url")
     URL url;
 
+    @Inject
+    @ConfigProperty(name = "mega.zep.soap-url")
+    String soapUrl;
+
     public String getUrlAsString() {
+        return String.format("%s%s", url.toString(), soapUrl);
+    }
+
+    public String getUrlForFrontend(){
         return url.toString();
     }
 

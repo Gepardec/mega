@@ -52,7 +52,8 @@ mega:
   mega:
     dash-url: http://localhost:4444/index.html
     zep:
-      url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
+      url: https://www.zep-online.de/zepgepardecservices_test
+      soap-url: /sync/soap.php?v=7
     oauth:
       client-id: 60018822787-gkagrsid8bugtlnts2eqfvtf4n6loefu.apps.googleusercontent.com
     mail:
@@ -79,7 +80,8 @@ mega:
     oauth:
       client-id: 60018822787-4nlv6e1tit3q8ssfbe2e013790p939dt.apps.googleusercontent.com
     zep:
-      url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
+      url: https://www.zep-online.de/zepgepardecservices_test
+      soap-url: /sync/soap.php?v=7
     mail:
       subject-prefix: 'UNIT-TEST: '
       cron: 0 0 7 ? * MON-FRI
@@ -109,7 +111,8 @@ mega:
     oauth:
       client-id: 60018822787-4nlv6e1tit3q8ssfbe2e013790p939dt.apps.googleusercontent.com
     zep:
-      url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
+      url: https://www.zep-online.de/zepgepardecservices_test
+      soap-url: /sync/soap.php?v=7
     mail:
       cron: 0 0 7 ? * MON-FRI
       subject-prefix: 'Development Stage: '
@@ -128,7 +131,8 @@ mega:
     oauth:
       client-id: 60018822787-361in5i8h2kaqfmj7ue0ocn5s4acf5ci.apps.googleusercontent.com
     zep:
-      url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
+      url: https://www.zep-online.de/zepgepardecservices_test
+      soap-url: /sync/soap.php?v=7
     mail:
       cron: 0 0 7 ? * MON-FRI
       subject-prefix: 'Test Stage: '
@@ -147,7 +151,8 @@ mega:
     oauth:
       client-id: 60018822787-u23ip1l6n7gbql7mpsh560ffj56uagsr.apps.googleusercontent.com
     zep:
-      url: https://www.zep-online.de/zepgepardecservices/sync/soap.php?v=7
+      url: https://www.zep-online.de/zepgepardecservices
+      soap-url: /sync/soap.php?v=7
     mail:
       cron: 0 0 7 ? * MON-FRI
       employees:

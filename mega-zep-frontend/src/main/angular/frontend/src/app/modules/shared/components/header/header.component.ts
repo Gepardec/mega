@@ -21,13 +21,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     .pipe(map(result => result.matches));
 
   readonly links = new Array<Link>();
-  readonly zepUrl = configuration.ZEP_URL;
   readonly assetsPath = '../../../../../assets/';
   readonly logoMega = 'logo-MEGA.png';
   readonly excelLogo = 'excel-logo.png';
   readonly zepLogo = 'zep-eye.png';
   user: User;
   spreadSheetUrl: string;
+  zepUrl: string;
   private userSubscription: Subscription;
 
   constructor(private rolesService: RolesService,
@@ -50,6 +50,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
     this.configService.getConfig().subscribe((config: Config) => {
       this.spreadSheetUrl = config.excelUrl;
+      this.zepUrl = config.zepUrl;
+      console.log(this.zepUrl)
     });
   }
 
