@@ -68,7 +68,7 @@ export class OfficeManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.configService.getConfig().subscribe((config: Config) => {
-      this.officeManagementUrl = config.zepUrl + '/' + configuration.OFFICE_MANAGEMENT_SEGMENT;
+      this.officeManagementUrl = config.zepOrigin + '/' + configuration.OFFICE_MANAGEMENT_SEGMENT;
     });
     this.getOmEntries();
   }

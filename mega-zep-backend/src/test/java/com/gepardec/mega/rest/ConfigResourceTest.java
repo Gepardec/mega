@@ -38,7 +38,7 @@ public class ConfigResourceTest {
                 .get("/config")
                 .then().statusCode(HttpStatus.SC_OK)
                 .body("excelUrl", equalTo(applicationConfig.getExcelUrlAsString()))
-                .body("zepUrl", equalTo(zepConfig.getUrlForFrontend()))
+                .body("zepOrigin", equalTo(zepConfig.getUrlForFrontend()))
                 .body("clientId", equalTo(oAuthConfig.getClientId()))
                 .body("issuer", equalTo(oAuthConfig.getIssuer()))
                 .body("scope", equalTo(oAuthConfig.getScope()))

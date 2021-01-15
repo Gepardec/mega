@@ -32,7 +32,7 @@ public class ConfigResource {
     public Config get() {
         return Config.newBuilder()
                 .excelUrl(applicationConfig.getExcelUrlAsString())
-                .zepUrl(zepConfig.getUrlForFrontend())
+                .zepOrigin(zepConfig.getUrlForFrontend())
                 .clientId(oauthConfig.getClientId())
                 .issuer(oauthConfig.getIssuer())
                 .scope(oauthConfig.getScope())

@@ -23,7 +23,7 @@ describe('AppComponent', () => {
         issuer: 'https://accounts.google.com',
         version: '1',
         excelUrl: 'DUMMY',
-        zepUrl: 'DUMMY'
+        zepOrigin: 'DUMMY'
       });
     }
   }

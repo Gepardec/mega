@@ -50,7 +50,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
     this.configService.getConfig().subscribe((config: Config) => {
       this.spreadSheetUrl = config.excelUrl;
-      this.zepUrl = config.zepUrl;
+      this.zepUrl = config.zepOrigin;
       console.log(this.zepUrl)
     });
   }

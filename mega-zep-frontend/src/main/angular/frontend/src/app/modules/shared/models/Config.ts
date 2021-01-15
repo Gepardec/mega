@@ -4,5 +4,5 @@ export class Config {
   scope: string;
   version: string;
   excelUrl: string;
-  zepUrl: string;
+  zepOrigin: string;
 }
