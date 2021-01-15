@@ -2,14 +2,11 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import { configuration } from '../app/modules/shared/constants/configuration';
-
 export const environment = {
   production: false,
   // Base url
   frontendOriginSegment: '4200',
   backendOriginSegment: '8080',
-  ZEP_URL_OFFICE_MANAGEMENT: `${configuration.ZEP_URL}_test/${configuration.OFFICE_MANAGEMENT_SEGMENT}`
 };
 
 /*

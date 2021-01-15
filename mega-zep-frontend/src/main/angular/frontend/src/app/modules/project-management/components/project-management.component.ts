@@ -15,6 +15,10 @@ import {Step} from '../../shared/models/Step';
 
 import * as _moment from 'moment';
 import {Moment} from 'moment';
+import {ConfigService} from "../../shared/services/config/config.service";
+import {Config} from "../../shared/models/Config";
+import {configuration} from "../../shared/constants/configuration";
+
 const moment = _moment;
 
 @Component({
@@ -35,6 +39,7 @@ export class ProjectManagementComponent implements OnInit {
     'releaseDate'
   ];
 
+  officeManagementUrl: string;
   pmSelectionModels: Map<string, SelectionModel<ManagementEntry>>;
   environment = environment;
   selectedYear = moment().subtract(1, 'month').year();
@@ -44,10 +49,14 @@ export class ProjectManagementComponent implements OnInit {
   constructor(private dialog: MatDialog,
               private pmService: ProjectManagementService,
               private stepEntryService: StepentriesService,
-              private commentService: CommentService) {
+              private commentService: CommentService,
+              private configService: ConfigService) {
   }
 
   ngOnInit(): void {
+    this.configService.getConfig().subscribe((config: Config) => {
+      this.officeManagementUrl = config.zepOrigin + '/' + configuration.OFFICE_MANAGEMENT_SEGMENT;
+    })
     this.getPmEntries();
   }
 

@@ -34,7 +34,7 @@ mega:
     eom-url: https://sites.google.com/a/gepardec.com/internal/home/zeiterfassung-mit-zep/monatsende-kontrolle-von-arbeitszeiten
   zep:
     admin-token: ${TOKEN}
-  excel-url: "https://docs.google.com/spreadsheets/d/1wUJHMtkY47RhLIGytg_MXVe_hgPAj_yzozLMcv5hrdU/"
+  excel-url: "https://docs.google.com/spreadsheets/d/1u1G_hNW8ePZqthzWJOEh3qOHc6Fy_R2TQwn5wCMsTt0/"
   oauth:
     issuer: https://accounts.google.com
     scope: openid profile email
@@ -52,7 +52,8 @@ mega:
   mega:
     dash-url: http://localhost:4444/index.html
     zep:
-      url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
+      origin: https://www.zep-online.de/zepgepardecservices_test
+      soap-path: /sync/soap.php?v=7
     oauth:
       client-id: 60018822787-gkagrsid8bugtlnts2eqfvtf4n6loefu.apps.googleusercontent.com
     mail:
@@ -77,7 +78,8 @@ mega:
     oauth:
       client-id: 60018822787-4nlv6e1tit3q8ssfbe2e013790p939dt.apps.googleusercontent.com
     zep:
-      url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
+      origin: https://www.zep-online.de/zepgepardecservices_test
+      soap-path: /sync/soap.php?v=7
     mail:
       subject-prefix: 'UNIT-TEST: '
       employees:
@@ -105,7 +107,8 @@ mega:
     oauth:
       client-id: 60018822787-4nlv6e1tit3q8ssfbe2e013790p939dt.apps.googleusercontent.com
     zep:
-      url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
+      origin: https://www.zep-online.de/zepgepardecservices_test
+      soap-path: /sync/soap.php?v=7
     mail:
       subject-prefix: 'Development Stage: '
       employees:
@@ -122,7 +125,8 @@ mega:
     oauth:
       client-id: 60018822787-361in5i8h2kaqfmj7ue0ocn5s4acf5ci.apps.googleusercontent.com
     zep:
-      url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
+      origin: https://www.zep-online.de/zepgepardecservices_test
+      soap-path: /sync/soap.php?v=7
     mail:
       subject-prefix: 'Test Stage: '
       employees:
@@ -139,7 +143,8 @@ mega:
     oauth:
       client-id: 60018822787-u23ip1l6n7gbql7mpsh560ffj56uagsr.apps.googleusercontent.com
     zep:
-      url: https://www.zep-online.de/zepgepardecservices/sync/soap.php?v=7
+      origin: https://www.zep-online.de/zepgepardecservices
+      soap-path: /sync/soap.php?v=7
     mail:
       employees:
         notification: true
