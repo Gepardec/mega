@@ -56,12 +56,10 @@ mega:
     oauth:
       client-id: 60018822787-gkagrsid8bugtlnts2eqfvtf4n6loefu.apps.googleusercontent.com
     mail:
-      cron: 0 0 7 ? * MON-FRI
       subject-prefix: 'LOCAL: '
       employees:
         notification: true
       reminder:
-        pl: thomas.herzog@gepardec.com
         om: thomas.herzog@gepardec.com,werner.bruckmueller@gepardec.com,marko.gattringer@gepardec.com,christoph.ruhsam@gepardec.com
 ## DEV Properties
 "%test":
@@ -82,11 +80,9 @@ mega:
       url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
     mail:
       subject-prefix: 'UNIT-TEST: '
-      cron: 0 0 7 ? * MON-FRI
       employees:
         notification: true
       reminder:
-        pl: thomas.herzog@gepardec.com
         om: thomas.herzog@gepardec.com,werner.bruckmueller@gepardec.com
 # PROD Properties
 "%prod":
@@ -111,12 +107,10 @@ mega:
     zep:
       url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
     mail:
-      cron: 0 0 7 ? * MON-FRI
       subject-prefix: 'Development Stage: '
       employees:
         notification: false
       reminder:
-        pl: thomas.herzog@gepardec.com
         om: thomas.herzog@gepardec.com,werner.bruckmueller@gepardec.com,marko.gattringer@gepardec.com,christoph.ruhsam@gepardec.com
 # TEST-STAGE Properties
 "%teststage":
@@ -130,13 +124,11 @@ mega:
     zep:
       url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
     mail:
-      cron: 0 0 7 ? * MON-FRI
       subject-prefix: 'Test Stage: '
       employees:
         notification: false
       reminder:
-        pl: werner.bruckmueller@gepardec.com,guenter.pirklbauer@gepardec.com
-        om: werner.bruckmueller@gepardec.com,guenter.pirklbauer@gepardec.com
+        om: evelyn.pirklbauer@gepardec.com,guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com
 # TEST-STAGE Properties
 "%prodstage":
   quarkus:
@@ -149,9 +141,7 @@ mega:
     zep:
       url: https://www.zep-online.de/zepgepardecservices/sync/soap.php?v=7
     mail:
-      cron: 0 0 7 ? * MON-FRI
       employees:
         notification: true
       reminder:
-        pl: guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com,christoph.kofler@gepardec.com,erhard.siegl@gepardec.com,stefan.kovar@gepardec.com,ludwig.steindl@gepardec.com
-        om: evelyn.pirklbauer@gepardec.com
+        om: evelyn.pirklbauer@gepardec.com,guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com
