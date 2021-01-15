@@ -176,6 +176,7 @@ class InvalidJourneyCalculatorTest {
                 .task(Task.REISEN)
                 .workingLocation(workingLocation)
                 .journeyDirection(direction)
+                .vehicle(Vehicle.OTHER_INACTIVE)
                 .build();
     }
 }

@@ -36,14 +36,15 @@ public class ProjectEntryMapper {
         WorkingLocation workingLocation = toWorkingLocation(projektzeitType.getOrt());
 
         if (Task.isJourney(task)) {
+            JourneyDirection journeyDirection = toJourneyDirection(projektzeitType.getReiseRichtung());
+            Vehicle vehicle = toVehicle(projektzeitType.getFahrzeug());
             return JourneyTimeEntry.newBuilder()
                     .fromTime(from)
                     .toTime(to)
                     .task(task)
-                    .journeyDirection(JourneyDirection.fromString(projektzeitType.getReiseRichtung())
-                            .orElseThrow(
-                                    () -> new IllegalArgumentException("ProjektzeitType.getReiseRichtung could not be converted to JourneyDirection enum")))
+                    .journeyDirection(journeyDirection)
                     .workingLocation(workingLocation)
+                    .vehicle(vehicle)
                     .build();
         } else {
             return ProjectTimeEntry.of(from, to, task, workingLocation);
@@ -62,5 +63,15 @@ public class ProjectEntryMapper {
     private Task toTask(String taetigkeit) {
         return Task.fromString(taetigkeit)
                 .orElseThrow(() -> new IllegalArgumentException("Tätigkeit '" + taetigkeit + "' is not mapped in Enum Task"));
+    }
+
+    private Vehicle toVehicle(final String vehicle) {
+        return Vehicle.forId(vehicle)
+                .orElseThrow(() -> new IllegalArgumentException("Vehicle '" + vehicle + "' is not mapped in Enum Vehicle"));
+    }
+
+    private JourneyDirection toJourneyDirection(final String direction) {
+        return JourneyDirection.fromString(direction)
+                .orElseThrow(() -> new IllegalArgumentException("JourneyDirection '" + direction + "' is not mapped in Enum JourneyDirection"));
     }
 }

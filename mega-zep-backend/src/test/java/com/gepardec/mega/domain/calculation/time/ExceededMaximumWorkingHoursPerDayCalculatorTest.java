@@ -130,6 +130,7 @@ class ExceededMaximumWorkingHoursPerDayCalculatorTest {
                 .task(Task.REISEN)
                 .workingLocation(WorkingLocation.MAIN)
                 .journeyDirection(JourneyDirection.TO)
+                .vehicle(Vehicle.OTHER_INACTIVE)
                 .build();
     }
 }

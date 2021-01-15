@@ -22,16 +22,17 @@ class ProjectEntryMapperTest {
     }
 
     private ProjektzeitType pojektzeitTypeFor(String taetigkeit) {
-        return projektzeitTypeFor(taetigkeit, WorkingLocation.MAIN.zepOrt, null);
+        return projektzeitTypeFor(taetigkeit, WorkingLocation.MAIN.zepOrt, null, Vehicle.OTHER_INACTIVE.id);
     }
 
-    private ProjektzeitType projektzeitTypeFor(String taetigkeit, String ort, String reiseRichtung) {
+    private ProjektzeitType projektzeitTypeFor(String taetigkeit, String ort, String reiseRichtung, String fahrzeug) {
         ProjektzeitType projektzeitType = new ProjektzeitType();
         projektzeitType.setDatum("2020-07-01");
         projektzeitType.setVon("08:00");
         projektzeitType.setBis("10:00");
         projektzeitType.setTaetigkeit(taetigkeit);
         projektzeitType.setOrt(ort);
+        projektzeitType.setFahrzeug(fahrzeug);
         projektzeitType.setReiseRichtung(reiseRichtung);
 
         return projektzeitType;
@@ -50,21 +51,30 @@ class ProjectEntryMapperTest {
 
             @Test
             void withTaetigkeitIsNotATask_thenThrowsIllegalArgumentException() {
-                ProjektzeitType projektzeitType = projektzeitTypeFor("testen", WorkingLocation.MAIN.zepOrt, null);
+                ProjektzeitType projektzeitType = projektzeitTypeFor("testen", WorkingLocation.MAIN.zepOrt, JourneyDirection.TO.getDirection(),
+                        Vehicle.OTHER_INACTIVE.id);
 
                 assertThrows(IllegalArgumentException.class, () -> mapper.map(projektzeitType));
             }
 
             @Test
             void withOrtIsNotAWorkingLocation_thenThrowsIllegalArgumentException() {
-                ProjektzeitType projektzeitType = projektzeitTypeFor(Task.REISEN.name(), "unbekannt", null);
+                ProjektzeitType projektzeitType = projektzeitTypeFor(Task.REISEN.name(), "unbekannt", JourneyDirection.TO.getDirection(), Vehicle.OTHER_INACTIVE.id);
 
                 assertThrows(IllegalArgumentException.class, () -> mapper.map(projektzeitType));
             }
 
             @Test
             void withReiseRichtungIsNotAJourneyDirection_thenThrowsIllegalArgumentException() {
-                ProjektzeitType projektzeitType = projektzeitTypeFor(Task.REISEN.name(), WorkingLocation.MAIN.zepOrt, "100");
+                ProjektzeitType projektzeitType = projektzeitTypeFor(Task.REISEN.name(), WorkingLocation.MAIN.zepOrt, "100", Vehicle.OTHER_INACTIVE.id);
+
+                assertThrows(IllegalArgumentException.class, () -> mapper.map(projektzeitType));
+            }
+
+            @Test
+            void withFahrzeugIsNotAVehicle_thenThrowsIllegalArgumentException() {
+                ProjektzeitType projektzeitType = projektzeitTypeFor(Task.REISEN.name(), WorkingLocation.MAIN.zepOrt, JourneyDirection.TO.getDirection(),
+                        "UNKOWN");
 
                 assertThrows(IllegalArgumentException.class, () -> mapper.map(projektzeitType));
             }
@@ -125,7 +135,8 @@ class ProjectEntryMapperTest {
 
             @Test
             void withTaskIsReisen_thenReturnsJourneyTimeEntry() {
-                ProjektzeitType projektzeitType = projektzeitTypeFor(Task.REISEN.name(), WorkingLocation.MAIN.zepOrt, JourneyDirection.TO.getDirection());
+                ProjektzeitType projektzeitType = projektzeitTypeFor(Task.REISEN.name(), WorkingLocation.MAIN.zepOrt, JourneyDirection.TO.getDirection(),
+                        Vehicle.CAR_ACTIVE.id);
 
                 ProjectEntry actual = mapper.map(projektzeitType);
 
@@ -186,7 +197,8 @@ class ProjectEntryMapperTest {
 
         @Test
         void whenJourneyTimeEntry_thenReturnsJourneyTimeEntry() {
-            ProjektzeitType projektzeitType = projektzeitTypeFor(Task.REISEN.name(), WorkingLocation.MAIN.zepOrt, JourneyDirection.TO.getDirection());
+            ProjektzeitType projektzeitType = projektzeitTypeFor(Task.REISEN.name(), WorkingLocation.MAIN.zepOrt, JourneyDirection.TO.getDirection(),
+                    Vehicle.CAR_ACTIVE.id);
 
             List<ProjectEntry> actual = mapper.mapList(List.of(projektzeitType));
 

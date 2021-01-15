@@ -2,14 +2,12 @@ package com.gepardec.mega.domain.calculation.time;
 
 import com.gepardec.mega.domain.calculation.AbstractTimeWarningCalculationStrategy;
 import com.gepardec.mega.domain.calculation.WarningCalculationStrategy;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
-import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
-import com.gepardec.mega.domain.model.monthlyreport.TimeWarningType;
+import com.gepardec.mega.domain.model.monthlyreport.*;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +29,11 @@ public class CoreWorkingHoursCalculator extends AbstractTimeWarningCalculationSt
 
         for (final Map.Entry<LocalDate, List<ProjectEntry>> entry : groupedEntries.entrySet()) {
             final List<ProjectEntry> projectEntries = entry.getValue();
-            final ProjectEntry startEntry = projectEntries.get(0);
-            final ProjectEntry endEntry = projectEntries.get(projectEntries.size() - 1);
-            if (isAnyEntryOutOfRange(startEntry, endEntry)) {
+            final List<ProjectEntry> reversedProjectEntries = new ArrayList<>(projectEntries);
+            Collections.reverse(reversedProjectEntries);
+            final ProjectEntry startEntry = findFirstRelevantEntry(projectEntries);
+            final ProjectEntry endEntry = findFirstRelevantEntry(reversedProjectEntries);
+            if (isEntryOutOfRange(startEntry, endEntry)) {
                 warnings.add(createTimeWarning(startEntry));
             }
         }
@@ -41,11 +41,35 @@ public class CoreWorkingHoursCalculator extends AbstractTimeWarningCalculationSt
         return warnings;
     }
 
-    private boolean isAnyEntryOutOfRange(final ProjectEntry firstEntry, final ProjectEntry lastEntry) {
-        final int startHour = firstEntry.getFromTime().get(ChronoField.HOUR_OF_DAY);
-        final int endHour = lastEntry.getToTime().get(ChronoField.HOUR_OF_DAY);
+    private ProjectEntry findFirstRelevantEntry(List<ProjectEntry> timeEntries) {
+        for (final ProjectEntry timeEntry : timeEntries) {
+            if (isRelevantProjectTimeEntry(timeEntry)
+                    || isRelevantJourneyTimeEntry(timeEntry)) {
+                return timeEntry;
+            }
+        }
 
-        return EARLIEST_HOUR > startHour || LATEST_HOUR < endHour;
+        return null;
+    }
+
+    private boolean isRelevantProjectTimeEntry(ProjectEntry projectEntry) {
+        return projectEntry instanceof ProjectTimeEntry;
+    }
+
+    private boolean isRelevantJourneyTimeEntry(ProjectEntry projectEntry) {
+        return projectEntry instanceof JourneyTimeEntry && ((JourneyTimeEntry) projectEntry).getVehicle().activeTraveler;
+    }
+
+    private boolean isEntryOutOfRange(final ProjectEntry firstEntry, final ProjectEntry lastEntry) {
+        return hasStartedToEarly(firstEntry) || hasFinishedToLate(lastEntry);
+    }
+
+    private boolean hasStartedToEarly(ProjectEntry projectTimeEntry) {
+        return projectTimeEntry != null && EARLIEST_HOUR > projectTimeEntry.getFromTime().get(ChronoField.HOUR_OF_DAY);
+    }
+
+    private boolean hasFinishedToLate(ProjectEntry projectTimeEntry) {
+        return projectTimeEntry != null && LATEST_HOUR < projectTimeEntry.getToTime().get(ChronoField.HOUR_OF_DAY);
     }
 
     private TimeWarning createTimeWarning(final ProjectEntry projectEntry) {
