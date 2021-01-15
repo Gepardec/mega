@@ -90,11 +90,10 @@ class CoreWorkingHoursCalculatorTest {
             }
 
             @Test
-            void whenInactiveTravelerOnJourneyAndFinishedToLate_thenWarning() {
-                final JourneyTimeEntry start = journeyTimeEntryFor(3, 6, Vehicle.OTHER_INACTIVE);
-                final ProjectTimeEntry end = projectTimeEntryFor(6, 23);
+            void whenActiveTravelerOnJourneyAndStartedToEarly_thenWarning() {
+                final JourneyTimeEntry start = journeyTimeEntryFor(3, 6, Vehicle.CAR_ACTIVE);
 
-                final List<TimeWarning> result = calculator.calculate(List.of(start, end));
+                final List<TimeWarning> result = calculator.calculate(List.of(start));
 
                 assertEquals(1, result.size());
             }

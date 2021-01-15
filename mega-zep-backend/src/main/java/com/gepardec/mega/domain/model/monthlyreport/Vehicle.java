@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum Vehicle {
-    CAR_ACTIVE("Auto", false),
+    CAR_ACTIVE("Auto", true),
     CAR_INACTIVE("Auto (PKW passiv)", false),
     OTHER_INACTIVE("", false);
 
