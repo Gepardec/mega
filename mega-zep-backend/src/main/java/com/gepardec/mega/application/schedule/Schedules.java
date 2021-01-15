@@ -32,12 +32,12 @@ public class Schedules {
 
     @Scheduled(identity = "Generate step entries on the first day of a month",
             cron = "0 0 0 1 * ? *")
-    void genereteStepEntries() {
+    void generateStepEntries() {
         stepEntrySyncService.genereteStepEntries();
     }
 
     @Scheduled(identity = "Send E-Mail reminder to Users",
-            cron = "{mega.mail.cron}")
+            cron = "0 0 7 ? * MON-FRI")
     void sendReminder() {
         reminderEmailSender.sendReminder();
     }

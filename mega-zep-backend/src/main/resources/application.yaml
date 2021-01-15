@@ -56,7 +56,6 @@ mega:
     oauth:
       client-id: 60018822787-gkagrsid8bugtlnts2eqfvtf4n6loefu.apps.googleusercontent.com
     mail:
-      cron: 0 0 7 ? * MON-FRI
       subject-prefix: 'LOCAL: '
       employees:
         notification: true
@@ -81,7 +80,6 @@ mega:
       url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
     mail:
       subject-prefix: 'UNIT-TEST: '
-      cron: 0 0 7 ? * MON-FRI
       employees:
         notification: true
       reminder:
@@ -109,7 +107,6 @@ mega:
     zep:
       url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
     mail:
-      cron: 0 0 7 ? * MON-FRI
       subject-prefix: 'Development Stage: '
       employees:
         notification: false
@@ -127,7 +124,6 @@ mega:
     zep:
       url: https://www.zep-online.de/zepgepardecservices_test/sync/soap.php?v=7
     mail:
-      cron: 0 0 7 ? * MON-FRI
       subject-prefix: 'Test Stage: '
       employees:
         notification: false
@@ -145,7 +141,6 @@ mega:
     zep:
       url: https://www.zep-online.de/zepgepardecservices/sync/soap.php?v=7
     mail:
-      cron: 0 0 7 ? * MON-FRI
       employees:
         notification: true
       reminder:
