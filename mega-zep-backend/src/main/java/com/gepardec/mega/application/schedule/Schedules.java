@@ -7,6 +7,7 @@ import io.quarkus.scheduler.Scheduled;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Thomas Herzog <herzog.thomas81@gmail.com>
@@ -25,7 +26,8 @@ public class Schedules {
     ReminderEmailSender reminderEmailSender;
 
     @Scheduled(identity = "Sync ZEP-Employees with Users in the database",
-            every = "PT30M")
+            every = "PT30M",
+            delay = 15, delayUnit = TimeUnit.SECONDS) // We need to wait for liquibase to finish, but is executed in parallel
     void syncEmployeesWithDatabase() {
         syncService.syncEmployees();
     }
