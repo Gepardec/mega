@@ -64,7 +64,7 @@
         <mat-header-cell *matHeaderCellDef>{{'office-management.table.name' | translate}}</mat-header-cell>
         <mat-cell *matCellDef="let omEntry" class="font-weight-bold">
           <span class="mobile-label">{{'office-management.table.name' | translate}}</span>
-          <a [href]="environment.ZEP_URL_OFFICE_MANAGEMENT + omEntry.employee.userId"
+          <a [href]="officeManagementUrl + omEntry.employee.userId"
              target="_blank">
             <b>{{omEntry.employee.firstname}} {{omEntry.employee.lastname}}</b>
           </a>
