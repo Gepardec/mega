@@ -1,21 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CommentsForEmployeeComponent } from './comments-for-employee.component';
+import { ConfirmDialogComponent } from './confirm-dialog.component';
 import { TranslateModule } from '@ngx-translate/core';
-import { AngularMaterialModule } from '../../../material/material-module';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {AngularMaterialModule} from '../../../material/material-module';
+import {MatDialogRef} from '@angular/material/dialog';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {OAuthModule} from 'angular-oauth2-oidc';
-import { MatDialogRef} from '@angular/material/dialog';
 
-describe('CommentsForEmployeeComponent', () => {
-  let component: CommentsForEmployeeComponent;
-  let fixture: ComponentFixture<CommentsForEmployeeComponent>;
+describe('ConfirmDialogComponent', () => {
+  let component: ConfirmDialogComponent;
+  let fixture: ComponentFixture<ConfirmDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CommentsForEmployeeComponent],
+      declarations: [ ConfirmDialogComponent ],
       imports: [
         AngularMaterialModule,
         TranslateModule.forRoot(),
@@ -25,14 +24,13 @@ describe('CommentsForEmployeeComponent', () => {
       ],
       providers: [
         { provide: MatDialogRef, useValue: {} }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      ]
     })
-      .compileComponents();
+    .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CommentsForEmployeeComponent);
+    fixture = TestBed.createComponent(ConfirmDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -18,6 +18,8 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { OfficeManagementModule } from './modules/office-management/office-management.module';
 import { ProjectManagementModule } from './modules/project-management/project-management.module';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
 
 registerLocaleData(localeDeAt, 'de-AT');
 
@@ -41,7 +43,9 @@ registerLocaleData(localeDeAt, 'de-AT');
         useFactory: httpTranslateLoader,
         deps: [HttpClient]
       }
-    })
+    }),
+    MatDialogModule,
+    MatButtonModule
   ],
   providers: [
     {provide: APP_BASE_HREF, useValue: '/'},

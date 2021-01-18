@@ -18,6 +18,7 @@ import { StateSelectComponent } from './components/state-select/state-select.com
 import { DoneCommentsIndicatorComponent } from './components/done-comments-indicator/done-comments-indicator.component';
 import { StateIndicatorComponent } from './components/state-indicator/state-indicator.component';
 import { DatepickerMonthYearComponent } from './components/datepicker-month-year/datepicker-month-year.component';
+import {ConfirmDialogComponent} from "./components/confirm-dialog/confirm-dialog.component";
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { DatepickerMonthYearComponent } from './components/datepicker-month-year
     StateSelectComponent,
     DoneCommentsIndicatorComponent,
     StateIndicatorComponent,
-    DatepickerMonthYearComponent
+    DatepickerMonthYearComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,
@@ -60,7 +62,8 @@ import { DatepickerMonthYearComponent } from './components/datepicker-month-year
   ],
   entryComponents: [
     CommentsForEmployeeComponent,
-    InfoDialogComponent
+    InfoDialogComponent,
+    ConfirmDialogComponent
   ]
 })
 export class SharedModule {
