@@ -98,10 +98,10 @@ class WarningCalculatorTest {
 
             @Test
             void whenUnordered_thenOrdered() {
-                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 7, 8, JourneyDirection.TO, WorkingLocation.A);
+                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 7, 8, JourneyDirection.TO, WorkingLocation.A, Vehicle.OTHER_INACTIVE);
                 final ProjectEntry projectEntryTwo = projectTimeEntryFor(1, 8, 9, WorkingLocation.MAIN);
                 final ProjectEntry projectEntryThree = projectTimeEntryFor(1, 9, 10, WorkingLocation.MAIN);
-                final JourneyTimeEntry journeyTimeEntryFour = journeyTimeEntryFor(1, 10, 11, JourneyDirection.BACK, WorkingLocation.A);
+                final JourneyTimeEntry journeyTimeEntryFour = journeyTimeEntryFor(1, 10, 11, JourneyDirection.BACK, WorkingLocation.A, Vehicle.OTHER_INACTIVE);
 
                 final List<JourneyWarning> warnings = calculator
                         .determineJourneyWarnings(List.of(journeyTimeEntryFour, projectEntryThree, projectEntryTwo, journeyTimeEntryOne));
@@ -116,10 +116,10 @@ class WarningCalculatorTest {
 
                 @Test
                 void whenTwoProjectTimeEntryWithinJourneyWithWorkingLocationMain_thenOneWarning() {
-                    final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 7, 8, JourneyDirection.TO, WorkingLocation.A);
+                    final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 7, 8, JourneyDirection.TO, WorkingLocation.A, Vehicle.OTHER_INACTIVE);
                     final ProjectEntry projectEntryTwo = projectTimeEntryFor(1, 8, 9, WorkingLocation.MAIN);
                     final ProjectEntry projectEntryThree = projectTimeEntryFor(1, 9, 10, WorkingLocation.MAIN);
-                    final JourneyTimeEntry journeyTimeEntryFour = journeyTimeEntryFor(1, 10, 11, JourneyDirection.BACK, WorkingLocation.A);
+                    final JourneyTimeEntry journeyTimeEntryFour = journeyTimeEntryFor(1, 10, 11, JourneyDirection.BACK, WorkingLocation.A, Vehicle.OTHER_INACTIVE);
 
                     final List<JourneyWarning> warnings = calculator
                             .determineJourneyWarnings(List.of(journeyTimeEntryOne, projectEntryTwo, projectEntryThree, journeyTimeEntryFour));
@@ -135,12 +135,12 @@ class WarningCalculatorTest {
 
                 @Test
                 void whenTwoProjectTimeEntryWithinTwoJourneys_thenNoWarning() {
-                    final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 7, 8, JourneyDirection.TO, WorkingLocation.A);
+                    final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 7, 8, JourneyDirection.TO, WorkingLocation.A, Vehicle.OTHER_INACTIVE);
                     final ProjectEntry projectEntryTwo = projectTimeEntryFor(1, 8, 9, WorkingLocation.A);
-                    final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(1, 9, 10, JourneyDirection.BACK, WorkingLocation.A);
-                    final JourneyTimeEntry journeyTimeEntryFour = journeyTimeEntryFor(1, 10, 11, JourneyDirection.TO, WorkingLocation.P);
+                    final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(1, 9, 10, JourneyDirection.BACK, WorkingLocation.A, Vehicle.OTHER_INACTIVE);
+                    final JourneyTimeEntry journeyTimeEntryFour = journeyTimeEntryFor(1, 10, 11, JourneyDirection.TO, WorkingLocation.P, Vehicle.OTHER_INACTIVE);
                     final ProjectEntry projectEntryFive = projectTimeEntryFor(1, 11, 12, WorkingLocation.P);
-                    final JourneyTimeEntry journeyTimeEntrySix = journeyTimeEntryFor(1, 12, 13, JourneyDirection.BACK, WorkingLocation.A);
+                    final JourneyTimeEntry journeyTimeEntrySix = journeyTimeEntryFor(1, 12, 13, JourneyDirection.BACK, WorkingLocation.A, Vehicle.OTHER_INACTIVE);
 
                     final List<JourneyWarning> warnings = calculator
                             .determineJourneyWarnings(
@@ -424,19 +424,20 @@ class WarningCalculatorTest {
     }
 
     private JourneyTimeEntry journeyTimeEntryFor(final int day, final int startHour, final int endHour, JourneyDirection journeyDirection,
-            WorkingLocation workingLocation) {
-        return journeyTimeEntryFor(day, startHour, 0, day, endHour, 0, journeyDirection, workingLocation);
+            WorkingLocation workingLocation, Vehicle vehicle) {
+        return journeyTimeEntryFor(day, startHour, 0, day, endHour, 0, journeyDirection, workingLocation, vehicle);
     }
 
     private JourneyTimeEntry journeyTimeEntryFor(final int startDay, final int startHour, final int startMinute, final int endDay, final int endHour,
             final int endMinute,
-            JourneyDirection journeyDirection, WorkingLocation workingLocation) {
+            JourneyDirection journeyDirection, WorkingLocation workingLocation, Vehicle vehicle) {
         return JourneyTimeEntry.newBuilder()
                 .fromTime(LocalDateTime.of(2020, 1, startDay, startHour, startMinute))
                 .toTime(LocalDateTime.of(2020, 1, endDay, endHour, endMinute))
                 .task(Task.REISEN)
                 .journeyDirection(journeyDirection)
                 .workingLocation(workingLocation)
+                .vehicle(vehicle)
                 .build();
     }
 }

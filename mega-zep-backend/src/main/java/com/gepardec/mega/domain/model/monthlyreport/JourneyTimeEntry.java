@@ -7,24 +7,6 @@ import java.time.LocalDateTime;
 @AutoValue
 public abstract class JourneyTimeEntry implements ProjectEntry {
 
-    /**
-     * @deprecated Us {@link #of(LocalDateTime, LocalDateTime, Task, JourneyDirection, WorkingLocation)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public static JourneyTimeEntry of(LocalDateTime fromTime, LocalDateTime toTime, Task task, JourneyDirection journeyDirection) {
-        return of(fromTime, toTime, task, journeyDirection, WorkingLocation.MAIN);
-    }
-
-    public static JourneyTimeEntry of(LocalDateTime fromTime, LocalDateTime toTime, Task task, JourneyDirection journeyDirection,
-            WorkingLocation workingLocation) {
-        return newBuilder().fromTime(fromTime)
-                .toTime(toTime)
-                .task(task)
-                .journeyDirection(journeyDirection)
-                .workingLocation(workingLocation)
-                .build();
-    }
-
     public static Builder newBuilder() {
         return new com.gepardec.mega.domain.model.monthlyreport.AutoValue_JourneyTimeEntry.Builder();
     }
@@ -43,6 +25,8 @@ public abstract class JourneyTimeEntry implements ProjectEntry {
 
     public abstract JourneyDirection getJourneyDirection();
 
+    public abstract Vehicle getVehicle();
+
     @AutoValue.Builder
     public static abstract class Builder {
 
@@ -55,6 +39,8 @@ public abstract class JourneyTimeEntry implements ProjectEntry {
         public abstract Builder workingLocation(WorkingLocation workingLocation);
 
         public abstract Builder journeyDirection(JourneyDirection journeyDirection);
+
+        public abstract Builder vehicle(Vehicle vehicle);
 
         public abstract JourneyTimeEntry build();
     }

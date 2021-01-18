@@ -3,4 +3,6 @@ export class Config {
   issuer: string;
   scope: string;
   version: string;
+  excelUrl: string;
+  zepOrigin: string;
 }

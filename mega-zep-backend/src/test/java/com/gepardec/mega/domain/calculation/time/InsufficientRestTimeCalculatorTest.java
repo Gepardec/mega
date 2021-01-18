@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -128,6 +127,7 @@ class InsufficientRestTimeCalculatorTest {
                 .task(Task.REISEN)
                 .workingLocation(WorkingLocation.MAIN)
                 .journeyDirection(JourneyDirection.TO)
+                .vehicle(Vehicle.OTHER_INACTIVE)
                 .build();
     }
 }

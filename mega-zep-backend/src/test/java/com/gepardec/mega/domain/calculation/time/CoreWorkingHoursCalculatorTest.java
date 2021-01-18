@@ -23,16 +23,13 @@ class CoreWorkingHoursCalculatorTest {
     class Calculate {
 
         @Test
-        void calculate_whenDataListEmpty_thenNoWarningsCreated() {
-            assertTrue(calculator.calculate(List.of()).isEmpty());
-        }
-
-        @Test
-        void whenValid_thenNoWarning() {
+        void whenUnordered_thenNoWarning() {
+            final JourneyTimeEntry travelBefore = journeyTimeEntryFor(1, 6, Vehicle.OTHER_INACTIVE);
             final ProjectTimeEntry start = projectTimeEntryFor(6, 12);
             final ProjectTimeEntry end = projectTimeEntryFor(13, 22);
+            final JourneyTimeEntry travelAfter = journeyTimeEntryFor(22, 23, Vehicle.OTHER_INACTIVE);
 
-            final List<TimeWarning> result = calculator.calculate(List.of(start, end));
+            final List<TimeWarning> result = calculator.calculate(List.of(travelAfter, end, start, travelBefore));
 
             assertTrue(result.isEmpty());
         }
@@ -81,6 +78,59 @@ class CoreWorkingHoursCalculatorTest {
 
                 assertEquals(1, result.size());
             }
+
+            @Test
+            void whenInactiveTravelerOnJourneyAndStartedToEarly_thenWarning() {
+                final JourneyTimeEntry start = journeyTimeEntryFor(3, 4, Vehicle.OTHER_INACTIVE);
+                final ProjectTimeEntry end = projectTimeEntryFor(5, 8);
+
+                final List<TimeWarning> result = calculator.calculate(List.of(start, end));
+
+                assertEquals(1, result.size());
+            }
+
+            @Test
+            void whenActiveTravelerOnJourneyAndStartedToEarly_thenWarning() {
+                final JourneyTimeEntry start = journeyTimeEntryFor(3, 6, Vehicle.CAR_ACTIVE);
+
+                final List<TimeWarning> result = calculator.calculate(List.of(start));
+
+                assertEquals(1, result.size());
+            }
+        }
+
+        @Nested
+        class WithoutWarnings {
+
+            @Test
+            void whenDataListEmpty_thenNoWarnings() {
+                assertTrue(calculator.calculate(List.of()).isEmpty());
+            }
+
+            @Test
+            void whenValid_thenNoWarning() {
+                final JourneyTimeEntry travelInactiveBefore = journeyTimeEntryFor(1, 6, Vehicle.OTHER_INACTIVE);
+                final JourneyTimeEntry travelActiveBefore = journeyTimeEntryFor(6, 10, Vehicle.CAR_ACTIVE);
+                final ProjectTimeEntry start = projectTimeEntryFor(10, 12);
+                final ProjectTimeEntry end = projectTimeEntryFor(13, 16);
+                final JourneyTimeEntry travelActiveAfter = journeyTimeEntryFor(17, 22, Vehicle.CAR_ACTIVE);
+                final JourneyTimeEntry travelInactiveAfter = journeyTimeEntryFor(22, 23, Vehicle.OTHER_INACTIVE);
+
+                final List<TimeWarning> result = calculator
+                        .calculate(List.of(travelInactiveBefore, travelActiveBefore, start, end, travelActiveAfter, travelInactiveAfter));
+
+                assertTrue(result.isEmpty());
+            }
+
+            @Test
+            void whenOnlyInactiveTravelerOnJourney_thenNoWarning() {
+                final JourneyTimeEntry start = journeyTimeEntryFor(3, 10, Vehicle.OTHER_INACTIVE);
+                final JourneyTimeEntry end = journeyTimeEntryFor(10, 23, Vehicle.OTHER_INACTIVE);
+
+                final List<TimeWarning> result = calculator.calculate(List.of(start, end));
+
+                assertTrue(result.isEmpty());
+            }
         }
     }
 
@@ -94,5 +144,20 @@ class CoreWorkingHoursCalculatorTest {
                 LocalDateTime.of(2020, 1, 7, endHour, endMinute),
                 Task.BEARBEITEN,
                 WorkingLocation.MAIN);
+    }
+
+    private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int endHour, final Vehicle vehicle) {
+        return journeyTimeEntryFor(startHour, 0, endHour, 0, vehicle);
+    }
+
+    private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int startMinute, final int endHour, final int endMinute, final Vehicle vehicle) {
+        return JourneyTimeEntry.newBuilder()
+                .fromTime(LocalDateTime.of(2020, 1, 7, startHour, startMinute))
+                .toTime(LocalDateTime.of(2020, 1, 7, endHour, endMinute))
+                .task(Task.REISEN)
+                .workingLocation(WorkingLocation.MAIN)
+                .journeyDirection(JourneyDirection.TO)
+                .vehicle(vehicle)
+                .build();
     }
 }

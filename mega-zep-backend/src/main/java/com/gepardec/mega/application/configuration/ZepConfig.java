@@ -14,18 +14,26 @@ public class ZepConfig {
     String authorizationToken;
 
     @Inject
-    @ConfigProperty(name = "mega.zep.url")
-    URL url;
+    @ConfigProperty(name = "mega.zep.origin")
+    URL origin;
+
+    @Inject
+    @ConfigProperty(name = "mega.zep.soap-path")
+    String soapPath;
 
     public String getUrlAsString() {
-        return url.toString();
+        return String.format("%s%s", origin.toString(), soapPath);
+    }
+
+    public String getUrlForFrontend(){
+        return origin.toString();
     }
 
     public String getAuthorizationToken() {
         return authorizationToken;
     }
 
-    public URL getUrl() {
-        return url;
+    public URL getOrigin() {
+        return origin;
     }
 }

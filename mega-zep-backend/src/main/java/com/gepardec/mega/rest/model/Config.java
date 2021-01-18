@@ -14,7 +14,7 @@ public abstract class Config {
     public abstract String excelUrl();
 
     @JsonProperty
-    public abstract String zepUrl();
+    public abstract String zepOrigin();
 
     @JsonProperty
     public abstract String clientId();
@@ -37,7 +37,7 @@ public abstract class Config {
 
         public abstract Builder excelUrl(String excelUrl);
 
-        public abstract Builder zepUrl(String zepUrl);
+        public abstract Builder zepOrigin(String zepUrl);
 
         public abstract Builder clientId(String clientId);
 
