@@ -1,5 +1,5 @@
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, Inject } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -12,12 +12,10 @@ export class ConfirmDialogComponent {
   }
 
   onConfirm(): void {
-    // Close the dialog, return true
     this.dialogRef.close(true);
   }
 
   onDismiss(): void {
-    // Close the dialog, return false
     this.dialogRef.close(false);
   }
 }
