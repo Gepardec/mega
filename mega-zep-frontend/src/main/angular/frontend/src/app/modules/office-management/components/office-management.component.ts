@@ -75,7 +75,7 @@ export class OfficeManagementComponent implements OnInit {
 
   dateChanged(date: Moment) {
     this.selectedYear = moment(date).year();
-    this.selectedMonth = moment(date).month();
+    this.selectedMonth = moment(date).month() + 1;
     this.getOmEntries();
   }
 
@@ -188,7 +188,7 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   private getFormattedDate() {
-    return moment().year(this.selectedYear).month(this.selectedMonth).date(1).format('yyyy-MM-DD');
+    return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
   }
 
   private getOmEntries() {
