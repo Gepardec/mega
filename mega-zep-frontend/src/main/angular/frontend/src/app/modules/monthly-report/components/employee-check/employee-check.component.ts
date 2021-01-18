@@ -3,11 +3,12 @@ import {MonthlyReport} from '../../models/MonthlyReport';
 import {CommentService} from '../../../shared/services/comment/comment.service';
 import {State} from '../../../shared/models/State';
 import {MatSelectionListChange} from '@angular/material/list';
-import {ErrorHandlerService} from "../../../shared/services/error/error-handler.service";
-import {StepentriesService} from "../../../shared/services/stepentries/stepentries.service";
-import {Step} from "../../../shared/models/Step";
-import {MatBottomSheet, MatBottomSheetRef} from "@angular/material/bottom-sheet";
-import {PmProgressComponent} from "../../../shared/components/pm-progress/pm-progress.component";
+import {ErrorHandlerService} from '../../../shared/services/error/error-handler.service';
+import {StepentriesService} from '../../../shared/services/stepentries/stepentries.service';
+import {Step} from '../../../shared/models/Step';
+import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
+import {PmProgressComponent} from '../../../shared/components/pm-progress/pm-progress.component';
+import {configuration} from "../../../shared/constants/configuration";
 
 @Component({
   selector: 'app-employee-check',
@@ -15,6 +16,7 @@ import {PmProgressComponent} from "../../../shared/components/pm-progress/pm-pro
   styleUrls: ['./employee-check.component.scss']
 })
 export class EmployeeCheckComponent implements OnInit {
+
   @Input() monthlyReport: MonthlyReport;
   @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>();
   State = State;
@@ -67,5 +69,10 @@ export class EmployeeCheckComponent implements OnInit {
 
   closeEmployeeProgress() {
     this.employeeProgressRef.dismiss();
+  }
+
+  parseBody(body: string) {
+    const urlPattern = /^((https?:\/\/)?([\da-z\.-]+\.[a-z\.]{2,6}|[\d\.]+)([\/:?=&#]{1}[\da-z\.-]+)*[\/\?]?$)/igm;
+    return body.replace(urlPattern, '<a href=\$1 target="_blank"\>$1</a>');
   }
 }
