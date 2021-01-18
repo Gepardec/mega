@@ -1,12 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Comment} from '../../models/Comment';
 import {State} from '../../models/State';
-import {configuration} from '../../constants/configuration';
 import {Employee} from '../../models/Employee';
 import {CommentService} from '../../services/comment/comment.service';
 import {User} from '../../models/User';
 import {UserService} from '../../services/user/user.service';
 import {Step} from '../../models/Step';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-comments-for-employee',
@@ -15,7 +16,6 @@ import {Step} from '../../models/Step';
 })
 export class CommentsForEmployeeComponent implements OnInit {
   MAXIMUM_LETTERS = 500;
-  DATE_FORMAT = configuration.dateFormat;
   State = State;
   employee: Employee;
   user: User;
@@ -24,7 +24,12 @@ export class CommentsForEmployeeComponent implements OnInit {
   project = '';
   currentMonthYear: string;
 
-  constructor(private commentService: CommentService, private userService: UserService) {
+  @ViewChild('newMessage') newCommentTextarea;
+
+  constructor(private commentService: CommentService,
+              private userService: UserService,
+              public dialogRef: MatDialogRef<CommentsForEmployeeComponent>,
+              public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -96,5 +101,20 @@ export class CommentsForEmployeeComponent implements OnInit {
     this.commentService.deleteComment(commentToRemove).subscribe(() => {
       this.comments = this.comments.filter(item => item.id !== commentToRemove.id);
     });
+  }
+
+  close(): void {
+    if (this.newCommentTextarea.nativeElement.value !== '') {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      });
+
+      dialogRef.afterClosed().subscribe(dialogResult => {
+        if (dialogResult === true) {
+          this.dialogRef.close(dialogResult);
+        }
+      });
+    } else {
+      this.dialogRef.close(true);
+    }
   }
 }

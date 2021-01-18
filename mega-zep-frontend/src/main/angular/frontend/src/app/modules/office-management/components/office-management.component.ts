@@ -16,10 +16,10 @@ import {Step} from '../../shared/models/Step';
 
 import * as _moment from 'moment';
 import {Moment} from 'moment';
-import {PmProgressComponent} from "../../shared/components/pm-progress/pm-progress.component";
-import {MatBottomSheet, MatBottomSheetRef} from "@angular/material/bottom-sheet";
-import {ConfigService} from "../../shared/services/config/config.service";
-import {Config} from "../../shared/models/Config";
+import {PmProgressComponent} from '../../shared/components/pm-progress/pm-progress.component';
+import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
+import {ConfigService} from '../../shared/services/config/config.service';
+import {Config} from '../../shared/models/Config';
 
 const moment = _moment;
 
@@ -75,7 +75,7 @@ export class OfficeManagementComponent implements OnInit {
 
   dateChanged(date: Moment) {
     this.selectedYear = moment(date).year();
-    this.selectedMonth = moment(date).month();
+    this.selectedMonth = moment(date).month() + 1;
     this.getOmEntries();
   }
 
@@ -102,6 +102,8 @@ export class OfficeManagementComponent implements OnInit {
         dialogRef.componentInstance.comments = comments;
         dialogRef.componentInstance.step = Step.CONTROL_INTERNAL_TIMES;
         dialogRef.componentInstance.currentMonthYear = this.getFormattedDate();
+
+        dialogRef.disableClose = true;
         dialogRef.afterClosed().subscribe(() => this.getOmEntries());
       });
   }
@@ -188,7 +190,7 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   private getFormattedDate() {
-    return moment().year(this.selectedYear).month(this.selectedMonth).date(1).format('yyyy-MM-DD');
+    return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
   }
 
   private getOmEntries() {
@@ -199,10 +201,10 @@ export class OfficeManagementComponent implements OnInit {
   }
 
   private sortOmEntries(): void {
-    let allDoneEntries = this.getFilteredAndSortedOmEntries(State.DONE, State.DONE);
-    let projectEntriesDone = this.getFilteredAndSortedOmEntries(State.DONE, State.OPEN);
-    let internalEntriesDone = this.getFilteredAndSortedOmEntries(State.OPEN, State.DONE);
-    let allOpenEntries = this.getFilteredAndSortedOmEntries(State.OPEN, State.OPEN);
+    const allDoneEntries = this.getFilteredAndSortedOmEntries(State.DONE, State.DONE);
+    const projectEntriesDone = this.getFilteredAndSortedOmEntries(State.DONE, State.OPEN);
+    const internalEntriesDone = this.getFilteredAndSortedOmEntries(State.OPEN, State.DONE);
+    const allOpenEntries = this.getFilteredAndSortedOmEntries(State.OPEN, State.OPEN);
 
     this.filteredOmEntries = allOpenEntries
       .concat(projectEntriesDone)
