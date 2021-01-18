@@ -71,7 +71,7 @@ public class ManagementResource {
             String entryDate = LocalDate.of(year, month, 1).minusMonths(1).format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN));
             final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(empl.email(), entryDate);
             List<PmProgress> pmProgresses = new ArrayList<>();
-            allOwnedStepEntriesForPMProgress.stream()
+            allOwnedStepEntriesForPMProgress
                     .forEach(stepEntry -> pmProgresses.add(
                             PmProgress.builder()
                                     .project(stepEntry.getProject())
