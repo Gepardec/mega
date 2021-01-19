@@ -72,7 +72,7 @@ export class EmployeeCheckComponent implements OnInit {
   }
 
   parseBody(body: string) {
-    const urlPattern = /^((https?:\/\/)?([\da-z\.-]+\.[a-z\.]{2,6}|[\d\.]+)([\/:?=&#]{1}[\da-z\.-]+)*[\/\?]?$)/igm;
-    return body.replace(urlPattern, '<a href=\$1 target="_blank"\>$1</a>');
+    const urlPattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/igm;
+    return body.replace(urlPattern, '<a href=\$& target="_blank"\>$&</a>');
   }
 }
