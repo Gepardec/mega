@@ -30,7 +30,7 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
                 Parameters
                         .with("entryDate", entryDate)
                         .and("ownerEmail", ownerEmail)
-                        .and("stepId", StepName.CONTROL_TIMES.getId()))
+                        .and("stepId", List.of(StepName.CONTROL_TIMES.getId(), StepName.ACCEPT_TIMES.getId())))
                 .list();
     }
 
