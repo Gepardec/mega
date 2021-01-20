@@ -265,10 +265,7 @@ public class ManagementResourceTest {
                 .as(new TypeRef<>() {
                 });
 
-        assertEquals(1L, result.size());
-        ProjectManagementEntry entry = result.get(0);
-        assertEquals(rgkkcc.projectId(), entry.projectName());
-        assertEquals(0L, entry.entries().size());
+        assertEquals(0L, result.size());
     }
 
     @Test
@@ -294,10 +291,7 @@ public class ManagementResourceTest {
                 .as(new TypeRef<>() {
                 });
 
-        assertEquals(1L, result.size());
-        ProjectManagementEntry entry = result.get(0);
-        assertEquals(rgkkcc.projectId(), entry.projectName());
-        assertEquals(0L, entry.entries().size());
+        assertEquals(0L, result.size());
     }
 
     private com.gepardec.mega.db.entity.Step createStep(StepName stepName) {

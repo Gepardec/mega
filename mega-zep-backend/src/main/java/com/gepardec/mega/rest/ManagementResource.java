@@ -115,11 +115,14 @@ public class ManagementResource {
         Map<String, Employee> employees = createEmployeeCache();
         for (Project currentProject : projects) {
             List<ManagementEntry> entries = createManagementEntriesForProject(currentProject, employees, from, to);
-            projectManagementEntries.add(ProjectManagementEntry.builder()
-                    .projectName(currentProject.projectId())
-                    .entries(entries)
-                    .build()
-            );
+            if(!entries.isEmpty()) {
+                projectManagementEntries.add(ProjectManagementEntry.builder()
+                        .projectName(currentProject.projectId())
+                        .entries(entries)
+                        .build()
+                );
+            }
+
         }
 
         return projectManagementEntries;
