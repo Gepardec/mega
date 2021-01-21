@@ -54,7 +54,7 @@ DB_PASSWORD=***
 DB_HOST=***
 ----
 
-== Databse
+== Database
 
 Mega uses a database to store persistent data, which is managed by liquibase.
 
