@@ -141,7 +141,8 @@ public class StepEntryServiceImpl implements StepEntryService {
         if (StringUtils.isBlank(releaseDate) || StringUtils.equalsIgnoreCase(releaseDate, "NULL")) {
             entryDate = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
         } else {
-            entryDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(releaseDate));
+            // release date is end of last month, we need to get two months forward to get stepentries of next month
+            entryDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(releaseDate)).plusMonths(1);
         }
         return entryDate;
     }
