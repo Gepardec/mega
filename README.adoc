@@ -17,6 +17,7 @@ The following image illustrates the service structure of the MEGA services and e
 .Mega Service Structure
 image::./docs/images/mega-service-structure.png[align="center"]
 
+
 The following services are provided by MEGA:
 
 . `Backend` +
