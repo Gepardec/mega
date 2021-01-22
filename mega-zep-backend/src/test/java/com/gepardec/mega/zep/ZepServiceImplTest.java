@@ -201,7 +201,8 @@ public class ZepServiceImplTest {
                     Arguments.of("2020-12-01", "2020-12-31"),
                     Arguments.of("2020-11-01", "2020-12-31"),
                     Arguments.of("2020-01-01", "2020-12-15"),
-                    Arguments.of("2020-12-15", "2021-12-31")
+                    Arguments.of("2020-12-15", "2021-12-31"),
+                    Arguments.of("2020-12-15", "2021-12-16")
             );
         }
 
