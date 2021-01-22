@@ -167,7 +167,11 @@ public class ZepServiceImpl implements ZepService {
         final LocalDate from = inProjectFrom != null ? DateUtils.parseDate(inProjectFrom) : LocalDate.MIN;
         final LocalDate until = inProjectUntil != null ? DateUtils.parseDate(inProjectUntil) : LocalDate.MAX;
 
-        return (from.isBefore(firstOfMonth) || from.isEqual(firstOfMonth)) && (until.isAfter(lastOfMonth) || until.isEqual(lastOfMonth));
+        return (from.isBefore(firstOfMonth) || isBetween(from, firstOfMonth, lastOfMonth)) && (until.isAfter(lastOfMonth) || isBetween(until, firstOfMonth, lastOfMonth));
+    }
+
+    private boolean isBetween(final LocalDate from, final LocalDate firstOfMonth, final LocalDate lastOfMonth) {
+        return !from.isBefore(firstOfMonth) && !from.isAfter(lastOfMonth);
     }
 
     private List<String> createProjectLeads(final ProjektMitarbeiterListeType projektMitarbeiterListeType, final LocalDate monthYear) {
