@@ -3,16 +3,19 @@
 Make End-of-the-month-process Great Again!
 
 This is the repository holding the sources for our *MEGA* application, which provides us an aggregated view over our employees *ZEP* time entries.
+
+*MEGA 1.x.x*
+
 The first intention was to provide our employees an application where at the beginning of a month the employees can check their time entries of the former month.
 
-*MEGA 2.x.x* +
+*MEGA 2.x.x*
 
 In this version we implemented features for project managers whereby the project managers can check project related time entries of their project members.
 
 The following image illustrates the service structure of the MEGA services and external services MEGA depends on.
 
 .Mega Service Structure
-image::./docs/images/mega-service-structure.png[]
+image::./docs/images/mega-service-structure.png[align="center"]
 
 The following services are provided by MEGA:
 
