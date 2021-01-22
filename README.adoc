@@ -2,21 +2,37 @@
 
 Make End-of-the-month-process Great Again!
 
-This is the repository holding the sources for our *MEGA* application, which provides us an aggregated view
-over our employees *ZEP* time entries. The first intention was to provide our employees an application where at the beginning of a month
-the employees can check their time entries of the former month.
+This is the repository holding the sources for our *MEGA* application, which provides us an aggregated view over our employees *ZEP* time entries.
+The first intention was to provide our employees an application where at the beginning of a month the employees can check their time entries of the former month.
 
 *MEGA 2.x.x* +
 
-In this version we implemented features for project managers whereby the project managers can check project related time entries of their
-project members.
+In this version we implemented features for project managers whereby the project managers can check project related time entries of their project members.
+
+The following image illustrates the service structure of the MEGA services and external services MEGA depends on.
 
 .Mega Service Structure
 image::./docs/images/mega-service-structure.png[]
 
-== Prerequisites
+The following services are provided by MEGA:
 
-=== Project setup
+. `Backend` +
+The Quarkus microservice representing the REST backend for the frontend application and integrates the external services such as `ZEP` and `GMAIL`
+. `Frontend` +
+The Apache service hosting the compiled Angular frontend application which retrieves its data from the backend
+. link:https://www.postgresql.org/[Database (PostgreSQL)] +
+The MEGA database which holds transformed and aggregated data retrieved from the ZEP time management system
+
+The following external services are integrated and used by MEGA:
+
+. link:https://developers.google.com/identity/protocols/oauth2[OAUTH (Google)] +
+The OAUTH service provided by Google which is used to authenticate our employees
+. link:https://www.google.com/gmail/about/[GMAIL (Google)] +
+The Gmail email service provided by Google which is used by MEGA for communicating with our employees
+. link:https://www.zep.de/[ZEP] +
+The time management system where all our employees enter their time entries
+
+The following listing shows the technologies used by the project MEGA.
 
 - link:https://quarkus.io/[Quarkus 1.6.1.Final]
 - link:https://openjdk.java.net/[OpenJDK 11]
@@ -24,6 +40,21 @@ image::./docs/images/mega-service-structure.png[]
 - link:https://nodejs.org/en/[node.js 12.x.x+]
 - link:https://www.npmjs.com/[npm 6+]
 - link:https://www.postgresql.org/[PostgreSQL 10]
+- link:https://www.docker.com/[Docker (Development)]
+
+== Project setup
+
+The following sections will explain how a developer can setup the local development environment and get MEGA running.
+
+=== Developer PC Setup
+
+You need the following software suitable for your used platform:
+
+. `OpenJDK 11`
+. `Maven 3.6.3`
+. `NodeJS 12.x.x`
+. `Npm 6+`
+. `Docker`
 
 === Backend setup
 
@@ -38,6 +69,8 @@ The backend project is located at `./mega-zep-backend`.
 - Start quarkus in development mode +
 `mvn quarkus:dev`
 
+The database schema will be created/migrated after the service started with `quarkus:dev`.
+
 === Frontend Setup
 
 The frontend project is located at `./mega-zep-frontend`.
@@ -49,7 +82,11 @@ The frontend project is located at `./mega-zep-frontend`.
 . Install project dependencies +
 `npm install`
 . Start webserver +
-`npx ng serve / npx ng test`
+`npx ng serve`
+. Test the frontend +
+`npx ng test`
+
+The frontend will take some time to come up which is due to the compilation process which takes some time.
 
 === Secrets
 
@@ -58,17 +95,24 @@ The following file ``./mega-zep-backend/.env`` contains the secret values and ha
 ./mega-zep-backend/.env
 [source,properties]
 ----
+# The auth token provided by ZEP
 TOKEN=***
+# The gmail password to use
 MAILER_PASSWORD=***
-# STAGE deployments only, not for local
+## STAGE deployments only, not for local
+# The database user
 DB_USER=***
+# the dabtase users password
 DB_PASSWORD=***
+# the host:port where to reach the database
 DB_HOST=***
 ----
 
+IMPORTANT: Without this file the backend won't start.
+
 == Database
 
-Mega uses a database to store persistent data, which is managed by liquibase.
+MEGA uses a database to store persistent data whereby the database is managed by link:https://www.liquibase.org/[liquibase]. +
 
 === Local development with PostgreSQL
 
@@ -78,6 +122,10 @@ The source definition of our database schema is the JPA datamodel, and we genera
 
 IMPORTANT: All liquibase maven goals work on the compiled sources and resources located in `./mega-zep-backend/target/classes/`.
 
+=== How to use Liquibase
+
+The following sections provide information about how to use the liquibase-maven-plugin properly.
+
 ==== How to generate a full changeset?
 
 . Drop the current database schema +
@@ -85,7 +133,7 @@ IMPORTANT: All liquibase maven goals work on the compiled sources and resources 
 . Generate the changeset +
 `mvn liquibase:generateChangeLog`
 
-IMPORTANT: Ensure that the generated full changeset is proper and that everything has been definied in the JPA model.
+IMPORTANT: Ensure that the generated full changeset is proper and that everything has been defined in the JPA model.
 
 ==== How to generate a diff changeset?
 
@@ -98,6 +146,8 @@ IMPORTANT: Ensure that the generated full changeset is proper and that everythin
 
 . Apply newly created changeset +
 `liquibase:update`
+
+IMPORTANT: Liquibase updates only work on consistent database states defined by changeset files, and the state persisted in the liquibase specific tables, so if a changeset has already been applied then it cannot be reapplied again anymore, and the database needs to be dropped and recreated in full.
 
 ==== How to test a new changeset?
 
