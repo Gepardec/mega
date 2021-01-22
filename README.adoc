@@ -2,14 +2,26 @@
 
 Make End-of-the-month-process Great Again!
 
+This is the repository holding the sources for our *MEGA* application, which provides us an aggregated view
+over our employees *ZEP* time entries. The first intention was to provide our employees an application where at the beginning of a month
+the employees can check their time entries of the former month.
+
+*MEGA 2.x.x* +
+
+In this version we implemented features for project managers whereby the project managers can check project related time entries of their
+project members.
+
+.Mega Service Structure
+image::./docs/images/mega-service-structure.png[]
+
 == Prerequisites
 
 === Project setup
 
-- link:https://quarkus.io/[Quarkus 1.6.0.Final]
+- link:https://quarkus.io/[Quarkus 1.6.1.Final]
 - link:https://openjdk.java.net/[OpenJDK 11]
 - link:https://maven.apache.org/[Maven 3.6.3]
-- link:https://nodejs.org/en/[node.js 12+]
+- link:https://nodejs.org/en/[node.js 12.x.x+]
 - link:https://www.npmjs.com/[npm 6+]
 - link:https://www.postgresql.org/[PostgreSQL 10]
 
