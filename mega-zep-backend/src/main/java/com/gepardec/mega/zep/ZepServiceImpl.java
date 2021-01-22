@@ -147,7 +147,7 @@ public class ZepServiceImpl implements ZepService {
                 .projectId(projektType.getProjektNr())
                 .description(projektType.getBezeichnung())
                 .employees(createProjectEmployees(projektType.getProjektmitarbeiterListe(), monthYear))
-                .leads(createProjectLeads(projektType.getProjektmitarbeiterListe()))
+                .leads(createProjectLeads(projektType.getProjektmitarbeiterListe(), monthYear))
                 .categories(createCategories(projektType))
                 .build();
     }
@@ -161,19 +161,23 @@ public class ZepServiceImpl implements ZepService {
     }
 
     private boolean filterActiveEmployees(final LocalDate monthYear, final String inProjectFrom, final String inProjectUntil) {
-        LocalDate from = inProjectFrom != null ? DateUtils.parseDate(inProjectFrom) : null;
-        LocalDate until = inProjectUntil != null ? DateUtils.parseDate(inProjectUntil) : null;
+        final LocalDate firstOfMonth = monthYear.with(TemporalAdjusters.firstDayOfMonth());
+        final LocalDate lastOfMonth = monthYear.with(TemporalAdjusters.lastDayOfMonth());
 
-        if(until == null) {
-            return from == null || from.isBefore(monthYear);
-        } else {
-            return from == null ? until.isAfter(monthYear) : from.isBefore(monthYear) && until.isAfter(monthYear);
-        }
+        final LocalDate from = inProjectFrom != null ? DateUtils.parseDate(inProjectFrom) : LocalDate.MIN;
+        final LocalDate until = inProjectUntil != null ? DateUtils.parseDate(inProjectUntil) : LocalDate.MAX;
+
+        return (from.isBefore(firstOfMonth) || isBetween(from, firstOfMonth, lastOfMonth)) && (until.isAfter(lastOfMonth) || isBetween(until, firstOfMonth, lastOfMonth));
     }
 
-    private List<String> createProjectLeads(final ProjektMitarbeiterListeType projektMitarbeiterListeType) {
+    private boolean isBetween(final LocalDate from, final LocalDate firstOfMonth, final LocalDate lastOfMonth) {
+        return !from.isBefore(firstOfMonth) && !from.isAfter(lastOfMonth);
+    }
+
+    private List<String> createProjectLeads(final ProjektMitarbeiterListeType projektMitarbeiterListeType, final LocalDate monthYear) {
         return projektMitarbeiterListeType.getProjektmitarbeiter()
                 .stream()
+                .filter(e -> filterActiveEmployees(monthYear, e.getVon(), e.getBis()))
                 .filter(projektMitarbeiterType -> PROJECT_LEAD_RANGE.contains(projektMitarbeiterType.getIstProjektleiter()))
                 .map(ProjektMitarbeiterType::getUserId)
                 .collect(Collectors.toList());
