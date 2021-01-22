@@ -102,7 +102,7 @@ MAILER_PASSWORD=***
 ## STAGE deployments only, not for local
 # The database user
 DB_USER=***
-# the dabtase users password
+# the database users password
 DB_PASSWORD=***
 # the host:port where to reach the database
 DB_HOST=***
@@ -116,7 +116,7 @@ MEGA uses a database to store persistent data whereby the database is managed by
 
 === Local development with PostgreSQL
 
-For the local development we use PostgreSQL which is automatically setup by liquibase during `mvn quarkus:dev` startup.
+For the local development we use Postgres which is automatically setup by liquibase during `mvn quarkus:dev` startup.
 We use the `liquibase-maven-plugin` which provides maven goals to manage the local database.
 The source definition of our database schema is the JPA datamodel, and we generate the changeset files via the `liquibase-maven-plugin`.
 
@@ -153,7 +153,7 @@ IMPORTANT: Liquibase updates only work on consistent database states defined by 
 
 . Try clean install and H2 setup during tests +
 `mvn clean install`
-. Try application in development and PostgreSQL setup +
+. Try application in development and Postgres setup +
 `mvn quarkus:dev`
 
 IMPORTANT: Ensure that the database state is on the current released version.
