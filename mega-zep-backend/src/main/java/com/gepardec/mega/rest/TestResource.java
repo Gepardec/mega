@@ -18,8 +18,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-// The property 'mega.endpoint.test.disable' is set to 'true' during CI/CD builds.
-@IfBuildProperty(name = "mega.endpoint.test.disable", stringValue = "true", enableIfMissing = true)
+// The property 'mega.endpoint.test.enable' is set to 'true' during CI/CD builds.
+@IfBuildProperty(name = "mega.endpoint.test.enable", stringValue = "true", enableIfMissing = true)
 @RequestScoped
 @Path("/test/")
 public class TestResource {
