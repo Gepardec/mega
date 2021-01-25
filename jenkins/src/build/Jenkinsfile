@@ -99,6 +99,7 @@ pipeline {
                                                         -Dgit.commit=${env.GIT_COMMIT} \
                                                         -Dgit.branch=${env.GIT_BRANCH} \
                                                         -Dbuild.number=${env.BUILD_NUMBER} \
+                                                        -Dmega.endpoint.test.disable=true \
                                                         -Dquarkus.package.uber.jar=true"
                                                 jacoco(execPattern: 'target/*.exec',
                                                         classPattern: 'target/classes',

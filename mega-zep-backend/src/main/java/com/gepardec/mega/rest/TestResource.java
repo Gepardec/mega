@@ -4,6 +4,7 @@ import com.gepardec.mega.notification.mail.Mail;
 import com.gepardec.mega.notification.mail.MailParameter;
 import com.gepardec.mega.notification.mail.MailSender;
 import com.gepardec.mega.service.api.init.StepEntrySyncService;
+import io.quarkus.arc.properties.IfBuildProperty;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -15,8 +16,10 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
-// TODO: remove before release
+// The property 'mega.endpoint.test.disable' is set to 'true' during CI/CD builds.
+@IfBuildProperty(name = "mega.endpoint.test.disable", stringValue = "true", enableIfMissing = true)
 @RequestScoped
 @Path("/test/")
 public class TestResource {
@@ -31,7 +34,9 @@ public class TestResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response synctest() {
-        stepEntrySyncService.genereteStepEntries();
+        Optional.ofNullable(stepEntrySyncService)
+                .orElseThrow(() -> new IllegalStateException("TestResource is disabled and 'StepEntrySyncService' is null"))
+                .genereteStepEntries();
         return Response.ok("ok").build();
     }
 
@@ -39,14 +44,16 @@ public class TestResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response mailComment() {
-        mailSender.send(Mail.COMMENT_CREATED,
-                "thomas.herzog@gepardec.com",
-                "Thomas",
-                Locale.GERMAN,
-                Map.of(MailParameter.CREATOR, "Werner",
-                        MailParameter.RECIPIENT, "Thomas",
-                        MailParameter.COMMENT, "This is my comment"),
-                List.of("Thomas"));
+        Optional.ofNullable(mailSender)
+                .orElseThrow(() -> new IllegalStateException("TestResource is disabled and 'MailSender' is null"))
+                .send(Mail.COMMENT_CREATED,
+                        "thomas.herzog@gepardec.com",
+                        "Thomas",
+                        Locale.GERMAN,
+                        Map.of(MailParameter.CREATOR, "Werner",
+                                MailParameter.RECIPIENT, "Thomas",
+                                MailParameter.COMMENT, "This is my comment"),
+                        List.of("Thomas"));
         mailSender.send(Mail.COMMENT_CLOSED,
                 "thomas.herzog@gepardec.com",
                 "Thomas",
