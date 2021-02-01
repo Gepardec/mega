@@ -34,7 +34,7 @@
         <quarkus.package.uber.jar>false</quarkus.package.uber.jar>
 
         <!-- application info -->
-        <revision>2.0.1-SNAPSHOT</revision>
+        <revision>2.1.0-SNAPSHOT</revision>
         <git.commit>local</git.commit>
         <git.branch>local</git.branch>
         <build.number>0</build.number>
