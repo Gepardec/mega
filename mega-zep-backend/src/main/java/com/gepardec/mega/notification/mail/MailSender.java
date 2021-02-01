@@ -17,6 +17,7 @@ import java.util.Map;
 public class MailSender {
 
     private static final String NEW_LINE_STRING = "\n";
+
     private static final String NEW_LINE_HTML = "<br>";
 
     @Inject
@@ -47,7 +48,7 @@ public class MailSender {
         };
 
         Map<String, String> modifiableMap = Maps.newHashMap(mailParameter);
-        if(modifiableMap.containsKey(MailParameter.COMMENT)) {
+        if (modifiableMap.containsKey(MailParameter.COMMENT)) {
             modifiableMap.put(
                     MailParameter.COMMENT,
                     StringUtils.replace(modifiableMap.get(MailParameter.COMMENT), NEW_LINE_STRING, NEW_LINE_HTML)
@@ -55,6 +56,9 @@ public class MailSender {
         }
 
         templateParameters.putAll(modifiableMap);
+
+        // replace mail text parameters and mail template parameters
+        templateParameters.put(MailParameter.MAIL_TEXT, replaceTextParameters(templateParameters.get(MailParameter.MAIL_TEXT), templateParameters));
         String replacedContent = replaceTextParameters(mailTemplateText, templateParameters);
 
         mailer.send(io.quarkus.mailer.Mail.withHtml(eMail, subject, replacedContent)
