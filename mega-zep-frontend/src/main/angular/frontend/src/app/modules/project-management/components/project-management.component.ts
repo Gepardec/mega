@@ -15,9 +15,9 @@ import {Step} from '../../shared/models/Step';
 
 import * as _moment from 'moment';
 import {Moment} from 'moment';
-import {ConfigService} from "../../shared/services/config/config.service";
-import {Config} from "../../shared/models/Config";
-import {configuration} from "../../shared/constants/configuration";
+import {ConfigService} from '../../shared/services/config/config.service';
+import {Config} from '../../shared/models/Config';
+import {configuration} from '../../shared/constants/configuration';
 
 const moment = _moment;
 
@@ -56,7 +56,7 @@ export class ProjectManagementComponent implements OnInit {
   ngOnInit(): void {
     this.configService.getConfig().subscribe((config: Config) => {
       this.officeManagementUrl = config.zepOrigin + '/' + configuration.OFFICE_MANAGEMENT_SEGMENT;
-    })
+    });
     this.getPmEntries();
   }
 
@@ -125,8 +125,6 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   private getPmEntries() {
-    console.log(this.selectedYear);
-    console.log(this.selectedMonth)
     this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
       this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
@@ -164,6 +162,6 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   private getFormattedDate() {
-    return this.selectedYear + '-' + this.selectedMonth + '-01';
+    return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
   }
 }
