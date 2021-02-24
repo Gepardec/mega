@@ -2,8 +2,10 @@ package com.gepardec.mega.service.impl.stepentry;
 
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.StepEntry;
+import com.gepardec.mega.db.entity.User;
 import com.gepardec.mega.db.repository.StepEntryRepository;
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.ProjectEmployees;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import io.quarkus.test.junit.QuarkusTest;
@@ -18,13 +20,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @QuarkusTest
 class StepEntryServiceImplTest {
@@ -94,7 +91,8 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.anyString())).thenReturn(stepEntries);
 
         boolean areOtherChecksDone = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(createEmployee())
-                .stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);;
+                .stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);
+        ;
         assertTrue(areOtherChecksDone);
     }
 
@@ -205,6 +203,37 @@ class StepEntryServiceImplTest {
         assertEquals(1L, stepEntry.getId());
         assertEquals("Liwest-EMS", stepEntry.getProject());
         assertEquals(State.IN_PROGRESS, stepEntry.getState());
+    }
+
+    @Test
+    void getProjectEmployeesForPM_whenValid_thenReturnListOfEntries() {
+        when(stepEntryRepository.findAllStepEntriesForPMInRange(
+                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString())
+        ).thenReturn(createStepEntriesForPM());
+
+        List<ProjectEmployees> projectEmployees = stepEntryService.getProjectEmployeesForPM(LocalDate.now(), LocalDate.now(), "marko.gattringer@gepardec.com");
+        assertNotNull(projectEmployees);
+        assertEquals(1L, projectEmployees.size());
+        assertEquals("Liwest-EMS", projectEmployees.get(0).projectId());
+        assertTrue(projectEmployees.get(0).employees().containsAll(List.of("008-mgattringer", "010-gpirklbauer", "012-ckofler", "020-therzog")));
+    }
+
+    private List<StepEntry> createStepEntriesForPM() {
+        return List.of(
+                createStepEntry(1L, "marko.gattringer@gepardec.com", "008-mgattringer"),
+                createStepEntry(2L, "guenter.pirklbauer@gepardec.com", "010-gpirklbauer"),
+                createStepEntry(3L, "christoph.kofler@gepardec.com", "012-ckofler"),
+                createStepEntry(4L, "thomas.herzog@gepardec.com", "020-therzog")
+        );
+    }
+
+    private StepEntry createStepEntry(Long id, String ownerEmail, String ownerZepId) {
+        StepEntry entry = createStepEntry(id);
+        User owner = new User();
+        owner.setEmail(ownerEmail);
+        owner.setZepId(ownerZepId);
+        entry.setOwner(owner);
+        return entry;
     }
 
     private StepEntry createStepEntry(Long id) {

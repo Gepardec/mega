@@ -2,6 +2,7 @@ package com.gepardec.mega.db.repository;
 
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.StepEntry;
+import com.gepardec.mega.domain.model.ProjectEmployees;
 import com.gepardec.mega.domain.model.StepName;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
@@ -118,5 +119,15 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
                         .and("assigneeEmail", assigneeEmail)
                         .and("project", project))
                 .singleResultOptional();
+    }
+
+    public List<StepEntry> findAllStepEntriesForPMInRange(LocalDate startDate, LocalDate endDate, String assigneEmail) {
+        return find("#StepEntry.findAllStepEntriesForPMInRange",
+                Parameters
+                    .with("start", startDate)
+                    .and("end", endDate)
+                    .and("assigneEmail", assigneEmail)
+                    .and("stepId", StepName.CONTROL_TIME_EVIDENCES.getId())
+                ).list();
     }
 }

@@ -4,6 +4,7 @@ import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.StepEntry;
 import com.gepardec.mega.db.repository.StepEntryRepository;
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.ProjectEmployees;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class StepEntryServiceImpl implements StepEntryService {
@@ -134,6 +136,17 @@ public class StepEntryServiceImpl implements StepEntryService {
         }
 
         return stepEntry.get();
+    }
+
+    @Override
+    public List<ProjectEmployees> getProjectEmployeesForPM(final LocalDate from, final LocalDate to, String assigneEmail) {
+        return stepEntryRepository.findAllStepEntriesForPMInRange(from, to, assigneEmail)
+                .stream()
+                .collect(Collectors.groupingBy(StepEntry::getProject, Collectors.mapping(s -> s.getOwner().getZepId(), Collectors.toList())))
+                .entrySet()
+                .stream()
+                .map(e -> ProjectEmployees.builder().projectId(e.getKey()).employees(e.getValue()).build())
+                .collect(Collectors.toList());
     }
 
     private LocalDate parseReleaseDate(String releaseDate) {
