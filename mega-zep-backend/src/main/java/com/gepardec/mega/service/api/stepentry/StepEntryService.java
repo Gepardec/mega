@@ -2,6 +2,7 @@ package com.gepardec.mega.service.api.stepentry;
 
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.ProjectEmployees;
 import com.gepardec.mega.domain.model.StepEntry;
 
 import java.time.LocalDate;
@@ -28,4 +29,6 @@ public interface StepEntryService {
     com.gepardec.mega.db.entity.StepEntry findStepEntryForEmployeeAtStep(Long stepId, Employee employee, String assigneeEmail, String currentMonthYear);
 
     com.gepardec.mega.db.entity.StepEntry findStepEntryForEmployeeAndProjectAtStep(Long stepId, Employee employee, String assigneeEmail, String project, String currentMonthYear);
+
+    List<ProjectEmployees> getProjectEmployeesForPM(final LocalDate from, final LocalDate to, final String assigneEmail);
 }

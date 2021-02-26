@@ -184,9 +184,9 @@ public class ManagementResourceTest {
 
         List<String> employees = List.of(mgattringer.userId(), jgartner.userId());
         List<String> leads = List.of("005-wbruckmueller");
-        Project rgkkcc = createProject("ÖGK-RGKKCC-2020", employees, leads);
-        Project rgkkwc = createProject("ÖGK-RGKK2WC-2020", employees, leads);
-        when(projectService.getProjectsForMonthYear(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyList()))
+        ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
+        ProjectEmployees rgkkwc = createProject("ÖGK-RGKK2WC-2020", employees);
+        when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
                 .thenReturn(List.of(rgkkcc, rgkkwc));
 
         when(employeeService.getAllActiveEmployees()).thenReturn(List.of(mgattringer, jgartner));
@@ -256,8 +256,8 @@ public class ManagementResourceTest {
         when(userContext.user()).thenReturn(user);
 
         List<String> leads = List.of("005-wbruckmueller");
-        Project rgkkcc = createProject("ÖGK-RGKKCC-2020", List.of(), leads);
-        when(projectService.getProjectsForMonthYear(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyList()))
+        ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", List.of());
+        when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
                 .thenReturn(List.of(rgkkcc));
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
@@ -278,9 +278,8 @@ public class ManagementResourceTest {
         Employee jgartner = createEmployee("030-jgartner", "julian.gartner@gepardec.com", "Julian", "Gartner");
 
         List<String> employees = List.of(mgattringer.userId(), jgartner.userId());
-        List<String> leads = List.of("005-wbruckmueller");
-        Project rgkkcc = createProject("ÖGK-RGKKCC-2020", employees, leads);
-        when(projectService.getProjectsForMonthYear(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyList()))
+        ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
+        when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
                 .thenReturn(List.of(rgkkcc));
 
         when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
@@ -326,12 +325,10 @@ public class ManagementResourceTest {
                 .build();
     }
 
-    private Project createProject(String projectId, List<String> employees, List<String> leads) {
-        return Project.builder()
+    private ProjectEmployees createProject(String projectId, List<String> employees) {
+        return ProjectEmployees.builder()
                 .projectId(projectId)
                 .employees(employees)
-                .leads(leads)
-                .categories(List.of())
                 .build();
     }
 

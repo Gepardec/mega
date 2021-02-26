@@ -4,13 +4,7 @@ import com.gepardec.mega.application.interceptor.RolesAllowed;
 import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.StepEntry;
-import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.FinishedAndTotalComments;
-import com.gepardec.mega.domain.model.Project;
-import com.gepardec.mega.domain.model.ProjectFilter;
-import com.gepardec.mega.domain.model.Role;
-import com.gepardec.mega.domain.model.StepName;
-import com.gepardec.mega.domain.model.UserContext;
+import com.gepardec.mega.domain.model.*;
 import com.gepardec.mega.rest.model.PmProgress;
 import com.gepardec.mega.rest.model.ManagementEntry;
 import com.gepardec.mega.rest.model.ProjectManagementEntry;
@@ -102,18 +96,10 @@ public class ManagementResource {
         LocalDate from = LocalDate.of(year, month, 1);
         LocalDate to = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
 
-        List<Project> projects = projectService
-                .getProjectsForMonthYear(from, List.of(ProjectFilter.IS_LEADS_AVAILABLE,
-                        ProjectFilter.IS_CUSTOMER_PROJECT))
-                .stream()
-                .filter(project -> project.leads().stream().anyMatch(lead -> lead.equalsIgnoreCase(
-                        userContext.user().userId()
-                )))
-                .collect(Collectors.toList());
-
+        List<ProjectEmployees> projectEmployees = stepEntryService.getProjectEmployeesForPM(from, to, userContext.user().email());
         List<ProjectManagementEntry> projectManagementEntries = new ArrayList<>();
         Map<String, Employee> employees = createEmployeeCache();
-        for (Project currentProject : projects) {
+        for (ProjectEmployees currentProject : projectEmployees) {
             List<ManagementEntry> entries = createManagementEntriesForProject(currentProject, employees, from, to);
             if(!entries.isEmpty()) {
                 projectManagementEntries.add(ProjectManagementEntry.builder()
@@ -122,7 +108,6 @@ public class ManagementResource {
                         .build()
                 );
             }
-
         }
 
         return projectManagementEntries;
@@ -133,15 +118,15 @@ public class ManagementResource {
                 .collect(Collectors.toMap(Employee::userId, employee -> employee));
     }
 
-    private List<ManagementEntry> createManagementEntriesForProject(Project project, Map<String, Employee> employees, LocalDate from, LocalDate to) {
+    private List<ManagementEntry> createManagementEntriesForProject(ProjectEmployees projectEmployees, Map<String, Employee> employees, LocalDate from, LocalDate to) {
         List<ManagementEntry> entries = new ArrayList<>();
-        for (String userId : project.employees()) {
+        for (String userId : projectEmployees.employees()) {
             if (employees.containsKey(userId)) {
                 Employee empl = employees.get(userId);
                 List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployeeAndProject(
-                        empl, project.projectId(), userContext.user().email(), from, to
+                        empl, projectEmployees.projectId(), userContext.user().email(), from, to
                 );
-                ManagementEntry entry = createManagementEntryForEmployee(empl, project.projectId(), stepEntries, from, to, null);
+                ManagementEntry entry = createManagementEntryForEmployee(empl, projectEmployees.projectId(), stepEntries, from, to, null);
                 if(entry != null) {
                     entries.add(entry);
                 }

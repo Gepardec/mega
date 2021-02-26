@@ -18,6 +18,7 @@ import java.util.Objects;
         @NamedQuery(name="StepEntry.findAllOwnedStepEntriesInRangeForProject", query = "SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.assignee.email like :assigneEmail AND s.project like :projectId"),
         @NamedQuery(name="StepEntry.findStepEntryForEmployeeAtStepInRange", query = "SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.step.id = :stepId and s.owner.email = :ownerEmail and s.assignee.email = :assigneeEmail"),
         @NamedQuery(name="StepEntry.findStepEntryForEmployeeAndProjectAtStepInRange", query = "SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.step.id = :stepId and s.owner.email = :ownerEmail and s.assignee.email = :assigneeEmail and s.project like :project"),
+        @NamedQuery(name = "StepEntry.findAllStepEntriesForPMInRange", query = "SELECT s FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.step.id = :stepId and s.assignee.email = :assigneEmail")
 })
 public class StepEntry {
 
