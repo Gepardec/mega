@@ -16,6 +16,8 @@ public class MailParameter {
 
     public static final String COMMENT = "$comment$";
 
+    public static final String EXCEL_URL = "$excelUrl$";
+
     private MailParameter() {
     }
 }
