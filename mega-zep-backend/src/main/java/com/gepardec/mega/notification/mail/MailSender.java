@@ -1,5 +1,6 @@
 package com.gepardec.mega.notification.mail;
 
+import com.gepardec.mega.application.configuration.ApplicationConfig;
 import com.gepardec.mega.application.configuration.NotificationConfig;
 import com.google.common.collect.Maps;
 import com.google.common.net.MediaType;
@@ -29,6 +30,9 @@ public class MailSender {
     @Inject
     Mailer mailer;
 
+    @Inject
+    ApplicationConfig applicationConfig;
+
     public void send(Mail mail, String eMail, String firstName, Locale locale) {
         send(mail, eMail, firstName, locale, Map.of(), List.of());
     }
@@ -44,6 +48,7 @@ public class MailSender {
                 put(MailParameter.MAIL_TEXT, text);
                 put(MailParameter.WIKI_EOM_URL, notificationConfig.getMegaWikiEomUrl());
                 put(MailParameter.MEGA_DASH, notificationConfig.getMegaDashUrl());
+                put(MailParameter.EXCEL_URL, applicationConfig.getExcelUrlAsString());
             }
         };
 
