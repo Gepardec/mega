@@ -61,7 +61,7 @@ mega:
       employees:
         notification: true
       reminder:
-        om: thomas.herzog@gepardec.com,werner.bruckmueller@gepardec.com,marko.gattringer@gepardec.com,christoph.ruhsam@gepardec.com
+        om: thomas.herzog@gepardec.com,werner.bruckmueller@gepardec.com,christoph.ruhsam@gepardec.com,armin.lang@gepardec.com,manuel.vilim@gepardec.com,philipp.wurm@gepardec.com,oliver.tod@gepardec.com,patrick.holzer@gepardec.com,robin.fischer@gepardec.com
 ## DEV Properties
 "%test":
   quarkus:
@@ -114,7 +114,7 @@ mega:
       employees:
         notification: false
       reminder:
-        om: thomas.herzog@gepardec.com,werner.bruckmueller@gepardec.com,marko.gattringer@gepardec.com,christoph.ruhsam@gepardec.com
+        om: thomas.herzog@gepardec.com,werner.bruckmueller@gepardec.com,christoph.ruhsam@gepardec.com,armin.lang@gepardec.com,manuel.vilim@gepardec.com,philipp.wurm@gepardec.com,oliver.tod@gepardec.com,patrick.holzer@gepardec.com,robin.fischer@gepardec.com
 # TEST-STAGE Properties
 "%teststage":
   quarkus:
