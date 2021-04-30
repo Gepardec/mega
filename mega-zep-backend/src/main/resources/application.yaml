@@ -133,7 +133,7 @@ mega:
         notification: false
       reminder:
         om: evelyn.pirklbauer@gepardec.com,guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com
-# TEST-STAGE Properties
+# PROD-STAGE Properties
 "%prodstage":
   quarkus:
     mailer:

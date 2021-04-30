@@ -23,6 +23,7 @@ export class CommentsForEmployeeComponent implements OnInit {
   step: Step;
   project = '';
   currentMonthYear: string;
+  hasChanged = false;
 
   @ViewChild('newMessage') newCommentTextarea;
 
@@ -87,26 +88,29 @@ export class CommentsForEmployeeComponent implements OnInit {
     this.commentService
       .createNewComment(this.employee, comment, this.user.email, this.step, this.project, this.currentMonthYear)
       .subscribe(() => {
-      this.commentService.getCommentsForEmployee(this.employee.email, this.currentMonthYear).subscribe((comments: Array<Comment>) => {
-        this.comments = comments;
+        this.commentService.getCommentsForEmployee(this.employee.email, this.currentMonthYear).subscribe((comments: Array<Comment>) => {
+          this.comments = comments;
+          this.hasChanged = true;
+        });
       });
-    });
   }
 
   updateCommentForEmployee(comment: Comment): void {
-    this.commentService.updateComment(comment).subscribe(() => {});
+    this.commentService.updateComment(comment).subscribe(() => {
+    });
+    this.hasChanged = true;
   }
 
   deleteCommentOfEmployee(commentToRemove: Comment): void {
     this.commentService.deleteComment(commentToRemove).subscribe(() => {
       this.comments = this.comments.filter(item => item.id !== commentToRemove.id);
     });
+    this.hasChanged = true;
   }
 
   close(): void {
     if (this.newCommentTextarea.nativeElement.value !== '') {
-      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      });
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {});
 
       dialogRef.afterClosed().subscribe(dialogResult => {
         if (dialogResult === true) {
@@ -114,7 +118,9 @@ export class CommentsForEmployeeComponent implements OnInit {
         }
       });
     } else {
+      // if hasChanged = true then do this
       this.dialogRef.close(true);
+      // else close without reload
     }
   }
 }

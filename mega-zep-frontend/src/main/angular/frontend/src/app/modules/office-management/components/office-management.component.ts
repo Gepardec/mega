@@ -104,7 +104,12 @@ export class OfficeManagementComponent implements OnInit {
         dialogRef.componentInstance.currentMonthYear = this.getFormattedDate();
 
         dialogRef.disableClose = true;
-        dialogRef.afterClosed().subscribe(() => this.getOmEntries());
+        dialogRef.afterClosed().subscribe(() => {
+            if (dialogRef.componentInstance.hasChanged) {
+              this.getOmEntries();
+            }
+          }
+        );
       });
   }
 
