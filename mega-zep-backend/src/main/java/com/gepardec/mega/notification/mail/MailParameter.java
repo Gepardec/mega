@@ -18,6 +18,8 @@ public class MailParameter {
 
     public static final String EXCEL_URL = "$excelUrl$";
 
+    public static final String PLANRECHNUNG_URL = "$planrechnungUrl$";
+
     private MailParameter() {
     }
 }

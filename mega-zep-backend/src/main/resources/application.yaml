@@ -35,6 +35,7 @@ mega:
   zep:
     admin-token: ${TOKEN}
   excel-url: "https://docs.google.com/spreadsheets/d/1u1G_hNW8ePZqthzWJOEh3qOHc6Fy_R2TQwn5wCMsTt0/"
+  planrechnung-url: "https://docs.google.com/spreadsheets/d/1Da3XrY9WuBrftJc0oBVySx58Ms1LWWhNkb3gfpZ4anA/"
   oauth:
     issuer: https://accounts.google.com
     scope: openid profile email

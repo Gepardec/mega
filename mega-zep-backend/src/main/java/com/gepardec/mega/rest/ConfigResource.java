@@ -32,6 +32,7 @@ public class ConfigResource {
     public Config get() {
         return Config.newBuilder()
                 .excelUrl(applicationConfig.getExcelUrlAsString())
+                .planrechnungUrl(applicationConfig.getPlanrechnungUrlAsString())
                 .zepOrigin(zepConfig.getUrlForFrontend())
                 .clientId(oauthConfig.getClientId())
                 .issuer(oauthConfig.getIssuer())

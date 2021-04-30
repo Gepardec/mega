@@ -1,5 +1,6 @@
 package com.gepardec.mega.notification.mail;
 
+import com.gepardec.mega.application.configuration.ApplicationConfig;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -28,6 +29,9 @@ class MailSenderTest {
 
     @Inject
     MockMailbox mailbox;
+
+    @Inject
+    ApplicationConfig applicationConfig;
 
     @BeforeEach
     void init() {
@@ -75,5 +79,16 @@ class MailSenderTest {
         }
         List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
         assertEquals(10, sent.size());
+    }
+
+    @Test
+    void send_projectControllingMailContainsPlanrechnungUrl() {
+        final String to = "garfield.atHome@gmail.com";
+        mailSender.send(Mail.PL_PROJECT_CONTROLLING, to, "Jamal", Locale.GERMAN);
+        List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
+        assertAll(
+                () -> assertEquals(1, sent.size()),
+                () -> assertTrue(sent.get(0).getHtml().contains(applicationConfig.getPlanrechnungUrlAsString()))
+        );
     }
 }
