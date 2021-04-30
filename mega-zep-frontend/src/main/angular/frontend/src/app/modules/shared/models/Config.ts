@@ -4,5 +4,6 @@ export class Config {
   scope: string;
   version: string;
   excelUrl: string;
+  planrechnungUrl: string;
   zepOrigin: string;
 }
