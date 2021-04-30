@@ -49,6 +49,7 @@ public class MailSender {
                 put(MailParameter.WIKI_EOM_URL, notificationConfig.getMegaWikiEomUrl());
                 put(MailParameter.MEGA_DASH, notificationConfig.getMegaDashUrl());
                 put(MailParameter.EXCEL_URL, applicationConfig.getExcelUrlAsString());
+                put(MailParameter.BUDGET_CALCULATION_EXCEL_URL, applicationConfig.getBudgetCalculationExcelUrlAsString());
             }
         };
 

@@ -14,6 +14,9 @@ public abstract class Config {
     public abstract String excelUrl();
 
     @JsonProperty
+    public abstract String budgetCalculationExcelUrl();
+
+    @JsonProperty
     public abstract String zepOrigin();
 
     @JsonProperty
@@ -36,6 +39,8 @@ public abstract class Config {
     public abstract static class Builder {
 
         public abstract Builder excelUrl(String excelUrl);
+
+        public abstract Builder budgetCalculationExcelUrl(String planrechnungUrl);
 
         public abstract Builder zepOrigin(String zepUrl);
 

@@ -18,6 +18,10 @@ public class ApplicationConfig {
     URL excelUrl;
 
     @Inject
+    @ConfigProperty(name = "mega.budget-calculation-excel-url")
+    URL budgetCalculationExcelUrl;
+
+    @Inject
     @ConfigProperty(name = "mega.info.build.version")
     String version;
 
@@ -58,6 +62,14 @@ public class ApplicationConfig {
 
     public URL getExcelUrl() {
         return excelUrl;
+    }
+
+    public String getBudgetCalculationExcelUrlAsString() {
+        return budgetCalculationExcelUrl.toString();
+    }
+
+    public URL getBudgetCalculationExcelUrl() {
+        return budgetCalculationExcelUrl;
     }
 
     public String getVersion() {
