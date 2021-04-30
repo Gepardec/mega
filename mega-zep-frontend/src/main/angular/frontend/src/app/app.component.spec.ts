@@ -24,7 +24,7 @@ describe('AppComponent', () => {
         version: '1',
         excelUrl: 'DUMMY',
         zepOrigin: 'DUMMY',
-        planrechnungUrl: 'DUMMY'
+        budgetCalculationExcelUrl: 'DUMMY'
       });
     }
   }

@@ -4,6 +4,6 @@ export class Config {
   scope: string;
   version: string;
   excelUrl: string;
-  planrechnungUrl: string;
+  budgetCalculationExcelUrl: string;
   zepOrigin: string;
 }

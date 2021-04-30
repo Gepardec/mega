@@ -88,7 +88,7 @@ class MailSenderTest {
         List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
         assertAll(
                 () -> assertEquals(1, sent.size()),
-                () -> assertTrue(sent.get(0).getHtml().contains(applicationConfig.getPlanrechnungUrlAsString()))
+                () -> assertTrue(sent.get(0).getHtml().contains(applicationConfig.getBudgetCalculationExcelUrlAsString()))
         );
     }
 }
