@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {Comment} from '../../models/Comment';
 import {State} from '../../models/State';
 import {Employee} from '../../models/Employee';
@@ -23,7 +23,7 @@ export class CommentsForEmployeeComponent implements OnInit {
   step: Step;
   project = '';
   currentMonthYear: string;
-  hasChanged = false;
+  @Output() commentHasChanged: EventEmitter<void> = new EventEmitter<void>();
 
   @ViewChild('newMessage') newCommentTextarea;
 
@@ -88,9 +88,9 @@ export class CommentsForEmployeeComponent implements OnInit {
     this.commentService
       .createNewComment(this.employee, comment, this.user.email, this.step, this.project, this.currentMonthYear)
       .subscribe(() => {
+        this.commentHasChanged.emit();
         this.commentService.getCommentsForEmployee(this.employee.email, this.currentMonthYear).subscribe((comments: Array<Comment>) => {
           this.comments = comments;
-          this.hasChanged = true;
         });
       });
   }
@@ -98,14 +98,14 @@ export class CommentsForEmployeeComponent implements OnInit {
   updateCommentForEmployee(comment: Comment): void {
     this.commentService.updateComment(comment).subscribe(() => {
     });
-    this.hasChanged = true;
+    this.commentHasChanged.emit();
   }
 
   deleteCommentOfEmployee(commentToRemove: Comment): void {
     this.commentService.deleteComment(commentToRemove).subscribe(() => {
       this.comments = this.comments.filter(item => item.id !== commentToRemove.id);
     });
-    this.hasChanged = true;
+    this.commentHasChanged.emit();
   }
 
   close(): void {
