@@ -24,10 +24,10 @@ public class ConstraintViolationExceptionMapperTest {
 
     public static class Model {
 
-        @NotNull
+        @NotNull(message = "must not be null")
         private String name;
 
-        @NotNull
+        @NotNull(message = "must not be null")
         private String email;
     }
 
