@@ -152,3 +152,8 @@ mega:
         notification: true
       reminder:
         om: evelyn.pirklbauer@gepardec.com,guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com
+
+"%codeowners-test":
+  quarkus:
+    mailer:
+      mock: true
