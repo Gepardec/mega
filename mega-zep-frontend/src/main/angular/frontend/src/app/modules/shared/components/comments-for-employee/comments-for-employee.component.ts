@@ -118,9 +118,7 @@ export class CommentsForEmployeeComponent implements OnInit {
         }
       });
     } else {
-      // if hasChanged = true then do this
       this.dialogRef.close(true);
-      // else close without reload
     }
   }
 }
