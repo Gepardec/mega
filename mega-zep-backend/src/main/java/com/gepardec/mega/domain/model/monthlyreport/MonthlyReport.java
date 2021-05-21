@@ -16,18 +16,6 @@ import java.util.List;
 @JsonSerialize(as = MonthlyReport.class)
 public abstract class MonthlyReport {
 
-    @Nullable
-    @JsonProperty
-    public abstract Employee employee();
-
-    @Nullable
-    @JsonProperty
-    public abstract List<TimeWarning> timeWarnings();
-
-    @Nullable
-    @JsonProperty
-    public abstract List<JourneyWarning> journeyWarnings();
-
     @JsonCreator
     public static MonthlyReport of(
             @JsonProperty("employee") final Employee employee,
@@ -42,6 +30,18 @@ public abstract class MonthlyReport {
                 employee, timeWarnings, journeyWarnings, comments, employeeCheckState, assigned, pmProgresses, otherChecksDone
         );
     }
+
+    @Nullable
+    @JsonProperty
+    public abstract Employee employee();
+
+    @Nullable
+    @JsonProperty
+    public abstract List<TimeWarning> timeWarnings();
+
+    @Nullable
+    @JsonProperty
+    public abstract List<JourneyWarning> journeyWarnings();
 
     @Nullable
     @JsonProperty

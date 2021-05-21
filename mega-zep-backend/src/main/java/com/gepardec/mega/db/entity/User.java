@@ -4,7 +4,25 @@ import com.gepardec.mega.domain.model.Role;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.*;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -18,8 +36,8 @@ import java.util.Set;
 @Entity
 @Table(name = "employee_user",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uidx_email", columnNames = { "email" }),
-                @UniqueConstraint(name = "uidx_zep_id", columnNames = { "zep_id" })
+                @UniqueConstraint(name = "uidx_email", columnNames = {"email"}),
+                @UniqueConstraint(name = "uidx_zep_id", columnNames = {"zep_id"})
         })
 @NamedQueries({
         @NamedQuery(name = "User.findActiveByEmail", query = "select u from User u where u.email = :email and u.active = true"),
@@ -114,17 +132,6 @@ public class User {
     @Column(name = "role", nullable = false)
     private Set<Role> roles = new HashSet<>(0);
 
-    public User() {
-    }
-
-    private User(final String email) {
-        this.email = email;
-    }
-
-    public static User of(final String email) {
-        return new User(email);
-    }
-
     /**
      * The step entries the user is assigned to
      */
@@ -136,6 +143,17 @@ public class User {
      */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
     private Set<StepEntry> ownedStepEntries = new HashSet<>(0);
+
+    public User() {
+    }
+
+    private User(final String email) {
+        this.email = email;
+    }
+
+    public static User of(final String email) {
+        return new User(email);
+    }
 
     @PrePersist
     void onPersist() {
@@ -227,7 +245,7 @@ public class User {
         this.comments = comments;
     }
 
-        public LocalDate getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 

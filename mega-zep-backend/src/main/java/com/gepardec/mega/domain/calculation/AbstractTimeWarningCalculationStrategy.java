@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 public abstract class AbstractTimeWarningCalculationStrategy {
 
     protected Map<LocalDate, List<ProjectEntry>> groupProjectEntriesByFromDate(final List<ProjectEntry> projectTimeList,
-            Predicate<ProjectEntry>... filters) {
+                                                                               Predicate<ProjectEntry>... filters) {
         Stream<ProjectEntry> projectEntryStream = projectTimeList.stream();
         if (filters != null && filters.length > 0) {
             for (final Predicate<ProjectEntry> predicate : filters) {

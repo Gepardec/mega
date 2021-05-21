@@ -1,14 +1,11 @@
 package com.gepardec.mega.db.entity.project;
 
-import com.gepardec.mega.db.entity.Step;
 import com.gepardec.mega.db.entity.User;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -18,23 +15,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "project_step",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "uidx_ordinal", columnNames = {"ordinal"})
-        }
-)
+@Table(name = "project_entry")
 public class ProjectEntry {
 
     @Id
     @Column(name = "id", insertable = false, updatable = false)
-    @GeneratedValue(generator = "stepIdGenerator", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "stepIdGenerator", sequenceName = "sequence_step_id", allocationSize = 1)
+    @GeneratedValue(generator = "projectIdGenerator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "projectIdGenerator", sequenceName = "sequence_project_entry_id", allocationSize = 1)
     private Long id;
 
     /**
@@ -68,6 +60,8 @@ public class ProjectEntry {
 
     /**
      * The owner of the step entry who is the user who is responsible for the validity of the entry
+     *
+     * @see User
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
@@ -79,6 +73,8 @@ public class ProjectEntry {
 
     /**
      * The assignee of the step entry who is the employee who marks the step entry done
+     *
+     * @see User
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
@@ -89,10 +85,12 @@ public class ProjectEntry {
     private User assignee;
 
     /**
-     * The related project of the step entry
+     * The related project of the project entry
+     *
+     * @see Project
      */
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "project", nullable = false)
     private Project project;
 
     /**
@@ -103,17 +101,103 @@ public class ProjectEntry {
 
     /**
      * The state of the project step
+     *
+     * @see State
      */
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "state", nullable = false, columnDefinition = "INTEGER")
     private State state;
 
     /**
      * The related step of this project entry
      *
-     * @see Step
+     * @see ProjectStep
      */
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "step", nullable = false, columnDefinition = "INTEGER")
     private ProjectStep step;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public LocalDateTime getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(LocalDateTime updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public User getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(User assignee) {
+        this.assignee = assignee;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public boolean isPreset() {
+        return preset;
+    }
+
+    public void setPreset(boolean preset) {
+        this.preset = preset;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public ProjectStep getStep() {
+        return step;
+    }
+
+    public void setStep(ProjectStep step) {
+        this.step = step;
+    }
 }

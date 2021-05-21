@@ -16,6 +16,10 @@ import java.time.LocalDateTime;
 @JsonDeserialize(builder = ApplicationInfo.Builder.class)
 public abstract class ApplicationInfo {
 
+    public static Builder newBuilder() {
+        return new com.gepardec.mega.rest.model.AutoValue_ApplicationInfo.Builder();
+    }
+
     @JsonProperty
     public abstract String version();
 
@@ -39,11 +43,6 @@ public abstract class ApplicationInfo {
     @JsonProperty
     @JsonSerialize(using = DurationSerializer.class)
     public abstract Duration upTime();
-
-    public static Builder newBuilder() {
-        return new com.gepardec.mega.rest.model.AutoValue_ApplicationInfo.Builder();
-    }
-
     @AutoValue.Builder
     public abstract static class Builder {
         public abstract Builder version(String version);

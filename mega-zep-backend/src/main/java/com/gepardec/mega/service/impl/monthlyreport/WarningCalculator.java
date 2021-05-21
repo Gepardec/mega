@@ -7,17 +7,22 @@ import com.gepardec.mega.domain.calculation.time.CoreWorkingHoursCalculator;
 import com.gepardec.mega.domain.calculation.time.ExceededMaximumWorkingHoursPerDayCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientBreakCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientRestCalculator;
-import com.gepardec.mega.domain.model.monthlyreport.*;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectEntryWarning;
+import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
+import com.gepardec.mega.domain.model.monthlyreport.WarningType;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 @ApplicationScoped
 public class WarningCalculator {
-
-    @Inject
-    ResourceBundle messages;
 
     private static final List<WarningCalculationStrategy<TimeWarning>> timeWarningCalculators = List.of(
             new ExceededMaximumWorkingHoursPerDayCalculator(),
@@ -29,6 +34,9 @@ public class WarningCalculator {
             new InvalidJourneyCalculator(),
             new InvalidWorkingLocationInJourneyCalculator()
     );
+
+    @Inject
+    ResourceBundle messages;
 
     public List<TimeWarning> determineTimeWarnings(List<ProjectEntry> projectTimeList) {
         final List<TimeWarning> warnings = new ArrayList<>();

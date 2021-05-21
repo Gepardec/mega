@@ -12,7 +12,9 @@ import java.util.Objects;
 public class DateUtils {
 
     private static final DateTimeFormatter DEFAULT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault());
+
     private static final DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-ddHH:mm", Locale.getDefault());
+
     private static final Locale GERMAN_LOCALE = Locale.GERMANY;
 
     private DateUtils() {
@@ -25,7 +27,6 @@ public class DateUtils {
     public static String formatDate(LocalDate date) {
         return date.format(DEFAULT_DATE_FORMATTER);
     }
-
 
     public static LocalDateTime parseDateTime(String dateAsString, String timeAsString) {
         return LocalDateTime.parse(dateAsString + timeAsString, DEFAULT_DATETIME_FORMATTER);

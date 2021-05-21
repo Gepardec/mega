@@ -16,25 +16,19 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "project",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "uidx_ordinal", columnNames = {"ordinal"})
-        }
-)
+@Table(name = "project")
 public class Project {
 
     @Id
     @Column(name = "id", insertable = false, updatable = false)
-    @GeneratedValue(generator = "stepIdGenerator", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "stepIdGenerator", sequenceName = "sequence_step_id", allocationSize = 1)
+    @GeneratedValue(generator = "projectIdGenerator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "projectIdGenerator", sequenceName = "sequence_project_id", allocationSize = 1)
     private Long id;
 
     /**
@@ -60,15 +54,9 @@ public class Project {
     private LocalDate endDate;
 
     /**
-     * The id of the project
-     */
-    @NotNull
-    @Min(1)
-    @Column(name = "project_id", unique = true)
-    private Integer projectId;
-
-    /**
      * The project leads of the project
+     *
+     * @see User
      */
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinTable(
@@ -78,11 +66,18 @@ public class Project {
     )
     private Set<User> projectLeads = new HashSet<>(0);
 
-    @OneToMany(mappedBy = "project_step", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<ProjectEntry> projectEntries = new HashSet<>(0);
+
+    @OneToMany(mappedBy = "project")
+    private Set<ProjectEntry> items;
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -109,14 +104,6 @@ public class Project {
         this.endDate = endDate;
     }
 
-    public Integer getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
-    }
-
     public Set<User> getProjectLeads() {
         return projectLeads;
     }
@@ -125,13 +112,19 @@ public class Project {
         this.projectLeads = projectLeads;
     }
 
-    public Set<ProjectEntry> getProjectSteps() {
+    public Set<ProjectEntry> getProjectEntries() {
         return projectEntries;
     }
 
-    public void setProjectSteps(Set<ProjectEntry> projectEntries) {
+    public void setProjectEntries(Set<ProjectEntry> projectEntries) {
         this.projectEntries = projectEntries;
     }
 
+    public Set<ProjectEntry> getItems() {
+        return items;
+    }
 
+    public void setItems(Set<ProjectEntry> items) {
+        this.items = items;
+    }
 }

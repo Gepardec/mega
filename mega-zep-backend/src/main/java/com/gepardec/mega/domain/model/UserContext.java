@@ -7,13 +7,12 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class UserContext {
 
-    @Nullable
-    public abstract User user();
-
     public static UserContext.Builder builder() {
         return new com.gepardec.mega.domain.model.AutoValue_UserContext.Builder();
     }
 
+    @Nullable
+    public abstract User user();
     @AutoValue.Builder
     public abstract static class Builder {
 

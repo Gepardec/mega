@@ -13,6 +13,10 @@ import java.util.List;
 @JsonDeserialize(builder = com.gepardec.mega.domain.model.AutoValue_Project.Builder.class)
 public abstract class Project {
 
+    public static Project.Builder builder() {
+        return new com.gepardec.mega.domain.model.AutoValue_Project.Builder();
+    }
+
     @JsonProperty
     public abstract String projectId();
 
@@ -28,11 +32,6 @@ public abstract class Project {
 
     @JsonProperty
     public abstract List<String> categories();
-
-    public static Project.Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_Project.Builder();
-    }
-
     @AutoValue.Builder
     public abstract static class Builder {
         @JsonProperty

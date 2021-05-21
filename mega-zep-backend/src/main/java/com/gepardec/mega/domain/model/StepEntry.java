@@ -13,6 +13,10 @@ import java.time.LocalDate;
 @JsonDeserialize(builder = com.gepardec.mega.domain.model.AutoValue_StepEntry.Builder.class)
 public abstract class StepEntry {
 
+    public static StepEntry.Builder builder() {
+        return new com.gepardec.mega.domain.model.AutoValue_StepEntry.Builder();
+    }
+
     @JsonProperty
     public abstract LocalDate date();
 
@@ -31,11 +35,6 @@ public abstract class StepEntry {
 
     @JsonProperty
     public abstract Step step();
-
-    public static StepEntry.Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_StepEntry.Builder();
-    }
-
     @AutoValue.Builder
     public abstract static class Builder {
 

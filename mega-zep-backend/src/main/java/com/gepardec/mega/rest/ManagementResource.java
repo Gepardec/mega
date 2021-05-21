@@ -4,9 +4,14 @@ import com.gepardec.mega.application.interceptor.RolesAllowed;
 import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.StepEntry;
-import com.gepardec.mega.domain.model.*;
-import com.gepardec.mega.rest.model.PmProgress;
+import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.FinishedAndTotalComments;
+import com.gepardec.mega.domain.model.ProjectEmployees;
+import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.domain.model.StepName;
+import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.rest.model.ManagementEntry;
+import com.gepardec.mega.rest.model.PmProgress;
 import com.gepardec.mega.rest.model.ProjectManagementEntry;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.employee.EmployeeService;
@@ -82,9 +87,7 @@ public class ManagementResource {
                 officeManagementEntries.add(newManagementEntry);
             }
 
-
         }
-
 
         return officeManagementEntries;
     }
@@ -101,7 +104,7 @@ public class ManagementResource {
         Map<String, Employee> employees = createEmployeeCache();
         for (ProjectEmployees currentProject : projectEmployees) {
             List<ManagementEntry> entries = createManagementEntriesForProject(currentProject, employees, from, to);
-            if(!entries.isEmpty()) {
+            if (!entries.isEmpty()) {
                 projectManagementEntries.add(ProjectManagementEntry.builder()
                         .projectName(currentProject.projectId())
                         .entries(entries)
@@ -127,7 +130,7 @@ public class ManagementResource {
                         empl, projectEmployees.projectId(), userContext.user().email(), from, to
                 );
                 ManagementEntry entry = createManagementEntryForEmployee(empl, projectEmployees.projectId(), stepEntries, from, to, null);
-                if(entry != null) {
+                if (entry != null) {
                     entries.add(entry);
                 }
             }

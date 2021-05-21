@@ -25,7 +25,7 @@ public class ZepConfig {
         return String.format("%s%s", origin.toString(), soapPath);
     }
 
-    public String getUrlForFrontend(){
+    public String getUrlForFrontend() {
         return origin.toString();
     }
 

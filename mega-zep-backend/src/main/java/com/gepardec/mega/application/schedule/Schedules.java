@@ -27,7 +27,8 @@ public class Schedules {
 
     @Scheduled(identity = "Sync ZEP-Employees with Users in the database",
             every = "PT30M",
-            delay = 15, delayUnit = TimeUnit.SECONDS) // We need to wait for liquibase to finish, but is executed in parallel
+            delay = 15, delayUnit = TimeUnit.SECONDS)
+        // We need to wait for liquibase to finish, but is executed in parallel
     void syncEmployeesWithDatabase() {
         syncService.syncEmployees();
     }
