@@ -1,0 +1,19 @@
+@import 'src/styles/colors';
+
+mat-select {
+  padding: 5px;
+  border-radius: 3px;
+  width: 100px;
+}
+
+.select-red {
+  background: $mega-danger-red-transparent;
+}
+
+.select-green {
+  background: $mega-success-green-transparent;
+}
+
+.select-yellow {
+  background: $mega-warning-yellow-transparent;
+}

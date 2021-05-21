@@ -1,0 +1,13 @@
+<mat-select
+  #select
+  (selectionChange)="onSelectionChange($event)"
+  [class.select-green]="select.value === ProjectState.DONE || select.value === ProjectState.NOT_RELEVANT"
+  [class.select-red]="select.value === ProjectState.OPEN"
+  [class.select-yellow]="select.value === ProjectState.IN_PROGRESS"
+  [value]="value"
+  [disabled]="isDisabled">
+  <mat-option [value]="ProjectState.OPEN">{{'STATE.OPEN' | translate}}</mat-option>
+  <mat-option [value]="ProjectState.IN_PROGRESS">{{'STATE.IN_PROGRESS' | translate}}</mat-option>
+  <mat-option [value]="ProjectState.DONE">{{'STATE.DONE' | translate}}</mat-option>
+  <mat-option [value]="ProjectState.NOT_RELEVANT">{{'STATE.NOT_RELEVANT' | translate}}</mat-option>
+</mat-select>

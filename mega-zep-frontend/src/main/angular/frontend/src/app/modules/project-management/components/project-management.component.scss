@@ -13,7 +13,7 @@ th, td {
 }
 
 .mat-expansion-panel-header-title {
-  max-width: 30%;
+  //max-width: 12.5%;
 }
 
 a {
@@ -24,3 +24,8 @@ a {
 a:hover {
   color: $mega-success-green;
 }
+
+//mat-panel-title,
+//mat-panel-description {
+//  display: block;
+//}

@@ -18,6 +18,8 @@ import {Moment} from 'moment';
 import {ConfigService} from '../../shared/services/config/config.service';
 import {Config} from '../../shared/models/Config';
 import {configuration} from '../../shared/constants/configuration';
+import {ProjectState} from "../../shared/models/ProjectState";
+import {MatSelectChange} from "@angular/material/select";
 
 const moment = _moment;
 
@@ -163,5 +165,19 @@ export class ProjectManagementComponent implements OnInit {
 
   private getFormattedDate() {
     return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
+  }
+
+  changeProjectControllingState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
+    // TODO: http call
+    pmEntry.projectControllingState = $event.value;
+  }
+
+  changeProjectBillingState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
+    // TODO: http call
+    pmEntry.projectBillingState = $event.value;
+  }
+
+  isProjectStateNotRelevant(projectState: ProjectState) {
+    return projectState === ProjectState.NOT_RELEVANT;
   }
 }
