@@ -130,8 +130,15 @@ export class ProjectManagementComponent implements OnInit {
     this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
       this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
-      this.pmEntries.forEach(pmEntry =>
-        this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []))
+      this.pmEntries.forEach(pmEntry => {
+          this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []));
+          // TODO workaround start
+          pmEntry.projectBillingState = ProjectState.OPEN;
+          pmEntry.projectControllingState = ProjectState.IN_PROGRESS;
+          pmEntry.presetBillingState = false;
+          pmEntry.presetProjectControllingState = false;
+          // TODO workaround end
+        }
       );
     });
   }

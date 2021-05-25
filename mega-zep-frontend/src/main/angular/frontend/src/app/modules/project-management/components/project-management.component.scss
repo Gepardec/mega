@@ -12,10 +12,6 @@ th, td {
   margin-top: 20px;
 }
 
-.mat-expansion-panel-header-title {
-  //max-width: 12.5%;
-}
-
 a {
   color: inherit;
   text-decoration: none;
@@ -25,7 +21,44 @@ a:hover {
   color: $mega-success-green;
 }
 
-//mat-panel-title,
-//mat-panel-description {
-//  display: block;
-//}
+.headers-align .mat-expansion-panel-header-title,
+.headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+mat-panel-title {
+  flex-grow: 0.5;
+}
+
+mat-panel-description {
+  flex-grow: 0.5;
+}
+
+.headers-align mat-expansion-panel-header {
+  margin-left: 10px;
+}
+
+.headers-align .mat-expansion-panel-header-description,
+.headers-align .mat-expansion-panel-header-title {
+  align-items: center;
+}
+
+table.projectActions {
+  width: auto;
+}
+
+table.projectActions > th, td {
+  font-size: inherit;
+}
+
+tr.spacing > td {
+  padding-top: 5px;
+}
+
+.preset-next-month {
+  margin-left: 15px;
+}
+
+.description {
+  padding-right: 15px;
+}

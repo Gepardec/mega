@@ -16,39 +16,54 @@
     </mat-card-content>
   </mat-card>
 
-  <!--  TODO: fix formatting of panel-description-->
-  <mat-accordion [multi]="true">
+  <mat-accordion [multi]="true" class="headers-align">
     <mat-expansion-panel *ngFor="let pmEntry of pmEntries, let i = index" [expanded]="true">
-      <mat-expansion-panel-header>
-            <mat-panel-title>
-              <strong>{{pmEntry.projectName}}</strong>
-            </mat-panel-title>
-          <mat-panel-description>
-            <div fxLayout="row wrap">
-            <div fxFlex="30%" [ngClass]="areAllProjectCheckStatesDone(pmEntry.projectName) ? 'green' : 'red'"
-                 class="wrap">
+      <mat-expansion-panel-header [collapsedHeight]="'100px'"
+                                  [expandedHeight]="'100px'">
+        <mat-panel-title>
+          <strong>{{pmEntry.projectName}}</strong>
+        </mat-panel-title>
+        <div class="mat-expansion-panel-header-description">
+          <table class="projectActions">
+            <tbody>
+            <tr>
+              <td class="description">
+                {{'project-management.projectTimeState' | translate}}
+              </td>
+              <td>
+                <app-project-state-select [value]="pmEntry.projectControllingState"
+                                          (selectionChange)="changeProjectControllingState($event, pmEntry)"
+                                          (click)="$event.stopPropagation()"></app-project-state-select>
+                <mat-checkbox class="preset-next-month"
+                              *ngIf="isProjectStateNotRelevant(pmEntry.projectControllingState)"
+                              (click)="$event.stopPropagation()">
+                  {{'project-management.presetMonth' | translate}}
+                </mat-checkbox>
+              </td>
+            </tr>
+            <tr class="spacing">
+              <td class="description">
+                {{'project-management.billingState' | translate}}
+              </td>
+              <td>
+                <app-project-state-select [value]="pmEntry.projectBillingState"
+                                          (selectionChange)="changeProjectBillingState($event, pmEntry)"
+                                          (click)="$event.stopPropagation()"></app-project-state-select>
+                <mat-checkbox class="preset-next-month"
+                              *ngIf="isProjectStateNotRelevant(pmEntry.projectBillingState)"
+                              (click)="$event.stopPropagation()">
+                  {{'project-management.presetMonth' | translate}}
+                </mat-checkbox>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <mat-panel-description>
+            <span [ngClass]="areAllProjectCheckStatesDone(pmEntry.projectName) ? 'green' : 'red'">
               {{'project-management.employeeDone' | translate}}
-            </div>
-            <div fxFlex="70%">
-              <span>{{'project-management.projectTimeState' | translate}}</span>
-              <!--          ProjectControllingState-->
-              <app-project-state-select [value]="pmEntry.projectControllingState"
-                                        (selectionChange)="changeProjectControllingState($event, pmEntry)"></app-project-state-select>
-              <mat-checkbox *ngIf="isProjectStateNotRelevant(pmEntry.projectControllingState)">
-                {{'project-management.presetMonth' | translate}}
-              </mat-checkbox>
-              <br>
-
-              <!--          ProjectBillingState-->
-              <span>{{'project-management.billingState' | translate}}</span>
-              <app-project-state-select [value]="pmEntry.projectBillingState"
-                                        (selectionChange)="changeProjectBillingState($event, pmEntry)"></app-project-state-select>
-              <mat-checkbox *ngIf="isProjectStateNotRelevant(pmEntry.projectBillingState)">
-                {{'project-management.presetMonth' | translate}}
-              </mat-checkbox>
-            </div>
-            </div>
-          </mat-panel-description>
+            </span>
+        </mat-panel-description>
       </mat-expansion-panel-header>
 
       <div class="table-container">
