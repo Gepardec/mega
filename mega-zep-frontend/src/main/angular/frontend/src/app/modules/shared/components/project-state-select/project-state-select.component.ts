@@ -20,14 +20,19 @@ export class ProjectStateSelectComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  get isDisabled(): boolean {
-    return this.value === ProjectState.DONE || this.value === ProjectState.NOT_RELEVANT
-      || this.select?.value === ProjectState.DONE || this.select?.value === ProjectState.NOT_RELEVANT;
+  get isInProgressSelected(): boolean {
+    return this.value === ProjectState.IN_PROGRESS;
+  }
+
+  get isNotRelevantSelected(): boolean {
+    return this.value === ProjectState.NOT_RELEVANT;
+  }
+
+  get isDoneSelected(): boolean {
+    return this.value === ProjectState.DONE;
   }
 
   onSelectionChange(selectChange: MatSelectChange): void {
     this.selectionChange.emit(selectChange);
-    // this.value = ProjectState.DONE;
   }
-
 }
