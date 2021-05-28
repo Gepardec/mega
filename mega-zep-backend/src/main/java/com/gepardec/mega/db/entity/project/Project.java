@@ -66,9 +66,6 @@ public class Project {
     )
     private Set<User> projectLeads = new HashSet<>(0);
 
-    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<ProjectEntry> projectEntries = new HashSet<>(0);
-
     @OneToMany(mappedBy = "project")
     private Set<ProjectEntry> items;
 
@@ -110,14 +107,6 @@ public class Project {
 
     public void setProjectLeads(Set<User> projectLeads) {
         this.projectLeads = projectLeads;
-    }
-
-    public Set<ProjectEntry> getProjectEntries() {
-        return projectEntries;
-    }
-
-    public void setProjectEntries(Set<ProjectEntry> projectEntries) {
-        this.projectEntries = projectEntries;
     }
 
     public Set<ProjectEntry> getItems() {
