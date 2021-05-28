@@ -91,7 +91,9 @@ export class ProjectManagementComponent implements OnInit {
         dialogRef.componentInstance.step = Step.CONTROL_TIME_EVIDENCES;
         dialogRef.componentInstance.project = project;
         dialogRef.componentInstance.currentMonthYear = this.getFormattedDate();
-        dialogRef.afterClosed().subscribe(() => this.getPmEntries());
+
+        dialogRef.disableClose = true;
+        dialogRef.componentInstance.commentHasChanged.subscribe(() => this.getPmEntries())
       });
   }
 
