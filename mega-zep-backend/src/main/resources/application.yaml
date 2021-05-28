@@ -132,7 +132,7 @@ mega:
       employees:
         notification: false
       reminder:
-        om: evelyn.pirklbauer@gepardec.com,guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com
+        om: office@gepardec.com,guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com,manuel.vilim@gepardec.com,armin.lang@gepardec.com
 # TEST-STAGE Properties
 "%prodstage":
   quarkus:
@@ -149,4 +149,4 @@ mega:
       employees:
         notification: true
       reminder:
-        om: evelyn.pirklbauer@gepardec.com,guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com
+        om: office@gepardec.com,guenter.pirklbauer@gepardec.com,werner.bruckmueller@gepardec.com,manuel.vilim@gepardec.com
