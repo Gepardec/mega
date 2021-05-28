@@ -31,11 +31,11 @@
                 {{'project-management.projectTimeState' | translate}}
               </td>
               <td>
-                <app-project-state-select [value]="pmEntry.projectControllingState"
+                <app-project-state-select [value]="pmEntry.controlProjectState"
                                           (selectionChange)="changeProjectControllingState($event, pmEntry)"
                                           (click)="$event.stopPropagation()"></app-project-state-select>
                 <mat-checkbox class="preset-next-month"
-                              *ngIf="isProjectStateNotRelevant(pmEntry.projectControllingState)"
+                              *ngIf="isProjectStateNotRelevant(pmEntry.controlProjectState)"
                               (click)="$event.stopPropagation()">
                   {{'project-management.presetMonth' | translate}}
                 </mat-checkbox>
@@ -46,11 +46,11 @@
                 {{'project-management.billingState' | translate}}
               </td>
               <td>
-                <app-project-state-select [value]="pmEntry.projectBillingState"
+                <app-project-state-select [value]="pmEntry.controlBillingState"
                                           (selectionChange)="changeProjectBillingState($event, pmEntry)"
                                           (click)="$event.stopPropagation()"></app-project-state-select>
                 <mat-checkbox class="preset-next-month"
-                              *ngIf="isProjectStateNotRelevant(pmEntry.projectBillingState)"
+                              *ngIf="isProjectStateNotRelevant(pmEntry.controlBillingState)"
                               (click)="$event.stopPropagation()">
                   {{'project-management.presetMonth' | translate}}
                 </mat-checkbox>

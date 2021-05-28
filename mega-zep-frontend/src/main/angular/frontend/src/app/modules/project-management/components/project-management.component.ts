@@ -18,8 +18,8 @@ import {Moment} from 'moment';
 import {ConfigService} from '../../shared/services/config/config.service';
 import {Config} from '../../shared/models/Config';
 import {configuration} from '../../shared/constants/configuration';
-import {ProjectState} from "../../shared/models/ProjectState";
-import {MatSelectChange} from "@angular/material/select";
+import {ProjectState} from '../../shared/models/ProjectState';
+import {MatSelectChange} from '@angular/material/select';
 
 const moment = _moment;
 
@@ -133,10 +133,10 @@ export class ProjectManagementComponent implements OnInit {
       this.pmEntries.forEach(pmEntry => {
           this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []));
           // TODO workaround start
-          pmEntry.projectBillingState = ProjectState.OPEN;
-          pmEntry.projectControllingState = ProjectState.IN_PROGRESS;
-          pmEntry.presetBillingState = false;
-          pmEntry.presetProjectControllingState = false;
+          pmEntry.controlBillingState = ProjectState.OPEN;
+          pmEntry.controlProjectState = ProjectState.IN_PROGRESS;
+          pmEntry.presetControlBillingState = false;
+          pmEntry.presetControlProjectState = false;
           // TODO workaround end
         }
       );
@@ -176,12 +176,12 @@ export class ProjectManagementComponent implements OnInit {
 
   changeProjectControllingState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
     // TODO: http call
-    pmEntry.projectControllingState = $event.value;
+    pmEntry.controlProjectState = $event.value;
   }
 
   changeProjectBillingState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
     // TODO: http call
-    pmEntry.projectBillingState = $event.value;
+    pmEntry.controlBillingState = $event.value;
   }
 
   isProjectStateNotRelevant(projectState: ProjectState) {

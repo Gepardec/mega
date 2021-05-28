@@ -5,8 +5,8 @@ export class ProjectManagementEntry {
 
   projectName: string;
   entries: Array<ManagementEntry>;
-  projectControllingState: ProjectState;
-  projectBillingState: ProjectState;
-  presetProjectControllingState: boolean;
-  presetBillingState: boolean;
+  controlProjectState: ProjectState;
+  controlBillingState: ProjectState;
+  presetControlProjectState: boolean;
+  presetControlBillingState: boolean;
 }
