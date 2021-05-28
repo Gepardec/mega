@@ -1,6 +1,5 @@
 package com.gepardec.mega.service.impl.employee;
 
-
 import com.gepardec.mega.db.repository.UserRepository;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.zep.ZepService;
@@ -41,7 +40,7 @@ public class EmployeeServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        beanUnderTest = new EmployeeServiceImpl(logger, zepService, managedExecutor, userRepository,10);
+        beanUnderTest = new EmployeeServiceImpl(logger, zepService, managedExecutor, userRepository, 10);
     }
 
     @Test
@@ -108,7 +107,7 @@ public class EmployeeServiceImplTest {
             }
         }).when(managedExecutor).execute(Mockito.any());
 
-        final List<Employee> employees = IntStream.range(0,40).mapToObj(this::createEmployee).collect(Collectors.toList());
+        final List<Employee> employees = IntStream.range(0, 40).mapToObj(this::createEmployee).collect(Collectors.toList());
 
         final List<String> result = beanUnderTest.updateEmployeesReleaseDate(employees);
         Assertions.assertNotNull(result);

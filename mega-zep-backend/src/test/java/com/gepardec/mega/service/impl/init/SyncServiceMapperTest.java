@@ -19,8 +19,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SyncServiceMapperTest {
@@ -36,6 +43,38 @@ class SyncServiceMapperTest {
     @InjectMocks
     private SyncServiceMapper mapper;
 
+    private Employee employeeForLanguage(final String language) {
+        return employeeFor("1", "thomas.herzog@gepardec.com", language);
+    }
+
+    private Employee employeeForEmail(final String email) {
+        return employeeFor("1", email, DEFAULT_FRENCH_LOCALE.getLanguage());
+    }
+
+    private Employee employeeForUserId(final String userId) {
+        return employeeFor(userId, "thomas.herzog@gepardec.com", DEFAULT_FRENCH_LOCALE.getLanguage());
+    }
+
+    private Employee employeeFor(final String userId, final String email, final String language) {
+        return Employee.builder()
+                .userId(userId)
+                .email(email)
+                .firstname("Thomas")
+                .lastname("Herzog")
+                .language(language)
+                .releaseDate("NULL")
+                .active(true)
+                .build();
+    }
+
+    private Project projectForLeadUserId(final String userId) {
+        return Project.builder()
+                .projectId("1")
+                .employees(List.of())
+                .leads(List.of(userId))
+                .categories(List.of())
+                .build();
+    }
     @Nested
     class MapToDeactivatedUser {
 
@@ -49,7 +88,6 @@ class SyncServiceMapperTest {
             assertFalse(actual.getActive());
         }
     }
-
     @Nested
     class MapEmployeeToUser {
 
@@ -100,7 +138,6 @@ class SyncServiceMapperTest {
                     () -> assertTrue(actual.getRoles().contains(Role.PROJECT_LEAD)));
         }
     }
-
     @Nested
     class MapEmployeeToNewUser {
 
@@ -259,38 +296,5 @@ class SyncServiceMapperTest {
                 assertEquals(actual.getLocale(), Locale.GERMAN);
             }
         }
-    }
-
-    private Employee employeeForLanguage(final String language) {
-        return employeeFor("1", "thomas.herzog@gepardec.com", language);
-    }
-
-    private Employee employeeForEmail(final String email) {
-        return employeeFor("1", email, DEFAULT_FRENCH_LOCALE.getLanguage());
-    }
-
-    private Employee employeeForUserId(final String userId) {
-        return employeeFor(userId, "thomas.herzog@gepardec.com", DEFAULT_FRENCH_LOCALE.getLanguage());
-    }
-
-    private Employee employeeFor(final String userId, final String email, final String language) {
-        return Employee.builder()
-                .userId(userId)
-                .email(email)
-                .firstname("Thomas")
-                .lastname("Herzog")
-                .language(language)
-                .releaseDate("NULL")
-                .active(true)
-                .build();
-    }
-
-    private Project projectForLeadUserId(final String userId) {
-        return Project.builder()
-                .projectId("1")
-                .employees(List.of())
-                .leads(List.of(userId))
-                .categories(List.of())
-                .build();
     }
 }

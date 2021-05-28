@@ -19,7 +19,11 @@ import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -91,7 +95,7 @@ public class CommentServiceImpl implements CommentService {
     public boolean deleteCommentWithId(Long id) {
         com.gepardec.mega.db.entity.Comment comment = commentRepository.findById(id);
         boolean deleted = commentRepository.deleteComment(id);
-        if(deleted) {
+        if (deleted) {
             sendMail(Mail.COMMENT_DELETED, comment);
         }
 
@@ -102,7 +106,7 @@ public class CommentServiceImpl implements CommentService {
     @Transactional(Transactional.TxType.SUPPORTS)
     public Comment updateComment(Long id, String message) {
         com.gepardec.mega.db.entity.Comment commentDb = commentRepository.findById(id);
-        if(commentDb == null) {
+        if (commentDb == null) {
             throw new EntityNotFoundException(String.format("No entity found for id = %d", id));
         }
 

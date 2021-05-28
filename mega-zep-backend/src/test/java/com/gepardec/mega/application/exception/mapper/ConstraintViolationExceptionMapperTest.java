@@ -9,7 +9,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
-import javax.validation.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -21,15 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 public class ConstraintViolationExceptionMapperTest {
-
-    public static class Model {
-
-        @NotNull(message = "must not be null")
-        private String name;
-
-        @NotNull(message = "must not be null")
-        private String email;
-    }
 
     @Mock
     private Logger logger;
@@ -75,5 +70,13 @@ public class ConstraintViolationExceptionMapperTest {
         assertTrue(actual.containsAll(List.of(
                 ValidationViolation.of("name", "must not be null"),
                 ValidationViolation.of("email", "must not be null"))));
+    }
+    public static class Model {
+
+        @NotNull(message = "must not be null")
+        private String name;
+
+        @NotNull(message = "must not be null")
+        private String email;
     }
 }

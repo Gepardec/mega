@@ -61,7 +61,6 @@ public class BusinessDayCalculator {
         }
     }
 
-
     private LocalDate calcFirstWorkingDayOfMonthForDate(LocalDate date) {
 
         LocalDate firstWorkingDayOfMonth = date.with(DAY_OF_MONTH, 1);
@@ -71,7 +70,6 @@ public class BusinessDayCalculator {
         }
         return firstWorkingDayOfMonth;
     }
-
 
     private LocalDate addWorkingdays(LocalDate date, int workdaysToAdd) {
         if (workdaysToAdd < 1) {
@@ -88,7 +86,6 @@ public class BusinessDayCalculator {
         return resultDate;
     }
 
-
     private LocalDate removeWorkingdaysFromNextMonth(LocalDate date, int workingdaysToRemove) {
         if (workingdaysToRemove < 0) {
             workingdaysToRemove *= -1;
@@ -103,7 +100,6 @@ public class BusinessDayCalculator {
         }
         return resultDate;
     }
-
 
     private boolean isWorkingDay(LocalDate date) {
         return date.getDayOfWeek() != DayOfWeek.SATURDAY

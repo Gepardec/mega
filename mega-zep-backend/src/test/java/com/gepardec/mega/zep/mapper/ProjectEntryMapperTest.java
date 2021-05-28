@@ -1,6 +1,12 @@
 package com.gepardec.mega.zep.mapper;
 
-import com.gepardec.mega.domain.model.monthlyreport.*;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyDirection;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.Task;
+import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
+import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
 import de.provantis.zep.ProjektzeitType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -10,7 +16,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ProjectEntryMapperTest {
 

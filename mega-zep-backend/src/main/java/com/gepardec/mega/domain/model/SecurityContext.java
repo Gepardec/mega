@@ -7,12 +7,12 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class SecurityContext {
 
-    @Nullable
-    public abstract String email();
-
     public static SecurityContext.Builder builder() {
         return new com.gepardec.mega.domain.model.AutoValue_SecurityContext.Builder();
     }
+
+    @Nullable
+    public abstract String email();
 
     @AutoValue.Builder
     public abstract static class Builder {

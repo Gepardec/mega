@@ -15,6 +15,10 @@ import java.util.List;
 @JsonDeserialize(builder = com.gepardec.mega.rest.model.AutoValue_ManagementEntry.Builder.class)
 public abstract class ManagementEntry {
 
+    public static Builder builder() {
+        return new com.gepardec.mega.rest.model.AutoValue_ManagementEntry.Builder();
+    }
+
     @JsonProperty
     public abstract Employee employee();
 
@@ -42,10 +46,6 @@ public abstract class ManagementEntry {
 
     @JsonProperty
     public abstract String entryDate();
-
-    public static Builder builder() {
-        return new com.gepardec.mega.rest.model.AutoValue_ManagementEntry.Builder();
-    }
 
     @AutoValue.Builder
     public abstract static class Builder {

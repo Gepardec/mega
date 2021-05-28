@@ -1,6 +1,13 @@
 package com.gepardec.mega.domain.calculation.time;
 
-import com.gepardec.mega.domain.model.monthlyreport.*;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyDirection;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.Task;
+import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
+import com.gepardec.mega.domain.model.monthlyreport.TimeWarningType;
+import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
+import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -8,7 +15,9 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CoreWorkingHoursCalculatorTest {
 
@@ -19,6 +28,32 @@ class CoreWorkingHoursCalculatorTest {
         calculator = new CoreWorkingHoursCalculator();
     }
 
+    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int endHour) {
+        return projectTimeEntryFor(startHour, 0, endHour, 0);
+    }
+
+    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int startMinute, final int endHour, final int endMinute) {
+        return ProjectTimeEntry.of(
+                LocalDateTime.of(2020, 1, 7, startHour, startMinute),
+                LocalDateTime.of(2020, 1, 7, endHour, endMinute),
+                Task.BEARBEITEN,
+                WorkingLocation.MAIN);
+    }
+
+    private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int endHour, final Vehicle vehicle) {
+        return journeyTimeEntryFor(startHour, 0, endHour, 0, vehicle);
+    }
+
+    private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int startMinute, final int endHour, final int endMinute, final Vehicle vehicle) {
+        return JourneyTimeEntry.newBuilder()
+                .fromTime(LocalDateTime.of(2020, 1, 7, startHour, startMinute))
+                .toTime(LocalDateTime.of(2020, 1, 7, endHour, endMinute))
+                .task(Task.REISEN)
+                .workingLocation(WorkingLocation.MAIN)
+                .journeyDirection(JourneyDirection.TO)
+                .vehicle(vehicle)
+                .build();
+    }
     @Nested
     class Calculate {
 
@@ -132,32 +167,5 @@ class CoreWorkingHoursCalculatorTest {
                 assertTrue(result.isEmpty());
             }
         }
-    }
-
-    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int endHour) {
-        return projectTimeEntryFor(startHour, 0, endHour, 0);
-    }
-
-    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int startMinute, final int endHour, final int endMinute) {
-        return ProjectTimeEntry.of(
-                LocalDateTime.of(2020, 1, 7, startHour, startMinute),
-                LocalDateTime.of(2020, 1, 7, endHour, endMinute),
-                Task.BEARBEITEN,
-                WorkingLocation.MAIN);
-    }
-
-    private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int endHour, final Vehicle vehicle) {
-        return journeyTimeEntryFor(startHour, 0, endHour, 0, vehicle);
-    }
-
-    private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int startMinute, final int endHour, final int endMinute, final Vehicle vehicle) {
-        return JourneyTimeEntry.newBuilder()
-                .fromTime(LocalDateTime.of(2020, 1, 7, startHour, startMinute))
-                .toTime(LocalDateTime.of(2020, 1, 7, endHour, endMinute))
-                .task(Task.REISEN)
-                .workingLocation(WorkingLocation.MAIN)
-                .journeyDirection(JourneyDirection.TO)
-                .vehicle(vehicle)
-                .build();
     }
 }

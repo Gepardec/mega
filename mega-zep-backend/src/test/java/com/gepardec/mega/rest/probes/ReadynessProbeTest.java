@@ -22,6 +22,7 @@ class ReadynessProbeTest {
                 .get("/health/live")
                 .then().assertThat().statusCode(HttpStatus.SC_OK);
     }
+
     @Test
     void health_whenCalled_thenReturnsHttpStatusOK() {
         given().when()

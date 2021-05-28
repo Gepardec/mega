@@ -4,8 +4,22 @@ import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.service.impl.employee.EmployeeMapper;
 import com.gepardec.mega.zep.mapper.ProjectEntryMapper;
-import de.provantis.zep.*;
-import org.junit.jupiter.api.*;
+import de.provantis.zep.MitarbeiterListeType;
+import de.provantis.zep.MitarbeiterType;
+import de.provantis.zep.ProjektListeType;
+import de.provantis.zep.ProjektMitarbeiterListeType;
+import de.provantis.zep.ProjektMitarbeiterType;
+import de.provantis.zep.ProjektType;
+import de.provantis.zep.ReadMitarbeiterResponseType;
+import de.provantis.zep.ReadProjekteResponseType;
+import de.provantis.zep.ResponseHeaderType;
+import de.provantis.zep.UpdateMitarbeiterResponseType;
+import de.provantis.zep.ZepSoapPortType;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -33,7 +47,7 @@ public class ZepServiceImplTest {
 
     private ZepServiceImpl beanUnderTest;
 
-    private ProjectEntryMapper projectEntryMapper = new ProjectEntryMapper();
+    private final ProjectEntryMapper projectEntryMapper = new ProjectEntryMapper();
 
     @BeforeEach
     void setUp() {
@@ -148,11 +162,46 @@ public class ZepServiceImplTest {
         ));
     }
 
+    private MitarbeiterType createMitarbeiterType(final int userId) {
+        final MitarbeiterType mitarbeiter = new MitarbeiterType();
+        final String name = "Thomas_" + userId;
+
+        mitarbeiter.setEmail(name + "@gepardec.com");
+        mitarbeiter.setVorname(name);
+        mitarbeiter.setNachname(name + "_Nachname");
+        mitarbeiter.setTitel("Ing.");
+        mitarbeiter.setUserId(String.valueOf(userId));
+        mitarbeiter.setAnrede("Herr");
+        mitarbeiter.setPreisgruppe("ARCHITEKT");
+        mitarbeiter.setFreigabedatum("2020-01-01");
+
+        return mitarbeiter;
+    }
+
+    private ReadMitarbeiterResponseType createReadMitarbeiterResponseType(final MitarbeiterType... mitarbeiterType) {
+        final ReadMitarbeiterResponseType readMitarbeiterResponseType = new ReadMitarbeiterResponseType();
+        readMitarbeiterResponseType.setMitarbeiterListe(new MitarbeiterListeType());
+        readMitarbeiterResponseType.getMitarbeiterListe().getMitarbeiter().addAll(List.of(mitarbeiterType));
+        return readMitarbeiterResponseType;
+    }
+
+    private ResponseHeaderType createResponseHeaderType(final String returnCode) {
+        final ResponseHeaderType responseHeaderType = new ResponseHeaderType();
+        responseHeaderType.setReturnCode(returnCode);
+        return responseHeaderType;
+    }
+
+    private UpdateMitarbeiterResponseType createUpaUpdateMitarbeiterResponseType(final ResponseHeaderType responseHeaderType) {
+        final UpdateMitarbeiterResponseType updateMitarbeiterResponseType = new UpdateMitarbeiterResponseType();
+        updateMitarbeiterResponseType.setResponseHeader(responseHeaderType);
+        return updateMitarbeiterResponseType;
+    }
     @Nested
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class whenFilterProjectEmployee {
 
         private ProjektMitarbeiterListeType projektMitarbeiterListeType;
+
         private LocalDate monthYear;
 
         @BeforeEach
@@ -282,40 +331,5 @@ public class ZepServiceImplTest {
             Assertions.assertEquals(0, projectsForMonthYear.get(0).employees().size());
             Assertions.assertEquals(0, projectsForMonthYear.get(0).leads().size());
         }
-    }
-
-    private MitarbeiterType createMitarbeiterType(final int userId) {
-        final MitarbeiterType mitarbeiter = new MitarbeiterType();
-        final String name = "Thomas_" + userId;
-
-        mitarbeiter.setEmail(name + "@gepardec.com");
-        mitarbeiter.setVorname(name);
-        mitarbeiter.setNachname(name + "_Nachname");
-        mitarbeiter.setTitel("Ing.");
-        mitarbeiter.setUserId(String.valueOf(userId));
-        mitarbeiter.setAnrede("Herr");
-        mitarbeiter.setPreisgruppe("ARCHITEKT");
-        mitarbeiter.setFreigabedatum("2020-01-01");
-
-        return mitarbeiter;
-    }
-
-    private ReadMitarbeiterResponseType createReadMitarbeiterResponseType(final MitarbeiterType... mitarbeiterType) {
-        final ReadMitarbeiterResponseType readMitarbeiterResponseType = new ReadMitarbeiterResponseType();
-        readMitarbeiterResponseType.setMitarbeiterListe(new MitarbeiterListeType());
-        readMitarbeiterResponseType.getMitarbeiterListe().getMitarbeiter().addAll(List.of(mitarbeiterType));
-        return readMitarbeiterResponseType;
-    }
-
-    private ResponseHeaderType createResponseHeaderType(final String returnCode) {
-        final ResponseHeaderType responseHeaderType = new ResponseHeaderType();
-        responseHeaderType.setReturnCode(returnCode);
-        return responseHeaderType;
-    }
-
-    private UpdateMitarbeiterResponseType createUpaUpdateMitarbeiterResponseType(final ResponseHeaderType responseHeaderType) {
-        final UpdateMitarbeiterResponseType updateMitarbeiterResponseType = new UpdateMitarbeiterResponseType();
-        updateMitarbeiterResponseType.setResponseHeader(responseHeaderType);
-        return updateMitarbeiterResponseType;
     }
 }

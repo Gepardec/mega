@@ -1,6 +1,12 @@
 package com.gepardec.mega.zep.mapper;
 
-import com.gepardec.mega.domain.model.monthlyreport.*;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyDirection;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.Task;
+import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
+import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
 import de.provantis.zep.ProjektzeitType;
 
 import javax.enterprise.context.ApplicationScoped;

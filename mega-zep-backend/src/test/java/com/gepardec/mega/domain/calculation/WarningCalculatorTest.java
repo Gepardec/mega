@@ -1,6 +1,15 @@
 package com.gepardec.mega.domain.calculation;
 
-import com.gepardec.mega.domain.model.monthlyreport.*;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyDirection;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyWarningType;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.Task;
+import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
+import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
+import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
 import com.gepardec.mega.service.impl.monthlyreport.WarningCalculator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,7 +24,10 @@ import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class WarningCalculatorTest {
@@ -26,6 +38,49 @@ class WarningCalculatorTest {
     @Mock
     ResourceBundle messages;
 
+    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int endHour) {
+        return projectTimeEntryFor(1, startHour, 0, 1, endHour, 0, WorkingLocation.MAIN);
+    }
+
+    private ProjectTimeEntry projectTimeEntryFor(final int day, final int startHour, final int endHour) {
+        return projectTimeEntryFor(day, startHour, 0, day, endHour, 0, WorkingLocation.MAIN);
+    }
+
+    private ProjectTimeEntry projectTimeEntryFor(final int day, final int startHour, final int startMinute, final int endHour,
+                                                 final int endMinute) {
+        return projectTimeEntryFor(day, startHour, startMinute, day, endHour, endMinute, WorkingLocation.MAIN);
+    }
+
+    private ProjectTimeEntry projectTimeEntryFor(final int day, final int startHour, final int endHour, WorkingLocation workingLocation) {
+        return projectTimeEntryFor(day, startHour, 0, day, endHour, 0, workingLocation);
+    }
+
+    private ProjectTimeEntry projectTimeEntryFor(final int startDay, final int startHour, final int startMinute, final int endDay, final int endHour,
+                                                 final int endMinute, WorkingLocation workingLocation) {
+        return ProjectTimeEntry.of(
+                LocalDateTime.of(2020, 1, startDay, startHour, startMinute),
+                LocalDateTime.of(2020, 1, endDay, endHour, endMinute),
+                Task.BEARBEITEN,
+                workingLocation);
+    }
+
+    private JourneyTimeEntry journeyTimeEntryFor(final int day, final int startHour, final int endHour, JourneyDirection journeyDirection,
+                                                 WorkingLocation workingLocation, Vehicle vehicle) {
+        return journeyTimeEntryFor(day, startHour, 0, day, endHour, 0, journeyDirection, workingLocation, vehicle);
+    }
+
+    private JourneyTimeEntry journeyTimeEntryFor(final int startDay, final int startHour, final int startMinute, final int endDay, final int endHour,
+                                                 final int endMinute,
+                                                 JourneyDirection journeyDirection, WorkingLocation workingLocation, Vehicle vehicle) {
+        return JourneyTimeEntry.newBuilder()
+                .fromTime(LocalDateTime.of(2020, 1, startDay, startHour, startMinute))
+                .toTime(LocalDateTime.of(2020, 1, endDay, endHour, endMinute))
+                .task(Task.REISEN)
+                .journeyDirection(journeyDirection)
+                .workingLocation(workingLocation)
+                .vehicle(vehicle)
+                .build();
+    }
     @Nested
     class DetermineTimeWarnings {
 
@@ -395,49 +450,5 @@ class WarningCalculatorTest {
                 }
             }
         }
-    }
-
-    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int endHour) {
-        return projectTimeEntryFor(1, startHour, 0, 1, endHour, 0, WorkingLocation.MAIN);
-    }
-
-    private ProjectTimeEntry projectTimeEntryFor(final int day, final int startHour, final int endHour) {
-        return projectTimeEntryFor(day, startHour, 0, day, endHour, 0, WorkingLocation.MAIN);
-    }
-
-    private ProjectTimeEntry projectTimeEntryFor(final int day, final int startHour, final int startMinute, final int endHour,
-            final int endMinute) {
-        return projectTimeEntryFor(day, startHour, startMinute, day, endHour, endMinute, WorkingLocation.MAIN);
-    }
-
-    private ProjectTimeEntry projectTimeEntryFor(final int day, final int startHour, final int endHour, WorkingLocation workingLocation) {
-        return projectTimeEntryFor(day, startHour, 0, day, endHour, 0, workingLocation);
-    }
-
-    private ProjectTimeEntry projectTimeEntryFor(final int startDay, final int startHour, final int startMinute, final int endDay, final int endHour,
-            final int endMinute, WorkingLocation workingLocation) {
-        return ProjectTimeEntry.of(
-                LocalDateTime.of(2020, 1, startDay, startHour, startMinute),
-                LocalDateTime.of(2020, 1, endDay, endHour, endMinute),
-                Task.BEARBEITEN,
-                workingLocation);
-    }
-
-    private JourneyTimeEntry journeyTimeEntryFor(final int day, final int startHour, final int endHour, JourneyDirection journeyDirection,
-            WorkingLocation workingLocation, Vehicle vehicle) {
-        return journeyTimeEntryFor(day, startHour, 0, day, endHour, 0, journeyDirection, workingLocation, vehicle);
-    }
-
-    private JourneyTimeEntry journeyTimeEntryFor(final int startDay, final int startHour, final int startMinute, final int endDay, final int endHour,
-            final int endMinute,
-            JourneyDirection journeyDirection, WorkingLocation workingLocation, Vehicle vehicle) {
-        return JourneyTimeEntry.newBuilder()
-                .fromTime(LocalDateTime.of(2020, 1, startDay, startHour, startMinute))
-                .toTime(LocalDateTime.of(2020, 1, endDay, endHour, endMinute))
-                .task(Task.REISEN)
-                .journeyDirection(journeyDirection)
-                .workingLocation(workingLocation)
-                .vehicle(vehicle)
-                .build();
     }
 }

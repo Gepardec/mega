@@ -11,6 +11,14 @@ import com.google.auto.value.AutoValue;
 @JsonDeserialize(builder = com.gepardec.mega.rest.model.AutoValue_NewCommentEntry.Builder.class)
 public abstract class NewCommentEntry {
 
+    public NewCommentEntry() {
+        super();
+    }
+
+    public static NewCommentEntry.Builder builder() {
+        return new com.gepardec.mega.rest.model.AutoValue_NewCommentEntry.Builder();
+    }
+
     @JsonProperty
     public abstract Long stepId();
 
@@ -28,14 +36,6 @@ public abstract class NewCommentEntry {
 
     @JsonProperty
     public abstract String currentMonthYear();
-
-    public NewCommentEntry() {
-        super();
-    }
-
-    public static NewCommentEntry.Builder builder() {
-        return new com.gepardec.mega.rest.model.AutoValue_NewCommentEntry.Builder();
-    }
 
     @AutoValue.Builder
     public abstract static class Builder {
@@ -61,6 +61,5 @@ public abstract class NewCommentEntry {
         public abstract NewCommentEntry build();
 
     }
-
 
 }
