@@ -1,23 +1,57 @@
 package com.gepardec.mega.domain.calculation.time;
 
-import com.gepardec.mega.domain.model.monthlyreport.*;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyDirection;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.Task;
+import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
+import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
+import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class InsufficientRestTimeCalculatorTest {
 
-    private InsufficientRestCalculator calculator = new InsufficientRestCalculator();
+    private final InsufficientRestCalculator calculator = new InsufficientRestCalculator();
 
     @Test
     void calculate_whenDataListEmpty_thenNoWarningsCreated() {
         assertTrue(calculator.calculate(List.of()).isEmpty());
     }
 
+    private ProjectTimeEntry projectTimeEntryFor(final int day, final int startHour, final int startMinute, final int endHour,
+                                                 final int endMinute) {
+        return projectTimeEntryFor(day, startHour, startMinute, day, endHour, endMinute);
+    }
+
+    private ProjectTimeEntry projectTimeEntryFor(final int startDay, final int startHour, final int startMinute, final int endDay, final int endHour,
+                                                 final int endMinute) {
+        return ProjectTimeEntry.of(
+                LocalDateTime.of(2020, 1, startDay, startHour, startMinute),
+                LocalDateTime.of(2020, 1, endDay, endHour, endMinute),
+                Task.BEARBEITEN,
+                WorkingLocation.MAIN);
+    }
+
+    private JourneyTimeEntry journeyTimeEntryFor(final int startDay, final int startHour, final int startMinute, final int endDay, final int endHour,
+                                                 final int endMinute) {
+        return JourneyTimeEntry.newBuilder()
+                .fromTime(LocalDateTime.of(2020, startDay, 7, startHour, startMinute))
+                .toTime(LocalDateTime.of(2020, endDay, 7, endHour, endMinute))
+                .task(Task.REISEN)
+                .workingLocation(WorkingLocation.MAIN)
+                .journeyDirection(JourneyDirection.TO)
+                .vehicle(Vehicle.OTHER_INACTIVE)
+                .build();
+    }
     @Nested
     class Calculate {
 
@@ -103,31 +137,5 @@ class InsufficientRestTimeCalculatorTest {
                 assertTrue(warnings.isEmpty());
             }
         }
-    }
-
-    private ProjectTimeEntry projectTimeEntryFor(final int day, final int startHour, final int startMinute, final int endHour,
-            final int endMinute) {
-        return projectTimeEntryFor(day, startHour, startMinute, day, endHour, endMinute);
-    }
-
-    private ProjectTimeEntry projectTimeEntryFor(final int startDay, final int startHour, final int startMinute, final int endDay, final int endHour,
-            final int endMinute) {
-        return ProjectTimeEntry.of(
-                LocalDateTime.of(2020, 1, startDay, startHour, startMinute),
-                LocalDateTime.of(2020, 1, endDay, endHour, endMinute),
-                Task.BEARBEITEN,
-                WorkingLocation.MAIN);
-    }
-
-    private JourneyTimeEntry journeyTimeEntryFor(final int startDay, final int startHour, final int startMinute, final int endDay, final int endHour,
-            final int endMinute) {
-        return JourneyTimeEntry.newBuilder()
-                .fromTime(LocalDateTime.of(2020, startDay, 7, startHour, startMinute))
-                .toTime(LocalDateTime.of(2020, endDay, 7, endHour, endMinute))
-                .task(Task.REISEN)
-                .workingLocation(WorkingLocation.MAIN)
-                .journeyDirection(JourneyDirection.TO)
-                .vehicle(Vehicle.OTHER_INACTIVE)
-                .build();
     }
 }

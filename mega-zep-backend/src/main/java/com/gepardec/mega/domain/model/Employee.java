@@ -54,6 +54,7 @@ public abstract class Employee {
 
     @JsonProperty
     public abstract boolean active();
+
     @AutoValue.Builder
     public abstract static class Builder {
         @JsonProperty

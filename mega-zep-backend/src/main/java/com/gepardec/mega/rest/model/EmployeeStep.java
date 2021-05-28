@@ -27,6 +27,7 @@ public abstract class EmployeeStep {
 
     @JsonProperty
     public abstract String currentMonthYear();
+
     @AutoValue.Builder
     public abstract static class Builder {
         @JsonProperty

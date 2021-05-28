@@ -13,6 +13,7 @@ public abstract class SecurityContext {
 
     @Nullable
     public abstract String email();
+
     @AutoValue.Builder
     public abstract static class Builder {
         public abstract SecurityContext.Builder email(String email);

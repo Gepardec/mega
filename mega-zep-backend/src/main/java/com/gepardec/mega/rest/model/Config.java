@@ -34,6 +34,7 @@ public abstract class Config {
 
     @JsonProperty
     public abstract String version();
+
     @AutoValue.Builder
     public abstract static class Builder {
 

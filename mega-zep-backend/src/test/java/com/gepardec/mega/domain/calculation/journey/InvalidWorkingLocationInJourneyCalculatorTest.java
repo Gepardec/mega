@@ -1,6 +1,14 @@
 package com.gepardec.mega.domain.calculation.journey;
 
-import com.gepardec.mega.domain.model.monthlyreport.*;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyDirection;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyWarningType;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.Task;
+import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
+import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,6 +28,35 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
         calculator = new InvalidWorkingLocationInJourneyCalculator();
     }
 
+    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int endHour, final WorkingLocation workingLocation) {
+        return projectTimeEntryFor(startHour, 0, endHour, 0, workingLocation);
+    }
+
+    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int startMinute, final int endHour, final int endMinute,
+                                                 final WorkingLocation workingLocation) {
+        return ProjectTimeEntry.of(
+                LocalDateTime.of(2020, 1, 7, startHour, startMinute),
+                LocalDateTime.of(2020, 1, 7, endHour, endMinute),
+                Task.BEARBEITEN,
+                workingLocation);
+    }
+
+    private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int endHour, final JourneyDirection direction,
+                                                 final WorkingLocation workingLocation) {
+        return journeyTimeEntryFor(startHour, 0, endHour, 0, direction, workingLocation);
+    }
+
+    private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int startMinute, final int endHour, final int endMinute,
+                                                 final JourneyDirection direction, final WorkingLocation workingLocation) {
+        return JourneyTimeEntry.newBuilder()
+                .fromTime(LocalDateTime.of(2020, 1, 7, startHour, startMinute))
+                .toTime(LocalDateTime.of(2020, 1, 7, endHour, endMinute))
+                .task(Task.REISEN)
+                .workingLocation(workingLocation)
+                .journeyDirection(direction)
+                .vehicle(Vehicle.OTHER_INACTIVE)
+                .build();
+    }
     @Nested
     class Calculate {
 
@@ -170,35 +207,5 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
                 assertTrue(warnings.isEmpty());
             }
         }
-    }
-
-    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int endHour, final WorkingLocation workingLocation) {
-        return projectTimeEntryFor(startHour, 0, endHour, 0, workingLocation);
-    }
-
-    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int startMinute, final int endHour, final int endMinute,
-            final WorkingLocation workingLocation) {
-        return ProjectTimeEntry.of(
-                LocalDateTime.of(2020, 1, 7, startHour, startMinute),
-                LocalDateTime.of(2020, 1, 7, endHour, endMinute),
-                Task.BEARBEITEN,
-                workingLocation);
-    }
-
-    private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int endHour, final JourneyDirection direction,
-            final WorkingLocation workingLocation) {
-        return journeyTimeEntryFor(startHour, 0, endHour, 0, direction, workingLocation);
-    }
-
-    private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int startMinute, final int endHour, final int endMinute,
-            final JourneyDirection direction, final WorkingLocation workingLocation) {
-        return JourneyTimeEntry.newBuilder()
-                .fromTime(LocalDateTime.of(2020, 1, 7, startHour, startMinute))
-                .toTime(LocalDateTime.of(2020, 1, 7, endHour, endMinute))
-                .task(Task.REISEN)
-                .workingLocation(workingLocation)
-                .journeyDirection(direction)
-                .vehicle(Vehicle.OTHER_INACTIVE)
-                .build();
     }
 }

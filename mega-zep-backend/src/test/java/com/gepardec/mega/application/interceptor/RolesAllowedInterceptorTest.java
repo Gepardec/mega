@@ -16,19 +16,13 @@ import java.lang.annotation.Annotation;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RolesAllowedInterceptorTest {
-
-    @RolesAllowed(Role.EMPLOYEE)
-    private static class TargetWithAnnotation {
-
-    }
-
-    private static class TargetNoAnnotation {
-
-    }
 
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private UserContext userContext;
@@ -95,5 +89,12 @@ class RolesAllowedInterceptorTest {
                 return RolesAllowed.class;
             }
         };
+    }
+    @RolesAllowed(Role.EMPLOYEE)
+    private static class TargetWithAnnotation {
+
+    }
+    private static class TargetNoAnnotation {
+
     }
 }

@@ -13,6 +13,7 @@ public abstract class UserContext {
 
     @Nullable
     public abstract User user();
+
     @AutoValue.Builder
     public abstract static class Builder {
 

@@ -14,6 +14,7 @@ public abstract class ProjectEmployees {
     public abstract String projectId();
 
     public abstract List<String> employees();
+
     @AutoValue.Builder
     public abstract static class Builder {
         public abstract Builder projectId(String projectId);

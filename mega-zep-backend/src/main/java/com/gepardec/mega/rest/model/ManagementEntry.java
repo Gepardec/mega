@@ -46,6 +46,7 @@ public abstract class ManagementEntry {
 
     @JsonProperty
     public abstract String entryDate();
+
     @AutoValue.Builder
     public abstract static class Builder {
         @JsonProperty

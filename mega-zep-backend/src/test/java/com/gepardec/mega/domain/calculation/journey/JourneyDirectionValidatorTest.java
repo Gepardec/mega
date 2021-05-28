@@ -6,8 +6,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static com.gepardec.mega.domain.model.monthlyreport.JourneyDirection.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.gepardec.mega.domain.model.monthlyreport.JourneyDirection.BACK;
+import static com.gepardec.mega.domain.model.monthlyreport.JourneyDirection.FURTHER;
+import static com.gepardec.mega.domain.model.monthlyreport.JourneyDirection.TO;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JourneyDirectionValidatorTest {
 
@@ -36,7 +42,6 @@ class JourneyDirectionValidatorTest {
                     () -> assertNull(handler.validate(TO, BACK)),
                     () -> assertNull(handler.validate(BACK, null)));
         }
-
 
         @Test
         void whenOnlyJourneyStarted_thenReturnsNoWarning() {
@@ -99,7 +104,6 @@ class JourneyDirectionValidatorTest {
                     () -> assertNull(handler.validate(BACK, FURTHER)),
                     () -> assertEquals(JourneyWarningType.TO_MISSING, handler.validate(FURTHER, null)));
         }
-
 
         @Test
         void whenFirstJourneyValidAndSecondJourneyIsNotStarted_thenOnLastJourneyReturnsJourneyToMissingWarning() {

@@ -1,8 +1,8 @@
 package com.gepardec.mega.service.impl.init;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
-import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.Project;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.Step;
 import com.gepardec.mega.domain.model.StepEntry;
 import com.gepardec.mega.domain.model.User;
@@ -26,7 +26,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class StepEntrySyncServiceImplTest {
@@ -105,6 +109,45 @@ class StepEntrySyncServiceImplTest {
         when(notificationConfig.getOmMailAddresses()).thenReturn(List.of(userForOm(3).email()));
     }
 
+    private User userForProjectLead(final int id) {
+        return userFor(id, "ProjectLeadGepard", "Gepardec")
+                .build();
+    }
+
+    private User userForOm(final int id) {
+        return userFor(id, "OfficeManagmentGepardin", "Gepardec")
+                .build();
+    }
+
+    private User userForEmployee(final int id) {
+        return userFor(id, "Gepard", "Gepardec")
+                .build();
+    }
+
+    private User.Builder userFor(final int id, final String firstname, final String lastname) {
+        return User.builder()
+                .dbId(id)
+                .userId(id + "-userId")
+                .firstname(firstname + id)
+                .lastname(lastname)
+                .roles(Set.of(Role.EMPLOYEE))
+                .email(String.format("%s%s.%s@gepardec.com", firstname, id, lastname));
+    }
+
+    private Project.Builder projectFor(final int id) {
+        return Project.builder()
+                .projectId(String.valueOf(id))
+                .description(String.format("Description of Project %s", id))
+                .categories(List.of());
+    }
+
+    private Step.Builder stepFor(final int id, final String name, final Role role) {
+        return Step.builder()
+                .dbId(id)
+                .ordinal(id)
+                .name(name)
+                .role(role);
+    }
     @Nested
     class WithAll {
 
@@ -125,7 +168,6 @@ class StepEntrySyncServiceImplTest {
             verify(stepEntryService, times(34)).addStepEntry(Mockito.any());
         }
     }
-
     @Nested
     class WithProjectLead {
 
@@ -219,7 +261,6 @@ class StepEntrySyncServiceImplTest {
             Assertions.assertEquals(10, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count());
         }
     }
-
     @Nested
     class WithOfficeManagment {
 
@@ -297,7 +338,6 @@ class StepEntrySyncServiceImplTest {
             Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count());
         }
     }
-
     @Nested
     class WithEmployee {
 
@@ -347,7 +387,6 @@ class StepEntrySyncServiceImplTest {
             Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIMES")).count());
         }
     }
-
     @Nested
     class WithProject {
 
@@ -391,7 +430,6 @@ class StepEntrySyncServiceImplTest {
             Assertions.assertEquals(3, stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().projectId().equals(String.valueOf(3))).count());
         }
     }
-
     @Nested
     class WithStep {
 
@@ -428,45 +466,5 @@ class StepEntrySyncServiceImplTest {
             // Step 5
             Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count());
         }
-    }
-
-    private User userForProjectLead(final int id) {
-        return userFor(id, "ProjectLeadGepard", "Gepardec")
-                .build();
-    }
-
-    private User userForOm(final int id) {
-        return userFor(id, "OfficeManagmentGepardin", "Gepardec")
-                .build();
-    }
-
-    private User userForEmployee(final int id) {
-        return userFor(id, "Gepard", "Gepardec")
-                .build();
-    }
-
-    private User.Builder userFor(final int id, final String firstname, final String lastname) {
-        return User.builder()
-                .dbId(id)
-                .userId(id + "-userId")
-                .firstname(firstname + id)
-                .lastname(lastname)
-                .roles(Set.of(Role.EMPLOYEE))
-                .email(String.format("%s%s.%s@gepardec.com", firstname, id, lastname));
-    }
-
-    private Project.Builder projectFor(final int id) {
-        return Project.builder()
-                .projectId(String.valueOf(id))
-                .description(String.format("Description of Project %s", id))
-                .categories(List.of());
-    }
-
-    private Step.Builder stepFor(final int id, final String name, final Role role) {
-        return Step.builder()
-                .dbId(id)
-                .ordinal(id)
-                .name(name)
-                .role(role);
     }
 }

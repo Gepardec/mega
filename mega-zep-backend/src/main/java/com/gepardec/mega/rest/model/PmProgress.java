@@ -41,6 +41,7 @@ public abstract class PmProgress {
 
     @JsonProperty
     public abstract Long stepId();
+
     @AutoValue.Builder
     public abstract static class Builder {
         @JsonProperty

@@ -16,7 +16,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 class MailSenderTest {
@@ -33,12 +35,6 @@ class MailSenderTest {
     @Inject
     ApplicationConfig applicationConfig;
 
-    @BeforeEach
-    void init() {
-        assertTrue(mailMockSetting, "This test can only run when mail mocking is true");
-        mailbox.clear();
-    }
-
     public static Stream<Arguments> emailsWithSubject() {
         return Stream.of(
                 Arguments.of(Mail.EMPLOYEE_CHECK_PROJECTTIME, "UNIT-TEST: Friendly Reminder: Buchungen kontrollieren"),
@@ -51,6 +47,12 @@ class MailSenderTest {
                 Arguments.of(Mail.COMMENT_CREATED, "UNIT-TEST: MEGA: Anmerkung von Thomas erhalten"),
                 Arguments.of(Mail.COMMENT_CLOSED, "UNIT-TEST: MEGA: Anmerkung von Thomas erledigt")
         );
+    }
+
+    @BeforeEach
+    void init() {
+        assertTrue(mailMockSetting, "This test can only run when mail mocking is true");
+        mailbox.clear();
     }
 
     @ParameterizedTest

@@ -3,6 +3,7 @@ package com.gepardec.mega.rest.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gepardec.mega.db.entity.project.State;
 import com.google.auto.value.AutoValue;
 
 import java.util.List;
@@ -20,7 +21,11 @@ public abstract class ProjectManagementEntry {
     public abstract String projectName();
 
     @JsonProperty
+    public abstract State controlProjectState();
+
+    @JsonProperty
     public abstract List<ManagementEntry> entries();
+
     @AutoValue.Builder
     public abstract static class Builder {
         @JsonProperty

@@ -43,6 +43,7 @@ public abstract class ApplicationInfo {
     @JsonProperty
     @JsonSerialize(using = DurationSerializer.class)
     public abstract Duration upTime();
+
     @AutoValue.Builder
     public abstract static class Builder {
         public abstract Builder version(String version);

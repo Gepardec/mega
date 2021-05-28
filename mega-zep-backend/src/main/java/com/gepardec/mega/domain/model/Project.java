@@ -32,6 +32,7 @@ public abstract class Project {
 
     @JsonProperty
     public abstract List<String> categories();
+
     @AutoValue.Builder
     public abstract static class Builder {
         @JsonProperty

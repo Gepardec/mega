@@ -42,6 +42,7 @@ public abstract class User {
 
     @JsonProperty
     public abstract Set<Role> roles();
+
     @AutoValue.Builder
     public abstract static class Builder {
         @JsonProperty

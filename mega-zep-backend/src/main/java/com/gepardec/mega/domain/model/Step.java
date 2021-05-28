@@ -25,6 +25,7 @@ public abstract class Step {
 
     @JsonProperty
     public abstract Role role();
+
     @AutoValue.Builder
     public abstract static class Builder {
         @JsonProperty

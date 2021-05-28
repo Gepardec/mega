@@ -35,6 +35,7 @@ public abstract class StepEntry {
 
     @JsonProperty
     public abstract Step step();
+
     @AutoValue.Builder
     public abstract static class Builder {
 

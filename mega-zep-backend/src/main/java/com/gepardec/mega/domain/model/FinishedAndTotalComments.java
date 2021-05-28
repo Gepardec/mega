@@ -12,6 +12,7 @@ public abstract class FinishedAndTotalComments {
     public abstract Long finishedComments();
 
     public abstract Long totalComments();
+
     @AutoValue.Builder
     public abstract static class Builder {
         public abstract Builder finishedComments(Long finishedComments);

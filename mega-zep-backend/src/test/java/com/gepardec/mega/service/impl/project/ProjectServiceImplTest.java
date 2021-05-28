@@ -1,8 +1,8 @@
 package com.gepardec.mega.service.impl.project;
 
-import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.ProjectFilter;
+import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.zep.ZepService;
 import org.junit.jupiter.api.Assertions;
@@ -30,6 +30,11 @@ class ProjectServiceImplTest {
     @InjectMocks
     ProjectServiceImpl projectService;
 
+    private Project.Builder projectFor(final String id) {
+        return Project.builder()
+                .projectId(id)
+                .description(String.format("Description of Project %s", id));
+    }
     @Nested
     class WhenNoFilter {
 
@@ -61,7 +66,6 @@ class ProjectServiceImplTest {
             Assertions.assertFalse(projectsForMonthYear.isEmpty());
         }
     }
-
     @Nested
     class WhenFilter {
 
@@ -119,11 +123,5 @@ class ProjectServiceImplTest {
             Assertions.assertEquals(1, projectsForMonthYear.size());
             Assertions.assertEquals("1", projectsForMonthYear.get(0).projectId());
         }
-    }
-
-    private Project.Builder projectFor(final String id) {
-        return Project.builder()
-                .projectId(id)
-                .description(String.format("Description of Project %s", id));
     }
 }
