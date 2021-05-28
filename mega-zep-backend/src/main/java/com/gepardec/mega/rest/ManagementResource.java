@@ -4,6 +4,7 @@ import com.gepardec.mega.application.interceptor.RolesAllowed;
 import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.StepEntry;
+import com.gepardec.mega.db.entity.project.ProjectState;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.FinishedAndTotalComments;
 import com.gepardec.mega.domain.model.ProjectEmployees;
@@ -107,6 +108,10 @@ public class ManagementResource {
             if (!entries.isEmpty()) {
                 projectManagementEntries.add(ProjectManagementEntry.builder()
                         .projectName(currentProject.projectId())
+                        .controlProjectState(ProjectState.OPEN)
+                        .controlBillingState(ProjectState.WORK_IN_PROGRESS)
+                        .presetControlProjectState(Boolean.TRUE)
+                        .presetControlBillingState(Boolean.FALSE)
                         .entries(entries)
                         .build()
                 );

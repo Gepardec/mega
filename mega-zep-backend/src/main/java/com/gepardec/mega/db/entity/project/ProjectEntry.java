@@ -102,9 +102,9 @@ public class ProjectEntry {
     /**
      * The state of the project step
      *
-     * @see State
+     * @see ProjectState
      */
-    private State state;
+    private ProjectState state;
 
     /**
      * The related step of this project entry
@@ -185,11 +185,11 @@ public class ProjectEntry {
         this.preset = preset;
     }
 
-    public State getState() {
+    public ProjectState getState() {
         return state;
     }
 
-    public void setState(State state) {
+    public void setState(ProjectState state) {
         this.state = state;
     }
 

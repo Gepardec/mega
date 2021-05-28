@@ -1,6 +1,6 @@
 package com.gepardec.mega.db.entity.project;
 
-public enum State {
+public enum ProjectState {
     OPEN(0, "Offen"),
     WORK_IN_PROGRESS(1, "In Arbeit"),
     DONE(2, "Fertig"),
@@ -10,7 +10,7 @@ public enum State {
 
     final String stateName;
 
-    State(int stateId, String stateName) {
+    ProjectState(int stateId, String stateName) {
         this.stateId = stateId;
         this.stateName = stateName;
     }
