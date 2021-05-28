@@ -1,10 +1,10 @@
 package com.gepardec.mega.service.api.projectentry;
 
 import com.gepardec.mega.db.entity.project.ProjectEntry;
-import com.gepardec.mega.domain.model.Employee;
 
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.List;
 
 public interface ProjectEntryService {
-    Optional<ProjectEntry> findAllProjectEntriesForProjectNameInRange(final Employee employee);
+    List<ProjectEntry> findByNameAndDate(final String projectName, final LocalDate from, final LocalDate to);
 }
