@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -21,6 +22,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "project_entry")
+@NamedQuery(
+        name = "ProjectEntry.findAllProjectEntriesForProjectNameInRange",
+        query = "SELECT pe FROM ProjectEntry pe WHERE pe.project.name = :projectName AND pe.date BETWEEN :start AND :end")
 public class ProjectEntry {
 
     @Id

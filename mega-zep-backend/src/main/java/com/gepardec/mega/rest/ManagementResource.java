@@ -5,6 +5,7 @@ import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.StepEntry;
 import com.gepardec.mega.db.entity.project.ProjectState;
+import com.gepardec.mega.db.repository.ProjectEntryRepository;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.FinishedAndTotalComments;
 import com.gepardec.mega.domain.model.ProjectEmployees;
@@ -56,6 +57,9 @@ public class ManagementResource {
     @Inject
     ProjectService projectService;
 
+    @Inject
+    ProjectEntryRepository projectEntryRepository;
+
     @GET
     @Path("/officemanagemententries/{year}/{month}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -105,6 +109,9 @@ public class ManagementResource {
         Map<String, Employee> employees = createEmployeeCache();
         for (ProjectEmployees currentProject : projectEmployees) {
             List<ManagementEntry> entries = createManagementEntriesForProject(currentProject, employees, from, to);
+            // TODO find all ProjectEntries for projectId and filter by ProjectStep [ProjectContrlling and Billing] and set values
+
+
             if (!entries.isEmpty()) {
                 projectManagementEntries.add(ProjectManagementEntry.builder()
                         .projectName(currentProject.projectId())
