@@ -1,6 +1,7 @@
 package com.gepardec.mega.service.impl.init;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
+import com.gepardec.mega.db.entity.project.ProjectEntry;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.ProjectFilter;
 import com.gepardec.mega.domain.model.State;
@@ -81,7 +82,10 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
         logger.info("Loaded omUsers: {}", omUsers.size());
         logger.debug("omUsers are: {}", omUsers);
 
+        // TODO: process newly fetched data (projectsForMonth contains data for project table)
+        // TODO: generate projectEntries
         final List<StepEntry> toBeCreatedStepEntries = new ArrayList<>();
+        final List<ProjectEntry> toBeCreatedProjectEntries = new ArrayList<>();
 
         for (Step step : steps) {
             switch (step.role()) {
@@ -93,6 +97,8 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
                     break;
                 case PROJECT_LEAD:
                     toBeCreatedStepEntries.addAll(createStepEntriesProjectLeadForUsers(date, step, projectsForMonthYear, activeUsers));
+                    // TODO: here
+                    toBeCreatedProjectEntries.addAll(createProjectStepEntriesForProjects(date, step, projectsForMonthYear));
                     break;
                 default:
                     throw new IllegalArgumentException("no logic implemented for provided role");
@@ -138,6 +144,15 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
                         .step(step)
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    private List<ProjectEntry> createProjectStepEntriesForProjects(final LocalDate date, final Step step, final List<Project> projects) {
+        // TODO: logic for generating step entries goes here
+        // Therefore a AutoValue class is required in order to construct the default ProjectEntries
+        return null;
+//        projects.stream()
+//                .map(project -> com.gepardec.mega.domain.model.ProjectEntry.builder())
+//                .collect(Collectors.toList());
     }
 
     private List<StepEntry> createStepEntriesOmForUsers(final LocalDate date, final Step step, final List<User> omUsers, final List<User> users) {

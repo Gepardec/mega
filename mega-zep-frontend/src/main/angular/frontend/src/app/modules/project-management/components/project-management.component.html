@@ -1,9 +1,10 @@
 <mat-toolbar class="mat-elevation-z8" color="accent">
   <mat-toolbar-row fxLayout="row" fxLayoutAlign="end center">
-      <app-datepicker-month-year (dateChanged)="dateChanged($event)"></app-datepicker-month-year>
+    <app-datepicker-month-year (dateChanged)="dateChanged($event)"></app-datepicker-month-year>
   </mat-toolbar-row>
 </mat-toolbar>
-<div fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px" *ngIf="pmEntries?.length > 0; else noPmEntriesFound">
+<div fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px"
+     *ngIf="pmEntries?.length > 0; else noPmEntriesFound">
   <mat-card *ngIf="isAnySelected()" class="actions">
     <mat-card-content fxFlexAlign="space-around center" fxLayout="row" fxLayoutGap="10px">
       <h2>{{'project-management.actions' | translate}}</h2>
@@ -15,16 +16,53 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-accordion [multi]="true">
+  <mat-accordion [multi]="true" class="headers-align">
     <mat-expansion-panel *ngFor="let pmEntry of pmEntries, let i = index" [expanded]="true">
-      <mat-expansion-panel-header>
+      <mat-expansion-panel-header [collapsedHeight]="'100px'"
+                                  [expandedHeight]="'100px'">
         <mat-panel-title>
           <strong>{{pmEntry.projectName}}</strong>
         </mat-panel-title>
+        <div class="mat-expansion-panel-header-description">
+          <table class="projectActions">
+            <tbody>
+            <tr>
+              <td class="description">
+                {{'project-management.projectTimeState' | translate}}
+              </td>
+              <td>
+                <app-project-state-select [value]="pmEntry.controlProjectState"
+                                          (selectionChange)="changeProjectControllingState($event, pmEntry)"
+                                          (click)="$event.stopPropagation()"></app-project-state-select>
+                <mat-checkbox class="preset-next-month"
+                              *ngIf="isProjectStateNotRelevant(pmEntry.controlProjectState)"
+                              (click)="$event.stopPropagation()">
+                  {{'project-management.presetMonth' | translate}}
+                </mat-checkbox>
+              </td>
+            </tr>
+            <tr class="spacing">
+              <td class="description">
+                {{'project-management.billingState' | translate}}
+              </td>
+              <td>
+                <app-project-state-select [value]="pmEntry.controlBillingState"
+                                          (selectionChange)="changeProjectBillingState($event, pmEntry)"
+                                          (click)="$event.stopPropagation()"></app-project-state-select>
+                <mat-checkbox class="preset-next-month"
+                              *ngIf="isProjectStateNotRelevant(pmEntry.controlBillingState)"
+                              (click)="$event.stopPropagation()">
+                  {{'project-management.presetMonth' | translate}}
+                </mat-checkbox>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
         <mat-panel-description>
-          <span [ngClass]="areAllProjectCheckStatesDone(pmEntry.projectName) ? 'green' : 'red'">
-            {{'project-management.employeeDone' | translate}}
-          </span>
+            <span [ngClass]="areAllProjectCheckStatesDone(pmEntry.projectName) ? 'green' : 'red'">
+              {{'project-management.employeeDone' | translate}}
+            </span>
         </mat-panel-description>
       </mat-expansion-panel-header>
 

@@ -18,6 +18,8 @@ import {Moment} from 'moment';
 import {ConfigService} from '../../shared/services/config/config.service';
 import {Config} from '../../shared/models/Config';
 import {configuration} from '../../shared/constants/configuration';
+import {ProjectState} from '../../shared/models/ProjectState';
+import {MatSelectChange} from '@angular/material/select';
 
 const moment = _moment;
 
@@ -128,8 +130,15 @@ export class ProjectManagementComponent implements OnInit {
     this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
       this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
-      this.pmEntries.forEach(pmEntry =>
-        this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []))
+      this.pmEntries.forEach(pmEntry => {
+          this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []));
+          // TODO workaround start
+          pmEntry.controlBillingState = ProjectState.OPEN;
+          pmEntry.controlProjectState = ProjectState.IN_PROGRESS;
+          pmEntry.presetControlBillingState = false;
+          pmEntry.presetControlProjectState = false;
+          // TODO workaround end
+        }
       );
     });
   }
@@ -163,5 +172,19 @@ export class ProjectManagementComponent implements OnInit {
 
   private getFormattedDate() {
     return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
+  }
+
+  changeProjectControllingState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
+    // TODO: http call
+    pmEntry.controlProjectState = $event.value;
+  }
+
+  changeProjectBillingState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
+    // TODO: http call
+    pmEntry.controlBillingState = $event.value;
+  }
+
+  isProjectStateNotRelevant(projectState: ProjectState) {
+    return projectState === ProjectState.NOT_RELEVANT;
   }
 }

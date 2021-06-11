@@ -3,19 +3,7 @@ package com.gepardec.mega.db.entity.project;
 import com.gepardec.mega.db.entity.User;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Column;
-import javax.persistence.ConstraintMode;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -116,6 +104,17 @@ public class ProjectEntry {
      * @see ProjectStep
      */
     private ProjectStep step;
+
+    @PrePersist
+    void onPersist() {
+        creationDate = LocalDateTime.now();
+        state = preset ? ProjectState.NOT_RELEVANT : ProjectState.OPEN;
+    }
+
+    @PreUpdate
+    void onUpdate() {
+        updatedDate = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
