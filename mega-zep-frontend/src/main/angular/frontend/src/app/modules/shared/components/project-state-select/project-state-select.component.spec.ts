@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProjectStateSelectComponent } from './project-state-select.component';
+import {TranslateModule} from "@ngx-translate/core";
+import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe('ProjectStateSelectComponent', () => {
   let component: ProjectStateSelectComponent;
@@ -8,7 +10,9 @@ describe('ProjectStateSelectComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProjectStateSelectComponent ]
+      declarations: [ ProjectStateSelectComponent ],
+      imports: [TranslateModule.forRoot()],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
   }));
