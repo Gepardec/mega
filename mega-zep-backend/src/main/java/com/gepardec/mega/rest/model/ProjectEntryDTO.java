@@ -4,7 +4,6 @@ package com.gepardec.mega.rest.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.ProjectState;
 import com.gepardec.mega.domain.model.ProjectStep;
 import com.google.auto.value.AutoValue;
@@ -32,8 +31,6 @@ public abstract class ProjectEntryDTO {
     @JsonProperty
     public abstract ProjectStep step();
     @JsonProperty
-    public abstract Employee employee();
-    @JsonProperty
     public abstract String currentMonthYear();
 
     @AutoValue.Builder
@@ -47,8 +44,6 @@ public abstract class ProjectEntryDTO {
         public abstract Builder projectName(String projectName);
         @JsonProperty
         public abstract Builder step(ProjectStep step);
-        @JsonProperty
-        public abstract Builder employee(Employee employee);
         @JsonProperty
         public abstract Builder currentMonthYear(String currentMonthYear);
 

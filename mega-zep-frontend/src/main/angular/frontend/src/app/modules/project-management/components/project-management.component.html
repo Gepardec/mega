@@ -32,11 +32,13 @@
               </td>
               <td>
                 <app-project-state-select [value]="pmEntry.controlProjectState"
-                                          (selectionChange)="changeProjectControllingState($event, pmEntry)"
+                                          (selectionChange)="onChangeProjectControllingState($event, pmEntry)"
                                           (click)="$event.stopPropagation()"></app-project-state-select>
-                <mat-checkbox class="preset-next-month"
+                <mat-checkbox [(ngModel)]="pmEntry.presetControlProjectState"
                               *ngIf="isProjectStateNotRelevant(pmEntry.controlProjectState)"
-                              (click)="$event.stopPropagation()">
+                              (click)="$event.stopPropagation()"
+                              (change)="onChangeProjectControllingPreset($event, pmEntry)"
+                              class="preset-next-month">
                   {{'project-management.presetMonth' | translate}}
                 </mat-checkbox>
               </td>
@@ -47,11 +49,13 @@
               </td>
               <td>
                 <app-project-state-select [value]="pmEntry.controlBillingState"
-                                          (selectionChange)="changeProjectBillingState($event, pmEntry)"
+                                          (selectionChange)="onChangeProjectBillingState($event, pmEntry)"
                                           (click)="$event.stopPropagation()"></app-project-state-select>
-                <mat-checkbox class="preset-next-month"
+                <mat-checkbox [(ngModel)]="pmEntry.presetControlBillingState"
                               *ngIf="isProjectStateNotRelevant(pmEntry.controlBillingState)"
-                              (click)="$event.stopPropagation()">
+                              (click)="$event.stopPropagation()"
+                              (change)="onChangeControlBillingPreset($event, pmEntry)"
+                              class="preset-next-month">
                   {{'project-management.presetMonth' | translate}}
                 </mat-checkbox>
               </td>
