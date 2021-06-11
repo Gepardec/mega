@@ -65,8 +65,8 @@ public class Project {
     )
     private Set<User> projectLeads = new HashSet<>(0);
 
-    @OneToMany(mappedBy = "project")
-    private Set<ProjectEntry> items;
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private Set<ProjectEntry> items = new HashSet<>(0);
 
     public Long getId() {
         return id;

@@ -56,7 +56,7 @@ public class ProjectEntry {
      * @see User
      */
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "owner_employee_user_id",
             referencedColumnName = "id",
             updatable = false,
@@ -69,7 +69,7 @@ public class ProjectEntry {
      * @see User
      */
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "assignee_employee_user_id",
             referencedColumnName = "id",
             updatable = false,
@@ -81,8 +81,8 @@ public class ProjectEntry {
      *
      * @see Project
      */
-    @ManyToOne
-    @JoinColumn(name = "project", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "project")
     private Project project;
 
     /**

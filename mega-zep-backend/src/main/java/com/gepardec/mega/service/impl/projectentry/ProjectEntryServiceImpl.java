@@ -1,5 +1,6 @@
 package com.gepardec.mega.service.impl.projectentry;
 
+import com.gepardec.mega.db.entity.project.Project;
 import com.gepardec.mega.db.entity.project.ProjectEntry;
 import com.gepardec.mega.db.repository.ProjectEntryRepository;
 import com.gepardec.mega.service.api.projectentry.ProjectEntryService;

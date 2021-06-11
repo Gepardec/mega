@@ -51,10 +51,10 @@ mega:
       password: mega
       jdbc:
         url: jdbc:postgresql://localhost:5432/mega
-    hibernate-orm:
-      database:
-        generation: create
-      sql-load-script: db/import/import-dev.sql
+#    hibernate-orm:
+#      database:
+#        generation: create
+#      sql-load-script: db/import/import-dev.sql
   mega:
     dash-url: http://localhost:4444/index.html
     zep:
@@ -79,10 +79,10 @@ mega:
       db-kind: h2
       jdbc:
         url: 'jdbc:h2:mem:mega;MODE=PostgreSQL;INIT=create schema if not exists mega\;SET SCHEMA mega'
-    hibernate-orm:
-      database:
-        generation: create
-      sql-load-script: db/import/import-dev.sql
+#    hibernate-orm:
+#      database:
+#        generation: create
+#      sql-load-script: db/import/import-dev.sql
   mega:
     dash-url: http://localhost:8080/index.html
     oauth:

@@ -30,6 +30,13 @@ public class TestResource {
     @Inject
     MailSender mailSender;
 
+    @Path("/sync/projects")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response syncProjects() {
+        return Response.ok(stepEntrySyncService.generateProjects()).build();
+    }
+
     @Path("/sync")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
