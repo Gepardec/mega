@@ -2,11 +2,8 @@ package com.gepardec.mega.rest;
 
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.project.ProjectEntry;
-<<<<<<< HEAD
-=======
 import com.gepardec.mega.db.entity.project.ProjectState;
 import com.gepardec.mega.db.entity.project.ProjectStep;
->>>>>>> 7e519925134c1d33161bfec12b1d8e756eef41e4
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.FinishedAndTotalComments;
 import com.gepardec.mega.domain.model.ProjectEmployees;
@@ -373,8 +370,6 @@ public class ManagementResourceTest {
                 .email(email)
                 .build();
     }
-<<<<<<< HEAD
-=======
 
     private ProjectEntry createProjectEntryForStepWithStateAndPreset(ProjectStep step, ProjectState state, boolean preset) {
         ProjectEntry p = new ProjectEntry();
@@ -383,5 +378,4 @@ public class ManagementResourceTest {
         p.setPreset(preset);
         return p;
     }
->>>>>>> 7e519925134c1d33161bfec12b1d8e756eef41e4
 }
