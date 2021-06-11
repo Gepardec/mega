@@ -1,6 +1,7 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.db.entity.State;
+import com.gepardec.mega.db.entity.project.ProjectEntry;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.FinishedAndTotalComments;
 import com.gepardec.mega.domain.model.ProjectEmployees;
@@ -346,5 +347,4 @@ public class ManagementResourceTest {
                 .email(email)
                 .build();
     }
-
 }

@@ -51,6 +51,10 @@ mega:
       password: mega
       jdbc:
         url: jdbc:postgresql://localhost:5432/mega
+    hibernate-orm:
+      database:
+        generation: create
+      sql-load-script: db/import/import-dev.sql
   mega:
     dash-url: http://localhost:4444/index.html
     zep:

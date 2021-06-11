@@ -35,7 +35,7 @@ public class Project {
      * The name of the project
      */
     @NotNull
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     @Length(min = 1, max = 255)
     private String name;
 
@@ -43,14 +43,13 @@ public class Project {
      * The start date of the project
      */
     @NotNull
-    @Column(name = "start_date", updatable = false, nullable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "start_date", updatable = false, nullable = false, columnDefinition = "DATE")
     private LocalDate startDate;
 
     /**
      * The end date of the project
      */
-    @NotNull
-    @Column(name = "end_date", columnDefinition = "TIMESTAMP")
+    @Column(name = "end_date", columnDefinition = "DATE")
     private LocalDate endDate;
 
     /**
