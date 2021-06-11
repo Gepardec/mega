@@ -100,7 +100,7 @@ public class ManagementResource {
         LocalDate from = LocalDate.of(year, month, 1);
         LocalDate to = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
 
-        List<ProjectEmployees> projectEmployees = stepEntryService.getProjectEmployeesForPM(from, to, userContext.user().email());
+        List<ProjectEmployees> projectEmployees = stepEntryService.getProjectEmployeesForPM(from, to, "werner.bruckmueller@gepardec.com");
         List<ProjectManagementEntry> projectManagementEntries = new ArrayList<>();
         Map<String, Employee> employees = createEmployeeCache();
         for (ProjectEmployees currentProject : projectEmployees) {
@@ -117,6 +117,15 @@ public class ManagementResource {
                         .entries(entries)
                         .build()
                 );
+//                projectManagementEntries.add(ProjectManagementEntry.builder()
+//                        .projectName(currentProject.projectId())
+//                        .controlProjectState(null)
+//                        .controlBillingState(null)
+//                        .presetControlProjectState(null)
+//                        .presetControlBillingState(null)
+//                        .entries(entries)
+//                        .build()
+//                );
             }
         }
 
