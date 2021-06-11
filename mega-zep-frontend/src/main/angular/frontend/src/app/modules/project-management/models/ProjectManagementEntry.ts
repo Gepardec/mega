@@ -1,5 +1,5 @@
 import {ManagementEntry} from '../../shared/models/ManagementEntry';
-import {ProjectState} from "../../shared/models/ProjectState";
+import {ProjectState} from '../../shared/models/ProjectState';
 
 export class ProjectManagementEntry {
 

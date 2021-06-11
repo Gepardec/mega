@@ -7,7 +7,7 @@
   "STATE": {
     "DONE": "Fertig",
     "OPEN": "Offen",
-    "IN_PROGRESS": "In Arbeit",
+    "WORK_IN_PROGRESS": "In Arbeit",
     "NOT_RELEVANT": "Nicht relevant"
   },
   "EMPLOYEE_FUNCTIONS": {

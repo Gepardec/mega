@@ -20,6 +20,8 @@ import {Config} from '../../shared/models/Config';
 import {configuration} from '../../shared/constants/configuration';
 import {ProjectState} from '../../shared/models/ProjectState';
 import {MatSelectChange} from '@angular/material/select';
+import {ProjectEntriesService} from "../../shared/services/projectentries/project-entries.service";
+import {MatCheckboxChange} from "@angular/material/checkbox";
 
 const moment = _moment;
 
@@ -52,7 +54,8 @@ export class ProjectManagementComponent implements OnInit {
               private pmService: ProjectManagementService,
               private stepEntryService: StepentriesService,
               private commentService: CommentService,
-              private configService: ConfigService) {
+              private configService: ConfigService,
+              private projectEntryService: ProjectEntriesService) {
   }
 
   ngOnInit(): void {
@@ -130,15 +133,8 @@ export class ProjectManagementComponent implements OnInit {
     this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
       this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
-      this.pmEntries.forEach(pmEntry => {
-          this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []));
-          // TODO workaround start
-          pmEntry.controlBillingState = ProjectState.OPEN;
-          pmEntry.controlProjectState = ProjectState.IN_PROGRESS;
-          pmEntry.presetControlBillingState = false;
-          pmEntry.presetControlProjectState = false;
-          // TODO workaround end
-        }
+      this.pmEntries.forEach(pmEntry =>
+        this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []))
       );
     });
   }
@@ -174,14 +170,50 @@ export class ProjectManagementComponent implements OnInit {
     return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
   }
 
-  changeProjectControllingState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
-    // TODO: http call
-    pmEntry.controlProjectState = $event.value;
+  onChangeProjectControllingState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
+    const newValue = $event.value as ProjectState;
+    const preset = newValue !== 'NOT_RELEVANT' ? false : pmEntry.presetControlProjectState;
+
+    this.projectEntryService.updateProjectEntry(newValue, preset, pmEntry.projectName, 'CONTROL_PROJECT', this.getFormattedDate())
+      .subscribe((success) => {
+        if (success) {
+          pmEntry.controlProjectState = newValue;
+        } else {
+          // TODO error handling
+        }
+      });
   }
 
-  changeProjectBillingState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
-    // TODO: http call
-    pmEntry.controlBillingState = $event.value;
+  onChangeProjectBillingState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
+    const newValue = $event.value as ProjectState;
+    const preset = newValue !== 'NOT_RELEVANT' ? false : pmEntry.presetControlBillingState;
+
+    this.projectEntryService.updateProjectEntry(newValue, preset, pmEntry.projectName, 'CONTROL_BILLING', this.getFormattedDate())
+      .subscribe((success) => {
+        if (success) {
+          pmEntry.controlBillingState = newValue;
+        } else {
+          // TODO error handling
+        }
+      });
+  }
+
+  onChangeProjectControllingPreset($event: MatCheckboxChange, pmEntry: ProjectManagementEntry) {
+    this.projectEntryService.updateProjectEntry(pmEntry.controlProjectState, pmEntry.presetControlProjectState, pmEntry.projectName, 'CONTROL_PROJECT', this.getFormattedDate())
+      .subscribe(success => {
+        if (!success) {
+          // TODO error handling
+        }
+      })
+  }
+
+  onChangeControlBillingPreset($event: MatCheckboxChange, pmEntry: ProjectManagementEntry) {
+    this.projectEntryService.updateProjectEntry(pmEntry.controlBillingState, pmEntry.presetControlBillingState, pmEntry.projectName, 'CONTROL_BILLING', this.getFormattedDate())
+      .subscribe(success => {
+        if (!success) {
+          // TODO error handling
+        }
+      })
   }
 
   isProjectStateNotRelevant(projectState: ProjectState) {

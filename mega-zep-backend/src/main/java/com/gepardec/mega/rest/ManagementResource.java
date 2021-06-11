@@ -107,7 +107,7 @@ public class ManagementResource {
             List<ManagementEntry> entries = createManagementEntriesForProject(currentProject, employees, from, to);
             final List<ProjectEntry> projectEntries = projectEntryService.findByNameAndDate(currentProject.projectId(), from, to);
 
-            if (!entries.isEmpty()) {
+            if (!entries.isEmpty() && !projectEntries.isEmpty()) {
                 projectManagementEntries.add(ProjectManagementEntry.builder()
                         .projectName(currentProject.projectId())
                         .controlProjectState(ProjectState.byName(getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_PROJECT).getState().name()))

@@ -9,7 +9,7 @@ quarkus:
       enable: true
       level: ALL
   liquibase:
-    change-log: db/changelog-master.yaml
+    change-log: db/changelog-master.xml
     migrate-at-start: false
   mailer:
     auth-methods: DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN
@@ -51,10 +51,10 @@ mega:
       password: mega
       jdbc:
         url: jdbc:postgresql://localhost:5432/mega
-#    hibernate-orm:
-#      database:
-#        generation: create
-#      sql-load-script: db/import/import-dev.sql
+    hibernate-orm:
+      database:
+        generation: create
+      sql-load-script: db/import/import-projects.sql
   mega:
     dash-url: http://localhost:4444/index.html
     zep:
@@ -79,10 +79,10 @@ mega:
       db-kind: h2
       jdbc:
         url: 'jdbc:h2:mem:mega;MODE=PostgreSQL;INIT=create schema if not exists mega\;SET SCHEMA mega'
-#    hibernate-orm:
-#      database:
-#        generation: create
-#      sql-load-script: db/import/import-dev.sql
+    hibernate-orm:
+      database:
+        generation: create
+      sql-load-script: db/import/import-dev.sql
   mega:
     dash-url: http://localhost:8080/index.html
     oauth:

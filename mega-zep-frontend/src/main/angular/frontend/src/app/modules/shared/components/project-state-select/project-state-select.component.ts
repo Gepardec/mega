@@ -21,7 +21,7 @@ export class ProjectStateSelectComponent implements OnInit {
   }
 
   get isInProgressSelected(): boolean {
-    return this.value === ProjectState.IN_PROGRESS;
+    return this.value === ProjectState.WORK_IN_PROGRESS;
   }
 
   get isNotRelevantSelected(): boolean {
