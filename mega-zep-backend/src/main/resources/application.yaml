@@ -68,7 +68,7 @@ mega:
         notification: true
       reminder:
         om: thomas.herzog@gepardec.com,werner.bruckmueller@gepardec.com,christoph.ruhsam@gepardec.com,armin.lang@gepardec.com,manuel.vilim@gepardec.com,philipp.wurm@gepardec.com,oliver.tod@gepardec.com,patrick.holzer@gepardec.com,robin.fischer@gepardec.com
-## DEV Properties
+## TEST Properties
 "%test":
   quarkus:
     scheduler:
@@ -79,6 +79,10 @@ mega:
       db-kind: h2
       jdbc:
         url: 'jdbc:h2:mem:mega;MODE=PostgreSQL;INIT=create schema if not exists mega\;SET SCHEMA mega'
+    hibernate-orm:
+      database:
+        generation: create
+      sql-load-script: db/import/import-dev.sql
   mega:
     dash-url: http://localhost:8080/index.html
     oauth:
