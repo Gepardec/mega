@@ -3,7 +3,22 @@ package com.gepardec.mega.db.entity.project;
 import com.gepardec.mega.db.entity.User;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -37,21 +52,21 @@ public class ProjectEntry {
     private LocalDateTime creationDate;
 
     /**
-     * The update date of the step entry
+     * The update date of the project entry
      */
     @NotNull
     @Column(name = "update_date", columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedDate;
 
     /**
-     * The date (=month) the step entry is for
+     * The date (=month) the project entry is for
      */
     @NotNull
     @Column(name = "entry_date", updatable = false, columnDefinition = "DATE")
     private LocalDate date;
 
     /**
-     * The owner of the step entry who is the user who is responsible for the validity of the entry
+     * The owner of the project entry who is the user who is responsible for the validity of the entry
      *
      * @see User
      */
@@ -64,7 +79,7 @@ public class ProjectEntry {
     private User owner;
 
     /**
-     * The assignee of the step entry who is the employee who marks the step entry done
+     * The assignee of the project entry who is the employee who marks the project entry done
      *
      * @see User
      */
@@ -81,8 +96,8 @@ public class ProjectEntry {
      *
      * @see Project
      */
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "project")
+    @ManyToOne(targetEntity = Project.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id")
     private Project project;
 
     /**
@@ -202,5 +217,65 @@ public class ProjectEntry {
 
     public void setStep(ProjectStep step) {
         this.step = step;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ProjectEntry that = (ProjectEntry) o;
+
+        if (preset != that.preset) {
+            return false;
+        }
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
+        if (name != null ? !name.equals(that.name) : that.name != null) {
+            return false;
+        }
+        if (creationDate != null ? !creationDate.equals(that.creationDate) : that.creationDate != null) {
+            return false;
+        }
+        if (updatedDate != null ? !updatedDate.equals(that.updatedDate) : that.updatedDate != null) {
+            return false;
+        }
+        if (date != null ? !date.equals(that.date) : that.date != null) {
+            return false;
+        }
+        if (owner != null ? !owner.equals(that.owner) : that.owner != null) {
+            return false;
+        }
+        if (assignee != null ? !assignee.equals(that.assignee) : that.assignee != null) {
+            return false;
+        }
+        if (project != null ? !project.equals(that.project) : that.project != null) {
+            return false;
+        }
+        if (state != that.state) {
+            return false;
+        }
+        return step == that.step;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
+        result = 31 * result + (updatedDate != null ? updatedDate.hashCode() : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        result = 31 * result + (assignee != null ? assignee.hashCode() : 0);
+        result = 31 * result + (project != null ? project.hashCode() : 0);
+        result = 31 * result + (preset ? 1 : 0);
+        result = 31 * result + (state != null ? state.hashCode() : 0);
+        result = 31 * result + (step != null ? step.hashCode() : 0);
+        return result;
     }
 }

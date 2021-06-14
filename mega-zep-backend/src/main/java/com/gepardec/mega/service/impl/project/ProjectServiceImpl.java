@@ -54,8 +54,7 @@ public class ProjectServiceImpl implements ProjectService {
             projectEntity.getProjectLeads().add(user);
         });
 
-        projectEntity.setItems(new HashSet<>());
-        project.getItems().forEach(projectEntry -> {
+        project.getProjectEntries().forEach(projectEntry -> {
             User owner = userRepository.findById(projectEntry.getOwner().getId());
             User assignee = userRepository.findById(projectEntry.getAssignee().getId());
 
@@ -71,7 +70,7 @@ public class ProjectServiceImpl implements ProjectService {
             pe.setOwner(owner);
             pe.setAssignee(assignee);
 
-            projectEntity.getItems().add(pe);
+            projectEntity.addProjectEntry(pe);
         });
 
         projectEntity.setName(project.getName());

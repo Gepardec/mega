@@ -57,16 +57,37 @@ public class Project {
      *
      * @see User
      */
-    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
-            name = "employee_project",
-            joinColumns = {@JoinColumn(name = "employee_id")},
-            inverseJoinColumns = {@JoinColumn(name = "project_id")}
+            name = "project_employee",
+            joinColumns = {@JoinColumn(name = "project_id")},
+            inverseJoinColumns = {@JoinColumn(name = "employee_id")}
     )
     private Set<User> projectLeads = new HashSet<>(0);
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private Set<ProjectEntry> items = new HashSet<>(0);
+    /**
+     * The project entries of the project
+     *
+     * @see ProjectEntry
+     */
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "project_project_entry",
+            joinColumns = {@JoinColumn(name = "project_id")},
+            inverseJoinColumns = {@JoinColumn(name = "project_entry_id")}
+    )
+    private Set<ProjectEntry> projectEntries = new HashSet<>(0);
+
+    // needed to be consistent with the database
+    public void addProjectEntry(ProjectEntry projectEntry) {
+        projectEntries.add(projectEntry);
+        projectEntry.setProject(this);
+    }
+
+    public void removeProjectEntry(ProjectEntry projectEntry) {
+        projectEntries.remove(projectEntry);
+        projectEntry.setProject(null);
+    }
 
     public Long getId() {
         return id;
@@ -108,11 +129,51 @@ public class Project {
         this.projectLeads = projectLeads;
     }
 
-    public Set<ProjectEntry> getItems() {
-        return items;
+    public Set<ProjectEntry> getProjectEntries() {
+        return projectEntries;
     }
 
-    public void setItems(Set<ProjectEntry> items) {
-        this.items = items;
+    public void setProjectEntries(Set<ProjectEntry> projectEntries){
+        this.projectEntries = projectEntries;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Project project = (Project) o;
+
+        if (id != null ? !id.equals(project.id) : project.id != null) {
+            return false;
+        }
+        if (name != null ? !name.equals(project.name) : project.name != null) {
+            return false;
+        }
+        if (startDate != null ? !startDate.equals(project.startDate) : project.startDate != null) {
+            return false;
+        }
+        if (endDate != null ? !endDate.equals(project.endDate) : project.endDate != null) {
+            return false;
+        }
+        if (projectLeads != null ? !projectLeads.equals(project.projectLeads) : project.projectLeads != null) {
+            return false;
+        }
+        return projectEntries != null ? projectEntries.equals(project.projectEntries) : project.projectEntries == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
+        result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
+        result = 31 * result + (projectLeads != null ? projectLeads.hashCode() : 0);
+        result = 31 * result + (projectEntries != null ? projectEntries.hashCode() : 0);
+        return result;
     }
 }
