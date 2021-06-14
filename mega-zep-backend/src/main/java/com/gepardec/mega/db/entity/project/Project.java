@@ -133,7 +133,7 @@ public class Project {
         return projectEntries;
     }
 
-    public void setProjectEntries(Set<ProjectEntry> projectEntries){
+    public void setProjectEntries(Set<ProjectEntry> projectEntries) {
         this.projectEntries = projectEntries;
     }
 

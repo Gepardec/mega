@@ -1,6 +1,5 @@
 package com.gepardec.mega.service.api.projectentry;
 
-import com.gepardec.mega.db.entity.project.Project;
 import com.gepardec.mega.db.entity.project.ProjectEntry;
 
 import java.time.LocalDate;

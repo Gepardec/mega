@@ -1,6 +1,5 @@
 package com.gepardec.mega.rest.model;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -24,12 +23,16 @@ public abstract class ProjectEntryDTO {
 
     @JsonProperty
     public abstract ProjectState state();
+
     @JsonProperty
     public abstract Boolean preset();
+
     @JsonProperty
     public abstract String projectName();
+
     @JsonProperty
     public abstract ProjectStep step();
+
     @JsonProperty
     public abstract String currentMonthYear();
 
@@ -38,12 +41,16 @@ public abstract class ProjectEntryDTO {
 
         @JsonProperty
         public abstract Builder state(ProjectState state);
+
         @JsonProperty
         public abstract Builder preset(Boolean preset);
+
         @JsonProperty
         public abstract Builder projectName(String projectName);
+
         @JsonProperty
         public abstract Builder step(ProjectStep step);
+
         @JsonProperty
         public abstract Builder currentMonthYear(String currentMonthYear);
 
@@ -51,7 +58,5 @@ public abstract class ProjectEntryDTO {
         public abstract ProjectEntryDTO build();
 
     }
-
-
 
 }
