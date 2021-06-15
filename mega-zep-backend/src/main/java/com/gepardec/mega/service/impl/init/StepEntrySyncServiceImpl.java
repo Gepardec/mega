@@ -54,7 +54,7 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
     ProjectEntryService projectEntryService;
 
     @Override
-    public void genereteStepEntries() {
+    public void generateStepEntries() {
         final StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
@@ -85,8 +85,6 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
         logger.info("Loaded omUsers: {}", omUsers.size());
         logger.debug("omUsers are: {}", omUsers);
 
-        // TODO: process newly fetched data (projectsForMonth contains data for project table)
-        // TODO: generate projectEntries
         final List<StepEntry> toBeCreatedStepEntries = new ArrayList<>();
 
         for (Step step : steps) {

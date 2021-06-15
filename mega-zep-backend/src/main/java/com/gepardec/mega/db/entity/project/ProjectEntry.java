@@ -22,6 +22,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "project_entry")
@@ -233,28 +234,28 @@ public class ProjectEntry {
         if (preset != that.preset) {
             return false;
         }
-        if (id != null ? !id.equals(that.id) : that.id != null) {
+        if (!Objects.equals(id, that.id)) {
             return false;
         }
-        if (name != null ? !name.equals(that.name) : that.name != null) {
+        if (!Objects.equals(name, that.name)) {
             return false;
         }
-        if (creationDate != null ? !creationDate.equals(that.creationDate) : that.creationDate != null) {
+        if (!Objects.equals(creationDate, that.creationDate)) {
             return false;
         }
-        if (updatedDate != null ? !updatedDate.equals(that.updatedDate) : that.updatedDate != null) {
+        if (!Objects.equals(updatedDate, that.updatedDate)) {
             return false;
         }
-        if (date != null ? !date.equals(that.date) : that.date != null) {
+        if (!Objects.equals(date, that.date)) {
             return false;
         }
-        if (owner != null ? !owner.equals(that.owner) : that.owner != null) {
+        if (!Objects.equals(owner, that.owner)) {
             return false;
         }
-        if (assignee != null ? !assignee.equals(that.assignee) : that.assignee != null) {
+        if (!Objects.equals(assignee, that.assignee)) {
             return false;
         }
-        if (project != null ? !project.equals(that.project) : that.project != null) {
+        if (!Objects.equals(project, that.project)) {
             return false;
         }
         if (state != that.state) {

@@ -47,7 +47,7 @@ public class TestResource {
     public Response synctest() {
         Optional.ofNullable(stepEntrySyncService)
                 .orElseThrow(() -> new IllegalStateException("TestResource is disabled and 'StepEntrySyncService' is null"))
-                .genereteStepEntries();
+                .generateStepEntries();
         return Response.ok("ok").build();
     }
 

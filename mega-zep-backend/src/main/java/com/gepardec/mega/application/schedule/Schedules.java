@@ -40,7 +40,7 @@ public class Schedules {
     @Scheduled(identity = "Generate step entries on the first day of a month",
             cron = "0 0 0 1 * ? *")
     void generateStepEntries() {
-        stepEntrySyncService.genereteStepEntries();
+        stepEntrySyncService.generateStepEntries();
     }
 
     @Scheduled(identity = "Generate projects and project entries on the first day of a month",

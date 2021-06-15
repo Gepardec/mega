@@ -162,7 +162,7 @@ class StepEntrySyncServiceImplTest {
             // default setup
 
             // When
-            stepEntrySyncService.genereteStepEntries();
+            stepEntrySyncService.generateStepEntries();
 
             // Then
             verify(stepEntryService, times(34)).addStepEntry(Mockito.any());
@@ -182,7 +182,7 @@ class StepEntrySyncServiceImplTest {
             when(projectService.getProjectsForMonthYear(Mockito.any(), Mockito.anyList())).thenReturn(List.of());
 
             // When
-            stepEntrySyncService.genereteStepEntries();
+            stepEntrySyncService.generateStepEntries();
 
             // Then
             final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
@@ -217,7 +217,7 @@ class StepEntrySyncServiceImplTest {
                     .build()));
 
             // When
-            stepEntrySyncService.genereteStepEntries();
+            stepEntrySyncService.generateStepEntries();
 
             // Then
             final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
@@ -242,7 +242,7 @@ class StepEntrySyncServiceImplTest {
             // default setup
 
             // When
-            stepEntrySyncService.genereteStepEntries();
+            stepEntrySyncService.generateStepEntries();
 
             // Then
             final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
@@ -275,7 +275,7 @@ class StepEntrySyncServiceImplTest {
             when(notificationConfig.getOmMailAddresses()).thenReturn(List.of("some.user@gepardec.com"));
 
             // When
-            stepEntrySyncService.genereteStepEntries();
+            stepEntrySyncService.generateStepEntries();
 
             // Then
             final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
@@ -298,7 +298,7 @@ class StepEntrySyncServiceImplTest {
             when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
 
             // When
-            stepEntrySyncService.genereteStepEntries();
+            stepEntrySyncService.generateStepEntries();
 
             // Then
             final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
@@ -321,7 +321,7 @@ class StepEntrySyncServiceImplTest {
             // default setup
 
             // When
-            stepEntrySyncService.genereteStepEntries();
+            stepEntrySyncService.generateStepEntries();
 
             // Then
             final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
@@ -352,7 +352,7 @@ class StepEntrySyncServiceImplTest {
             when(userService.findActiveUsers()).thenReturn(List.of());
 
             // When
-            stepEntrySyncService.genereteStepEntries();
+            stepEntrySyncService.generateStepEntries();
 
             // Then
             verify(stepEntryService, never()).addStepEntry(Mockito.any());
@@ -364,7 +364,7 @@ class StepEntrySyncServiceImplTest {
             // default setup
 
             // When
-            stepEntrySyncService.genereteStepEntries();
+            stepEntrySyncService.generateStepEntries();
 
             // Then
             final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
@@ -401,7 +401,7 @@ class StepEntrySyncServiceImplTest {
             when(stepService.getSteps()).thenReturn(List.of());
 
             // When
-            stepEntrySyncService.genereteStepEntries();
+            stepEntrySyncService.generateStepEntries();
 
             // Then
             verify(stepEntryService, never()).addStepEntry(Mockito.any());
@@ -413,7 +413,7 @@ class StepEntrySyncServiceImplTest {
             // default setup
 
             // When
-            stepEntrySyncService.genereteStepEntries();
+            stepEntrySyncService.generateStepEntries();
 
             // Then
             final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
@@ -444,7 +444,7 @@ class StepEntrySyncServiceImplTest {
             // default setup
 
             // When
-            stepEntrySyncService.genereteStepEntries();
+            stepEntrySyncService.generateStepEntries();
 
             // Then
             final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);

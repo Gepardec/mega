@@ -3,22 +3,11 @@ package com.gepardec.mega.db.entity.project;
 import com.gepardec.mega.db.entity.User;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -148,19 +137,13 @@ public class Project {
 
         Project project = (Project) o;
 
-        if (id != null ? !id.equals(project.id) : project.id != null) {
+        if (!Objects.equals(id, project.id)) {
             return false;
         }
-        if (name != null ? !name.equals(project.name) : project.name != null) {
+        if (!Objects.equals(name, project.name)) {
             return false;
         }
-        if (startDate != null ? !startDate.equals(project.startDate) : project.startDate != null) {
-            return false;
-        }
-        if (endDate != null ? !endDate.equals(project.endDate) : project.endDate != null) {
-            return false;
-        }
-        if (projectLeads != null ? !projectLeads.equals(project.projectLeads) : project.projectLeads != null) {
+        if (!Objects.equals(startDate, project.startDate)) {
             return false;
         }
         return projectEntries != null ? projectEntries.equals(project.projectEntries) : project.projectEntries == null;
@@ -172,8 +155,6 @@ public class Project {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
-        result = 31 * result + (projectLeads != null ? projectLeads.hashCode() : 0);
-        result = 31 * result + (projectEntries != null ? projectEntries.hashCode() : 0);
         return result;
     }
 }
