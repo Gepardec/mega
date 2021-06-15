@@ -29,6 +29,10 @@ import java.util.Objects;
 @NamedQuery(
         name = "ProjectEntry.findAllProjectEntriesForProjectNameInRange",
         query = "SELECT pe FROM ProjectEntry pe WHERE pe.project.name = :projectName AND pe.date BETWEEN :start AND :end")
+@NamedQuery(
+        name = "ProjectEntry.findProjectEntryByNameAndEntryDateAndStep",
+        query = "SELECT pe FROM ProjectEntry pe WHERE pe.project.name = :projectName AND pe.date = :entryDate AND pe.step = :projectStep"
+)
 public class ProjectEntry {
 
     @Id

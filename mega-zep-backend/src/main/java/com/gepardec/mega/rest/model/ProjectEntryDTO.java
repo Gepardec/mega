@@ -25,7 +25,7 @@ public abstract class ProjectEntryDTO {
     public abstract ProjectState state();
 
     @JsonProperty
-    public abstract Boolean preset();
+    public abstract boolean preset();
 
     @JsonProperty
     public abstract String projectName();
@@ -43,7 +43,7 @@ public abstract class ProjectEntryDTO {
         public abstract Builder state(ProjectState state);
 
         @JsonProperty
-        public abstract Builder preset(Boolean preset);
+        public abstract Builder preset(boolean preset);
 
         @JsonProperty
         public abstract Builder projectName(String projectName);
@@ -58,5 +58,4 @@ public abstract class ProjectEntryDTO {
         public abstract ProjectEntryDTO build();
 
     }
-
 }
