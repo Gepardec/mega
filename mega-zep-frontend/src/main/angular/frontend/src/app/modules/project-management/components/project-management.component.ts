@@ -20,8 +20,10 @@ import {Config} from '../../shared/models/Config';
 import {configuration} from '../../shared/constants/configuration';
 import {ProjectState} from '../../shared/models/ProjectState';
 import {MatSelectChange} from '@angular/material/select';
-import {ProjectEntriesService} from "../../shared/services/projectentries/project-entries.service";
-import {MatCheckboxChange} from "@angular/material/checkbox";
+import {ProjectEntriesService} from '../../shared/services/projectentries/project-entries.service';
+import {MatCheckboxChange} from '@angular/material/checkbox';
+import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
+import {TranslateService} from '@ngx-translate/core';
 
 const moment = _moment;
 
@@ -55,7 +57,9 @@ export class ProjectManagementComponent implements OnInit {
               private stepEntryService: StepentriesService,
               private commentService: CommentService,
               private configService: ConfigService,
-              private projectEntryService: ProjectEntriesService) {
+              private projectEntryService: ProjectEntriesService,
+              private _snackBar: MatSnackBar,
+              private translate: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -172,7 +176,7 @@ export class ProjectManagementComponent implements OnInit {
     return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
   }
 
-  onChangeProjectControllingState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
+  onChangeControlProjectState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
     const newValue = $event.value as ProjectState;
     const preset = newValue !== 'NOT_RELEVANT' ? false : pmEntry.presetControlProjectState;
 
@@ -180,13 +184,15 @@ export class ProjectManagementComponent implements OnInit {
       .subscribe((success) => {
         if (success) {
           pmEntry.controlProjectState = newValue;
+          pmEntry.presetControlProjectState = preset;
         } else {
-          // TODO error handling
+          this.showErrorSnackbar();
+          this.pmService.resetProjectStateSelect.next(pmEntry.controlProjectState);
         }
       });
   }
 
-  onChangeProjectBillingState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
+  onChangeControlBillingState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
     const newValue = $event.value as ProjectState;
     const preset = newValue !== 'NOT_RELEVANT' ? false : pmEntry.presetControlBillingState;
 
@@ -194,28 +200,43 @@ export class ProjectManagementComponent implements OnInit {
       .subscribe((success) => {
         if (success) {
           pmEntry.controlBillingState = newValue;
+          pmEntry.presetControlBillingState = preset;
         } else {
-          // TODO error handling
+          this.showErrorSnackbar();
+          this.pmService.resetProjectStateSelect.next(pmEntry.controlProjectState);
         }
       });
   }
 
-  onChangeProjectControllingPreset($event: MatCheckboxChange, pmEntry: ProjectManagementEntry) {
+  onChangePresetControlProjectState($event: MatCheckboxChange, pmEntry: ProjectManagementEntry) {
     this.projectEntryService.updateProjectEntry(pmEntry.controlProjectState, pmEntry.presetControlProjectState, pmEntry.projectName, 'CONTROL_PROJECT', this.getFormattedDate())
       .subscribe(success => {
         if (!success) {
-          // TODO error handling
+          this.showErrorSnackbar();
+          pmEntry.presetControlProjectState = !$event.checked;
         }
       })
   }
 
-  onChangeControlBillingPreset($event: MatCheckboxChange, pmEntry: ProjectManagementEntry) {
+  onChangePresetControlBillingState($event: MatCheckboxChange, pmEntry: ProjectManagementEntry) {
     this.projectEntryService.updateProjectEntry(pmEntry.controlBillingState, pmEntry.presetControlBillingState, pmEntry.projectName, 'CONTROL_BILLING', this.getFormattedDate())
       .subscribe(success => {
         if (!success) {
-          // TODO error handling
+          this.showErrorSnackbar();
+          pmEntry.presetControlBillingState = !$event.checked;
         }
       })
+  }
+
+  private showErrorSnackbar() {
+    this._snackBar.open(
+      this.translate.instant('snackbar.message'),
+      this.translate.instant('snackbar.confirm'),
+      {
+        horizontalPosition: <MatSnackBarHorizontalPosition>configuration.snackbar.horizontalPosition,
+        verticalPosition: <MatSnackBarVerticalPosition>configuration.snackbar.verticalPosition,
+        duration: configuration.snackbar.duration
+      });
   }
 
   isProjectStateNotRelevant(projectState: ProjectState) {

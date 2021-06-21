@@ -6,7 +6,7 @@ export const configuration = {
     LOGIN: 'login',
     ERROR: 'error'
   },
-  
+
   OFFICE_MANAGEMENT_SEGMENT: `view/index.php?menu=MitarbeiterVerwaltungMgr&
   modelContentMenu=true&mgr=MitarbeiterProjektzeitMgr&contentModelId=`,
 
@@ -22,5 +22,11 @@ export const configuration = {
     Off: 6
   },
 
-  logWithDate: true
+  logWithDate: true,
+
+  snackbar: {
+    horizontalPosition: 'center',
+    verticalPosition: 'top',
+    duration: 5000
+  }
 };
