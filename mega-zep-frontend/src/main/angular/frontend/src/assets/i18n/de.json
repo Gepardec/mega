@@ -136,5 +136,9 @@
     "message": "Eine Änderung wurde nicht gespeichert. Wenn die Seite ohne zu speichern verlassen wird, geht die Anmerkung verloren.",
     "dismiss": "Abbrechen",
     "confirm": "OK"
+  },
+  "snackbar": {
+    "message": "Fehler beim Aktualisieren des Status",
+    "confirm": "OK"
   }
 }
