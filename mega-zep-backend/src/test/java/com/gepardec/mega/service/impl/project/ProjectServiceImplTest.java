@@ -54,6 +54,7 @@ class ProjectServiceImplTest {
                 .leads(List.of())
                 .employees(List.of())
                 .categories(List.of())
+                .startDate(LocalDate.now())
                 .build()));
 
         // When
@@ -71,11 +72,13 @@ class ProjectServiceImplTest {
                         .leads(List.of())
                         .employees(List.of())
                         .categories(List.of("INT"))
+                        .startDate(LocalDate.now())
                         .build(),
                 projectFor("Kunde")
                         .leads(List.of())
                         .employees(List.of())
                         .categories(List.of())
+                        .startDate(LocalDate.now())
                         .build()));
 
         // When
@@ -102,11 +105,13 @@ class ProjectServiceImplTest {
                                 .stream().map(User::userId).collect(Collectors.toList()))
                         .employees(List.of())
                         .categories(List.of())
+                        .startDate(LocalDate.now())
                         .build(),
                 projectFor("2")
                         .leads(List.of())
                         .employees(List.of())
                         .categories(List.of())
+                        .startDate(LocalDate.now())
                         .build()));
 
         // When

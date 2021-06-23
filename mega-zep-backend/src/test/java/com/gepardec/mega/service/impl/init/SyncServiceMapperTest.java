@@ -71,6 +71,7 @@ class SyncServiceMapperTest {
                 .employees(List.of())
                 .leads(List.of(userId))
                 .categories(List.of())
+                .startDate(LocalDate.now())
                 .build();
     }
 

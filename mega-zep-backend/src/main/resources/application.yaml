@@ -121,8 +121,8 @@ mega:
         url: 'jdbc:h2:mem:mega;MODE=PostgreSQL;INIT=create schema if not exists mega\;SET SCHEMA mega'
     hibernate-orm:
       database:
-        generation: create
-      sql-load-script: db/import/import-dev.sql
+        generation: "create"
+      sql-load-script: "db/import/import-projects.sql"
   mega:
     dash-url: "http://localhost:8080/index.html"
 

@@ -1,5 +1,6 @@
 package com.gepardec.mega.zep;
 
+import com.gepardec.mega.application.constant.DateTimeConstants;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
@@ -177,7 +178,7 @@ public class ZepServiceImpl implements ZepService {
         return Project.builder()
                 .projectId(projektType.getProjektNr())
                 .description(projektType.getBezeichnung())
-                .startDate(LocalDate.parse(projektType.getStartDatum()))
+                .startDate(LocalDate.parse(projektType.getStartDatum(), DateTimeFormatter.ofPattern(DateTimeConstants.DATE_PATTERN)))
                 .endDate(endDate)
                 .employees(createProjectEmployees(projektType.getProjektmitarbeiterListe(), monthYear))
                 .leads(createProjectLeads(projektType.getProjektmitarbeiterListe(), monthYear))

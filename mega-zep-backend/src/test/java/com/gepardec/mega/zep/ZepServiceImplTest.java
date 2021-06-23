@@ -1,5 +1,6 @@
 package com.gepardec.mega.zep;
 
+import com.gepardec.mega.application.constant.DateTimeConstants;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.service.impl.employee.EmployeeMapper;
@@ -31,6 +32,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -64,6 +66,7 @@ class ZepServiceImplTest {
         final ProjektListeType projektListeType = new ProjektListeType();
         final ProjektType projektType = new ProjektType();
         projektType.setProjektNr("ÖGK-RGKKCC-2020");
+        projektType.setStartDatum(LocalDate.now().format(DateTimeFormatter.ofPattern(DateTimeConstants.DATE_PATTERN)));
         projektMitarbeiterListeType = new ProjektMitarbeiterListeType();
 
         projektType.setProjektmitarbeiterListe(projektMitarbeiterListeType);
