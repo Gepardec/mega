@@ -3,9 +3,10 @@ package com.gepardec.mega.rest.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gepardec.mega.db.entity.project.ProjectState;
+import com.gepardec.mega.domain.model.ProjectState;
 import com.google.auto.value.AutoValue;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 @AutoValue
@@ -21,15 +22,19 @@ public abstract class ProjectManagementEntry {
     public abstract String projectName();
 
     @JsonProperty
+    @Nullable
     public abstract ProjectState controlProjectState();
 
     @JsonProperty
+    @Nullable
     public abstract ProjectState controlBillingState();
 
     @JsonProperty
+    @Nullable
     public abstract Boolean presetControlProjectState();
 
     @JsonProperty
+    @Nullable
     public abstract Boolean presetControlBillingState();
 
     @JsonProperty

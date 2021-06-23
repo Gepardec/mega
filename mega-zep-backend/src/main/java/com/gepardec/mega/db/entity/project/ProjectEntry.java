@@ -3,6 +3,7 @@ package com.gepardec.mega.db.entity.project;
 import com.gepardec.mega.db.entity.User;
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
@@ -13,14 +14,25 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "project_entry")
+@NamedQuery(
+        name = "ProjectEntry.findAllProjectEntriesForProjectNameInRange",
+        query = "SELECT pe FROM ProjectEntry pe WHERE pe.project.name = :projectName AND pe.date BETWEEN :start AND :end")
+@NamedQuery(
+        name = "ProjectEntry.findProjectEntryByNameAndEntryDateAndStep",
+        query = "SELECT pe FROM ProjectEntry pe WHERE pe.project.name = :projectName AND pe.date = :entryDate AND pe.step = :projectStep"
+)
 public class ProjectEntry {
 
     @Id
@@ -45,26 +57,26 @@ public class ProjectEntry {
     private LocalDateTime creationDate;
 
     /**
-     * The update date of the step entry
+     * The update date of the project entry
      */
     @NotNull
     @Column(name = "update_date", columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedDate;
 
     /**
-     * The date (=month) the step entry is for
+     * The date (=month) the project entry is for
      */
     @NotNull
     @Column(name = "entry_date", updatable = false, columnDefinition = "DATE")
     private LocalDate date;
 
     /**
-     * The owner of the step entry who is the user who is responsible for the validity of the entry
+     * The owner of the project entry who is the user who is responsible for the validity of the entry
      *
      * @see User
      */
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "owner_employee_user_id",
             referencedColumnName = "id",
             updatable = false,
@@ -72,12 +84,12 @@ public class ProjectEntry {
     private User owner;
 
     /**
-     * The assignee of the step entry who is the employee who marks the step entry done
+     * The assignee of the project entry who is the employee who marks the project entry done
      *
      * @see User
      */
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "assignee_employee_user_id",
             referencedColumnName = "id",
             updatable = false,
@@ -89,8 +101,8 @@ public class ProjectEntry {
      *
      * @see Project
      */
-    @ManyToOne
-    @JoinColumn(name = "project", nullable = false)
+    @ManyToOne(targetEntity = Project.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id")
     private Project project;
 
     /**
@@ -112,6 +124,17 @@ public class ProjectEntry {
      * @see ProjectStep
      */
     private ProjectStep step;
+
+    @PrePersist
+    void onPersist() {
+        creationDate = LocalDateTime.now();
+        state = preset ? ProjectState.NOT_RELEVANT : ProjectState.OPEN;
+    }
+
+    @PreUpdate
+    void onUpdate() {
+        updatedDate = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
@@ -199,5 +222,65 @@ public class ProjectEntry {
 
     public void setStep(ProjectStep step) {
         this.step = step;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ProjectEntry that = (ProjectEntry) o;
+
+        if (preset != that.preset) {
+            return false;
+        }
+        if (!Objects.equals(id, that.id)) {
+            return false;
+        }
+        if (!Objects.equals(name, that.name)) {
+            return false;
+        }
+        if (!Objects.equals(creationDate, that.creationDate)) {
+            return false;
+        }
+        if (!Objects.equals(updatedDate, that.updatedDate)) {
+            return false;
+        }
+        if (!Objects.equals(date, that.date)) {
+            return false;
+        }
+        if (!Objects.equals(owner, that.owner)) {
+            return false;
+        }
+        if (!Objects.equals(assignee, that.assignee)) {
+            return false;
+        }
+        if (!Objects.equals(project, that.project)) {
+            return false;
+        }
+        if (state != that.state) {
+            return false;
+        }
+        return step == that.step;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
+        result = 31 * result + (updatedDate != null ? updatedDate.hashCode() : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        result = 31 * result + (assignee != null ? assignee.hashCode() : 0);
+        result = 31 * result + (project != null ? project.hashCode() : 0);
+        result = 31 * result + (preset ? 1 : 0);
+        result = 31 * result + (state != null ? state.hashCode() : 0);
+        result = 31 * result + (step != null ? step.hashCode() : 0);
+        return result;
     }
 }

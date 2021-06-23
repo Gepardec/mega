@@ -4,10 +4,12 @@ import com.gepardec.mega.application.interceptor.RolesAllowed;
 import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.StepEntry;
-import com.gepardec.mega.db.entity.project.ProjectState;
+import com.gepardec.mega.db.entity.project.ProjectEntry;
+import com.gepardec.mega.db.entity.project.ProjectStep;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.FinishedAndTotalComments;
 import com.gepardec.mega.domain.model.ProjectEmployees;
+import com.gepardec.mega.domain.model.ProjectState;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.StepName;
 import com.gepardec.mega.domain.model.UserContext;
@@ -17,6 +19,7 @@ import com.gepardec.mega.rest.model.ProjectManagementEntry;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.project.ProjectService;
+import com.gepardec.mega.service.api.projectentry.ProjectEntryService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import org.apache.commons.lang3.StringUtils;
 
@@ -55,6 +58,9 @@ public class ManagementResource {
 
     @Inject
     ProjectService projectService;
+
+    @Inject
+    ProjectEntryService projectEntryService;
 
     @GET
     @Path("/officemanagemententries/{year}/{month}")
@@ -105,20 +111,38 @@ public class ManagementResource {
         Map<String, Employee> employees = createEmployeeCache();
         for (ProjectEmployees currentProject : projectEmployees) {
             List<ManagementEntry> entries = createManagementEntriesForProject(currentProject, employees, from, to);
-            if (!entries.isEmpty()) {
+            final List<ProjectEntry> projectEntries = projectEntryService.findByNameAndDate(currentProject.projectId(), from, to);
+
+            if (!entries.isEmpty() && !projectEntries.isEmpty()) {
                 projectManagementEntries.add(ProjectManagementEntry.builder()
                         .projectName(currentProject.projectId())
-                        .controlProjectState(ProjectState.OPEN)
-                        .controlBillingState(ProjectState.WORK_IN_PROGRESS)
-                        .presetControlProjectState(Boolean.TRUE)
-                        .presetControlBillingState(Boolean.FALSE)
+                        .controlProjectState(ProjectState.byName(getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_PROJECT).getState().name()))
+                        .controlBillingState(ProjectState.byName((getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_BILLING).getState().name())))
+                        .presetControlProjectState(getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_PROJECT).isPreset())
+                        .presetControlBillingState(getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_BILLING).isPreset())
                         .entries(entries)
                         .build()
                 );
+//                projectManagementEntries.add(ProjectManagementEntry.builder()
+//                        .projectName(currentProject.projectId())
+//                        .controlProjectState(null)
+//                        .controlBillingState(null)
+//                        .presetControlProjectState(null)
+//                        .presetControlBillingState(null)
+//                        .entries(entries)
+//                        .build()
+//                );
             }
         }
 
         return projectManagementEntries;
+    }
+
+    private ProjectEntry getProjectEntryForProjectStep(List<ProjectEntry> projectEntries, ProjectStep projectStep) {
+        return projectEntries.stream()
+                .filter(p -> p.getStep() == projectStep)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(String.format("No project entry found for project step '%s'", projectStep)));
     }
 
     private Map<String, Employee> createEmployeeCache() {

@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-step
+      author: thomas
+      changes:
+        - loadData:
+            tableName: step
+            separator: ';'
+            file: 'db/data/step-2.0.csv'

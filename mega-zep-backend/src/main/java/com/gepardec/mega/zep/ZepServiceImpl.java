@@ -9,6 +9,7 @@ import com.gepardec.mega.zep.mapper.ProjectEntryMapper;
 import de.provantis.zep.KategorieListeType;
 import de.provantis.zep.KategorieType;
 import de.provantis.zep.MitarbeiterType;
+import de.provantis.zep.ProjektListeType;
 import de.provantis.zep.ProjektMitarbeiterListeType;
 import de.provantis.zep.ProjektMitarbeiterType;
 import de.provantis.zep.ProjektType;
@@ -133,7 +134,8 @@ public class ZepServiceImpl implements ZepService {
     public List<Project> getProjectsForMonthYear(final LocalDate monthYear) {
         final ReadProjekteResponseType readProjekteResponseType = getProjectsInternal(monthYear);
 
-        return readProjekteResponseType.getProjektListe().getProjekt()
+        ProjektListeType projektListe = readProjekteResponseType.getProjektListe();
+        return projektListe.getProjekt()
                 .stream()
                 .map(pt -> createProject(pt, monthYear))
                 .collect(Collectors.toList());
@@ -165,9 +167,18 @@ public class ZepServiceImpl implements ZepService {
     }
 
     private Project createProject(final ProjektType projektType, final LocalDate monthYear) {
+        Optional<String> endDateString = Optional.ofNullable(projektType.getEndeDatum());
+        LocalDate endDate = endDateString.isPresent() ?
+                LocalDate.parse(endDateString.get()) :
+                LocalDate.now()
+                        .plusYears(5)
+                        .with(TemporalAdjusters.lastDayOfYear());
+
         return Project.builder()
                 .projectId(projektType.getProjektNr())
                 .description(projektType.getBezeichnung())
+                .startDate(LocalDate.parse(projektType.getStartDatum()))
+                .endDate(endDate)
                 .employees(createProjectEmployees(projektType.getProjektmitarbeiterListe(), monthYear))
                 .leads(createProjectLeads(projektType.getProjektmitarbeiterListe(), monthYear))
                 .categories(createCategories(projektType))
