@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-public class StepEntryResourceTest {
+class StepEntryResourceTest {
 
     @InjectMock
     private UserContext userContext;

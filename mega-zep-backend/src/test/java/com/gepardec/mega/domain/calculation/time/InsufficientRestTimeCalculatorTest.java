@@ -7,7 +7,6 @@ import com.gepardec.mega.domain.model.monthlyreport.Task;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -52,90 +51,79 @@ class InsufficientRestTimeCalculatorTest {
                 .vehicle(Vehicle.OTHER_INACTIVE)
                 .build();
     }
-    @Nested
-    class Calculate {
 
-        @Test
-        void whenDataListEmpty_thenNoWarningsCreated() {
-            assertTrue(calculator.calculate(List.of()).isEmpty());
-        }
+    @Test
+    void whenDataListEmpty_thenNoWarningsCreated() {
+        assertTrue(calculator.calculate(List.of()).isEmpty());
+    }
 
-        @Test
-        void whenWarning_thenOnlyMissingRestTimeSet() {
-            final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
-            final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(2, 8, 0, 11, 0);
+    @Test
+    void whenWarning_thenOnlyMissingRestTimeSet() {
+        final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
+        final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(2, 8, 0, 11, 0);
 
-            final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
+        final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
 
-            assertEquals(1, warnings.size());
-            final TimeWarning warning = warnings.get(0);
-            assertNotNull(warning.getDate());
-            assertNotNull(warning.getMissingRestTime());
-            assertNull(warning.getExcessWorkTime());
-            assertNull(warning.getMissingBreakTime());
-        }
+        assertEquals(1, warnings.size());
+        final TimeWarning warning = warnings.get(0);
+        assertNotNull(warning.getDate());
+        assertNotNull(warning.getMissingRestTime());
+        assertNull(warning.getExcessWorkTime());
+        assertNull(warning.getMissingBreakTime());
+    }
 
-        @Test
-        void whenUnordered_thenOrdered() {
-            final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
-            final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(2, 8, 0, 11, 0);
+    @Test
+    void whenUnordered_thenOrdered() {
+        final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
+        final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(2, 8, 0, 11, 0);
 
-            final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryTwo, timeEntryOne));
+        final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryTwo, timeEntryOne));
 
-            assertEquals(1, warnings.size());
-            assertEquals(1, warnings.get(0).getMissingRestTime());
-        }
+        assertEquals(1, warnings.size());
+        assertEquals(1, warnings.get(0).getMissingRestTime());
+    }
 
-        @Nested
-        class WithWarnings {
+    @Test
+    void when10HoursRestTime_thenWarning() {
+        final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
+        final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(2, 8, 0, 11, 0);
 
-            @Test
-            void when10HoursRestTime_thenWarning() {
-                final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
-                final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(2, 8, 0, 11, 0);
+        final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
 
-                final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
+        assertEquals(1, warnings.size());
+        assertEquals(1, warnings.get(0).getMissingRestTime());
+    }
 
-                assertEquals(1, warnings.size());
-                assertEquals(1, warnings.get(0).getMissingRestTime());
-            }
+    @Test
+    void whenOneJourneyEntryAnd10HoursRestTime_thenWarning() {
+        final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
+        final JourneyTimeEntry timeEntryTwo = journeyTimeEntryFor(1, 22, 0, 2, 1, 0);
+        final ProjectTimeEntry timeEntryThree = projectTimeEntryFor(2, 8, 0, 11, 0);
 
-            @Test
-            void whenOneJourneyEntryAnd10HoursRestTime_thenWarning() {
-                final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
-                final JourneyTimeEntry timeEntryTwo = journeyTimeEntryFor(1, 22, 0, 2, 1, 0);
-                final ProjectTimeEntry timeEntryThree = projectTimeEntryFor(2, 8, 0, 11, 0);
+        final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
 
-                final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
+        assertEquals(1, warnings.size());
+        assertEquals(1, warnings.get(0).getMissingRestTime());
+    }
 
-                assertEquals(1, warnings.size());
-                assertEquals(1, warnings.get(0).getMissingRestTime());
-            }
-        }
+    @Test
+    void when11HoursRestTime_thenNoWarning() {
+        final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
+        final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(2, 9, 0, 11, 0);
 
-        @Nested
-        class WithoutWarnings {
+        final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
 
-            @Test
-            void when11HoursRestTime_thenNoWarning() {
-                final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
-                final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(2, 9, 0, 11, 0);
+        assertTrue(warnings.isEmpty());
+    }
 
-                final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
+    @Test
+    void whenOneJourneyEntryAnd11HoursRestTime_thenNoWarning() {
+        final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
+        final JourneyTimeEntry timeEntryTwo = journeyTimeEntryFor(1, 22, 0, 2, 1, 0);
+        final ProjectTimeEntry timeEntryThree = projectTimeEntryFor(2, 9, 0, 11, 0);
 
-                assertTrue(warnings.isEmpty());
-            }
+        final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
 
-            @Test
-            void whenOneJourneyEntryAnd11HoursRestTime_thenNoWarning() {
-                final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
-                final JourneyTimeEntry timeEntryTwo = journeyTimeEntryFor(1, 22, 0, 2, 1, 0);
-                final ProjectTimeEntry timeEntryThree = projectTimeEntryFor(2, 9, 0, 11, 0);
-
-                final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
-
-                assertTrue(warnings.isEmpty());
-            }
-        }
+        assertTrue(warnings.isEmpty());
     }
 }

@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-public class ManagementResourceTest {
+class ManagementResourceTest {
 
     @InjectMock
     EmployeeService employeeService;
@@ -346,5 +346,4 @@ public class ManagementResourceTest {
                 .email(email)
                 .build();
     }
-
 }

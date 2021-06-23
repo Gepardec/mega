@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 @ExtendWith(MockitoExtension.class)
-public class MonthlyReportServiceImplTest {
+class MonthlyReportServiceImplTest {
 
     @Mock
     private ZepService zepService;

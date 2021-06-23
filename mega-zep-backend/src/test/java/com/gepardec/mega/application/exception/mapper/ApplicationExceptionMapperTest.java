@@ -16,7 +16,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class ApplicationExceptionMapperTest {
+class ApplicationExceptionMapperTest {
 
     @Mock
     private Logger logger;

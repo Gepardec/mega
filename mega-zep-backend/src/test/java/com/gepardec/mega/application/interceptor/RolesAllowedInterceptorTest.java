@@ -90,6 +90,7 @@ class RolesAllowedInterceptorTest {
             }
         };
     }
+
     @RolesAllowed(Role.EMPLOYEE)
     private static class TargetWithAnnotation {
 

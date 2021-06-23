@@ -151,5 +151,4 @@ class BusinessDayCalculatorTest {
     private void assertReminderEquals(Mail expectedMail, Optional<Mail> actualReminder) {
         assertEquals(expectedMail, actualReminder.get());
     }
-
 }

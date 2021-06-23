@@ -9,7 +9,6 @@ import com.gepardec.mega.domain.model.monthlyreport.Task;
 import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -55,134 +54,123 @@ class InvalidJourneyCalculatorTest {
                 .vehicle(Vehicle.OTHER_INACTIVE)
                 .build();
     }
-    @Nested
-    class Calculate {
 
-        @Nested
-        class WithWarnings {
+    @Test
+    void whenOnlyDeparture_thenWarning() {
+        final JourneyTimeEntry journeyTimeEntry = journeyTimeEntryFor(8, 9, JourneyDirection.TO, WorkingLocation.MAIN);
 
-            @Test
-            void whenOnlyDeparture_thenWarning() {
-                final JourneyTimeEntry journeyTimeEntry = journeyTimeEntryFor(8, 9, JourneyDirection.TO, WorkingLocation.MAIN);
+        final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntry));
 
-                final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntry));
+        assertEquals(1, warnings.size());
+        assertEquals(1, warnings.get(0).getWarningTypes().size());
+        assertEquals(JourneyWarningType.BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
 
-                assertEquals(1, warnings.size());
-                assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(JourneyWarningType.BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
+    }
 
-            }
+    @Test
+    void whenDepartureAndProjectTimeEntry_thenWarning() {
+        final JourneyTimeEntry journeyTimeEntry = journeyTimeEntryFor(1, 8, JourneyDirection.TO, WorkingLocation.MAIN);
+        final ProjectTimeEntry projectTimeEntry = projectTimeEntryFor(8, 10);
 
-            @Test
-            void whenDepartureAndProjectTimeEntry_thenWarning() {
-                final JourneyTimeEntry journeyTimeEntry = journeyTimeEntryFor(1, 8, JourneyDirection.TO, WorkingLocation.MAIN);
-                final ProjectTimeEntry projectTimeEntry = projectTimeEntryFor(8, 10);
+        final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntry, projectTimeEntry));
 
-                final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntry, projectTimeEntry));
+        assertEquals(1, warnings.size());
+        assertEquals(1, warnings.get(0).getWarningTypes().size());
+        assertEquals(JourneyWarningType.BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
+    }
 
-                assertEquals(1, warnings.size());
-                assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(JourneyWarningType.BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
-            }
+    @Test
+    void whenFurtherAndProjectTimeEntryAndArrival_thenWarning() {
+        final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.FURTHER, WorkingLocation.MAIN);
+        final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(8, 10);
+        final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(10, 12, JourneyDirection.BACK, WorkingLocation.MAIN);
 
-            @Test
-            void whenFurtherAndProjectTimeEntryAndArrival_thenWarning() {
-                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.FURTHER, WorkingLocation.MAIN);
-                final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(8, 10);
-                final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(10, 12, JourneyDirection.BACK, WorkingLocation.MAIN);
+        final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
 
-                final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
+        // TODO: Both journey entries cause TO_MISSING Warning, because all are checked separately
+        assertEquals(2, warnings.size());
+        assertEquals(1, warnings.get(0).getWarningTypes().size());
+        assertEquals(JourneyWarningType.TO_MISSING, warnings.get(0).getWarningTypes().get(0));
+        assertEquals(JourneyWarningType.TO_MISSING, warnings.get(1).getWarningTypes().get(0));
+    }
 
-                // TODO: Both journey entries cause TO_MISSING Warning, because all are checked separately
-                assertEquals(2, warnings.size());
-                assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(JourneyWarningType.TO_MISSING, warnings.get(0).getWarningTypes().get(0));
-                assertEquals(JourneyWarningType.TO_MISSING, warnings.get(1).getWarningTypes().get(0));
-            }
+    @Test
+    void whenDepartureAndProjectTimeEntryAndDepartureAgain_thenWarning() {
+        final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.TO, WorkingLocation.MAIN);
+        final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(8, 10);
+        final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(10, 12, JourneyDirection.TO, WorkingLocation.MAIN);
 
-            @Test
-            void whenDepartureAndProjectTimeEntryAndDepartureAgain_thenWarning() {
-                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.TO, WorkingLocation.MAIN);
-                final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(8, 10);
-                final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(10, 12, JourneyDirection.TO, WorkingLocation.MAIN);
+        final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
 
-                final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
+        // TODO: Both journey entries cause BACK_MISSING Warning, because all are checked separately
+        assertEquals(2, warnings.size());
+        assertEquals(1, warnings.get(0).getWarningTypes().size());
+        assertEquals(JourneyWarningType.BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
+        assertEquals(JourneyWarningType.BACK_MISSING, warnings.get(1).getWarningTypes().get(0));
+    }
 
-                // TODO: Both journey entries cause BACK_MISSING Warning, because all are checked separately
-                assertEquals(2, warnings.size());
-                assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(JourneyWarningType.BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
-                assertEquals(JourneyWarningType.BACK_MISSING, warnings.get(1).getWarningTypes().get(0));
-            }
+    @Test
+    void whenArrivalAndProjectTimeEntryAndArrivalAgain_thenWarning() {
+        final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.BACK, WorkingLocation.MAIN);
+        final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(8, 10);
+        final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(10, 12, JourneyDirection.BACK, WorkingLocation.MAIN);
 
-            @Test
-            void whenArrivalAndProjectTimeEntryAndArrivalAgain_thenWarning() {
-                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.BACK, WorkingLocation.MAIN);
-                final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(8, 10);
-                final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(10, 12, JourneyDirection.BACK, WorkingLocation.MAIN);
+        final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
 
-                final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
+        // TODO: Both journey entries cause TO_MISSING Warning, because all are checked separately
+        assertEquals(2, warnings.size());
+        assertEquals(1, warnings.get(0).getWarningTypes().size());
+        assertEquals(JourneyWarningType.TO_MISSING, warnings.get(0).getWarningTypes().get(0));
+        assertEquals(JourneyWarningType.TO_MISSING, warnings.get(1).getWarningTypes().get(0));
+    }
 
-                // TODO: Both journey entries cause TO_MISSING Warning, because all are checked separately
-                assertEquals(2, warnings.size());
-                assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(JourneyWarningType.TO_MISSING, warnings.get(0).getWarningTypes().get(0));
-                assertEquals(JourneyWarningType.TO_MISSING, warnings.get(1).getWarningTypes().get(0));
-            }
+    @Test
+    void whenArrivalAndProjectTimeEntryAndFurther_thenWarning() {
+        final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.BACK, WorkingLocation.MAIN);
+        final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(8, 10);
+        final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(10, 12, JourneyDirection.FURTHER, WorkingLocation.MAIN);
 
-            @Test
-            void whenArrivalAndProjectTimeEntryAndFurther_thenWarning() {
-                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.BACK, WorkingLocation.MAIN);
-                final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(8, 10);
-                final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(10, 12, JourneyDirection.FURTHER, WorkingLocation.MAIN);
+        final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
 
-                final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
+        // TODO: Both journey entries cause TO_MISSING Warning, because all are checked separately
+        assertEquals(2, warnings.size());
+        assertEquals(1, warnings.get(0).getWarningTypes().size());
+        assertEquals(JourneyWarningType.TO_MISSING, warnings.get(0).getWarningTypes().get(0));
+        assertEquals(JourneyWarningType.TO_MISSING, warnings.get(1).getWarningTypes().get(0));
+    }
 
-                // TODO: Both journey entries cause TO_MISSING Warning, because all are checked separately
-                assertEquals(2, warnings.size());
-                assertEquals(1, warnings.get(0).getWarningTypes().size());
-                assertEquals(JourneyWarningType.TO_MISSING, warnings.get(0).getWarningTypes().get(0));
-                assertEquals(JourneyWarningType.TO_MISSING, warnings.get(1).getWarningTypes().get(0));
-            }
-        }
+    @Test
+    void whenDepartureAndProjectTimeAndArrival_thenNoWarning() {
+        final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.TO, WorkingLocation.MAIN);
+        final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(8, 14);
+        final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(14, 16, JourneyDirection.BACK, WorkingLocation.MAIN);
 
-        @Nested
-        class WithoutWarnings {
+        final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
 
-            @Test
-            void whenDepartureAndProjectTimeAndArrival_thenNoWarning() {
-                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.TO, WorkingLocation.MAIN);
-                final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(8, 14);
-                final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(14, 16, JourneyDirection.BACK, WorkingLocation.MAIN);
+        assertTrue(warnings.isEmpty());
+    }
 
-                final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
+    @Test
+    void whenDepartureAndArrival_thenNoWarning() {
+        final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.TO, WorkingLocation.MAIN);
+        final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(14, 16, JourneyDirection.BACK, WorkingLocation.MAIN);
 
-                assertTrue(warnings.isEmpty());
-            }
+        final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, journeyTimeEntryThree));
 
-            @Test
-            void whenDepartureAndArrival_thenNoWarning() {
-                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 8, JourneyDirection.TO, WorkingLocation.MAIN);
-                final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(14, 16, JourneyDirection.BACK, WorkingLocation.MAIN);
+        assertTrue(warnings.isEmpty());
+    }
 
-                final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, journeyTimeEntryThree));
+    @Test
+    void whenDepartureAndProjectTimeEntryAndFurtherAndProjectTimeEntryAndArrival_thenNoWarning() {
+        final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(8, 9, JourneyDirection.TO, WorkingLocation.MAIN);
+        final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(9, 10);
+        final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(10, 11, JourneyDirection.FURTHER, WorkingLocation.MAIN);
+        final ProjectTimeEntry projectTimeEntryFour = projectTimeEntryFor(11, 12);
+        final JourneyTimeEntry journeyTimeEntryFive = journeyTimeEntryFor(12, 13, JourneyDirection.BACK, WorkingLocation.MAIN);
 
-                assertTrue(warnings.isEmpty());
-            }
+        final List<JourneyWarning> warnings = calculator
+                .calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree, projectTimeEntryFour, journeyTimeEntryFive));
 
-            @Test
-            void whenDepartureAndProjectTimeEntryAndFurtherAndProjectTimeEntryAndArrival_thenNoWarning() {
-                final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(8, 9, JourneyDirection.TO, WorkingLocation.MAIN);
-                final ProjectTimeEntry projectTimeEntryTwo = projectTimeEntryFor(9, 10);
-                final JourneyTimeEntry journeyTimeEntryThree = journeyTimeEntryFor(10, 11, JourneyDirection.FURTHER, WorkingLocation.MAIN);
-                final ProjectTimeEntry projectTimeEntryFour = projectTimeEntryFor(11, 12);
-                final JourneyTimeEntry journeyTimeEntryFive = journeyTimeEntryFor(12, 13, JourneyDirection.BACK, WorkingLocation.MAIN);
-
-                final List<JourneyWarning> warnings = calculator
-                        .calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree, projectTimeEntryFour, journeyTimeEntryFive));
-
-                assertTrue(warnings.isEmpty());
-            }
-        }
+        assertTrue(warnings.isEmpty());
     }
 }
