@@ -80,7 +80,7 @@ public class ProjectEntry {
     @JoinColumn(name = "owner_employee_user_id",
             referencedColumnName = "id",
             updatable = false,
-            foreignKey = @ForeignKey(name = "fk_owner_employee_user_id", value = ConstraintMode.CONSTRAINT))
+            foreignKey = @ForeignKey(name = "fk_owner_employee_user_id_project", value = ConstraintMode.CONSTRAINT))
     private User owner;
 
     /**
@@ -93,7 +93,7 @@ public class ProjectEntry {
     @JoinColumn(name = "assignee_employee_user_id",
             referencedColumnName = "id",
             updatable = false,
-            foreignKey = @ForeignKey(name = "fk_assignee_employee_user_id", value = ConstraintMode.CONSTRAINT))
+            foreignKey = @ForeignKey(name = "fk_assignee_employee_user_id_project", value = ConstraintMode.CONSTRAINT))
     private User assignee;
 
     /**
