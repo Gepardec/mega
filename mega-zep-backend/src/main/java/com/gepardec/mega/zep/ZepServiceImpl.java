@@ -1,6 +1,5 @@
 package com.gepardec.mega.zep;
 
-import com.gepardec.mega.application.constant.DateTimeConstants;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
