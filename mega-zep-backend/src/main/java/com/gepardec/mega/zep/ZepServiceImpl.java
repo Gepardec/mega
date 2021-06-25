@@ -178,7 +178,7 @@ public class ZepServiceImpl implements ZepService {
         return Project.builder()
                 .projectId(projektType.getProjektNr())
                 .description(projektType.getBezeichnung())
-                .startDate(LocalDate.parse(projektType.getStartDatum(), DateTimeFormatter.ofPattern(DateTimeConstants.DATE_PATTERN)))
+                .startDate(LocalDate.parse(projektType.getStartDatum()))
                 .endDate(endDate)
                 .employees(createProjectEmployees(projektType.getProjektmitarbeiterListe(), monthYear))
                 .leads(createProjectLeads(projektType.getProjektmitarbeiterListe(), monthYear))
