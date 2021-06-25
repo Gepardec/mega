@@ -20,7 +20,7 @@ quarkus:
       level: "ALL"
 
   liquibase:
-    change-log: "db/changelog-master.yaml"
+    change-log: "db/changelog-master.xml"
     migrate-at-start: false
 
   mailer:
