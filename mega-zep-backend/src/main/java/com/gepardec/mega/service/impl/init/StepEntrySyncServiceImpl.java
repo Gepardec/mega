@@ -9,6 +9,7 @@ import com.gepardec.mega.domain.model.StepEntry;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.service.api.init.StepEntrySyncService;
 import com.gepardec.mega.service.api.project.ProjectService;
+import com.gepardec.mega.service.api.projectentry.ProjectEntryService;
 import com.gepardec.mega.service.api.step.StepService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.service.api.user.UserService;
@@ -49,8 +50,11 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
     @Inject
     NotificationConfig notificationConfig;
 
+    @Inject
+    ProjectEntryService projectEntryService;
+
     @Override
-    public void genereteStepEntries() {
+    public void generateStepEntries() {
         final StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 

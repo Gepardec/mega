@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-public class CommentResourceTest {
+class CommentResourceTest {
 
     @InjectMock
     private UserContext userContext;

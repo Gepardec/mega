@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
-public class ConstraintViolationExceptionMapperTest {
+class ConstraintViolationExceptionMapperTest {
 
     @Mock
     private Logger logger;
@@ -71,6 +71,7 @@ public class ConstraintViolationExceptionMapperTest {
                 ValidationViolation.of("name", "must not be null"),
                 ValidationViolation.of("email", "must not be null"))));
     }
+
     public static class Model {
 
         @NotNull(message = "must not be null")

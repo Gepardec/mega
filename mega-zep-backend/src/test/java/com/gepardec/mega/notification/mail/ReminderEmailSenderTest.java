@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-public class ReminderEmailSenderTest {
+class ReminderEmailSenderTest {
 
     @Inject
     ReminderEmailSender reminderEmailSender;

@@ -12,7 +12,6 @@ import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.service.api.user.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -22,6 +21,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -77,6 +77,7 @@ class StepEntrySyncServiceImplTest {
                                         userForEmployee(5),
                                         userForEmployee(6))
                                         .stream().map(User::userId).collect(Collectors.toList()))
+                        .startDate(LocalDate.now())
                         .build(),
                 projectFor(2)
                         .leads(
@@ -87,6 +88,7 @@ class StepEntrySyncServiceImplTest {
                                         userForEmployee(5),
                                         userForEmployee(6))
                                         .stream().map(User::userId).collect(Collectors.toList()))
+                        .startDate(LocalDate.now())
                         .build(),
                 projectFor(3)
                         .leads(
@@ -97,6 +99,7 @@ class StepEntrySyncServiceImplTest {
                                         userForEmployee(5),
                                         userForEmployee(6))
                                         .stream().map(User::userId).collect(Collectors.toList()))
+                        .startDate(LocalDate.now())
                         .build()
         ));
         when(stepService.getSteps()).thenReturn(
@@ -148,323 +151,278 @@ class StepEntrySyncServiceImplTest {
                 .name(name)
                 .role(role);
     }
-    @Nested
-    class WithAll {
 
-        @BeforeEach
-        void setUp() {
+    @Test
+    void whenAllDataIsProvided_thenInsertDefinedNumberOfItems() {
+        // Given
+        // default setup
 
-        }
+        // When
+        stepEntrySyncService.generateStepEntries();
 
-        @Test
-        void whenAllDataIsProvided_thenInsertDefinedNumberOfItems() {
-            // Given
-            // default setup
-
-            // When
-            stepEntrySyncService.genereteStepEntries();
-
-            // Then
-            verify(stepEntryService, times(34)).addStepEntry(Mockito.any());
-        }
+        // Then
+        verify(stepEntryService, times(34)).addStepEntry(Mockito.any());
     }
-    @Nested
-    class WithProjectLead {
 
-        @BeforeEach
-        void setUp() {
-            when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
-        }
+    @Test
+    void whenNoProjectsProvided_thenDoNotInsertProjectLead() {
+        // Given
+        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
+        when(projectService.getProjectsForMonthYear(Mockito.any(), Mockito.anyList())).thenReturn(List.of());
 
-        @Test
-        void whenNoProjectsProvided_thenDoNotInsertProjectLead() {
-            // Given
-            when(projectService.getProjectsForMonthYear(Mockito.any(), Mockito.anyList())).thenReturn(List.of());
+        // When
+        stepEntrySyncService.generateStepEntries();
 
-            // When
-            stepEntrySyncService.genereteStepEntries();
+        // Then
+        final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
+        verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
+        final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
-            // Then
-            final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
-            verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
-            final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
+        // Project Lead 1
+        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 1).count());
+        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 1).count());
 
-            // Project Lead 1
-            Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 1).count());
-            Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 1).count());
+        // Project Lead 2
+        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 2).count());
+        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 2).count());
 
-            // Project Lead 2
-            Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 2).count());
-            Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 2).count());
-
-            // Steps
-            Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count());
-        }
-
-        @Test
-        void whenProjectLeadIsInactive_thenDoNotInsertProjectLead() {
-            // Given
-            when(projectService.getProjectsForMonthYear(Mockito.any(), Mockito.anyList())).thenReturn(List.of(projectFor(1)
-                    .leads(
-                            List.of(userForProjectLead(7))
-                                    .stream().map(User::userId).collect(Collectors.toList()))
-                    .employees(
-                            List.of(userForProjectLead(1),
-                                    userForEmployee(4),
-                                    userForEmployee(5),
-                                    userForEmployee(6))
-                                    .stream().map(User::userId).collect(Collectors.toList()))
-                    .build()));
-
-            // When
-            stepEntrySyncService.genereteStepEntries();
-
-            // Then
-            final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
-            verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
-            final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
-
-            // Project Lead 1
-            Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 1).count());
-            Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 1).count());
-
-            // Project Lead 2
-            Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 2).count());
-            Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 2).count());
-
-            // Steps
-            Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count());
-        }
-
-        @Test
-        void whenDefaultDataIsProvided_thenInsertProjectLead() {
-            // Given
-            // default setup
-
-            // When
-            stepEntrySyncService.genereteStepEntries();
-
-            // Then
-            final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
-            verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
-            final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
-
-            // Project Lead 1
-            Assertions.assertEquals(3, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 1).count());
-            Assertions.assertEquals(8, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 1).count());
-
-            // Project Lead 2
-            Assertions.assertEquals(2, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 2).count());
-            Assertions.assertEquals(4, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 2).count());
-
-            // Steps
-            Assertions.assertEquals(10, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count());
-        }
+        // Steps
+        Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count());
     }
-    @Nested
-    class WithOfficeManagment {
 
-        @BeforeEach
-        void setUp() {
+    @Test
+    void whenProjectLeadIsInactive_thenDoNotInsertProjectLead() {
+        // Given
+        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
+        when(projectService.getProjectsForMonthYear(Mockito.any(), Mockito.anyList())).thenReturn(List.of(projectFor(1)
+                .leads(
+                        List.of(userForProjectLead(7))
+                                .stream().map(User::userId).collect(Collectors.toList()))
+                .employees(
+                        List.of(userForProjectLead(1),
+                                userForEmployee(4),
+                                userForEmployee(5),
+                                userForEmployee(6))
+                                .stream().map(User::userId).collect(Collectors.toList()))
+                .startDate(LocalDate.now())
+                .build()));
 
-        }
+        // When
+        stepEntrySyncService.generateStepEntries();
 
-        @Test
-        void whenOfficeManagmentIsInactive_thenDoNotInsertOfficeManagment() {
-            // Given
-            when(notificationConfig.getOmMailAddresses()).thenReturn(List.of("some.user@gepardec.com"));
+        // Then
+        final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
+        verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
+        final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
-            // When
-            stepEntrySyncService.genereteStepEntries();
+        // Project Lead 1
+        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 1).count());
+        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 1).count());
 
-            // Then
-            final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
-            verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
-            final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
+        // Project Lead 2
+        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 2).count());
+        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 2).count());
 
-            // Office Managment 3
-            Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 3).count());
-            Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 3).count());
-
-            // Steps
-            Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count());
-            Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count());
-            Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count());
-        }
-
-        @Test
-        void whenNoOfficeManagmentIsProvided_thenDoNotInsertOfficeManagment() {
-            // Given
-            when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
-
-            // When
-            stepEntrySyncService.genereteStepEntries();
-
-            // Then
-            final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
-            verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
-            final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
-
-            // Office Managment 3
-            Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 3).count());
-            Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 3).count());
-
-            // Steps
-            Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count());
-            Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count());
-            Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count());
-        }
-
-        @Test
-        void whenDefaultDataIsProvided_thenInsertOfficeManagment() {
-            // Given
-            // default setup
-
-            // When
-            stepEntrySyncService.genereteStepEntries();
-
-            // Then
-            final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
-            verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
-            final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
-
-            // Office Managment 3
-            Assertions.assertEquals(4, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 3).count());
-            Assertions.assertEquals(19, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 3).count());
-
-            // Steps
-            Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count());
-            Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count());
-            Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count());
-        }
+        // Steps
+        Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count());
     }
-    @Nested
-    class WithEmployee {
 
-        @BeforeEach
-        void setUp() {
+    @Test
+    void whenDefaultDataIsProvided_thenInsertProjectLead() {
+        // Given
+        // default setup
+        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
+        // When
+        stepEntrySyncService.generateStepEntries();
 
-        }
+        // Then
+        final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
+        verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
+        final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
-        @Test
-        void whenNoActiveUsers_thenDoNotInsertEmployees() {
-            // Given
-            when(userService.findActiveUsers()).thenReturn(List.of());
+        // Project Lead 1
+        Assertions.assertEquals(3, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 1).count());
+        Assertions.assertEquals(8, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 1).count());
 
-            // When
-            stepEntrySyncService.genereteStepEntries();
+        // Project Lead 2
+        Assertions.assertEquals(2, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 2).count());
+        Assertions.assertEquals(4, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 2).count());
 
-            // Then
-            verify(stepEntryService, never()).addStepEntry(Mockito.any());
-        }
-
-        @Test
-        void whenDefaultDataIsProvided_thenInsertEmployees() {
-            // Given
-            // default setup
-
-            // When
-            stepEntrySyncService.genereteStepEntries();
-
-            // Then
-            final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
-            verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
-            final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
-
-            // Employee 4
-            Assertions.assertEquals(5, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 4).count());
-            Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 4).count());
-
-            // Employee 5
-            Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 5).count());
-            Assertions.assertEquals(7, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 5).count());
-
-            // Employee 6
-            Assertions.assertEquals(7, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 6).count());
-            Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 6).count());
-
-            // Steps
-            Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIMES")).count());
-        }
+        // Steps
+        Assertions.assertEquals(10, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count());
     }
-    @Nested
-    class WithProject {
 
-        @BeforeEach
-        void setUp() {
+    @Test
+    void whenOfficeManagmentIsInactive_thenDoNotInsertOfficeManagment() {
+        // Given
+        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of("some.user@gepardec.com"));
 
-        }
+        // When
+        stepEntrySyncService.generateStepEntries();
 
-        @Test
-        void whenNoStepsProvided_thenDoNotInsertSteps() {
-            // Given
-            when(stepService.getSteps()).thenReturn(List.of());
+        // Then
+        final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
+        verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
+        final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
-            // When
-            stepEntrySyncService.genereteStepEntries();
+        // Office Managment 3
+        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 3).count());
+        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 3).count());
 
-            // Then
-            verify(stepEntryService, never()).addStepEntry(Mockito.any());
-        }
-
-        @Test
-        void whenDefaultDataIsProvided_thenInsertSteps() {
-            // Given
-            // default setup
-
-            // When
-            stepEntrySyncService.genereteStepEntries();
-
-            // Then
-            final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
-            verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
-            final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
-
-            // Project 1
-            Assertions.assertEquals(4, stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().projectId().equals(String.valueOf(1))).count());
-
-            // Project 2
-            Assertions.assertEquals(3, stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().projectId().equals(String.valueOf(2))).count());
-
-            // Project 3
-            Assertions.assertEquals(3, stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().projectId().equals(String.valueOf(3))).count());
-        }
+        // Steps
+        Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count());
+        Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count());
+        Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count());
     }
-    @Nested
-    class WithStep {
 
-        @BeforeEach
-        void setUp() {
+    @Test
+    void whenNoOfficeManagmentIsProvided_thenDoNotInsertOfficeManagment() {
+        // Given
+        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
 
-        }
+        // When
+        stepEntrySyncService.generateStepEntries();
 
-        @Test
-        void whenDefaultDataIsProvided_thenInsertSteps() {
-            // Given
-            // default setup
+        // Then
+        final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
+        verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
+        final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
-            // When
-            stepEntrySyncService.genereteStepEntries();
+        // Office Managment 3
+        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 3).count());
+        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 3).count());
 
-            // Then
-            final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
-            verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
-            final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
+        // Steps
+        Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count());
+        Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count());
+        Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count());
+    }
 
-            // Step 1
-            Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIMES")).count());
+    @Test
+    void whenDefaultDataIsProvided_thenInsertOfficeManagment() {
+        // Given
+        // default setup
 
-            // Step 2
-            Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count());
+        // When
+        stepEntrySyncService.generateStepEntries();
 
-            // Step 3
-            Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count());
+        // Then
+        final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
+        verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
+        final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
-            // Step 4
-            Assertions.assertEquals(10, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count());
+        // Office Managment 3
+        Assertions.assertEquals(4, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 3).count());
+        Assertions.assertEquals(19, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 3).count());
 
-            // Step 5
-            Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count());
-        }
+        // Steps
+        Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count());
+        Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count());
+        Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count());
+    }
+
+    @Test
+    void whenNoActiveUsers_thenDoNotInsertEmployees() {
+        // Given
+        when(userService.findActiveUsers()).thenReturn(List.of());
+
+        // When
+        stepEntrySyncService.generateStepEntries();
+
+        // Then
+        verify(stepEntryService, never()).addStepEntry(Mockito.any());
+    }
+
+    @Test
+    void whenDefaultDataIsProvided_thenInsertEmployees() {
+        // Given
+        // default setup
+
+        // When
+        stepEntrySyncService.generateStepEntries();
+
+        // Then
+        final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
+        verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
+        final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
+
+        // Employee 4
+        Assertions.assertEquals(5, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 4).count());
+        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 4).count());
+
+        // Employee 5
+        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 5).count());
+        Assertions.assertEquals(7, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 5).count());
+
+        // Employee 6
+        Assertions.assertEquals(7, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 6).count());
+        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 6).count());
+
+        // Steps
+        Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIMES")).count());
+    }
+
+    @Test
+    void whenNoStepsProvided_thenDoNotInsertSteps() {
+        // Given
+        when(stepService.getSteps()).thenReturn(List.of());
+
+        // When
+        stepEntrySyncService.generateStepEntries();
+
+        // Then
+        verify(stepEntryService, never()).addStepEntry(Mockito.any());
+    }
+
+    @Test
+    void whenDefaultDataIsProvided_thenInsertSteps() {
+        // Given
+        // default setup
+
+        // When
+        stepEntrySyncService.generateStepEntries();
+
+        // Then
+        final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
+        verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
+        final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
+
+        // Project 1
+        Assertions.assertEquals(4, stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().projectId().equals(String.valueOf(1))).count());
+
+        // Project 2
+        Assertions.assertEquals(3, stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().projectId().equals(String.valueOf(2))).count());
+
+        // Project 3
+        Assertions.assertEquals(3, stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().projectId().equals(String.valueOf(3))).count());
+    }
+
+    @Test
+    void whenDefaultDataIsProvided_thenInsertSteps2() {
+        // Given
+        // default setup
+
+        // When
+        stepEntrySyncService.generateStepEntries();
+
+        // Then
+        final ArgumentCaptor<StepEntry> argumentCaptor = ArgumentCaptor.forClass(StepEntry.class);
+        verify(stepEntryService, atLeastOnce()).addStepEntry(argumentCaptor.capture());
+        final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
+
+        // Step 1
+        Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIMES")).count());
+
+        // Step 2
+        Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count());
+
+        // Step 3
+        Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count());
+
+        // Step 4
+        Assertions.assertEquals(10, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count());
+
+        // Step 5
+        Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count());
     }
 }

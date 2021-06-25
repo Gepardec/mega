@@ -1,55 +1,7 @@
 databaseChangeLog:
   - changeSet:
-      id: 1621596532600-1
-      author: mega (generated)
-      changes:
-        - createSequence:
-            incrementBy: 1
-            sequenceName: sequence_comment_id
-            startValue: 1
-  - changeSet:
-      id: 1621596532600-2
-      author: mega (generated)
-      changes:
-        - createSequence:
-            incrementBy: 1
-            sequenceName: sequence_project_entry_id
-            startValue: 1
-  - changeSet:
-      id: 1621596532600-3
-      author: mega (generated)
-      changes:
-        - createSequence:
-            incrementBy: 1
-            sequenceName: sequence_project_id
-            startValue: 1
-  - changeSet:
-      id: 1621596532600-4
-      author: mega (generated)
-      changes:
-        - createSequence:
-            incrementBy: 1
-            sequenceName: sequence_step_entry_id
-            startValue: 1
-  - changeSet:
-      id: 1621596532600-5
-      author: mega (generated)
-      changes:
-        - createSequence:
-            incrementBy: 1
-            sequenceName: sequence_step_id
-            startValue: 1
-  - changeSet:
-      id: 1621596532600-6
-      author: mega (generated)
-      changes:
-        - createSequence:
-            incrementBy: 1
-            sequenceName: sequence_user_id
-            startValue: 1
-  - changeSet:
-      id: 1621596532600-7
-      author: mega (generated)
+      id: 1623657883038-1
+      author: mega
       changes:
         - createTable:
             columns:
@@ -57,7 +9,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: commentPK
+                    primaryKeyName: comment_pkey
                   name: id
                   type: BIGINT
               - column:
@@ -87,8 +39,8 @@ databaseChangeLog:
                   type: BIGINT
             tableName: comment
   - changeSet:
-      id: 1621596532600-8
-      author: mega (generated)
+      id: 1623657883038-2
+      author: mega
       changes:
         - createTable:
             columns:
@@ -96,26 +48,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                  name: employee_id
-                  type: BIGINT
-              - column:
-                  constraints:
-                    nullable: false
-                    primaryKey: true
-                  name: project_id
-                  type: BIGINT
-            tableName: employee_project
-  - changeSet:
-      id: 1621596532600-9
-      author: mega (generated)
-      changes:
-        - createTable:
-            columns:
-              - column:
-                  constraints:
-                    nullable: false
-                    primaryKey: true
-                    primaryKeyName: employee_userPK
+                    primaryKeyName: employee_user_pkey
                   name: id
                   type: BIGINT
               - column:
@@ -163,8 +96,8 @@ databaseChangeLog:
                   type: VARCHAR(100)
             tableName: employee_user
   - changeSet:
-      id: 1621596532600-10
-      author: mega (generated)
+      id: 1623657883038-3
+      author: mega
       changes:
         - createTable:
             columns:
@@ -172,18 +105,20 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
+                    primaryKeyName: employee_user_roles_pkey
                   name: id
                   type: BIGINT
               - column:
                   constraints:
                     nullable: false
                     primaryKey: true
+                    primaryKeyName: employee_user_roles_pkey
                   name: role
                   type: VARCHAR(255)
             tableName: employee_user_roles
   - changeSet:
-      id: 1621596532600-11
-      author: mega (generated)
+      id: 1623657883038-4
+      author: mega
       changes:
         - createTable:
             columns:
@@ -191,36 +126,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: projectPK
-                  name: id
-                  type: BIGINT
-              - column:
-                  constraints:
-                    nullable: false
-                  name: end_date
-                  type: TIMESTAMP WITHOUT TIME ZONE
-              - column:
-                  constraints:
-                    nullable: false
-                  name: name
-                  type: VARCHAR(255)
-              - column:
-                  constraints:
-                    nullable: false
-                  name: start_date
-                  type: TIMESTAMP WITHOUT TIME ZONE
-            tableName: project
-  - changeSet:
-      id: 1621596532600-12
-      author: mega (generated)
-      changes:
-        - createTable:
-            columns:
-              - column:
-                  constraints:
-                    nullable: false
-                    primaryKey: true
-                    primaryKeyName: project_entryPK
+                    primaryKeyName: project_entry_pkey
                   name: id
                   type: BIGINT
               - column:
@@ -265,14 +171,12 @@ databaseChangeLog:
                   name: owner_employee_user_id
                   type: BIGINT
               - column:
-                  constraints:
-                    nullable: false
-                  name: project
+                  name: project_id
                   type: BIGINT
             tableName: project_entry
   - changeSet:
-      id: 1621596532600-13
-      author: mega (generated)
+      id: 1623657883038-5
+      author: mega
       changes:
         - createTable:
             columns:
@@ -280,18 +184,20 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                  name: Project_id
+                    primaryKeyName: project_project_entry_pkey
+                  name: project_id
                   type: BIGINT
               - column:
                   constraints:
                     nullable: false
                     primaryKey: true
-                  name: projectEntries_id
+                    primaryKeyName: project_project_entry_pkey
+                  name: project_entry_id
                   type: BIGINT
             tableName: project_project_entry
   - changeSet:
-      id: 1621596532600-14
-      author: mega (generated)
+      id: 1623657883038-6
+      author: mega
       changes:
         - createTable:
             columns:
@@ -299,9 +205,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: stepPK
+                    primaryKeyName: project_pkey
                   name: id
                   type: BIGINT
+              - column:
+                  name: end_date
+                  type: date
               - column:
                   constraints:
                     nullable: false
@@ -310,17 +219,12 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
-                  name: ordinal
-                  type: INTEGER
-              - column:
-                  constraints:
-                    nullable: false
-                  name: role
-                  type: VARCHAR(255)
-            tableName: step
+                  name: start_date
+                  type: date
+            tableName: project
   - changeSet:
-      id: 1621596532600-15
-      author: mega (generated)
+      id: 1623657883038-7
+      author: mega
       changes:
         - createTable:
             columns:
@@ -328,7 +232,28 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: step_entryPK
+                    primaryKeyName: project_employee_pkey
+                  name: project_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: project_employee_pkey
+                  name: employee_id
+                  type: BIGINT
+            tableName: project_employee
+  - changeSet:
+      id: 1623657883038-8
+      author: mega
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: step_entry_pkey
                   name: id
                   type: BIGINT
               - column:
@@ -371,118 +296,52 @@ databaseChangeLog:
                   type: BIGINT
             tableName: step_entry
   - changeSet:
-      id: 1621596532600-16
-      author: mega (generated)
+      id: 1623657883038-9
+      author: mega
       changes:
-        - addUniqueConstraint:
-            columnNames: projectEntries_id
-            constraintName: UK_k2j1gib448qd89td8vod7temg
-            tableName: project_project_entry
-  - changeSet:
-      id: 1621596532600-17
-      author: mega (generated)
-      changes:
-        - addUniqueConstraint:
-            columnNames: email
-            constraintName: uidx_email
-            tableName: employee_user
-  - changeSet:
-      id: 1621596532600-18
-      author: mega (generated)
-      changes:
-        - addUniqueConstraint:
-            columnNames: ordinal
-            constraintName: uidx_ordinal
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: step_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: ordinal
+                  type: INTEGER
+              - column:
+                  constraints:
+                    nullable: false
+                  name: role
+                  type: VARCHAR(255)
             tableName: step
   - changeSet:
-      id: 1621596532600-19
-      author: mega (generated)
-      changes:
-        - addUniqueConstraint:
-            columnNames: zep_id
-            constraintName: uidx_zep_id
-            tableName: employee_user
-  - changeSet:
-      id: 1621596532600-20
-      author: mega (generated)
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: Project_id
-            baseTableName: project_project_entry
-            constraintName: FK309yhpsxdvqamgvvfhroqaop
-            deferrable: false
-            initiallyDeferred: false
-            referencedColumnNames: id
-            referencedTableName: project
-            validate: true
-  - changeSet:
-      id: 1621596532600-21
-      author: mega (generated)
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: projectEntries_id
-            baseTableName: project_project_entry
-            constraintName: FKfviw58vg80o0s8afvg083mvlg
-            deferrable: false
-            initiallyDeferred: false
-            referencedColumnNames: id
-            referencedTableName: project_entry
-            validate: true
-  - changeSet:
-      id: 1621596532600-22
-      author: mega (generated)
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: id
-            baseTableName: employee_user_roles
-            constraintName: FKjulmxy756d87nr7mkoyh5ahbu
-            deferrable: false
-            initiallyDeferred: false
-            referencedColumnNames: id
-            referencedTableName: employee_user
-            validate: true
-  - changeSet:
-      id: 1621596532600-23
-      author: mega (generated)
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: project_id
-            baseTableName: employee_project
-            constraintName: FKm0hev5kdb3lgsqx5y3m78hrga
-            deferrable: false
-            initiallyDeferred: false
-            referencedColumnNames: id
-            referencedTableName: employee_user
-            validate: true
-  - changeSet:
-      id: 1621596532600-24
-      author: mega (generated)
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: project
-            baseTableName: project_entry
-            constraintName: FKoc6iypri465innbxbg9qqjmuj
-            deferrable: false
-            initiallyDeferred: false
-            referencedColumnNames: id
-            referencedTableName: project
-            validate: true
-  - changeSet:
-      id: 1621596532600-25
-      author: mega (generated)
+      id: 1623657883038-10
+      author: mega
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: employee_id
-            baseTableName: employee_project
-            constraintName: FKtg8odq87vgrymwu9tp831w3k1
+            baseTableName: project_employee
+            constraintName: fk1k814ldet49nble03y7x39j5i
             deferrable: false
             initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
             referencedColumnNames: id
-            referencedTableName: project
+            referencedTableName: employee_user
             validate: true
   - changeSet:
-      id: 1621596532600-26
-      author: mega (generated)
+      id: 1623657883038-11
+      author: mega
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: assignee_employee_user_id
@@ -490,12 +349,29 @@ databaseChangeLog:
             constraintName: fk_assignee_employee_user_id
             deferrable: false
             initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
             referencedColumnNames: id
             referencedTableName: employee_user
             validate: true
   - changeSet:
-      id: 1621596532600-27
-      author: mega (generated)
+      id: 1623657883038-12
+      author: mega
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: id
+            baseTableName: employee_user_roles
+            constraintName: fkjulmxy756d87nr7mkoyh5ahbu
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: employee_user
+            validate: true
+  - changeSet:
+      id: 1623657883038-13
+      author: mega
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: owner_employee_user_id
@@ -503,12 +379,84 @@ databaseChangeLog:
             constraintName: fk_owner_employee_user_id
             deferrable: false
             initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
             referencedColumnNames: id
             referencedTableName: employee_user
             validate: true
   - changeSet:
-      id: 1621596532600-28
-      author: mega (generated)
+      id: 1623657883038-14
+      author: mega
+      changes:
+        - addUniqueConstraint:
+            columnNames: email
+            constraintName: uidx_email
+            tableName: employee_user
+  - changeSet:
+      id: 1623657883038-15
+      author: mega
+      changes:
+        - addUniqueConstraint:
+            columnNames: zep_id
+            constraintName: uidx_zep_id
+            tableName: employee_user
+  - changeSet:
+      id: 1623657883038-16
+      author: mega
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: project_entry_id
+            baseTableName: project_project_entry
+            constraintName: fk16jjld9ojw491nplwpusil1e3
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: project_entry
+            validate: true
+  - changeSet:
+      id: 1623657883038-17
+      author: mega
+      changes:
+        - addUniqueConstraint:
+            columnNames: project_entry_id
+            constraintName: uk_8ahicomjqjd4fyj8cc5dlq0ab
+            tableName: project_project_entry
+  - changeSet:
+      id: 1623657883038-18
+      author: mega
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: uk_3k75vvu7mevyvvb5may5lj8k7
+            tableName: project
+  - changeSet:
+      id: 1623657883038-19
+      author: mega
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: project_id
+            baseTableName: project_employee
+            constraintName: fk1907nkisp2dlsswuycpnakiv8
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: project
+            validate: true
+  - changeSet:
+      id: 1623657883038-20
+      author: mega
+      changes:
+        - addUniqueConstraint:
+            columnNames: ordinal
+            constraintName: uk_glyccy3k3y6lpd8ekumh9m5x0
+            tableName: step
+  - changeSet:
+      id: 1623657883038-21
+      author: mega
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: step_entry_id
@@ -516,12 +464,44 @@ databaseChangeLog:
             constraintName: fk_step_entry
             deferrable: false
             initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
             referencedColumnNames: id
             referencedTableName: step_entry
             validate: true
   - changeSet:
-      id: 1621596532600-29
-      author: mega (generated)
+      id: 1623657883038-22
+      author: mega
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: project_id
+            baseTableName: project_entry
+            constraintName: fkasm9cdpra1fao9cskerg2p1dm
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: project
+            validate: true
+  - changeSet:
+      id: 1623657883038-23
+      author: mega
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: project_id
+            baseTableName: project_project_entry
+            constraintName: fk3r34vpcleu4j6ykwq19pxqb4h
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: project
+            validate: true
+  - changeSet:
+      id: 1623657883038-24
+      author: mega
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: step_id
@@ -529,7 +509,87 @@ databaseChangeLog:
             constraintName: fk_step_id
             deferrable: false
             initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
             referencedColumnNames: id
             referencedTableName: step
             validate: true
+  - changeSet:
+      id: 1623657883038-25
+      author: mega
+      changes:
+        - createSequence:
+            cacheSize: 1
+            cycle: false
+            dataType: bigint
+            incrementBy: 1
+            maxValue: 9223372036854775807
+            minValue: 1
+            sequenceName: sequence_comment_id
+            startValue: 1
+  - changeSet:
+      id: 1623657883038-26
+      author: mega
+      changes:
+        - createSequence:
+            cacheSize: 1
+            cycle: false
+            dataType: bigint
+            incrementBy: 1
+            maxValue: 9223372036854775807
+            minValue: 1
+            sequenceName: sequence_project_entry_id
+            startValue: 1
+  - changeSet:
+      id: 1623657883038-27
+      author: mega
+      changes:
+        - createSequence:
+            cacheSize: 1
+            cycle: false
+            dataType: bigint
+            incrementBy: 1
+            maxValue: 9223372036854775807
+            minValue: 1
+            sequenceName: sequence_project_id
+            startValue: 1
+  - changeSet:
+      id: 1623657883038-28
+      author: mega
+      changes:
+        - createSequence:
+            cacheSize: 1
+            cycle: false
+            dataType: bigint
+            incrementBy: 1
+            maxValue: 9223372036854775807
+            minValue: 1
+            sequenceName: sequence_step_entry_id
+            startValue: 1
+  - changeSet:
+      id: 1623657883038-29
+      author: mega
+      changes:
+        - createSequence:
+            cacheSize: 1
+            cycle: false
+            dataType: bigint
+            incrementBy: 1
+            maxValue: 9223372036854775807
+            minValue: 1
+            sequenceName: sequence_step_id
+            startValue: 1
+  - changeSet:
+      id: 1623657883038-30
+      author: mega
+      changes:
+        - createSequence:
+            cacheSize: 1
+            cycle: false
+            dataType: bigint
+            incrementBy: 1
+            maxValue: 9223372036854775807
+            minValue: 1
+            sequenceName: sequence_user_id
+            startValue: 1
 

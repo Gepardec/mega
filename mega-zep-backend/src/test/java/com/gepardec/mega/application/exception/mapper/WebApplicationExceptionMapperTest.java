@@ -10,7 +10,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 @ExtendWith(MockitoExtension.class)
-public class WebApplicationExceptionMapperTest {
+class WebApplicationExceptionMapperTest {
 
     private WebApplicationExceptionMapper mapper;
 

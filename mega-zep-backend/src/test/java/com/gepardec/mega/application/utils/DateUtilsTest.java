@@ -76,5 +76,4 @@ class DateUtilsTest {
     void getDayByDate_normalInput_shouldRetornCorrectDay() {
         assertEquals("Montag", DateUtils.getDayByDate(LocalDate.of(2019, 11, 18)));
     }
-
 }

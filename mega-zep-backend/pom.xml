@@ -21,7 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.version>3.6.3</maven.version>
 
-        <auto-value.version>1.7.4</auto-value.version>
+        <auto-value.version>1.8.1</auto-value.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <commons-io.version>2.7</commons-io.version>
         <google-api-client.version>1.30.4</google-api-client.version>

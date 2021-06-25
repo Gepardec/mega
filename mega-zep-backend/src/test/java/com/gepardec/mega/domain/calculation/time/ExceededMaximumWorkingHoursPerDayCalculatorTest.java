@@ -8,7 +8,6 @@ import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -54,90 +53,79 @@ class ExceededMaximumWorkingHoursPerDayCalculatorTest {
                 .vehicle(Vehicle.OTHER_INACTIVE)
                 .build();
     }
-    @Nested
-    class Calculate {
 
-        @Test
-        void calculate_whenDataListEmpty_thenNoWarningsCreated() {
-            assertTrue(calculator.calculate(List.of()).isEmpty());
-        }
+    @Test
+    void when10HoursPerDay_thenNoWarning() {
+        final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(7, 0, 12, 0);
+        final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(13, 0, 18, 0);
 
-        @Test
-        void whenWarning_thenOnlyExcessWorkTimeSet() {
-            final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(7, 12);
-            final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(13, 19);
+        final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
 
-            final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
+        assertTrue(warnings.isEmpty());
+    }
 
-            assertEquals(1, warnings.size());
-            final TimeWarning warning = warnings.get(0);
-            assertNotNull(warning.getDate());
-            assertNotNull(warning.getExcessWorkTime());
-            assertNull(warning.getMissingRestTime());
-            assertNull(warning.getMissingBreakTime());
-        }
+    @Test
+    void whenOneJourneyEntry10HoursPerDay_thenWarning() {
+        final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(7, 12);
+        final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(13, 18);
+        final JourneyTimeEntry timeEntryThree = journeyTimeEntryFor(18, 22);
 
-        @Test
-        void whenUnordered_thenOrdered() {
-            final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(7, 12);
-            final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(13, 19);
+        final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
 
-            final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryTwo, timeEntryOne));
+        assertTrue(warnings.isEmpty());
+    }
 
-            assertEquals(1, warnings.size());
-            assertEquals(1, warnings.get(0).getExcessWorkTime());
-        }
+    @Test
+    void calculate_whenDataListEmpty_thenNoWarningsCreated() {
+        assertTrue(calculator.calculate(List.of()).isEmpty());
+    }
 
-        @Nested
-        class WithWarnings {
+    @Test
+    void whenWarning_thenOnlyExcessWorkTimeSet() {
+        final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(7, 12);
+        final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(13, 19);
 
-            @Test
-            void when11HoursPerDay_thenWarning() {
-                final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(7, 12);
-                final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(13, 19);
+        final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
 
-                final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
+        assertEquals(1, warnings.size());
+        final TimeWarning warning = warnings.get(0);
+        assertNotNull(warning.getDate());
+        assertNotNull(warning.getExcessWorkTime());
+        assertNull(warning.getMissingRestTime());
+        assertNull(warning.getMissingBreakTime());
+    }
 
-                assertEquals(1, warnings.size());
-                assertEquals(1, warnings.get(0).getExcessWorkTime());
-            }
+    @Test
+    void whenUnordered_thenOrdered() {
+        final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(7, 12);
+        final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(13, 19);
 
-            @Test
-            void whenOneJourneyEntry11HoursPerDay_thenWarning() {
-                final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(7, 12);
-                final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(13, 19);
-                final JourneyTimeEntry timeEntryThree = journeyTimeEntryFor(19, 22);
+        final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryTwo, timeEntryOne));
 
-                final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
+        assertEquals(1, warnings.size());
+        assertEquals(1, warnings.get(0).getExcessWorkTime());
+    }
 
-                assertEquals(1, warnings.size());
-                assertEquals(1, warnings.get(0).getExcessWorkTime());
-            }
-        }
+    @Test
+    void when11HoursPerDay_thenWarning() {
+        final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(7, 12);
+        final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(13, 19);
 
-        @Nested
-        class WithoutWarnings {
+        final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
 
-            @Test
-            void when10HoursPerDay_thenNoWarning() {
-                final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(7, 0, 12, 0);
-                final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(13, 0, 18, 0);
+        assertEquals(1, warnings.size());
+        assertEquals(1, warnings.get(0).getExcessWorkTime());
+    }
 
-                final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
+    @Test
+    void whenOneJourneyEntry11HoursPerDay_thenWarning() {
+        final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(7, 12);
+        final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(13, 19);
+        final JourneyTimeEntry timeEntryThree = journeyTimeEntryFor(19, 22);
 
-                assertTrue(warnings.isEmpty());
-            }
+        final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
 
-            @Test
-            void whenOneJourneyEntry10HoursPerDay_thenWarning() {
-                final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(7, 12);
-                final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(13, 18);
-                final JourneyTimeEntry timeEntryThree = journeyTimeEntryFor(18, 22);
-
-                final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
-
-                assertTrue(warnings.isEmpty());
-            }
-        }
+        assertEquals(1, warnings.size());
+        assertEquals(1, warnings.get(0).getExcessWorkTime());
     }
 }
