@@ -10,7 +10,9 @@ quarkus:
     always-include: true
 
   http:
-    cors: true
+    cors:
+      ~: true
+      access-control-allow-credentials: true
     root-path: "/"
     port: 8080
 
