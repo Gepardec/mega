@@ -17,22 +17,15 @@ public abstract class ProjectEntry {
         return new com.gepardec.mega.domain.model.AutoValue_ProjectEntry.Builder();
     }
 
-    // id is set in entity class
-    // creation_date is set in entity class
-    // entry_date
     @JsonProperty
     public abstract LocalDate date();
 
-    // name
     @JsonProperty
     public abstract String name();
 
-    // TODO: preset unknown where to set
-    // step
     @JsonProperty
     public abstract ProjectStep step();
 
-    // update_date set in entity class
     public abstract User assignee();
 
     public abstract User owner();
