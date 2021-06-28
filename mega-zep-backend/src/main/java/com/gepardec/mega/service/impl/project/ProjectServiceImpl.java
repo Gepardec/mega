@@ -50,21 +50,13 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void addProject(com.gepardec.mega.db.entity.project.Project project) {
 
-        com.gepardec.mega.db.entity.project.Project projectEntity = projectRepository.findByName(project.getName());
+        com.gepardec.mega.db.entity.project.Project projectEntity = new com.gepardec.mega.db.entity.project.Project();
 
-        if (projectEntity != null) {
-            projectEntity.setId(projectEntity.getId());
-        } else {
-            projectEntity = new com.gepardec.mega.db.entity.project.Project();
-        }
-
-        com.gepardec.mega.db.entity.project.Project finalProjectEntity = projectEntity;
         project.getProjectLeads().forEach(lead -> {
             User user = userRepository.findById(lead.getId());
-            finalProjectEntity.getProjectLeads().add(user);
+            projectEntity.getProjectLeads().add(user);
         });
 
-        com.gepardec.mega.db.entity.project.Project finalProjectEntity1 = projectEntity;
         project.getProjectEntries().forEach(projectEntry -> {
             User owner = userRepository.findById(projectEntry.getOwner().getId());
             User assignee = userRepository.findById(projectEntry.getAssignee().getId());
@@ -81,13 +73,13 @@ public class ProjectServiceImpl implements ProjectService {
             pe.setOwner(owner);
             pe.setAssignee(assignee);
 
-            finalProjectEntity1.addProjectEntry(pe);
+            projectEntity.addProjectEntry(pe);
         });
 
         projectEntity.setName(project.getName());
         projectEntity.setStartDate(project.getStartDate());
         projectEntity.setEndDate(project.getEndDate());
-        //projectEntity.setId(project.getId());
+        projectEntity.setId(project.getId());
 
         projectRepository.merge(projectEntity);
     }
