@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -62,7 +63,9 @@ public class Project {
     @JoinTable(
             name = "project_employee",
             joinColumns = {@JoinColumn(name = "project_id")},
-            inverseJoinColumns = {@JoinColumn(name = "employee_id")}
+            inverseJoinColumns = {@JoinColumn(name = "employee_id")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {
+                    "project_id", "employee_id" })
     )
     private Set<User> projectLeads = new HashSet<>(0);
 
