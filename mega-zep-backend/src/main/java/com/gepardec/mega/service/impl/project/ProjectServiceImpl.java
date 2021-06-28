@@ -48,9 +48,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         com.gepardec.mega.db.entity.project.Project projectEntity = projectRepository.findByName(project.getName());
 
-        if (projectEntity != null) {
-            projectEntity.setId(projectEntity.getId());
-        } else {
+        if (projectEntity == null) {
             projectEntity = new com.gepardec.mega.db.entity.project.Project();
         }
 
