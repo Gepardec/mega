@@ -55,9 +55,7 @@ public class ProjectServiceImpl implements ProjectService {
         com.gepardec.mega.db.entity.project.Project finalProjectEntity = projectEntity;
         project.getProjectLeads().forEach(lead -> {
             User user = userRepository.findById(lead.getId());
-            if (finalProjectEntity.getProjectLeads().contains(user)) {
-                finalProjectEntity.getProjectLeads().add(user);
-            }
+            finalProjectEntity.getProjectLeads().add(user);
         });
 
         com.gepardec.mega.db.entity.project.Project finalProjectEntity1 = projectEntity;
