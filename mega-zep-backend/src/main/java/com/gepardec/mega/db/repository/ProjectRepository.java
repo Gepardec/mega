@@ -15,6 +15,10 @@ public class ProjectRepository implements PanacheRepository<Project> {
     @Inject
     EntityManager em;
 
+    public Project findByName(String name){
+        return find("name", name).firstResult();
+    }
+
     public Project merge(Project project) {
         return em.merge(project);
     }
