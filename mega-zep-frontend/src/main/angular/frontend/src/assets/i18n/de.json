@@ -81,12 +81,27 @@
       "projectCheckState": "PM Check",
       "releaseDate": "Freigegeben bis"
     },
-    "noOmEntriesFound": "Keine Einträge gefunden"
+    "noOmEntriesFound": "Keine Einträge gefunden",
+    "global-check" : {
+      "labels": {
+        "zep-release-times": "ZEP Zeiten freigeben",
+        "chargeability-sheet": "Chargeability Sheet & externe Mitarbeiter",
+        "submit-to-payroll-accounting": "Daten an Lohnverrechnung übermitteln",
+        "perform-monthly-settlement-zep": "Monatsabschluss in ZEP durchführen"
+      },
+      "tooltips": {
+        "zep-release-times": "Bis zum 6. Arbeitstag:\nNach Freigabe der Projektzeiten durch die Projektleiter erfolgt die Kontrolle und Freigabe der ZEP Zeiten via MEGA (externe und interne Projekte).",
+        "chargeability-sheet": "Bis zum 6. Arbeitstag:\nChargeability-Sheet mit monatsaktuellen Daten befüllen und Stunden der externen Mitarbeiter in Planrechnungen eintragen",
+        "submit-to-payroll-accounting": "Bis zum 15. Arbeitstag:\nÜbermittlung von Fehlzeiten (Urlaub, ZA, Krankenstand, ...), HO-Tagen und Spesen an die Lohnverrechnung.",
+        "perform-monthly-settlement-zep": "Bis zum 15. Arbeitstag:\nMonatsabschluss der gebuchten Zeiten in ZEP durchführen. Ab diesem Zeitpunkt können von den Mitarbeitern keine Änderungen in ZEP mehr durchgeführt werden."
+      }
+    }
   },
   "project-management": {
     "actions": "Aktionen",
     "doneBtn": "Überprüft",
     "employeeDone": "Mitarbeiter überprüft",
+    "projectName": "Projektbezeichnung",
     "table": {
       "employeeName": "Mitarbeiter",
       "projectCheckState": "Überprüfung",

@@ -109,7 +109,7 @@ export class CommentsForEmployeeComponent implements OnInit {
   }
 
   close(): void {
-    if (this.newCommentTextarea.nativeElement.value !== '') {
+    if (this.newCommentTextarea?.nativeElement.value !== '') {
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {});
 
       dialogRef.afterClosed().subscribe(dialogResult => {

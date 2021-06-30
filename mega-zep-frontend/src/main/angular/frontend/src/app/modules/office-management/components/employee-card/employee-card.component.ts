@@ -1,34 +1,36 @@
-import {Component, OnInit} from '@angular/core';
-import {ManagementEntry} from '../../shared/models/ManagementEntry';
-import {State} from '../../shared/models/State';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ManagementEntry} from '../../../shared/models/ManagementEntry';
+import {State} from '../../../shared/models/State';
 import {MatDialog} from '@angular/material/dialog';
 import {SelectionModel} from '@angular/cdk/collections';
-import {configuration} from '../../shared/constants/configuration';
-import {environment} from '../../../../environments/environment';
-import {OfficeManagementService} from '../services/office-management.service';
-import {NotificationService} from '../../shared/services/notification/notification.service';
+import {configuration} from '../../../shared/constants/configuration';
+import {environment} from '../../../../../environments/environment';
+import {OfficeManagementService} from '../../services/office-management.service';
+import {NotificationService} from '../../../shared/services/notification/notification.service';
 import {TranslateService} from '@ngx-translate/core';
-import {CommentService} from '../../shared/services/comment/comment.service';
-import {Comment} from '../../shared/models/Comment';
-import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
-import {StepentriesService} from '../../shared/services/stepentries/stepentries.service';
-import {Step} from '../../shared/models/Step';
+import {CommentService} from '../../../shared/services/comment/comment.service';
+import {Comment} from '../../../shared/models/Comment';
+import {CommentsForEmployeeComponent} from '../../../shared/components/comments-for-employee/comments-for-employee.component';
+import {StepentriesService} from '../../../shared/services/stepentries/stepentries.service';
+import {Step} from '../../../shared/models/Step';
 
 import * as _moment from 'moment';
 import {Moment} from 'moment';
-import {PmProgressComponent} from '../../shared/components/pm-progress/pm-progress.component';
+import {PmProgressComponent} from '../../../shared/components/pm-progress/pm-progress.component';
 import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
-import {ConfigService} from '../../shared/services/config/config.service';
-import {Config} from '../../shared/models/Config';
+import {ConfigService} from '../../../shared/services/config/config.service';
+import {Config} from '../../../shared/models/Config';
+import {Subscription, zip} from 'rxjs';
+import {tap} from 'rxjs/operators';
 
 const moment = _moment;
 
 @Component({
-  selector: 'app-office-management',
-  templateUrl: './office-management.component.html',
-  styleUrls: ['./office-management.component.scss']
+  selector: 'app-employee-card',
+  templateUrl: './employee-card.component.html',
+  styleUrls: ['./employee-card.component.scss']
 })
-export class OfficeManagementComponent implements OnInit {
+export class EmployeeCardComponent implements OnInit, OnDestroy {
   State = State;
 
   employeeProgressRef: MatBottomSheetRef;
@@ -52,8 +54,9 @@ export class OfficeManagementComponent implements OnInit {
   dayOfMonthForWarning = 5;
   configuration = configuration;
   environment = environment;
-  selectedYear = moment().subtract(1, 'month').year();
-  selectedMonth = moment().subtract(1, 'month').month() + 1;
+  selectedYear: number;
+  selectedMonth: number;
+  dateSelectionSub: Subscription;
 
   constructor(
     private dialog: MatDialog,
@@ -70,7 +73,23 @@ export class OfficeManagementComponent implements OnInit {
     this.configService.getConfig().subscribe((config: Config) => {
       this.officeManagementUrl = config.zepOrigin + '/' + configuration.OFFICE_MANAGEMENT_SEGMENT;
     });
-    this.getOmEntries();
+
+    this.dateSelectionSub = zip(this.omService.selectedYear, this.omService.selectedMonth)
+      .pipe(
+        tap(value => {
+          this.selectedYear = value[0];
+          this.selectedMonth = value[1];
+        })
+      ).subscribe(() => {
+        this.getOmEntries();
+      });
+  }
+
+  ngOnDestroy(): void {
+    console.log('EmployeeCardComponent destroyed');
+    if (this.dateSelectionSub) {
+      this.dateSelectionSub.unsubscribe();
+    }
   }
 
   dateChanged(date: Moment) {

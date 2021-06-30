@@ -1,0 +1,35 @@
+@import "src/styles/colors";
+
+.mat-mini-fab {
+  color: white;
+}
+
+.mat-mini-fab.cancel {
+  background-color: dimgrey;
+  margin-left: 10px;
+}
+
+.mat-mini-fab.save {
+  background-color: dodgerblue;
+  margin-left: 10px;
+}
+
+mat-form-field {
+  //width: 35vw;
+}
+
+//.custom-component {
+//  background-color: green;
+//  padding: 5px;
+//
+//  display: flex;
+//  flex-direction: row;
+//  align-items: flex-end;
+//
+//  > {
+//    flex-grow: 0;
+//  }
+//  > mat-form-field {
+//    flex-grow: 1;
+//  }
+//}

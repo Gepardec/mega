@@ -1,0 +1,20 @@
+.controls-container {
+  min-height: 100px!important;
+  flex-wrap: wrap;
+  //height: 500px!important;
+}
+
+.controls-container > div {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.controls-container > div > b {
+  margin-right: 15px;
+  font-size: 14px;
+}
+
+.controls-container > div > app-project-state-select > mat-select {
+  //font-size: 20px;
+  min-height: 100px!important;
+}

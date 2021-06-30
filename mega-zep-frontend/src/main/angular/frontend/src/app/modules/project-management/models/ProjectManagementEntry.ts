@@ -9,4 +9,5 @@ export class ProjectManagementEntry {
   controlBillingState: ProjectState;
   presetControlProjectState: boolean;
   presetControlBillingState: boolean;
+  comment: string;
 }

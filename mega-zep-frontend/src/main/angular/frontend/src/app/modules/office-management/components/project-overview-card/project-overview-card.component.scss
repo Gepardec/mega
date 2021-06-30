@@ -1,4 +1,4 @@
-@import '../../../../styles/colors';
+@import 'src/styles/colors';
 
 .release {
   color: black !important;
@@ -35,4 +35,24 @@ th, td {
 
 table {
   margin-bottom: 30px;
+}
+
+.action-label {
+  cursor: pointer;
+}
+
+.mat-column-name {
+  flex: 0 0 20%;
+}
+
+.mat-column-controlEmployeesState {
+  flex: 0 0 10%;
+}
+
+.mat-column-controlProjectState {
+  flex: 0 0 10%;
+}
+
+.mat-column-controlBillingState {
+  flex: 0 0 10%;
 }

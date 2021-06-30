@@ -1,0 +1,71 @@
+<!--TODO: Move date selection out of this component so it's on the very top of the page-->
+<mat-card *ngIf="pmEntries" style="margin-top: 10px" class="mat-elevation-z6">
+  <mat-card-header>
+    <mat-card-title>Projekte</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px">
+    <div class="mat-elevation-z10 table-container">
+      <mat-table *ngIf="pmEntries.length > 0; else noProjectsFound" style="width: 100%;"
+                 [dataSource]="pmEntries">
+
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef>{{'project-management.projectName' | translate}}</mat-header-cell>
+          <mat-cell *matCellDef="let pmEntry" class="font-weight-bold">
+            <span class="mobile-label">{{'project-management.projectName' | translate}}</span>
+              <b>{{pmEntry.projectName}}</b>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="controlEmployeesState">
+          <mat-header-cell *matHeaderCellDef class="text-center">
+            {{'project-management.employeeDone' | translate}}</mat-header-cell>
+          <mat-cell *matCellDef="let pmEntry" class="text-center">
+            <span class="mobile-label">{{'project-management.employeeDone' | translate}}</span>
+            <app-state-indicator [state]="isAtLeastOneEmployeeCheckDone(pmEntry)"></app-state-indicator>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="controlProjectState">
+          <mat-header-cell *matHeaderCellDef class="text-center">
+            {{'project-management.projectTimeState' | translate}}</mat-header-cell>
+          <mat-cell *matCellDef="let pmEntry" class="text-center">
+            <span class="mobile-label">{{'project-management.projectTimeState' | translate}}</span>
+            <app-state-indicator [state]="pmEntry.controlProjectState"></app-state-indicator>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="controlBillingState">
+          <mat-header-cell *matHeaderCellDef class="text-center">
+            {{'project-management.billingState' | translate}}</mat-header-cell>
+          <mat-cell *matCellDef="let pmEntry" class="text-center">
+            <span class="mobile-label">{{'project-management.billingState' | translate}}</span>
+            <app-state-indicator [state]="pmEntry.controlBillingState"></app-state-indicator>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="comment">
+          <mat-header-cell *matHeaderCellDef class="text-center">
+            {{'comments-for-employee.table.comment' | translate}}</mat-header-cell>
+          <mat-cell *matCellDef="let pmEntry" style="align-items: start">
+            <span class="mobile-label">{{'comments-for-employee.table.comment' | translate}}</span>
+            <p class="action-label" *ngIf="pmEntry.comment && forProjectName !== pmEntry.projectName"
+               (click)="onStartEditing(pmEntry.projectName)">{{ pmEntry.comment }}</p>
+            <p class="action-label" *ngIf="!pmEntry.comment && forProjectName !== pmEntry.projectName"
+               style="opacity: 50%"
+               (click)="onStartEditing(pmEntry.projectName)">Anmerkung hinzufügen</p>
+            <app-inline-text-editor *ngIf="showCommentEditor && forProjectName === pmEntry.projectName"
+                                    [comment]="pmEntry.comment"
+                                    (commentChange)="onCommentChange(pmEntry, $event)"></app-inline-text-editor>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" style="height: 75px !important;"></mat-row>
+      </mat-table>
+    </div>
+
+    <ng-template #noProjectsFound>
+      <mat-card>{{'office-management.noOmEntriesFound' | translate}}</mat-card>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

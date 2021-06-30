@@ -1,0 +1,33 @@
+<mat-card class="mat-elevation-z6">
+  <mat-card-header>
+    <mat-card-title>Unternehmen</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxFlexAlign="center" fxLayout="column" fxLayoutGap="10px">
+    <div class="mat-elevation-z10 controls-container" fxLayout="row" fxLayoutAlign="space-between center">
+      <div>
+        <b matTooltip="{{'office-management.global-check.tooltips.zep-release-times' | translate}}"
+              matTooltipPosition="above"
+              matTooltipClass="om-tooltip">{{ 'office-management.global-check.labels.zep-release-times' | translate }}</b>
+        <app-project-state-select [value]="'OPEN'"></app-project-state-select>
+      </div>
+      <div>
+        <b matTooltip="{{'office-management.global-check.tooltips.chargeability-sheet' | translate}}"
+              matTooltipPosition="above"
+              matTooltipClass="om-tooltip">{{ 'office-management.global-check.labels.chargeability-sheet' | translate }}</b>
+        <app-project-state-select [value]="'OPEN'"></app-project-state-select>
+      </div>
+      <div>
+        <b matTooltip="{{'office-management.global-check.tooltips.submit-to-payroll-accounting' | translate}}"
+              matTooltipPosition="above"
+              matTooltipClass="om-tooltip">{{ 'office-management.global-check.labels.submit-to-payroll-accounting' | translate }}</b>
+        <app-project-state-select [value]="'OPEN'"></app-project-state-select>
+      </div>
+      <div>
+        <b matTooltip="{{'office-management.global-check.tooltips.perform-monthly-settlement-zep' | translate}}"
+              matTooltipPosition="above"
+              matTooltipClass="om-tooltip">{{ 'office-management.global-check.labels.perform-monthly-settlement-zep' | translate }}</b>
+        <app-project-state-select [value]="'OPEN'"></app-project-state-select>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

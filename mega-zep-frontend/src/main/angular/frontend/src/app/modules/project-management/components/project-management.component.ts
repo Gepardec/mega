@@ -49,7 +49,9 @@ export class ProjectManagementComponent implements OnInit {
   pmSelectionModels: Map<string, SelectionModel<ManagementEntry>>;
   environment = environment;
   selectedYear = moment().subtract(1, 'month').year();
-  selectedMonth = moment().subtract(1, 'month').month() + 1; // months 0 - 11
+  selectedMonth = moment().subtract(2, 'month').month() + 1; // months 0 - 11
+  showCommentEditor = false;
+  forProjectName: string;
 
 
   constructor(private dialog: MatDialog,
@@ -241,5 +243,16 @@ export class ProjectManagementComponent implements OnInit {
 
   isProjectStateNotRelevant(projectState: ProjectState) {
     return projectState === ProjectState.NOT_RELEVANT;
+  }
+
+  onStartEditing(projectName: string) {
+    this.forProjectName = projectName;
+    this.showCommentEditor = true;
+  }
+
+  onCommentChange(pmEntry: ProjectManagementEntry, comment: string) {
+    this.showCommentEditor = false;
+    this.forProjectName = null;
+    pmEntry.comment = comment;
   }
 }

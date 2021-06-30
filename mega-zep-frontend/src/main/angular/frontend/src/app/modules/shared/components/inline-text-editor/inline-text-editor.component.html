@@ -1,0 +1,21 @@
+<div>
+  <mat-form-field>
+    <textarea matInput
+              cdkTextareaAutosize
+              maxlength="500"
+              #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="3" [value]="comment ? comment : ''" #textArea></textarea>
+  </mat-form-field>
+  <button mat-mini-fab class="cancel" (click)="onCancel()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <button mat-mini-fab class="save" (click)="onSave(textArea)">
+    <mat-icon>save</mat-icon>
+  </button>
+</div>
+
+<!--Jetzt kumt amoi a richtig fetter text, dass ma sehn wie sie des ding verhält wenn ma do a bissl fü einaschreim, weil des is eigentlich a wichtig zum sehn wos daun passiert, is zumindest meine meinung-->
+<!--Jetzt kumt amoi a richtig fetter text, dass ma sehn wie sie des ding verhält wenn ma do a bissl fü einaschreim, weil des is eigentlich a wichtig zum sehn wos daun passiert, is zumindest meine meinung nach u a b cde-->
+<!--500 character string-->
+<!--Jetzt kumt amoi a richtig fetter text, dass ma sehn wie sie des ding verhält wenn ma do a bissl fü einaschreim, weil des is eigentlich a wichtig zum sehn wos daun passiert, is zumindest meine meinung Jetzt kumt amoi a richtig fetter text, dass ma sehn wie sie des ding verhält wenn ma do a bissl fü einaschreim, weil des is eigentlich a wichtig zum sehn wos daun passiert, is zumindest meine meinung Jetzt kumt amoi a richtig fetter text, dass ma sehn wie sie des ding verhält wenn ma do a bissl fü e-->
