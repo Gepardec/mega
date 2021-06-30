@@ -101,6 +101,7 @@ mega:
           - "oliver.tod@gepardec.com"
           - "patrick.holzer@gepardec.com"
           - "robin.fischer@gepardec.com"
+          - "alexandra.stummer@gepardec.com"
 
 ## TEST Properties
 "%test":
@@ -188,6 +189,7 @@ mega:
           - "oliver.tod@gepardec.com"
           - "patrick.holzer@gepardec.com"
           - "robin.fischer@gepardec.com"
+          - "alexandra.stummer@gepardec.com"
 
 # TEST-STAGE Properties
 "%teststage":
@@ -218,6 +220,7 @@ mega:
           - "werner.bruckmueller@gepardec.com"
           - "manuel.vilim@gepardec.com"
           - "armin.lang@gepardec.com"
+          - "alexandra.stummer@gepardec.com"
 
 # PROD-STAGE Properties
 "%prodstage":
@@ -245,3 +248,5 @@ mega:
           - "guenter.pirklbauer@gepardec.com"
           - "werner.bruckmueller@gepardec.com"
           - "manuel.vilim@gepardec.com"
+          - "alexandra.stummer@gepardec.com"
+          - "armin.lang@gepardec.com"
