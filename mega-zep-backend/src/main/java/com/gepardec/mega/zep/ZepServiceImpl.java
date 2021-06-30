@@ -106,7 +106,7 @@ public class ZepServiceImpl implements ZepService {
 
         logger.info("finish update user {} with response {}", userId, returnCode.get());
 
-        if (StringUtils.isNotEmpty(returnCode.get()) && Integer.parseInt(returnCode.get()) != 0) {
+        if (StringUtils.isNotBlank(returnCode.get()) && Integer.parseInt(returnCode.get()) != 0) {
             throw new ZepServiceException("updateEmployeeReleaseDate failed with code: " + returnCode.get());
         }
     }

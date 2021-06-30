@@ -53,7 +53,7 @@ public class SyncServiceMapper {
     }
 
     private LocalDate parseReleaseDate(Employee employee) {
-        if (StringUtils.isNotEmpty(employee.releaseDate())) {
+        if (StringUtils.isNotBlank(employee.releaseDate()) && !employee.releaseDate().equals("NULL")) {
             try {
                 return DateTimeFormatter.ISO_LOCAL_DATE.parse(employee.releaseDate(), TemporalQueries.localDate());
             } catch (DateTimeParseException exception) {
