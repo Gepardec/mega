@@ -38,8 +38,8 @@ public class ProjectEntry {
 
     @Id
     @Column(name = "id", insertable = false, updatable = false)
-    @GeneratedValue(generator = "projectIdGenerator", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "projectIdGenerator", sequenceName = "sequence_project_entry_id", allocationSize = 1)
+    @GeneratedValue(generator = "projectEntryIdGenerator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "projectEntryIdGenerator", sequenceName = "sequence_project_entry_id", allocationSize = 1)
     private Long id;
 
     /**

@@ -1,0 +1,53 @@
+databaseChangeLog:
+- changeSet:
+    id: 1625226083764-7
+    author: mega (generated)
+    changes:
+    - createSequence:
+        incrementBy: 1
+        sequenceName: sequence_enterprise_entry_id
+        startValue: 1
+- changeSet:
+    id: 1625226083764-8
+    author: mega (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: enterprise_entryPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: chargeability_external_employees_recorded
+            type: INTEGER
+        - column:
+            constraints:
+              nullable: false
+            name: creation_date
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: entry_date
+            type: date
+        - column:
+            constraints:
+              nullable: false
+            name: payroll_accounting_sent
+            type: INTEGER
+        - column:
+            constraints:
+              nullable: false
+            name: zep_monthly_report_done
+            type: INTEGER
+        - column:
+            constraints:
+              nullable: false
+            name: zep_times_released
+            type: INTEGER
+        tableName: enterprise_entry

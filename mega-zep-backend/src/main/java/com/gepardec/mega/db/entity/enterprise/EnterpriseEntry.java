@@ -20,8 +20,8 @@ public class EnterpriseEntry {
 
     @Id
     @Column(name = "id", insertable = false, updatable = false)
-    @GeneratedValue(generator = "projectIdGenerator", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "projectIdGenerator", sequenceName = "sequence_project_id", allocationSize = 1)
+    @GeneratedValue(generator = "enterpriseEntryIdGenerator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "enterpriseEntryIdGenerator", sequenceName = "sequence_enterprise_entry_id", allocationSize = 1)
     private Long id;
 
     @NotNull
