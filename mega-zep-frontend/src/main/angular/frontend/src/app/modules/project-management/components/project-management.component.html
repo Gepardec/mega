@@ -57,14 +57,13 @@
               </tr>
               </tbody>
             </table>
-            <div class="container-flex" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" style="padding-left: 15px">
-              <div>Some permanent text</div>
+            <div fxLayout="row" fxLayoutAlign="start center" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" style="padding-left: 15px">
               <p class="action-label" *ngIf="pmEntry.comment && forProjectName !== pmEntry.projectName"
                  (click)="onStartEditing(pmEntry.projectName)">{{ pmEntry.comment }}</p>
               <p class="action-label" *ngIf="!pmEntry.comment && forProjectName !== pmEntry.projectName"
                  style="opacity: 50%"
                  (click)="onStartEditing(pmEntry.projectName)">Anmerkung hinzufügen</p>
-              <app-inline-text-editor class="custom-component" *ngIf="showCommentEditor && forProjectName === pmEntry.projectName"
+              <app-inline-text-editor *ngIf="showCommentEditor && forProjectName === pmEntry.projectName"
                                       [comment]="pmEntry.comment"
                                       (commentChange)="onCommentChange(pmEntry, $event)"></app-inline-text-editor>
             </div>
@@ -76,7 +75,7 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <!--        TODO: Do we want an elevated table here, to match styling of OM view?-->
+<!--        TODO: Do we want an elevated table here, to match styling of OM view?-->
         <div class="table-container">
           <mat-table [dataSource]="pmEntry.entries">
             <ng-container matColumnDef="select">
@@ -176,3 +175,4 @@
     <mat-card>{{'project-management.noPmEntriesFound' | translate}}</mat-card>
   </ng-template>
 </div>
+
