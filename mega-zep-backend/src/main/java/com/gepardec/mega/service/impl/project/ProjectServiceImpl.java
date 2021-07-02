@@ -1,6 +1,6 @@
 package com.gepardec.mega.service.impl.project;
 
-import com.gepardec.mega.db.entity.User;
+import com.gepardec.mega.db.entity.employee.User;
 import com.gepardec.mega.db.entity.project.ProjectEntry;
 import com.gepardec.mega.db.repository.ProjectRepository;
 import com.gepardec.mega.db.repository.UserRepository;

@@ -1,7 +1,7 @@
 package com.gepardec.mega.db.repository;
 
-import com.gepardec.mega.db.entity.State;
-import com.gepardec.mega.db.entity.StepEntry;
+import com.gepardec.mega.db.entity.employee.EmployeeState;
+import com.gepardec.mega.db.entity.employee.StepEntry;
 import com.gepardec.mega.domain.model.StepName;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
@@ -77,7 +77,7 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
     public int closeAssigned(LocalDate startDate, LocalDate endDate, String ownerEmail, Long stepId) {
         return update("UPDATE StepEntry s SET s.state = :state WHERE s.id IN (SELECT s.id FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.step.id = :stepId)",
                 Parameters
-                        .with("state", State.DONE)
+                        .with("state", EmployeeState.DONE)
                         .and("start", startDate)
                         .and("end", endDate)
                         .and("ownerEmail", ownerEmail)
@@ -88,7 +88,7 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
     public int closeAssigned(LocalDate startDate, LocalDate endDate, String ownerEmail, String assigneeEmail, Long stepId, String project) {
         return update("UPDATE StepEntry s SET s.state = :state WHERE s.id IN (SELECT s.id FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.step.id = :stepId AND s.project like :project AND s.assignee.email = :assigneeEmail)",
                 Parameters
-                        .with("state", State.DONE)
+                        .with("state", EmployeeState.DONE)
                         .and("start", startDate)
                         .and("end", endDate)
                         .and("ownerEmail", ownerEmail)

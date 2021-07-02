@@ -3,7 +3,7 @@ package com.gepardec.mega.domain.model.monthlyreport;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gepardec.mega.db.entity.State;
+import com.gepardec.mega.db.entity.employee.EmployeeState;
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.rest.model.PmProgress;
@@ -22,12 +22,12 @@ public abstract class MonthlyReport {
             @JsonProperty("timeWarnings") final List<TimeWarning> timeWarnings,
             @JsonProperty("journeyWarnings") final List<JourneyWarning> journeyWarnings,
             @JsonProperty("comments") final List<Comment> comments,
-            @JsonProperty("employeeCheckState") final State employeeCheckState,
+            @JsonProperty("employeeCheckState") final EmployeeState employeeCheckEmployeeState,
             @JsonProperty("assigned") final boolean assigned,
             @JsonProperty("employeeProgresses") final List<PmProgress> pmProgresses,
             @JsonProperty("otherChecksDone") final boolean otherChecksDone) {
         return new com.gepardec.mega.domain.model.monthlyreport.AutoValue_MonthlyReport(
-                employee, timeWarnings, journeyWarnings, comments, employeeCheckState, assigned, pmProgresses, otherChecksDone
+                employee, timeWarnings, journeyWarnings, comments, employeeCheckEmployeeState, assigned, pmProgresses, otherChecksDone
         );
     }
 
@@ -49,7 +49,7 @@ public abstract class MonthlyReport {
 
     @Nullable
     @JsonProperty
-    public abstract State employeeCheckState();
+    public abstract EmployeeState employeeCheckState();
 
     @JsonProperty
     public abstract boolean isAssigned();

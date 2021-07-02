@@ -1,4 +1,4 @@
-package com.gepardec.mega.db.entity;
+package com.gepardec.mega.db.entity.employee;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -27,7 +27,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "comment")
 @NamedQueries({
-        @NamedQuery(name = "Comment.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail", query = "SELECT c FROM Comment c WHERE c.stepEntry.owner.email = :email AND ((c.stepEntry.date BETWEEN :start AND :end) OR (c.stepEntry.date < :start AND c.state = :state))"),
+        @NamedQuery(name = "Comment.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail", query = "SELECT c FROM Comment c WHERE c.stepEntry.owner.email = :email AND ((c.stepEntry.date BETWEEN :start AND :end) OR (c.stepEntry.date < :start AND c.employeeState = :state))"),
         @NamedQuery(name = "Comment.findAllCommentsBetweenStartAndEndDateForEmail", query = "SELECT c FROM Comment c WHERE c.stepEntry.owner.email = :email AND ((c.stepEntry.date BETWEEN :start AND :end) OR (c.stepEntry.date < :start))")
 })
 public class Comment {
@@ -63,12 +63,12 @@ public class Comment {
     /**
      * The state of the comment
      *
-     * @see State
+     * @see EmployeeState
      */
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "state")
-    private State state;
+    private EmployeeState employeeState;
 
     /**
      * The step entry the comment is for
@@ -84,7 +84,7 @@ public class Comment {
 
     @PrePersist
     void onPersist() {
-        state = State.OPEN;
+        employeeState = EmployeeState.OPEN;
         creationDate = updatedDate = LocalDateTime.now();
     }
 
@@ -133,12 +133,12 @@ public class Comment {
         this.message = message;
     }
 
-    public State getState() {
-        return state;
+    public EmployeeState getState() {
+        return employeeState;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setState(EmployeeState employeeState) {
+        this.employeeState = employeeState;
     }
 
     @Override
@@ -165,7 +165,7 @@ public class Comment {
                 ", creationDate=" + creationDate +
                 ", updatedDate=" + updatedDate +
                 ", message='" + message + '\'' +
-                ", state=" + state +
+                ", state=" + employeeState +
                 ", stepEntry=" + stepEntry +
                 '}';
     }

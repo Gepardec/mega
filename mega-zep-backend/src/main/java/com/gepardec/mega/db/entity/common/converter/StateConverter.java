@@ -1,16 +1,16 @@
-package com.gepardec.mega.db.entity.project.converter;
+package com.gepardec.mega.db.entity.common.converter;
 
-import com.gepardec.mega.db.entity.project.ProjectState;
+import com.gepardec.mega.db.entity.common.State;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.util.stream.Stream;
 
 @Converter(autoApply = true)
-public class StateConverter implements AttributeConverter<ProjectState, Integer> {
+public class StateConverter implements AttributeConverter<State, Integer> {
 
     @Override
-    public Integer convertToDatabaseColumn(ProjectState state) {
+    public Integer convertToDatabaseColumn(State state) {
         if (state == null) {
             return null;
         }
@@ -18,12 +18,12 @@ public class StateConverter implements AttributeConverter<ProjectState, Integer>
     }
 
     @Override
-    public ProjectState convertToEntityAttribute(Integer stateId) {
+    public State convertToEntityAttribute(Integer stateId) {
         if (stateId == null) {
             return null;
         }
 
-        return Stream.of(ProjectState.values())
+        return Stream.of(State.values())
                 .filter(s -> s.getStateId() == stateId)
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);

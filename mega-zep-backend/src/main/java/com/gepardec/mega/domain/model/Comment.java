@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gepardec.mega.db.entity.State;
+import com.gepardec.mega.db.entity.employee.EmployeeState;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nullable;
@@ -40,7 +40,7 @@ public abstract class Comment {
 
     @JsonProperty
     @Nullable
-    public abstract State state();
+    public abstract EmployeeState state();
 
     @AutoValue.Builder
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -58,7 +58,7 @@ public abstract class Comment {
         public abstract Comment.Builder authorName(String authorName);
 
         @JsonProperty
-        public abstract Comment.Builder state(State state);
+        public abstract Comment.Builder state(EmployeeState employeeState);
 
         @JsonProperty
         public abstract Comment.Builder updateDate(String updateDate);

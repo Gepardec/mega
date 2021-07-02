@@ -1,7 +1,7 @@
 package com.gepardec.mega.db.repository;
 
-import com.gepardec.mega.db.entity.Comment;
-import com.gepardec.mega.db.entity.State;
+import com.gepardec.mega.db.entity.employee.Comment;
+import com.gepardec.mega.db.entity.employee.EmployeeState;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
 
@@ -23,7 +23,7 @@ public class CommentRepository implements PanacheRepository<Comment> {
                 Parameters
                         .with("start", startDate)
                         .and("end", endDate)
-                        .and("state", State.OPEN)
+                        .and("state", EmployeeState.OPEN)
                         .and("email", email))
                 .list();
     }
@@ -33,7 +33,7 @@ public class CommentRepository implements PanacheRepository<Comment> {
         return update("UPDATE Comment c SET c.state = :state WHERE id = :id",
                 Parameters
                         .with("id", id)
-                        .and("state", State.DONE));
+                        .and("state", EmployeeState.DONE));
     }
 
     @Transactional

@@ -1,6 +1,7 @@
 package com.gepardec.mega.db.entity.project;
 
-import com.gepardec.mega.db.entity.User;
+import com.gepardec.mega.db.entity.employee.User;
+import com.gepardec.mega.db.entity.common.State;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.CascadeType;
@@ -114,9 +115,9 @@ public class ProjectEntry {
     /**
      * The state of the project step
      *
-     * @see ProjectState
+     * @see State
      */
-    private ProjectState state;
+    private State state;
 
     /**
      * The related step of this project entry
@@ -128,7 +129,7 @@ public class ProjectEntry {
     @PrePersist
     void onPersist() {
         creationDate = LocalDateTime.now();
-        state = preset ? ProjectState.NOT_RELEVANT : ProjectState.OPEN;
+        state = preset ? State.NOT_RELEVANT : State.OPEN;
     }
 
     @PreUpdate
@@ -208,11 +209,11 @@ public class ProjectEntry {
         this.preset = preset;
     }
 
-    public ProjectState getState() {
+    public State getState() {
         return state;
     }
 
-    public void setState(ProjectState state) {
+    public void setState(State state) {
         this.state = state;
     }
 

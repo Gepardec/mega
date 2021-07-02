@@ -1,6 +1,6 @@
 package com.gepardec.mega.db.repository;
 
-import com.gepardec.mega.db.entity.Step;
+import com.gepardec.mega.db.entity.employee.Step;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 
 import javax.enterprise.context.ApplicationScoped;

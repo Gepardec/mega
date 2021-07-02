@@ -1,8 +1,8 @@
 package com.gepardec.mega.service.impl.stepentry;
 
-import com.gepardec.mega.db.entity.State;
-import com.gepardec.mega.db.entity.StepEntry;
-import com.gepardec.mega.db.entity.User;
+import com.gepardec.mega.db.entity.employee.EmployeeState;
+import com.gepardec.mega.db.entity.employee.StepEntry;
+import com.gepardec.mega.db.entity.employee.User;
 import com.gepardec.mega.db.repository.StepEntryRepository;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.ProjectEmployees;
@@ -45,9 +45,9 @@ class StepEntryServiceImplTest {
         when(stepEntryRepository.findAllOwnedAndAssignedStepEntriesForEmployee(ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.anyString())).thenReturn(stepEntries);
 
-        Optional<State> states = stepEntryService.findEmployeeCheckState(createEmployee());
+        Optional<EmployeeState> states = stepEntryService.findEmployeeCheckState(createEmployee());
         assertTrue(states.isPresent());
-        Assertions.assertEquals(State.IN_PROGRESS, states.get());
+        Assertions.assertEquals(EmployeeState.IN_PROGRESS, states.get());
     }
 
     @Test
@@ -55,7 +55,7 @@ class StepEntryServiceImplTest {
         when(stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.anyString())).thenReturn(List.of());
 
-        Optional<State> states = stepEntryService.findEmployeeCheckState(createEmployee());
+        Optional<EmployeeState> states = stepEntryService.findEmployeeCheckState(createEmployee());
         assertTrue(states.isEmpty());
     }
 
@@ -69,7 +69,7 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.anyString())).thenReturn(stepEntries);
 
         boolean areOtherChecksDone = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(createEmployee())
-                .stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);
+                .stream().allMatch(stepEntry -> stepEntry.getState() == EmployeeState.DONE);
         Assertions.assertFalse(areOtherChecksDone);
     }
 
@@ -79,7 +79,7 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.anyString())).thenReturn(List.of());
 
         boolean areOtherChecksDone = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(createEmployee())
-                .stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);
+                .stream().allMatch(stepEntry -> stepEntry.getState() == EmployeeState.DONE);
         assertTrue(areOtherChecksDone);
     }
 
@@ -88,15 +88,15 @@ class StepEntryServiceImplTest {
         StepEntry stepEntry1 = createStepEntry(1L);
         StepEntry stepEntry2 = createStepEntry(2L);
 
-        stepEntry1.setState(State.DONE);
-        stepEntry2.setState(State.DONE);
+        stepEntry1.setState(EmployeeState.DONE);
+        stepEntry2.setState(EmployeeState.DONE);
 
         List<StepEntry> stepEntries = List.of(stepEntry1, stepEntry2);
         when(stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.anyString())).thenReturn(stepEntries);
 
         boolean areOtherChecksDone = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(createEmployee())
-                .stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);
+                .stream().allMatch(stepEntry -> stepEntry.getState() == EmployeeState.DONE);
         assertTrue(areOtherChecksDone);
     }
 
@@ -206,7 +206,7 @@ class StepEntryServiceImplTest {
         assertNotNull(stepEntry);
         assertEquals(1L, stepEntry.getId());
         assertEquals("Liwest-EMS", stepEntry.getProject());
-        assertEquals(State.IN_PROGRESS, stepEntry.getState());
+        assertEquals(EmployeeState.IN_PROGRESS, stepEntry.getState());
     }
 
     @Test
@@ -246,7 +246,7 @@ class StepEntryServiceImplTest {
         stepEntry.setCreationDate(LocalDateTime.now());
         stepEntry.setDate(LocalDate.now());
         stepEntry.setProject("Liwest-EMS");
-        stepEntry.setState(State.IN_PROGRESS);
+        stepEntry.setState(EmployeeState.IN_PROGRESS);
         stepEntry.setUpdatedDate(LocalDateTime.now());
         return stepEntry;
     }
