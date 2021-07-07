@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -16,6 +17,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "enterprise_entry")
+@NamedQuery(
+        name = "EnterpriseEntry.findByDate",
+        query = "SELECT e FROM EnterpriseEntry e WHERE e.date BETWEEN :start and :end"
+)
 public class EnterpriseEntry {
 
     @Id
