@@ -47,7 +47,7 @@ public class EnterpriseSyncServiceImpl implements EnterpriseSyncService {
 
         if (savedEnterpriseEntry.isEmpty()) {
             EnterpriseEntry enterpriseEntry = new EnterpriseEntry();
-            enterpriseEntry.setDate(LocalDate.now());
+            enterpriseEntry.setDate(date);
             enterpriseEntry.setCreationDate(LocalDateTime.now());
             enterpriseEntry.setChargeabilityExternalEmployeesRecorded(State.OPEN);
             enterpriseEntry.setPayrollAccountingSent(State.OPEN);
