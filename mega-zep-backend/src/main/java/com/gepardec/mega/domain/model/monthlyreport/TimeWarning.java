@@ -105,11 +105,14 @@ public class TimeWarning implements ProjectEntryWarning {
         this.excessWorkTime = excessWorkTime;
     }
 
-    @Override public boolean equals(Object o) {
-        if (this == o)
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
         TimeWarning warning = (TimeWarning) o;
         return Objects.equals(date, warning.date) &&
                 Objects.equals(missingRestTime, warning.missingRestTime) &&
@@ -119,7 +122,8 @@ public class TimeWarning implements ProjectEntryWarning {
                 Objects.equals(warningTypes, warning.warningTypes);
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         return Objects.hash(date, missingRestTime, missingBreakTime, excessWorkTime, warnings, warningTypes);
     }
 }

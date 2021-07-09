@@ -10,6 +10,10 @@ import com.google.auto.value.AutoValue;
 @JsonDeserialize(builder = com.gepardec.mega.domain.model.AutoValue_Step.Builder.class)
 public abstract class Step {
 
+    public static Builder builder() {
+        return new com.gepardec.mega.domain.model.AutoValue_Step.Builder();
+    }
+
     @JsonProperty
     public abstract long dbId();
 
@@ -21,10 +25,6 @@ public abstract class Step {
 
     @JsonProperty
     public abstract Role role();
-
-    public static Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_Step.Builder();
-    }
 
     @AutoValue.Builder
     public abstract static class Builder {

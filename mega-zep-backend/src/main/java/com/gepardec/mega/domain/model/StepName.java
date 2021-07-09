@@ -7,7 +7,7 @@ public enum StepName {
     CONTROL_TIME_EVIDENCES(4L),
     ACCEPT_TIMES(5L);
 
-    private long id;
+    private final long id;
 
     StepName(long id) {
         this.id = id;

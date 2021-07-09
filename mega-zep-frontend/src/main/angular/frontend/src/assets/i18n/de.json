@@ -6,7 +6,9 @@
   },
   "STATE": {
     "DONE": "Fertig",
-    "OPEN": "Offen"
+    "OPEN": "Offen",
+    "WORK_IN_PROGRESS": "In Arbeit",
+    "NOT_RELEVANT": "Nicht relevant"
   },
   "EMPLOYEE_FUNCTIONS": {
     "01": "Technische/r PL",
@@ -94,7 +96,10 @@
       "comments": "Anmerkungen",
       "releaseDate": "Freigabedatum"
     },
-    "noPmEntriesFound": "Keine Projekteinträge gefunden"
+    "noPmEntriesFound": "Keine Projekteinträge gefunden",
+    "projectTimeState": "Projektzeitenkontrolle",
+    "billingState": "Rechnungslegung",
+    "presetMonth": "im Folgemonat übernehmen"
   },
   "comments-for-employee": {
     "commentsFor": "Anmerkungen für {{firstAndSureName}}",
@@ -130,6 +135,10 @@
     "title": "Achtung!",
     "message": "Eine Änderung wurde nicht gespeichert. Wenn die Seite ohne zu speichern verlassen wird, geht die Anmerkung verloren.",
     "dismiss": "Abbrechen",
+    "confirm": "OK"
+  },
+  "snackbar": {
+    "message": "Fehler beim Aktualisieren des Status",
     "confirm": "OK"
   }
 }

@@ -4,13 +4,21 @@ import com.gepardec.mega.application.interceptor.RolesAllowed;
 import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.db.entity.State;
 import com.gepardec.mega.db.entity.StepEntry;
-import com.gepardec.mega.domain.model.*;
-import com.gepardec.mega.rest.model.PmProgress;
+import com.gepardec.mega.db.entity.project.ProjectEntry;
+import com.gepardec.mega.db.entity.project.ProjectStep;
+import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.FinishedAndTotalComments;
+import com.gepardec.mega.domain.model.ProjectEmployees;
+import com.gepardec.mega.domain.model.ProjectState;
+import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.domain.model.StepName;
+import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.rest.model.ManagementEntry;
+import com.gepardec.mega.rest.model.PmProgress;
 import com.gepardec.mega.rest.model.ProjectManagementEntry;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.employee.EmployeeService;
-import com.gepardec.mega.service.api.project.ProjectService;
+import com.gepardec.mega.service.api.projectentry.ProjectEntryService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import org.apache.commons.lang3.StringUtils;
 
@@ -48,7 +56,7 @@ public class ManagementResource {
     UserContext userContext;
 
     @Inject
-    ProjectService projectService;
+    ProjectEntryService projectEntryService;
 
     @GET
     @Path("/officemanagemententries/{year}/{month}")
@@ -59,12 +67,15 @@ public class ManagementResource {
 
         List<ManagementEntry> officeManagementEntries = new ArrayList<>();
         List<Employee> activeEmployees = employeeService.getAllActiveEmployees();
+
         for (Employee empl : activeEmployees) {
             List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployee(empl, from, to);
 
             String entryDate = LocalDate.of(year, month, 1).minusMonths(1).format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN));
-            final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(empl.email(), entryDate);
+
+            List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(empl.email(), entryDate);
             List<PmProgress> pmProgresses = new ArrayList<>();
+
             allOwnedStepEntriesForPMProgress
                     .forEach(stepEntry -> pmProgresses.add(
                             PmProgress.builder()
@@ -78,13 +89,12 @@ public class ManagementResource {
                     ));
 
             ManagementEntry newManagementEntry = createManagementEntryForEmployee(empl, stepEntries, from, to, pmProgresses);
+
             if (newManagementEntry != null) {
                 officeManagementEntries.add(newManagementEntry);
             }
 
-
         }
-
 
         return officeManagementEntries;
     }
@@ -93,17 +103,29 @@ public class ManagementResource {
     @Path("/projectmanagemententries/{year}/{month}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<ProjectManagementEntry> getAllProjectManagementEntries(@PathParam("year") Integer year, @PathParam("month") Integer month) {
+        if (userContext == null || userContext.user() == null) {
+            throw new IllegalStateException("User context does not exist or user is null.");
+        }
+
         LocalDate from = LocalDate.of(year, month, 1);
         LocalDate to = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
 
         List<ProjectEmployees> projectEmployees = stepEntryService.getProjectEmployeesForPM(from, to, userContext.user().email());
         List<ProjectManagementEntry> projectManagementEntries = new ArrayList<>();
+
         Map<String, Employee> employees = createEmployeeCache();
+
         for (ProjectEmployees currentProject : projectEmployees) {
             List<ManagementEntry> entries = createManagementEntriesForProject(currentProject, employees, from, to);
-            if(!entries.isEmpty()) {
+            List<ProjectEntry> projectEntries = projectEntryService.findByNameAndDate(currentProject.projectId(), from, to);
+
+            if (!entries.isEmpty() && !projectEntries.isEmpty()) {
                 projectManagementEntries.add(ProjectManagementEntry.builder()
                         .projectName(currentProject.projectId())
+                        .controlProjectState(ProjectState.byName(getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_PROJECT).getState().name()))
+                        .controlBillingState(ProjectState.byName((getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_BILLING).getState().name())))
+                        .presetControlProjectState(getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_PROJECT).isPreset())
+                        .presetControlBillingState(getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_BILLING).isPreset())
                         .entries(entries)
                         .build()
                 );
@@ -113,21 +135,36 @@ public class ManagementResource {
         return projectManagementEntries;
     }
 
+    private ProjectEntry getProjectEntryForProjectStep(List<ProjectEntry> projectEntries, ProjectStep projectStep) {
+        return projectEntries.stream()
+                .filter(p -> p.getStep() == projectStep)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(String.format("No project entry found for project step '%s'", projectStep)));
+    }
+
     private Map<String, Employee> createEmployeeCache() {
         return employeeService.getAllActiveEmployees().stream()
                 .collect(Collectors.toMap(Employee::userId, employee -> employee));
     }
 
     private List<ManagementEntry> createManagementEntriesForProject(ProjectEmployees projectEmployees, Map<String, Employee> employees, LocalDate from, LocalDate to) {
+        if (userContext == null || userContext.user() == null) {
+            throw new IllegalStateException("User context does not exist or user is null.");
+        }
+
         List<ManagementEntry> entries = new ArrayList<>();
+
         for (String userId : projectEmployees.employees()) {
+
             if (employees.containsKey(userId)) {
                 Employee empl = employees.get(userId);
                 List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployeeAndProject(
                         empl, projectEmployees.projectId(), userContext.user().email(), from, to
                 );
+
                 ManagementEntry entry = createManagementEntryForEmployee(empl, projectEmployees.projectId(), stepEntries, from, to, null);
-                if(entry != null) {
+
+                if (entry != null) {
                     entries.add(entry);
                 }
             }
@@ -168,6 +205,10 @@ public class ManagementResource {
     }
 
     private com.gepardec.mega.domain.model.State extractCustomerCheckState(List<StepEntry> stepEntries) {
+        if (userContext == null || userContext.user() == null) {
+            throw new IllegalStateException("User context does not exist or user is null.");
+        }
+
         boolean customerCheckStateOpen = stepEntries.stream()
                 .filter(stepEntry ->
                         StepName.CONTROL_EXTERNAL_TIMES.name().equalsIgnoreCase(stepEntry.getStep().getName())
@@ -178,6 +219,10 @@ public class ManagementResource {
     }
 
     private com.gepardec.mega.domain.model.State extractInternalCheckState(List<StepEntry> stepEntries) {
+        if (userContext == null || userContext.user() == null) {
+            throw new IllegalStateException("User context does not exist.");
+        }
+
         boolean customerCheckStateOpen = stepEntries.stream()
                 .filter(stepEntry ->
                         StepName.CONTROL_INTERNAL_TIMES.name().equalsIgnoreCase(stepEntry.getStep().getName())
@@ -188,6 +233,10 @@ public class ManagementResource {
     }
 
     private com.gepardec.mega.domain.model.State extractStateForProject(List<StepEntry> stepEntries, String projectId) {
+        if (userContext == null || userContext.user() == null) {
+            throw new IllegalStateException("User context does not exist or user is null.");
+        }
+
         return stepEntries
                 .stream()
                 .filter(se -> {

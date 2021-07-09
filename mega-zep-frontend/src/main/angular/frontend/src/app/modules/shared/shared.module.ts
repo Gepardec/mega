@@ -19,6 +19,7 @@ import { DoneCommentsIndicatorComponent } from './components/done-comments-indic
 import { StateIndicatorComponent } from './components/state-indicator/state-indicator.component';
 import { DatepickerMonthYearComponent } from './components/datepicker-month-year/datepicker-month-year.component';
 import {ConfirmDialogComponent} from "./components/confirm-dialog/confirm-dialog.component";
+import { ProjectStateSelectComponent } from './components/project-state-select/project-state-select.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import {ConfirmDialogComponent} from "./components/confirm-dialog/confirm-dialog
     DoneCommentsIndicatorComponent,
     StateIndicatorComponent,
     DatepickerMonthYearComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    ProjectStateSelectComponent
   ],
   imports: [
     CommonModule,
@@ -56,6 +58,7 @@ import {ConfirmDialogComponent} from "./components/confirm-dialog/confirm-dialog
     InfoComponent,
     InfoDialogComponent,
     StateSelectComponent,
+    ProjectStateSelectComponent,
     DoneCommentsIndicatorComponent,
     StateIndicatorComponent,
     DatepickerMonthYearComponent,

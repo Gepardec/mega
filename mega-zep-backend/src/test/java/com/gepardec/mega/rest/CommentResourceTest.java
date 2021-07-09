@@ -1,7 +1,12 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.db.entity.State;
-import com.gepardec.mega.domain.model.*;
+import com.gepardec.mega.domain.model.Comment;
+import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.domain.model.SecurityContext;
+import com.gepardec.mega.domain.model.User;
+import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.rest.model.NewCommentEntry;
 import com.gepardec.mega.service.api.comment.CommentService;
 import io.quarkus.test.junit.QuarkusTest;
@@ -23,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-public class CommentResourceTest {
+class CommentResourceTest {
 
     @InjectMock
     private UserContext userContext;

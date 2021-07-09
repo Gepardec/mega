@@ -1,7 +1,12 @@
 package com.gepardec.mega.domain.calculation.journey;
 
 import com.gepardec.mega.domain.calculation.WarningCalculationStrategy;
-import com.gepardec.mega.domain.model.monthlyreport.*;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyDirection;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyWarningType;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
+import com.gepardec.mega.domain.model.monthlyreport.Task;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

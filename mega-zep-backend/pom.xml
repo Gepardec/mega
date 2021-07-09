@@ -8,7 +8,7 @@
     <version>${revision}</version>
     <name>MEGA ZEP-Backend</name>
     <properties>
-        <jacoco.version>0.8.5</jacoco.version>
+        <jacoco.version>0.8.6</jacoco.version>
         <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
         <maven-resource-plugin.version>3.1.0</maven-resource-plugin.version>
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
@@ -21,20 +21,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.version>3.6.3</maven.version>
 
-        <auto-value.version>1.7.4</auto-value.version>
+        <auto-value.version>1.8.1</auto-value.version>
         <commons-lang3.version>3.9</commons-lang3.version>
-        <commons-io.version>1.3.2</commons-io.version>
+        <commons-io.version>2.7</commons-io.version>
         <google-api-client.version>1.30.4</google-api-client.version>
-        <guava.version>28.1-jre</guava.version>
-        <quarkus-plugin.version>1.6.1.Final</quarkus-plugin.version>
-        <quarkus.platform.version>1.6.1.Final</quarkus.platform.version>
+        <guava.version>30.1.1-jre</guava.version>
+        <quarkus-plugin.version>1.7.6.Final</quarkus-plugin.version>
+        <quarkus.platform.version>1.7.6.Final</quarkus.platform.version>
         <ws.rt.version>2.3.2</ws.rt.version>
         <xml.resolver.version>20050927</xml.resolver.version>
 
-        <quarkus.package.uber.jar>false</quarkus.package.uber.jar>
-
         <!-- application info -->
-        <revision>2.0.5-SNAPSHOT</revision>
+        <revision>3.0.0-RC1</revision>
         <git.commit>local</git.commit>
         <git.branch>local</git.branch>
         <build.number>0</build.number>
@@ -264,9 +262,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <uberJar>${quarkus.package.uber.jar}</uberJar>
-                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>

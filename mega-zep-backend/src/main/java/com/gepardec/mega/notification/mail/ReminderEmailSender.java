@@ -15,7 +15,12 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static com.gepardec.mega.notification.mail.Mail.*;
+import static com.gepardec.mega.notification.mail.Mail.EMPLOYEE_CHECK_PROJECTTIME;
+import static com.gepardec.mega.notification.mail.Mail.OM_ADMINISTRATIVE;
+import static com.gepardec.mega.notification.mail.Mail.OM_CONTROL_EMPLOYEES_CONTENT;
+import static com.gepardec.mega.notification.mail.Mail.OM_RELEASE;
+import static com.gepardec.mega.notification.mail.Mail.OM_SALARY;
+import static com.gepardec.mega.notification.mail.Mail.PL_PROJECT_CONTROLLING;
 
 @ApplicationScoped
 @Transactional(Transactional.TxType.SUPPORTS)
@@ -40,7 +45,7 @@ public class ReminderEmailSender {
     NotificationConfig notificationConfig;
 
     public void sendReminder() {
-        logger.info("Mail-Daemon-cron-job started at {}", DateUtils.today().toString());
+        logger.info("Mail-Daemon-cron-job started at {}", DateUtils.today());
         Optional<Mail> reminder = businessDayCalculator.getEventForDate(DateUtils.today());
         if (reminder.isPresent()) {
             switch (reminder.get()) {
@@ -77,7 +82,6 @@ public class ReminderEmailSender {
             logger.info("NO notification sent today");
         }
     }
-
 
     void sendReminderToPl() {
         final List<User> users = userService.findByRoles(Role.PROJECT_LEAD);

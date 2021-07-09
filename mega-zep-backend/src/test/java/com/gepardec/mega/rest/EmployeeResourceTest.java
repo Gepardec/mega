@@ -1,6 +1,10 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.domain.model.*;
+import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.domain.model.SecurityContext;
+import com.gepardec.mega.domain.model.User;
+import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
@@ -20,7 +24,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-public class EmployeeResourceTest {
+class EmployeeResourceTest {
 
     @InjectMock
     EmployeeService employeeService;

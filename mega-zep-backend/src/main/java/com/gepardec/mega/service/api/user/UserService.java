@@ -1,6 +1,5 @@
 package com.gepardec.mega.service.api.user;
 
-
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
 

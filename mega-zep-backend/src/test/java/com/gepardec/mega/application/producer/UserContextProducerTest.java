@@ -12,11 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,7 +32,7 @@ class UserContextProducerTest {
     private UserContextProducer producer;
 
     @Test
-    void createUserContext_whenUserVerified_thenUserSetAndLogged() throws GeneralSecurityException, IOException {
+    void createUserContext_whenUserVerified_thenUserSetAndLogged() {
         // Given
         final User user = User.builder()
                 .dbId(1)

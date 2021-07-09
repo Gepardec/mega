@@ -10,8 +10,15 @@ import com.google.auto.value.AutoValue;
 @JsonDeserialize(builder = Config.Builder.class)
 public abstract class Config {
 
+    public static Builder newBuilder() {
+        return new com.gepardec.mega.rest.model.AutoValue_Config.Builder();
+    }
+
     @JsonProperty
     public abstract String excelUrl();
+
+    @JsonProperty
+    public abstract String budgetCalculationExcelUrl();
 
     @JsonProperty
     public abstract String zepOrigin();
@@ -28,14 +35,12 @@ public abstract class Config {
     @JsonProperty
     public abstract String version();
 
-    public static Builder newBuilder() {
-        return new com.gepardec.mega.rest.model.AutoValue_Config.Builder();
-    }
-
     @AutoValue.Builder
     public abstract static class Builder {
 
         public abstract Builder excelUrl(String excelUrl);
+
+        public abstract Builder budgetCalculationExcelUrl(String planrechnungUrl);
 
         public abstract Builder zepOrigin(String zepUrl);
 

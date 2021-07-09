@@ -16,10 +16,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.Set;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ForbiddenExceptionMapperTest {
+class ForbiddenExceptionMapperTest {
 
     @Mock
     private Logger logger;
@@ -59,7 +63,6 @@ public class ForbiddenExceptionMapperTest {
 
         Assertions.assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
-
 
     private User createUserForEmail(final String email) {
         return User.builder()

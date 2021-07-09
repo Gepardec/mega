@@ -15,15 +15,14 @@ import java.util.List;
 import java.util.Set;
 
 import static com.gepardec.mega.notification.mail.Mail.OM_RELEASE;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-public class ReminderEmailSenderTest {
-
-    @InjectMock
-    private UserService userService;
+class ReminderEmailSenderTest {
 
     @Inject
     ReminderEmailSender reminderEmailSender;
@@ -33,6 +32,9 @@ public class ReminderEmailSenderTest {
 
     @ConfigProperty(name = "quarkus.mailer.mock")
     boolean mailMockSetting;
+
+    @InjectMock
+    private UserService userService;
 
     @BeforeEach
     void init() {

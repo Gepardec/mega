@@ -28,10 +28,10 @@ public class MailSender {
     NotificationConfig notificationConfig;
 
     @Inject
-    Mailer mailer;
+    ApplicationConfig applicationConfig;
 
     @Inject
-    ApplicationConfig applicationConfig;
+    Mailer mailer;
 
     public void send(Mail mail, String eMail, String firstName, Locale locale) {
         send(mail, eMail, firstName, locale, Map.of(), List.of());
@@ -49,6 +49,7 @@ public class MailSender {
                 put(MailParameter.WIKI_EOM_URL, notificationConfig.getMegaWikiEomUrl());
                 put(MailParameter.MEGA_DASH, notificationConfig.getMegaDashUrl());
                 put(MailParameter.EXCEL_URL, applicationConfig.getExcelUrlAsString());
+                put(MailParameter.BUDGET_CALCULATION_EXCEL_URL, applicationConfig.getBudgetCalculationExcelUrlAsString());
             }
         };
 

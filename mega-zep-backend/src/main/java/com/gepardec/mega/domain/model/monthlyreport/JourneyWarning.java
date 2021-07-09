@@ -29,7 +29,8 @@ public class JourneyWarning implements ProjectEntryWarning {
         this.warnings = warnings;
     }
 
-    @Override public LocalDate getDate() {
+    @Override
+    public LocalDate getDate() {
         return date;
     }
 

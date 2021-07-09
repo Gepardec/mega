@@ -11,6 +11,14 @@ import com.google.auto.value.AutoValue;
 @JsonDeserialize(builder = com.gepardec.mega.rest.model.AutoValue_EmployeeStep.Builder.class)
 public abstract class EmployeeStep {
 
+    public EmployeeStep() {
+        super();
+    }
+
+    public static Builder builder() {
+        return new com.gepardec.mega.rest.model.AutoValue_EmployeeStep.Builder();
+    }
+
     @JsonProperty
     public abstract Long stepId();
 
@@ -20,25 +28,20 @@ public abstract class EmployeeStep {
     @JsonProperty
     public abstract String currentMonthYear();
 
-    public EmployeeStep() {
-        super();
-    }
-
-    public static Builder builder() {
-        return new com.gepardec.mega.rest.model.AutoValue_EmployeeStep.Builder();
-    }
-
     @AutoValue.Builder
     public abstract static class Builder {
-        @JsonProperty public abstract Builder stepId(Long stepId);
+        @JsonProperty
+        public abstract Builder stepId(Long stepId);
 
-        @JsonProperty public abstract Builder employee(Employee employee);
+        @JsonProperty
+        public abstract Builder employee(Employee employee);
 
-        @JsonProperty public abstract Builder currentMonthYear(String currentMonthYear);
+        @JsonProperty
+        public abstract Builder currentMonthYear(String currentMonthYear);
 
-        @JsonProperty public abstract EmployeeStep build();
+        @JsonProperty
+        public abstract EmployeeStep build();
 
     }
-
 
 }

@@ -11,7 +11,13 @@ import org.slf4j.Logger;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static com.gepardec.mega.notification.mail.Mail.*;
+import static com.gepardec.mega.notification.mail.Mail.EMPLOYEE_CHECK_PROJECTTIME;
+import static com.gepardec.mega.notification.mail.Mail.OM_ADMINISTRATIVE;
+import static com.gepardec.mega.notification.mail.Mail.OM_CONTROL_EMPLOYEES_CONTENT;
+import static com.gepardec.mega.notification.mail.Mail.OM_CONTROL_PROJECTTIMES;
+import static com.gepardec.mega.notification.mail.Mail.OM_RELEASE;
+import static com.gepardec.mega.notification.mail.Mail.OM_SALARY;
+import static com.gepardec.mega.notification.mail.Mail.PL_PROJECT_CONTROLLING;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -23,7 +29,6 @@ class BusinessDayCalculatorTest {
 
     @InjectMocks
     private BusinessDayCalculator businessDayCalculator;
-
 
     @Test
     void getEventForDate_firstDayOfMonthBusinessDay_shouldReturnUserCheckprojecttimes() {
@@ -68,7 +73,6 @@ class BusinessDayCalculatorTest {
         assertReminderEquals(OM_ADMINISTRATIVE, businessDayCalculator.getEventForDate(LocalDate.of(2020, 2, 17)));
     }
 
-
     @Test
     void getEventforDate_differentDatesOfMonthNovember_shouldReturnCorrectReminder() {
         assertAll(
@@ -105,7 +109,6 @@ class BusinessDayCalculatorTest {
         );
     }
 
-
     @Test
     void getEventforDate_differentDatesOfMonthFebruary_shouldReturnCorrectReminder() {
         assertAll(
@@ -141,14 +144,11 @@ class BusinessDayCalculatorTest {
         );
     }
 
-
     private void assertReminderEmpty(Optional<Mail> actualReminder) {
         assertEquals(Optional.empty(), actualReminder);
     }
 
-
     private void assertReminderEquals(Mail expectedMail, Optional<Mail> actualReminder) {
         assertEquals(expectedMail, actualReminder.get());
     }
-
 }

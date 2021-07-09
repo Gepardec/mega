@@ -37,7 +37,7 @@ public class ZepSoapProvider {
     }
 
     private void configureWebserviceClient(final BindingProvider bindingProvider, final String endpoint, final Long connectionTimeout,
-            final Long requestTimeout, final TimeUnit timeoutUnit) {
+                                           final Long requestTimeout, final TimeUnit timeoutUnit) {
         bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
         final int connectionTimeoutMillis = (int) TimeUnit.MILLISECONDS.convert(connectionTimeout, timeoutUnit);
         final int requestTimeoutMillis = (int) TimeUnit.MILLISECONDS.convert(requestTimeout, timeoutUnit);

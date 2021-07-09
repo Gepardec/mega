@@ -1,6 +1,7 @@
 package com.gepardec.mega.application.schedule;
 
 import com.gepardec.mega.notification.mail.ReminderEmailSender;
+import com.gepardec.mega.service.api.init.ProjectSyncService;
 import com.gepardec.mega.service.api.init.StepEntrySyncService;
 import com.gepardec.mega.service.api.init.SyncService;
 import io.quarkus.scheduler.Scheduled;
@@ -23,11 +24,15 @@ public class Schedules {
     StepEntrySyncService stepEntrySyncService;
 
     @Inject
+    ProjectSyncService projectSyncService;
+
+    @Inject
     ReminderEmailSender reminderEmailSender;
 
     @Scheduled(identity = "Sync ZEP-Employees with Users in the database",
             every = "PT30M",
-            delay = 15, delayUnit = TimeUnit.SECONDS) // We need to wait for liquibase to finish, but is executed in parallel
+            delay = 15, delayUnit = TimeUnit.SECONDS)
+        // We need to wait for liquibase to finish, but is executed in parallel
     void syncEmployeesWithDatabase() {
         syncService.syncEmployees();
     }
@@ -35,7 +40,13 @@ public class Schedules {
     @Scheduled(identity = "Generate step entries on the first day of a month",
             cron = "0 0 0 1 * ? *")
     void generateStepEntries() {
-        stepEntrySyncService.genereteStepEntries();
+        stepEntrySyncService.generateStepEntries();
+    }
+
+    @Scheduled(identity = "Generate projects and project entries on the first day of a month",
+            cron = "0 0 0 1 * ? *")
+    void generateProjects() {
+        projectSyncService.generateProjects();
     }
 
     @Scheduled(identity = "Send E-Mail reminder to Users",

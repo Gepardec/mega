@@ -1,12 +1,23 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.db.entity.State;
-import com.gepardec.mega.domain.model.*;
+import com.gepardec.mega.db.entity.project.ProjectEntry;
+import com.gepardec.mega.db.entity.project.ProjectState;
+import com.gepardec.mega.db.entity.project.ProjectStep;
+import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.FinishedAndTotalComments;
+import com.gepardec.mega.domain.model.ProjectEmployees;
+import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.domain.model.SecurityContext;
+import com.gepardec.mega.domain.model.StepName;
+import com.gepardec.mega.domain.model.User;
+import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.rest.model.ManagementEntry;
 import com.gepardec.mega.rest.model.ProjectManagementEntry;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.project.ProjectService;
+import com.gepardec.mega.service.api.projectentry.ProjectEntryService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
@@ -15,16 +26,16 @@ import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 import org.wildfly.common.Assert;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -41,6 +52,9 @@ public class ManagementResourceTest {
 
     @InjectMock
     ProjectService projectService;
+
+    @InjectMock
+    ProjectEntryService projectEntryService;
 
     @InjectMock
     private SecurityContext securityContext;
@@ -191,11 +205,16 @@ public class ManagementResourceTest {
 
         when(employeeService.getAllActiveEmployees()).thenReturn(List.of(mgattringer, jgartner));
 
-        List<com.gepardec.mega.db.entity.StepEntry> entries = List.of(
+        List<com.gepardec.mega.db.entity.StepEntry> stepEntries = List.of(
                 createStepEntryForStep(StepName.CONTROL_EXTERNAL_TIMES, State.DONE),
                 createStepEntryForStep(StepName.CONTROL_INTERNAL_TIMES, State.OPEN),
                 createStepEntryForStep(StepName.CONTROL_TIME_EVIDENCES, State.DONE),
                 createStepEntryForStep(StepName.CONTROL_TIMES, State.OPEN)
+        );
+
+        List<ProjectEntry> projectEntries = List.of(
+                createProjectEntryForStepWithStateAndPreset(ProjectStep.CONTROL_PROJECT, ProjectState.NOT_RELEVANT, true),
+                createProjectEntryForStepWithStateAndPreset(ProjectStep.CONTROL_BILLING, ProjectState.DONE, false)
         );
 
         when(commentService.cntFinishedAndTotalCommentsForEmployee(
@@ -205,7 +224,11 @@ public class ManagementResourceTest {
         when(stepEntryService.findAllStepEntriesForEmployeeAndProject(
                 ArgumentMatchers.any(Employee.class), ArgumentMatchers.anyString(), ArgumentMatchers.anyString(),
                 ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
-        ).thenReturn(entries);
+        ).thenReturn(stepEntries);
+
+        // TODO add concrete parameter values instead of any
+        when(projectEntryService.findByNameAndDate(Mockito.any(), Mockito.any(), Mockito.any()))
+                .thenReturn(projectEntries);
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/10")
@@ -217,11 +240,18 @@ public class ManagementResourceTest {
                 .filter(p -> rgkkcc.projectId().equalsIgnoreCase(p.projectName()))
                 .findFirst();
 
+        // assert project management entry
         Assert.assertTrue(projectRgkkcc.isPresent());
+        assertEquals(com.gepardec.mega.domain.model.ProjectState.NOT_RELEVANT, projectRgkkcc.get().controlProjectState());
+        assertEquals(com.gepardec.mega.domain.model.ProjectState.DONE, projectRgkkcc.get().controlBillingState());
+        assertTrue(projectRgkkcc.get().presetControlProjectState());
+        assertFalse(projectRgkkcc.get().presetControlBillingState());
+
         List<ManagementEntry> rgkkccEntries = projectRgkkcc.get().entries();
         Optional<ManagementEntry> entryMgattringer = rgkkccEntries.stream()
                 .filter(m -> mgattringer.userId().equalsIgnoreCase(m.employee().userId()))
                 .findFirst();
+        // assert management entry
         Assert.assertTrue(entryMgattringer.isPresent());
         ManagementEntry entry = entryMgattringer.get();
         assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
@@ -341,4 +371,11 @@ public class ManagementResourceTest {
                 .build();
     }
 
+    private ProjectEntry createProjectEntryForStepWithStateAndPreset(ProjectStep step, ProjectState state, boolean preset) {
+        ProjectEntry p = new ProjectEntry();
+        p.setStep(step);
+        p.setState(state);
+        p.setPreset(preset);
+        return p;
+    }
 }

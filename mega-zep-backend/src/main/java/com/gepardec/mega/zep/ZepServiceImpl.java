@@ -6,7 +6,26 @@ import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.service.impl.employee.EmployeeMapper;
 import com.gepardec.mega.zep.mapper.ProjectEntryMapper;
-import de.provantis.zep.*;
+import de.provantis.zep.KategorieListeType;
+import de.provantis.zep.KategorieType;
+import de.provantis.zep.MitarbeiterType;
+import de.provantis.zep.ProjektListeType;
+import de.provantis.zep.ProjektMitarbeiterListeType;
+import de.provantis.zep.ProjektMitarbeiterType;
+import de.provantis.zep.ProjektType;
+import de.provantis.zep.ReadMitarbeiterRequestType;
+import de.provantis.zep.ReadMitarbeiterResponseType;
+import de.provantis.zep.ReadMitarbeiterSearchCriteriaType;
+import de.provantis.zep.ReadProjekteRequestType;
+import de.provantis.zep.ReadProjekteResponseType;
+import de.provantis.zep.ReadProjekteSearchCriteriaType;
+import de.provantis.zep.ReadProjektzeitenRequestType;
+import de.provantis.zep.ReadProjektzeitenResponseType;
+import de.provantis.zep.ReadProjektzeitenSearchCriteriaType;
+import de.provantis.zep.UpdateMitarbeiterRequestType;
+import de.provantis.zep.UpdateMitarbeiterResponseType;
+import de.provantis.zep.UserIdListeType;
+import de.provantis.zep.ZepSoapPortType;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -32,9 +51,13 @@ public class ZepServiceImpl implements ZepService {
     private static final Range<Integer> PROJECT_LEAD_RANGE = Range.between(1, 2);
 
     private final EmployeeMapper employeeMapper;
+
     private final Logger logger;
+
     private final ZepSoapPortType zepSoapPortType;
+
     private final ZepSoapProvider zepSoapProvider;
+
     private final ProjectEntryMapper projectEntryMapper;
 
     @Inject
@@ -111,7 +134,8 @@ public class ZepServiceImpl implements ZepService {
     public List<Project> getProjectsForMonthYear(final LocalDate monthYear) {
         final ReadProjekteResponseType readProjekteResponseType = getProjectsInternal(monthYear);
 
-        return readProjekteResponseType.getProjektListe().getProjekt()
+        ProjektListeType projektListe = readProjekteResponseType.getProjektListe();
+        return projektListe.getProjekt()
                 .stream()
                 .map(pt -> createProject(pt, monthYear))
                 .collect(Collectors.toList());
@@ -143,9 +167,18 @@ public class ZepServiceImpl implements ZepService {
     }
 
     private Project createProject(final ProjektType projektType, final LocalDate monthYear) {
+        Optional<String> endDateString = Optional.ofNullable(projektType.getEndeDatum());
+        LocalDate endDate = endDateString.isPresent() ?
+                LocalDate.parse(endDateString.get()) :
+                LocalDate.now()
+                        .plusYears(5)
+                        .with(TemporalAdjusters.lastDayOfYear());
+
         return Project.builder()
                 .projectId(projektType.getProjektNr())
                 .description(projektType.getBezeichnung())
+                .startDate(LocalDate.parse(projektType.getStartDatum()))
+                .endDate(endDate)
                 .employees(createProjectEmployees(projektType.getProjektmitarbeiterListe(), monthYear))
                 .leads(createProjectLeads(projektType.getProjektmitarbeiterListe(), monthYear))
                 .categories(createCategories(projektType))

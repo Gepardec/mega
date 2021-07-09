@@ -18,6 +18,12 @@ import {Moment} from 'moment';
 import {ConfigService} from '../../shared/services/config/config.service';
 import {Config} from '../../shared/models/Config';
 import {configuration} from '../../shared/constants/configuration';
+import {ProjectState} from '../../shared/models/ProjectState';
+import {MatSelectChange} from '@angular/material/select';
+import {ProjectEntriesService} from '../../shared/services/projectentries/project-entries.service';
+import {MatCheckboxChange} from '@angular/material/checkbox';
+import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
+import {TranslateService} from '@ngx-translate/core';
 
 const moment = _moment;
 
@@ -50,7 +56,10 @@ export class ProjectManagementComponent implements OnInit {
               private pmService: ProjectManagementService,
               private stepEntryService: StepentriesService,
               private commentService: CommentService,
-              private configService: ConfigService) {
+              private configService: ConfigService,
+              private projectEntryService: ProjectEntriesService,
+              private _snackBar: MatSnackBar,
+              private translate: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -91,7 +100,9 @@ export class ProjectManagementComponent implements OnInit {
         dialogRef.componentInstance.step = Step.CONTROL_TIME_EVIDENCES;
         dialogRef.componentInstance.project = project;
         dialogRef.componentInstance.currentMonthYear = this.getFormattedDate();
-        dialogRef.afterClosed().subscribe(() => this.getPmEntries());
+
+        dialogRef.disableClose = true;
+        dialogRef.componentInstance.commentHasChanged.subscribe(() => this.getPmEntries())
       });
   }
 
@@ -163,5 +174,72 @@ export class ProjectManagementComponent implements OnInit {
 
   private getFormattedDate() {
     return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
+  }
+
+  onChangeControlProjectState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
+    const newValue = $event.value as ProjectState;
+    const preset = newValue !== 'NOT_RELEVANT' ? false : pmEntry.presetControlProjectState;
+
+    this.projectEntryService.updateProjectEntry(newValue, preset, pmEntry.projectName, 'CONTROL_PROJECT', this.getFormattedDate())
+      .subscribe((success) => {
+        if (success) {
+          pmEntry.controlProjectState = newValue;
+          pmEntry.presetControlProjectState = preset;
+        } else {
+          this.showErrorSnackbar();
+          this.pmService.resetProjectStateSelect.next(pmEntry.controlProjectState);
+        }
+      });
+  }
+
+  onChangeControlBillingState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
+    const newValue = $event.value as ProjectState;
+    const preset = newValue !== 'NOT_RELEVANT' ? false : pmEntry.presetControlBillingState;
+
+    this.projectEntryService.updateProjectEntry(newValue, preset, pmEntry.projectName, 'CONTROL_BILLING', this.getFormattedDate())
+      .subscribe((success) => {
+        if (success) {
+          pmEntry.controlBillingState = newValue;
+          pmEntry.presetControlBillingState = preset;
+        } else {
+          this.showErrorSnackbar();
+          this.pmService.resetProjectStateSelect.next(pmEntry.controlProjectState);
+        }
+      });
+  }
+
+  onChangePresetControlProjectState($event: MatCheckboxChange, pmEntry: ProjectManagementEntry) {
+    this.projectEntryService.updateProjectEntry(pmEntry.controlProjectState, pmEntry.presetControlProjectState, pmEntry.projectName, 'CONTROL_PROJECT', this.getFormattedDate())
+      .subscribe(success => {
+        if (!success) {
+          this.showErrorSnackbar();
+          pmEntry.presetControlProjectState = !$event.checked;
+        }
+      })
+  }
+
+  onChangePresetControlBillingState($event: MatCheckboxChange, pmEntry: ProjectManagementEntry) {
+    this.projectEntryService.updateProjectEntry(pmEntry.controlBillingState, pmEntry.presetControlBillingState, pmEntry.projectName, 'CONTROL_BILLING', this.getFormattedDate())
+      .subscribe(success => {
+        if (!success) {
+          this.showErrorSnackbar();
+          pmEntry.presetControlBillingState = !$event.checked;
+        }
+      })
+  }
+
+  private showErrorSnackbar() {
+    this._snackBar.open(
+      this.translate.instant('snackbar.message'),
+      this.translate.instant('snackbar.confirm'),
+      {
+        horizontalPosition: <MatSnackBarHorizontalPosition>configuration.snackbar.horizontalPosition,
+        verticalPosition: <MatSnackBarVerticalPosition>configuration.snackbar.verticalPosition,
+        duration: configuration.snackbar.duration
+      });
+  }
+
+  isProjectStateNotRelevant(projectState: ProjectState) {
+    return projectState === ProjectState.NOT_RELEVANT;
   }
 }

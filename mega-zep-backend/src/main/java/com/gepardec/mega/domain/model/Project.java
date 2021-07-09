@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nullable;
+import java.time.LocalDate;
 import java.util.List;
 
 @AutoValue
@@ -13,12 +14,23 @@ import java.util.List;
 @JsonDeserialize(builder = com.gepardec.mega.domain.model.AutoValue_Project.Builder.class)
 public abstract class Project {
 
+    public static Project.Builder builder() {
+        return new com.gepardec.mega.domain.model.AutoValue_Project.Builder();
+    }
+
     @JsonProperty
     public abstract String projectId();
 
     @Nullable
     @JsonProperty
     public abstract String description();
+
+    @JsonProperty
+    public abstract LocalDate startDate();
+
+    @JsonProperty
+    @Nullable
+    public abstract LocalDate endDate();
 
     @JsonProperty
     public abstract List<String> employees();
@@ -29,10 +41,6 @@ public abstract class Project {
     @JsonProperty
     public abstract List<String> categories();
 
-    public static Project.Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_Project.Builder();
-    }
-
     @AutoValue.Builder
     public abstract static class Builder {
         @JsonProperty
@@ -40,6 +48,12 @@ public abstract class Project {
 
         @JsonProperty
         public abstract Project.Builder description(String description);
+
+        @JsonProperty
+        public abstract Project.Builder startDate(LocalDate startDate);
+
+        @JsonProperty
+        public abstract Project.Builder endDate(LocalDate endDate);
 
         @JsonProperty
         public abstract Project.Builder employees(List<String> employees);

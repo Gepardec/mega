@@ -5,10 +5,7 @@ import java.util.Set;
 
 public class AustrianHolidays {
 
-    private AustrianHolidays() {
-    }
-
-    private static Set<LocalDate> holidates = Set.of(
+    private static final Set<LocalDate> holidates = Set.of(
             LocalDate.of(2019, 10, 26),
             LocalDate.of(2019, 11, 1),
             LocalDate.of(2019, 12, 8),
@@ -43,6 +40,8 @@ public class AustrianHolidays {
             LocalDate.of(2021, 12, 26)
     );
 
+    private AustrianHolidays() {
+    }
 
     public static Set<LocalDate> getHolidates() {
         return holidates;
