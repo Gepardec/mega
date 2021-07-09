@@ -39,6 +39,10 @@
     "message": "Ein Fehler ist aufgetreten",
     "reload": "Neu laden"
   },
+  "global": {
+    "selectPayrollMonth": "Abrechnungsmonat auswählen:",
+    "addComment": "Anmerkung hinzufügen"
+  },
   "monthly-report": {
     "ok": "Alle Eingaben sind korrekt.",
     "notReleasedYet": "Noch nicht freigegeben",
@@ -69,6 +73,8 @@
     }
   },
   "office-management": {
+    "enterprise": "Unternehmen",
+    "projects": "Projekte",
     "filterPlaceholder": "Suche nach Name",
     "selectedCount": "Person(en) ausgewählt",
     "releaseBtnText": "Freigeben",
@@ -81,12 +87,27 @@
       "projectCheckState": "PM Check",
       "releaseDate": "Freigegeben bis"
     },
-    "noOmEntriesFound": "Keine Einträge gefunden"
+    "noOmEntriesFound": "Keine Einträge gefunden",
+    "global-check" : {
+      "labels": {
+        "zepTimesReleased": "ZEP Zeiten freigeben",
+        "chargeabilityExternalEmployeesRecorded": "Chargeability Sheet & externe Mitarbeiter",
+        "payrollAccountingSent": "Daten an Lohnverrechnung übermitteln",
+        "zepMonthlyReportDone": "Monatsabschluss in ZEP durchführen"
+      },
+      "tooltips": {
+        "zepTimesReleased": "Bis zum 6. Arbeitstag:\nNach Freigabe der Projektzeiten durch die Projektleiter erfolgt die Kontrolle und Freigabe der ZEP Zeiten via MEGA (externe und interne Projekte).",
+        "chargeabilityExternalEmployeesRecorded": "Bis zum 6. Arbeitstag:\nChargeability-Sheet mit monatsaktuellen Daten befüllen und Stunden der externen Mitarbeiter in Planrechnungen eintragen",
+        "payrollAccountingSent": "Bis zum 15. Arbeitstag:\nÜbermittlung von Fehlzeiten (Urlaub, ZA, Krankenstand, ...), HO-Tagen und Spesen an die Lohnverrechnung.",
+        "zepMonthlyReportDone": "Bis zum 15. Arbeitstag:\nMonatsabschluss der gebuchten Zeiten in ZEP durchführen. Ab diesem Zeitpunkt können von den Mitarbeitern keine Änderungen in ZEP mehr durchgeführt werden."
+      }
+    }
   },
   "project-management": {
     "actions": "Aktionen",
     "doneBtn": "Überprüft",
     "employeeDone": "Mitarbeiter überprüft",
+    "projectName": "Projektbezeichnung",
     "table": {
       "employeeName": "Mitarbeiter",
       "projectCheckState": "Überprüfung",

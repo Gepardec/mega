@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {MatSelect, MatSelectChange} from '@angular/material/select';
 import {ProjectState} from '../../models/ProjectState';
 import {ProjectManagementService} from '../../../project-management/services/project-management.service';
@@ -9,25 +9,27 @@ import {Subscription} from 'rxjs';
   templateUrl: './project-state-select.component.html',
   styleUrls: ['./project-state-select.component.scss']
 })
-export class ProjectStateSelectComponent implements OnInit, OnDestroy {
+export class ProjectStateSelectComponent implements OnInit {
 
   @ViewChild('select') select: MatSelect;
   ProjectState = ProjectState;
-  @Input() value;
-  @Output() selectionChange = new EventEmitter<MatSelectChange>();
-  resetProjectStateSelectSubscription: Subscription
+  private _value: ProjectState;
+  @Input() set value(newValue: ProjectState) {
+    if (this._value !== newValue) {
+      this._value = newValue;
+      this.cdr.markForCheck();
+    }
+  }
 
-  constructor(private pmService: ProjectManagementService) {
+  get value() {
+    return this._value;
+  }
+  @Output() selectionChange = new EventEmitter<MatSelectChange>();
+
+  constructor(private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
-    this.resetProjectStateSelectSubscription = this.pmService.resetProjectStateSelect.subscribe((projectState) => {
-      this.value = projectState;
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.resetProjectStateSelectSubscription.unsubscribe();
   }
 
   get isInProgressSelected(): boolean {
