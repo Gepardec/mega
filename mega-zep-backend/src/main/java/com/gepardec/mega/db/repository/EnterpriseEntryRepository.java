@@ -1,6 +1,5 @@
 package com.gepardec.mega.db.repository;
 
-import com.gepardec.mega.db.entity.common.State;
 import com.gepardec.mega.db.entity.enterprise.EnterpriseEntry;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
@@ -23,41 +22,5 @@ public class EnterpriseEntryRepository implements PanacheRepository<EnterpriseEn
 
     public Optional<EnterpriseEntry> findByDate(LocalDate date) {
         return find("date", date).firstResultOptional();
-    }
-
-    public int setZepTimesReleased(final State state, final LocalDate from, final LocalDate to) {
-        return update("#EnterpriseEntry.setZepTimesRelease",
-                Parameters
-                        .with("state", state)
-                        .and("start", from)
-                        .and("end", to)
-        );
-    }
-
-    public int setChargeabilityExternalEmployeesRecorded(final State state, final LocalDate from, final LocalDate to) {
-        return update("#EnterpriseEntry.setChargeabilityExternalEmployeesRecorded",
-                Parameters
-                        .with("state", state)
-                        .and("start", from)
-                        .and("end", to)
-        );
-    }
-
-    public int setPayrollAccountingSent(final State state, final LocalDate from, final LocalDate to) {
-        return update("#EnterpriseEntry.setPayrollAccountingSent",
-                Parameters
-                        .with("state", state)
-                        .and("start", from)
-                        .and("end", to)
-        );
-    }
-
-    public int zepMonthlyReportDone(final State state, final LocalDate from, final LocalDate to) {
-        return update("#EnterpriseEntry.zepMonthlyReportDone",
-                Parameters
-                        .with("state", state)
-                        .and("start", from)
-                        .and("end", to)
-        );
     }
 }

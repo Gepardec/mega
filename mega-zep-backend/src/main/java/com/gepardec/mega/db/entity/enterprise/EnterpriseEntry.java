@@ -21,22 +21,6 @@ import java.time.LocalDateTime;
         name = "EnterpriseEntry.findByDate",
         query = "SELECT e FROM EnterpriseEntry e WHERE e.date BETWEEN :start AND :end"
 )
-@NamedQuery(
-        name = "EnterpriseEntry.setZepTimesRelease",
-        query = "UPDATE EnterpriseEntry e SET e.zepTimesReleased = :state WHERE e.date BETWEEN :start AND :end"
-)
-@NamedQuery(
-        name = "EnterpriseEntry.setChargeabilityExternalEmployeesRecorded",
-        query = "UPDATE EnterpriseEntry e SET e.chargeabilityExternalEmployeesRecorded = :state WHERE e.date BETWEEN :start AND :end"
-)
-@NamedQuery(
-        name = "EnterpriseEntry.setPayrollAccountingSent",
-        query = "UPDATE EnterpriseEntry e SET e.payrollAccountingSent = :state WHERE e.date BETWEEN :start AND :end"
-)
-@NamedQuery(
-        name = "EnterpriseEntry.zepMonthlyReportDone",
-        query = "UPDATE EnterpriseEntry e SET e.zepMonthlyReportDone = :state WHERE e.date BETWEEN :start AND :end"
-)
 public class EnterpriseEntry {
 
     @Id

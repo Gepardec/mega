@@ -1,6 +1,6 @@
 package com.gepardec.mega.service.impl.enterpriseentry;
 
-import com.gepardec.mega.db.entity.common.State;
+import com.gepardec.mega.db.entity.enterprise.EnterpriseEntry;
 import com.gepardec.mega.db.repository.EnterpriseEntryRepository;
 import com.gepardec.mega.rest.model.EnterpriseEntryDto;
 import com.gepardec.mega.service.api.enterpriseentry.EnterpriseEntryService;
@@ -8,6 +8,7 @@ import com.gepardec.mega.service.api.enterpriseentry.EnterpriseEntryService;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @ApplicationScoped
 public class EnterpriseEntryServiceImpl implements EnterpriseEntryService {
@@ -26,22 +27,19 @@ public class EnterpriseEntryServiceImpl implements EnterpriseEntryService {
     }
 
     @Override
-    public boolean setZepTimesReleased(final State state, final LocalDate from, final LocalDate to) {
-        return enterpriseEntryRepository.setZepTimesReleased(state, from, to) == 1;
-    }
+    public boolean update(EnterpriseEntryDto updatedEntryDto, LocalDate from, LocalDate to) {
+        Optional<EnterpriseEntry> optionalEntry = enterpriseEntryRepository.findByDate(from, to);
 
-    @Override
-    public boolean setChargeabilityExternalEmployeesRecorded(final State state, final LocalDate from, final LocalDate to) {
-        return enterpriseEntryRepository.setChargeabilityExternalEmployeesRecorded(state, from, to) == 1;
-    }
+        if (optionalEntry.isPresent()) {
+            EnterpriseEntry entry = optionalEntry.get();
+            entry.setChargeabilityExternalEmployeesRecorded(updatedEntryDto.getChargeabilityExternalEmployeesRecorded());
+            entry.setPayrollAccountingSent(updatedEntryDto.getPayrollAccountingSent());
+            entry.setZepMonthlyReportDone(updatedEntryDto.getZepMonthlyReportDone());
+            entry.setZepTimesReleased(updatedEntryDto.getZepTimesReleased());
 
-    @Override
-    public boolean setPayrollAccountingSent(final State state, final LocalDate from, final LocalDate to) {
-        return enterpriseEntryRepository.setPayrollAccountingSent(state, from, to) == 1;
-    }
-
-    @Override
-    public boolean zepMonthlyReportDone(final State state, final LocalDate from, final LocalDate to) {
-        return enterpriseEntryRepository.zepMonthlyReportDone(state, from, to) == 1;
+            enterpriseEntryRepository.persist(entry);
+            return true;
+        }
+        return false;
     }
 }
