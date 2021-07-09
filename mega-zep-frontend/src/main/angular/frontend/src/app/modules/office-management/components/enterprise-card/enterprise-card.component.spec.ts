@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { EnterpriseCardComponent } from './enterprise-card.component';
+import {EnterpriseCardComponent} from './enterprise-card.component';
+import {OfficeManagementModule} from "../../office-management.module";
 
 describe('EnterpriseCardComponent', () => {
   let component: EnterpriseCardComponent;
@@ -8,9 +9,9 @@ describe('EnterpriseCardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EnterpriseCardComponent ]
+      imports: [OfficeManagementModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -14,7 +14,7 @@
              [matTooltipShowDelay]="tooltipShowDelay"
              matTooltipClass="om-tooltip">{{ 'office-management.global-check.labels.zepTimesReleased' | translate }}</b>
           <app-project-state-select #zepTimesReleasedSelect
-                                    [value]="enterpriseEntry.zepTimesReleased"
+                                    [value]="enterpriseEntry?.zepTimesReleased"
                                     (selectionChange)="onChangeEnterpriseState($event, EnterpriseStep.ZEP_TIMES_RELEASED, zepTimesReleasedSelect)"></app-project-state-select>
         </div>
         <div>
@@ -24,7 +24,7 @@
             [matTooltipShowDelay]="tooltipShowDelay"
             matTooltipClass="om-tooltip">{{ 'office-management.global-check.labels.chargeabilityExternalEmployeesRecorded' | translate }}</b>
           <app-project-state-select #chargeabilityExternalEmployeesRecordedSelect
-                                    [value]="enterpriseEntry.chargeabilityExternalEmployeesRecorded"
+                                    [value]="enterpriseEntry?.chargeabilityExternalEmployeesRecorded"
                                     (selectionChange)="onChangeEnterpriseState($event, EnterpriseStep.CHARGEABILITY_EXTERNAL_EMPLOYEES_RECORDED, chargeabilityExternalEmployeesRecordedSelect)"></app-project-state-select>
         </div>
         <div>
@@ -33,7 +33,7 @@
              [matTooltipShowDelay]="tooltipShowDelay"
              matTooltipClass="om-tooltip">{{ 'office-management.global-check.labels.payrollAccountingSent' | translate }}</b>
           <app-project-state-select #payrollAccountingSentSelect
-                                    [value]="enterpriseEntry.payrollAccountingSent"
+                                    [value]="enterpriseEntry?.payrollAccountingSent"
                                     (selectionChange)="onChangeEnterpriseState($event, EnterpriseStep.PAYROLL_ACCOUNTING_SENT, payrollAccountingSentSelect)"></app-project-state-select>
         </div>
         <div>
@@ -42,7 +42,7 @@
              [matTooltipShowDelay]="tooltipShowDelay"
              matTooltipClass="om-tooltip">{{ 'office-management.global-check.labels.zepMonthlyReportDone' | translate }}</b>
           <app-project-state-select #zepMonthlyReportDoneSelect
-                                    [value]="enterpriseEntry.zepMonthlyReportDone"
+                                    [value]="enterpriseEntry?.zepMonthlyReportDone"
                                     (selectionChange)="onChangeEnterpriseState($event, EnterpriseStep.ZEP_MONTHLY_REPORT_DONE, zepMonthlyReportDoneSelect)"></app-project-state-select>
         </div>
       </div>

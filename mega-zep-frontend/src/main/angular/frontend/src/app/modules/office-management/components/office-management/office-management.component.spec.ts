@@ -1,6 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { OfficeManagementComponent } from './office-management.component';
+import {OfficeManagementComponent} from './office-management.component';
+import {TranslateModule} from "@ngx-translate/core";
+import {AngularMaterialModule} from "../../../material/material-module";
+import {OfficeManagementModule} from "../../office-management.module";
+import {RouterTestingModule} from "@angular/router/testing";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('OfficeManagementComponent', () => {
   let component: OfficeManagementComponent;
@@ -8,9 +13,9 @@ describe('OfficeManagementComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OfficeManagementComponent ]
+      imports: [OfficeManagementModule, HttpClientTestingModule, TranslateModule.forRoot(), AngularMaterialModule, RouterTestingModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,6 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { InlineTextEditorComponent } from './inline-text-editor.component';
+import {InlineTextEditorComponent} from './inline-text-editor.component';
+import {SharedModule} from "../../shared.module";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 describe('InlineTextEditorComponent', () => {
   let component: InlineTextEditorComponent;
@@ -8,9 +10,9 @@ describe('InlineTextEditorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InlineTextEditorComponent ]
+      imports: [SharedModule, BrowserAnimationsModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

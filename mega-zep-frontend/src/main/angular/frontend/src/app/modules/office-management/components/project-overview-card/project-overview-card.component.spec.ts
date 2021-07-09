@@ -1,6 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ProjectOverviewCardComponent } from './project-overview-card.component';
+import {ProjectOverviewCardComponent} from './project-overview-card.component';
+import {TranslateModule} from "@ngx-translate/core";
+import {OfficeManagementModule} from "../../office-management.module";
+import {RouterTestingModule} from "@angular/router/testing";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('ProjectOverviewCardComponent', () => {
   let component: ProjectOverviewCardComponent;
@@ -8,9 +12,13 @@ describe('ProjectOverviewCardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProjectOverviewCardComponent ]
+      imports: [
+        HttpClientTestingModule,
+        TranslateModule.forRoot(),
+        OfficeManagementModule,
+        RouterTestingModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
