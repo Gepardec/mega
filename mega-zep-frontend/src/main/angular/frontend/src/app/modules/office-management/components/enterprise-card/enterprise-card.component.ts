@@ -81,7 +81,7 @@ export class EnterpriseCardComponent implements OnInit, OnDestroy {
     console.log('Old value: ' + oldValue);
     console.log('New value: ' + this.enterpriseEntry[step]);
 
-    this.eeService.updateEnterpriseEntry(this.enterpriseEntry)
+    this.eeService.updateEnterpriseEntry(this.enterpriseEntry, this.selectedYear, this.selectedMonth)
       .subscribe((success) => {
         if (success) {
         } else {
