@@ -1,4 +1,14 @@
-import {Component, EventEmitter, Input, NgZone, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  NgZone,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {CdkTextareaAutosize} from '@angular/cdk/text-field';
 import {take} from 'rxjs/operators';
 
@@ -7,20 +17,31 @@ import {take} from 'rxjs/operators';
   templateUrl: './inline-text-editor.component.html',
   styleUrls: ['./inline-text-editor.component.scss']
 })
-export class InlineTextEditorComponent implements OnInit {
+export class InlineTextEditorComponent implements OnInit, AfterViewInit {
 
   @Input() comment: string
   @Output() commentChange = new EventEmitter<string>();
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
+  @ViewChild('textarea') textarea: ElementRef;
+  MAXIMUM_LETTERS = 500;
 
-  constructor(private _ngZone: NgZone) { }
+  constructor(private _ngZone: NgZone,
+              private changeDectectorRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
   }
 
+  ngAfterViewInit(): void {
+    this.textarea.nativeElement.focus();
+    this.triggerResize();
+    this.changeDectectorRef.detectChanges();
+  }
+
   triggerResize() {
     this._ngZone.onStable.pipe(take(1))
-      .subscribe(() => this.autosize.resizeToFitContent(true));
+      .subscribe(() => {
+        this.autosize.resizeToFitContent(true);
+      });
   }
 
   onCancel() {
@@ -28,6 +49,6 @@ export class InlineTextEditorComponent implements OnInit {
   }
 
   onSave(inputElement: HTMLTextAreaElement) {
-    this.commentChange.emit(inputElement.value);
+    this.commentChange.emit(inputElement.value.trim());
   }
 }

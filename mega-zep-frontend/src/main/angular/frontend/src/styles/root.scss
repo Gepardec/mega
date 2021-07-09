@@ -118,3 +118,11 @@ app-employee-card, app-project-management {
   font-size: 15px !important;
   white-space: pre-line;
 }
+
+app-project-overview-card, app-project-management {
+  .btn-addComment {
+    flex-grow: 0 !important;
+    color: $gepardec-black;
+    background-color: transparentize($gepardec-yellow, 0.5);
+  }
+}

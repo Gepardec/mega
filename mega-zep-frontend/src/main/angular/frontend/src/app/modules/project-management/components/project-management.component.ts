@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {ProjectManagementEntry} from '../models/ProjectManagementEntry';
 import {MatDialog} from '@angular/material/dialog';
 import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
@@ -24,6 +24,7 @@ import {ProjectEntriesService} from '../../shared/services/projectentries/projec
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
 import {TranslateService} from '@ngx-translate/core';
+import {ProjectStateSelectComponent} from '../../shared/components/project-state-select/project-state-select.component';
 
 const moment = _moment;
 
@@ -52,7 +53,6 @@ export class ProjectManagementComponent implements OnInit {
   selectedMonth = moment().subtract(2, 'month').month() + 1; // months 0 - 11
   showCommentEditor = false;
   forProjectName: string;
-
 
   constructor(private dialog: MatDialog,
               private pmService: ProjectManagementService,
@@ -167,7 +167,7 @@ export class ProjectManagementComponent implements OnInit {
       });
 
       if (entries.length > 0) {
-        return new Date(entries[0][0].entryDate);
+        return new Date(entries[0][0].currentMonthYear);
       }
     }
 
@@ -178,7 +178,7 @@ export class ProjectManagementComponent implements OnInit {
     return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
   }
 
-  onChangeControlProjectState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
+  onChangeControlProjectState($event: MatSelectChange, pmEntry: ProjectManagementEntry, controlProjectStateSelect: ProjectStateSelectComponent) {
     const newValue = $event.value as ProjectState;
     const preset = newValue !== 'NOT_RELEVANT' ? false : pmEntry.presetControlProjectState;
 
@@ -189,12 +189,12 @@ export class ProjectManagementComponent implements OnInit {
           pmEntry.presetControlProjectState = preset;
         } else {
           this.showErrorSnackbar();
-          this.pmService.resetProjectStateSelect.next(pmEntry.controlProjectState);
+          controlProjectStateSelect.value = pmEntry.controlProjectState;
         }
       });
   }
 
-  onChangeControlBillingState($event: MatSelectChange, pmEntry: ProjectManagementEntry) {
+  onChangeControlBillingState($event: MatSelectChange, pmEntry: ProjectManagementEntry, controlBillingStateSelect: ProjectStateSelectComponent) {
     const newValue = $event.value as ProjectState;
     const preset = newValue !== 'NOT_RELEVANT' ? false : pmEntry.presetControlBillingState;
 
@@ -205,7 +205,7 @@ export class ProjectManagementComponent implements OnInit {
           pmEntry.presetControlBillingState = preset;
         } else {
           this.showErrorSnackbar();
-          this.pmService.resetProjectStateSelect.next(pmEntry.controlProjectState);
+          controlBillingStateSelect.value = pmEntry.controlBillingState;
         }
       });
   }

@@ -86,7 +86,6 @@ export class EmployeeCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('EmployeeCardComponent destroyed');
     if (this.dateSelectionSub) {
       this.dateSelectionSub.unsubscribe();
     }

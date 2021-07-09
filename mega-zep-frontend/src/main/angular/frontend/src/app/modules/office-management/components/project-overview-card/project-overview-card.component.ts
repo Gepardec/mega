@@ -81,51 +81,17 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('ProjectOverviewCardComponent destroyed');
     if (this.dateSelectionSub) {
       this.dateSelectionSub.unsubscribe();
     }
   }
 
-  dateChanged(date: Moment) {
-    this.selectedYear = moment(date).year();
-    this.selectedMonth = moment(date).month() + 1;
-    this.getPmEntries();
-  }
-
-  private getFormattedDate() {
-    return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
-  }
-
   private getPmEntries() {
     this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
-      // this.pmSelectionModel = new Map<string, SelectionModel<ManagementEntry>>();
-      this.pmEntries.forEach(pmEntry => {
-        pmEntry.comment = Math.random() > 0.5 ? 'Dummy comment' : null;
-        // pmEntry.comment = 'Dummy text';
-      });
     });
   }
 
-  private monthDiff(d1: Date, d2: Date) {
-    let months = (d2.getFullYear() - d1.getFullYear()) * 12;
-    months -= d1.getMonth();
-    months += d2.getMonth();
-    return Math.abs(months);
-  }
-
-  // openEmployeeProgress(omEntry: ManagementEntry) {
-  //   this.employeeProgressRef = this._bottomSheet.open(PmProgressComponent, {
-  //     data: {employeeProgresses: omEntry.employeeProgresses},
-  //     autoFocus: false,
-  //     hasBackdrop: false
-  //   });
-  // }
-
-  // closeEmployeeProgress() {
-  //   this.employeeProgressRef.dismiss();
-  // }
   isAtLeastOneEmployeeCheckDone(pmEntry: ProjectManagementEntry): ProjectState {
     for (let mgmtEntry of pmEntry.entries) {
       if (mgmtEntry.projectCheckState === State.DONE) {
@@ -141,7 +107,6 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
   }
 
   onCommentChange(pmEntry: ProjectManagementEntry, comment: string) {
-    console.log(comment);
     this.showCommentEditor = false;
     this.forProjectName = null;
     pmEntry.comment = comment;

@@ -59,35 +59,19 @@ tr.spacing > td {
   padding-right: 15px;
 }
 
-
-
-
-.container-flex {
-  background-color: red;
+.mat-expansion-panel-header-description {
   display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-
-  > :nth-child(1) {
-    flex-grow: 0;
-  }
-  > :nth-child(2) {
+  >:nth-child(2) {
     flex-grow: 1;
+    //max-width: 600px;
   }
 }
 
-.custom-component {
-  background-color: green;
-  padding: 5px;
-
+.comment-container {
   display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-
-  > {
-    flex-grow: 0;
-  }
-  > mat-form-field {
+  padding-left: 15px;
+  >:nth-child(1) {
     flex-grow: 1;
+    max-width: 600px;
   }
 }

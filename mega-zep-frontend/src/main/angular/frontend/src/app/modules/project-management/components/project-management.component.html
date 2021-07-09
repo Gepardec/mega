@@ -2,7 +2,7 @@
   <div>
     <mat-toolbar class="mat-elevation-z6" color="accent">
       <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
-        <span>Abrechnungsmonat auswählen:</span>
+        <span>{{'global.selectPayrollMonth' | translate}}</span>
         <app-datepicker-month-year (dateChanged)="dateChanged($event)"></app-datepicker-month-year>
       </mat-toolbar-row>
       <div fxLayoutGap="10px"></div>
@@ -17,8 +17,9 @@
     <mat-accordion [multi]="true" class="headers-align"
                    *ngIf="pmEntries?.length > 0; else noPmEntriesFound">
       <mat-expansion-panel *ngFor="let pmEntry of pmEntries, let i = index" [expanded]="true" class="mat-elevation-z6">
-        <mat-expansion-panel-header collapsedHeight="125px"
-                                    expandedHeight="125px">
+        <mat-expansion-panel-header style="min-height: 125px;"
+                                    [collapsedHeight]="'fit-content'"
+                                    [expandedHeight]="'fit-content'">
           <mat-panel-title>
             <strong>{{pmEntry.projectName}}</strong>
           </mat-panel-title>
@@ -30,8 +31,9 @@
                   {{'project-management.projectTimeState' | translate}}
                 </td>
                 <td>
-                  <app-project-state-select [value]="pmEntry.controlProjectState"
-                                            (selectionChange)="onChangeControlProjectState($event, pmEntry)"></app-project-state-select>
+                  <app-project-state-select #controlProjectStateSelect
+                                            [value]="pmEntry.controlProjectState"
+                                            (selectionChange)="onChangeControlProjectState($event, pmEntry, controlProjectStateSelect)"></app-project-state-select>
                   <mat-checkbox [(ngModel)]="pmEntry.presetControlProjectState"
                                 *ngIf="isProjectStateNotRelevant(pmEntry.controlProjectState)"
                                 (change)="onChangePresetControlProjectState($event, pmEntry)"
@@ -45,8 +47,9 @@
                   {{'project-management.billingState' | translate}}
                 </td>
                 <td class="states">
-                  <app-project-state-select [value]="pmEntry.controlBillingState"
-                                            (selectionChange)="onChangeControlBillingState($event, pmEntry)"></app-project-state-select>
+                  <app-project-state-select #controlBillingStateSelect
+                                            [value]="pmEntry.controlBillingState"
+                                            (selectionChange)="onChangeControlBillingState($event, pmEntry, controlBillingStateSelect)"></app-project-state-select>
                   <mat-checkbox [(ngModel)]="pmEntry.presetControlBillingState"
                                 *ngIf="isProjectStateNotRelevant(pmEntry.controlBillingState)"
                                 (change)="onChangePresetControlBillingState($event, pmEntry)"
@@ -57,13 +60,21 @@
               </tr>
               </tbody>
             </table>
-            <div fxLayout="row" fxLayoutAlign="start center" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" style="padding-left: 15px">
-              <p class="action-label" *ngIf="pmEntry.comment && forProjectName !== pmEntry.projectName"
-                 (click)="onStartEditing(pmEntry.projectName)">{{ pmEntry.comment }}</p>
-              <p class="action-label" *ngIf="!pmEntry.comment && forProjectName !== pmEntry.projectName"
-                 style="opacity: 50%"
-                 (click)="onStartEditing(pmEntry.projectName)">Anmerkung hinzufügen</p>
-              <app-inline-text-editor *ngIf="showCommentEditor && forProjectName === pmEntry.projectName"
+            <div (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" class="comment-container">
+              <p *ngIf="pmEntry.comment && forProjectName !== pmEntry.projectName"
+                 (click)="onStartEditing(pmEntry.projectName)"
+                 class="action-label"
+                 style="max-width: 800px">{{ pmEntry.comment }}</p>
+              <button mat-icon-button
+                      matTooltip="{{'global.addComment' | translate}}"
+                      matTooltipShowDelay="1000"
+                      *ngIf="!pmEntry.comment && forProjectName !== pmEntry.projectName"
+                      (click)="onStartEditing(pmEntry.projectName)"
+                      class="btn-addComment">
+                <mat-icon>add</mat-icon>
+              </button>
+              <app-inline-text-editor style="flex-grow: 1; max-width: 600px"
+                                      *ngIf="showCommentEditor && forProjectName === pmEntry.projectName"
                                       [comment]="pmEntry.comment"
                                       (commentChange)="onCommentChange(pmEntry, $event)"></app-inline-text-editor>
             </div>
@@ -75,7 +86,7 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
 
-<!--        TODO: Do we want an elevated table here, to match styling of OM view?-->
+        <!--        TODO: Do we want an elevated table here, to match styling of OM view?-->
         <div class="table-container">
           <mat-table [dataSource]="pmEntry.entries">
             <ng-container matColumnDef="select">

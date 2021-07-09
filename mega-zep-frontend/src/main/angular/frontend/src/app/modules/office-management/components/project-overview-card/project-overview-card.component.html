@@ -1,7 +1,6 @@
-<!--TODO: Move date selection out of this component so it's on the very top of the page-->
 <mat-card *ngIf="pmEntries" style="margin-top: 10px" class="mat-elevation-z6">
   <mat-card-header>
-    <mat-card-title>Projekte</mat-card-title>
+    <mat-card-title>{{'office-management.projects' | translate}}</mat-card-title>
   </mat-card-header>
   <mat-card-content fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px">
     <div class="mat-elevation-z10 table-container">
@@ -12,7 +11,7 @@
           <mat-header-cell *matHeaderCellDef>{{'project-management.projectName' | translate}}</mat-header-cell>
           <mat-cell *matCellDef="let pmEntry" class="font-weight-bold">
             <span class="mobile-label">{{'project-management.projectName' | translate}}</span>
-              <b>{{pmEntry.projectName}}</b>
+            <b>{{pmEntry.projectName}}</b>
           </mat-cell>
         </ng-container>
 
@@ -46,13 +45,25 @@
         <ng-container matColumnDef="comment">
           <mat-header-cell *matHeaderCellDef class="text-center">
             {{'comments-for-employee.table.comment' | translate}}</mat-header-cell>
-          <mat-cell *matCellDef="let pmEntry" style="align-items: start">
+          <mat-cell *matCellDef="let pmEntry">
             <span class="mobile-label">{{'comments-for-employee.table.comment' | translate}}</span>
-            <p class="action-label" *ngIf="pmEntry.comment && forProjectName !== pmEntry.projectName"
-               (click)="onStartEditing(pmEntry.projectName)">{{ pmEntry.comment }}</p>
-            <p class="action-label" *ngIf="!pmEntry.comment && forProjectName !== pmEntry.projectName"
-               style="opacity: 50%"
-               (click)="onStartEditing(pmEntry.projectName)">Anmerkung hinzufügen</p>
+            <p *ngIf="pmEntry.comment && forProjectName !== pmEntry.projectName"
+               (click)="onStartEditing(pmEntry.projectName)"
+               class="action-label"
+               style="max-width: 850px">{{ pmEntry.comment }}</p>
+            <button mat-icon-button
+                    matTooltip="{{'global.addComment' | translate}}"
+                    matTooltipShowDelay="1000"
+                    *ngIf="!pmEntry.comment && forProjectName !== pmEntry.projectName"
+                    (click)="onStartEditing(pmEntry.projectName)"
+                    class="btn-addComment">
+              <mat-icon>add</mat-icon>
+            </button>
+<!--            TODO: Remove this if the design with button is okay-->
+<!--            <p *ngIf="!pmEntry.comment && forProjectName !== pmEntry.projectName"-->
+<!--               (click)="onStartEditing(pmEntry.projectName)"-->
+<!--               class="action-label"-->
+<!--               style="opacity: 50%">{{'global.addComment' | translate}}</p>-->
             <app-inline-text-editor *ngIf="showCommentEditor && forProjectName === pmEntry.projectName"
                                     [comment]="pmEntry.comment"
                                     (commentChange)="onCommentChange(pmEntry, $event)"></app-inline-text-editor>
@@ -60,7 +71,8 @@
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" style="height: 75px !important;"></mat-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"
+                 style="min-height: 75px; height: fit-content;"></mat-row>
       </mat-table>
     </div>
 

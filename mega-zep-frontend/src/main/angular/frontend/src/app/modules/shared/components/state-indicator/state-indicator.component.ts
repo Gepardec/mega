@@ -7,7 +7,6 @@ import {ProjectState} from '../../models/ProjectState';
   templateUrl: './state-indicator.component.html',
   styleUrls: ['./state-indicator.component.scss']
 })
-// TODO: maybe a new component for project-state has to be created, depends on how the different states should be displayed
 export class StateIndicatorComponent implements OnInit {
   @Input() state: string;
   @Input() size: 'small' | 'medium' | 'large' = 'small';

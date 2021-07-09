@@ -32,7 +32,6 @@ export class OfficeManagementComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('OfficeManagementComponent destroyed');
     this.omService.selectedYear.next(moment().subtract(1, 'month').year());
     this.omService.selectedMonth.next(moment().subtract(1, 'month').month() + 1);
     if (this.dateSelectionSub) {

@@ -10,8 +10,6 @@ import {ProjectState} from '../../shared/models/ProjectState';
 })
 export class ProjectManagementService {
 
-  resetProjectStateSelect = new Subject<ProjectState>();
-
   constructor(private configService: ConfigService, private httpClient: HttpClient) { }
 
   getEntries(year: number, month: number): Observable<Array<ProjectManagementEntry>> {
