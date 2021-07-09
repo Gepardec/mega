@@ -13,20 +13,10 @@ export class ProjectStateSelectComponent implements OnInit {
 
   @ViewChild('select') select: MatSelect;
   ProjectState = ProjectState;
-  private _value: ProjectState;
-  @Input() set value(newValue: ProjectState) {
-    if (this._value !== newValue) {
-      this._value = newValue;
-      this.cdr.markForCheck();
-    }
-  }
-
-  get value() {
-    return this._value;
-  }
+  @Input() value
   @Output() selectionChange = new EventEmitter<MatSelectChange>();
 
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor() {
   }
 
   ngOnInit(): void {

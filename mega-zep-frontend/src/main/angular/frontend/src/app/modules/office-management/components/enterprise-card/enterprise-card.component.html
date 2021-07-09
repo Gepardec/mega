@@ -4,7 +4,7 @@
   </mat-card-header>
   <mat-card-content fxFlexAlign="center" fxLayout="column" fxLayoutGap="10px">
     <div class="mat-elevation-z10">
-      <div *ngIf="true; else noEnterpriseEntriesFound"
+      <div *ngIf="enterpriseEntry; else noEnterpriseEntriesFound"
            fxLayout="row"
            fxLayoutAlign="space-between center"
            class="controls-container">
