@@ -2,8 +2,8 @@ package com.gepardec.mega.rest;
 
 import com.gepardec.mega.application.interceptor.RolesAllowed;
 import com.gepardec.mega.application.interceptor.Secured;
-import com.gepardec.mega.db.entity.State;
-import com.gepardec.mega.db.entity.StepEntry;
+import com.gepardec.mega.db.entity.employee.EmployeeState;
+import com.gepardec.mega.db.entity.employee.StepEntry;
 import com.gepardec.mega.db.entity.project.ProjectEntry;
 import com.gepardec.mega.db.entity.project.ProjectStep;
 import com.gepardec.mega.domain.model.Employee;
@@ -199,7 +199,7 @@ public class ManagementResource {
     private com.gepardec.mega.domain.model.State extractEmployeeCheckState(List<StepEntry> stepEntries) {
         boolean employeeCheckStateOpen = stepEntries.stream()
                 .filter(stepEntry -> StepName.CONTROL_TIMES.name().equalsIgnoreCase(stepEntry.getStep().getName()))
-                .anyMatch(stepEntry -> State.OPEN.equals(stepEntry.getState()));
+                .anyMatch(stepEntry -> EmployeeState.OPEN.equals(stepEntry.getState()));
 
         return employeeCheckStateOpen ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
     }
@@ -213,7 +213,7 @@ public class ManagementResource {
                 .filter(stepEntry ->
                         StepName.CONTROL_EXTERNAL_TIMES.name().equalsIgnoreCase(stepEntry.getStep().getName())
                                 && StringUtils.equalsIgnoreCase(userContext.user().email(), stepEntry.getAssignee().getEmail())
-                ).anyMatch(stepEntry -> State.OPEN.equals(stepEntry.getState()));
+                ).anyMatch(stepEntry -> EmployeeState.OPEN.equals(stepEntry.getState()));
 
         return customerCheckStateOpen ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
     }
@@ -227,7 +227,7 @@ public class ManagementResource {
                 .filter(stepEntry ->
                         StepName.CONTROL_INTERNAL_TIMES.name().equalsIgnoreCase(stepEntry.getStep().getName())
                                 && StringUtils.equalsIgnoreCase(userContext.user().email(), stepEntry.getAssignee().getEmail())
-                ).anyMatch(stepEntry -> State.OPEN.equals(stepEntry.getState()));
+                ).anyMatch(stepEntry -> EmployeeState.OPEN.equals(stepEntry.getState()));
 
         return customerCheckStateOpen ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
     }
@@ -249,6 +249,6 @@ public class ManagementResource {
                     }
                 })
                 .map(StepEntry::getState)
-                .anyMatch(state -> state.equals(State.OPEN)) ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
+                .anyMatch(state -> state.equals(EmployeeState.OPEN)) ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
     }
 }

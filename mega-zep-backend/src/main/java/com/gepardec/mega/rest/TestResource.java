@@ -3,6 +3,7 @@ package com.gepardec.mega.rest;
 import com.gepardec.mega.notification.mail.Mail;
 import com.gepardec.mega.notification.mail.MailParameter;
 import com.gepardec.mega.notification.mail.MailSender;
+import com.gepardec.mega.service.api.init.EnterpriseSyncService;
 import com.gepardec.mega.service.api.init.ProjectSyncService;
 import com.gepardec.mega.service.api.init.StepEntrySyncService;
 import io.quarkus.arc.properties.IfBuildProperty;
@@ -32,6 +33,9 @@ public class TestResource {
     ProjectSyncService projectSyncService;
 
     @Inject
+    EnterpriseSyncService enterpriseSyncService;
+
+    @Inject
     MailSender mailSender;
 
     @Path("/sync/projects")
@@ -39,6 +43,13 @@ public class TestResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response syncProjects() {
         return Response.ok(projectSyncService.generateProjects()).build();
+    }
+
+    @Path("/sync/enterprise")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response syncEnterpriseEntries() {
+        return Response.ok(enterpriseSyncService.generateEnterpriseEntries()).build();
     }
 
     @Path("/sync")

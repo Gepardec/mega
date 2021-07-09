@@ -2,8 +2,8 @@ package com.gepardec.mega.rest;
 
 import com.gepardec.mega.application.interceptor.RolesAllowed;
 import com.gepardec.mega.application.interceptor.Secured;
-import com.gepardec.mega.db.entity.State;
-import com.gepardec.mega.db.entity.User;
+import com.gepardec.mega.db.entity.employee.EmployeeState;
+import com.gepardec.mega.db.entity.employee.User;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.UserContext;
@@ -46,7 +46,7 @@ public class WorkerResource {
         MonthlyReport monthlyReport = monthlyReportService.getMonthendReportForUser(employee.userId());
 
         if (monthlyReport == null) {
-            monthlyReport = MonthlyReport.of(employee, List.of(), List.of(), List.of(), State.OPEN, false, List.of(), false);
+            monthlyReport = MonthlyReport.of(employee, List.of(), List.of(), List.of(), EmployeeState.OPEN, false, List.of(), false);
         }
 
         return monthlyReport;

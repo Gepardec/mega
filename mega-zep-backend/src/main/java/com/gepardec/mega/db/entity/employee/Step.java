@@ -1,4 +1,4 @@
-package com.gepardec.mega.db.entity;
+package com.gepardec.mega.db.entity.employee;
 
 import com.gepardec.mega.domain.model.Role;
 import org.hibernate.validator.constraints.Length;

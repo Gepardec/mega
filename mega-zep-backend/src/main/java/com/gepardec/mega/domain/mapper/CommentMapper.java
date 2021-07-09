@@ -7,7 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class CommentMapper {
 
-    public Comment mapDbCommentToDomainComment(com.gepardec.mega.db.entity.Comment dbComment) {
+    public Comment mapDbCommentToDomainComment(com.gepardec.mega.db.entity.employee.Comment dbComment) {
         Comment domainComment = Comment
                 .builder()
                 .id(dbComment.getId())

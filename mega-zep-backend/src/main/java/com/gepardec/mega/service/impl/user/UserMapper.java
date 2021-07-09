@@ -7,7 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class UserMapper {
 
-    public User map(final com.gepardec.mega.db.entity.User user) {
+    public User map(final com.gepardec.mega.db.entity.employee.User user) {
         if (user == null) {
             return null;
         }

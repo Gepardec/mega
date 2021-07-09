@@ -1,5 +1,6 @@
 package com.gepardec.mega.service.impl.projectentry;
 
+import com.gepardec.mega.db.entity.common.State;
 import com.gepardec.mega.db.entity.project.ProjectEntry;
 import com.gepardec.mega.db.repository.ProjectEntryRepository;
 import com.gepardec.mega.domain.model.ProjectState;
@@ -36,8 +37,8 @@ public class ProjectEntryServiceImpl implements ProjectEntryService {
         return projectEntryRepository.findByNameAndEntryDateAndStep(projectName, entryDate, mapProjectStepFromModelToDatabase(projectStep));
     }
 
-    private com.gepardec.mega.db.entity.project.ProjectState mapProjectStateFromModelToDatabase(ProjectState state) {
-        return Arrays.stream(com.gepardec.mega.db.entity.project.ProjectState.values())
+    private State mapProjectStateFromModelToDatabase(ProjectState state) {
+        return Arrays.stream(State.values())
                 .filter(ps -> ps.name().equals(state.name()))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("ProjectState not supported!"));

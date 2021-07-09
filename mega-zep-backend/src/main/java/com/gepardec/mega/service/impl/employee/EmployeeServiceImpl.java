@@ -1,6 +1,6 @@
 package com.gepardec.mega.service.impl.employee;
 
-import com.gepardec.mega.db.entity.User;
+import com.gepardec.mega.db.entity.employee.User;
 import com.gepardec.mega.db.repository.UserRepository;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.service.api.employee.EmployeeService;

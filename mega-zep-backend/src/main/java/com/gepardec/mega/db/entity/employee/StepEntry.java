@@ -1,4 +1,4 @@
-package com.gepardec.mega.db.entity;
+package com.gepardec.mega.db.entity.employee;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -76,12 +76,12 @@ public class StepEntry {
     /**
      * Teh state of the step entry
      *
-     * @see State
+     * @see EmployeeState
      */
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "state")
-    private State state;
+    private EmployeeState employeeState;
 
     /**
      * The owner of the step entry who is the user who is responsible for the validity of the entry
@@ -120,7 +120,7 @@ public class StepEntry {
 
     @PrePersist
     void onPersist() {
-        state = State.OPEN;
+        employeeState = EmployeeState.OPEN;
         creationDate = updatedDate = LocalDateTime.now();
     }
 
@@ -185,12 +185,12 @@ public class StepEntry {
         this.date = date;
     }
 
-    public State getState() {
-        return state;
+    public EmployeeState getState() {
+        return employeeState;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setState(EmployeeState employeeState) {
+        this.employeeState = employeeState;
     }
 
     public String getProject() {
@@ -226,7 +226,7 @@ public class StepEntry {
                 ", updatedDate=" + updatedDate +
                 ", date=" + date +
                 ", project='" + project + '\'' +
-                ", state=" + state +
+                ", state=" + employeeState +
                 ", owner=" + owner +
                 ", assignee=" + assignee +
                 ", step=" + step +

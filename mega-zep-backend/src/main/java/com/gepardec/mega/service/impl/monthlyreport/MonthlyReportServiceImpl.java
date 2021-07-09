@@ -1,7 +1,7 @@
 package com.gepardec.mega.service.impl.monthlyreport;
 
-import com.gepardec.mega.db.entity.State;
-import com.gepardec.mega.db.entity.StepEntry;
+import com.gepardec.mega.db.entity.employee.EmployeeState;
+import com.gepardec.mega.db.entity.employee.StepEntry;
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
@@ -76,12 +76,12 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                     ));
         }
 
-        final Optional<State> employeeCheckState = stepEntryService.findEmployeeCheckState(employee);
+        final Optional<EmployeeState> employeeCheckState = stepEntryService.findEmployeeCheckState(employee);
         final boolean isAssigned = employeeCheckState.isPresent();
 
         final List<StepEntry> allOwnedAndAssignedStepEntries = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(employee);
-        final boolean otherChecksDone = allOwnedAndAssignedStepEntries.stream().allMatch(stepEntry -> stepEntry.getState() == State.DONE);
+        final boolean otherChecksDone = allOwnedAndAssignedStepEntries.stream().allMatch(stepEntry -> stepEntry.getState() == EmployeeState.DONE);
 
-        return MonthlyReport.of(employee, timeWarnings, journeyWarnings, comments, employeeCheckState.orElse(State.OPEN), isAssigned, pmProgresses, otherChecksDone);
+        return MonthlyReport.of(employee, timeWarnings, journeyWarnings, comments, employeeCheckState.orElse(EmployeeState.OPEN), isAssigned, pmProgresses, otherChecksDone);
     }
 }

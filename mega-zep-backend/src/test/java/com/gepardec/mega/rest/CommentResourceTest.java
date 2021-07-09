@@ -1,6 +1,6 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.db.entity.State;
+import com.gepardec.mega.db.entity.employee.EmployeeState;
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Role;
@@ -67,7 +67,7 @@ class CommentResourceTest {
                 .id(0L)
                 .message("Pausen eintragen!")
                 .authorEmail("evelyn.pirklbauer@gepardec.com")
-                .state(State.IN_PROGRESS)
+                .state(EmployeeState.IN_PROGRESS)
                 .build();
 
         final int updatedCount = given().contentType(ContentType.JSON)
@@ -142,7 +142,7 @@ class CommentResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        Comment comment = Comment.builder().id(0L).message("Pausen eintragen!").authorEmail("evelyn.pirklbauer@gepardec.com").state(State.IN_PROGRESS).build();
+        Comment comment = Comment.builder().id(0L).message("Pausen eintragen!").authorEmail("evelyn.pirklbauer@gepardec.com").state(EmployeeState.IN_PROGRESS).build();
         when(commentService.findCommentsForEmployee(ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(List.of(comment));
 

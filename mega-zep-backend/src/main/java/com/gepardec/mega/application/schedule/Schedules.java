@@ -1,6 +1,7 @@
 package com.gepardec.mega.application.schedule;
 
 import com.gepardec.mega.notification.mail.ReminderEmailSender;
+import com.gepardec.mega.service.api.init.EnterpriseSyncService;
 import com.gepardec.mega.service.api.init.ProjectSyncService;
 import com.gepardec.mega.service.api.init.StepEntrySyncService;
 import com.gepardec.mega.service.api.init.SyncService;
@@ -27,6 +28,9 @@ public class Schedules {
     ProjectSyncService projectSyncService;
 
     @Inject
+    EnterpriseSyncService enterpriseSyncService;
+
+    @Inject
     ReminderEmailSender reminderEmailSender;
 
     @Scheduled(identity = "Sync ZEP-Employees with Users in the database",
@@ -47,6 +51,12 @@ public class Schedules {
             cron = "0 0 0 1 * ? *")
     void generateProjects() {
         projectSyncService.generateProjects();
+    }
+
+    @Scheduled(identity = "Generate enterprise entries on the first day of a month",
+            cron = "0 0 0 1 * ? *")
+    void generateEnterpriseEntries() {
+        enterpriseSyncService.generateEnterpriseEntries();
     }
 
     @Scheduled(identity = "Send E-Mail reminder to Users",

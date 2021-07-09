@@ -3,7 +3,7 @@ package com.gepardec.mega.rest.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gepardec.mega.db.entity.State;
+import com.gepardec.mega.db.entity.employee.EmployeeState;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nullable;
@@ -37,7 +37,7 @@ public abstract class PmProgress {
     public abstract String lastname();
 
     @JsonProperty
-    public abstract State state();
+    public abstract EmployeeState state();
 
     @JsonProperty
     public abstract Long stepId();
@@ -51,7 +51,7 @@ public abstract class PmProgress {
         public abstract Builder assigneeEmail(String email);
 
         @JsonProperty
-        public abstract Builder state(State state);
+        public abstract Builder state(EmployeeState employeeState);
 
         @JsonProperty
         public abstract Builder stepId(Long stepId);

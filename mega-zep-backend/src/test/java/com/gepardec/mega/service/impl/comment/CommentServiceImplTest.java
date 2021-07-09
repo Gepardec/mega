@@ -1,9 +1,9 @@
 package com.gepardec.mega.service.impl.comment;
 
-import com.gepardec.mega.db.entity.Comment;
-import com.gepardec.mega.db.entity.State;
-import com.gepardec.mega.db.entity.StepEntry;
-import com.gepardec.mega.db.entity.User;
+import com.gepardec.mega.db.entity.employee.Comment;
+import com.gepardec.mega.db.entity.employee.EmployeeState;
+import com.gepardec.mega.db.entity.employee.StepEntry;
+import com.gepardec.mega.db.entity.employee.User;
 import com.gepardec.mega.db.repository.CommentRepository;
 import com.gepardec.mega.domain.mapper.CommentMapper;
 import com.gepardec.mega.domain.model.Employee;
@@ -58,7 +58,7 @@ class CommentServiceImplTest {
     @Test
     void findCommentsForEmployee_when1DbComment_thenMap1DomainComment() {
         when(commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(ArgumentMatchers.any(LocalDate.class),
-                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString())).thenReturn(List.of(createComment(1L, State.OPEN)));
+                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString())).thenReturn(List.of(createComment(1L, EmployeeState.OPEN)));
 
         Employee employee = createEmployee();
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
@@ -73,10 +73,10 @@ class CommentServiceImplTest {
 
     @Test
     void setDone_whenNoneUpdated_then0() {
-        when(commentRepository.findById(ArgumentMatchers.anyLong())).thenReturn(createComment(1L, State.IN_PROGRESS));
+        when(commentRepository.findById(ArgumentMatchers.anyLong())).thenReturn(createComment(1L, EmployeeState.IN_PROGRESS));
         when(commentRepository.setStatusDone(ArgumentMatchers.anyLong())).thenReturn(0);
 
-        int updatedCount = commentService.setDone(commentMapper.mapDbCommentToDomainComment(createComment(1L, State.IN_PROGRESS)));
+        int updatedCount = commentService.setDone(commentMapper.mapDbCommentToDomainComment(createComment(1L, EmployeeState.IN_PROGRESS)));
         Assertions.assertEquals(0, updatedCount);
     }
 
@@ -134,9 +134,9 @@ class CommentServiceImplTest {
                 ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.anyString()
         )).thenReturn(List.of(
-                createComment(1L, State.IN_PROGRESS),
-                createComment(2L, State.DONE),
-                createComment(3L, State.OPEN)
+                createComment(1L, EmployeeState.IN_PROGRESS),
+                createComment(2L, EmployeeState.DONE),
+                createComment(3L, EmployeeState.OPEN)
         ));
 
         Employee employee = createEmployee();
@@ -155,9 +155,9 @@ class CommentServiceImplTest {
                 ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.anyString()
         )).thenReturn(List.of(
-                createComment(1L, State.IN_PROGRESS),
-                createComment(2L, State.OPEN),
-                createComment(3L, State.OPEN)
+                createComment(1L, EmployeeState.IN_PROGRESS),
+                createComment(2L, EmployeeState.OPEN),
+                createComment(3L, EmployeeState.OPEN)
         ));
 
         Employee employee = createEmployee();
@@ -210,7 +210,7 @@ class CommentServiceImplTest {
         doAnswer(invocation -> {
             Object[] args = invocation.getArguments();
             ((Comment) args[0]).setUpdatedDate(LocalDateTime.now());
-            ((Comment) args[0]).setState(State.OPEN);
+            ((Comment) args[0]).setState(EmployeeState.OPEN);
             return args[0];
         }).when(commentRepository).save(ArgumentMatchers.any(Comment.class));
 
@@ -243,7 +243,7 @@ class CommentServiceImplTest {
         assertNotNull(createdComment);
         assertEquals("My new comment!", createdComment.message());
         assertEquals(stepEntry.getAssignee().getEmail(), createdComment.authorEmail());
-        assertEquals(State.OPEN, createdComment.state());
+        assertEquals(EmployeeState.OPEN, createdComment.state());
     }
 
     @Test
@@ -261,7 +261,7 @@ class CommentServiceImplTest {
 
     @Test
     void updateComment_whenValid_thenReturnUpdatedComment() {
-        Comment originalComment = createComment(1L, State.DONE);
+        Comment originalComment = createComment(1L, EmployeeState.DONE);
         when(commentRepository.findById(ArgumentMatchers.anyLong())).thenReturn(originalComment);
         when(commentRepository.update(ArgumentMatchers.any(Comment.class))).thenReturn(null);
 
@@ -270,12 +270,12 @@ class CommentServiceImplTest {
         assertEquals("Updated message", updatedComment.message());
     }
 
-    private Comment createComment(Long id, State state) {
+    private Comment createComment(Long id, EmployeeState employeeState) {
         Comment comment = new Comment();
         comment.setId(id);
         comment.setCreationDate(LocalDateTime.now());
         comment.setMessage("Reisezeiten eintragen!");
-        comment.setState(state);
+        comment.setState(employeeState);
         comment.setUpdatedDate(LocalDateTime.now());
         comment.setStepEntry(createStepEntry(1L));
         return comment;
@@ -296,7 +296,7 @@ class CommentServiceImplTest {
         stepEntry.setCreationDate(LocalDateTime.now());
         stepEntry.setDate(LocalDate.now());
         stepEntry.setProject("Liwest-EMS");
-        stepEntry.setState(State.IN_PROGRESS);
+        stepEntry.setState(EmployeeState.IN_PROGRESS);
         stepEntry.setUpdatedDate(LocalDateTime.now());
         stepEntry.setAssignee(createUser());
         stepEntry.setOwner(createUser());

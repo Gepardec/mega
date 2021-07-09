@@ -1,7 +1,7 @@
 package com.gepardec.mega.service.impl.init;
 
 import com.gepardec.mega.db.entity.project.ProjectEntry;
-import com.gepardec.mega.db.entity.project.ProjectState;
+import com.gepardec.mega.db.entity.common.State;
 import com.gepardec.mega.db.entity.project.ProjectStep;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.ProjectFilter;
@@ -101,7 +101,7 @@ public class ProjectSyncServiceImpl implements ProjectSyncService {
             return Optional.empty();
         }
 
-        Set<com.gepardec.mega.db.entity.User> mappedLeads = leads.stream()
+        Set<com.gepardec.mega.db.entity.employee.User> mappedLeads = leads.stream()
                 .map(this::mapDomainUserToEntity)
                 .collect(Collectors.toSet());
 
@@ -121,14 +121,14 @@ public class ProjectSyncServiceImpl implements ProjectSyncService {
         return users.stream().filter(user -> user.userId().equals(userId)).findFirst();
     }
 
-    private com.gepardec.mega.db.entity.User mapDomainUserToEntity(User user) {
-        com.gepardec.mega.db.entity.User u = new com.gepardec.mega.db.entity.User();
+    private com.gepardec.mega.db.entity.employee.User mapDomainUserToEntity(User user) {
+        com.gepardec.mega.db.entity.employee.User u = new com.gepardec.mega.db.entity.employee.User();
         u.setId(user.dbId());
         return u;
     }
 
     private ProjectEntry createProjectEntry(com.gepardec.mega.db.entity.project.Project project,
-                                            Set<com.gepardec.mega.db.entity.User> leads,
+                                            Set<com.gepardec.mega.db.entity.employee.User> leads,
                                             LocalDate date, ProjectStep step) {
         ProjectEntry projectEntry = new ProjectEntry();
         projectEntry.setProject(project);
@@ -146,7 +146,7 @@ public class ProjectSyncServiceImpl implements ProjectSyncService {
         projectEntry.setDate(date);
         projectEntry.setCreationDate(LocalDateTime.now());
         projectEntry.setUpdatedDate(LocalDateTime.now());
-        projectEntry.setState(ProjectState.OPEN);
+        projectEntry.setState(State.OPEN);
         projectEntry.setStep(step);
 
         LocalDate from = date.minusMonths(1).withDayOfMonth(1);

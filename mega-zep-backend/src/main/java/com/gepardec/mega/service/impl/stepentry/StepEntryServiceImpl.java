@@ -1,7 +1,9 @@
 package com.gepardec.mega.service.impl.stepentry;
 
-import com.gepardec.mega.db.entity.State;
-import com.gepardec.mega.db.entity.StepEntry;
+import com.gepardec.mega.db.entity.employee.EmployeeState;
+import com.gepardec.mega.db.entity.employee.StepEntry;
+import com.gepardec.mega.db.entity.employee.Step;
+import com.gepardec.mega.db.entity.employee.User;
 import com.gepardec.mega.db.repository.StepEntryRepository;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.ProjectEmployees;
@@ -31,7 +33,7 @@ public class StepEntryServiceImpl implements StepEntryService {
     StepEntryRepository stepEntryRepository;
 
     @Override
-    public Optional<State> findEmployeeCheckState(final Employee employee) {
+    public Optional<EmployeeState> findEmployeeCheckState(final Employee employee) {
         LocalDate entryDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
 
         Optional<StepEntry> stepEntries =
@@ -56,19 +58,19 @@ public class StepEntryServiceImpl implements StepEntryService {
     @Override
     @Transactional(Transactional.TxType.SUPPORTS)
     public void addStepEntry(com.gepardec.mega.domain.model.StepEntry stepEntry) {
-        final com.gepardec.mega.db.entity.User ownerDb = new com.gepardec.mega.db.entity.User();
+        final User ownerDb = new User();
         ownerDb.setId(stepEntry.owner().dbId());
 
-        final com.gepardec.mega.db.entity.Step stepDb = new com.gepardec.mega.db.entity.Step();
+        final Step stepDb = new Step();
         stepDb.setId(stepEntry.step().dbId());
 
-        final com.gepardec.mega.db.entity.User assigneeDb = new com.gepardec.mega.db.entity.User();
+        final User assigneeDb = new User();
         assigneeDb.setId(stepEntry.assignee().dbId());
 
         final StepEntry stepEntryDb = new StepEntry();
         stepEntryDb.setDate(stepEntry.date());
         stepEntryDb.setProject(stepEntry.project() != null ? stepEntry.project().projectId() : null);
-        stepEntryDb.setState(State.OPEN);
+        stepEntryDb.setState(EmployeeState.OPEN);
         stepEntryDb.setOwner(ownerDb);
         stepEntryDb.setAssignee(assigneeDb);
         stepEntryDb.setStep(stepDb);

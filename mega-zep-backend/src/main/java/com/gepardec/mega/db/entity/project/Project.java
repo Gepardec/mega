@@ -1,6 +1,6 @@
 package com.gepardec.mega.db.entity.project;
 
-import com.gepardec.mega.db.entity.User;
+import com.gepardec.mega.db.entity.employee.User;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.CascadeType;

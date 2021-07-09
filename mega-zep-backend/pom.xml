@@ -30,6 +30,7 @@
         <quarkus.platform.version>1.7.6.Final</quarkus.platform.version>
         <ws.rt.version>2.3.2</ws.rt.version>
         <xml.resolver.version>20050927</xml.resolver.version>
+        <lombok.version>1.18.20</lombok.version>
 
         <!-- application info -->
         <revision>3.0.0-RC1</revision>
@@ -175,6 +176,12 @@
             <classifier>runtime</classifier>
             <scope>test</scope>
             <version>${jacoco.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
         </dependency>
 
         <!-- For IDEA, so that annotation processing works -->
