@@ -8,10 +8,6 @@ th, td {
   font-size: 17px;
 }
 
-.actions mat-card-content {
-  margin-top: 20px;
-}
-
 a {
   color: inherit;
   text-decoration: none;
@@ -31,7 +27,7 @@ mat-panel-title {
 }
 
 mat-panel-description {
-  flex-grow: 0.5;
+  flex-grow: 0.4;
 }
 
 .headers-align mat-expansion-panel-header {
@@ -59,6 +55,23 @@ tr.spacing > td {
   margin-left: 15px;
 }
 
-.description {
+.label {
   padding-right: 15px;
+}
+
+.mat-expansion-panel-header-description {
+  display: flex;
+  >:nth-child(2) {
+    flex-grow: 1;
+    //max-width: 600px;
+  }
+}
+
+.comment-container {
+  display: flex;
+  padding-left: 15px;
+  >:nth-child(1) {
+    flex-grow: 1;
+    max-width: 600px;
+  }
 }

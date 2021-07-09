@@ -20,6 +20,7 @@ import { StateIndicatorComponent } from './components/state-indicator/state-indi
 import { DatepickerMonthYearComponent } from './components/datepicker-month-year/datepicker-month-year.component';
 import {ConfirmDialogComponent} from "./components/confirm-dialog/confirm-dialog.component";
 import { ProjectStateSelectComponent } from './components/project-state-select/project-state-select.component';
+import { InlineTextEditorComponent } from './components/inline-text-editor/inline-text-editor.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ProjectStateSelectComponent } from './components/project-state-select/p
     StateIndicatorComponent,
     DatepickerMonthYearComponent,
     ConfirmDialogComponent,
-    ProjectStateSelectComponent
+    ProjectStateSelectComponent,
+    InlineTextEditorComponent
   ],
   imports: [
     CommonModule,
@@ -49,20 +51,21 @@ import { ProjectStateSelectComponent } from './components/project-state-select/p
     HttpClientModule,
     ReactiveFormsModule
   ],
-  exports: [
-    DatepickerComponent,
-    HeaderComponent,
-    UserActionsComponent,
-    LoginComponent,
-    ErrorComponent,
-    InfoComponent,
-    InfoDialogComponent,
-    StateSelectComponent,
-    ProjectStateSelectComponent,
-    DoneCommentsIndicatorComponent,
-    StateIndicatorComponent,
-    DatepickerMonthYearComponent,
-  ],
+    exports: [
+        DatepickerComponent,
+        HeaderComponent,
+        UserActionsComponent,
+        LoginComponent,
+        ErrorComponent,
+        InfoComponent,
+        InfoDialogComponent,
+        StateSelectComponent,
+        ProjectStateSelectComponent,
+        DoneCommentsIndicatorComponent,
+        StateIndicatorComponent,
+        DatepickerMonthYearComponent,
+        InlineTextEditorComponent,
+    ],
   entryComponents: [
     CommentsForEmployeeComponent,
     InfoDialogComponent,

@@ -4,6 +4,7 @@ import { JourneyCheckComponent } from './journey-check.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AngularMaterialModule } from '../../../material/material-module';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('JourneyCheckComponent', () => {
   let component: JourneyCheckComponent;
@@ -12,7 +13,7 @@ describe('JourneyCheckComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [JourneyCheckComponent],
-      imports: [TranslateModule.forRoot(), AngularMaterialModule],
+      imports: [TranslateModule.forRoot(), AngularMaterialModule, HttpClientTestingModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
