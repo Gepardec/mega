@@ -3,6 +3,7 @@ package com.gepardec.mega.db.repository;
 import com.gepardec.mega.db.entity.enterprise.EnterpriseEntry;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
+import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -17,6 +18,9 @@ public class EnterpriseEntryRepository implements PanacheRepository<EnterpriseEn
 
     @Inject
     EntityManager em;
+
+    @Inject
+    Logger logger;
 
     public Optional<EnterpriseEntry> findByDate(LocalDate from, LocalDate to) {
         return find("#EnterpriseEntry.findByDate",
@@ -34,7 +38,7 @@ public class EnterpriseEntryRepository implements PanacheRepository<EnterpriseEn
             em.merge(entry);
             return true;
         } catch (Exception exception) {
-            exception.printStackTrace();
+            logger.error("An exception occurred during updating enterprise entry", exception);
             return false;
         }
     }
