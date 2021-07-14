@@ -27,6 +27,7 @@ public abstract class Comment {
     public abstract String message();
 
 
+
     @JsonProperty
     @Nullable
     public abstract String authorEmail();
