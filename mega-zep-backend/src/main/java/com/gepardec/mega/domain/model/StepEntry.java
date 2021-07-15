@@ -2,9 +2,9 @@ package com.gepardec.mega.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.auto.value.AutoValue;
+import javax.annotation.Nullable;
+import java.time.LocalDate;
+
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,8 +12,6 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.extern.jackson.Jacksonized;
 
-import javax.annotation.Nullable;
-import java.time.LocalDate;
 
 @Builder
 @Getter
@@ -22,7 +20,6 @@ import java.time.LocalDate;
 @Accessors(fluent = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Jacksonized
-
 public class StepEntry {
     @JsonProperty
     private final LocalDate date;
@@ -42,5 +39,4 @@ public class StepEntry {
 
     @JsonProperty
     private final Step step;
-
 }

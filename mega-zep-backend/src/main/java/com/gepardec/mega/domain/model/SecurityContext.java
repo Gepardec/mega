@@ -2,11 +2,13 @@ package com.gepardec.mega.domain.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javax.annotation.Nullable;
+
 import lombok.*;
 import lombok.experimental.Accessors;
 import lombok.extern.jackson.Jacksonized;
 
-import javax.annotation.Nullable;
+
 
 @Builder
 @Getter
@@ -16,9 +18,6 @@ import javax.annotation.Nullable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Jacksonized
 public class SecurityContext {
-
     @Nullable
     private final String email;
-
-
 }
