@@ -16,7 +16,8 @@ import static io.restassured.RestAssured.given;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-class UserResourceTest {
+class
+UserResourceTest {
 
     @InjectMock
     private SecurityContext securityContext;

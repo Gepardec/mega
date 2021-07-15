@@ -8,7 +8,6 @@ import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 
-
 @Builder
 @Getter
 @ToString
@@ -17,9 +16,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Jacksonized
 public class ProjectEmployees {
-
     private final String projectId;
-
     private final List<String> employees;
 }
 

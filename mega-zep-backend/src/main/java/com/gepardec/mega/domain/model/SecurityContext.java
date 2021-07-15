@@ -1,23 +1,24 @@
 package com.gepardec.mega.domain.model;
 
-import com.google.auto.value.AutoValue;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
+import lombok.experimental.Accessors;
+import lombok.extern.jackson.Jacksonized;
 
 import javax.annotation.Nullable;
 
-@AutoValue
-public abstract class SecurityContext {
-
-    public static SecurityContext.Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_SecurityContext.Builder();
-    }
+@Builder
+@Getter
+@ToString
+@EqualsAndHashCode
+@Accessors(fluent = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Jacksonized
+public class SecurityContext {
 
     @Nullable
-    public abstract String email();
+    private final String email;
 
-    @AutoValue.Builder
-    public abstract static class Builder {
-        public abstract SecurityContext.Builder email(String email);
 
-        public abstract SecurityContext build();
-    }
 }

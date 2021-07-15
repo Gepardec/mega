@@ -3,22 +3,21 @@ package com.gepardec.mega.domain.model;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nullable;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import lombok.experimental.*;
+import lombok.extern.jackson.Jacksonized;
 
-@AutoValue
-public abstract class UserContext {
 
-    public static UserContext.Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_UserContext.Builder();
-    }
-
+@Builder
+@Getter
+@ToString
+@EqualsAndHashCode
+@Accessors(fluent = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Jacksonized
+public class UserContext {
     @Nullable
-    public abstract User user();
-
-    @AutoValue.Builder
-    public abstract static class Builder {
-
-        public abstract Builder user(User user);
-
-        public abstract UserContext build();
-    }
+    private final User user;
 }
