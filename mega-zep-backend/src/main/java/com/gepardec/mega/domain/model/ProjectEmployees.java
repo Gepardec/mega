@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 
 import java.util.List;
 
+
 @Builder
 @Getter
 @ToString
@@ -14,10 +15,10 @@ import java.util.List;
 @Accessors(fluent = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProjectEmployees {
-    @NonNull
+
     private final String projectId;
-    @NonNull
-    public final List<String> employees;
+
+    private final List<String> employees;
 }
 
 
