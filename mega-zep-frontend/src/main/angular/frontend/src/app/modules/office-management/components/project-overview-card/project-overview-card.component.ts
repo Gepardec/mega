@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import * as _moment from 'moment';
-import {Moment} from 'moment';
 import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import {configuration} from '../../../shared/constants/configuration';
 import {environment} from '../../../../../environments/environment';
@@ -18,6 +17,8 @@ import {ProjectManagementService} from '../../../project-management/services/pro
 import {Subscription, zip} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {ProjectState} from '../../../shared/models/ProjectState';
+import {ProjectCommentService} from '../../../shared/services/project-comment/project-comment.service';
+import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
 
 const moment = _moment;
 
@@ -62,7 +63,10 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
     private commentService: CommentService,
     private stepEntryService: StepentriesService,
     private _bottomSheet: MatBottomSheet,
-    private configService: ConfigService) {
+    private configService: ConfigService,
+    private projectCommentService: ProjectCommentService,
+    private _snackBar: MatSnackBar,
+    private translate: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -89,6 +93,12 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
   private getPmEntries() {
     this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
+      this.pmEntries.forEach(pmEntry => {
+        this.projectCommentService.getProjectComment(this.getFormattedDate(), pmEntry.projectName)
+          .subscribe(projectComment => {
+            pmEntry.projectComment = projectComment;
+          });
+      });
     });
   }
 
@@ -109,6 +119,44 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
   onCommentChange(pmEntry: ProjectManagementEntry, comment: string) {
     this.showCommentEditor = false;
     this.forProjectName = null;
-    pmEntry.comment = comment;
+
+    // Avoid reloading of page when the return button was clicked
+    if (pmEntry.projectComment) {
+      if (pmEntry.projectComment.comment !== comment) {
+        let oldComment = pmEntry.projectComment.comment;
+        pmEntry.projectComment.comment = comment;
+        this.projectCommentService.updateProjectComment(pmEntry.projectComment)
+          .subscribe((success) => {
+            if (!success) {
+              this.showErrorSnackbar();
+              pmEntry.projectComment.comment = oldComment;
+            }
+          });
+      }
+    } else {
+      // Avoid reloading of page when the return button was clicked
+      if (comment) {
+        this.projectCommentService.createNewProjectComment(comment, this.getFormattedDate(), pmEntry.projectName)
+          .subscribe(projectComment => {
+            pmEntry.projectComment = projectComment;
+          });
+      }
+    }
+  }
+
+  private getFormattedDate() {
+    return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
+  }
+
+  // TODO: Refactor snackbar logic into service
+  private showErrorSnackbar() {
+    this._snackBar.open(
+      this.translate.instant('snackbar.message'),
+      this.translate.instant('snackbar.confirm'),
+      {
+        horizontalPosition: <MatSnackBarHorizontalPosition>configuration.snackbar.horizontalPosition,
+        verticalPosition: <MatSnackBarVerticalPosition>configuration.snackbar.verticalPosition,
+        duration: configuration.snackbar.duration
+      });
   }
 }

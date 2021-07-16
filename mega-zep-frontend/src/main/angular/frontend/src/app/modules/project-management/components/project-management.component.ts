@@ -1,4 +1,4 @@
-import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProjectManagementEntry} from '../models/ProjectManagementEntry';
 import {MatDialog} from '@angular/material/dialog';
 import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
@@ -25,6 +25,7 @@ import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
 import {TranslateService} from '@ngx-translate/core';
 import {ProjectStateSelectComponent} from '../../shared/components/project-state-select/project-state-select.component';
+import {ProjectCommentService} from '../../shared/services/project-comment/project-comment.service';
 
 const moment = _moment;
 
@@ -61,7 +62,8 @@ export class ProjectManagementComponent implements OnInit {
               private configService: ConfigService,
               private projectEntryService: ProjectEntriesService,
               private _snackBar: MatSnackBar,
-              private translate: TranslateService) {
+              private translate: TranslateService,
+              private projectCommentService: ProjectCommentService) {
   }
 
   ngOnInit(): void {
@@ -141,8 +143,13 @@ export class ProjectManagementComponent implements OnInit {
     this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
       this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
-      this.pmEntries.forEach(pmEntry =>
-        this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []))
+      this.pmEntries.forEach(pmEntry => {
+          this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []));
+          this.projectCommentService.getProjectComment(this.getFormattedDate(), pmEntry.projectName)
+            .subscribe(projectComment => {
+              pmEntry.projectComment = projectComment;
+            });
+        }
       );
     });
   }
@@ -253,6 +260,28 @@ export class ProjectManagementComponent implements OnInit {
   onCommentChange(pmEntry: ProjectManagementEntry, comment: string) {
     this.showCommentEditor = false;
     this.forProjectName = null;
-    pmEntry.comment = comment;
+
+    // Avoid reloading of page when the return button was clicked
+    if (pmEntry.projectComment) {
+      if (pmEntry.projectComment.comment !== comment) {
+        let oldComment = pmEntry.projectComment.comment;
+        pmEntry.projectComment.comment = comment;
+        this.projectCommentService.updateProjectComment(pmEntry.projectComment)
+          .subscribe((success) => {
+            if (!success) {
+              this.showErrorSnackbar();
+              pmEntry.projectComment.comment = oldComment;
+            }
+          });
+      }
+    } else {
+      // Avoid reloading of page when the return button was clicked
+      if (comment) {
+        this.projectCommentService.createNewProjectComment(comment, this.getFormattedDate(), pmEntry.projectName)
+          .subscribe(projectComment => {
+            pmEntry.projectComment = projectComment;
+          });
+      }
+    }
   }
 }
