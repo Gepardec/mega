@@ -68,8 +68,8 @@ class ConstraintViolationExceptionMapperTest {
 
         assertEquals(2, actual.size());
         assertTrue(actual.containsAll(List.of(
-                ValidationViolation.of("name", "must not be null"),
-                ValidationViolation.of("email", "must not be null"))));
+                ValidationViolation.builder().property("name").message("must not be null").build(),
+                ValidationViolation.builder().property("email").message("must not be null").build())));
     }
 
     public static class Model {

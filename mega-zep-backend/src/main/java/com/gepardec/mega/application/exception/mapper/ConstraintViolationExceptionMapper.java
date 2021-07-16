@@ -44,6 +44,6 @@ public class ConstraintViolationExceptionMapper implements ExceptionMapper<Const
     }
 
     private ValidationViolation createValidationViolationForConstraintViolation(final ConstraintViolation<?> violation) {
-        return ValidationViolation.of(violation.getPropertyPath().toString(), violation.getMessage());
+        return ValidationViolation.builder().property(violation.getPropertyPath().toString()).message(violation.getMessage()).build();
     }
 }

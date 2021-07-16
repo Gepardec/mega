@@ -29,7 +29,7 @@ public class CoreWorkingHoursCalculator extends AbstractTimeWarningCalculationSt
     @Override
     public List<TimeWarning> calculate(List<ProjectEntry> projectTimeEntries) {
         final List<TimeWarning> warnings = new ArrayList<>();
-        Map<LocalDate, List<ProjectEntry>> groupedEntries = groupProjectEntriesByFromDate(projectTimeEntries);
+        Map<LocalDate, List<ProjectEntry>> groupedEntries = groupProjectEntriesByFromDate(projectTimeEntries, Collections.emptyList());
 
         for (final Map.Entry<LocalDate, List<ProjectEntry>> entry : groupedEntries.entrySet()) {
             final List<ProjectEntry> projectEntries = entry.getValue();

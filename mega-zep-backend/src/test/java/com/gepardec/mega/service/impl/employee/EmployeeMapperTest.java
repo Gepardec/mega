@@ -47,7 +47,7 @@ class EmployeeMapperTest {
     void map_whenEmployeeWasEmployedInThePastOnce_thenEmployeeIsInactive() {
         final MitarbeiterType employee = new MitarbeiterType();
         final BeschaeftigungszeitType closedEmployment = createBeschaeftigungszeitType(LocalDate.now().minusDays(2), LocalDate.now().minusDays(1));
-        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(closedEmployment);
+        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(List.of(closedEmployment));
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
@@ -60,7 +60,7 @@ class EmployeeMapperTest {
         final BeschaeftigungszeitType closedEmploymentOne = createBeschaeftigungszeitType(LocalDate.now().minusDays(10), LocalDate.now()
                 .minusDays(8));
         final BeschaeftigungszeitType closedEmploymentTwo = createBeschaeftigungszeitType(LocalDate.now().minusDays(7), LocalDate.now().minusDays(4));
-        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(closedEmploymentOne, closedEmploymentTwo);
+        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(List.of(closedEmploymentOne, closedEmploymentTwo));
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
@@ -71,7 +71,7 @@ class EmployeeMapperTest {
     void map_whenEmployeeWillBeEmployedInTheFutureWithOpenEnd_thenEmployeeIsInactive() {
         final MitarbeiterType employee = new MitarbeiterType();
         final BeschaeftigungszeitType futureActiveEmployment = createBeschaeftigungszeitType(LocalDate.now().plusDays(1), null);
-        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(futureActiveEmployment);
+        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(List.of(futureActiveEmployment));
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
@@ -83,7 +83,7 @@ class EmployeeMapperTest {
         final MitarbeiterType employee = new MitarbeiterType();
         final BeschaeftigungszeitType futureActiveEmployment = createBeschaeftigungszeitType(LocalDate.now().plusDays(1), LocalDate.now()
                 .plusDays(2));
-        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(futureActiveEmployment);
+        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(List.of(futureActiveEmployment));
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
@@ -95,7 +95,7 @@ class EmployeeMapperTest {
         final MitarbeiterType employee = new MitarbeiterType();
         final LocalDate today = LocalDate.now();
         final BeschaeftigungszeitType futureActiveEmployment = createBeschaeftigungszeitType(today, today);
-        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(futureActiveEmployment);
+        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(List.of(futureActiveEmployment));
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
@@ -106,7 +106,7 @@ class EmployeeMapperTest {
     void map_whenEmployeeIsCurrentlyEmployedWithOpenEnd_thenEmployeeIsActive() {
         final MitarbeiterType employee = new MitarbeiterType();
         final BeschaeftigungszeitType activeEmployment = createBeschaeftigungszeitType(LocalDate.now().minusDays(10), null);
-        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(activeEmployment);
+        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(List.of(activeEmployment));
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
@@ -117,7 +117,7 @@ class EmployeeMapperTest {
     void map_whenEmployeeIsCurrentlyEmployedWithFixedEndDate_thenEmployeeIsActive() {
         final MitarbeiterType employee = new MitarbeiterType();
         final BeschaeftigungszeitType activeEmployment = createBeschaeftigungszeitType(LocalDate.now().minusDays(10), LocalDate.now().plusDays(1));
-        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(activeEmployment);
+        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(List.of(activeEmployment));
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
@@ -129,7 +129,7 @@ class EmployeeMapperTest {
         final MitarbeiterType employee = new MitarbeiterType();
         final BeschaeftigungszeitType closedEmployment = createBeschaeftigungszeitType(LocalDate.now().minusDays(10), LocalDate.now().minusDays(8));
         final BeschaeftigungszeitType activeEmployment = createBeschaeftigungszeitType(LocalDate.now().minusDays(7), LocalDate.now().plusDays(1));
-        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(closedEmployment, activeEmployment);
+        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(List.of(closedEmployment, activeEmployment));
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
@@ -139,7 +139,7 @@ class EmployeeMapperTest {
     @Test
     void map_whenEmployee_thenMappedProperly() {
         final BeschaeftigungszeitType activeEmployment = createBeschaeftigungszeitType(LocalDate.now().minusDays(7), LocalDate.now().plusDays(1));
-        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(activeEmployment);
+        final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(List.of(activeEmployment));
         final MitarbeiterType employee = new MitarbeiterType();
         employee.setEmail("thomas.herzog@gepardec.com");
         employee.setVorname("Thomas");
@@ -171,9 +171,9 @@ class EmployeeMapperTest {
         return beschaeftigung;
     }
 
-    private BeschaeftigungszeitListeType createBeschaeftigungszeitListeType(BeschaeftigungszeitType... employments) {
+    private BeschaeftigungszeitListeType createBeschaeftigungszeitListeType(List<BeschaeftigungszeitType> employments) {
         final BeschaeftigungszeitListeType beschaeftigungszeitListeType = new BeschaeftigungszeitListeType();
-        beschaeftigungszeitListeType.getBeschaeftigungszeit().addAll(List.of(employments));
+        beschaeftigungszeitListeType.getBeschaeftigungszeit().addAll(employments);
         return beschaeftigungszeitListeType;
     }
 }

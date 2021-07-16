@@ -31,11 +31,13 @@ public class InsufficientBreakCalculator extends AbstractTimeWarningCalculationS
     public List<TimeWarning> calculate(List<ProjectEntry> projectTimes) {
         final List<TimeWarning> warnings = new ArrayList<>();
 
-        final Map<LocalDate, List<ProjectEntry>> groupedProjectTimeEntries = groupProjectEntriesByFromDate(projectTimes,
-                (entry) -> Task.isTask(entry.getTask()));
+        final Map<LocalDate, List<ProjectEntry>> groupedProjectTimeEntries = groupProjectEntriesByFromDate(projectTimes, List.of((entry) -> Task.isTask(entry.getTask())));
+
         for (final Map.Entry<LocalDate, List<ProjectEntry>> projectTimeEntry : groupedProjectTimeEntries.entrySet()) {
+
             final double workHoursOfDay = calculateWorkingDuration(projectTimeEntry.getValue());
             final List<ProjectEntry> entriesPerDay = projectTimeEntry.getValue();
+
             if (hasExceededMaximumWorkingHoursWithoutBreak(workHoursOfDay)) {
                 final double breakTime = calculateBreakTimeSummaryForAllDayEntries(entriesPerDay);
                 if (breakTime < MIN_REQUIRED_BREAK_TIME) {

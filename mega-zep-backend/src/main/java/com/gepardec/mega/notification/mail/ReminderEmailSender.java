@@ -84,7 +84,7 @@ public class ReminderEmailSender {
     }
 
     void sendReminderToPl() {
-        final List<User> users = userService.findByRoles(Role.PROJECT_LEAD);
+        final List<User> users = userService.findByRoles(List.of(Role.PROJECT_LEAD));
         if (users.isEmpty()) {
             logger.warn("No PL email addresses configured, there sending nothing");
             return;
@@ -94,7 +94,7 @@ public class ReminderEmailSender {
     }
 
     void sendReminderToOm(Mail mail) {
-        final List<User> users = userService.findByRoles(Role.OFFICE_MANAGEMENT);
+        final List<User> users = userService.findByRoles(List.of(Role.OFFICE_MANAGEMENT));
         if (users.isEmpty()) {
             logger.warn("No OM email addresses configured, there sending nothing");
             return;

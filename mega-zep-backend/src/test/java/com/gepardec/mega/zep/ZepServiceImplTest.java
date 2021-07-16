@@ -1,6 +1,5 @@
 package com.gepardec.mega.zep;
 
-import com.gepardec.mega.application.constant.DateTimeConstants;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.service.impl.employee.EmployeeMapper;
@@ -81,7 +80,7 @@ class ZepServiceImplTest {
     @Test
     void testGetEmployee() {
         Mockito.when(zepSoapPortType.readMitarbeiter(Mockito.any(ReadMitarbeiterRequestType.class))).thenReturn(createReadMitarbeiterResponseType(
-                createMitarbeiterType(0)
+                List.of(createMitarbeiterType(0))
         ));
 
         final Employee employee = beanUnderTest.getEmployee("0");
@@ -123,9 +122,7 @@ class ZepServiceImplTest {
     @Test
     void testGetEmployees() {
         Mockito.when(zepSoapPortType.readMitarbeiter(Mockito.any(ReadMitarbeiterRequestType.class))).thenReturn(createReadMitarbeiterResponseType(
-                createMitarbeiterType(0),
-                createMitarbeiterType(1),
-                createMitarbeiterType(2)
+                List.of(createMitarbeiterType(0), createMitarbeiterType(1), createMitarbeiterType(2))
         ));
 
         final List<Employee> employee = beanUnderTest.getEmployees();
@@ -202,10 +199,10 @@ class ZepServiceImplTest {
         return mitarbeiter;
     }
 
-    private ReadMitarbeiterResponseType createReadMitarbeiterResponseType(final MitarbeiterType... mitarbeiterType) {
+    private ReadMitarbeiterResponseType createReadMitarbeiterResponseType(final List<MitarbeiterType> mitarbeiterType) {
         final ReadMitarbeiterResponseType readMitarbeiterResponseType = new ReadMitarbeiterResponseType();
         readMitarbeiterResponseType.setMitarbeiterListe(new MitarbeiterListeType());
-        readMitarbeiterResponseType.getMitarbeiterListe().getMitarbeiter().addAll(List.of(mitarbeiterType));
+        readMitarbeiterResponseType.getMitarbeiterListe().getMitarbeiter().addAll(mitarbeiterType);
         return readMitarbeiterResponseType;
     }
 
