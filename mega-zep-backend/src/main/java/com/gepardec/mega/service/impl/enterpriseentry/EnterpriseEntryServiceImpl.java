@@ -1,5 +1,6 @@
 package com.gepardec.mega.service.impl.enterpriseentry;
 
+import com.gepardec.mega.db.entity.common.State;
 import com.gepardec.mega.db.entity.enterprise.EnterpriseEntry;
 import com.gepardec.mega.db.repository.EnterpriseEntryRepository;
 import com.gepardec.mega.rest.model.EnterpriseEntryDto;
@@ -32,13 +33,12 @@ public class EnterpriseEntryServiceImpl implements EnterpriseEntryService {
 
         if (optionalEntry.isPresent()) {
             EnterpriseEntry entry = optionalEntry.get();
-            entry.setChargeabilityExternalEmployeesRecorded(updatedEntryDto.getChargeabilityExternalEmployeesRecorded());
-            entry.setPayrollAccountingSent(updatedEntryDto.getPayrollAccountingSent());
-            entry.setZepMonthlyReportDone(updatedEntryDto.getZepMonthlyReportDone());
-            entry.setZepTimesReleased(updatedEntryDto.getZepTimesReleased());
+            entry.setChargeabilityExternalEmployeesRecorded(State.valueOf(updatedEntryDto.getChargeabilityExternalEmployeesRecorded().name()));
+            entry.setPayrollAccountingSent(State.valueOf(updatedEntryDto.getPayrollAccountingSent().name()));
+            entry.setZepMonthlyReportDone(State.valueOf(updatedEntryDto.getZepMonthlyReportDone().name()));
+            entry.setZepTimesReleased(State.valueOf(updatedEntryDto.getZepTimesReleased().name()));
 
-            enterpriseEntryRepository.persist(entry);
-            return true;
+            return enterpriseEntryRepository.updateEntry(entry);
         }
         return false;
     }
