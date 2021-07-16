@@ -82,6 +82,15 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         final List<StepEntry> allOwnedAndAssignedStepEntries = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(employee);
         final boolean otherChecksDone = allOwnedAndAssignedStepEntries.stream().allMatch(stepEntry -> stepEntry.getState() == EmployeeState.DONE);
 
-        return MonthlyReport.of(employee, timeWarnings, journeyWarnings, comments, employeeCheckState.orElse(EmployeeState.OPEN), isAssigned, pmProgresses, otherChecksDone);
+        return MonthlyReport.builder()
+                .employee(employee)
+                .timeWarnings(timeWarnings)
+                .journeyWarnings(journeyWarnings)
+                .comments(comments)
+                .employeeCheckState(employeeCheckState.orElse(EmployeeState.OPEN))
+                .isAssigned(isAssigned)
+                .employeeProgresses(pmProgresses)
+                .otherChecksDone(otherChecksDone)
+                .build();
     }
 }

@@ -18,7 +18,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @RequestScoped
 @Secured
@@ -42,11 +44,19 @@ public class WorkerResource {
     @Path("/monthendreports")
     @Produces(MediaType.APPLICATION_JSON)
     public MonthlyReport monthlyReport() {
-        Employee employee = employeeService.getEmployee(userContext.user().userId());
-        MonthlyReport monthlyReport = monthlyReportService.getMonthendReportForUser(employee.userId());
+        Employee employee = employeeService.getEmployee(Objects.requireNonNull(userContext.user()).userId());
+        MonthlyReport monthlyReport = monthlyReportService.getMonthendReportForUser(Objects.requireNonNull(employee).userId());
 
         if (monthlyReport == null) {
-            monthlyReport = MonthlyReport.of(employee, List.of(), List.of(), List.of(), EmployeeState.OPEN, false, List.of(), false);
+            monthlyReport = MonthlyReport.builder()
+                    .employee(employee)
+                    .timeWarnings(Collections.emptyList())
+                    .journeyWarnings(Collections.emptyList())
+                    .comments(Collections.emptyList())
+                    .employeeCheckState(EmployeeState.OPEN)
+                    .isAssigned(false)
+                    .employeeProgresses(Collections.emptyList())
+                    .otherChecksDone(false).build();
         }
 
         return monthlyReport;

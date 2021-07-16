@@ -59,18 +59,29 @@ public class WorkerResourceTest {
 
     @Test
     void employeeMonthendReport_withReport_returnsReport() {
-        final User user = createUserForRole(Role.EMPLOYEE);
+        User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        final Employee employee = createEmployeeForUser(user);
+        Employee employee = createEmployeeForUser(user);
         when(employeeService.getEmployee(anyString())).thenReturn(employee);
-        final List<TimeWarning> timeWarnings = List.of(TimeWarning.of(LocalDate.now(), 0.0, 0.0, 0.0));
-        final List<JourneyWarning> journeyWarnings = List.of(new JourneyWarning(LocalDate.now(), List.of("WARNING")));
-        final MonthlyReport expected = MonthlyReport.of(employee, timeWarnings, journeyWarnings, List.of(), EmployeeState.OPEN, false, List.of(), true);
+        List<TimeWarning> timeWarnings = List.of(TimeWarning.of(LocalDate.now(), 0.0, 0.0, 0.0));
+        List<JourneyWarning> journeyWarnings = List.of(new JourneyWarning(LocalDate.now(), List.of("WARNING")));
+
+        MonthlyReport expected = MonthlyReport.builder()
+                .employee(employee)
+                .timeWarnings(timeWarnings)
+                .journeyWarnings(journeyWarnings)
+                .comments(List.of())
+                .employeeCheckState(EmployeeState.OPEN)
+                .isAssigned(false)
+                .employeeProgresses(List.of())
+                .otherChecksDone(true)
+                .build();
+
         when(monthlyReportService.getMonthendReportForUser(anyString())).thenReturn(expected);
 
-        final MonthlyReport actual = given().contentType(ContentType.JSON)
+        MonthlyReport actual = given().contentType(ContentType.JSON)
                 .get("/worker/monthendreports")
                 .as(MonthlyReport.class);
 
