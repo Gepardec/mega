@@ -1,14 +1,11 @@
 package com.gepardec.mega.domain.model.monthlyreport;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gepardec.mega.db.entity.employee.EmployeeState;
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.rest.model.PmProgress;
-import com.google.auto.value.AutoValue;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

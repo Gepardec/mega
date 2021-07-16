@@ -1,7 +1,6 @@
 package com.gepardec.mega.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -65,7 +65,7 @@ public class Project {
             joinColumns = {@JoinColumn(name = "project_id")},
             inverseJoinColumns = {@JoinColumn(name = "employee_id")},
             uniqueConstraints = @UniqueConstraint(columnNames = {
-                    "project_id", "employee_id" })
+                    "project_id", "employee_id"})
     )
     private Set<User> projectLeads = new HashSet<>(0);
 

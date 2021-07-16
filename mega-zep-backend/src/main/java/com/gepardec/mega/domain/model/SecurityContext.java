@@ -1,14 +1,14 @@
 package com.gepardec.mega.domain.model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import javax.annotation.Nullable;
-
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.extern.jackson.Jacksonized;
 
-
+import javax.annotation.Nullable;
 
 @Builder
 @Getter
