@@ -32,10 +32,10 @@ public class EnterpriseEntryServiceImpl implements EnterpriseEntryService {
 
         if (optionalEntry.isPresent()) {
             EnterpriseEntry entry = optionalEntry.get();
-            entry.setChargeabilityExternalEmployeesRecorded(updatedEntryDto.getChargeabilityExternalEmployeesRecorded());
-            entry.setPayrollAccountingSent(updatedEntryDto.getPayrollAccountingSent());
-            entry.setZepMonthlyReportDone(updatedEntryDto.getZepMonthlyReportDone());
-            entry.setZepTimesReleased(updatedEntryDto.getZepTimesReleased());
+            entry.setChargeabilityExternalEmployeesRecorded(updatedEntryDto.chargeabilityExternalEmployeesRecorded());
+            entry.setPayrollAccountingSent(updatedEntryDto.payrollAccountingSent());
+            entry.setZepMonthlyReportDone(updatedEntryDto.zepMonthlyReportDone());
+            entry.setZepTimesReleased(updatedEntryDto.zepTimesReleased());
 
             enterpriseEntryRepository.persist(entry);
             return true;

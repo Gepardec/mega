@@ -32,15 +32,16 @@ class InsufficientBreakTimeCalculatorTest {
     }
 
     private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int startMinute, final int endHour, final int endMinute) {
-        return ProjectTimeEntry.of(
-                LocalDateTime.of(2020, 1, 7, startHour, startMinute),
-                LocalDateTime.of(2020, 1, 7, endHour, endMinute),
-                Task.BEARBEITEN,
-                WorkingLocation.MAIN);
+        return ProjectTimeEntry.builder()
+                .fromTime(LocalDateTime.of(2020, 1, 7, startHour, startMinute))
+                .toTime(LocalDateTime.of(2020, 1, 7, endHour, endMinute))
+                .task(Task.BEARBEITEN)
+                .workingLocation(WorkingLocation.MAIN)
+                .build();
     }
 
     private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int startMinute, final int endHour, final int endMinute) {
-        return JourneyTimeEntry.newBuilder()
+        return JourneyTimeEntry.builder()
                 .fromTime(LocalDateTime.of(2020, 1, 7, startHour, startMinute))
                 .toTime(LocalDateTime.of(2020, 1, 7, endHour, endMinute))
                 .task(Task.REISEN)

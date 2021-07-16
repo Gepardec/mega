@@ -1,25 +1,28 @@
 package com.gepardec.mega.domain.model.monthlyreport;
 
-import com.google.auto.value.AutoValue;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.extern.jackson.Jacksonized;
 
 import java.time.LocalDateTime;
 
-@AutoValue
-public abstract class ProjectTimeEntry implements ProjectEntry {
+@Builder(builderClassName = "Builder")
+@Getter
+@ToString
+@EqualsAndHashCode
+//@Accessors(fluent = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Jacksonized
+public class ProjectTimeEntry implements ProjectEntry {
 
-    public static ProjectTimeEntry of(LocalDateTime fromTime, LocalDateTime toTime, Task task, WorkingLocation workingLocation) {
-        return new com.gepardec.mega.domain.model.monthlyreport.AutoValue_ProjectTimeEntry(fromTime, toTime, task, workingLocation);
-    }
+    private final LocalDateTime fromTime;
 
-    @Override
-    public abstract LocalDateTime getFromTime();
+    private final LocalDateTime toTime;
 
-    @Override
-    public abstract LocalDateTime getToTime();
+    private final Task task;
 
-    @Override
-    public abstract Task getTask();
-
-    @Override
-    public abstract WorkingLocation getWorkingLocation();
+    private final WorkingLocation workingLocation;
 }

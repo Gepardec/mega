@@ -1,82 +1,53 @@
 package com.gepardec.mega.rest.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.State;
-import com.google.auto.value.AutoValue;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import lombok.extern.jackson.Jacksonized;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-@AutoValue
-@JsonSerialize(as = ManagementEntry.class)
-@JsonDeserialize(builder = com.gepardec.mega.rest.model.AutoValue_ManagementEntry.Builder.class)
-public abstract class ManagementEntry {
-
-    public static Builder builder() {
-        return new com.gepardec.mega.rest.model.AutoValue_ManagementEntry.Builder();
-    }
-
-    @JsonProperty
-    public abstract Employee employee();
+@Builder(builderClassName = "Builder")
+@Getter
+@ToString
+@EqualsAndHashCode
+@Accessors(fluent = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Jacksonized
+public class ManagementEntry {
 
     @JsonProperty
-    public abstract State employeeCheckState();
+    private final Employee employee;
 
     @JsonProperty
-    public abstract State customerCheckState();
+    private final State employeeCheckState;
 
     @JsonProperty
-    public abstract State internalCheckState();
+    private final State customerCheckState;
 
     @JsonProperty
-    public abstract State projectCheckState();
+    private final State internalCheckState;
+
+    @JsonProperty
+    private final State projectCheckState;
 
     @JsonProperty
     @Nullable
-    public abstract List<PmProgress> employeeProgresses();
+    private final List<PmProgress> employeeProgresses;
 
     @JsonProperty
-    public abstract long totalComments();
+    private final long totalComments;
 
     @JsonProperty
-    public abstract long finishedComments();
+    private final long finishedComments;
 
     @JsonProperty
-    public abstract String entryDate();
-
-    @AutoValue.Builder
-    public abstract static class Builder {
-        @JsonProperty
-        public abstract Builder employee(Employee employee);
-
-        @JsonProperty
-        public abstract Builder employeeCheckState(State state);
-
-        @JsonProperty
-        public abstract Builder customerCheckState(State state);
-
-        @JsonProperty
-        public abstract Builder internalCheckState(State state);
-
-        @JsonProperty
-        public abstract Builder projectCheckState(State state);
-
-        @JsonProperty
-        public abstract Builder employeeProgresses(List<PmProgress> pmProgresses);
-
-        @JsonProperty
-        public abstract Builder totalComments(long totalComments);
-
-        @JsonProperty
-        public abstract Builder finishedComments(long totalComments);
-
-        @JsonProperty
-        public abstract Builder entryDate(String entryDate);
-
-        @JsonProperty
-        public abstract ManagementEntry build();
-    }
+    private final String entryDate;
 }

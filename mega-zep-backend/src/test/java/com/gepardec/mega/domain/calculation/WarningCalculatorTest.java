@@ -56,11 +56,12 @@ class WarningCalculatorTest {
 
     private ProjectTimeEntry projectTimeEntryFor(final int startDay, final int startHour, final int startMinute, final int endDay, final int endHour,
                                                  final int endMinute, WorkingLocation workingLocation) {
-        return ProjectTimeEntry.of(
-                LocalDateTime.of(2020, 1, startDay, startHour, startMinute),
-                LocalDateTime.of(2020, 1, endDay, endHour, endMinute),
-                Task.BEARBEITEN,
-                workingLocation);
+        return ProjectTimeEntry.builder()
+                .fromTime(LocalDateTime.of(2020, 1, startDay, startHour, startMinute))
+                .toTime(LocalDateTime.of(2020, 1, endDay, endHour, endMinute))
+                .task(Task.BEARBEITEN)
+                .workingLocation(workingLocation)
+                .build();
     }
 
     private JourneyTimeEntry journeyTimeEntryFor(final int day, final int startHour, final int endHour, JourneyDirection journeyDirection,
@@ -71,7 +72,7 @@ class WarningCalculatorTest {
     private JourneyTimeEntry journeyTimeEntryFor(final int startDay, final int startHour, final int startMinute, final int endDay, final int endHour,
                                                  final int endMinute,
                                                  JourneyDirection journeyDirection, WorkingLocation workingLocation, Vehicle vehicle) {
-        return JourneyTimeEntry.newBuilder()
+        return JourneyTimeEntry.builder()
                 .fromTime(LocalDateTime.of(2020, 1, startDay, startHour, startMinute))
                 .toTime(LocalDateTime.of(2020, 1, endDay, endHour, endMinute))
                 .task(Task.REISEN)

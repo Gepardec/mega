@@ -1,68 +1,43 @@
 package com.gepardec.mega.rest.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gepardec.mega.db.entity.employee.EmployeeState;
-import com.google.auto.value.AutoValue;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import lombok.extern.jackson.Jacksonized;
 
 import javax.annotation.Nullable;
 
-@AutoValue
-@JsonSerialize(as = PmProgress.class)
-@JsonDeserialize(builder = com.gepardec.mega.rest.model.AutoValue_PmProgress.Builder.class)
-public abstract class PmProgress {
+@Builder(builderClassName = "Builder")
+@Getter
+@ToString
+@EqualsAndHashCode
+@Accessors(fluent = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Jacksonized
+public class PmProgress {
+    @JsonProperty
+    @Nullable
+    private final String project;
 
-    public PmProgress() {
-        super();
-    }
-
-    public static Builder builder() {
-        return new com.gepardec.mega.rest.model.AutoValue_PmProgress.Builder();
-    }
+    @JsonProperty
+    private final String assigneeEmail;
 
     @JsonProperty
     @Nullable
-    public abstract String project();
-
-    @JsonProperty
-    public abstract String assigneeEmail();
+    private final String firstname;
 
     @JsonProperty
     @Nullable
-    public abstract String firstname();
+    private final String lastname;
 
     @JsonProperty
-    @Nullable
-    public abstract String lastname();
+    private final EmployeeState state;
 
     @JsonProperty
-    public abstract EmployeeState state();
-
-    @JsonProperty
-    public abstract Long stepId();
-
-    @AutoValue.Builder
-    public abstract static class Builder {
-        @JsonProperty
-        public abstract Builder project(String project);
-
-        @JsonProperty
-        public abstract Builder assigneeEmail(String email);
-
-        @JsonProperty
-        public abstract Builder state(EmployeeState employeeState);
-
-        @JsonProperty
-        public abstract Builder stepId(Long stepId);
-
-        @JsonProperty
-        public abstract Builder firstname(String firstname);
-
-        @JsonProperty
-        public abstract Builder lastname(String lastname);
-
-        @JsonProperty
-        public abstract PmProgress build();
-    }
+    private final Long stepId;
 }
