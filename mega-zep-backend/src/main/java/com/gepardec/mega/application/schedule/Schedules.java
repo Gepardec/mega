@@ -47,8 +47,9 @@ public class Schedules {
         stepEntrySyncService.generateStepEntries();
     }
 
-    @Scheduled(identity = "Generate projects and project entries on the first day of a month",
-            cron = "0 0 0 1 * ? *")
+    @Scheduled(identity = "Update project entries every 30 minutes",
+            every = "PT30M",
+            delay = 30, delayUnit = TimeUnit.SECONDS)
     void generateProjects() {
         projectSyncService.generateProjects();
     }

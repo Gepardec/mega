@@ -59,24 +59,32 @@ public class ProjectServiceImpl implements ProjectService {
         });
 
         com.gepardec.mega.db.entity.project.Project finalProjectEntity1 = projectEntity;
-        project.getProjectEntries().forEach(projectEntry -> {
-            User owner = userRepository.findById(projectEntry.getOwner().getId());
-            User assignee = userRepository.findById(projectEntry.getAssignee().getId());
 
-            ProjectEntry pe = new ProjectEntry();
-            pe.setPreset(projectEntry.isPreset());
-            pe.setProject(projectEntry.getProject());
-            pe.setStep(projectEntry.getStep());
-            pe.setState(projectEntry.getState());
-            pe.setUpdatedDate(projectEntry.getUpdatedDate());
-            pe.setCreationDate(projectEntry.getCreationDate());
-            pe.setDate(projectEntry.getDate());
-            pe.setName(projectEntry.getName());
-            pe.setOwner(owner);
-            pe.setAssignee(assignee);
+        LocalDate currentMonth = LocalDate.now().minusMonths(1).withDayOfMonth(1);
 
-            finalProjectEntity1.addProjectEntry(pe);
-        });
+        boolean noProjectEntriesExist = projectEntity.getProjectEntries().stream().noneMatch(pe -> pe.getDate().equals(currentMonth));
+
+        if(noProjectEntriesExist) {
+            project.getProjectEntries().forEach(projectEntry -> {
+
+                User owner = userRepository.findById(projectEntry.getOwner().getId());
+                User assignee = userRepository.findById(projectEntry.getAssignee().getId());
+
+                ProjectEntry pe = new ProjectEntry();
+                pe.setPreset(projectEntry.isPreset());
+                pe.setProject(projectEntry.getProject());
+                pe.setStep(projectEntry.getStep());
+                pe.setState(projectEntry.getState());
+                pe.setUpdatedDate(projectEntry.getUpdatedDate());
+                pe.setCreationDate(projectEntry.getCreationDate());
+                pe.setDate(projectEntry.getDate());
+                pe.setName(projectEntry.getName());
+                pe.setOwner(owner);
+                pe.setAssignee(assignee);
+
+                finalProjectEntity1.addProjectEntry(pe);
+            });
+        }
 
         projectEntity.setName(project.getName());
         projectEntity.setStartDate(project.getStartDate());
