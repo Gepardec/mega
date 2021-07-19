@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @EqualsAndHashCode
-@Accessors(fluent = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Jacksonized
 public class EnterpriseEntryDto {
