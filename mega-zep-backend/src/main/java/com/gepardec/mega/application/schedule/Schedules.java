@@ -41,14 +41,15 @@ public class Schedules {
         syncService.syncEmployees();
     }
 
-    @Scheduled(identity = "Generate step entries on the first day of a month",
-            cron = "0 0 0 1 * ? *")
+    @Scheduled(identity = "Generate step entries on the second last day of a month",
+            cron = "0 0 0 L-2 * ? *")
     void generateStepEntries() {
         stepEntrySyncService.generateStepEntries();
     }
 
-    @Scheduled(identity = "Generate projects and project entries on the first day of a month",
-            cron = "0 0 0 1 * ? *")
+    @Scheduled(identity = "Update project entries every 30 minutes",
+            every = "PT30M",
+            delay = 30, delayUnit = TimeUnit.SECONDS)
     void generateProjects() {
         projectSyncService.generateProjects();
     }

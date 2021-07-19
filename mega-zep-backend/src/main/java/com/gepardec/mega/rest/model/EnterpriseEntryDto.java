@@ -1,7 +1,7 @@
 package com.gepardec.mega.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.gepardec.mega.db.entity.common.State;
+import com.gepardec.mega.domain.model.ProjectState;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,13 +21,13 @@ import java.time.LocalDateTime;
 @Jacksonized
 public class EnterpriseEntryDto {
 
-    private final State zepTimesReleased;
+    private final ProjectState zepTimesReleased;
 
-    private final State chargeabilityExternalEmployeesRecorded;
+    private final ProjectState chargeabilityExternalEmployeesRecorded;
 
-    private final State payrollAccountingSent;
+    private final ProjectState payrollAccountingSent;
 
-    private final State zepMonthlyReportDone;
+    private final ProjectState zepMonthlyReportDone;
 
     private final LocalDate date;
 
