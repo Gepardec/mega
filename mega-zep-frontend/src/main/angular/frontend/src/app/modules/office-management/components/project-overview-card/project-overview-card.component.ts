@@ -18,7 +18,7 @@ import {Subscription, zip} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {ProjectState} from '../../../shared/models/ProjectState';
 import {ProjectCommentService} from '../../../shared/services/project-comment/project-comment.service';
-import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
+import {SnackbarService} from '../../../shared/services/snackbar/snackbar.service';
 
 const moment = _moment;
 
@@ -59,14 +59,13 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
     private omService: OfficeManagementService,
     private pmService: ProjectManagementService,
     private notificationService: NotificationService,
-    private translateService: TranslateService,
+    private translate: TranslateService,
     private commentService: CommentService,
     private stepEntryService: StepentriesService,
     private _bottomSheet: MatBottomSheet,
     private configService: ConfigService,
     private projectCommentService: ProjectCommentService,
-    private _snackBar: MatSnackBar,
-    private translate: TranslateService) {
+    private snackbarService: SnackbarService) {
   }
 
   ngOnInit(): void {
@@ -128,7 +127,7 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
         this.projectCommentService.updateProjectComment(pmEntry.projectComment)
           .subscribe((success) => {
             if (!success) {
-              this.showErrorSnackbar();
+              this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.updateProjectCommentError'));
               pmEntry.projectComment.comment = oldComment;
             }
           });
@@ -146,17 +145,5 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
 
   private getFormattedDate() {
     return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
-  }
-
-  // TODO: Refactor snackbar logic into service
-  private showErrorSnackbar() {
-    this._snackBar.open(
-      this.translate.instant('snackbar.message'),
-      this.translate.instant('snackbar.confirm'),
-      {
-        horizontalPosition: <MatSnackBarHorizontalPosition>configuration.snackbar.horizontalPosition,
-        verticalPosition: <MatSnackBarVerticalPosition>configuration.snackbar.verticalPosition,
-        duration: configuration.snackbar.duration
-      });
   }
 }

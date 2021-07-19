@@ -22,10 +22,10 @@ import {ProjectState} from '../../shared/models/ProjectState';
 import {MatSelectChange} from '@angular/material/select';
 import {ProjectEntriesService} from '../../shared/services/projectentries/project-entries.service';
 import {MatCheckboxChange} from '@angular/material/checkbox';
-import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
 import {TranslateService} from '@ngx-translate/core';
 import {ProjectStateSelectComponent} from '../../shared/components/project-state-select/project-state-select.component';
 import {ProjectCommentService} from '../../shared/services/project-comment/project-comment.service';
+import {SnackbarService} from '../../shared/services/snackbar/snackbar.service';
 
 const moment = _moment;
 
@@ -61,7 +61,7 @@ export class ProjectManagementComponent implements OnInit {
               private commentService: CommentService,
               private configService: ConfigService,
               private projectEntryService: ProjectEntriesService,
-              private _snackBar: MatSnackBar,
+              private snackbarService: SnackbarService,
               private translate: TranslateService,
               private projectCommentService: ProjectCommentService) {
   }
@@ -195,7 +195,7 @@ export class ProjectManagementComponent implements OnInit {
           pmEntry.controlProjectState = newValue;
           pmEntry.presetControlProjectState = preset;
         } else {
-          this.showErrorSnackbar();
+          this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.updateStatusError'));
           controlProjectStateSelect.value = pmEntry.controlProjectState;
         }
       });
@@ -211,7 +211,7 @@ export class ProjectManagementComponent implements OnInit {
           pmEntry.controlBillingState = newValue;
           pmEntry.presetControlBillingState = preset;
         } else {
-          this.showErrorSnackbar();
+          this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.updateStatusError'));
           controlBillingStateSelect.value = pmEntry.controlBillingState;
         }
       });
@@ -221,7 +221,7 @@ export class ProjectManagementComponent implements OnInit {
     this.projectEntryService.updateProjectEntry(pmEntry.controlProjectState, pmEntry.presetControlProjectState, pmEntry.projectName, 'CONTROL_PROJECT', this.getFormattedDate())
       .subscribe(success => {
         if (!success) {
-          this.showErrorSnackbar();
+          this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.updateStatusError'));
           pmEntry.presetControlProjectState = !$event.checked;
         }
       })
@@ -231,21 +231,10 @@ export class ProjectManagementComponent implements OnInit {
     this.projectEntryService.updateProjectEntry(pmEntry.controlBillingState, pmEntry.presetControlBillingState, pmEntry.projectName, 'CONTROL_BILLING', this.getFormattedDate())
       .subscribe(success => {
         if (!success) {
-          this.showErrorSnackbar();
+          this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.updateStatusError'));
           pmEntry.presetControlBillingState = !$event.checked;
         }
       })
-  }
-
-  private showErrorSnackbar() {
-    this._snackBar.open(
-      this.translate.instant('snackbar.message'),
-      this.translate.instant('snackbar.confirm'),
-      {
-        horizontalPosition: <MatSnackBarHorizontalPosition>configuration.snackbar.horizontalPosition,
-        verticalPosition: <MatSnackBarVerticalPosition>configuration.snackbar.verticalPosition,
-        duration: configuration.snackbar.duration
-      });
   }
 
   isProjectStateNotRelevant(projectState: ProjectState) {
@@ -269,7 +258,7 @@ export class ProjectManagementComponent implements OnInit {
         this.projectCommentService.updateProjectComment(pmEntry.projectComment)
           .subscribe((success) => {
             if (!success) {
-              this.showErrorSnackbar();
+              this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.updateProjectCommentError'));
               pmEntry.projectComment.comment = oldComment;
             }
           });
