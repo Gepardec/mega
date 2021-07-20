@@ -1,4 +1,4 @@
-import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProjectManagementEntry} from '../models/ProjectManagementEntry';
 import {MatDialog} from '@angular/material/dialog';
 import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
@@ -50,7 +50,7 @@ export class ProjectManagementComponent implements OnInit {
   pmSelectionModels: Map<string, SelectionModel<ManagementEntry>>;
   environment = environment;
   selectedYear = moment().subtract(1, 'month').year();
-  selectedMonth = moment().subtract(2, 'month').month() + 1; // months 0 - 11
+  selectedMonth = moment().subtract(1, 'month').month() + 1; // months 0 - 11
   showCommentEditor = false;
   forProjectName: string;
 
