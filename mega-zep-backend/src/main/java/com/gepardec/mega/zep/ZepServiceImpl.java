@@ -132,6 +132,24 @@ public class ZepServiceImpl implements ZepService {
     }
 
     @Override
+    public ReadProjektzeitenResponseType getProjectTimesForEmployeePerProject(String projectID, LocalDate curDate) {
+        final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
+        projektzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
+
+        final ReadProjektzeitenSearchCriteriaType searchCriteria;
+        try {
+            searchCriteria = createProjectTimesForEmployeePerProjectSearchCriteria(projectID, curDate);
+        } catch (DateTimeParseException e) {
+            logger.error("invalid release date {0}", e);
+            return null;
+        }
+        projektzeitenRequest.setReadProjektzeitenSearchCriteria(searchCriteria);
+        ReadProjektzeitenResponseType projectTimeResponse = zepSoapPortType.readProjektzeiten(projektzeitenRequest);
+
+        return projectTimeResponse;
+    }
+
+    @Override
     public List<Project> getProjectsForMonthYear(final LocalDate monthYear) {
         final ReadProjekteResponseType readProjekteResponseType = getProjectsInternal(monthYear);
 

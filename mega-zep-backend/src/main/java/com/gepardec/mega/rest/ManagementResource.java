@@ -305,4 +305,34 @@ public class ManagementResource {
                 .map(StepEntry::getState)
                 .anyMatch(state -> state.equals(EmployeeState.OPEN)) ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+private Logger logger;
+
+
+    private ZepSoapPortType zepSoapPortType;
+
+
+    private ZepSoapProvider zepSoapProvider;
+    private final ProjectEntryMapper projectEntryMapper = new ProjectEntryMapper();
+    private ZepServiceImpl beanUnderTest;
+
+ */
+
 }
