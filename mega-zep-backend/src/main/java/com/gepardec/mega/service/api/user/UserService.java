@@ -11,5 +11,5 @@ public interface UserService {
 
     List<User> findActiveUsers();
 
-    List<User> findByRoles(Role... roles);
+    List<User> findByRoles(List<Role> roles);
 }

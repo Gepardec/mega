@@ -19,11 +19,13 @@ public class ExceededMaximumWorkingHoursPerDayCalculator extends AbstractTimeWar
     public List<TimeWarning> calculate(List<ProjectEntry> projectTimeEntries) {
         final List<TimeWarning> warnings = new ArrayList<>(0);
 
-        final Map<LocalDate, List<ProjectEntry>> groupedProjectTimeEntries = groupProjectEntriesByFromDate(projectTimeEntries,
-                (entry) -> Task.isTask(entry.getTask()));
+        final Map<LocalDate, List<ProjectEntry>> groupedProjectTimeEntries = groupProjectEntriesByFromDate(projectTimeEntries, List.of((entry) -> Task.isTask(entry.getTask())));
+
         for (final Map.Entry<LocalDate, List<ProjectEntry>> projectTimeEntry : groupedProjectTimeEntries.entrySet()) {
+
             final List<ProjectEntry> projectEntriesPerDay = projectTimeEntry.getValue();
             final double workDurationOfDay = calculateWorkingDuration(projectEntriesPerDay);
+
             if (hasExceededMaximumWorkingHoursPerDay(workDurationOfDay)) {
                 warnings.add(createTimeWarning(projectTimeEntry.getKey(), workDurationOfDay));
             }

@@ -1,27 +1,26 @@
 package com.gepardec.mega.domain.model;
 
-import com.google.auto.value.AutoValue;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 
-@AutoValue
-public abstract class ProjectEmployees {
+@Builder
+@Getter
+@ToString
+@EqualsAndHashCode
+@Accessors(fluent = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Jacksonized
+public class ProjectEmployees {
+    private final String projectId;
 
-    public static ProjectEmployees.Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_ProjectEmployees.Builder();
-    }
-
-    public abstract String projectId();
-
-    public abstract List<String> employees();
-
-    @AutoValue.Builder
-    public abstract static class Builder {
-        public abstract Builder projectId(String projectId);
-
-        public abstract Builder employees(List<String> employees);
-
-        public abstract ProjectEmployees build();
-    }
-
+    private final List<String> employees;
 }
+
+

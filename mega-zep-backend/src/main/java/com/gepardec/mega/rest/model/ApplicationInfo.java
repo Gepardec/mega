@@ -1,65 +1,50 @@
 package com.gepardec.mega.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gepardec.mega.application.constant.DateTimeConstants;
 import com.gepardec.mega.application.jackson.serializer.DurationSerializer;
-import com.google.auto.value.AutoValue;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import lombok.extern.jackson.Jacksonized;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-@AutoValue
-@JsonSerialize(as = ApplicationInfo.class)
-@JsonDeserialize(builder = ApplicationInfo.Builder.class)
-public abstract class ApplicationInfo {
-
-    public static Builder newBuilder() {
-        return new com.gepardec.mega.rest.model.AutoValue_ApplicationInfo.Builder();
-    }
-
+@Builder(builderClassName = "Builder")
+@Getter
+@ToString
+@EqualsAndHashCode
+@Accessors(fluent = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Jacksonized
+public class ApplicationInfo {
     @JsonProperty
-    public abstract String version();
-
-    @JsonProperty
-    @JsonFormat(pattern = DateTimeConstants.DATE_TIME_PATTERN)
-    public abstract LocalDateTime buildDate();
-
-    @JsonProperty
-    public abstract Integer buildNumber();
-
-    @JsonProperty
-    public abstract String commit();
-
-    @JsonProperty
-    public abstract String branch();
+    private final String version;
 
     @JsonProperty
     @JsonFormat(pattern = DateTimeConstants.DATE_TIME_PATTERN)
-    public abstract LocalDateTime startedAt();
+    private final LocalDateTime buildDate;
+
+    @JsonProperty
+    private final Integer buildNumber;
+
+    @JsonProperty
+    private final String commit;
+
+    @JsonProperty
+    private final String branch;
+
+    @JsonProperty
+    @JsonFormat(pattern = DateTimeConstants.DATE_TIME_PATTERN)
+    private final LocalDateTime startedAt;
 
     @JsonProperty
     @JsonSerialize(using = DurationSerializer.class)
-    public abstract Duration upTime();
-
-    @AutoValue.Builder
-    public abstract static class Builder {
-        public abstract Builder version(String version);
-
-        public abstract Builder buildDate(LocalDateTime buildDate);
-
-        public abstract Builder buildNumber(Integer Integer);
-
-        public abstract Builder commit(String commit);
-
-        public abstract Builder branch(String branch);
-
-        public abstract Builder startedAt(LocalDateTime startedAt);
-
-        public abstract Builder upTime(Duration upTime);
-
-        public abstract ApplicationInfo build();
-    }
+    private final Duration upTime;
 }

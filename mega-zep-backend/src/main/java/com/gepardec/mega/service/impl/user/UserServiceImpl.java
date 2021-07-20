@@ -41,8 +41,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(Transactional.TxType.SUPPORTS)
-    public List<User> findByRoles(Role... roles) {
-        if (roles == null || roles.length == 0) {
+    public List<User> findByRoles(List<Role> roles) {
+        if (roles == null || roles.size() == 0) {
             throw new IllegalArgumentException("Cannot load users if no 'roles' are given");
         }
 

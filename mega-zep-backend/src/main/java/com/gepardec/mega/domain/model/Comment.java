@@ -2,68 +2,45 @@ package com.gepardec.mega.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gepardec.mega.db.entity.employee.EmployeeState;
-import com.google.auto.value.AutoValue;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import lombok.extern.jackson.Jacksonized;
 
 import javax.annotation.Nullable;
 
-@AutoValue
-@JsonSerialize(as = Comment.class)
-@JsonDeserialize(builder = com.gepardec.mega.domain.model.AutoValue_Comment.Builder.class)
+@Builder
+@Getter
+@ToString
+@EqualsAndHashCode
+@Accessors(fluent = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class Comment {
-    public static Comment.Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_Comment.Builder();
-    }
+@Jacksonized
+public class Comment {
+    @JsonProperty
+    @Nullable
+    private final Long id;
 
     @JsonProperty
     @Nullable
-    public abstract Long id();
+    private final String message;
 
     @JsonProperty
     @Nullable
-    public abstract String message();
+    private final String authorEmail;
 
     @JsonProperty
     @Nullable
-    public abstract String authorEmail();
+    private final String authorName;
 
     @JsonProperty
     @Nullable
-    public abstract String authorName();
+    private final String updateDate;
 
     @JsonProperty
     @Nullable
-    public abstract String updateDate();
-
-    @JsonProperty
-    @Nullable
-    public abstract EmployeeState state();
-
-    @AutoValue.Builder
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public abstract static class Builder {
-        @JsonProperty
-        public abstract Comment.Builder id(Long id);
-
-        @JsonProperty
-        public abstract Comment.Builder message(String message);
-
-        @JsonProperty
-        public abstract Comment.Builder authorEmail(String authorEmail);
-
-        @JsonProperty
-        public abstract Comment.Builder authorName(String authorName);
-
-        @JsonProperty
-        public abstract Comment.Builder state(EmployeeState employeeState);
-
-        @JsonProperty
-        public abstract Comment.Builder updateDate(String updateDate);
-
-        @JsonProperty
-        public abstract Comment build();
-    }
+    private final EmployeeState state;
 }

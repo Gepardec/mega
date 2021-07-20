@@ -30,7 +30,7 @@ public class ConfigResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Config get() {
-        return Config.newBuilder()
+        return Config.builder()
                 .excelUrl(applicationConfig.getExcelUrlAsString())
                 .budgetCalculationExcelUrl(applicationConfig.getBudgetCalculationExcelUrlAsString())
                 .zepOrigin(zepConfig.getUrlForFrontend())

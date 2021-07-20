@@ -1,63 +1,41 @@
 package com.gepardec.mega.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.auto.value.AutoValue;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import lombok.extern.jackson.Jacksonized;
 
 import javax.annotation.Nullable;
 import java.time.LocalDate;
 
-@AutoValue
-@JsonSerialize(as = Step.class)
-@JsonDeserialize(builder = com.gepardec.mega.domain.model.AutoValue_StepEntry.Builder.class)
-public abstract class StepEntry {
-
-    public static StepEntry.Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_StepEntry.Builder();
-    }
-
+@Builder
+@Getter
+@ToString
+@EqualsAndHashCode
+@Accessors(fluent = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Jacksonized
+public class StepEntry {
     @JsonProperty
-    public abstract LocalDate date();
+    private final LocalDate date;
 
     @JsonProperty
     @Nullable
-    public abstract Project project();
+    private final Project project;
 
     @JsonProperty
-    public abstract State state();
+    private final State state;
 
     @JsonProperty
-    public abstract User owner();
+    private final User owner;
 
     @JsonProperty
-    public abstract User assignee();
+    private final User assignee;
 
     @JsonProperty
-    public abstract Step step();
-
-    @AutoValue.Builder
-    public abstract static class Builder {
-
-        @JsonProperty
-        public abstract com.gepardec.mega.domain.model.StepEntry.Builder date(LocalDate date);
-
-        @JsonProperty
-        public abstract com.gepardec.mega.domain.model.StepEntry.Builder project(Project project);
-
-        @JsonProperty
-        public abstract com.gepardec.mega.domain.model.StepEntry.Builder state(State state);
-
-        @JsonProperty
-        public abstract com.gepardec.mega.domain.model.StepEntry.Builder owner(User owner);
-
-        @JsonProperty
-        public abstract com.gepardec.mega.domain.model.StepEntry.Builder assignee(User assignee);
-
-        @JsonProperty
-        public abstract com.gepardec.mega.domain.model.StepEntry.Builder step(Step step);
-
-        @JsonProperty
-        public abstract StepEntry build();
-    }
+    private final Step step;
 }

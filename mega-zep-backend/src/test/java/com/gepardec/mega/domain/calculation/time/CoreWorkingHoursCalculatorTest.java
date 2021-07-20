@@ -27,24 +27,24 @@ class CoreWorkingHoursCalculatorTest {
         calculator = new CoreWorkingHoursCalculator();
     }
 
-    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int endHour) {
+    private ProjectTimeEntry projectTimeEntryFor(int startHour, int endHour) {
         return projectTimeEntryFor(startHour, 0, endHour, 0);
     }
 
-    private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int startMinute, final int endHour, final int endMinute) {
-        return ProjectTimeEntry.of(
-                LocalDateTime.of(2020, 1, 7, startHour, startMinute),
-                LocalDateTime.of(2020, 1, 7, endHour, endMinute),
-                Task.BEARBEITEN,
-                WorkingLocation.MAIN);
+    private ProjectTimeEntry projectTimeEntryFor(int startHour, int startMinute, int endHour, int endMinute) {
+        return ProjectTimeEntry.builder()
+                .fromTime(LocalDateTime.of(2020, 1, 7, startHour, startMinute))
+                .toTime(LocalDateTime.of(2020, 1, 7, endHour, endMinute))
+                .task(Task.BEARBEITEN)
+                .workingLocation(WorkingLocation.MAIN).build();
     }
 
-    private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int endHour, final Vehicle vehicle) {
+    private JourneyTimeEntry journeyTimeEntryFor(int startHour, int endHour, Vehicle vehicle) {
         return journeyTimeEntryFor(startHour, 0, endHour, 0, vehicle);
     }
 
-    private JourneyTimeEntry journeyTimeEntryFor(final int startHour, final int startMinute, final int endHour, final int endMinute, final Vehicle vehicle) {
-        return JourneyTimeEntry.newBuilder()
+    private JourneyTimeEntry journeyTimeEntryFor(int startHour, int startMinute, int endHour, int endMinute, Vehicle vehicle) {
+        return JourneyTimeEntry.builder()
                 .fromTime(LocalDateTime.of(2020, 1, 7, startHour, startMinute))
                 .toTime(LocalDateTime.of(2020, 1, 7, endHour, endMinute))
                 .task(Task.REISEN)
@@ -56,22 +56,22 @@ class CoreWorkingHoursCalculatorTest {
 
     @Test
     void whenUnordered_thenNoWarning() {
-        final JourneyTimeEntry travelBefore = journeyTimeEntryFor(1, 6, Vehicle.OTHER_INACTIVE);
-        final ProjectTimeEntry start = projectTimeEntryFor(6, 12);
-        final ProjectTimeEntry end = projectTimeEntryFor(13, 22);
-        final JourneyTimeEntry travelAfter = journeyTimeEntryFor(22, 23, Vehicle.OTHER_INACTIVE);
+        JourneyTimeEntry travelBefore = journeyTimeEntryFor(1, 6, Vehicle.OTHER_INACTIVE);
+        ProjectTimeEntry start = projectTimeEntryFor(6, 12);
+        ProjectTimeEntry end = projectTimeEntryFor(13, 22);
+        JourneyTimeEntry travelAfter = journeyTimeEntryFor(22, 23, Vehicle.OTHER_INACTIVE);
 
-        final List<TimeWarning> result = calculator.calculate(List.of(travelAfter, end, start, travelBefore));
+        List<TimeWarning> result = calculator.calculate(List.of(travelAfter, end, start, travelBefore));
 
         assertTrue(result.isEmpty());
     }
 
     @Test
     void whenWarning_thenTimeWarningTypeSet() {
-        final ProjectTimeEntry start = projectTimeEntryFor(5, 12);
-        final ProjectTimeEntry end = projectTimeEntryFor(13, 16);
+        ProjectTimeEntry start = projectTimeEntryFor(5, 12);
+        ProjectTimeEntry end = projectTimeEntryFor(13, 16);
 
-        final List<TimeWarning> result = calculator.calculate(List.of(start, end));
+        List<TimeWarning> result = calculator.calculate(List.of(start, end));
 
         assertFalse(result.isEmpty(), "Warnings should have been detected");
         assertEquals(1, result.get(0).getWarningTypes().size(), "One WarningType should have been set");
@@ -80,49 +80,49 @@ class CoreWorkingHoursCalculatorTest {
 
     @Test
     void whenStartedToEarlyAt5_thenWarning() {
-        final ProjectTimeEntry start = projectTimeEntryFor(5, 12);
-        final ProjectTimeEntry end = projectTimeEntryFor(13, 16);
+        ProjectTimeEntry start = projectTimeEntryFor(5, 12);
+        ProjectTimeEntry end = projectTimeEntryFor(13, 16);
 
-        final List<TimeWarning> result = calculator.calculate(List.of(start, end));
+        List<TimeWarning> result = calculator.calculate(List.of(start, end));
 
         assertEquals(1, result.size());
     }
 
     @Test
     void whenStoppedToLateAt23_thenWarning() {
-        final ProjectTimeEntry start = projectTimeEntryFor(6, 12);
-        final ProjectTimeEntry end = projectTimeEntryFor(18, 23);
+        ProjectTimeEntry start = projectTimeEntryFor(6, 12);
+        ProjectTimeEntry end = projectTimeEntryFor(18, 23);
 
-        final List<TimeWarning> result = calculator.calculate(List.of(start, end));
+        List<TimeWarning> result = calculator.calculate(List.of(start, end));
 
         assertEquals(1, result.size());
     }
 
     @Test
     void whenStartedToEarlyAt5AndStoppedToLateAt23_thenWarning() {
-        final ProjectTimeEntry start = projectTimeEntryFor(5, 12);
-        final ProjectTimeEntry end = projectTimeEntryFor(18, 23);
+        ProjectTimeEntry start = projectTimeEntryFor(5, 12);
+        ProjectTimeEntry end = projectTimeEntryFor(18, 23);
 
-        final List<TimeWarning> result = calculator.calculate(List.of(start, end));
+        List<TimeWarning> result = calculator.calculate(List.of(start, end));
 
         assertEquals(1, result.size());
     }
 
     @Test
     void whenInactiveTravelerOnJourneyAndStartedToEarly_thenWarning() {
-        final JourneyTimeEntry start = journeyTimeEntryFor(3, 4, Vehicle.OTHER_INACTIVE);
-        final ProjectTimeEntry end = projectTimeEntryFor(5, 8);
+        JourneyTimeEntry start = journeyTimeEntryFor(3, 4, Vehicle.OTHER_INACTIVE);
+        ProjectTimeEntry end = projectTimeEntryFor(5, 8);
 
-        final List<TimeWarning> result = calculator.calculate(List.of(start, end));
+        List<TimeWarning> result = calculator.calculate(List.of(start, end));
 
         assertEquals(1, result.size());
     }
 
     @Test
     void whenActiveTravelerOnJourneyAndStartedToEarly_thenWarning() {
-        final JourneyTimeEntry start = journeyTimeEntryFor(3, 6, Vehicle.CAR_ACTIVE);
+        JourneyTimeEntry start = journeyTimeEntryFor(3, 6, Vehicle.CAR_ACTIVE);
 
-        final List<TimeWarning> result = calculator.calculate(List.of(start));
+        List<TimeWarning> result = calculator.calculate(List.of(start));
 
         assertEquals(1, result.size());
     }
@@ -134,14 +134,14 @@ class CoreWorkingHoursCalculatorTest {
 
     @Test
     void whenValid_thenNoWarning() {
-        final JourneyTimeEntry travelInactiveBefore = journeyTimeEntryFor(1, 6, Vehicle.OTHER_INACTIVE);
-        final JourneyTimeEntry travelActiveBefore = journeyTimeEntryFor(6, 10, Vehicle.CAR_ACTIVE);
-        final ProjectTimeEntry start = projectTimeEntryFor(10, 12);
-        final ProjectTimeEntry end = projectTimeEntryFor(13, 16);
-        final JourneyTimeEntry travelActiveAfter = journeyTimeEntryFor(17, 22, Vehicle.CAR_ACTIVE);
-        final JourneyTimeEntry travelInactiveAfter = journeyTimeEntryFor(22, 23, Vehicle.OTHER_INACTIVE);
+        JourneyTimeEntry travelInactiveBefore = journeyTimeEntryFor(1, 6, Vehicle.OTHER_INACTIVE);
+        JourneyTimeEntry travelActiveBefore = journeyTimeEntryFor(6, 10, Vehicle.CAR_ACTIVE);
+        ProjectTimeEntry start = projectTimeEntryFor(10, 12);
+        ProjectTimeEntry end = projectTimeEntryFor(13, 16);
+        JourneyTimeEntry travelActiveAfter = journeyTimeEntryFor(17, 22, Vehicle.CAR_ACTIVE);
+        JourneyTimeEntry travelInactiveAfter = journeyTimeEntryFor(22, 23, Vehicle.OTHER_INACTIVE);
 
-        final List<TimeWarning> result = calculator
+        List<TimeWarning> result = calculator
                 .calculate(List.of(travelInactiveBefore, travelActiveBefore, start, end, travelActiveAfter, travelInactiveAfter));
 
         assertTrue(result.isEmpty());
@@ -149,10 +149,10 @@ class CoreWorkingHoursCalculatorTest {
 
     @Test
     void whenOnlyInactiveTravelerOnJourney_thenNoWarning() {
-        final JourneyTimeEntry start = journeyTimeEntryFor(3, 10, Vehicle.OTHER_INACTIVE);
-        final JourneyTimeEntry end = journeyTimeEntryFor(10, 23, Vehicle.OTHER_INACTIVE);
+        JourneyTimeEntry start = journeyTimeEntryFor(3, 10, Vehicle.OTHER_INACTIVE);
+        JourneyTimeEntry end = journeyTimeEntryFor(10, 23, Vehicle.OTHER_INACTIVE);
 
-        final List<TimeWarning> result = calculator.calculate(List.of(start, end));
+        List<TimeWarning> result = calculator.calculate(List.of(start, end));
 
         assertTrue(result.isEmpty());
     }

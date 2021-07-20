@@ -1,24 +1,22 @@
 package com.gepardec.mega.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.auto.value.AutoValue;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.experimental.Accessors;
+import lombok.extern.jackson.Jacksonized;
 
-@AutoValue
-@JsonSerialize(as = ValidationViolation.class)
-public abstract class ValidationViolation {
-
-    @JsonCreator
-    public static ValidationViolation of(
-            final @JsonProperty("name") String name,
-            final @JsonProperty("property") String property) {
-        return new com.gepardec.mega.domain.model.AutoValue_ValidationViolation(name, property);
-    }
+@EqualsAndHashCode
+@Jacksonized
+@Accessors(fluent = true)
+@Getter
+@Builder(builderClassName = "Builder")
+public class ValidationViolation {
 
     @JsonProperty("property")
-    public abstract String property();
+    private final String property;
 
     @JsonProperty("message")
-    public abstract String message();
+    private final String message;
 }

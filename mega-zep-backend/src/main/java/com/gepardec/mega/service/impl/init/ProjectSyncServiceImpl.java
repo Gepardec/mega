@@ -1,7 +1,7 @@
 package com.gepardec.mega.service.impl.init;
 
-import com.gepardec.mega.db.entity.project.ProjectEntry;
 import com.gepardec.mega.db.entity.common.State;
+import com.gepardec.mega.db.entity.project.ProjectEntry;
 import com.gepardec.mega.db.entity.project.ProjectStep;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.ProjectFilter;

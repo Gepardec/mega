@@ -1,70 +1,46 @@
 package com.gepardec.mega.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.auto.value.AutoValue;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import lombok.extern.jackson.Jacksonized;
 
 import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.util.List;
 
-@AutoValue
-@JsonSerialize(as = Project.class)
-@JsonDeserialize(builder = com.gepardec.mega.domain.model.AutoValue_Project.Builder.class)
-public abstract class Project {
-
-    public static Project.Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_Project.Builder();
-    }
-
+@Builder(builderClassName = "Builder")
+@Getter
+@ToString
+@EqualsAndHashCode
+@Accessors(fluent = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Jacksonized
+public class Project {
     @JsonProperty
-    public abstract String projectId();
+    private final String projectId;
 
     @Nullable
     @JsonProperty
-    public abstract String description();
+    private final String description;
 
     @JsonProperty
-    public abstract LocalDate startDate();
+    private final LocalDate startDate;
 
     @JsonProperty
     @Nullable
-    public abstract LocalDate endDate();
+    private final LocalDate endDate;
 
     @JsonProperty
-    public abstract List<String> employees();
+    private final List<String> employees;
 
     @JsonProperty
-    public abstract List<String> leads();
+    private final List<String> leads;
 
     @JsonProperty
-    public abstract List<String> categories();
-
-    @AutoValue.Builder
-    public abstract static class Builder {
-        @JsonProperty
-        public abstract Project.Builder projectId(String projectId);
-
-        @JsonProperty
-        public abstract Project.Builder description(String description);
-
-        @JsonProperty
-        public abstract Project.Builder startDate(LocalDate startDate);
-
-        @JsonProperty
-        public abstract Project.Builder endDate(LocalDate endDate);
-
-        @JsonProperty
-        public abstract Project.Builder employees(List<String> employees);
-
-        @JsonProperty
-        public abstract Project.Builder leads(List<String> leads);
-
-        @JsonProperty
-        public abstract Project.Builder categories(List<String> categories);
-
-        @JsonProperty
-        public abstract Project build();
-    }
+    private final List<String> categories;
 }

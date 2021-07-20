@@ -1,24 +1,23 @@
 package com.gepardec.mega.domain.model;
 
-import com.google.auto.value.AutoValue;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import lombok.extern.jackson.Jacksonized;
 
 import javax.annotation.Nullable;
 
-@AutoValue
-public abstract class UserContext {
-
-    public static UserContext.Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_UserContext.Builder();
-    }
-
+@Builder
+@Getter
+@ToString
+@EqualsAndHashCode
+@Accessors(fluent = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Jacksonized
+public class UserContext {
     @Nullable
-    public abstract User user();
-
-    @AutoValue.Builder
-    public abstract static class Builder {
-
-        public abstract Builder user(User user);
-
-        public abstract UserContext build();
-    }
+    private final User user;
 }

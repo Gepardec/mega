@@ -1,62 +1,55 @@
 package com.gepardec.mega.domain.model.monthlyreport;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gepardec.mega.db.entity.employee.EmployeeState;
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.rest.model.PmProgress;
-import com.google.auto.value.AutoValue;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import lombok.extern.jackson.Jacksonized;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-@AutoValue
-@JsonSerialize(as = MonthlyReport.class)
-public abstract class MonthlyReport {
-
-    @JsonCreator
-    public static MonthlyReport of(
-            @JsonProperty("employee") final Employee employee,
-            @JsonProperty("timeWarnings") final List<TimeWarning> timeWarnings,
-            @JsonProperty("journeyWarnings") final List<JourneyWarning> journeyWarnings,
-            @JsonProperty("comments") final List<Comment> comments,
-            @JsonProperty("employeeCheckState") final EmployeeState employeeCheckEmployeeState,
-            @JsonProperty("assigned") final boolean assigned,
-            @JsonProperty("employeeProgresses") final List<PmProgress> pmProgresses,
-            @JsonProperty("otherChecksDone") final boolean otherChecksDone) {
-        return new com.gepardec.mega.domain.model.monthlyreport.AutoValue_MonthlyReport(
-                employee, timeWarnings, journeyWarnings, comments, employeeCheckEmployeeState, assigned, pmProgresses, otherChecksDone
-        );
-    }
+@Builder
+@Getter
+@ToString
+@EqualsAndHashCode
+@Accessors(fluent = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Jacksonized
+public class MonthlyReport {
+    @Nullable
+    @JsonProperty
+    private final Employee employee;
 
     @Nullable
     @JsonProperty
-    public abstract Employee employee();
+    private final List<TimeWarning> timeWarnings;
 
     @Nullable
     @JsonProperty
-    public abstract List<TimeWarning> timeWarnings();
+    private final List<JourneyWarning> journeyWarnings;
 
     @Nullable
     @JsonProperty
-    public abstract List<JourneyWarning> journeyWarnings();
+    private final List<Comment> comments;
 
     @Nullable
     @JsonProperty
-    public abstract List<Comment> comments();
-
-    @Nullable
-    @JsonProperty
-    public abstract EmployeeState employeeCheckState();
+    private final EmployeeState employeeCheckState;
 
     @JsonProperty
-    public abstract boolean isAssigned();
+    private final boolean isAssigned;
 
     @JsonProperty
-    public abstract List<PmProgress> employeeProgresses();
+    private final List<PmProgress> employeeProgresses;
 
     @JsonProperty
-    public abstract boolean otherChecksDone();
+    private final boolean otherChecksDone;
 }

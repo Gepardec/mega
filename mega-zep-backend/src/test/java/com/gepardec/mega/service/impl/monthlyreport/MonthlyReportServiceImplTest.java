@@ -100,14 +100,18 @@ class MonthlyReportServiceImplTest {
 
     private List<ProjectEntry> createReadProjektzeitenResponseType(int bisHours) {
 
-        return List.of(ProjectTimeEntry.of(LocalDateTime.of(2020, 1, 31, 7, 0),
-                LocalDateTime.of(2020, 1, 31, bisHours, 0),
-                Task.BEARBEITEN,
-                WorkingLocation.MAIN),
-                ProjectTimeEntry.of(LocalDateTime.of(2020, 1, 30, 7, 0),
-                        LocalDateTime.of(2020, 1, 30, 10, 0),
-                        Task.BEARBEITEN,
-                        WorkingLocation.MAIN));
+        return List.of(
+                ProjectTimeEntry.builder()
+                        .fromTime(LocalDateTime.of(2020, 1, 31, 7, 0))
+                        .toTime(LocalDateTime.of(2020, 1, 31, bisHours, 0))
+                        .task(Task.BEARBEITEN)
+                        .workingLocation(WorkingLocation.MAIN).build(),
+                ProjectTimeEntry.builder()
+                        .fromTime(LocalDateTime.of(2020, 1, 30, 7, 0))
+                        .toTime(LocalDateTime.of(2020, 1, 30, 10, 0))
+                        .task(Task.BEARBEITEN)
+                        .workingLocation(WorkingLocation.MAIN).build()
+        );
     }
 
     private Employee createEmployee(final int userId) {

@@ -1,7 +1,7 @@
 package com.gepardec.mega.db.entity.project;
 
-import com.gepardec.mega.db.entity.employee.User;
 import com.gepardec.mega.db.entity.common.State;
+import com.gepardec.mega.db.entity.employee.User;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.CascadeType;

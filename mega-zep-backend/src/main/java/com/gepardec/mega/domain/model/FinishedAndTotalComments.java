@@ -1,24 +1,22 @@
 package com.gepardec.mega.domain.model;
 
-import com.google.auto.value.AutoValue;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import lombok.extern.jackson.Jacksonized;
 
-@AutoValue
-public abstract class FinishedAndTotalComments {
+@Builder
+@Getter
+@ToString
+@EqualsAndHashCode
+@Accessors(fluent = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Jacksonized
+public class FinishedAndTotalComments {
+    private final Long finishedComments;
 
-    public static FinishedAndTotalComments.Builder builder() {
-        return new com.gepardec.mega.domain.model.AutoValue_FinishedAndTotalComments.Builder();
-    }
-
-    public abstract Long finishedComments();
-
-    public abstract Long totalComments();
-
-    @AutoValue.Builder
-    public abstract static class Builder {
-        public abstract Builder finishedComments(Long finishedComments);
-
-        public abstract Builder totalComments(Long totalComments);
-
-        public abstract FinishedAndTotalComments build();
-    }
+    private final Long totalComments;
 }

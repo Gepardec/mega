@@ -21,7 +21,7 @@ public class ApplicationInfoResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ApplicationInfo get() {
         final Duration upTime = Duration.between(applicationConfig.getStartAt(), LocalDateTime.now());
-        return ApplicationInfo.newBuilder()
+        return ApplicationInfo.builder()
                 .version(applicationConfig.getVersion())
                 .buildDate(applicationConfig.getBuildDate())
                 .buildNumber(applicationConfig.getBuildNumber())

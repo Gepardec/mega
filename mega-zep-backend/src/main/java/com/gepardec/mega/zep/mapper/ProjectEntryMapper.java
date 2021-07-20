@@ -44,7 +44,7 @@ public class ProjectEntryMapper {
         if (Task.isJourney(task)) {
             JourneyDirection journeyDirection = toJourneyDirection(projektzeitType.getReiseRichtung());
             Vehicle vehicle = toVehicle(projektzeitType.getFahrzeug());
-            return JourneyTimeEntry.newBuilder()
+            return JourneyTimeEntry.builder()
                     .fromTime(from)
                     .toTime(to)
                     .task(task)
@@ -53,7 +53,7 @@ public class ProjectEntryMapper {
                     .vehicle(vehicle)
                     .build();
         } else {
-            return ProjectTimeEntry.of(from, to, task, workingLocation);
+            return ProjectTimeEntry.builder().fromTime(from).toTime(to).task(task).workingLocation(workingLocation).build();
         }
     }
 
