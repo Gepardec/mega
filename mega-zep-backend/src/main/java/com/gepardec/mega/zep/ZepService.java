@@ -3,8 +3,7 @@ package com.gepardec.mega.zep;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
-import de.provantis.zep.ReadProjektzeitenResponseType;
-import net.bytebuddy.asm.Advice;
+import de.provantis.zep.ProjektzeitType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,7 +18,7 @@ public interface ZepService {
 
     List<ProjectEntry> getProjectTimes(Employee employee);
 
-    ReadProjektzeitenResponseType getProjectTimesForEmployeePerProject(String project, LocalDate curDate);
+    List<ProjektzeitType> getProjectTimesForEmployeePerProject(String project, LocalDate curDate);
 
     List<Project> getProjectsForMonthYear(final LocalDate monthYear);
 }

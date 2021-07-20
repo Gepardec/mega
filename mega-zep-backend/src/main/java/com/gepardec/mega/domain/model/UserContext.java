@@ -9,7 +9,9 @@ import lombok.experimental.Accessors;
 import lombok.extern.jackson.Jacksonized;
 
 import javax.annotation.Nullable;
+import javax.enterprise.inject.Vetoed;
 
+@Vetoed
 @Builder
 @Getter
 @ToString

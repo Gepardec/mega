@@ -116,7 +116,7 @@
       "customerCheckState": "Kundenzeiten",
       "comments": "Anmerkungen",
       "releaseDate": "Freigabedatum",
-      "projectHours": "Projektstunden"
+      "projectHours": "Fakt. / Nicht fakt. Projektstunden"
     },
     "noPmEntriesFound": "Keine Projekteinträge gefunden",
     "projectTimeState": "Projektzeitenkontrolle",

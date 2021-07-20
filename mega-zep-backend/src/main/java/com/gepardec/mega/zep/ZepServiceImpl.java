@@ -14,6 +14,7 @@ import de.provantis.zep.ProjektMitarbeiterListeType;
 import de.provantis.zep.ProjektMitarbeiterType;
 import de.provantis.zep.ProjektNrListeType;
 import de.provantis.zep.ProjektType;
+import de.provantis.zep.ProjektzeitType;
 import de.provantis.zep.ReadMitarbeiterRequestType;
 import de.provantis.zep.ReadMitarbeiterResponseType;
 import de.provantis.zep.ReadMitarbeiterSearchCriteriaType;
@@ -38,6 +39,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -132,7 +134,7 @@ public class ZepServiceImpl implements ZepService {
     }
 
     @Override
-    public ReadProjektzeitenResponseType getProjectTimesForEmployeePerProject(String projectID, LocalDate curDate) {
+    public List<ProjektzeitType> getProjectTimesForEmployeePerProject(String projectID, LocalDate curDate) {
         final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
         projektzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
 
@@ -144,9 +146,16 @@ public class ZepServiceImpl implements ZepService {
             return null;
         }
         projektzeitenRequest.setReadProjektzeitenSearchCriteria(searchCriteria);
-        ReadProjektzeitenResponseType projectTimeResponse = zepSoapPortType.readProjektzeiten(projektzeitenRequest);
 
-        return projectTimeResponse;
+        ReadProjektzeitenResponseType readProjektzeitenResponseType = zepSoapPortType.readProjektzeiten(projektzeitenRequest);
+
+        if(readProjektzeitenResponseType != null
+                && readProjektzeitenResponseType.getProjektzeitListe() != null
+                && readProjektzeitenResponseType.getProjektzeitListe().getProjektzeiten() != null) {
+            return readProjektzeitenResponseType.getProjektzeitListe().getProjektzeiten();
+        }
+
+        return Collections.emptyList();
     }
 
     @Override
@@ -194,6 +203,7 @@ public class ZepServiceImpl implements ZepService {
         ProjektNrListeType projectListType = new ProjektNrListeType();
         projectListType.getProjektNr().add(projectID);
         searchCriteria.setProjektNrListe(projectListType);
+
         return searchCriteria;
     }
 

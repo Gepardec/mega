@@ -12,7 +12,6 @@ import lombok.experimental.Accessors;
 import lombok.extern.jackson.Jacksonized;
 
 import javax.annotation.Nullable;
-import java.time.Duration;
 import java.util.List;
 
 @Builder(builderClassName = "Builder")
