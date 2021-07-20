@@ -166,24 +166,53 @@
               </mat-cell>
             </ng-container>
 
+
+            <!--
+
             <ng-container matColumnDef="releaseDate">
               <mat-header-cell *matHeaderCellDef
                                class="text-center">{{'project-management.table.releaseDate' | translate}}</mat-header-cell>
               <mat-cell *matCellDef="let row" class="text-center">
                 <span class="mobile-label">{{'project-management.table.releaseDate' | translate}}</span>
-                {{row.employee.releaseDate | date:'dd.MM.yyyy'}}
+                20 Stunden frak. / 4 Stunden n.frak.
+                 {{row.employee.releaseDate | date:'dd.MM.yyyy'}}
               </mat-cell>
             </ng-container>
 
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-          </mat-table>
-        </div>
-      </mat-expansion-panel>
-    </mat-accordion>
+            -->
+
+            <ng-container matColumnDef="projectHours">
+              <mat-header-cell *matHeaderCellDef
+                               class="text-center">{{'project-management.table.projectHours' | translate}}</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <span class="mobile-label">{{'project-management.table.projectHours' | translate}}</span>
+                <table>
+                 <tr>
+                   <td>fakt.:</td>
+                   <td>{{row.billableTime}}</td>
+                 </tr>
+                  <tr>
+                    <td>nicht fakt.:</td>
+                    <td>{{row.nonBillableTime}}</td>
+                  </tr>
+                </table>
+
+
+                <!--  {{row.employee.releaseDate | date:'dd.MM.yyyy'}}-->
+                </mat-cell>
+              </ng-container>
+
+
+
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <ng-template #noPmEntriesFound>
+      <mat-card>{{'project-management.noPmEntriesFound' | translate}}</mat-card>
+    </ng-template>
   </div>
-  <ng-template #noPmEntriesFound>
-    <mat-card>{{'project-management.noPmEntriesFound' | translate}}</mat-card>
-  </ng-template>
-</div>
 

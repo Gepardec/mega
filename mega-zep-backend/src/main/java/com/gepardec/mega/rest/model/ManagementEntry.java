@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.jackson.Jacksonized;
 
 import javax.annotation.Nullable;
+import java.time.Duration;
 import java.util.List;
 
 @Builder(builderClassName = "Builder")
@@ -50,4 +51,10 @@ public class ManagementEntry {
 
     @JsonProperty
     private final String entryDate;
+
+    @JsonProperty
+    private final String billableTime;
+
+    @JsonProperty
+    private final String nonBillableTime;
 }

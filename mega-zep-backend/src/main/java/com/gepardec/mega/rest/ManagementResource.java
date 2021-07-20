@@ -20,7 +20,11 @@ import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.projectentry.ProjectEntryService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import com.gepardec.mega.zep.ZepService;
+import de.provantis.zep.ProjektzeitType;
+import de.provantis.zep.ReadProjektzeitenResponseType;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -28,12 +32,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Secured
@@ -57,6 +64,9 @@ public class ManagementResource {
 
     @Inject
     ProjectEntryService projectEntryService;
+
+    @Inject
+    ZepService zepService;
 
     @GET
     @Path("/officemanagemententries/{year}/{month}")
@@ -131,9 +141,31 @@ public class ManagementResource {
                 );
             }
         }
-
         return projectManagementEntries;
     }
+
+    /*
+      @GET
+    @Path("projectworkinghours/{year}/{month}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ReadProjektzeitenResponseType getBillableProjectHours(@PathParam("year") Integer year, @PathParam("month") Integer month) {
+        //ZepServiceImpl function(): getProjectTimesForEmployeePerProject  ?
+        LocalDate curDate = LocalDate.of(year, month, 1);
+        beanUnderTest = new ZepServiceImpl(new EmployeeMapper(), logger, zepSoapPortType, zepSoapProvider, projectEntryMapper);
+        List<Project> project = beanUnderTest.getProjectsForMonthYear(curDate);
+
+        ReadProjektzeitenResponseType readProjektzeitenResponse = beanUnderTest.getProjectTimesForEmployeePerProject(project.get(0), curDate);
+
+        if (readProjektzeitenResponse == null) {
+            return null;
+
+        }
+
+        return readProjektzeitenResponse;
+
+    }
+
+     */
 
     private ProjectEntry getProjectEntryForProjectStep(List<ProjectEntry> projectEntries, ProjectStep projectStep) {
         return projectEntries.stream()
@@ -179,6 +211,26 @@ public class ManagementResource {
 
     private ManagementEntry createManagementEntryForEmployee(Employee employee, String projectId, List<StepEntry> stepEntries, LocalDate from, LocalDate to, List<PmProgress> pmProgresses) {
         FinishedAndTotalComments finishedAndTotalComments = commentService.cntFinishedAndTotalCommentsForEmployee(employee, from, to);
+        ReadProjektzeitenResponseType readProjektzeitenResponseType = zepService.getProjectTimesForEmployeePerProject(projectId, from);
+
+        List<ProjektzeitType> projektzeitTypes = readProjektzeitenResponseType.getProjektzeitListe().getProjektzeiten();
+
+        Duration totalBillable = projektzeitTypes.stream()
+                .filter(pzt -> pzt.getUserId().equals(employee.userId()))
+                .filter(ProjektzeitType::isIstFakturierbar)
+                .map(pzt -> LocalTime.parse(pzt.getDauer()))
+                .map(lt -> Duration.between(LocalTime.MIN, lt))
+                .reduce(Duration.ZERO, Duration::plus);
+
+        Duration totalNonBillable = projektzeitTypes.stream()
+                .filter(pzt -> pzt.getUserId().equals(employee.userId()))
+                .filter(Predicate.not(ProjektzeitType::isIstFakturierbar))
+                .map(pzt -> LocalTime.parse(pzt.getDauer()))
+                .map(lt -> Duration.between(LocalTime.MIN, lt))
+                .reduce(Duration.ZERO, Duration::plus);
+
+
+
         if (!stepEntries.isEmpty()) {
             return ManagementEntry.builder()
                     .employee(employee)
@@ -190,6 +242,8 @@ public class ManagementResource {
                     .finishedComments(finishedAndTotalComments.finishedComments())
                     .totalComments(finishedAndTotalComments.totalComments())
                     .entryDate(stepEntries.get(0).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .billableTime(DurationFormatUtils.formatDuration(totalBillable.toMillis(),"HH:mm:ss"))
+                    .nonBillableTime(DurationFormatUtils.formatDuration(totalNonBillable.toMillis(),"HH:mm:ss"))
                     .build();
         }
 

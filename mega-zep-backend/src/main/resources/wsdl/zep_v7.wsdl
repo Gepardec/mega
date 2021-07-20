@@ -2262,7 +2262,7 @@
                     <xsd:documentation>Anzahl der Vorkommastellen = 6 und der Nachkommastellen = 4</xsd:documentation>
                 </xsd:annotation>
                 <xsd:restriction base="xsd:double">
-                    <xsd:minInclusive value="0"/>
+                    <xsd:minInclusive value="0"/>f
                     <xsd:maxInclusive value="999999.9999"/>
                 </xsd:restriction>
             </xsd:simpleType>

@@ -43,14 +43,15 @@ export class ProjectManagementComponent implements OnInit {
     'internalCheckState',
     'customerCheckState',
     'doneCommentsIndicator',
-    'releaseDate'
+    'projectHours'
+    // ,'releaseDate'
   ];
 
   officeManagementUrl: string;
   pmSelectionModels: Map<string, SelectionModel<ManagementEntry>>;
   environment = environment;
   selectedYear = moment().subtract(1, 'month').year();
-  selectedMonth = moment().subtract(2, 'month').month() + 1; // months 0 - 11
+  selectedMonth = moment().subtract(1, 'month').month() + 1; // months 0 - 11
   showCommentEditor = false;
   forProjectName: string;
 
@@ -145,6 +146,7 @@ export class ProjectManagementComponent implements OnInit {
         this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []))
       );
     });
+    console.log(this.pmEntries);
   }
 
   private findEntriesForProject(projectName: string) {

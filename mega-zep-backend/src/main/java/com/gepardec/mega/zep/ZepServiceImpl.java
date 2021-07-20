@@ -12,6 +12,7 @@ import de.provantis.zep.MitarbeiterType;
 import de.provantis.zep.ProjektListeType;
 import de.provantis.zep.ProjektMitarbeiterListeType;
 import de.provantis.zep.ProjektMitarbeiterType;
+import de.provantis.zep.ProjektNrListeType;
 import de.provantis.zep.ProjektType;
 import de.provantis.zep.ReadMitarbeiterRequestType;
 import de.provantis.zep.ReadMitarbeiterResponseType;
@@ -163,6 +164,18 @@ public class ZepServiceImpl implements ZepService {
         UserIdListeType userIdListType = new UserIdListeType();
         userIdListType.getUserId().add(employee.userId());
         searchCriteria.setUserIdListe(userIdListType);
+        return searchCriteria;
+    }
+
+    private ReadProjektzeitenSearchCriteriaType createProjectTimesForEmployeePerProjectSearchCriteria(String projectID, LocalDate curDate) {
+        ReadProjektzeitenSearchCriteriaType searchCriteria = new ReadProjektzeitenSearchCriteriaType();
+
+        searchCriteria.setVon(DateTimeFormatter.ISO_LOCAL_DATE.format(curDate.with(TemporalAdjusters.firstDayOfMonth())));
+        searchCriteria.setBis(DateTimeFormatter.ISO_LOCAL_DATE.format(curDate.with(TemporalAdjusters.lastDayOfMonth())));
+
+        ProjektNrListeType projectListType = new ProjektNrListeType();
+        projectListType.getProjektNr().add(projectID);
+        searchCriteria.setProjektNrListe(projectListType);
         return searchCriteria;
     }
 
