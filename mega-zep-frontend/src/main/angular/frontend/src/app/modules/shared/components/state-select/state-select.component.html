@@ -3,8 +3,8 @@
   (selectionChange)="onSelectionChange($event)"
   [class.select-green]="select.value === State.DONE"
   [class.select-red]="select.value === State.OPEN"
-  [value]="value"
-  [disabled]="value === State.DONE">
+  [disabled]="value === State.DONE"
+  [value]="value">
   <mat-option [value]="State.OPEN">{{'STATE.OPEN' | translate}}</mat-option>
   <mat-option [value]="State.DONE">{{'STATE.DONE' | translate}}</mat-option>
 </mat-select>

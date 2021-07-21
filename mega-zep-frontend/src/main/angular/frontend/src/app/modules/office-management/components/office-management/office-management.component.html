@@ -2,7 +2,7 @@
   <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
     <span>{{'global.selectPayrollMonth' | translate}}</span>
     <span>
-          <app-datepicker-month-year [date]="date" (dateChanged)="dateChanged($event)"></app-datepicker-month-year>
+          <app-datepicker-month-year (dateChanged)="dateChanged($event)" [date]="date"></app-datepicker-month-year>
         </span>
   </mat-toolbar-row>
 </mat-toolbar>

@@ -1,10 +1,10 @@
-<mat-form-field  style="font-size: 18px">
-  <input matInput [matDatepicker]="dp" [formControl]="dateControl" [max]="maxDate">
-  <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+<mat-form-field style="font-size: 18px">
+  <input [formControl]="dateControl" [matDatepicker]="dp" [max]="maxDate" matInput>
+  <mat-datepicker-toggle [for]="dp" matSuffix></mat-datepicker-toggle>
   <mat-datepicker #dp
-                  startView="multi-year"
-                  (yearSelected)="chosenYearHandler($event)"
                   (monthSelected)="chosenMonthHandler($event, dp)"
-                  panelClass="example-month-picker">
+                  (yearSelected)="chosenYearHandler($event)"
+                  panelClass="example-month-picker"
+                  startView="multi-year">
   </mat-datepicker>
 </mat-form-field>

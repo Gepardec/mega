@@ -1,10 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { DisplayMonthlyReportComponent } from './display-monthly-report.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { State } from '../../../shared/models/State';
-import { TranslateModule } from '@ngx-translate/core';
-import { AngularMaterialModule } from '../../../material/material-module';
+import {DisplayMonthlyReportComponent} from './display-monthly-report.component';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {State} from '../../../shared/models/State';
+import {TranslateModule} from '@ngx-translate/core';
+import {AngularMaterialModule} from '../../../material/material-module';
 import {SharedModule} from "../../../shared/shared.module";
 
 describe('DisplayMonthlyReportComponent', () => {

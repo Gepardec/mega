@@ -2,6 +2,7 @@
 
 table {
   width: 100%;
+  border: 1px solid #000000;
 }
 
 th, td {
@@ -37,43 +38,4 @@ mat-panel-description {
 .headers-align .mat-expansion-panel-header-description,
 .headers-align .mat-expansion-panel-header-title {
   align-items: center;
-}
-
-table.projectActions {
-  width: auto;
-}
-
-table.projectActions > th, td {
-  font-size: inherit;
-}
-
-tr.spacing > td {
-  padding-top: 5px;
-}
-
-.preset-next-month {
-  margin-left: 15px;
-}
-
-.label {
-  padding-right: 15px;
-}
-
-.mat-expansion-panel-header-description {
-  display: flex;
-
-  > :nth-child(2) {
-    flex-grow: 1;
-    //max-width: 600px;
-  }
-}
-
-.comment-container {
-  display: flex;
-  padding-left: 15px;
-
-  > :nth-child(1) {
-    flex-grow: 1;
-    max-width: 600px;
-  }
 }

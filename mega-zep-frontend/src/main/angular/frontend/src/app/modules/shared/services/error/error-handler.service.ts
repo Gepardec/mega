@@ -1,9 +1,9 @@
-import { ErrorHandler, Injectable, NgZone } from '@angular/core';
-import { LoggingService } from '../logging/logging.service';
-import { ErrorService } from './error.service';
-import { configuration } from '../../constants/configuration';
-import { Router } from '@angular/router';
-import { UserService } from '../user/user.service';
+import {ErrorHandler, Injectable, NgZone} from '@angular/core';
+import {LoggingService} from '../logging/logging.service';
+import {ErrorService} from './error.service';
+import {configuration} from '../../constants/configuration';
+import {Router} from '@angular/router';
+import {UserService} from '../user/user.service';
 
 @Injectable({
   providedIn: 'root'

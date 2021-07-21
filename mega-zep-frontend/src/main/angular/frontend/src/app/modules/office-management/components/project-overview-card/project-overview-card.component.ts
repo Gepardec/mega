@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import * as _moment from 'moment';
-import {Moment} from 'moment';
 import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import {configuration} from '../../../shared/constants/configuration';
 import {environment} from '../../../../../environments/environment';
@@ -86,12 +85,6 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getPmEntries() {
-    this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
-      this.pmEntries = pmEntries;
-    });
-  }
-
   isAtLeastOneEmployeeCheckDone(pmEntry: ProjectManagementEntry): ProjectState {
     for (let mgmtEntry of pmEntry.entries) {
       if (mgmtEntry.projectCheckState === State.DONE) {
@@ -110,5 +103,11 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
     this.showCommentEditor = false;
     this.forProjectName = null;
     pmEntry.comment = comment;
+  }
+
+  private getPmEntries() {
+    this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
+      this.pmEntries = pmEntries;
+    });
   }
 }

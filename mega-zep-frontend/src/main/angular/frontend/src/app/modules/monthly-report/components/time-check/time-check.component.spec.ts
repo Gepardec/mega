@@ -1,9 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { TimeCheckComponent } from './time-check.component';
-import { TranslateModule } from '@ngx-translate/core';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { AngularMaterialModule } from '../../../material/material-module';
+import {TimeCheckComponent} from './time-check.component';
+import {TranslateModule} from '@ngx-translate/core';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {AngularMaterialModule} from '../../../material/material-module';
 
 describe('TimeCheckComponent', () => {
   let component: TimeCheckComponent;

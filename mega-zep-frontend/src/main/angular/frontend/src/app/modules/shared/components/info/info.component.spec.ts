@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { InfoComponent } from './info.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { AngularMaterialModule } from '../../../material/material-module';
+import {InfoComponent} from './info.component';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {AngularMaterialModule} from '../../../material/material-module';
 
 describe('InfoComponent', () => {
   let component: InfoComponent;

@@ -1,4 +1,4 @@
-import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProjectManagementEntry} from '../models/ProjectManagementEntry';
 import {MatDialog} from '@angular/material/dialog';
 import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
@@ -138,23 +138,6 @@ export class ProjectManagementComponent implements OnInit {
       .subscribe(() => row.projectCheckState = State.DONE);
   }
 
-  private getPmEntries() {
-    this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
-      this.pmEntries = pmEntries;
-      this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
-      this.pmEntries.forEach(pmEntry =>
-        this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []))
-      );
-    });
-    console.log(this.pmEntries);
-  }
-
-  private findEntriesForProject(projectName: string) {
-    return this.pmEntries.filter(entry => {
-      return entry.projectName === projectName;
-    })[0].entries;
-  }
-
   getCurrentReleaseDate(): Date {
     if (this.pmEntries) {
       const entries = [];
@@ -174,10 +157,6 @@ export class ProjectManagementComponent implements OnInit {
     }
 
     return new Date();
-  }
-
-  private getFormattedDate() {
-    return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
   }
 
   onChangeControlProjectState($event: MatSelectChange, pmEntry: ProjectManagementEntry, controlProjectStateSelect: ProjectStateSelectComponent) {
@@ -232,17 +211,6 @@ export class ProjectManagementComponent implements OnInit {
       })
   }
 
-  private showErrorSnackbar() {
-    this._snackBar.open(
-      this.translate.instant('snackbar.message'),
-      this.translate.instant('snackbar.confirm'),
-      {
-        horizontalPosition: <MatSnackBarHorizontalPosition>configuration.snackbar.horizontalPosition,
-        verticalPosition: <MatSnackBarVerticalPosition>configuration.snackbar.verticalPosition,
-        duration: configuration.snackbar.duration
-      });
-  }
-
   isProjectStateNotRelevant(projectState: ProjectState) {
     return projectState === ProjectState.NOT_RELEVANT;
   }
@@ -256,5 +224,37 @@ export class ProjectManagementComponent implements OnInit {
     this.showCommentEditor = false;
     this.forProjectName = null;
     pmEntry.comment = comment;
+  }
+
+  private getPmEntries() {
+    this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
+      this.pmEntries = pmEntries;
+      this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
+      this.pmEntries.forEach(pmEntry =>
+        this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []))
+      );
+    });
+    console.log(this.pmEntries);
+  }
+
+  private findEntriesForProject(projectName: string) {
+    return this.pmEntries.filter(entry => {
+      return entry.projectName === projectName;
+    })[0].entries;
+  }
+
+  private getFormattedDate() {
+    return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
+  }
+
+  private showErrorSnackbar() {
+    this._snackBar.open(
+      this.translate.instant('snackbar.message'),
+      this.translate.instant('snackbar.confirm'),
+      {
+        horizontalPosition: <MatSnackBarHorizontalPosition>configuration.snackbar.horizontalPosition,
+        verticalPosition: <MatSnackBarVerticalPosition>configuration.snackbar.verticalPosition,
+        duration: configuration.snackbar.duration
+      });
   }
 }

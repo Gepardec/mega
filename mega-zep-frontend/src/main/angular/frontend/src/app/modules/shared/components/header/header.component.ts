@@ -1,13 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UserService } from '../../services/user/user.service';
-import { Observable, Subscription } from 'rxjs';
-import { User } from '../../models/User';
-import { Link } from '../../models/Link';
-import { RolesService } from '../../services/roles/roles.service';
-import { TranslateService } from '@ngx-translate/core';
-import { configuration } from '../../constants/configuration';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { map } from 'rxjs/operators';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {UserService} from '../../services/user/user.service';
+import {Observable, Subscription} from 'rxjs';
+import {User} from '../../models/User';
+import {Link} from '../../models/Link';
+import {RolesService} from '../../services/roles/roles.service';
+import {TranslateService} from '@ngx-translate/core';
+import {configuration} from '../../constants/configuration';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {map} from 'rxjs/operators';
 import {ConfigService} from "../../services/config/config.service";
 import {Config} from "../../models/Config";
 

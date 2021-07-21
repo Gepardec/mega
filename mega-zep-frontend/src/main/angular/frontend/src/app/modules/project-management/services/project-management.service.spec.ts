@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { ProjectManagementService } from './project-management.service';
+import {ProjectManagementService} from './project-management.service';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('ProjectManagementService', () => {

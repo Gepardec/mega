@@ -1,8 +1,6 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {MatSelect, MatSelectChange} from '@angular/material/select';
 import {ProjectState} from '../../models/ProjectState';
-import {ProjectManagementService} from '../../../project-management/services/project-management.service';
-import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-project-state-select',
@@ -19,9 +17,6 @@ export class ProjectStateSelectComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit(): void {
-  }
-
   get isInProgressSelected(): boolean {
     return this.value === ProjectState.WORK_IN_PROGRESS;
   }
@@ -32,6 +27,9 @@ export class ProjectStateSelectComponent implements OnInit {
 
   get isDoneSelected(): boolean {
     return this.value === ProjectState.DONE;
+  }
+
+  ngOnInit(): void {
   }
 
   onSelectionChange(selectChange: MatSelectChange): void {

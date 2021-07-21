@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { LoaderService } from './loader.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { OverlayModule } from '@angular/cdk/overlay';
+import {LoaderService} from './loader.service';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {OverlayModule} from '@angular/cdk/overlay';
 
 describe('LoaderService', () => {
   beforeEach(() => TestBed.configureTestingModule({

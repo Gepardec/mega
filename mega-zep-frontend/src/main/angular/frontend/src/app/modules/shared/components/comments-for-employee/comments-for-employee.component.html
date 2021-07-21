@@ -18,7 +18,7 @@
         <mat-hint align="end">{{newMessage.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
       </mat-form-field>
 
-      <button mat-raised-button (click)="createCommentForEmployee(newMessage.value);newMessage.value = ''">
+      <button (click)="createCommentForEmployee(newMessage.value);newMessage.value = ''" mat-raised-button>
         {{'comments-for-employee.addCommentBtn' | translate}}
       </button>
     </div>
@@ -47,7 +47,8 @@
         </td>
 
         <td class="mat-cell">
-          <pre style="white-space: pre-wrap" [hidden]="comment.isEditing" [innerHTML]="parseAnchorTags(comment.message)">{{comment.message}}</pre>
+          <pre [hidden]="comment.isEditing" [innerHTML]="parseAnchorTags(comment.message)"
+               style="white-space: pre-wrap">{{comment.message}}</pre>
           <div [hidden]="!comment.isEditing">
             <mat-form-field floatLabel="never">
               <mat-label>{{'comments-for-employee.editCommentLabel' | translate}}</mat-label>
@@ -82,7 +83,7 @@
         </td>
 
         <td class="mat-cell">
-          <button mat-icon-button (click)="deleteCommentOfEmployee(comment)" *ngIf="editCommentBtnVisible(comment)">
+          <button (click)="deleteCommentOfEmployee(comment)" *ngIf="editCommentBtnVisible(comment)" mat-icon-button>
             <mat-icon>delete</mat-icon>
           </button>
         </td>

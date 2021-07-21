@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { ConfigService } from '../config/config.service';
-import { Info } from '../../models/Info';
-import { tap } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {ConfigService} from '../config/config.service';
+import {Info} from '../../models/Info';
+import {tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

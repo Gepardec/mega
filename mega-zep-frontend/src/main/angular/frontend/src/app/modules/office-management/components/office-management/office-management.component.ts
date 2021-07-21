@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import * as _moment from 'moment';
+import {Moment} from 'moment';
 import {OfficeManagementService} from '../../services/office-management.service';
 import {Subscription, zip} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {Moment} from 'moment';
 
 const moment = _moment;
 
@@ -19,6 +19,14 @@ export class OfficeManagementComponent implements OnInit, OnDestroy {
   dateSelectionSub: Subscription;
 
   constructor(private omService: OfficeManagementService) {
+  }
+
+  get date() {
+    return moment()
+      .year(this.selectedYear)
+      .month(this.selectedMonth)
+      .date(1)
+      .startOf('day');
   }
 
   ngOnInit(): void {
@@ -42,13 +50,5 @@ export class OfficeManagementComponent implements OnInit, OnDestroy {
   dateChanged(date: Moment) {
     this.omService.selectedYear.next(moment(date).year());
     this.omService.selectedMonth.next(moment(date).month() + 1);
-  }
-
-  get date() {
-    return moment()
-      .year(this.selectedYear)
-      .month(this.selectedMonth)
-      .date(1)
-      .startOf('day');
   }
 }
