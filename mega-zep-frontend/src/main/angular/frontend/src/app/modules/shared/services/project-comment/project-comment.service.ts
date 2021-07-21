@@ -13,7 +13,7 @@ export class ProjectCommentService {
               private configService: ConfigService) {
   }
 
-  getProjectComment(monthYear: string, projectName: string) {
+  get(monthYear: string, projectName: string) {
     return this.httpClient.get<ProjectComment>(
       this.configService.getBackendUrlWithContext('/projectcomments'), {
         params: {
@@ -23,13 +23,13 @@ export class ProjectCommentService {
       });
   }
 
-  createNewProjectComment(comment: string, yearMonth: string, projectName: string) {
+  create(comment: string, yearMonth: string, projectName: string) {
     return this.httpClient.post<ProjectComment>(
       this.configService.getBackendUrlWithContext('/projectcomments'),
       new ProjectComment(comment, yearMonth, projectName));
   }
 
-  updateProjectComment(projectComment: ProjectComment): Observable<boolean> {
+  update(projectComment: ProjectComment): Observable<boolean> {
     return this.httpClient.put<boolean>(
       this.configService.getBackendUrlWithContext('/projectcomments'),
       projectComment

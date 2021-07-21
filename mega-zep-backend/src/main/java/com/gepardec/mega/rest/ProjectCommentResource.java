@@ -20,24 +20,24 @@ public class ProjectCommentResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public ProjectCommentDto getProjectComment(
+    public ProjectCommentDto get(
             @QueryParam("date") @NotNull(message = "{projectCommentResource.date.notNull}") String currentMonthYear,
             @QueryParam("projectName") @NotNull(message = "{projectCommentResource.projectName.notNull}") String projectName
     ) {
-        return projectCommentService.findProjectCommentForProjectNameWithCurrentYearMonth(projectName, currentMonthYear);
+        return projectCommentService.findForProjectNameWithCurrentYearMonth(projectName, currentMonthYear);
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ProjectCommentDto createProjectComment(@NotNull(message = "{projectCommentResource.projectCommentEntry.notNull}") ProjectCommentDto newProjectCommentDto) {
-        return projectCommentService.createProjectComment(newProjectCommentDto);
+    public ProjectCommentDto create(@NotNull(message = "{projectCommentResource.projectCommentEntry.notNull}") ProjectCommentDto newProjectCommentDto) {
+        return projectCommentService.create(newProjectCommentDto);
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean updateProjectComment(@NotNull(message = "{projectCommentResource.projectCommentEntry.notNull}") ProjectCommentDto projectCommentDto) {
-        return projectCommentService.updateProjectComment(projectCommentDto.getId(), projectCommentDto.getComment());
+    public boolean update(@NotNull(message = "{projectCommentResource.projectCommentEntry.notNull}") ProjectCommentDto projectCommentDto) {
+        return projectCommentService.update(projectCommentDto.getId(), projectCommentDto.getComment());
     }
 }

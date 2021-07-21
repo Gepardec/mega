@@ -63,7 +63,7 @@ public class ProjectComment implements Serializable {
     @PrePersist
     void onPersist() {
         creationDate = LocalDateTime.now();
-        updatedDate = LocalDateTime.now(); // TODO
+        updatedDate = LocalDateTime.now();
     }
 
     @PreUpdate

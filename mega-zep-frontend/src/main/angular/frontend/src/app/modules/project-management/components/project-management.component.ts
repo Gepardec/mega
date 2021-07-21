@@ -145,7 +145,7 @@ export class ProjectManagementComponent implements OnInit {
       this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
       this.pmEntries.forEach(pmEntry => {
           this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []));
-          this.projectCommentService.getProjectComment(this.getFormattedDate(), pmEntry.projectName)
+          this.projectCommentService.get(this.getFormattedDate(), pmEntry.projectName)
             .subscribe(projectComment => {
               pmEntry.projectComment = projectComment;
             });
@@ -255,7 +255,7 @@ export class ProjectManagementComponent implements OnInit {
       if (pmEntry.projectComment.comment !== comment) {
         let oldComment = pmEntry.projectComment.comment;
         pmEntry.projectComment.comment = comment;
-        this.projectCommentService.updateProjectComment(pmEntry.projectComment)
+        this.projectCommentService.update(pmEntry.projectComment)
           .subscribe((success) => {
             if (!success) {
               this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.updateProjectCommentError'));
@@ -266,7 +266,7 @@ export class ProjectManagementComponent implements OnInit {
     } else {
       // Avoid reloading of page when the return button was clicked
       if (comment) {
-        this.projectCommentService.createNewProjectComment(comment, this.getFormattedDate(), pmEntry.projectName)
+        this.projectCommentService.create(comment, this.getFormattedDate(), pmEntry.projectName)
           .subscribe(projectComment => {
             pmEntry.projectComment = projectComment;
           });

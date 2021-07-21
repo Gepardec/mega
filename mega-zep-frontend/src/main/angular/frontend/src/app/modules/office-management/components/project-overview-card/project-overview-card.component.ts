@@ -93,7 +93,7 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
     this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
       this.pmEntries.forEach(pmEntry => {
-        this.projectCommentService.getProjectComment(this.getFormattedDate(), pmEntry.projectName)
+        this.projectCommentService.get(this.getFormattedDate(), pmEntry.projectName)
           .subscribe(projectComment => {
             pmEntry.projectComment = projectComment;
           });
@@ -124,7 +124,7 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
       if (pmEntry.projectComment.comment !== comment) {
         let oldComment = pmEntry.projectComment.comment;
         pmEntry.projectComment.comment = comment;
-        this.projectCommentService.updateProjectComment(pmEntry.projectComment)
+        this.projectCommentService.update(pmEntry.projectComment)
           .subscribe((success) => {
             if (!success) {
               this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.updateProjectCommentError'));
@@ -135,7 +135,7 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
     } else {
       // Avoid reloading of page when the return button was clicked
       if (comment) {
-        this.projectCommentService.createNewProjectComment(comment, this.getFormattedDate(), pmEntry.projectName)
+        this.projectCommentService.create(comment, this.getFormattedDate(), pmEntry.projectName)
           .subscribe(projectComment => {
             pmEntry.projectComment = projectComment;
           });

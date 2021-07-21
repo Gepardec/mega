@@ -30,21 +30,21 @@ public class ProjectCommentServiceImpl implements ProjectCommentService {
     ProjectCommentMapper projectCommentMapper;
 
     @Override
-    public List<ProjectCommentDto> findProjectCommentsForProjectNameInRange(String projectName, LocalDate from, LocalDate to) {
+    public List<ProjectCommentDto> findForProjectNameInRange(String projectName, LocalDate from, LocalDate to) {
         List<ProjectComment> entities = projectCommentRepository.findByProjectNameAndEntryDateBetween(projectName, from, to);
         return entities.stream().map(e -> projectCommentMapper.mapToDto(e)).collect(Collectors.toList());
     }
 
     @Override
-    public ProjectCommentDto findProjectCommentForProjectNameWithCurrentYearMonth(String projectName, String currentYearMonth) {
+    public ProjectCommentDto findForProjectNameWithCurrentYearMonth(String projectName, String currentYearMonth) {
         LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(currentYearMonth));
         LocalDate to = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(currentYearMonth));
-        List<ProjectCommentDto> projectComments = this.findProjectCommentsForProjectNameInRange(projectName, from, to);
+        List<ProjectCommentDto> projectComments = this.findForProjectNameInRange(projectName, from, to);
         return projectComments.isEmpty() ? null : projectComments.get(0);
     }
 
     @Override
-    public ProjectCommentDto createProjectComment(ProjectCommentDto dto) {
+    public ProjectCommentDto create(ProjectCommentDto dto) {
         Objects.requireNonNull(dto);
 
         Project project = projectRepository.findByName(dto.getProjectName());
@@ -62,7 +62,7 @@ public class ProjectCommentServiceImpl implements ProjectCommentService {
 
 
     @Override
-    public boolean updateProjectComment(Long id, String comment) {
+    public boolean update(Long id, String comment) {
         ProjectComment entity = projectCommentRepository.findById(id);
         if (entity == null) {
             throw new EntityNotFoundException(String.format("No entity found for id = %d", id));

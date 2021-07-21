@@ -1,7 +1,7 @@
 package com.gepardec.mega.service.impl.init;
 
-import com.gepardec.mega.db.entity.project.ProjectEntry;
 import com.gepardec.mega.db.entity.common.State;
+import com.gepardec.mega.db.entity.project.ProjectEntry;
 import com.gepardec.mega.db.entity.project.ProjectStep;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.ProjectFilter;
@@ -19,11 +19,7 @@ import javax.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Dependent
@@ -144,6 +140,7 @@ public class ProjectSyncServiceImpl implements ProjectSyncService {
                         .orElseThrow(() -> new IllegalStateException("Project without project lead found."))
         );
         projectEntry.setDate(date);
+        // TODO: Make sure that creation- and updateDate and state are not set in code, but only in the entity class
         projectEntry.setCreationDate(LocalDateTime.now());
         projectEntry.setUpdatedDate(LocalDateTime.now());
         projectEntry.setState(State.OPEN);

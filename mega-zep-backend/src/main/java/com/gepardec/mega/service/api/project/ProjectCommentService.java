@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface ProjectCommentService {
 
-    List<ProjectCommentDto> findProjectCommentsForProjectNameInRange(String projectName, LocalDate from, LocalDate to);
+    List<ProjectCommentDto> findForProjectNameInRange(String projectName, LocalDate from, LocalDate to);
 
-    ProjectCommentDto findProjectCommentForProjectNameWithCurrentYearMonth(String projectName, String currentYearMonth);
+    ProjectCommentDto findForProjectNameWithCurrentYearMonth(String projectName, String currentYearMonth);
 
-    ProjectCommentDto createProjectComment(ProjectCommentDto projectCommentDto);
+    ProjectCommentDto create(ProjectCommentDto projectCommentDto);
 
-    boolean updateProjectComment(Long id, String comment);
+    boolean update(Long id, String comment);
 }
