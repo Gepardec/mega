@@ -2,29 +2,38 @@
   <mat-card-title>
     {{'monthly-report.title.geninfo' | translate}}
   </mat-card-title>
-
-  <mat-card-content style="" >
-    <mat-table [dataSource]="dataSource" align="center">
-      <ng-container matColumnDef="identifier">
-        <mat-header-cell *matHeaderCellDef></mat-header-cell>
-        <mat-cell *matCellDef="let data">
-          <span class="mobile-label">{{'monthly-report.table.journey.day' | translate}}</span>
-          <span>{{data.id}}</span>
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="values">
-        <mat-header-cell *matHeaderCellDef></mat-header-cell>
-        <mat-cell *matCellDef="let data">
-          <span class="mobile-label">{{'monthly-report.table.journey.warning' | translate}}</span>
-          {{data.value}}
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
-  </mat-card-content>
+  <table>
+    <tr>
+      <td>{{dataidentifiers[0]}}</td>
+      <td class="infovalue">{{monthlyReport.totalWorkingTime}}</td>
+      <td>Stunden</td>
+    </tr>
+    <tr>
+      <td>{{dataidentifiers[1]}}</td>
+      <td class="infovalue">{{monthlyReport.billableTime}}</td>
+      <td>Stunden</td>
+    </tr>
+    <tr>
+      <td>{{dataidentifiers[2]}}</td>
+      <td class="infovalue">{{billablePercentage}}</td>
+      <td>%</td>
+    </tr>
+    <tr>
+      <td>{{dataidentifiers[3]}}</td>
+      <td class="infovalue">{{monthlyReport.vacationDays}}</td>
+      <td>Tage</td>
+    </tr>
+    <tr>
+      <td>{{dataidentifiers[4]}}</td>
+      <td class="infovalue">{{monthlyReport.compensatoryDays}}</td>
+      <td>Tage</td>
+    </tr>
+    <tr>
+      <td>{{dataidentifiers[5]}}</td>
+      <td class="infovalue">{{monthlyReport.homeofficeDays}}</td>
+      <td>Tage</td>
+    </tr>
+  </table>
 
 </mat-card>
 

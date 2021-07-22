@@ -1,14 +1,15 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MonthlyReport} from '../../models/MonthlyReport';
-import {genInfoData} from "./genInfoData";
 
 const identifiers: string[] = [
-  'Arbeitszeit',
-  'fakturierbar',
+  'Arbeitszeit gesamt',
+  'fakturierbare Stunden',
+  'Verrechenbarkeit',
   'Urlaub',
   'Zeitausgleich',
   'Homeoffice'
 ];
+
 
 
 @Component({
@@ -23,29 +24,29 @@ export class GeneralInfoComponent implements OnInit {
   @Input() monthlyReport: MonthlyReport;
   @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>();
 
-  dataSource: Array<genInfoData>;
-  displayedColumns = ['identifier', 'values'];
+  dataidentifiers: string[];
+  billablePercentage: number;
 
   constructor() {
+    this.dataidentifiers = identifiers;
   }
 
-  ngOnInit():
-    void {
-    this.dataSource = this.createDatasource(this.monthlyReport);
+  ngOnInit(): void {
+      this.billablePercentage = this.calculateBillingPercentage(this.monthlyReport.totalWorkingTime, this.monthlyReport.billableTime);
   }
 
+  calculateBillingPercentage(totalWorkingTime: string, billableTime: string): number {
 
-  extractData(monthlyReport: MonthlyReport): string[] {
-    return [monthlyReport.totalWorkingTime, monthlyReport.billableTime, monthlyReport.vacationDays.toString(), monthlyReport.compensatoryDays.toString(), monthlyReport.homeofficeDays.toString()];
-  }
+    let confTotalWorkingTime = totalWorkingTime.split(":");
+    let confTotalWorkingTimeMinutes: number = (Number(confTotalWorkingTime[0]) * 60) + (Number(confTotalWorkingTime[1]));
 
-  createDatasource(monthlyReport: MonthlyReport): Array<genInfoData> {
-    let genInfoDataList: Array<genInfoData> = new Array<genInfoData>();
-    let monthlyReportData: string[] = this.extractData(monthlyReport);
-    for (let i = 0; i < monthlyReportData.length; i++) {
-      genInfoDataList.push(new genInfoData(identifiers[i], monthlyReportData[i]));
+    let confBillableTime = billableTime.split(":");
+    let confBillableTimeMinutes: number = (Number(confBillableTime[0]) * 60) + Number(confBillableTime[1]);
+
+    if (confTotalWorkingTimeMinutes === 0 || confBillableTimeMinutes === 0) {
+      return 0;
     }
-    return genInfoDataList;
-  }
 
+    return (confBillableTimeMinutes / confTotalWorkingTimeMinutes) * 100;
+  }
 }
