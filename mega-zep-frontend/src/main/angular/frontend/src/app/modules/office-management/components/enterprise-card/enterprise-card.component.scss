@@ -1,7 +1,6 @@
 .controls-container {
   min-height: 100px !important;
   flex-wrap: wrap;
-  //height: 500px!important;
 }
 
 .controls-container > div {
@@ -15,6 +14,5 @@
 }
 
 .controls-container > div > app-project-state-select > mat-select {
-  //font-size: 20px;
   min-height: 100px !important;
 }
