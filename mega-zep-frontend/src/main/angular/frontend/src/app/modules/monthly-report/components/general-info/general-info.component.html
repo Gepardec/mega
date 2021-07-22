@@ -3,75 +3,28 @@
     {{'monthly-report.title.geninfo' | translate}}
   </mat-card-title>
 
-  <!--
-  <mat-card-content
-    *ngIf="monthlyReport.journeyWarnings.length === 0; else journeyContent"
-    fxLayout="column" fxLayoutAlign="center center">
-    <app-state-indicator [state]="State.DONE" size="large"></app-state-indicator>
-    <p>{{'monthly-report.ok' | translate}}</p>
+  <mat-card-content style="" >
+    <mat-table [dataSource]="dataSource" align="center">
+      <ng-container matColumnDef="identifier">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let data">
+          <span class="mobile-label">{{'monthly-report.table.journey.day' | translate}}</span>
+          <span>{{data.id}}</span>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="values">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let data">
+          <span class="mobile-label">{{'monthly-report.table.journey.warning' | translate}}</span>
+          {{data.value}}
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
   </mat-card-content>
-  -->
-
-
-
-
-<!--
-<table mat-table [dataSource]="monthlyReport" class="mat-elevation-z8">
-
-
-
-
-  <ng-container matColumnDef="position">
-    <th mat-header-cell *matHeaderCellDef> No. </th>
-    <td mat-cell *matCellDef="let element"> {{element.totalWorkingTime}} </td>
-  </ng-container>
-
-
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef> Name </th>
-    <td mat-cell *matCellDef="let element"> </td>
-  </ng-container>
-
-
-  <ng-container matColumnDef="weight">
-    <th mat-header-cell *matHeaderCellDef> Weight </th>
-    <td mat-cell *matCellDef="let element">  </td>
-  </ng-container>
-
-
-  <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef> Symbol </th>
-    <td mat-cell *matCellDef="let element">  </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-
-  -->
-
-  <mat-table [dataSource]="monthlyReportDataSource">
-    <ng-container matColumnDef="identifier">
-      <mat-header-cell *matHeaderCellDef>
-        {{'monthly-report.table.journey.day' | translate}}
-      </mat-header-cell>
-      <mat-cell *matCellDef="let data">
-        <span class="mobile-label">{{'monthly-report.table.journey.day' | translate}}</span>
-        <span>This is a test {{data.vacationDays}}</span>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="values">
-      <mat-header-cell *matHeaderCellDef>
-        {{'monthly-report.table.journey.warning' | translate}}
-      </mat-header-cell>
-      <mat-cell *matCellDef="let data">
-        <span class="mobile-label">{{'monthly-report.table.journey.warning' | translate}}</span>
-      </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
 
 </mat-card>
+
