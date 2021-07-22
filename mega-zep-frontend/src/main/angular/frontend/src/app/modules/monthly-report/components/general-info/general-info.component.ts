@@ -10,14 +10,11 @@ const identifiers: string[] = [
   'Homeoffice'
 ];
 
-
-
 @Component({
   selector: 'app-general-info',
   templateUrl: './general-info.component.html',
   styleUrls: ['./general-info.component.scss']
 })
-
 
 export class GeneralInfoComponent implements OnInit {
 
@@ -36,17 +33,22 @@ export class GeneralInfoComponent implements OnInit {
   }
 
   calculateBillingPercentage(totalWorkingTime: string, billableTime: string): number {
+    let spTotalWorkingTime: string[] = totalWorkingTime.split(":");
+    let spBillableTime: string[] = billableTime.split(":");
 
-    let confTotalWorkingTime = totalWorkingTime.split(":");
-    let confTotalWorkingTimeMinutes: number = (Number(confTotalWorkingTime[0]) * 60) + (Number(confTotalWorkingTime[1]));
-
-    let confBillableTime = billableTime.split(":");
-    let confBillableTimeMinutes: number = (Number(confBillableTime[0]) * 60) + Number(confBillableTime[1]);
-
-    if (confTotalWorkingTimeMinutes === 0 || confBillableTimeMinutes === 0) {
+    // if split is not possible return 0
+    if(spTotalWorkingTime.length < 1 || spBillableTime.length < 1) {
       return 0;
     }
 
-    return (confBillableTimeMinutes / confTotalWorkingTimeMinutes) * 100;
+    let convTotalWorkingTimeMinutes: number = (Number(spTotalWorkingTime[0]) * 60) + (Number(spTotalWorkingTime[1]));
+    let convBillableTimeMinutes: number = (Number(spBillableTime[0]) * 60) + Number(spBillableTime[1]);
+
+    // prevent division by zero
+    if (convTotalWorkingTimeMinutes === 0 || convBillableTimeMinutes === 0) {
+      return 0;
+    }
+
+    return (convBillableTimeMinutes / convTotalWorkingTimeMinutes) * 100;
   }
 }
