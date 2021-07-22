@@ -5,33 +5,38 @@
   <table>
     <tr>
       <td>{{dataidentifiers[0]}}</td>
-      <td class="infovalue">{{monthlyReport.totalWorkingTime}}</td>
-      <td>Stunden</td>
+      <td class="infovalue">{{convTotalWorkingTimeHours | number : '2.2'}}</td>
+      <td *ngIf="convTotalWorkingTimeHours === 1">Stunde</td>
+      <td *ngIf="convTotalWorkingTimeHours > 1 || convTotalWorkingTimeHours === 0">Stunden</td>
     </tr>
     <tr>
       <td>{{dataidentifiers[1]}}</td>
-      <td class="infovalue">{{monthlyReport.billableTime}}</td>
-      <td>Stunden</td>
+      <td class="infovalue">{{convBillableTimeHours | number : '2.2'}}</td>
+      <td *ngIf="convBillableTimeHours === 1">Stunde</td>
+      <td *ngIf="convBillableTimeHours > 1 || convBillableTimeHours === 0">Stunden</td>
     </tr>
     <tr>
       <td>{{dataidentifiers[2]}}</td>
-      <td class="infovalue">{{billablePercentage}}</td>
+      <td class="infovalue">{{billablePercentage | number : '2.2'}}</td>
       <td>%</td>
     </tr>
     <tr>
       <td>{{dataidentifiers[3]}}</td>
-      <td class="infovalue">{{monthlyReport.vacationDays}}</td>
-      <td>Tage</td>
+      <td class="infovalue">4</td>
+      <td *ngIf="monthlyReport.vacationDays === 1">Tag</td>
+      <td *ngIf="monthlyReport.vacationDays > 1 || monthlyReport.vacationDays === 0">Tage</td>
     </tr>
     <tr>
       <td>{{dataidentifiers[4]}}</td>
       <td class="infovalue">{{monthlyReport.compensatoryDays}}</td>
-      <td>Tage</td>
+      <td *ngIf="monthlyReport.compensatoryDays === 1">Tag</td>
+      <td *ngIf="monthlyReport.compensatoryDays > 1 || monthlyReport.compensatoryDays === 0">Tage</td>
     </tr>
     <tr>
       <td>{{dataidentifiers[5]}}</td>
-      <td class="infovalue">{{monthlyReport.homeofficeDays}}</td>
-      <td>Tage</td>
+      <td class="infovalue">6</td>
+      <td *ngIf="monthlyReport.homeofficeDays === 1">Tag</td>
+      <td *ngIf="monthlyReport.homeofficeDays > 1 || monthlyReport.homeofficeDays === 0">Tage</td>
     </tr>
   </table>
 
