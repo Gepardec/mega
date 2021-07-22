@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1626427313392-8
+      author: mega (generated)
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: sequence_project_comment_id
+            startValue: 1
+  - changeSet:
+      id: 1626427313392-9
+      author: mega (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: project_commentPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: comment
+                  type: VARCHAR(500)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: creation_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: entry_date
+                  type: date
+              - column:
+                  constraints:
+                    nullable: false
+                  name: update_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: project_id
+                  type: BIGINT
+            tableName: project_comment
+  - changeSet:
+      id: 1626427313392-10
+      author: mega (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: project_id
+            baseTableName: project_comment
+            constraintName: FKhy2fe6ijy5r12lam8wvq4cfn4
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: project
+            validate: true

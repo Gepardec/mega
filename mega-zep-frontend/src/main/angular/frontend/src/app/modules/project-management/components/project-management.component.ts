@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {ProjectManagementEntry} from '../models/ProjectManagementEntry';
 import {MatDialog} from '@angular/material/dialog';
 import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
@@ -22,9 +22,10 @@ import {ProjectState} from '../../shared/models/ProjectState';
 import {MatSelectChange} from '@angular/material/select';
 import {ProjectEntriesService} from '../../shared/services/projectentries/project-entries.service';
 import {MatCheckboxChange} from '@angular/material/checkbox';
-import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
 import {TranslateService} from '@ngx-translate/core';
 import {ProjectStateSelectComponent} from '../../shared/components/project-state-select/project-state-select.component';
+import {ProjectCommentService} from '../../shared/services/project-comment/project-comment.service';
+import {SnackbarService} from '../../shared/services/snackbar/snackbar.service';
 
 const moment = _moment;
 
@@ -61,8 +62,9 @@ export class ProjectManagementComponent implements OnInit {
               private commentService: CommentService,
               private configService: ConfigService,
               private projectEntryService: ProjectEntriesService,
-              private _snackBar: MatSnackBar,
-              private translate: TranslateService) {
+              private snackbarService: SnackbarService,
+              private translate: TranslateService,
+              private projectCommentService: ProjectCommentService) {
   }
 
   ngOnInit(): void {
@@ -138,6 +140,27 @@ export class ProjectManagementComponent implements OnInit {
       .subscribe(() => row.projectCheckState = State.DONE);
   }
 
+  private getPmEntries() {
+    this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
+      this.pmEntries = pmEntries;
+      this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
+      this.pmEntries.forEach(pmEntry => {
+          this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []));
+          this.projectCommentService.get(this.getFormattedDate(), pmEntry.projectName)
+            .subscribe(projectComment => {
+              pmEntry.projectComment = projectComment;
+            });
+        }
+      );
+    });
+  }
+
+  private findEntriesForProject(projectName: string) {
+    return this.pmEntries.filter(entry => {
+      return entry.projectName === projectName;
+    })[0].entries;
+  }
+
   getCurrentReleaseDate(): Date {
     if (this.pmEntries) {
       const entries = [];
@@ -169,7 +192,7 @@ export class ProjectManagementComponent implements OnInit {
           pmEntry.controlProjectState = newValue;
           pmEntry.presetControlProjectState = preset;
         } else {
-          this.showErrorSnackbar();
+          this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.updateStatusError'));
           controlProjectStateSelect.value = pmEntry.controlProjectState;
         }
       });
@@ -185,7 +208,7 @@ export class ProjectManagementComponent implements OnInit {
           pmEntry.controlBillingState = newValue;
           pmEntry.presetControlBillingState = preset;
         } else {
-          this.showErrorSnackbar();
+          this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.updateStatusError'));
           controlBillingStateSelect.value = pmEntry.controlBillingState;
         }
       });
@@ -195,7 +218,7 @@ export class ProjectManagementComponent implements OnInit {
     this.projectEntryService.updateProjectEntry(pmEntry.controlProjectState, pmEntry.presetControlProjectState, pmEntry.projectName, 'CONTROL_PROJECT', this.getFormattedDate())
       .subscribe(success => {
         if (!success) {
-          this.showErrorSnackbar();
+          this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.updateStatusError'));
           pmEntry.presetControlProjectState = !$event.checked;
         }
       })
@@ -205,7 +228,7 @@ export class ProjectManagementComponent implements OnInit {
     this.projectEntryService.updateProjectEntry(pmEntry.controlBillingState, pmEntry.presetControlBillingState, pmEntry.projectName, 'CONTROL_BILLING', this.getFormattedDate())
       .subscribe(success => {
         if (!success) {
-          this.showErrorSnackbar();
+          this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.updateStatusError'));
           pmEntry.presetControlBillingState = !$event.checked;
         }
       })
@@ -223,38 +246,28 @@ export class ProjectManagementComponent implements OnInit {
   onCommentChange(pmEntry: ProjectManagementEntry, comment: string) {
     this.showCommentEditor = false;
     this.forProjectName = null;
-    pmEntry.comment = comment;
-  }
 
-  private getPmEntries() {
-    this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
-      this.pmEntries = pmEntries;
-      this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
-      this.pmEntries.forEach(pmEntry =>
-        this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []))
-      );
-    });
-    console.log(this.pmEntries);
-  }
-
-  private findEntriesForProject(projectName: string) {
-    return this.pmEntries.filter(entry => {
-      return entry.projectName === projectName;
-    })[0].entries;
-  }
-
-  private getFormattedDate() {
-    return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
-  }
-
-  private showErrorSnackbar() {
-    this._snackBar.open(
-      this.translate.instant('snackbar.message'),
-      this.translate.instant('snackbar.confirm'),
-      {
-        horizontalPosition: <MatSnackBarHorizontalPosition>configuration.snackbar.horizontalPosition,
-        verticalPosition: <MatSnackBarVerticalPosition>configuration.snackbar.verticalPosition,
-        duration: configuration.snackbar.duration
-      });
+    // Avoid reloading of page when the return button was clicked
+    if (pmEntry.projectComment) {
+      if (pmEntry.projectComment.comment !== comment) {
+        let oldComment = pmEntry.projectComment.comment;
+        pmEntry.projectComment.comment = comment;
+        this.projectCommentService.update(pmEntry.projectComment)
+          .subscribe((success) => {
+            if (!success) {
+              this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.updateProjectCommentError'));
+              pmEntry.projectComment.comment = oldComment;
+            }
+          });
+      }
+    } else {
+      // Avoid reloading of page when the return button was clicked
+      if (comment) {
+        this.projectCommentService.create(comment, this.getFormattedDate(), pmEntry.projectName)
+          .subscribe(projectComment => {
+            pmEntry.projectComment = projectComment;
+          });
+      }
+    }
   }
 }
