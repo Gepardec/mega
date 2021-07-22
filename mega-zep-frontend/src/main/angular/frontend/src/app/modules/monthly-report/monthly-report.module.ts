@@ -10,6 +10,7 @@ import { TimeCheckComponent } from './components/time-check/time-check.component
 import { JourneyCheckComponent } from './components/journey-check/journey-check.component';
 import { EmployeeCheckComponent } from './components/employee-check/employee-check.component';
 import { PmProgressComponent } from '../shared/components/pm-progress/pm-progress.component';
+import { GeneralInfoComponent } from './components/general-info/general-info.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { PmProgressComponent } from '../shared/components/pm-progress/pm-progres
     TimeCheckComponent,
     JourneyCheckComponent,
     EmployeeCheckComponent,
-    PmProgressComponent
+    PmProgressComponent,
+    GeneralInfoComponent
   ],
   imports: [
     CommonModule,
