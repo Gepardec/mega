@@ -1,4 +1,4 @@
-import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProjectManagementEntry} from '../models/ProjectManagementEntry';
 import {MatDialog} from '@angular/material/dialog';
 import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
@@ -45,7 +45,6 @@ export class ProjectManagementComponent implements OnInit {
     'customerCheckState',
     'doneCommentsIndicator',
     'projectHours'
-    // ,'releaseDate'
   ];
 
   officeManagementUrl: string;
@@ -180,6 +179,10 @@ export class ProjectManagementComponent implements OnInit {
     }
 
     return new Date();
+  }
+
+  private getFormattedDate() {
+    return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
   }
 
   onChangeControlProjectState($event: MatSelectChange, pmEntry: ProjectManagementEntry, controlProjectStateSelect: ProjectStateSelectComponent) {
