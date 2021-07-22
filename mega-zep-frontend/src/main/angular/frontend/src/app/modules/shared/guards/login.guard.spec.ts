@@ -1,14 +1,14 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { LoginGuard } from './login.guard';
-import { UserService } from '../services/user/user.service';
-import { BehaviorSubject } from 'rxjs';
-import { User } from '../models/User';
-import { RouterTestingModule } from '@angular/router/testing';
-import { routes } from '../../../app-routing.module';
-import { MonthlyReportModule } from '../../monthly-report/monthly-report.module';
-import { OfficeManagementModule } from '../../office-management/office-management.module';
-import { ProjectManagementModule } from '../../project-management/project-management.module';
+import {LoginGuard} from './login.guard';
+import {UserService} from '../services/user/user.service';
+import {BehaviorSubject} from 'rxjs';
+import {User} from '../models/User';
+import {RouterTestingModule} from '@angular/router/testing';
+import {routes} from '../../../app-routing.module';
+import {MonthlyReportModule} from '../../monthly-report/monthly-report.module';
+import {OfficeManagementModule} from '../../office-management/office-management.module';
+import {ProjectManagementModule} from '../../project-management/project-management.module';
 
 describe('LoginGuard', () => {
   let guard: LoginGuard;

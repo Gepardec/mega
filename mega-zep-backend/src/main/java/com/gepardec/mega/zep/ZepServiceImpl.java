@@ -12,7 +12,9 @@ import de.provantis.zep.MitarbeiterType;
 import de.provantis.zep.ProjektListeType;
 import de.provantis.zep.ProjektMitarbeiterListeType;
 import de.provantis.zep.ProjektMitarbeiterType;
+import de.provantis.zep.ProjektNrListeType;
 import de.provantis.zep.ProjektType;
+import de.provantis.zep.ProjektzeitType;
 import de.provantis.zep.ReadMitarbeiterRequestType;
 import de.provantis.zep.ReadMitarbeiterResponseType;
 import de.provantis.zep.ReadMitarbeiterSearchCriteriaType;
@@ -37,6 +39,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -131,6 +134,31 @@ public class ZepServiceImpl implements ZepService {
     }
 
     @Override
+    public List<ProjektzeitType> getProjectTimesForEmployeePerProject(String projectID, LocalDate curDate) {
+        final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
+        projektzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
+
+        final ReadProjektzeitenSearchCriteriaType searchCriteria;
+        try {
+            searchCriteria = createProjectTimesForEmployeePerProjectSearchCriteria(projectID, curDate);
+        } catch (DateTimeParseException e) {
+            logger.error("invalid release date {0}", e);
+            return null;
+        }
+        projektzeitenRequest.setReadProjektzeitenSearchCriteria(searchCriteria);
+
+        ReadProjektzeitenResponseType readProjektzeitenResponseType = zepSoapPortType.readProjektzeiten(projektzeitenRequest);
+
+        if(readProjektzeitenResponseType != null
+                && readProjektzeitenResponseType.getProjektzeitListe() != null
+                && readProjektzeitenResponseType.getProjektzeitListe().getProjektzeiten() != null) {
+            return readProjektzeitenResponseType.getProjektzeitListe().getProjektzeiten();
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
     public List<Project> getProjectsForMonthYear(final LocalDate monthYear) {
         final ReadProjekteResponseType readProjekteResponseType = getProjectsInternal(monthYear);
 
@@ -163,6 +191,19 @@ public class ZepServiceImpl implements ZepService {
         UserIdListeType userIdListType = new UserIdListeType();
         userIdListType.getUserId().add(employee.userId());
         searchCriteria.setUserIdListe(userIdListType);
+        return searchCriteria;
+    }
+
+    private ReadProjektzeitenSearchCriteriaType createProjectTimesForEmployeePerProjectSearchCriteria(String projectID, LocalDate curDate) {
+        ReadProjektzeitenSearchCriteriaType searchCriteria = new ReadProjektzeitenSearchCriteriaType();
+
+        searchCriteria.setVon(DateTimeFormatter.ISO_LOCAL_DATE.format(curDate.with(TemporalAdjusters.firstDayOfMonth())));
+        searchCriteria.setBis(DateTimeFormatter.ISO_LOCAL_DATE.format(curDate.with(TemporalAdjusters.lastDayOfMonth())));
+
+        ProjektNrListeType projectListType = new ProjektNrListeType();
+        projectListType.getProjektNr().add(projectID);
+        searchCriteria.setProjektNrListe(projectListType);
+
         return searchCriteria;
     }
 

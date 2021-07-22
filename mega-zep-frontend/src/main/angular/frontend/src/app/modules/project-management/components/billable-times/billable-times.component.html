@@ -1,0 +1,23 @@
+<table>
+  <tr>
+    <td>
+      <mat-icon class="billable"
+                matTooltip="Fakturierbar"
+                matTooltipShowDelay="500">monetization_on</mat-icon>
+    </td>
+    <td class="times-col" *ngIf="billableTimes !== '00:00'">{{billableTimes}}</td>
+    <td class="times-col" *ngIf="billableTimes === '00:00'"><mat-icon>horizontal_rule</mat-icon></td>
+  </tr>
+  <tr>
+    <td>
+      <img [src]="assetsPath + monetizationOff"
+           alt="Nicht fakturierbar"
+           height="24px"
+           width="24px"
+           matTooltip="Nicht fakturierbar"
+           matTooltipShowDelay="500"/>
+    </td>
+    <td class="times-col" *ngIf="nonBillableTimes !== '00:00'">{{nonBillableTimes}}</td>
+    <td class="times-col" *ngIf="nonBillableTimes === '00:00'"><mat-icon>horizontal_rule</mat-icon></td>
+  </tr>
+</table>

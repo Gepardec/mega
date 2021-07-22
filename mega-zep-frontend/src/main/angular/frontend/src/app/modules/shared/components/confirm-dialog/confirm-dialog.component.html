@@ -7,6 +7,6 @@
 </div>
 
 <div mat-dialog-actions>
-  <button mat-button (click)="onDismiss()">{{'confirm-dialog.dismiss' | translate}}</button>
-  <button mat-raised-button color="primary" (click)="onConfirm()">{{'confirm-dialog.confirm' | translate}}</button>
+  <button (click)="onDismiss()" mat-button>{{'confirm-dialog.dismiss' | translate}}</button>
+  <button (click)="onConfirm()" color="primary" mat-raised-button>{{'confirm-dialog.confirm' | translate}}</button>
 </div>

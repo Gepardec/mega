@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Overlay, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal } from '@angular/cdk/portal';
-import { MatSpinner } from '@angular/material/progress-spinner';
+import {Injectable} from '@angular/core';
+import {Overlay, OverlayRef} from '@angular/cdk/overlay';
+import {ComponentPortal} from '@angular/cdk/portal';
+import {MatSpinner} from '@angular/material/progress-spinner';
 
 @Injectable({
   providedIn: 'root'

@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { State } from '../../models/State';
+import {Component, Input, OnInit} from '@angular/core';
+import {State} from '../../models/State';
 import {ProjectState} from '../../models/ProjectState';
 
 @Component({

@@ -64,7 +64,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         boolean noProjectEntriesExist = projectEntity.getProjectEntries().stream().noneMatch(pe -> pe.getDate().equals(currentMonth));
 
-        if(noProjectEntriesExist) {
+        if (noProjectEntriesExist) {
             project.getProjectEntries().forEach(projectEntry -> {
 
                 User owner = userRepository.findById(projectEntry.getOwner().getId());

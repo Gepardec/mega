@@ -44,7 +44,7 @@ export class ProjectManagementComponent implements OnInit {
     'internalCheckState',
     'customerCheckState',
     'doneCommentsIndicator',
-    'releaseDate'
+    'projectHours'
   ];
 
   officeManagementUrl: string;

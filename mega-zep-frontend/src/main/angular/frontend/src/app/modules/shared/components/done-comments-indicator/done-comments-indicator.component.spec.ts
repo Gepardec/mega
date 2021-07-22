@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { DoneCommentsIndicatorComponent } from './done-comments-indicator.component';
-import { CommentService } from '../../services/comment/comment.service';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {DoneCommentsIndicatorComponent} from './done-comments-indicator.component';
+import {CommentService} from '../../services/comment/comment.service';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('DoneCommentsIndicatorComponent', () => {

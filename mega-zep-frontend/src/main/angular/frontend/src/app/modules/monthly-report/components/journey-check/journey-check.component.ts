@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MonthlyReport } from '../../models/MonthlyReport';
-import { State } from '../../../shared/models/State';
+import {Component, Input, OnInit} from '@angular/core';
+import {MonthlyReport} from '../../models/MonthlyReport';
+import {State} from '../../../shared/models/State';
 
 @Component({
   selector: 'app-journey-check',

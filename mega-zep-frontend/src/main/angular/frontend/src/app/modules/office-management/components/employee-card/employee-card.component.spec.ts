@@ -1,12 +1,12 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { EmployeeCardComponent } from './employee-card.component';
-import { TranslateModule } from '@ngx-translate/core';
-import { AngularMaterialModule } from '../../../material/material-module';
-import { SharedModule } from '../../../shared/shared.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import {EmployeeCardComponent} from './employee-card.component';
+import {TranslateModule} from '@ngx-translate/core';
+import {AngularMaterialModule} from '../../../material/material-module';
+import {SharedModule} from '../../../shared/shared.module';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('OfficeManagementComponent', () => {
   let component: EmployeeCardComponent;

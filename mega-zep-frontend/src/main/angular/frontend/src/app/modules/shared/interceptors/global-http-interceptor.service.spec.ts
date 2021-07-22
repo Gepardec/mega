@@ -1,10 +1,10 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { GlobalHttpInterceptorService } from './global-http-interceptor.service';
-import { ErrorHandlerService } from '../services/error/error-handler.service';
-import { ConfigService } from '../services/config/config.service';
-import { UserService } from '../services/user/user.service';
-import { LoaderService } from '../services/loader/loader.service';
+import {GlobalHttpInterceptorService} from './global-http-interceptor.service';
+import {ErrorHandlerService} from '../services/error/error-handler.service';
+import {ConfigService} from '../services/config/config.service';
+import {UserService} from '../services/user/user.service';
+import {LoaderService} from '../services/loader/loader.service';
 
 describe('GlobalHttpInterceptorService', () => {
 

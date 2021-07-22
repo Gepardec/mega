@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { RolesService } from './roles.service';
-import { RouterTestingModule } from '@angular/router/testing';
-import { UserService } from '../user/user.service';
-import { BehaviorSubject } from 'rxjs';
-import { User } from '../../models/User';
-import { configuration } from '../../constants/configuration';
-import { Role } from '../../models/Role';
-import { routes } from '../../../../app-routing.module';
-import { MonthlyReportModule } from '../../../monthly-report/monthly-report.module';
-import { OfficeManagementModule } from '../../../office-management/office-management.module';
-import { ProjectManagementModule } from '../../../project-management/project-management.module';
+import {RolesService} from './roles.service';
+import {RouterTestingModule} from '@angular/router/testing';
+import {UserService} from '../user/user.service';
+import {BehaviorSubject} from 'rxjs';
+import {User} from '../../models/User';
+import {configuration} from '../../constants/configuration';
+import {Role} from '../../models/Role';
+import {routes} from '../../../../app-routing.module';
+import {MonthlyReportModule} from '../../../monthly-report/monthly-report.module';
+import {OfficeManagementModule} from '../../../office-management/office-management.module';
+import {ProjectManagementModule} from '../../../project-management/project-management.module';
 
 describe('RolesService', () => {
   let userSubject: BehaviorSubject<User> = new BehaviorSubject<User>(undefined);

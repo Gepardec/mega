@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MonthlyReport } from '../../models/MonthlyReport';
-import { State } from '../../../shared/models/State';
+import {Component, Input, OnInit} from '@angular/core';
+import {MonthlyReport} from '../../models/MonthlyReport';
+import {State} from '../../../shared/models/State';
 import {TimeWarning} from "../../models/TimeWarning";
 
 @Component({
@@ -19,8 +19,8 @@ export class TimeCheckComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  displayWarningsTooltip(timeWarning: TimeWarning){
-    if(timeWarning.warnings == null || timeWarning.warnings.length == 0){
+  displayWarningsTooltip(timeWarning: TimeWarning) {
+    if (timeWarning.warnings == null || timeWarning.warnings.length == 0) {
       return null;
     } else {
       return timeWarning.warnings.join("<br>");

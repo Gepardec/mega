@@ -166,12 +166,13 @@
               </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="releaseDate">
+            <ng-container matColumnDef="projectHours">
               <mat-header-cell *matHeaderCellDef
-                               class="text-center">{{'project-management.table.releaseDate' | translate}}</mat-header-cell>
-              <mat-cell *matCellDef="let row" class="text-center">
-                <span class="mobile-label">{{'project-management.table.releaseDate' | translate}}</span>
-                {{row.employee.releaseDate | date:'dd.MM.yyyy'}}
+                               class="text-center">{{'project-management.table.projectHours' | translate}}</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <span class="mobile-label">{{'project-management.table.projectHours' | translate}}</span>
+                <app-billable-times [billableTimes]="row.billableTime"
+                                    [nonBillableTimes]="row.nonBillableTime"></app-billable-times>
               </mat-cell>
             </ng-container>
 

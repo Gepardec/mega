@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {ConfigService} from '../../shared/services/config/config.service';
 import {Employee} from '../../shared/models/Employee';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {ManagementEntry} from '../../shared/models/ManagementEntry';
 import * as _moment from 'moment';
 

@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {MonthlyReport} from '../models/MonthlyReport';
 import {Observable} from 'rxjs';
 import {ConfigService} from '../../shared/services/config/config.service';
-import {Employee} from "../../shared/models/Employee";
 
 @Injectable({
   providedIn: 'root'

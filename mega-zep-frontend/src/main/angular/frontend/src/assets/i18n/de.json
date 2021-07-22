@@ -115,7 +115,8 @@
       "internalCheckState": "Interne Zeiten",
       "customerCheckState": "Kundenzeiten",
       "comments": "Anmerkungen",
-      "releaseDate": "Freigabedatum"
+      "releaseDate": "Freigabedatum",
+      "projectHours": "Projektstunden"
     },
     "noPmEntriesFound": "Keine Projekteinträge gefunden",
     "projectTimeState": "Projektzeitenkontrolle",

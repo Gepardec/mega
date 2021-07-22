@@ -1,13 +1,13 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CommentsForEmployeeComponent } from './comments-for-employee.component';
-import { TranslateModule } from '@ngx-translate/core';
-import { AngularMaterialModule } from '../../../material/material-module';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {CommentsForEmployeeComponent} from './comments-for-employee.component';
+import {TranslateModule} from '@ngx-translate/core';
+import {AngularMaterialModule} from '../../../material/material-module';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {OAuthModule} from 'angular-oauth2-oidc';
-import { MatDialogRef} from '@angular/material/dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 
 describe('CommentsForEmployeeComponent', () => {
   let component: CommentsForEmployeeComponent;
@@ -24,7 +24,7 @@ describe('CommentsForEmployeeComponent', () => {
         OAuthModule.forRoot()
       ],
       providers: [
-        { provide: MatDialogRef, useValue: {} }
+        {provide: MatDialogRef, useValue: {}}
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { UserService } from '../../services/user/user.service';
+import {Component, OnInit} from '@angular/core';
+import {OAuthService} from 'angular-oauth2-oidc';
+import {UserService} from '../../services/user/user.service';
 
 @Component({
   selector: 'app-login',

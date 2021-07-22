@@ -11,7 +11,8 @@ import {ProjectState} from "../../models/ProjectState";
 export class ProjectEntriesService {
 
   constructor(private httpClient: HttpClient,
-              private config: ConfigService) { }
+              private config: ConfigService) {
+  }
 
   updateProjectEntry(state: ProjectState, preset: boolean, projectName: string, step: ProjectStepQualifier, currentMonthYear: string): Observable<boolean> {
     return this.httpClient.put<boolean>(

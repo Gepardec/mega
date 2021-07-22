@@ -8,7 +8,6 @@ import {StepentriesService} from '../../../shared/services/stepentries/stepentri
 import {Step} from '../../../shared/models/Step';
 import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import {PmProgressComponent} from '../../../shared/components/pm-progress/pm-progress.component';
-import {configuration} from "../../../shared/constants/configuration";
 
 @Component({
   selector: 'app-employee-check',
