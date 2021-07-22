@@ -10,6 +10,9 @@ export class BillableTimesComponent implements OnInit {
   @Input() billableTimes: string;
   @Input() nonBillableTimes: string;
 
+  readonly assetsPath = '../../../../../assets/';
+  readonly monetizationOff = 'monetization-off.png';
+
   constructor() {
   }
 
