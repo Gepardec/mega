@@ -61,21 +61,21 @@
               </tbody>
             </table>
             <div (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" class="comment-container">
-              <p *ngIf="pmEntry.comment && forProjectName !== pmEntry.projectName"
+              <p *ngIf="pmEntry.projectComment?.comment && forProjectName !== pmEntry.projectName"
                  (click)="onStartEditing(pmEntry.projectName)"
                  class="action-label"
-                 style="max-width: 800px">{{ pmEntry.comment }}</p>
+                 style="max-width: 800px">{{ pmEntry.projectComment?.comment }}</p>
               <button mat-icon-button
                       matTooltip="{{'global.addComment' | translate}}"
                       matTooltipShowDelay="1000"
-                      *ngIf="!pmEntry.comment && forProjectName !== pmEntry.projectName"
+                      *ngIf="!pmEntry.projectComment?.comment && forProjectName !== pmEntry.projectName"
                       (click)="onStartEditing(pmEntry.projectName)"
                       class="btn-addComment">
                 <mat-icon>add</mat-icon>
               </button>
               <app-inline-text-editor style="flex-grow: 1; max-width: 600px"
                                       *ngIf="showCommentEditor && forProjectName === pmEntry.projectName"
-                                      [comment]="pmEntry.comment"
+                                      [comment]="pmEntry.projectComment?.comment"
                                       (commentChange)="onCommentChange(pmEntry, $event)"></app-inline-text-editor>
             </div>
           </div>
