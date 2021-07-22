@@ -8,6 +8,11 @@ th, td {
   font-size: 17px;
 }
 
+td.times-col {
+  text-align: right;
+  min-width: 80px;
+}
+
 a {
   color: inherit;
   text-decoration: none;

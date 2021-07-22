@@ -5,9 +5,8 @@
                 matTooltip="Fakturierbar"
                 matTooltipShowDelay="500">monetization_on</mat-icon>
     </td>
-    <td *ngIf="billableTimes !== '00:00'"
-        style="text-align:right">{{billableTimes}}</td>
-    <td *ngIf="billableTimes === '00:00'"><mat-icon>horizontal_rule</mat-icon></td>
+    <td class="times-col" *ngIf="billableTimes !== '00:00'">{{billableTimes}}</td>
+    <td class="times-col" *ngIf="billableTimes === '00:00'"><mat-icon>horizontal_rule</mat-icon></td>
   </tr>
   <tr>
     <td>
@@ -18,8 +17,7 @@
            matTooltip="Nicht fakturierbar"
            matTooltipShowDelay="500"/>
     </td>
-    <td *ngIf="nonBillableTimes !== '00:00'"
-        style="text-align:right">{{nonBillableTimes}}</td>
-    <td *ngIf="nonBillableTimes === '00:00'"><mat-icon>horizontal_rule</mat-icon></td>
+    <td class="times-col" *ngIf="nonBillableTimes !== '00:00'">{{nonBillableTimes}}</td>
+    <td class="times-col" *ngIf="nonBillableTimes === '00:00'"><mat-icon>horizontal_rule</mat-icon></td>
   </tr>
 </table>
