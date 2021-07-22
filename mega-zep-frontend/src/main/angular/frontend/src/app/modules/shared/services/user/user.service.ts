@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { ConfigService } from '../config/config.service';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { User } from '../../models/User';
-import { configuration } from '../../constants/configuration';
-import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {ConfigService} from '../config/config.service';
+import {OAuthService} from 'angular-oauth2-oidc';
+import {User} from '../../models/User';
+import {configuration} from '../../constants/configuration';
+import {Router} from '@angular/router';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

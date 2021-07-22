@@ -50,4 +50,10 @@ public class ManagementEntry {
 
     @JsonProperty
     private final String entryDate;
+
+    @JsonProperty
+    private final String billableTime;
+
+    @JsonProperty
+    private final String nonBillableTime;
 }

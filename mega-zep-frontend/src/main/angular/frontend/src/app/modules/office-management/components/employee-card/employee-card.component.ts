@@ -207,6 +207,18 @@ export class EmployeeCardComponent implements OnInit, OnDestroy {
       });
   }
 
+  openEmployeeProgress(omEntry: ManagementEntry) {
+    this.employeeProgressRef = this._bottomSheet.open(PmProgressComponent, {
+      data: {employeeProgresses: omEntry.employeeProgresses},
+      autoFocus: false,
+      hasBackdrop: false
+    });
+  }
+
+  closeEmployeeProgress() {
+    this.employeeProgressRef.dismiss();
+  }
+
   private getFormattedDate() {
     return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
   }
@@ -235,17 +247,5 @@ export class EmployeeCardComponent implements OnInit, OnDestroy {
     months -= d1.getMonth();
     months += d2.getMonth();
     return Math.abs(months);
-  }
-
-  openEmployeeProgress(omEntry: ManagementEntry) {
-    this.employeeProgressRef = this._bottomSheet.open(PmProgressComponent, {
-      data: {employeeProgresses: omEntry.employeeProgresses},
-      autoFocus: false,
-      hasBackdrop: false
-    });
-  }
-
-  closeEmployeeProgress() {
-    this.employeeProgressRef.dismiss();
   }
 }

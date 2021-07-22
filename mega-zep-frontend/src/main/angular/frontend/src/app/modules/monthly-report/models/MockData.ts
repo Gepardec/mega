@@ -1,5 +1,5 @@
-import { MonthlyReport } from './MonthlyReport';
-import { State } from '../../shared/models/State';
+import {MonthlyReport} from './MonthlyReport';
+import {State} from '../../shared/models/State';
 
 export const monthlyReportMock: MonthlyReport = {
   employeeCheckState: State.DONE,

@@ -20,20 +20,28 @@ import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.projectentry.ProjectEntryService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import com.gepardec.mega.zep.ZepService;
+import de.provantis.zep.ProjektzeitType;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Secured
@@ -42,6 +50,8 @@ import java.util.stream.Collectors;
 public class ManagementResource {
 
     private static final String DATE_FORMAT_PATTERN = "YYYY-MM-dd";
+
+    private static final String BILLABLE_TIME_FORMAT = "HH:mm";
 
     @Inject
     EmployeeService employeeService;
@@ -57,6 +67,9 @@ public class ManagementResource {
 
     @Inject
     ProjectEntryService projectEntryService;
+
+    @Inject
+    ZepService zepService;
 
     @GET
     @Path("/officemanagemententries/{year}/{month}")
@@ -110,7 +123,7 @@ public class ManagementResource {
         LocalDate from = LocalDate.of(year, month, 1);
         LocalDate to = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
 
-        List<ProjectEmployees> projectEmployees = stepEntryService.getProjectEmployeesForPM(from, to, userContext.user().email());
+        List<ProjectEmployees> projectEmployees = stepEntryService.getProjectEmployeesForPM(from, to, Objects.requireNonNull(userContext.user()).email());
         List<ProjectManagementEntry> projectManagementEntries = new ArrayList<>();
 
         Map<String, Employee> employees = createEmployeeCache();
@@ -131,7 +144,6 @@ public class ManagementResource {
                 );
             }
         }
-
         return projectManagementEntries;
     }
 
@@ -159,7 +171,7 @@ public class ManagementResource {
             if (employees.containsKey(userId)) {
                 Employee empl = employees.get(userId);
                 List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployeeAndProject(
-                        empl, projectEmployees.projectId(), userContext.user().email(), from, to
+                        empl, projectEmployees.projectId(), Objects.requireNonNull(userContext.user()).email(), from, to
                 );
 
                 ManagementEntry entry = createManagementEntryForEmployee(empl, projectEmployees.projectId(), stepEntries, from, to, null);
@@ -179,6 +191,9 @@ public class ManagementResource {
 
     private ManagementEntry createManagementEntryForEmployee(Employee employee, String projectId, List<StepEntry> stepEntries, LocalDate from, LocalDate to, List<PmProgress> pmProgresses) {
         FinishedAndTotalComments finishedAndTotalComments = commentService.cntFinishedAndTotalCommentsForEmployee(employee, from, to);
+
+        List<ProjektzeitType> projektzeitTypes = zepService.getProjectTimesForEmployeePerProject(projectId, from);
+
         if (!stepEntries.isEmpty()) {
             return ManagementEntry.builder()
                     .employee(employee)
@@ -189,7 +204,9 @@ public class ManagementResource {
                     .employeeProgresses(pmProgresses)
                     .finishedComments(finishedAndTotalComments.finishedComments())
                     .totalComments(finishedAndTotalComments.totalComments())
-                    .entryDate(stepEntries.get(0).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .entryDate(stepEntries.get(0).getDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN)))
+                    .billableTime(getBillableTimesForEmployee(projektzeitTypes, employee, true))
+                    .nonBillableTime(getBillableTimesForEmployee(projektzeitTypes, employee, false))
                     .build();
         }
 
@@ -212,7 +229,7 @@ public class ManagementResource {
         boolean customerCheckStateOpen = stepEntries.stream()
                 .filter(stepEntry ->
                         StepName.CONTROL_EXTERNAL_TIMES.name().equalsIgnoreCase(stepEntry.getStep().getName())
-                                && StringUtils.equalsIgnoreCase(userContext.user().email(), stepEntry.getAssignee().getEmail())
+                                && StringUtils.equalsIgnoreCase(Objects.requireNonNull(userContext.user()).email(), stepEntry.getAssignee().getEmail())
                 ).anyMatch(stepEntry -> EmployeeState.OPEN.equals(stepEntry.getState()));
 
         return customerCheckStateOpen ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
@@ -226,7 +243,7 @@ public class ManagementResource {
         boolean customerCheckStateOpen = stepEntries.stream()
                 .filter(stepEntry ->
                         StepName.CONTROL_INTERNAL_TIMES.name().equalsIgnoreCase(stepEntry.getStep().getName())
-                                && StringUtils.equalsIgnoreCase(userContext.user().email(), stepEntry.getAssignee().getEmail())
+                                && StringUtils.equalsIgnoreCase(Objects.requireNonNull(userContext.user()).email(), stepEntry.getAssignee().getEmail())
                 ).anyMatch(stepEntry -> EmployeeState.OPEN.equals(stepEntry.getState()));
 
         return customerCheckStateOpen ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
@@ -245,10 +262,21 @@ public class ManagementResource {
                     } else {
                         return StepName.CONTROL_TIME_EVIDENCES.name().equalsIgnoreCase(se.getStep().getName()) &&
                                 StringUtils.equalsIgnoreCase(se.getProject(), projectId) &&
-                                StringUtils.equalsIgnoreCase(se.getAssignee().getEmail(), userContext.user().email());
+                                StringUtils.equalsIgnoreCase(se.getAssignee().getEmail(), Objects.requireNonNull(userContext.user()).email());
                     }
                 })
                 .map(StepEntry::getState)
                 .anyMatch(state -> state.equals(EmployeeState.OPEN)) ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
+    }
+
+    private String getBillableTimesForEmployee(@Nonnull List<ProjektzeitType> projektzeitTypeList, @Nonnull Employee employee, boolean billable) {
+        Duration totalBillable = projektzeitTypeList.stream()
+                .filter(pzt -> pzt.getUserId().equals(employee.userId()))
+                .filter(billable ? ProjektzeitType::isIstFakturierbar : Predicate.not(ProjektzeitType::isIstFakturierbar))
+                .map(pzt -> LocalTime.parse(pzt.getDauer()))
+                .map(lt -> Duration.between(LocalTime.MIN, lt))
+                .reduce(Duration.ZERO, Duration::plus);
+
+        return DurationFormatUtils.formatDuration(totalBillable.toMillis(), BILLABLE_TIME_FORMAT);
     }
 }

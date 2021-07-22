@@ -1,9 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { JourneyCheckComponent } from './journey-check.component';
-import { TranslateModule } from '@ngx-translate/core';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { AngularMaterialModule } from '../../../material/material-module';
+import {JourneyCheckComponent} from './journey-check.component';
+import {TranslateModule} from '@ngx-translate/core';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {AngularMaterialModule} from '../../../material/material-module';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('JourneyCheckComponent', () => {

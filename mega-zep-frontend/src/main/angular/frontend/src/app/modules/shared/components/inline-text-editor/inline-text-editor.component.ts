@@ -1,5 +1,6 @@
 import {
-  AfterViewInit, ChangeDetectorRef,
+  AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -26,7 +27,8 @@ export class InlineTextEditorComponent implements OnInit, AfterViewInit {
   MAXIMUM_LETTERS = 500;
 
   constructor(private _ngZone: NgZone,
-              private changeDectectorRef: ChangeDetectorRef) { }
+              private changeDectectorRef: ChangeDetectorRef) {
+  }
 
   ngOnInit(): void {
   }

@@ -21,6 +21,8 @@ public interface ZepService {
 
     List<ProjectEntry> getProjectTimes(Employee employee);
 
+    List<ProjektzeitType> getProjectTimesForEmployeePerProject(String project, LocalDate curDate);
+
     List<Project> getProjectsForMonthYear(final LocalDate monthYear);
 
     List<FehlzeitType> getAbsenceForEmployee(Employee employee);

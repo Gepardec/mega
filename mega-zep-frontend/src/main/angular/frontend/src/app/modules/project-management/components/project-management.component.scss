@@ -61,16 +61,17 @@ tr.spacing > td {
 
 .mat-expansion-panel-header-description {
   display: flex;
-  >:nth-child(2) {
+
+  > :nth-child(2) {
     flex-grow: 1;
-    //max-width: 600px;
   }
 }
 
 .comment-container {
   display: flex;
   padding-left: 15px;
-  >:nth-child(1) {
+
+  > :nth-child(1) {
     flex-grow: 1;
     max-width: 600px;
   }

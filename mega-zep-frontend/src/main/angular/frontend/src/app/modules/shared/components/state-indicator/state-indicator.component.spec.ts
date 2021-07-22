@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { StateIndicatorComponent } from './state-indicator.component';
-import { AngularMaterialModule } from '../../../material/material-module';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {StateIndicatorComponent} from './state-indicator.component';
+import {AngularMaterialModule} from '../../../material/material-module';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 
 describe('StateIndicatorComponent', () => {
   let component: StateIndicatorComponent;

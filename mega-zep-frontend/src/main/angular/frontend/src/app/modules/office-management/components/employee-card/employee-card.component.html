@@ -1,4 +1,4 @@
-<mat-card *ngIf="omEntries && filteredOmEntries" style="margin-top: 10px" class="mat-elevation-z6">
+<mat-card *ngIf="omEntries && filteredOmEntries" class="mat-elevation-z6" style="margin-top: 10px">
   <mat-card-header>
     <mat-card-title>{{'office-management.table.name' | translate}}</mat-card-title>
   </mat-card-header>
@@ -42,8 +42,8 @@
       </mat-toolbar>
     </div>
     <div class="mat-elevation-z10 table-container">
-      <mat-table *ngIf="filteredOmEntries.length > 0; else noOmEntriesFound" style="width: 100%;"
-                 [dataSource]="filteredOmEntries">
+      <mat-table *ngIf="filteredOmEntries.length > 0; else noOmEntriesFound" [dataSource]="filteredOmEntries"
+                 style="width: 100%;">
         <ng-container matColumnDef="select">
           <mat-header-cell *matHeaderCellDef>
             <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -75,8 +75,8 @@
             *matHeaderCellDef>{{'office-management.table.customerCheckState' | translate}}</mat-header-cell>
           <mat-cell *matCellDef="let omEntry">
             <span class="mobile-label">{{'office-management.table.customerCheckState' | translate}}</span>
-            <app-state-select [value]="omEntry.customerCheckState"
-                              (selectionChange)="closeCustomerCheck(omEntry)"></app-state-select>
+            <app-state-select (selectionChange)="closeCustomerCheck(omEntry)"
+                              [value]="omEntry.customerCheckState"></app-state-select>
           </mat-cell>
         </ng-container>
 
@@ -85,8 +85,8 @@
             *matHeaderCellDef>{{'office-management.table.internalCheckState' | translate}}</mat-header-cell>
           <mat-cell *matCellDef="let omEntry">
             <span class="mobile-label">{{'office-management.table.internalCheckState' | translate}}</span>
-            <app-state-select [value]="omEntry.internalCheckState"
-                              (selectionChange)="closeInternalCheck(omEntry)"></app-state-select>
+            <app-state-select (selectionChange)="closeInternalCheck(omEntry)"
+                              [value]="omEntry.internalCheckState"></app-state-select>
           </mat-cell>
         </ng-container>
 
@@ -115,8 +115,8 @@
             <span class="mobile-label">{{'office-management.table.comments' | translate}}</span>
             <button (click)="openDialog(omEntry)" mat-button>
               <mat-icon>comment</mat-icon>
-              <app-done-comments-indicator [totalComments]="omEntry.totalComments"
-                                           [finishedComments]="omEntry.finishedComments"></app-done-comments-indicator>
+              <app-done-comments-indicator [finishedComments]="omEntry.finishedComments"
+                                           [totalComments]="omEntry.totalComments"></app-done-comments-indicator>
             </button>
           </mat-cell>
         </ng-container>

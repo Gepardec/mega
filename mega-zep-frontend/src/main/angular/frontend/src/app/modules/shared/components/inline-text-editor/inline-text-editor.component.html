@@ -1,17 +1,17 @@
 <mat-form-field>
-    <textarea matInput
-              maxlength="500"
-              cdkTextareaAutosize
-              #autosize="cdkTextareaAutosize"
-              cdkAutosizeMinRows="1"
-              cdkAutosizeMaxRows="3"
+    <textarea #autosize="cdkTextareaAutosize"
+              #textarea
               [value]="comment ? comment : ''"
-              #textarea></textarea>
+              cdkAutosizeMaxRows="3"
+              cdkAutosizeMinRows="1"
+              cdkTextareaAutosize
+              matInput
+              maxlength="500"></textarea>
   <mat-hint align="end">{{textarea.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
 </mat-form-field>
-<button mat-mini-fab class="cancel" (click)="onCancel()">
+<button (click)="onCancel()" class="cancel" mat-mini-fab>
   <mat-icon>arrow_back</mat-icon>
 </button>
-<button mat-mini-fab class="save" (click)="onSave(textarea)">
+<button (click)="onSave(textarea)" class="save" mat-mini-fab>
   <mat-icon>save</mat-icon>
 </button>

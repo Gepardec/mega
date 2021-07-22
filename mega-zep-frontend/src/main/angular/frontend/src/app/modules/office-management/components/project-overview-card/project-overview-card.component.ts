@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import * as _moment from 'moment';
-import {Moment} from 'moment';
 import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import {configuration} from '../../../shared/constants/configuration';
 import {environment} from '../../../../../environments/environment';
@@ -18,6 +17,8 @@ import {ProjectManagementService} from '../../../project-management/services/pro
 import {Subscription, zip} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {ProjectState} from '../../../shared/models/ProjectState';
+import {ProjectCommentService} from '../../../shared/services/project-comment/project-comment.service';
+import {SnackbarService} from '../../../shared/services/snackbar/snackbar.service';
 
 const moment = _moment;
 
@@ -58,11 +59,13 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
     private omService: OfficeManagementService,
     private pmService: ProjectManagementService,
     private notificationService: NotificationService,
-    private translateService: TranslateService,
+    private translate: TranslateService,
     private commentService: CommentService,
     private stepEntryService: StepentriesService,
     private _bottomSheet: MatBottomSheet,
-    private configService: ConfigService) {
+    private configService: ConfigService,
+    private projectCommentService: ProjectCommentService,
+    private snackbarService: SnackbarService) {
   }
 
   ngOnInit(): void {
@@ -89,6 +92,12 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
   private getPmEntries() {
     this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
+      this.pmEntries.forEach(pmEntry => {
+        this.projectCommentService.get(this.getFormattedDate(), pmEntry.projectName)
+          .subscribe(projectComment => {
+            pmEntry.projectComment = projectComment;
+          });
+      });
     });
   }
 
@@ -109,6 +118,32 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
   onCommentChange(pmEntry: ProjectManagementEntry, comment: string) {
     this.showCommentEditor = false;
     this.forProjectName = null;
-    pmEntry.comment = comment;
+
+    // Avoid reloading of page when the return button was clicked
+    if (pmEntry.projectComment) {
+      if (pmEntry.projectComment.comment !== comment) {
+        let oldComment = pmEntry.projectComment.comment;
+        pmEntry.projectComment.comment = comment;
+        this.projectCommentService.update(pmEntry.projectComment)
+          .subscribe((success) => {
+            if (!success) {
+              this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.updateProjectCommentError'));
+              pmEntry.projectComment.comment = oldComment;
+            }
+          });
+      }
+    } else {
+      // Avoid reloading of page when the return button was clicked
+      if (comment) {
+        this.projectCommentService.create(comment, this.getFormattedDate(), pmEntry.projectName)
+          .subscribe(projectComment => {
+            pmEntry.projectComment = projectComment;
+          });
+      }
+    }
+  }
+
+  private getFormattedDate() {
+    return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
   }
 }

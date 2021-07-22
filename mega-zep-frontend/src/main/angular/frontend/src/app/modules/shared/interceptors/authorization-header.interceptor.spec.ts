@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { AuthorizationHeaderInterceptor } from './authorization-header.interceptor';
-import { OAuthStorage } from 'angular-oauth2-oidc';
-import { ConfigService } from '../services/config/config.service';
+import {AuthorizationHeaderInterceptor} from './authorization-header.interceptor';
+import {OAuthStorage} from 'angular-oauth2-oidc';
+import {ConfigService} from '../services/config/config.service';
 
 describe('AuthorizationHeaderInterceptor', () => {
 

@@ -12,4 +12,7 @@ export class ManagementEntry {
   totalComments: number;
   finishedComments: number;
   entryDate: string;
+  billableTime: string;
+  nonBillableTime: string;
+
 }

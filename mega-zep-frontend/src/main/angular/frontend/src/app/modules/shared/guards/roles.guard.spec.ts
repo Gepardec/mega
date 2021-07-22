@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
-import { RolesGuard } from './roles.guard';
-import { RolesService } from '../services/roles/roles.service';
+import {TestBed} from '@angular/core/testing';
+import {RolesGuard} from './roles.guard';
+import {RolesService} from '../services/roles/roles.service';
 
 describe('RolesGuard', () => {
   let guard: RolesGuard;

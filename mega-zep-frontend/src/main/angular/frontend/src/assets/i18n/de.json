@@ -89,7 +89,7 @@
       "releaseDate": "Freigegeben bis"
     },
     "noOmEntriesFound": "Keine Einträge gefunden",
-    "global-check" : {
+    "global-check": {
       "labels": {
         "zepTimesReleased": "ZEP Zeiten freigeben",
         "chargeabilityExternalEmployeesRecorded": "Chargeability Sheet & externe Mitarbeiter",
@@ -116,12 +116,15 @@
       "internalCheckState": "Interne Zeiten",
       "customerCheckState": "Kundenzeiten",
       "comments": "Anmerkungen",
-      "releaseDate": "Freigabedatum"
+      "releaseDate": "Freigabedatum",
+      "projectHours": "Projektstunden"
     },
     "noPmEntriesFound": "Keine Projekteinträge gefunden",
     "projectTimeState": "Projektzeitenkontrolle",
     "billingState": "Rechnungslegung",
-    "presetMonth": "im Folgemonat übernehmen"
+    "presetMonth": "im Folgemonat übernehmen",
+    "updateStatusError": "Fehler beim Aktualisieren des Status",
+    "updateProjectCommentError": "Fehler beim Aktualisieren der Anmerkung"
   },
   "comments-for-employee": {
     "commentsFor": "Anmerkungen für {{firstAndSureName}}",
@@ -160,7 +163,7 @@
     "confirm": "OK"
   },
   "snackbar": {
-    "message": "Fehler beim Aktualisieren des Status",
+    "message": "Ein Fehler ist aufgetreten",
     "confirm": "OK"
   }
 }

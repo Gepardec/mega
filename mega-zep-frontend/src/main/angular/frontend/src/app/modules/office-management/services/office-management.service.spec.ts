@@ -1,7 +1,7 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { OfficeManagementService } from './office-management.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {OfficeManagementService} from './office-management.service';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('OfficeManagementService', () => {
   let service: OfficeManagementService;

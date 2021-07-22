@@ -40,6 +40,14 @@ export class EnterpriseCardComponent implements OnInit, OnDestroy {
               private translate: TranslateService) {
   }
 
+  get date() {
+    return moment()
+      .year(this.selectedYear)
+      .month(this.selectedMonth)
+      .date(1)
+      .startOf('day');
+  }
+
   ngOnInit(): void {
     this.configService.getConfig().subscribe((config: Config) => {
       this.officeManagementUrl = config.zepOrigin + '/' + configuration.OFFICE_MANAGEMENT_SEGMENT;
@@ -64,14 +72,6 @@ export class EnterpriseCardComponent implements OnInit, OnDestroy {
   dateChanged(date: Moment) {
     this.omService.selectedYear.next(moment(date).year());
     this.omService.selectedMonth.next(moment(date).month() + 1);
-  }
-
-  get date() {
-    return moment()
-      .year(this.selectedYear)
-      .month(this.selectedMonth)
-      .date(1)
-      .startOf('day');
   }
 
   onChangeEnterpriseState($event: MatSelectChange, step: EnterpriseStep, projectStateSelect: ProjectStateSelectComponent) {

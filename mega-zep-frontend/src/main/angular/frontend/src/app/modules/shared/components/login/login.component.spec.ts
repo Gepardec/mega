@@ -1,11 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { LoginComponent } from './login.component';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { RouterTestingModule } from '@angular/router/testing';
-import { UserService } from '../../services/user/user.service';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import {LoginComponent} from './login.component';
+import {OAuthService} from 'angular-oauth2-oidc';
+import {RouterTestingModule} from '@angular/router/testing';
+import {UserService} from '../../services/user/user.service';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {TranslateModule} from '@ngx-translate/core';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;

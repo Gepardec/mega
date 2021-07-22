@@ -59,13 +59,6 @@ export class CommentsForEmployeeComponent implements OnInit {
     return (monthDiff === 1 || monthDiff === 0 || releaseDate > today);
   }
 
-  private monthDiff(d1: Date, d2: Date) {
-    let months = (d2.getFullYear() - d1.getFullYear()) * 12;
-    months -= d1.getMonth();
-    months += d2.getMonth();
-    return Math.abs(months);
-  }
-
   parseAnchorTags(plainText): string {
     let replacedText;
     let startingWithHttpHttpsOrFtpPattern;
@@ -120,5 +113,12 @@ export class CommentsForEmployeeComponent implements OnInit {
     } else {
       this.dialogRef.close(true);
     }
+  }
+
+  private monthDiff(d1: Date, d2: Date) {
+    let months = (d2.getFullYear() - d1.getFullYear()) * 12;
+    months -= d1.getMonth();
+    months += d2.getMonth();
+    return Math.abs(months);
   }
 }

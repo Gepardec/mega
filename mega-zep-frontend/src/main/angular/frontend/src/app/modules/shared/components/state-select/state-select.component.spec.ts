@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { StateSelectComponent } from './state-select.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import {StateSelectComponent} from './state-select.component';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {TranslateModule} from '@ngx-translate/core';
 
 describe('StateSelectComponent', () => {
   let component: StateSelectComponent;
