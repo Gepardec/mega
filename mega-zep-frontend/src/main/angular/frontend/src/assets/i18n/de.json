@@ -57,7 +57,8 @@
     "title": {
       "emc": "Status zum Monatsabschluss",
       "journey": "MEGA Reisen Check",
-      "time": "MEGA Zeiten Check"
+      "time": "MEGA Zeiten Check",
+      "geninfo": "Übersicht"
     },
     "table": {
       "time": {

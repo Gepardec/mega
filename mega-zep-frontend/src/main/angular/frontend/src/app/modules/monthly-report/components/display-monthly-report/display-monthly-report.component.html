@@ -21,7 +21,8 @@
        style="height: calc(100vh - 180px)">
     <app-time-check [monthlyReport]="monthlyReport" fxFlex="27.5"></app-time-check>
     <app-employee-check (refreshMonthlyReport)="emitRefreshMonthlyReport()" [monthlyReport]="monthlyReport" fxFlex="45"></app-employee-check>
-    <app-journey-check [monthlyReport]="monthlyReport" fxFlex="27.5"></app-journey-check>
+    <!-- <app-journey-check [monthlyReport]="monthlyReport" fxFlex="27.5"></app-journey-check> -->
+    <app-general-info [monthlyReport]="monthlyReport" fxFlex="27.5"></app-general-info>
   </div>
 
   <ng-template #invalidReleaseDate>
