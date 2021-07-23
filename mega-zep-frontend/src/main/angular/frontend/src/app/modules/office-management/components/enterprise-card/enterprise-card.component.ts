@@ -30,7 +30,7 @@ export class EnterpriseCardComponent implements OnInit, OnDestroy {
   officeManagementUrl: string;
   enterpriseEntry: EnterpriseEntry;
   EnterpriseStep = EnterpriseStep;
-  tooltipShowDelay = 1000;
+  tooltipShowDelay = 500;
   tooltipPosition = 'above';
 
   constructor(private configService: ConfigService,
