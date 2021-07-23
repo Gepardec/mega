@@ -75,9 +75,9 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
 
     @Transactional
     public int closeAssigned(LocalDate startDate, LocalDate endDate, String ownerEmail, Long stepId) {
-        return update("UPDATE StepEntry s SET s.state = :state WHERE s.id IN (SELECT s.id FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.step.id = :stepId)",
+        return update("#StepEntry.updateStepEntry",
                 Parameters
-                        .with("state", EmployeeState.DONE)
+                        .with("employeeState", EmployeeState.DONE)
                         .and("start", startDate)
                         .and("end", endDate)
                         .and("ownerEmail", ownerEmail)
@@ -86,9 +86,9 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
 
     @Transactional
     public int closeAssigned(LocalDate startDate, LocalDate endDate, String ownerEmail, String assigneeEmail, Long stepId, String project) {
-        return update("UPDATE StepEntry s SET s.state = :state WHERE s.id IN (SELECT s.id FROM StepEntry s WHERE s.date BETWEEN :start AND :end AND s.owner.email = :ownerEmail AND s.step.id = :stepId AND s.project like :project AND s.assignee.email = :assigneeEmail)",
+        return update("#StepEntry.updateStepEntryWithAssigneeAndProject",
                 Parameters
-                        .with("state", EmployeeState.DONE)
+                        .with("employeeState", EmployeeState.DONE)
                         .and("start", startDate)
                         .and("end", endDate)
                         .and("ownerEmail", ownerEmail)
