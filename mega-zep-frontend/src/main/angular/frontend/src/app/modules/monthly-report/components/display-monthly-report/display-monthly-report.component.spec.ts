@@ -49,7 +49,12 @@ describe('DisplayMonthlyReportComponent', () => {
         active: true
       },
       assigned: false,
-      employeeProgresses: null
+      employeeProgresses: null,
+      billableTime: '10:00',
+      compensatoryDays: 5,
+      homeofficeDays: 3,
+      vacationDays: 2,
+      totalWorkingTime: '20:00'
     };
     fixture.detectChanges();
   });
