@@ -13,11 +13,6 @@
           {{ link.name }}
         </a>
       </ng-container>
-
-      <a [href]="spreadSheetUrl" mat-list-item target="_blank">
-        <mat-icon>open_in_new</mat-icon>
-        Excel
-      </a>
       <a [href]="zepUrl" mat-list-item target="_blank">
         <mat-icon>open_in_new</mat-icon>
         ZEP
@@ -49,13 +44,6 @@
         <span fxFlex="1 1 auto"></span>
 
         <div fxLayout="row" fxLayoutGap="15px">
-          <a
-            [href]="spreadSheetUrl"
-            mat-mini-fab
-            target="_blank">
-            <img [src]="assetsPath + excelLogo" alt="Dashboard Link">
-          </a>
-
           <a
             [href]="zepUrl"
             mat-mini-fab
