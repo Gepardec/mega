@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @ApplicationScoped
@@ -22,13 +23,21 @@ public class ProjectCommentRepository implements PanacheRepository<ProjectCommen
     @Inject
     Logger logger;
 
-    public List<ProjectComment> findByProjectNameAndEntryDateBetween(String projectName, LocalDate from, LocalDate to) {
+    public List<ProjectComment> findByProjectNameAndDateBetween(String projectName, LocalDate from, LocalDate to) {
         return find("#ProjectComment.findByProjectNameAndEntryDateBetween",
                 Parameters
                         .with("projectName", projectName)
                         .and("start", from)
                         .and("end", to))
                 .list();
+    }
+
+    public List<ProjectComment> findByProjectNameWithDate(String projectName, LocalDate entryDate) {
+        return findByProjectNameAndDateBetween(
+                projectName,
+                entryDate.with(TemporalAdjusters.firstDayOfMonth()),
+                entryDate.with(TemporalAdjusters.lastDayOfMonth())
+        );
     }
 
     public boolean update(ProjectComment comment) {
