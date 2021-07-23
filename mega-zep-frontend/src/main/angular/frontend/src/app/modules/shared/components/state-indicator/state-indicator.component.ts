@@ -12,6 +12,7 @@ export class StateIndicatorComponent implements OnInit {
   @Input() size: 'small' | 'medium' | 'large' = 'small';
   State = State;
   ProjectState = ProjectState;
+  tooltipShowDelay = 500;
 
   constructor() {
   }

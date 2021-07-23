@@ -1,7 +1,19 @@
 <span [class]="size" [ngSwitch]="state">
-  <mat-icon *ngSwitchCase="State.OPEN" class="red">cancel</mat-icon>
-  <mat-icon *ngSwitchCase="State.DONE" class="green">check_circle</mat-icon>
-  <mat-icon *ngSwitchCase="ProjectState.WORK_IN_PROGRESS" class="red">cancel</mat-icon>
-  <mat-icon *ngSwitchCase="ProjectState.NOT_RELEVANT" class="green">check_circle</mat-icon>
+  <mat-icon *ngSwitchCase="State.OPEN"
+            class="red"
+            matTooltip="{{'STATE.OPEN' | translate}}"
+            [matTooltipShowDelay]="tooltipShowDelay">cancel</mat-icon>
+  <mat-icon *ngSwitchCase="State.DONE"
+            class="green"
+            matTooltip="{{'STATE.DONE' | translate}}"
+            [matTooltipShowDelay]="tooltipShowDelay">check_circle</mat-icon>
+  <mat-icon *ngSwitchCase="ProjectState.WORK_IN_PROGRESS"
+            class="red"
+            matTooltip="{{'STATE.WORK_IN_PROGRESS' | translate}}"
+            [matTooltipShowDelay]="tooltipShowDelay">cancel</mat-icon>
+  <mat-icon *ngSwitchCase="ProjectState.NOT_RELEVANT"
+            class="green"
+            matTooltip="{{'STATE.NOT_RELEVANT' | translate}}"
+            [matTooltipShowDelay]="tooltipShowDelay">check_circle</mat-icon>
   <mat-icon *ngSwitchDefault class="yellow">error</mat-icon>
 </span>
