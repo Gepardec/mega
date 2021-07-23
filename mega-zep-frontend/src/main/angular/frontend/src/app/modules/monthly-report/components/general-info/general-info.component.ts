@@ -19,7 +19,7 @@ export class GeneralInfoComponent implements OnInit {
   identifiers: string[] = [
     'Gesamte Arbeitszeit',
     'Fakturierbare Stunden',
-    'Verrechenbarkeit',
+    'Chargeability',
     'Urlaub',
     'Zeitausgleich',
     'Homeoffice'
