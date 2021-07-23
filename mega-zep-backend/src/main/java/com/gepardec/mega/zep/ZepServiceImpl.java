@@ -6,6 +6,7 @@ import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.service.impl.employee.EmployeeMapper;
 import com.gepardec.mega.zep.mapper.ProjectEntryMapper;
+import de.provantis.zep.FehlzeitType;
 import de.provantis.zep.KategorieListeType;
 import de.provantis.zep.KategorieType;
 import de.provantis.zep.MitarbeiterType;
@@ -15,6 +16,9 @@ import de.provantis.zep.ProjektMitarbeiterType;
 import de.provantis.zep.ProjektNrListeType;
 import de.provantis.zep.ProjektType;
 import de.provantis.zep.ProjektzeitType;
+import de.provantis.zep.ReadFehlzeitRequestType;
+import de.provantis.zep.ReadFehlzeitResponseType;
+import de.provantis.zep.ReadFehlzeitSearchCriteriaType;
 import de.provantis.zep.ReadMitarbeiterRequestType;
 import de.provantis.zep.ReadMitarbeiterResponseType;
 import de.provantis.zep.ReadMitarbeiterSearchCriteriaType;
@@ -115,6 +119,58 @@ public class ZepServiceImpl implements ZepService {
     }
 
     @Override
+    public List<FehlzeitType> getAbsenceForEmployee(Employee employee){
+        final ReadFehlzeitRequestType fehlzeitenRequest = new ReadFehlzeitRequestType();
+        fehlzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
+
+        final ReadFehlzeitSearchCriteriaType searchCriteria;
+
+        try {
+            searchCriteria = createAbsenceSearchCriteria(employee);
+        } catch (DateTimeParseException e) {
+            logger.error("invalid release date {0}", e);
+            return null;
+        }
+
+        fehlzeitenRequest.setReadFehlzeitSearchCriteria(searchCriteria);
+        ReadFehlzeitResponseType fehlzeitResponseType = zepSoapPortType.readFehlzeit(fehlzeitenRequest);
+
+        if(fehlzeitResponseType != null
+                && fehlzeitResponseType.getFehlzeitListe() != null
+                && fehlzeitResponseType.getFehlzeitListe().getFehlzeit() != null) {
+            return fehlzeitResponseType.getFehlzeitListe().getFehlzeit();
+
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<ProjektzeitType> getBillableForEmployee(Employee employee){
+        final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
+        projektzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
+
+        final ReadProjektzeitenSearchCriteriaType searchCriteria;
+        try {
+            searchCriteria = createProjectTimeSearchCriteria(employee);
+        } catch (DateTimeParseException e) {
+            logger.error("invalid release date {0}", e);
+            return null;
+        }
+        projektzeitenRequest.setReadProjektzeitenSearchCriteria(searchCriteria);
+
+        ReadProjektzeitenResponseType readProjektzeitenResponseType = zepSoapPortType.readProjektzeiten(projektzeitenRequest);
+
+        if(readProjektzeitenResponseType != null
+                && readProjektzeitenResponseType.getProjektzeitListe() != null
+                && readProjektzeitenResponseType.getProjektzeitListe().getProjektzeiten() != null) {
+            return readProjektzeitenResponseType.getProjektzeitListe().getProjektzeiten();
+
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
     public List<ProjectEntry> getProjectTimes(Employee employee) {
         final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
         projektzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
@@ -206,6 +262,19 @@ public class ZepServiceImpl implements ZepService {
 
         return searchCriteria;
     }
+
+    private ReadFehlzeitSearchCriteriaType createAbsenceSearchCriteria(Employee employee) {
+        ReadFehlzeitSearchCriteriaType searchCriteria = new ReadFehlzeitSearchCriteriaType();
+
+        final String releaseDate = employee.releaseDate();
+        searchCriteria.setStartdatum(getFirstDayOfFollowingMonth(releaseDate));
+        searchCriteria.setEnddatum(getLastDayOfFollowingMonth(releaseDate));
+
+        searchCriteria.setUserId(employee.userId());
+        return searchCriteria;
+    }
+
+
 
     private Project createProject(final ProjektType projektType, final LocalDate monthYear) {
         Optional<String> endDateString = Optional.ofNullable(projektType.getEndeDatum());

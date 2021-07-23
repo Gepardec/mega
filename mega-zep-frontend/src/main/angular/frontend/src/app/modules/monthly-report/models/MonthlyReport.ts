@@ -13,4 +13,9 @@ export class MonthlyReport {
   assigned: boolean;
   employee: Employee;
   employeeProgresses: Array<PmProgress>;
+  vacationDays: number;
+  homeofficeDays: number;
+  compensatoryDays: number;
+  billableTime: string;
+  totalWorkingTime: string;
 }

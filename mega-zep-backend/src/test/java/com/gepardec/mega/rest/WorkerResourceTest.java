@@ -65,8 +65,15 @@ public class WorkerResourceTest {
 
         Employee employee = createEmployeeForUser(user);
         when(employeeService.getEmployee(anyString())).thenReturn(employee);
+
         List<TimeWarning> timeWarnings = List.of(TimeWarning.of(LocalDate.now(), 0.0, 0.0, 0.0));
         List<JourneyWarning> journeyWarnings = List.of(new JourneyWarning(LocalDate.now(), List.of("WARNING")));
+
+        int vacationDays = 0;
+        int homeofficeDays = 0;
+        int compensatoryDays = 0;
+        String billableTime = "00:00";
+        String totalWorkingTime = "00:00";
 
         MonthlyReport expected = MonthlyReport.builder()
                 .employee(employee)
@@ -77,6 +84,11 @@ public class WorkerResourceTest {
                 .isAssigned(false)
                 .employeeProgresses(List.of())
                 .otherChecksDone(true)
+                .billableTime(billableTime)
+                .totalWorkingTime(totalWorkingTime)
+                .compensatoryDays(compensatoryDays)
+                .homeofficeDays(homeofficeDays)
+                .vacationDays(vacationDays)
                 .build();
 
         when(monthlyReportService.getMonthendReportForUser(anyString())).thenReturn(expected);
@@ -88,6 +100,11 @@ public class WorkerResourceTest {
         assertEquals(employee, actual.employee());
         assertEquals(actual.timeWarnings(), timeWarnings);
         assertEquals(actual.journeyWarnings(), journeyWarnings);
+        assertEquals(actual.billableTime(), billableTime);
+        assertEquals(actual.totalWorkingTime(), totalWorkingTime);
+        assertEquals(actual.vacationDays(), vacationDays);
+        assertEquals(actual.homeofficeDays(), homeofficeDays);
+        assertEquals(actual.compensatoryDays(), compensatoryDays);
     }
 
     private Employee createEmployeeForUser(final User user) {

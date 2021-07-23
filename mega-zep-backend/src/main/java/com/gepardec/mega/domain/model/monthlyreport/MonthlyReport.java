@@ -52,4 +52,19 @@ public class MonthlyReport {
 
     @JsonProperty
     private final boolean otherChecksDone;
+
+    @JsonProperty
+    private final int vacationDays;
+
+    @JsonProperty
+    private final int homeofficeDays;
+
+    @JsonProperty
+    private final int compensatoryDays;
+
+    @JsonProperty
+    private final String billableTime;
+
+    @JsonProperty
+    private final String totalWorkingTime;
 }

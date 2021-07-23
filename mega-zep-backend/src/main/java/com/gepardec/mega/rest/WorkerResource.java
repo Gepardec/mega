@@ -56,7 +56,13 @@ public class WorkerResource {
                     .employeeCheckState(EmployeeState.OPEN)
                     .isAssigned(false)
                     .employeeProgresses(Collections.emptyList())
-                    .otherChecksDone(false).build();
+                    .otherChecksDone(false)
+                    .billableTime(null)
+                    .totalWorkingTime(null)
+                    .compensatoryDays(0)
+                    .homeofficeDays(0)
+                    .vacationDays(0)
+                    .build();
         }
 
         return monthlyReport;

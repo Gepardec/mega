@@ -8,7 +8,7 @@
     <mat-card-subtitle>{{employeeFunctions[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
     <mat-card-content>
       {{monthlyReport.employee.firstname}} {{monthlyReport.employee.lastname}}
-      <span style="float: right">
+      <span>
         {{ isValidDate(monthlyReport.employee.releaseDate) ?
         (getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : null : 'de-AT') :
         ('monthly-report.notReleasedYet' | translate) }}
@@ -18,11 +18,18 @@
 
   <div *ngIf="isValidDate(monthlyReport.employee.releaseDate); else invalidReleaseDate"
        fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px"
-       style="height: calc(100vh - 180px)">
-    <app-time-check [monthlyReport]="monthlyReport" fxFlex="27.5"></app-time-check>
-    <app-employee-check (refreshMonthlyReport)="emitRefreshMonthlyReport()" [monthlyReport]="monthlyReport"
-                        fxFlex="45"></app-employee-check>
-    <app-journey-check [monthlyReport]="monthlyReport" fxFlex="27.5"></app-journey-check>
+       class="twoColumnBlock">
+    <div fxFlex="27.5" fxLayout="column" fxLayoutGap="10px">
+      <app-time-check [monthlyReport]="monthlyReport" fxFlex="46.6%" ></app-time-check>
+      <app-general-info [monthlyReport]="monthlyReport" fxFlex = "46.6%"></app-general-info>
+    </div>
+    <div fxFlex="45">
+      <app-employee-check (refreshMonthlyReport)="emitRefreshMonthlyReport()"
+                          [monthlyReport]="monthlyReport"></app-employee-check>
+    </div>
+    <div fxFlex="27.5">
+      <app-journey-check [monthlyReport]="monthlyReport"></app-journey-check>
+    </div>
   </div>
 
   <ng-template #invalidReleaseDate>
