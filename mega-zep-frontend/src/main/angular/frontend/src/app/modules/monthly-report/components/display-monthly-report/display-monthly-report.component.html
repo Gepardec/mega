@@ -8,7 +8,7 @@
     <mat-card-subtitle>{{employeeFunctions[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
     <mat-card-content>
       {{monthlyReport.employee.firstname}} {{monthlyReport.employee.lastname}}
-      <span>
+      <span class="mat-card-date">
         {{ isValidDate(monthlyReport.employee.releaseDate) ?
         (getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : null : 'de-AT') :
         ('monthly-report.notReleasedYet' | translate) }}
