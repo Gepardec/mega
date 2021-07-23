@@ -1,14 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MonthlyReport} from '../../models/MonthlyReport';
 
-const identifiers: string[] = [
-  'Arbeitszeit gesamt',
-  'fakturierbare Stunden',
-  'Verrechenbarkeit',
-  'Urlaub',
-  'Zeitausgleich',
-  'Homeoffice'
-];
 
 @Component({
   selector: 'app-general-info',
@@ -21,18 +13,24 @@ export class GeneralInfoComponent implements OnInit {
   @Input() monthlyReport: MonthlyReport;
   @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>();
 
-  dataidentifiers: string[];
   billablePercentage: number;
   convTotalWorkingTimeHours: number;
   convBillableTimeHours: number;
 
+  identifiers: string[] = [
+    'Arbeitszeit gesamt',
+    'fakturierbare Stunden',
+    'Verrechenbarkeit',
+    'Urlaub',
+    'Zeitausgleich',
+    'Homeoffice'
+  ];
+
   constructor() {
-    this.dataidentifiers = identifiers;
   }
 
   ngOnInit(): void {
-      //this.billablePercentage = this.calculateBillingPercentage(this.monthlyReport.totalWorkingTime, this.monthlyReport.billableTime);
-      this.billablePercentage = this.calculateBillingPercentage('50:00', '8:30');
+      this.billablePercentage = this.calculateBillingPercentage(this.monthlyReport.totalWorkingTime, this.monthlyReport.billableTime);
   }
 
   calculateBillingPercentage(totalWorkingTime: string, billableTime: string): number {
@@ -44,8 +42,8 @@ export class GeneralInfoComponent implements OnInit {
       return 0;
     }
 
-    let convTotalWorkingTimeMinutes: number = (Number(spTotalWorkingTime[0]) * 60) + (Number(spTotalWorkingTime[1]));
-    let convBillableTimeMinutes: number = (Number(spBillableTime[0]) * 60) + Number(spBillableTime[1]);
+    let convTotalWorkingTimeMinutes: number = (+spTotalWorkingTime[0] * 60) + (+spTotalWorkingTime[1]);
+    let convBillableTimeMinutes: number = (+spBillableTime[0] * 60) + (+spBillableTime[1]);
     this.convTotalWorkingTimeHours = convTotalWorkingTimeMinutes / 60;
     this.convBillableTimeHours = convBillableTimeMinutes / 60;
 
