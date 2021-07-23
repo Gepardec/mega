@@ -43,9 +43,6 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
 
   officeManagementUrl: string;
   pmEntries: Array<ProjectManagementEntry>;
-  // pmSelectionModel = new SelectionModel<ManagementEntry>(true, []);
-  selectedDate: string;
-  dayOfMonthForWarning = 5;
   configuration = configuration;
   environment = environment;
   selectedYear: number;
@@ -53,6 +50,7 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
   dateSelectionSub: Subscription;
   showCommentEditor = false;
   forProjectName: string;
+  tooltipShowDelay = 500;
 
   constructor(
     private dialog: MatDialog,
@@ -154,5 +152,9 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
 
   private getFormattedDate() {
     return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
+  }
+
+  getTooltipText(projectState: ProjectState) {
+    return this.translate.instant('STATE.' + projectState);
   }
 }
