@@ -16,8 +16,6 @@ public class MailParameter {
 
     public static final String COMMENT = "$comment$";
 
-    public static final String EXCEL_URL = "$excelUrl$";
-
     public static final String BUDGET_CALCULATION_EXCEL_URL = "$budgetCalculationExcelUrl$";
 
     private MailParameter() {
