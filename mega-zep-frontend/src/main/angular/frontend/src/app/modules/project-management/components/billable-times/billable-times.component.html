@@ -5,19 +5,10 @@
                 matTooltip="Fakturierbar"
                 matTooltipShowDelay="500">monetization_on</mat-icon>
     </td>
-    <td class="times-col" *ngIf="billableTimes !== '00:00'">{{transformTimeToFractionNumber(billableTimes) | number: '1.2-2' : 'de-AT'}}</td>
-    <td class="times-col" *ngIf="billableTimes === '00:00'"><mat-icon>horizontal_rule</mat-icon></td>
-  </tr>
-  <tr>
-    <td>
-      <img [src]="assetsPath + monetizationOff"
-           alt="Nicht fakturierbar"
-           height="24px"
-           width="24px"
-           matTooltip="Nicht fakturierbar"
-           matTooltipShowDelay="500"/>
-    </td>
-    <td class="times-col" *ngIf="nonBillableTimes !== '00:00'">{{transformTimeToFractionNumber(nonBillableTimes) | number: '1.2-2' : 'de-AT'}}</td>
-    <td class="times-col" *ngIf="nonBillableTimes === '00:00'"><mat-icon>horizontal_rule</mat-icon></td>
+    <td class="times-col-left" *ngIf="billableTimes !== '00:00'">{{transformTimeToFractionNumber(billableTimes) | number: '1.2-2' : 'de-AT'}}</td>
+    <td class="times-col-left" *ngIf="billableTimes === '00:00'"><mat-icon>horizontal_rule</mat-icon></td>
+    <td class="times-col-center">&nbsp;/&nbsp;</td>
+    <td class="times-col-right" *ngIf="nonBillableTimes !== '00:00'">{{transformTimeToFractionNumber(nonBillableTimes) | number: '1.2-2' : 'de-AT'}}</td>
+    <td class="times-col-right" *ngIf="nonBillableTimes === '00:00'"><mat-icon>horizontal_rule</mat-icon></td>
   </tr>
 </table>
