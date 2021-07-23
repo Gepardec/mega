@@ -250,6 +250,8 @@ export class ProjectManagementComponent implements OnInit {
     this.showCommentEditor = false;
     this.forProjectName = null;
 
+    let returnClicked = false;
+
     // Avoid reloading of page when the return button was clicked
     if (pmEntry.projectComment) {
       if (pmEntry.projectComment.comment !== comment) {
@@ -262,6 +264,8 @@ export class ProjectManagementComponent implements OnInit {
               pmEntry.projectComment.comment = oldComment;
             }
           });
+      } else {
+        returnClicked = true;
       }
     } else {
       // Avoid reloading of page when the return button was clicked
@@ -270,7 +274,12 @@ export class ProjectManagementComponent implements OnInit {
           .subscribe(projectComment => {
             pmEntry.projectComment = projectComment;
           });
+      } else {
+        returnClicked = true;
       }
+    }
+    if (returnClicked) {
+      this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.projectCommentNotUpdated'));
     }
   }
 }

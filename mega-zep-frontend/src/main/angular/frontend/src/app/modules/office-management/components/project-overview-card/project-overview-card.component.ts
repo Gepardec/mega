@@ -119,6 +119,8 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
     this.showCommentEditor = false;
     this.forProjectName = null;
 
+    let returnClicked = false;
+
     // Avoid reloading of page when the return button was clicked
     if (pmEntry.projectComment) {
       if (pmEntry.projectComment.comment !== comment) {
@@ -131,6 +133,8 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
               pmEntry.projectComment.comment = oldComment;
             }
           });
+      } else {
+        returnClicked = true;
       }
     } else {
       // Avoid reloading of page when the return button was clicked
@@ -139,7 +143,12 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
           .subscribe(projectComment => {
             pmEntry.projectComment = projectComment;
           });
+      } else {
+        returnClicked = true;
       }
+    }
+    if (returnClicked) {
+      this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.projectCommentNotUpdated'));
     }
   }
 

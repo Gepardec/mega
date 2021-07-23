@@ -124,7 +124,8 @@
     "billingState": "Rechnungslegung",
     "presetMonth": "im Folgemonat übernehmen",
     "updateStatusError": "Fehler beim Aktualisieren des Status",
-    "updateProjectCommentError": "Fehler beim Aktualisieren der Anmerkung"
+    "updateProjectCommentError": "Fehler beim Aktualisieren der Anmerkung",
+    "projectCommentNotUpdated": "Anmerkung wurde nicht gespeichert"
   },
   "comments-for-employee": {
     "commentsFor": "Anmerkungen für {{firstAndSureName}}",
