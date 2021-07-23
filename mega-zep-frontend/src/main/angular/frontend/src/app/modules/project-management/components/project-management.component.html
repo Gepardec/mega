@@ -171,8 +171,7 @@
                                class="text-center">{{'project-management.table.projectHours' | translate}}</mat-header-cell>
               <mat-cell *matCellDef="let row">
                 <span class="mobile-label">{{'project-management.table.projectHours' | translate}}</span>
-                <app-billable-times [billableTimes]="row.billableTime"
-                                    [nonBillableTimes]="row.nonBillableTime"></app-billable-times>
+                <app-billable-times [billableTimes]="row.billableTime" [nonBillableTimes]="row.nonBillableTime"></app-billable-times>
               </mat-cell>
             </ng-container>
 

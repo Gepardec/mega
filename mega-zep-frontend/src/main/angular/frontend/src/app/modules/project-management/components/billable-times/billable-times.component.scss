@@ -8,9 +8,22 @@ th, td {
   font-size: 17px;
 }
 
-td.times-col {
+td.times-col-left {
   text-align: right;
-  min-width: 80px;
+  min-width: 50px;
+  white-space: nowrap;
+}
+
+td.times-col-center {
+  text-align: right;
+  min-width: 10px;
+}
+
+td.times-col-right {
+  text-align: right;
+  min-width: 40px;
+  width: 1%;
+  white-space: nowrap;
 }
 
 a {
