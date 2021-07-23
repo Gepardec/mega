@@ -21,6 +21,7 @@ import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.project.ProjectService;
 import com.gepardec.mega.service.api.projectentry.ProjectEntryService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import com.gepardec.mega.zep.ZepService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.common.mapper.TypeRef;
@@ -32,6 +33,7 @@ import org.mockito.Mockito;
 import org.wildfly.common.Assert;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -63,6 +65,9 @@ public class ManagementResourceTest {
 
     @InjectMock
     private UserContext userContext;
+
+    @InjectMock
+    ZepService zepService;
 
     @Test
     void getAllOfficeManagementEntries_whenNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
@@ -102,6 +107,10 @@ public class ManagementResourceTest {
         when(stepEntryService.findAllStepEntriesForEmployee(
                 ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
         ).thenReturn(entries);
+
+        when(zepService.getProjectTimesForEmployeePerProject(
+                ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class)
+        )).thenReturn(Collections.emptyList());
 
         List<ManagementEntry> result = given().contentType(ContentType.JSON)
                 .get("/management/officemanagemententries/2020/01")
@@ -231,6 +240,10 @@ public class ManagementResourceTest {
         // TODO add concrete parameter values instead of any
         when(projectEntryService.findByNameAndDate(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(projectEntries);
+
+        when(zepService.getProjectTimesForEmployeePerProject(
+                ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class)
+        )).thenReturn(Collections.emptyList());
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/10")
