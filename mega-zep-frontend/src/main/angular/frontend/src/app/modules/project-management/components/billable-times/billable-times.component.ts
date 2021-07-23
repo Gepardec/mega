@@ -19,4 +19,13 @@ export class BillableTimesComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  transformTimeToFractionNumber(workingTime: string): number {
+    let spWorkingTime: string[] = workingTime.split(":");
+
+    if (spWorkingTime.length < 1) {
+      return 0;
+    }
+
+    return +(spWorkingTime[0]) + (+(spWorkingTime[1]) / 60);
+  }
 }
