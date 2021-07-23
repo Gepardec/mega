@@ -4,39 +4,42 @@
   </mat-card-title>
   <table>
     <tr>
-      <td class="headers">{{identifiers[0]}}:</td>
-      <td class="infovalue">{{convTotalWorkingTimeHours | number: '2.2': 'de-AT'}}</td>
-      <td *ngIf="convTotalWorkingTimeHours === 1">Stunde</td>
-      <td *ngIf="convTotalWorkingTimeHours > 1 || convTotalWorkingTimeHours === 0">Stunden</td>
+      <td class="headers">{{identifiers[0]}}</td>
+      <td class="infovalue">{{totalWorkingTimeHours | number: '1.2-2': 'de-AT'}}</td>
+      <td class="identifier" *ngIf="totalWorkingTimeHours === 1">Stunde</td>
+      <td class="identifier" *ngIf="totalWorkingTimeHours > 1 || totalWorkingTimeHours === 0">Stunden</td>
+    </tr>
+    <tr class="info-line">
+      <td class="headers">{{identifiers[1]}}</td>
+      <td class="infovalue">{{billableTimeHours | number: '1.2-2': 'de-AT'}}</td>
+      <td class="identifier" *ngIf="billableTimeHours === 1">Stunde</td>
+      <td class="identifier" *ngIf="billableTimeHours > 1 || billableTimeHours === 0">Stunden</td>
+    </tr>
+    <tr class="info-line">
+      <td class="headers">{{identifiers[2]}}</td>
+      <td class="identifier" class="infovalue">{{billablePercentage | number: '1.2-2': 'de-AT'}}</td>
+      <td class="identifier">%</td>
     </tr>
     <tr>
-      <td class="headers">{{identifiers[1]}}:</td>
-      <td class="infovalue">{{convBillableTimeHours | number: '2.2': 'de-AT'}}</td>
-      <td *ngIf="convBillableTimeHours === 1">Stunde</td>
-      <td *ngIf="convBillableTimeHours > 1 || convBillableTimeHours === 0">Stunden</td>
+      <td colspan="3"><hr></td>
     </tr>
-    <tr>
-      <td class="headers">{{identifiers[2]}}:</td>
-      <td class="infovalue">{{billablePercentage | number: '2.2': 'de-AT'}}</td>
-      <td>%</td>
-    </tr>
-    <tr>
-      <td class="headers">{{identifiers[3]}}:</td>
+    <tr class="info-line">
+      <td class="headers">{{identifiers[3]}}</td>
       <td class="infovalue">{{monthlyReport.vacationDays}}</td>
-      <td *ngIf="monthlyReport.vacationDays === 1">Tag</td>
-      <td *ngIf="monthlyReport.vacationDays > 1 || monthlyReport.vacationDays === 0">Tage</td>
+      <td class="identifier" *ngIf="monthlyReport.vacationDays === 1">Tag</td>
+      <td class="identifier" *ngIf="monthlyReport.vacationDays > 1 || monthlyReport.vacationDays === 0">Tage</td>
     </tr>
-    <tr>
-      <td class="headers">{{identifiers[4]}}:</td>
+    <tr class="info-line">
+      <td class="headers">{{identifiers[4]}}</td>
       <td class="infovalue">{{monthlyReport.compensatoryDays}}</td>
-      <td *ngIf="monthlyReport.compensatoryDays === 1">Tag</td>
-      <td *ngIf="monthlyReport.compensatoryDays > 1 || monthlyReport.compensatoryDays === 0">Tage</td>
+      <td class="identifier" *ngIf="monthlyReport.compensatoryDays === 1">Tag</td>
+      <td class="identifier" *ngIf="monthlyReport.compensatoryDays > 1 || monthlyReport.compensatoryDays === 0">Tage</td>
     </tr>
-    <tr>
-      <td class="headers">{{identifiers[5]}}:</td>
+    <tr class="info-line">
+      <td class="headers">{{identifiers[5]}}</td>
       <td class="infovalue">{{monthlyReport.homeofficeDays}}</td>
-      <td *ngIf="monthlyReport.homeofficeDays === 1">Tag</td>
-      <td *ngIf="monthlyReport.homeofficeDays > 1 || monthlyReport.homeofficeDays === 0">Tage</td>
+      <td class="identifier" *ngIf="monthlyReport.homeofficeDays === 1">Tag</td>
+      <td class="identifier" *ngIf="monthlyReport.homeofficeDays > 1 || monthlyReport.homeofficeDays === 0">Tage</td>
     </tr>
   </table>
 

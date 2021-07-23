@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MonthlyReport} from '../../models/MonthlyReport';
 
-
 @Component({
   selector: 'app-general-info',
   templateUrl: './general-info.component.html',
@@ -14,12 +13,12 @@ export class GeneralInfoComponent implements OnInit {
   @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>();
 
   billablePercentage: number;
-  convTotalWorkingTimeHours: number;
-  convBillableTimeHours: number;
+  totalWorkingTimeHours: number;
+  billableTimeHours: number;
 
   identifiers: string[] = [
-    'Arbeitszeit gesamt',
-    'fakturierbare Stunden',
+    'Gesamte Arbeitszeit',
+    'Fakturierbare Stunden',
     'Verrechenbarkeit',
     'Urlaub',
     'Zeitausgleich',
@@ -30,7 +29,7 @@ export class GeneralInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-      this.billablePercentage = this.calculateBillingPercentage(this.monthlyReport.totalWorkingTime, this.monthlyReport.billableTime);
+    this.billablePercentage = this.calculateBillingPercentage(this.monthlyReport.totalWorkingTime, this.monthlyReport.billableTime);
   }
 
   calculateBillingPercentage(totalWorkingTime: string, billableTime: string): number {
@@ -38,20 +37,18 @@ export class GeneralInfoComponent implements OnInit {
     let spBillableTime: string[] = billableTime.split(":");
 
     // if split is not possible return 0
-    if(spTotalWorkingTime.length < 1 || spBillableTime.length < 1) {
+    if (spTotalWorkingTime.length < 1 || spBillableTime.length < 1) {
       return 0;
     }
 
-    let convTotalWorkingTimeMinutes: number = (+spTotalWorkingTime[0] * 60) + (+spTotalWorkingTime[1]);
-    let convBillableTimeMinutes: number = (+spBillableTime[0] * 60) + (+spBillableTime[1]);
-    this.convTotalWorkingTimeHours = convTotalWorkingTimeMinutes / 60;
-    this.convBillableTimeHours = convBillableTimeMinutes / 60;
+    this.totalWorkingTimeHours = ((+spTotalWorkingTime[0] * 60) + (+spTotalWorkingTime[1])) / 60;
+    this.billableTimeHours = ((+spBillableTime[0] * 60) + (+spBillableTime[1])) / 60;
 
     // prevent division by zero
-    if (convTotalWorkingTimeMinutes === 0 || convBillableTimeMinutes === 0) {
+    if (this.totalWorkingTimeHours === 0 || this.billableTimeHours === 0) {
       return 0;
     }
 
-    return (convBillableTimeMinutes / convTotalWorkingTimeMinutes) * 100;
+    return (this.billableTimeHours / this.totalWorkingTimeHours) * 100;
   }
 }
