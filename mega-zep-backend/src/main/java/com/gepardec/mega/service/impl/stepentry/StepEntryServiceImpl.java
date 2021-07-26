@@ -58,26 +58,32 @@ public class StepEntryServiceImpl implements StepEntryService {
     @Override
     @Transactional(Transactional.TxType.SUPPORTS)
     public void addStepEntry(com.gepardec.mega.domain.model.StepEntry stepEntry) {
-        final User ownerDb = new User();
-        ownerDb.setId(stepEntry.owner().dbId());
 
-        final Step stepDb = new Step();
-        stepDb.setId(stepEntry.step().dbId());
+        List <StepEntry> existingStepEntries = stepEntryRepository.findAllStepEntries();
+        if(existingStepEntries.isEmpty()){
+            final User ownerDb = new User();
+            ownerDb.setId(stepEntry.owner().dbId());
 
-        final User assigneeDb = new User();
-        assigneeDb.setId(stepEntry.assignee().dbId());
+            final Step stepDb = new Step();
+            stepDb.setId(stepEntry.step().dbId());
 
-        final StepEntry stepEntryDb = new StepEntry();
-        stepEntryDb.setDate(stepEntry.date());
-        stepEntryDb.setProject(stepEntry.project() != null ? stepEntry.project().projectId() : null);
-        stepEntryDb.setState(EmployeeState.OPEN);
-        stepEntryDb.setOwner(ownerDb);
-        stepEntryDb.setAssignee(assigneeDb);
-        stepEntryDb.setStep(stepDb);
+            final User assigneeDb = new User();
+            assigneeDb.setId(stepEntry.assignee().dbId());
 
-        logger.debug("inserting step entry {}", stepEntryDb);
+            final StepEntry stepEntryDb = new StepEntry();
+            stepEntryDb.setDate(stepEntry.date());
+            stepEntryDb.setProject(stepEntry.project() != null ? stepEntry.project().projectId() : null);
+            stepEntryDb.setState(EmployeeState.OPEN);
+            stepEntryDb.setOwner(ownerDb);
+            stepEntryDb.setAssignee(assigneeDb);
+            stepEntryDb.setStep(stepDb);
 
-        stepEntryRepository.persist(stepEntryDb);
+            logger.debug("inserting step entry {}", stepEntryDb);
+
+            stepEntryRepository.persist(stepEntryDb);
+        }else{
+            logger.info("StepEntries already exist.");
+        }
     }
 
     @Override
