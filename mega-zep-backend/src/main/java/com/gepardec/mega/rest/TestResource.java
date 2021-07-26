@@ -14,7 +14,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.LocalDate;
@@ -69,7 +68,6 @@ public class TestResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response syncAll(@PathParam("year") Integer year, @PathParam("month") Integer month) {
-
         LocalDate date = LocalDate.of(year, month, 1);
         projectSyncService.generateProjects(date);
         enterpriseSyncService.generateEnterpriseEntries(date);
