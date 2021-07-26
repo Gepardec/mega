@@ -57,33 +57,60 @@ public class StepEntryServiceImpl implements StepEntryService {
 
     @Override
     @Transactional(Transactional.TxType.SUPPORTS)
-    public void addStepEntry(com.gepardec.mega.domain.model.StepEntry stepEntry) {
+    public void addStepEntryList(List<com.gepardec.mega.domain.model.StepEntry> stepEntry) {
+        com.gepardec.mega.domain.model.StepEntry sampleStepEntry = stepEntry.get(0);
+        List<StepEntry> existingStepEntries = stepEntryRepository.findAll().list();
 
-        List <StepEntry> existingStepEntries = stepEntryRepository.findAllStepEntries();
-        if(existingStepEntries.isEmpty()){
-            final User ownerDb = new User();
-            ownerDb.setId(stepEntry.owner().dbId());
+        if (existingStepEntries.stream().filter(se -> (se.getDate().isEqual(sampleStepEntry.date()))).count() == 0) {
+            for (com.gepardec.mega.domain.model.StepEntry se : stepEntry) {
+                final User ownerDb = new User();
+                ownerDb.setId(se.owner().dbId());
 
-            final Step stepDb = new Step();
-            stepDb.setId(stepEntry.step().dbId());
+                final Step stepDb = new Step();
+                stepDb.setId(se.step().dbId());
 
-            final User assigneeDb = new User();
-            assigneeDb.setId(stepEntry.assignee().dbId());
+                final User assigneeDb = new User();
+                assigneeDb.setId(se.assignee().dbId());
 
-            final StepEntry stepEntryDb = new StepEntry();
-            stepEntryDb.setDate(stepEntry.date());
-            stepEntryDb.setProject(stepEntry.project() != null ? stepEntry.project().projectId() : null);
-            stepEntryDb.setState(EmployeeState.OPEN);
-            stepEntryDb.setOwner(ownerDb);
-            stepEntryDb.setAssignee(assigneeDb);
-            stepEntryDb.setStep(stepDb);
+                final StepEntry stepEntryDb = new StepEntry();
+                stepEntryDb.setDate(se.date());
+                stepEntryDb.setProject(se.project() != null ? se.project().projectId() : null);
+                stepEntryDb.setState(EmployeeState.OPEN);
+                stepEntryDb.setOwner(ownerDb);
+                stepEntryDb.setAssignee(assigneeDb);
+                stepEntryDb.setStep(stepDb);
 
-            logger.debug("inserting step entry {}", stepEntryDb);
-
-            stepEntryRepository.persist(stepEntryDb);
-        }else{
-            logger.debug("StepEntries already exist.");
+                logger.debug("inserting step entry {}", stepEntryDb);
+                stepEntryRepository.persist(stepEntryDb);
+            }
+        } else {
+            logger.info("StepEntries already exist.");
         }
+    }
+
+    @Override
+    @Transactional(Transactional.TxType.SUPPORTS)
+    public void addStepEntry(com.gepardec.mega.domain.model.StepEntry stepEntry) {
+        final User ownerDb = new User();
+        ownerDb.setId(stepEntry.owner().dbId());
+
+        final Step stepDb = new Step();
+        stepDb.setId(stepEntry.step().dbId());
+
+        final User assigneeDb = new User();
+        assigneeDb.setId(stepEntry.assignee().dbId());
+
+        final StepEntry stepEntryDb = new StepEntry();
+        stepEntryDb.setDate(stepEntry.date());
+        stepEntryDb.setProject(stepEntry.project() != null ? stepEntry.project().projectId() : null);
+        stepEntryDb.setState(EmployeeState.OPEN);
+        stepEntryDb.setOwner(ownerDb);
+        stepEntryDb.setAssignee(assigneeDb);
+        stepEntryDb.setStep(stepDb);
+
+        logger.debug("inserting step entry {}", stepEntryDb);
+
+        stepEntryRepository.persist(stepEntryDb);
     }
 
     @Override

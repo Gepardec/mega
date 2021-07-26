@@ -18,6 +18,8 @@ public interface StepEntryService {
 
     void addStepEntry(final StepEntry stepEntry);
 
+    void addStepEntryList(final List<StepEntry> stepEntryList);
+
     boolean setOpenAndAssignedStepEntriesDone(Employee employee, Long stepId, LocalDate from, LocalDate to);
 
     boolean closeStepEntryForEmployeeInProject(Employee employee, Long stepId, String project, String assigneeEmail, String currentMonthYear);

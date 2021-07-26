@@ -108,7 +108,7 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
             }
         }
 
-        toBeCreatedStepEntries.forEach(stepEntryService::addStepEntry);
+        stepEntryService.addStepEntryList(toBeCreatedStepEntries);
 
         stopWatch.stop();
 
