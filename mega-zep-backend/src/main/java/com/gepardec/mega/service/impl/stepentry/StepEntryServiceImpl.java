@@ -82,7 +82,7 @@ public class StepEntryServiceImpl implements StepEntryService {
 
             stepEntryRepository.persist(stepEntryDb);
         }else{
-            logger.info("StepEntries already exist.");
+            logger.debug("StepEntries already exist.");
         }
     }
 
