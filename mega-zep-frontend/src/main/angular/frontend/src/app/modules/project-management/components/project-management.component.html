@@ -2,8 +2,11 @@
   <div>
     <mat-toolbar class="mat-elevation-z6" color="accent">
       <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
-        <span>{{'global.selectPayrollMonth' | translate}}</span>
-        <app-datepicker-month-year (dateChanged)="dateChanged($event)"></app-datepicker-month-year>
+        <span fxFlex fxFlexOffset="65">{{'global.selectPayrollMonth' | translate}}</span>
+        <span fxFlex="15">
+          <app-datepicker-month-year (dateChanged)="dateChanged($event)"></app-datepicker-month-year>
+        </span>
+
       </mat-toolbar-row>
       <div fxLayoutGap="10px"></div>
       <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center" *ngIf="isAnySelected()">
