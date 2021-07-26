@@ -44,37 +44,7 @@ public class ProjectSyncServiceImpl implements ProjectSyncService {
 
     @Override
     public boolean generateProjects() {
-        final StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-
-        logger.info("Started project generation: {}", Instant.ofEpochMilli(stopWatch.getStartTime()));
-
-        LocalDate date = LocalDate.now().minusMonths(1).withDayOfMonth(1);
-        logger.info("Processing date: {}", date);
-
-        List<User> activeUsers = userService.findActiveUsers();
-        List<Project> projectsForMonthYear = projectService.getProjectsForMonthYear(date,
-                List.of(ProjectFilter.IS_LEADS_AVAILABLE,
-                        ProjectFilter.IS_CUSTOMER_PROJECT));
-
-        logger.info("Loaded projects: {}", projectsForMonthYear.size());
-        logger.debug("projects are {}", projectsForMonthYear);
-        logger.info("Loaded users: {}", activeUsers.size());
-        logger.debug("Users are: {}", activeUsers);
-
-        createProjects(activeUsers, projectsForMonthYear, date)
-                .forEach(projectService::addProject);
-
-        List<Project> projects = projectService.getProjectsForMonthYear(date);
-
-        stopWatch.stop();
-
-        logger.debug("projects in db are {}", projects);
-
-        logger.info("Project generation took: {}ms", stopWatch.getTime());
-        logger.info("Finished project generation: {}", Instant.ofEpochMilli(stopWatch.getStartTime() + stopWatch.getTime()));
-
-        return !projects.isEmpty();
+        return generateProjects(LocalDate.now().minusMonths(1).withDayOfMonth(1));
     }
 
     @Override

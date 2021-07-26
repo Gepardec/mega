@@ -17,6 +17,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.LocalDate;
+import java.time.MonthDay;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -68,10 +70,10 @@ public class TestResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response syncAll(@PathParam("year") Integer year, @PathParam("month") Integer month) {
-        LocalDate date = LocalDate.of(year, month, 1);
+        LocalDate date = LocalDate.of(year, month,1);
+
         projectSyncService.generateProjects(date);
         enterpriseSyncService.generateEnterpriseEntries(date);
-
         Optional.ofNullable(stepEntrySyncService)
                 .orElseThrow(() -> new IllegalStateException("TestResource is disabled and 'StepEntrySyncService' is null"))
                 .generateStepEntries();

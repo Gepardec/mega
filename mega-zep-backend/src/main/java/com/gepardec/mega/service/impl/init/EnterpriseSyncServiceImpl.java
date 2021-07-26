@@ -35,36 +35,7 @@ public class EnterpriseSyncServiceImpl implements EnterpriseSyncService {
 
     @Override
     public boolean generateEnterpriseEntries() {
-        final StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-
-        logger.info("Started enterprise entry generation: {}", Instant.ofEpochMilli(stopWatch.getStartTime()));
-
-        LocalDate date = LocalDate.now().minusMonths(1).withDayOfMonth(1);
-        logger.info("Processing date: {}", date);
-
-        Optional<EnterpriseEntry> savedEnterpriseEntry = enterpriseEntryRepository.findByDate(date);
-
-        if (savedEnterpriseEntry.isEmpty()) {
-            EnterpriseEntry enterpriseEntry = new EnterpriseEntry();
-            enterpriseEntry.setDate(date);
-            enterpriseEntry.setCreationDate(LocalDateTime.now());
-            enterpriseEntry.setChargeabilityExternalEmployeesRecorded(State.OPEN);
-            enterpriseEntry.setPayrollAccountingSent(State.OPEN);
-            enterpriseEntry.setZepMonthlyReportDone(State.OPEN);
-            enterpriseEntry.setZepTimesReleased(State.OPEN);
-
-            enterpriseEntryRepository.persist(enterpriseEntry);
-        } else {
-            logger.debug("Enterprise entry for month {} already exists.", date.getMonth());
-        }
-
-        stopWatch.stop();
-
-        logger.info("Enterprise entry generation took: {}ms", stopWatch.getTime());
-        logger.info("Finished enterprise entry generation: {}", Instant.ofEpochMilli(stopWatch.getStartTime() + stopWatch.getTime()));
-
-        return enterpriseEntryRepository.findByDate(date).isPresent();
+        return generateEnterpriseEntries(LocalDate.now().minusMonths(1).withDayOfMonth(1));
     }
 
     @Override
