@@ -16,6 +16,7 @@ import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.zep.ZepService;
 import de.provantis.zep.FehlzeitType;
 import de.provantis.zep.ProjektzeitType;
+import net.bytebuddy.asm.Advice;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import javax.annotation.Nonnull;
@@ -25,10 +26,13 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 @RequestScoped
 public class MonthlyReportServiceImpl implements MonthlyReportService {
@@ -132,8 +136,16 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     }
 
     private int getAbsenceTimesForEmployee(@Nonnull List<FehlzeitType> fehlZeitTypeList, @Nonnull Employee employee, String absenceType) {
-        Period totalAbsence = Period.ofDays((int) fehlZeitTypeList.stream().filter(fzt -> fzt.getFehlgrund().equals(absenceType)).count());
+        int totalAbsence = fehlZeitTypeList.stream()
+                .filter(fzt -> fzt.getFehlgrund().equals(absenceType))
+                .map(ftl -> (Period.between(LocalDate.parse(ftl.getStartdatum()),LocalDate.parse(ftl.getEnddatum()))))
+                .map(ftl->(ftl.getDays()))
+                .reduce(0, Integer::sum);
 
-        return totalAbsence.getDays();
+        totalAbsence += Period.ofDays((int)fehlZeitTypeList.stream()
+                .filter(fzt -> fzt.getFehlgrund().equals(absenceType))
+                .count())
+                .getDays();
+        return totalAbsence;
     }
 }
