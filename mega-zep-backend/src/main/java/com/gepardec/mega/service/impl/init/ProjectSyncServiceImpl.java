@@ -19,7 +19,11 @@ import javax.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Dependent
@@ -46,6 +50,41 @@ public class ProjectSyncServiceImpl implements ProjectSyncService {
         logger.info("Started project generation: {}", Instant.ofEpochMilli(stopWatch.getStartTime()));
 
         LocalDate date = LocalDate.now().minusMonths(1).withDayOfMonth(1);
+        logger.info("Processing date: {}", date);
+
+        List<User> activeUsers = userService.findActiveUsers();
+        List<Project> projectsForMonthYear = projectService.getProjectsForMonthYear(date,
+                List.of(ProjectFilter.IS_LEADS_AVAILABLE,
+                        ProjectFilter.IS_CUSTOMER_PROJECT));
+
+        logger.info("Loaded projects: {}", projectsForMonthYear.size());
+        logger.debug("projects are {}", projectsForMonthYear);
+        logger.info("Loaded users: {}", activeUsers.size());
+        logger.debug("Users are: {}", activeUsers);
+
+        createProjects(activeUsers, projectsForMonthYear, date)
+                .forEach(projectService::addProject);
+
+        List<Project> projects = projectService.getProjectsForMonthYear(date);
+
+        stopWatch.stop();
+
+        logger.debug("projects in db are {}", projects);
+
+        logger.info("Project generation took: {}ms", stopWatch.getTime());
+        logger.info("Finished project generation: {}", Instant.ofEpochMilli(stopWatch.getStartTime() + stopWatch.getTime()));
+
+        return !projects.isEmpty();
+    }
+
+    @Override
+    public boolean generateProjects(LocalDate date) {
+        final StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+
+        logger.info("Started project generation: {}", Instant.ofEpochMilli(stopWatch.getStartTime()));
+
+        date = date.withDayOfMonth(1);
         logger.info("Processing date: {}", date);
 
         List<User> activeUsers = userService.findActiveUsers();

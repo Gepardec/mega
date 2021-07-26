@@ -12,9 +12,12 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -60,6 +63,22 @@ public class TestResource {
                 .orElseThrow(() -> new IllegalStateException("TestResource is disabled and 'StepEntrySyncService' is null"))
                 .generateStepEntries();
         return Response.ok("ok").build();
+    }
+
+    @Path("syncall/{year}/{month}/")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response syncAll(@PathParam("year") Integer year, @PathParam("month") Integer month) {
+
+        LocalDate date = LocalDate.of(year, month, 1);
+        projectSyncService.generateProjects(date);
+        enterpriseSyncService.generateEnterpriseEntries(date);
+
+        Optional.ofNullable(stepEntrySyncService)
+                .orElseThrow(() -> new IllegalStateException("TestResource is disabled and 'StepEntrySyncService' is null"))
+                .generateStepEntries();
+
+        return Response.ok("synced everything").build();
     }
 
     @Path("/mail-comment")
