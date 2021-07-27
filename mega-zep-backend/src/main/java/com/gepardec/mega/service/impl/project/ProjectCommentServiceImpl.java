@@ -31,7 +31,7 @@ public class ProjectCommentServiceImpl implements ProjectCommentService {
 
     @Override
     public List<ProjectCommentDto> findForProjectNameInRange(String projectName, LocalDate from, LocalDate to) {
-        List<ProjectComment> entities = projectCommentRepository.findByProjectNameAndEntryDateBetween(projectName, from, to);
+        List<ProjectComment> entities = projectCommentRepository.findByProjectNameAndDateBetween(projectName, from, to);
         return entities.stream().map(e -> projectCommentMapper.mapToDto(e)).collect(Collectors.toList());
     }
 
@@ -50,14 +50,27 @@ public class ProjectCommentServiceImpl implements ProjectCommentService {
         Project project = projectRepository.findByName(dto.getProjectName());
         Objects.requireNonNull(project);
 
-        ProjectComment projectComment = new ProjectComment();
-        projectComment.setComment(dto.getComment());
-        projectComment.setProject(project);
-        projectComment.setDate(dto.getDate());
+        List<ProjectComment> existingProjectComments = projectCommentRepository.findByProjectNameWithDate(project.getName(), dto.getDate());
 
-        projectCommentRepository.save(projectComment);
+        if (existingProjectComments.isEmpty()) {
+            ProjectComment newProjectComment = new ProjectComment();
+            newProjectComment.setComment(dto.getComment());
+            newProjectComment.setProject(project);
+            newProjectComment.setDate(dto.getDate());
 
-        return projectCommentMapper.mapToDto(projectComment);
+            projectCommentRepository.save(newProjectComment);
+
+            return projectCommentMapper.mapToDto(newProjectComment);
+        }
+        else {
+            // update comment of existing project comment
+            ProjectComment projectCommentToUpdate = existingProjectComments.get(0);
+            projectCommentToUpdate.setComment(dto.getComment());
+            projectCommentRepository.update(projectCommentToUpdate);
+
+            return projectCommentMapper.mapToDto(projectCommentToUpdate);
+        }
+
     }
 
 
