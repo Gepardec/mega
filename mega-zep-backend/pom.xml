@@ -115,7 +115,10 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-liquibase</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-cache</artifactId>
+        </dependency>
         <!-- Additional Dependencies -->
         <dependency>
             <groupId>org.apache.commons</groupId>
