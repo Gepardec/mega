@@ -140,7 +140,7 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   private getPmEntries() {
-    this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
+    this.pmService.getEntries(this.selectedYear, this.selectedMonth, false).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
       this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
       this.pmEntries.forEach(pmEntry => {

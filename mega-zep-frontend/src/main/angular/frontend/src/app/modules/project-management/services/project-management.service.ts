@@ -12,9 +12,9 @@ export class ProjectManagementService {
   constructor(private configService: ConfigService, private httpClient: HttpClient) {
   }
 
-  getEntries(year: number, month: number): Observable<Array<ProjectManagementEntry>> {
+  getEntries(year: number, month: number, all: boolean): Observable<Array<ProjectManagementEntry>> {
     return this.httpClient.get<Array<ProjectManagementEntry>>(
-      this.configService.getBackendUrlWithContext('/management/projectmanagemententries/' + year + '/' + month)
+      this.configService.getBackendUrlWithContext('/management/projectmanagemententries/' + year + '/' + month + '?all=' + `${all}`)
     );
   }
 }

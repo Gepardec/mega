@@ -88,7 +88,7 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
   }
 
   private getPmEntries() {
-    this.pmService.getEntries(this.selectedYear, this.selectedMonth).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
+    this.pmService.getEntries(this.selectedYear, this.selectedMonth, true).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
       this.pmEntries.forEach(pmEntry => {
         this.projectCommentService.get(this.getFormattedDate(), pmEntry.projectName)

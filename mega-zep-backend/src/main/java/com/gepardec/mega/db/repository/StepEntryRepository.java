@@ -129,4 +129,13 @@ public class StepEntryRepository implements PanacheRepository<StepEntry> {
                         .and("stepId", StepName.CONTROL_TIME_EVIDENCES.getId())
         ).list();
     }
+
+    public List<StepEntry> findAllStepEntriesForAllPMInRange(LocalDate startDate, LocalDate endDate) {
+        return find("#StepEntry.findAllStepEntriesForAllPMInRange",
+                Parameters
+                        .with("start", startDate)
+                        .and("end", endDate)
+                        .and("stepId", StepName.CONTROL_TIME_EVIDENCES.getId())
+        ).list();
+    }
 }

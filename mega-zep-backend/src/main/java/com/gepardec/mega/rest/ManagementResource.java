@@ -31,6 +31,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -115,7 +116,7 @@ public class ManagementResource {
     @GET
     @Path("/projectmanagemententries/{year}/{month}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ProjectManagementEntry> getAllProjectManagementEntries(@PathParam("year") Integer year, @PathParam("month") Integer month) {
+    public List<ProjectManagementEntry> getAllProjectManagementEntries(@PathParam("year") Integer year, @PathParam("month") Integer month, @QueryParam("all") boolean allProjects) {
         if (userContext == null || userContext.user() == null) {
             throw new IllegalStateException("User context does not exist or user is null.");
         }
@@ -123,7 +124,14 @@ public class ManagementResource {
         LocalDate from = LocalDate.of(year, month, 1);
         LocalDate to = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
 
-        List<ProjectEmployees> projectEmployees = stepEntryService.getProjectEmployeesForPM(from, to, Objects.requireNonNull(userContext.user()).email());
+        List<ProjectEmployees> projectEmployees = null;
+
+        if(allProjects) {
+            projectEmployees = stepEntryService.getAllProjectEmployeesForPM(from, to);
+        } else {
+            projectEmployees = stepEntryService.getProjectEmployeesForPM(from, to, Objects.requireNonNull(userContext.user()).email());
+        }
+
         List<ProjectManagementEntry> projectManagementEntries = new ArrayList<>();
 
         Map<String, Employee> employees = createEmployeeCache();

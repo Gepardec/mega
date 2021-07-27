@@ -151,6 +151,17 @@ public class StepEntryServiceImpl implements StepEntryService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<ProjectEmployees> getAllProjectEmployeesForPM(LocalDate from, LocalDate to) {
+        return stepEntryRepository.findAllStepEntriesForAllPMInRange(from, to)
+                .stream()
+                .collect(Collectors.groupingBy(StepEntry::getProject, Collectors.mapping(s -> s.getOwner().getZepId(), Collectors.toList())))
+                .entrySet()
+                .stream()
+                .map(e -> ProjectEmployees.builder().projectId(e.getKey()).employees(e.getValue()).build())
+                .collect(Collectors.toList());
+    }
+
     private LocalDate parseReleaseDate(String releaseDate) {
         LocalDate entryDate;
         if (StringUtils.isBlank(releaseDate) || StringUtils.equalsIgnoreCase(releaseDate, "NULL")) {
