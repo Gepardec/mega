@@ -132,10 +132,17 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     }
 
     private int getAbsenceTimesForEmployee(@Nonnull List<FehlzeitType> fehlZeitTypeList, @Nonnull Employee employee, String absenceType) {
-        Period totalAbsence = Period.ofDays((int) fehlZeitTypeList.stream()
+        int totalAbsence = fehlZeitTypeList.stream()
                 .filter(fzt -> fzt.getFehlgrund().equals(absenceType))
-                .count());
+                .map(ftl -> (Period.between(LocalDate.parse(ftl.getStartdatum()), LocalDate.parse(ftl.getEnddatum()))))
+                .map(ftl -> (ftl.getDays()))
+                .reduce(0, Integer::sum);
 
-        return totalAbsence.getDays();
+        totalAbsence += Period.ofDays((int) fehlZeitTypeList.stream()
+                .filter(fzt -> fzt.getFehlgrund().equals(absenceType))
+                .count())
+                .getDays();
+      
+        return totalAbsence;
     }
 }
