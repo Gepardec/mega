@@ -31,7 +31,7 @@ public class InvalidWorkingLocationInJourneyCalculator implements WarningCalcula
         final List<JourneyWarning> warnings = new ArrayList<>();
 
         if (hasJourneyEntries(groupedProjectTimeEntries)) {
-            WorkingLocation workingLocation = null;
+            WorkingLocation workingLocation = WorkingLocation.MAIN;
             JourneyDirection journeyDirection = null;
             for (final ProjectEntry projectEntry : groupedProjectTimeEntries) {
                 if (Task.isJourney(projectEntry.getTask())) {
