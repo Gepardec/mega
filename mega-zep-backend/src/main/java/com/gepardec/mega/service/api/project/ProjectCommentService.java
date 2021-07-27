@@ -5,7 +5,6 @@ import com.gepardec.mega.rest.model.ProjectCommentDto;
 import java.time.LocalDate;
 import java.util.List;
 
-
 public interface ProjectCommentService {
 
     List<ProjectCommentDto> findForProjectNameInRange(String projectName, LocalDate from, LocalDate to);

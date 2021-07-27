@@ -1,8 +1,5 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.application.interceptor.RolesAllowed;
-import com.gepardec.mega.application.interceptor.Secured;
-import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.rest.model.ManagementEntry;
 import com.gepardec.mega.rest.model.ProjectManagementEntry;
 
@@ -10,6 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -23,5 +21,5 @@ public interface ManagementResourceAPI {
     @GET
     @Path("/projectmanagemententries/{year}/{month}")
     @Produces(MediaType.APPLICATION_JSON)
-    List<ProjectManagementEntry> getAllProjectManagementEntries(@PathParam("year") Integer year, @PathParam("month") Integer month);
+    List<ProjectManagementEntry> getAllProjectManagementEntries(@PathParam("year") Integer year, @PathParam("month") Integer month, @QueryParam("all") boolean allProjects);
 }

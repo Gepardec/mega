@@ -16,19 +16,15 @@ import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.zep.ZepService;
 import de.provantis.zep.FehlzeitType;
 import de.provantis.zep.ProjektzeitType;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import javax.annotation.Nonnull;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 @RequestScoped
 public class MonthlyReportServiceImpl implements MonthlyReportService {
@@ -74,7 +70,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
             comments.addAll(commentService.findCommentsForEmployee(employee, fromDate, toDate));
 
             final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(employee.email(), employee.releaseDate());
-            allOwnedStepEntriesForPMProgress.stream()
+            allOwnedStepEntriesForPMProgress
                     .forEach(stepEntry -> pmProgresses.add(
                             PmProgress.builder()
                                     .project(stepEntry.getProject())
@@ -102,33 +98,12 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                 .isAssigned(isAssigned)
                 .employeeProgresses(pmProgresses)
                 .otherChecksDone(otherChecksDone)
-                .billableTime(getBillableTimesForEmployee(billableEntries, employee, true))
-                .totalWorkingTime(getTotalWorkingTimeForEmployee(billableEntries, employee))
+                .billableTime(zepService.getBillableTimesForEmployee(billableEntries, employee, true))
+                .totalWorkingTime(zepService.getTotalWorkingTimeForEmployee(billableEntries, employee))
                 .compensatoryDays(getAbsenceTimesForEmployee(absenceEntries, employee, "FA"))
                 .homeofficeDays(getAbsenceTimesForEmployee(absenceEntries, employee, "HO"))
                 .vacationDays(getAbsenceTimesForEmployee(absenceEntries, employee, "UB"))
                 .build();
-    }
-
-    private String getBillableTimesForEmployee(@Nonnull List<ProjektzeitType> projektzeitTypeList, @Nonnull Employee employee, boolean billable) {
-        Duration totalBillable = projektzeitTypeList.stream()
-                .filter(pzt -> pzt.getUserId().equals(employee.userId()))
-                .filter(billable ? ProjektzeitType::isIstFakturierbar : Predicate.not(ProjektzeitType::isIstFakturierbar))
-                .map(pzt -> LocalTime.parse(pzt.getDauer()))
-                .map(lt -> Duration.between(LocalTime.MIN, lt))
-                .reduce(Duration.ZERO, Duration::plus);
-
-        return DurationFormatUtils.formatDuration(totalBillable.toMillis(), BILLABLE_TIME_FORMAT);
-    }
-
-    private String getTotalWorkingTimeForEmployee(@Nonnull List<ProjektzeitType> projektzeitTypeList, @Nonnull Employee employee) {
-        Duration totalBillable = projektzeitTypeList.stream()
-                .filter(pzt -> pzt.getUserId().equals(employee.userId()))
-                .map(pzt -> LocalTime.parse(pzt.getDauer()))
-                .map(lt -> Duration.between(LocalTime.MIN, lt))
-                .reduce(Duration.ZERO, Duration::plus);
-
-        return DurationFormatUtils.formatDuration(totalBillable.toMillis(), BILLABLE_TIME_FORMAT);
     }
 
     private int getAbsenceTimesForEmployee(@Nonnull List<FehlzeitType> fehlZeitTypeList, @Nonnull Employee employee, String absenceType) {
@@ -142,7 +117,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                 .filter(fzt -> fzt.getFehlgrund().equals(absenceType))
                 .count())
                 .getDays();
-      
+
         return totalAbsence;
     }
 }

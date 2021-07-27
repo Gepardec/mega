@@ -4,7 +4,6 @@ import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.FinishedAndTotalComments;
 
-import javax.ws.rs.Path;
 import java.time.LocalDate;
 import java.util.List;
 

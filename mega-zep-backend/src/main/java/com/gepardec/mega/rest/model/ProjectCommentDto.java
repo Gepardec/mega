@@ -7,7 +7,6 @@ import lombok.extern.jackson.Jacksonized;
 
 import java.time.LocalDate;
 
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Jacksonized
 @Builder
@@ -15,8 +14,11 @@ import java.time.LocalDate;
 public class ProjectCommentDto {
 
     private final Long id;
+
     private final String comment;
+
     private final LocalDate date;
+
     private final String projectName;
 
 }

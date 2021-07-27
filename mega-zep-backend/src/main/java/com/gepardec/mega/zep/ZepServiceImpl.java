@@ -36,11 +36,15 @@ import io.quarkus.cache.CacheInvalidate;
 import io.quarkus.cache.CacheResult;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.slf4j.Logger;
 
+import javax.annotation.Nonnull;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
@@ -49,6 +53,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.gepardec.mega.domain.utils.DateUtils.getFirstDayOfFollowingMonth;
@@ -56,6 +61,8 @@ import static com.gepardec.mega.domain.utils.DateUtils.getLastDayOfFollowingMont
 
 @RequestScoped
 public class ZepServiceImpl implements ZepService {
+
+    private static final String BILLABLE_TIME_FORMAT = "HH:mm";
 
     private static final Range<Integer> PROJECT_LEAD_RANGE = Range.between(1, 2);
 
@@ -174,6 +181,34 @@ public class ZepServiceImpl implements ZepService {
 
         }
         return Collections.emptyList();
+    }
+
+    @Override
+    public String getBillableTimesForEmployee(@Nonnull List<ProjektzeitType> projektzeitTypeList, @Nonnull Employee employee) {
+        return getBillableTimesForEmployee(projektzeitTypeList, employee, false);
+    }
+
+    @Override
+    public String getBillableTimesForEmployee(@Nonnull List<ProjektzeitType> projektzeitTypeList, @Nonnull Employee employee, boolean billable) {
+        Duration totalBillable = projektzeitTypeList.stream()
+                .filter(pzt -> pzt.getUserId().equals(employee.userId()))
+                .filter(billable ? ProjektzeitType::isIstFakturierbar : Predicate.not(ProjektzeitType::isIstFakturierbar))
+                .map(pzt -> LocalTime.parse(pzt.getDauer()))
+                .map(lt -> Duration.between(LocalTime.MIN, lt))
+                .reduce(Duration.ZERO, Duration::plus);
+
+        return DurationFormatUtils.formatDuration(totalBillable.toMillis(), BILLABLE_TIME_FORMAT);
+    }
+
+    @Override
+    public String getTotalWorkingTimeForEmployee(@Nonnull List<ProjektzeitType> projektzeitTypeList, @Nonnull Employee employee) {
+        Duration totalBillable = projektzeitTypeList.stream()
+                .filter(pzt -> pzt.getUserId().equals(employee.userId()))
+                .map(pzt -> LocalTime.parse(pzt.getDauer()))
+                .map(lt -> Duration.between(LocalTime.MIN, lt))
+                .reduce(Duration.ZERO, Duration::plus);
+
+        return DurationFormatUtils.formatDuration(totalBillable.toMillis(), BILLABLE_TIME_FORMAT);
     }
 
     @CacheResult(cacheName = "projectentry")
