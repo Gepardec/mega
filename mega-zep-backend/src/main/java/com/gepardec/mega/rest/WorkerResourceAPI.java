@@ -13,10 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@RequestScoped
-@Secured
 @Path("/worker")
-@RolesAllowed(Role.EMPLOYEE)
 public interface WorkerResourceAPI {
     @GET
     @Path("/monthendreports")

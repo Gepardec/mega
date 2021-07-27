@@ -12,18 +12,15 @@ import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 @RequestScoped
+@RolesAllowed(Role.EMPLOYEE)
+@Secured
 public class WorkerResource implements WorkerResourceAPI {
 
     @Inject

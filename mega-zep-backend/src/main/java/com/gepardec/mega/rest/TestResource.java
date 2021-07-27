@@ -8,13 +8,8 @@ import com.gepardec.mega.service.api.init.ProjectSyncService;
 import com.gepardec.mega.service.api.init.StepEntrySyncService;
 import io.quarkus.arc.properties.IfBuildProperty;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +18,7 @@ import java.util.Optional;
 
 // The property 'mega.endpoint.test.enable' is set to 'true' during CI/CD builds.
 @RequestScoped
+@IfBuildProperty(name = "mega.endpoint.test.enable", stringValue = "true", enableIfMissing = true)
 public class TestResource implements TestResourceAPI {
 
     @Inject

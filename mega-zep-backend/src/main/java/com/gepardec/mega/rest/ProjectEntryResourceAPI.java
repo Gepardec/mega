@@ -10,8 +10,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@Secured
-@RequestScoped
 @Path("/projectentry")
 public interface ProjectEntryResourceAPI {
     @PUT

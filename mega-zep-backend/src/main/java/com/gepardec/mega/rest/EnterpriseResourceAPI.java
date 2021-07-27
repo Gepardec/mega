@@ -9,8 +9,6 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-@Secured
-@RolesAllowed(value = {Role.PROJECT_LEAD, Role.OFFICE_MANAGEMENT})
 @Path("/enterprise")
 public interface EnterpriseResourceAPI {
     @GET

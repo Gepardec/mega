@@ -10,9 +10,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Secured
-// PL, OM
-@RolesAllowed({Role.PROJECT_LEAD, Role.OFFICE_MANAGEMENT})
 @Path("/employees")
 public interface EmployeeResourceAPI {
     @GET

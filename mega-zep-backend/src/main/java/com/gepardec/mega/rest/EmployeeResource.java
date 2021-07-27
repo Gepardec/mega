@@ -6,19 +6,14 @@ import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.validation.constraints.NotEmpty;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @RequestScoped
+@Secured
+// PL, OM
+@RolesAllowed({Role.PROJECT_LEAD, Role.OFFICE_MANAGEMENT})
 public class EmployeeResource implements EmployeeResourceAPI {
 
     @Inject

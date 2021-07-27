@@ -8,8 +8,6 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-@Secured
-@RequestScoped
 @Path("/projectcomments")
 public interface ProjectCommentResourceAPI {
     @GET

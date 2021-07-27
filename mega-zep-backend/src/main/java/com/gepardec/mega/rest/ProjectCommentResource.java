@@ -4,14 +4,11 @@ import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.rest.model.ProjectCommentDto;
 import com.gepardec.mega.service.api.project.ProjectCommentService;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 
 @RequestScoped
+@Secured
 public class ProjectCommentResource implements ProjectCommentResourceAPI {
 
     @Inject

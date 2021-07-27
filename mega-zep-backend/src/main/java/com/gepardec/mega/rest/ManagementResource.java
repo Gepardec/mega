@@ -6,13 +6,7 @@ import com.gepardec.mega.db.entity.employee.EmployeeState;
 import com.gepardec.mega.db.entity.employee.StepEntry;
 import com.gepardec.mega.db.entity.project.ProjectEntry;
 import com.gepardec.mega.db.entity.project.ProjectStep;
-import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.FinishedAndTotalComments;
-import com.gepardec.mega.domain.model.ProjectEmployees;
-import com.gepardec.mega.domain.model.ProjectState;
-import com.gepardec.mega.domain.model.Role;
-import com.gepardec.mega.domain.model.StepName;
-import com.gepardec.mega.domain.model.UserContext;
+import com.gepardec.mega.domain.model.*;
 import com.gepardec.mega.rest.model.ManagementEntry;
 import com.gepardec.mega.rest.model.PmProgress;
 import com.gepardec.mega.rest.model.ProjectManagementEntry;
@@ -26,14 +20,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import javax.annotation.Nonnull;
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -47,6 +35,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @RequestScoped
+@Secured
+@RolesAllowed(value = {Role.PROJECT_LEAD, Role.OFFICE_MANAGEMENT})
 public class ManagementResource implements ManagementResourceAPI {
 
     private static final String DATE_FORMAT_PATTERN = "YYYY-MM-dd";
