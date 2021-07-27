@@ -29,7 +29,9 @@
             {{'project-management.projectTimeState' | translate}}</mat-header-cell>
           <mat-cell *matCellDef="let pmEntry" class="text-center">
             <span class="mobile-label">{{'project-management.projectTimeState' | translate}}</span>
-            <app-state-indicator [state]="pmEntry.controlProjectState"></app-state-indicator>
+            <app-state-indicator [state]="pmEntry.controlProjectState"
+                                 [matTooltip]="getTooltipText(pmEntry.controlProjectState)"
+                                 [matTooltipShowDelay]="tooltipShowDelay"></app-state-indicator>
           </mat-cell>
         </ng-container>
 
@@ -38,7 +40,9 @@
             {{'project-management.billingState' | translate}}</mat-header-cell>
           <mat-cell *matCellDef="let pmEntry" class="text-center">
             <span class="mobile-label">{{'project-management.billingState' | translate}}</span>
-            <app-state-indicator [state]="pmEntry.controlBillingState"></app-state-indicator>
+            <app-state-indicator [state]="pmEntry.controlBillingState"
+                                 [matTooltip]="getTooltipText(pmEntry.controlBillingState)"
+                                 [matTooltipShowDelay]="tooltipShowDelay"></app-state-indicator>
           </mat-cell>
         </ng-container>
 

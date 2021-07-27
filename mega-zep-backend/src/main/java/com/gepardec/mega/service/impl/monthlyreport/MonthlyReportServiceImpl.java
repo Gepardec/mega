@@ -142,6 +142,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                 .filter(fzt -> fzt.getFehlgrund().equals(absenceType))
                 .count())
                 .getDays();
+      
         return totalAbsence;
     }
 }
