@@ -25,6 +25,20 @@ quarkus:
     change-log: "db/changelog-master.xml"
     migrate-at-start: false
 
+  cache:
+    caffeine:
+      "employee":
+        initial-capacity: 50
+        expire-after-write: 30M
+      "fehlzeitentype":
+        expire-after-write: 30M
+      "projektzeittype":
+        expire-after-write: 30M
+      "projectentry":
+        expire-after-write: 30M
+      "project":
+        expire-after-write: 30M
+
   mailer:
     auth-methods: "DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN"
     from: "service@gepardec.com (MEGA Mailer)"
