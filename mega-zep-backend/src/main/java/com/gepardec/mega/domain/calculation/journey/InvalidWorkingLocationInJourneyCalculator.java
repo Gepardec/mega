@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class InvalidWorkingLocationInJourneyCalculator implements WarningCalculationStrategy<JourneyWarning> {
@@ -36,9 +37,13 @@ public class InvalidWorkingLocationInJourneyCalculator implements WarningCalcula
                 if (Task.isJourney(projectEntry.getTask())) {
                     workingLocation = projectEntry.getWorkingLocation();
                     journeyDirection = ((JourneyTimeEntry) projectEntry).getJourneyDirection();
-                } else if (!isProjectEntryValid(projectEntry, workingLocation, journeyDirection)) {
-                    warnings.add(createJourneyWarningWithEnumType(projectEntry, JourneyWarningType.INVALID_WORKING_LOCATION));
-                    break;
+                } else {
+                    if (journeyDirection != null && journeyDirection.equals(JourneyDirection.BACK)) {
+                        workingLocation = WorkingLocation.MAIN;
+                    }
+                    if (!isProjectEntryValid(projectEntry, workingLocation, journeyDirection)) {
+                        warnings.add(createJourneyWarningWithEnumType(projectEntry, JourneyWarningType.INVALID_WORKING_LOCATION));
+                    }
                 }
             }
         }
