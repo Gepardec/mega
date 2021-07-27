@@ -29,15 +29,15 @@ quarkus:
     caffeine:
       "employee":
         initial-capacity: 50
-        expire-after-write: 30M
+        expire-after-write: 3M
       "fehlzeitentype":
-        expire-after-write: 30M
+        expire-after-write: 3M
       "projektzeittype":
-        expire-after-write: 30M
+        expire-after-write: 3M
       "projectentry":
-        expire-after-write: 30M
+        expire-after-write: 3M
       "project":
-        expire-after-write: 30M
+        expire-after-write: 3M
 
   mailer:
     auth-methods: "DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN"
