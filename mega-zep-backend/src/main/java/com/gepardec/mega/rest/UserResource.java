@@ -8,22 +8,16 @@ import com.gepardec.mega.domain.model.UserContext;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
-@Secured
 @RequestScoped
-@Path("/user")
 @RolesAllowed(Role.EMPLOYEE)
-public class UserResource {
+@Secured
+public class UserResource implements UserResourceAPI {
 
     @Inject
     UserContext userContext;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Override
     public User get() {
         return userContext.user();
     }
