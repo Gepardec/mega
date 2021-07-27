@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 
 // The property 'mega.endpoint.test.enable' is set to 'true' during CI/CD builds.
-@ApplicationScoped
+@RequestScoped
 public class TestResource implements TestResourceAPI {
 
     @Inject

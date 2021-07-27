@@ -18,7 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.time.LocalDate;
 
-@ApplicationScoped
+@RequestScoped
 public class StepEntryResource implements StepEntryResourceAPI {
 
     @Inject

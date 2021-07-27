@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-@ApplicationScoped
+@RequestScoped
 public class ProjectCommentResource implements ProjectCommentResourceAPI {
 
     @Inject

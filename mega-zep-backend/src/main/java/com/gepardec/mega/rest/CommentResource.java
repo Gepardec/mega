@@ -8,6 +8,7 @@ import com.gepardec.mega.rest.model.NewCommentEntry;
 import com.gepardec.mega.service.api.comment.CommentService;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -24,7 +25,7 @@ import javax.ws.rs.core.MediaType;
 import java.time.LocalDate;
 import java.util.List;
 
-@ApplicationScoped
+@RequestScoped
 public class CommentResource implements CommentResourceAPI {
 
     @Inject

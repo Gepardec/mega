@@ -27,6 +27,7 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import javax.annotation.Nonnull;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -45,7 +46,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
+@RequestScoped
 public class ManagementResource implements ManagementResourceAPI {
 
     private static final String DATE_FORMAT_PATTERN = "YYYY-MM-dd";

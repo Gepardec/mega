@@ -8,6 +8,7 @@ import com.gepardec.mega.service.api.enterpriseentry.EnterpriseEntryService;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -19,7 +20,7 @@ import javax.ws.rs.core.MediaType;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 
-@ApplicationScoped
+@RequestScoped
 public class EnterpriseResource implements EnterpriseResourceAPI {
 
     @Inject

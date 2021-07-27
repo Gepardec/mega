@@ -4,6 +4,7 @@ import com.gepardec.mega.application.configuration.ApplicationConfig;
 import com.gepardec.mega.rest.model.ApplicationInfo;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -12,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-@ApplicationScoped
+@RequestScoped
 public class ApplicationInfoResource implements ApplicationInfoResourceAPI {
 
     @Inject

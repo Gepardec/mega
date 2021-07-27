@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@ApplicationScoped
+@RequestScoped
 public class WorkerResource implements WorkerResourceAPI {
 
     @Inject

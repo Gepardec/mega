@@ -7,6 +7,7 @@ import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.service.api.employee.EmployeeService;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.NotEmpty;
 import javax.ws.rs.Consumes;
@@ -17,7 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@ApplicationScoped
+@RequestScoped
 public class EmployeeResource implements EmployeeResourceAPI {
 
     @Inject
