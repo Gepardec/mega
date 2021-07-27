@@ -2,7 +2,6 @@
     <textarea #autosize="cdkTextareaAutosize"
               #textarea
               [value]="comment ? comment : ''"
-              (focusout)="onCancel()"
               cdkAutosizeMaxRows="3"
               cdkAutosizeMinRows="1"
               cdkTextareaAutosize
