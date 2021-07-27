@@ -23,21 +23,16 @@ import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.zep.ZepService;
 import de.provantis.zep.ProjektzeitType;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 
-import javax.annotation.Nonnull;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @RequestScoped
@@ -107,7 +102,7 @@ public class ManagementResource implements ManagementResourceAPI {
     }
 
     @Override
-    public List<ProjectManagementEntry> getAllProjectManagementEntries(Integer year, Integer month) {
+    public List<ProjectManagementEntry> getAllProjectManagementEntries(Integer year, Integer month, boolean allProjects) {
         if (userContext == null || userContext.user() == null) {
             throw new IllegalStateException("User context does not exist or user is null.");
         }
@@ -115,9 +110,9 @@ public class ManagementResource implements ManagementResourceAPI {
         LocalDate from = LocalDate.of(year, month, 1);
         LocalDate to = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
 
-        List<ProjectEmployees> projectEmployees = null;
+        List<ProjectEmployees> projectEmployees;
 
-        if(allProjects) {
+        if (allProjects) {
             projectEmployees = stepEntryService.getAllProjectEmployeesForPM(from, to);
         } else {
             projectEmployees = stepEntryService.getProjectEmployeesForPM(from, to, Objects.requireNonNull(userContext.user()).email());
@@ -204,8 +199,8 @@ public class ManagementResource implements ManagementResourceAPI {
                     .finishedComments(finishedAndTotalComments.finishedComments())
                     .totalComments(finishedAndTotalComments.totalComments())
                     .entryDate(stepEntries.get(0).getDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN)))
-                    .billableTime(getBillableTimesForEmployee(projektzeitTypes, employee, true))
-                    .nonBillableTime(getBillableTimesForEmployee(projektzeitTypes, employee, false))
+                    .billableTime(zepService.getBillableTimesForEmployee(projektzeitTypes, employee, true))
+                    .nonBillableTime(zepService.getBillableTimesForEmployee(projektzeitTypes, employee))
                     .build();
         }
 
@@ -266,16 +261,5 @@ public class ManagementResource implements ManagementResourceAPI {
                 })
                 .map(StepEntry::getState)
                 .anyMatch(state -> state.equals(EmployeeState.OPEN)) ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
-    }
-
-    private String getBillableTimesForEmployee(@Nonnull List<ProjektzeitType> projektzeitTypeList, @Nonnull Employee employee, boolean billable) {
-        Duration totalBillable = projektzeitTypeList.stream()
-                .filter(pzt -> pzt.getUserId().equals(employee.userId()))
-                .filter(billable ? ProjektzeitType::isIstFakturierbar : Predicate.not(ProjektzeitType::isIstFakturierbar))
-                .map(pzt -> LocalTime.parse(pzt.getDauer()))
-                .map(lt -> Duration.between(LocalTime.MIN, lt))
-                .reduce(Duration.ZERO, Duration::plus);
-
-        return DurationFormatUtils.formatDuration(totalBillable.toMillis(), BILLABLE_TIME_FORMAT);
     }
 }

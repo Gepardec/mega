@@ -1,9 +1,7 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.rest.model.ProjectEntryDTO;
 
-import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
