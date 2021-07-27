@@ -11,6 +11,7 @@ import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
 import com.gepardec.mega.service.impl.monthlyreport.WarningCalculator;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -145,10 +146,18 @@ class WarningCalculatorTest {
                 .determineJourneyWarnings(List.of(journeyTimeEntryFour, projectEntryThree, projectEntryTwo, journeyTimeEntryOne));
 
         assertEquals(1, warnings.size());
-        assertEquals(1, warnings.get(0).getWarningTypes().size());
+        assertEquals(2, warnings.get(0).getWarningTypes().size());
         assertEquals(JourneyWarningType.INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
     }
 
+    /*
+    Comment disabled because:
+                   journeys grouped in days     ->      now grouped in months
+                   this allows journeys over multiple days
+                   this prevents to group multiple warnings on one day
+                    -without implementing 'complex' logic
+     */
+    @Disabled
     @Test
     void whenTwoProjectTimeEntryWithinJourneyWithWorkingLocationMain_thenOneWarning() {
         final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 7, 8, JourneyDirection.TO, WorkingLocation.A, Vehicle.OTHER_INACTIVE);
@@ -385,6 +394,18 @@ class WarningCalculatorTest {
 
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(firstDayTimeEntryOne, firstDayTimeEntryTwo, secondDayTimeEntryOne, secondDayTimeEntryTwo));
+
+        assertTrue(warnings.isEmpty());
+    }
+
+    @Test
+    void whenJourneuOverXDays_thenNoWarning() {
+        final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 7, 12, JourneyDirection.TO, WorkingLocation.A, Vehicle.OTHER_INACTIVE);
+        final ProjectTimeEntry secondDayTimeEntryTwo = projectTimeEntryFor(2, 13, 16, WorkingLocation.MAIN);
+        final JourneyTimeEntry thirdTimeEntryOne = journeyTimeEntryFor(3, 7, 12, JourneyDirection.BACK, WorkingLocation.A, Vehicle.OTHER_INACTIVE);
+
+        final List<TimeWarning> warnings = calculator
+                .determineTimeWarnings(List.of(journeyTimeEntryOne, secondDayTimeEntryTwo, thirdTimeEntryOne));
 
         assertTrue(warnings.isEmpty());
     }
