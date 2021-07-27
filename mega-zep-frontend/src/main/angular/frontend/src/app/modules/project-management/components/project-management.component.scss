@@ -70,6 +70,7 @@ tr.spacing > td {
 .comment-container {
   display: flex;
   padding-left: 15px;
+  white-space: pre-wrap;
 
   > :nth-child(1) {
     flex-grow: 1;
