@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import javax.annotation.Nonnull;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -44,10 +45,8 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-@Secured
-@RolesAllowed(value = {Role.PROJECT_LEAD, Role.OFFICE_MANAGEMENT})
-@Path("/management")
-public class ManagementResource {
+@ApplicationScoped
+public class ManagementResource implements ManagementResourceAPI {
 
     private static final String DATE_FORMAT_PATTERN = "YYYY-MM-dd";
 
@@ -71,10 +70,8 @@ public class ManagementResource {
     @Inject
     ZepService zepService;
 
-    @GET
-    @Path("/officemanagemententries/{year}/{month}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<ManagementEntry> getAllOfficeManagementEntries(@PathParam("year") Integer year, @PathParam("month") Integer month) {
+    @Override
+    public List<ManagementEntry> getAllOfficeManagementEntries(Integer year, Integer month) {
         LocalDate from = LocalDate.of(year, month, 1);
         LocalDate to = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
 
@@ -112,10 +109,8 @@ public class ManagementResource {
         return officeManagementEntries;
     }
 
-    @GET
-    @Path("/projectmanagemententries/{year}/{month}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<ProjectManagementEntry> getAllProjectManagementEntries(@PathParam("year") Integer year, @PathParam("month") Integer month) {
+    @Override
+    public List<ProjectManagementEntry> getAllProjectManagementEntries(Integer year, Integer month) {
         if (userContext == null || userContext.user() == null) {
             throw new IllegalStateException("User context does not exist or user is null.");
         }

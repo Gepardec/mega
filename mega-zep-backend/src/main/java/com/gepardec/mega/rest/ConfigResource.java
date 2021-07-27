@@ -5,6 +5,7 @@ import com.gepardec.mega.application.configuration.OAuthConfig;
 import com.gepardec.mega.application.configuration.ZepConfig;
 import com.gepardec.mega.rest.model.Config;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -14,8 +15,8 @@ import javax.ws.rs.core.MediaType;
 /**
  * Provides configuration for the frontend.
  */
-@Path("/config")
-public class ConfigResource {
+@ApplicationScoped
+public class ConfigResource implements ConfigResourceAPI {
 
     @Inject
     OAuthConfig oauthConfig;
@@ -26,9 +27,7 @@ public class ConfigResource {
     @Inject
     ZepConfig zepConfig;
 
-    @Path("/")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Override
     public Config get() {
         return Config.builder()
                 .excelUrl(applicationConfig.getExcelUrlAsString())

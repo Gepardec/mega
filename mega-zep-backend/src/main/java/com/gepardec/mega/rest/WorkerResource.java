@@ -12,6 +12,7 @@ import com.gepardec.mega.service.api.employee.EmployeeService;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -22,11 +23,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@RequestScoped
-@Secured
-@Path("/worker")
-@RolesAllowed(Role.EMPLOYEE)
-public class WorkerResource {
+@ApplicationScoped
+public class WorkerResource implements WorkerResourceAPI {
 
     @Inject
     MonthlyReportService monthlyReportService;
@@ -40,9 +38,7 @@ public class WorkerResource {
     @Inject
     StepEntryService stepEntryService;
 
-    @GET
-    @Path("/monthendreports")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Override
     public MonthlyReport monthlyReport() {
         Employee employee = employeeService.getEmployee(Objects.requireNonNull(userContext.user()).userId());
         MonthlyReport monthlyReport = monthlyReportService.getMonthendReportForUser(Objects.requireNonNull(employee).userId());
@@ -68,9 +64,7 @@ public class WorkerResource {
         return monthlyReport;
     }
 
-    @GET
-    @Path("/getall")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Override
     public List<User> getAll() {
         return employeeService.getAll();
     }

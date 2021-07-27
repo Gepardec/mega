@@ -7,6 +7,7 @@ import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.rest.model.NewCommentEntry;
 import com.gepardec.mega.service.api.comment.CommentService;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -23,36 +24,26 @@ import javax.ws.rs.core.MediaType;
 import java.time.LocalDate;
 import java.util.List;
 
-@Secured
-@Path("/comments")
-public class CommentResource {
+@ApplicationScoped
+public class CommentResource implements CommentResourceAPI {
 
     @Inject
     CommentService commentService;
 
-    @PUT
-    @Path("/setdone")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Override
     public int setDone(@NotNull(message = "{commentResource.comment.notNull}") final Comment comment) {
         return commentService.setDone(comment);
     }
 
-    @GET
-    @Path("/getallcommentsforemployee")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Comment> getAllCommentsForEmployee(
-            @QueryParam("email") @NotNull(message = "{commentResource.email.notNull}") @Email(message = "{commentResource.email.invalid}") String employeeEmail,
-            @QueryParam("date") @NotNull(message = "{commentResource.date.notNull}") String currentMonthYear) {
+    @Override
+    public List<Comment> getAllCommentsForEmployee(String employeeEmail, String currentMonthYear) {
         LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(currentMonthYear));
         LocalDate to = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(currentMonthYear));
         return commentService.findCommentsForEmployee(Employee.builder().email(employeeEmail).build(), from, to);
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Comment newCommentForEmployee(@NotNull(message = "{commentResource.commentEntry.notNull}") NewCommentEntry newComment) {
+    @Override
+    public Comment newCommentForEmployee(NewCommentEntry newComment) {
         return commentService.createNewCommentForEmployee(
                 newComment.stepId(),
                 newComment.employee(),
@@ -63,17 +54,13 @@ public class CommentResource {
         );
     }
 
-    @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("{id}")
-    public boolean deleteComment(@PathParam("id") @NotNull(message = "{commentResource.id.notNull}") Long id) {
+    @Override
+    public boolean deleteComment(Long id) {
         return commentService.deleteCommentWithId(id);
     }
 
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Comment updateCommentForEmployee(@NotNull(message = "{commentResource.comment.notNull}") Comment comment) {
+    @Override
+    public Comment updateCommentForEmployee(Comment comment) {
         return commentService.updateComment(comment.id(), comment.message());
     }
 

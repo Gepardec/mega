@@ -8,6 +8,7 @@ import com.gepardec.mega.service.api.init.ProjectSyncService;
 import com.gepardec.mega.service.api.init.StepEntrySyncService;
 import io.quarkus.arc.properties.IfBuildProperty;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -21,10 +22,8 @@ import java.util.Map;
 import java.util.Optional;
 
 // The property 'mega.endpoint.test.enable' is set to 'true' during CI/CD builds.
-@IfBuildProperty(name = "mega.endpoint.test.enable", stringValue = "true", enableIfMissing = true)
-@RequestScoped
-@Path("/test/")
-public class TestResource {
+@ApplicationScoped
+public class TestResource implements TestResourceAPI {
 
     @Inject
     StepEntrySyncService stepEntrySyncService;
@@ -38,23 +37,17 @@ public class TestResource {
     @Inject
     MailSender mailSender;
 
-    @Path("/sync/projects")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Override
     public Response syncProjects() {
         return Response.ok(projectSyncService.generateProjects()).build();
     }
 
-    @Path("/sync/enterprise")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Override
     public Response syncEnterpriseEntries() {
         return Response.ok(enterpriseSyncService.generateEnterpriseEntries()).build();
     }
 
-    @Path("/sync")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Override
     public Response synctest() {
         Optional.ofNullable(stepEntrySyncService)
                 .orElseThrow(() -> new IllegalStateException("TestResource is disabled and 'StepEntrySyncService' is null"))
@@ -62,9 +55,7 @@ public class TestResource {
         return Response.ok("ok").build();
     }
 
-    @Path("/mail-comment")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Override
     public Response mailComment() {
         Optional.ofNullable(mailSender)
                 .orElseThrow(() -> new IllegalStateException("TestResource is disabled and 'MailSender' is null"))
