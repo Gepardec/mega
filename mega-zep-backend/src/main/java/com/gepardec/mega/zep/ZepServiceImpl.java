@@ -124,7 +124,7 @@ public class ZepServiceImpl implements ZepService {
 
     @CacheResult(cacheName = "fehlzeitentype")
     @Override
-    public List<FehlzeitType> getAbsenceForEmployee(Employee employee){
+    public List<FehlzeitType> getAbsenceForEmployee(Employee employee) {
         final ReadFehlzeitRequestType fehlzeitenRequest = new ReadFehlzeitRequestType();
         fehlzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
 
@@ -140,7 +140,7 @@ public class ZepServiceImpl implements ZepService {
         fehlzeitenRequest.setReadFehlzeitSearchCriteria(searchCriteria);
         ReadFehlzeitResponseType fehlzeitResponseType = zepSoapPortType.readFehlzeit(fehlzeitenRequest);
 
-        if(fehlzeitResponseType != null
+        if (fehlzeitResponseType != null
                 && fehlzeitResponseType.getFehlzeitListe() != null
                 && fehlzeitResponseType.getFehlzeitListe().getFehlzeit() != null) {
             return fehlzeitResponseType.getFehlzeitListe().getFehlzeit();
@@ -152,7 +152,7 @@ public class ZepServiceImpl implements ZepService {
 
     @CacheResult(cacheName = "projektzeittype")
     @Override
-    public List<ProjektzeitType> getBillableForEmployee(Employee employee){
+    public List<ProjektzeitType> getBillableForEmployee(Employee employee) {
         final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
         projektzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
 
@@ -167,7 +167,7 @@ public class ZepServiceImpl implements ZepService {
 
         ReadProjektzeitenResponseType readProjektzeitenResponseType = zepSoapPortType.readProjektzeiten(projektzeitenRequest);
 
-        if(readProjektzeitenResponseType != null
+        if (readProjektzeitenResponseType != null
                 && readProjektzeitenResponseType.getProjektzeitListe() != null
                 && readProjektzeitenResponseType.getProjektzeitListe().getProjektzeiten() != null) {
             return readProjektzeitenResponseType.getProjektzeitListe().getProjektzeiten();
@@ -213,7 +213,7 @@ public class ZepServiceImpl implements ZepService {
 
         ReadProjektzeitenResponseType readProjektzeitenResponseType = zepSoapPortType.readProjektzeiten(projektzeitenRequest);
 
-        if(readProjektzeitenResponseType != null
+        if (readProjektzeitenResponseType != null
                 && readProjektzeitenResponseType.getProjektzeitListe() != null
                 && readProjektzeitenResponseType.getProjektzeitListe().getProjektzeiten() != null) {
             return readProjektzeitenResponseType.getProjektzeitListe().getProjektzeiten();
@@ -282,8 +282,6 @@ public class ZepServiceImpl implements ZepService {
         searchCriteria.setUserId(employee.userId());
         return searchCriteria;
     }
-
-
 
     private Project createProject(final ProjektType projektType, final LocalDate monthYear) {
         Optional<String> endDateString = Optional.ofNullable(projektType.getEndeDatum());
