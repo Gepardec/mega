@@ -2,6 +2,7 @@
     <textarea #autosize="cdkTextareaAutosize"
               #textarea
               [value]="comment ? comment : ''"
+              (focusout)="onCancel($event, textarea)"
               cdkAutosizeMaxRows="3"
               cdkAutosizeMinRows="1"
               cdkTextareaAutosize
@@ -9,9 +10,9 @@
               maxlength="500"></textarea>
   <mat-hint align="end">{{textarea.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
 </mat-form-field>
-<button (click)="onCancel()" class="cancel" mat-mini-fab>
+<button (click)="onCancel($event, textarea)" class="cancel" mat-mini-fab>
   <mat-icon>arrow_back</mat-icon>
 </button>
-<button (click)="onSave(textarea)" class="save" mat-mini-fab>
+<button (click)="onSave(textarea)" id="savebutton" class="save" mat-mini-fab>
   <mat-icon>save</mat-icon>
 </button>
