@@ -23,31 +23,22 @@ import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.zep.ZepService;
 import de.provantis.zep.ProjektzeitType;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 
-import javax.annotation.Nonnull;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@RequestScoped
 @Secured
 @RolesAllowed(value = {Role.PROJECT_LEAD, Role.OFFICE_MANAGEMENT})
-@Path("/management")
-public class ManagementResource {
+public class ManagementResource implements ManagementResourceAPI {
 
     private static final String DATE_FORMAT_PATTERN = "YYYY-MM-dd";
 
@@ -71,10 +62,8 @@ public class ManagementResource {
     @Inject
     ZepService zepService;
 
-    @GET
-    @Path("/officemanagemententries/{year}/{month}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<ManagementEntry> getAllOfficeManagementEntries(@PathParam("year") Integer year, @PathParam("month") Integer month) {
+    @Override
+    public List<ManagementEntry> getAllOfficeManagementEntries(Integer year, Integer month) {
         LocalDate from = LocalDate.of(year, month, 1);
         LocalDate to = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
 
@@ -112,10 +101,8 @@ public class ManagementResource {
         return officeManagementEntries;
     }
 
-    @GET
-    @Path("/projectmanagemententries/{year}/{month}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<ProjectManagementEntry> getAllProjectManagementEntries(@PathParam("year") Integer year, @PathParam("month") Integer month) {
+    @Override
+    public List<ProjectManagementEntry> getAllProjectManagementEntries(Integer year, Integer month, boolean allProjects) {
         if (userContext == null || userContext.user() == null) {
             throw new IllegalStateException("User context does not exist or user is null.");
         }
@@ -123,7 +110,14 @@ public class ManagementResource {
         LocalDate from = LocalDate.of(year, month, 1);
         LocalDate to = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
 
-        List<ProjectEmployees> projectEmployees = stepEntryService.getProjectEmployeesForPM(from, to, Objects.requireNonNull(userContext.user()).email());
+        List<ProjectEmployees> projectEmployees;
+
+        if (allProjects) {
+            projectEmployees = stepEntryService.getAllProjectEmployeesForPM(from, to);
+        } else {
+            projectEmployees = stepEntryService.getProjectEmployeesForPM(from, to, Objects.requireNonNull(userContext.user()).email());
+        }
+
         List<ProjectManagementEntry> projectManagementEntries = new ArrayList<>();
 
         Map<String, Employee> employees = createEmployeeCache();
@@ -205,8 +199,8 @@ public class ManagementResource {
                     .finishedComments(finishedAndTotalComments.finishedComments())
                     .totalComments(finishedAndTotalComments.totalComments())
                     .entryDate(stepEntries.get(0).getDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN)))
-                    .billableTime(getBillableTimesForEmployee(projektzeitTypes, employee, true))
-                    .nonBillableTime(getBillableTimesForEmployee(projektzeitTypes, employee, false))
+                    .billableTime(zepService.getBillableTimesForEmployee(projektzeitTypes, employee, true))
+                    .nonBillableTime(zepService.getBillableTimesForEmployee(projektzeitTypes, employee))
                     .build();
         }
 
@@ -267,16 +261,5 @@ public class ManagementResource {
                 })
                 .map(StepEntry::getState)
                 .anyMatch(state -> state.equals(EmployeeState.OPEN)) ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
-    }
-
-    private String getBillableTimesForEmployee(@Nonnull List<ProjektzeitType> projektzeitTypeList, @Nonnull Employee employee, boolean billable) {
-        Duration totalBillable = projektzeitTypeList.stream()
-                .filter(pzt -> pzt.getUserId().equals(employee.userId()))
-                .filter(billable ? ProjektzeitType::isIstFakturierbar : Predicate.not(ProjektzeitType::isIstFakturierbar))
-                .map(pzt -> LocalTime.parse(pzt.getDauer()))
-                .map(lt -> Duration.between(LocalTime.MIN, lt))
-                .reduce(Duration.ZERO, Duration::plus);
-
-        return DurationFormatUtils.formatDuration(totalBillable.toMillis(), BILLABLE_TIME_FORMAT);
     }
 }

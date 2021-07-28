@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface CommentService {
-
     List<Comment> findCommentsForEmployee(final Employee employee, LocalDate from, LocalDate to);
 
     int setDone(final Comment comment);

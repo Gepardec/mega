@@ -61,8 +61,7 @@ public class ProjectCommentServiceImpl implements ProjectCommentService {
             projectCommentRepository.save(newProjectComment);
 
             return projectCommentMapper.mapToDto(newProjectComment);
-        }
-        else {
+        } else {
             // update comment of existing project comment
             ProjectComment projectCommentToUpdate = existingProjectComments.get(0);
             projectCommentToUpdate.setComment(dto.getComment());
@@ -72,7 +71,6 @@ public class ProjectCommentServiceImpl implements ProjectCommentService {
         }
 
     }
-
 
     @Override
     public boolean update(Long id, String comment) {

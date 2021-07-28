@@ -10,6 +10,7 @@ import com.gepardec.mega.domain.model.monthlyreport.Task;
 import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -82,6 +83,14 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
         assertEquals(JourneyWarningType.INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
     }
 
+    /*
+        Comment disabled because:
+                       journeys grouped in days     ->      now grouped in months
+                       this allows journeys over multiple days
+                       this prevents to group multiple warnings on one day
+                        -without implementing 'complex' logic
+         */
+    @Disabled
     @Test
     void whenTwoProjectTimeEntryWithinJourneyWithWorkingLocationMain_thenOneWarning() {
         JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(7, 8, JourneyDirection.TO, WorkingLocation.A);
@@ -153,7 +162,7 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
         List<JourneyWarning> warnings = calculator
                 .calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree, projectTimeEntryFour));
 
-        assertEquals(0, warnings.size());
+        assertEquals(1, warnings.size());
     }
 
     @Test
