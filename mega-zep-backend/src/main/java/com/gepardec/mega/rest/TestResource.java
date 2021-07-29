@@ -47,7 +47,7 @@ public class TestResource implements TestResourceAPI {
     public Response synctest() {
         Optional.ofNullable(stepEntrySyncService)
                 .orElseThrow(() -> new IllegalStateException("TestResource is disabled and 'StepEntrySyncService' is null"))
-                .generateStepEntries();
+                .generateStepEntriesFromEndpoint();
         return Response.ok("ok").build();
     }
 

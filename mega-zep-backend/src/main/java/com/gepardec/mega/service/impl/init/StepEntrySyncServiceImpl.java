@@ -9,7 +9,6 @@ import com.gepardec.mega.domain.model.StepEntry;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.service.api.init.StepEntrySyncService;
 import com.gepardec.mega.service.api.project.ProjectService;
-import com.gepardec.mega.service.api.projectentry.ProjectEntryService;
 import com.gepardec.mega.service.api.step.StepService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.service.api.user.UserService;
@@ -50,17 +49,23 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
     @Inject
     NotificationConfig notificationConfig;
 
-    @Inject
-    ProjectEntryService projectEntryService;
+    @Override
+    public void generateStepEntriesFromEndpoint() {
+        generateStepEntries(1);
+    }
 
     @Override
-    public void generateStepEntries() {
+    public void generateStepEntriesFromScheduler() {
+        generateStepEntries(0);
+    }
+
+    private void generateStepEntries(int month) {
         final StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
         logger.info("Started step entry generation: {}", Instant.ofEpochMilli(stopWatch.getStartTime()));
 
-        final LocalDate date = LocalDate.now().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth());
+        final LocalDate date = LocalDate.now().minusMonths(month).with(TemporalAdjusters.firstDayOfMonth());
         logger.info("Processing date: {}", date);
 
         final List<User> activeUsers = userService.findActiveUsers();
