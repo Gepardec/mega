@@ -44,7 +44,7 @@ public class Schedules {
     @Scheduled(identity = "Generate step entries on the second last day of a month",
             cron = "0 0 0 L-1 * ? *")
     void generateStepEntries() {
-        stepEntrySyncService.generateStepEntriesFromEndpoint();
+        stepEntrySyncService.generateStepEntriesFromScheduler();
     }
 
     @Scheduled(identity = "Update project entries every 30 minutes",
