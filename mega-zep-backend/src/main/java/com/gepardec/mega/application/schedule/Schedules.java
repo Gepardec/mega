@@ -42,7 +42,7 @@ public class Schedules {
     }
 
     @Scheduled(identity = "Generate step entries on the second last day of a month",
-            cron = "0 0 0 L-1 * ? *")
+            cron = "0 0 0 L-2 * ? *")
     void generateStepEntries() {
         stepEntrySyncService.generateStepEntriesFromScheduler();
     }
