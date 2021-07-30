@@ -30,7 +30,7 @@ public class CommentRepository implements PanacheRepository<Comment> {
 
     @Transactional
     public int setStatusDone(Long id) {
-        return update("UPDATE Comment c SET c.state = :state WHERE id = :id",
+        return update("UPDATE Comment c SET c.employeeState = :state WHERE id = :id",
                 Parameters
                         .with("id", id)
                         .and("state", EmployeeState.DONE));
