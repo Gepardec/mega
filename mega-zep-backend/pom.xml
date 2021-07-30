@@ -32,7 +32,7 @@
         <lombok.version>1.18.20</lombok.version>
 
         <!-- application info -->
-        <revision>3.1.0-SNAPSHOT</revision>
+        <revision>3.1.1</revision>
         <git.commit>local</git.commit>
         <git.branch>local</git.branch>
         <build.number>0</build.number>
