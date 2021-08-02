@@ -12,6 +12,7 @@ import com.gepardec.mega.zep.ZepService;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,6 +56,9 @@ public class ProjectServiceImpl implements ProjectService {
         com.gepardec.mega.db.entity.project.Project finalProjectEntity = projectEntity;
         project.getProjectLeads().forEach(lead -> {
             User user = userRepository.findById(lead.getId());
+            if(finalProjectEntity.getProjectLeads() == null){
+                finalProjectEntity.setProjectLeads(new HashSet<>());
+            }
             finalProjectEntity.getProjectLeads().add(user);
         });
 
