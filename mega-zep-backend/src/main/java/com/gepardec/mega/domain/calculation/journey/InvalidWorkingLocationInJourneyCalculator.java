@@ -25,7 +25,7 @@ public class InvalidWorkingLocationInJourneyCalculator implements WarningCalcula
     @Override
     public List<JourneyWarning> calculate(List<ProjectEntry> projectTimeEntries) {
         final List<ProjectEntry> groupedProjectTimeEntries = projectTimeEntries.stream()
-                .sorted(Comparator.comparing(ProjectEntry::getFromTime))
+                .sorted(Comparator.comparing(ProjectEntry::getFromTime).thenComparing(ProjectEntry::getToTime))
                 .collect(Collectors.toList());
 
         final List<JourneyWarning> warnings = new ArrayList<>();
