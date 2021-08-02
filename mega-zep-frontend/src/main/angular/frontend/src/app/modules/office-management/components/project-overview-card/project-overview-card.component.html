@@ -26,7 +26,13 @@
 
         <ng-container matColumnDef="controlProjectState">
           <mat-header-cell *matHeaderCellDef class="text-center">
-            {{'project-management.projectTimeState' | translate}}</mat-header-cell>
+            <span [matTooltipPosition]="tooltipPosition"
+                  [matTooltipShowDelay]="tooltipShowDelay"
+                  matTooltip="{{'project-management.tooltips.projectTimeState' | translate}}"
+                  matTooltipClass="pm-tooltip">
+              {{'project-management.projectTimeState' | translate}}
+            </span>
+          </mat-header-cell>
           <mat-cell *matCellDef="let pmEntry" class="text-center">
             <span class="mobile-label">{{'project-management.projectTimeState' | translate}}</span>
             <app-state-indicator [state]="pmEntry.controlProjectState"
@@ -37,7 +43,13 @@
 
         <ng-container matColumnDef="controlBillingState">
           <mat-header-cell *matHeaderCellDef class="text-center">
-            {{'project-management.billingState' | translate}}</mat-header-cell>
+            <span [matTooltipPosition]="tooltipPosition"
+                  [matTooltipShowDelay]="tooltipShowDelay"
+                  matTooltip="{{'project-management.tooltips.billingState' | translate}}"
+                  matTooltipClass="pm-tooltip">
+              {{'project-management.billingState' | translate}}
+            </span>
+          </mat-header-cell>
           <mat-cell *matCellDef="let pmEntry" class="text-center">
             <span class="mobile-label">{{'project-management.billingState' | translate}}</span>
             <app-state-indicator [state]="pmEntry.controlBillingState"
@@ -63,11 +75,11 @@
                     class="btn-addComment">
               <mat-icon>add</mat-icon>
             </button>
-<!--            TODO: Remove this if the design with button is okay-->
-<!--            <p *ngIf="!pmEntry.comment && forProjectName !== pmEntry.projectName"-->
-<!--               (click)="onStartEditing(pmEntry.projectName)"-->
-<!--               class="action-label"-->
-<!--               style="opacity: 50%">{{'global.addComment' | translate}}</p>-->
+            <!--            TODO: Remove this if the design with button is okay-->
+            <!--            <p *ngIf="!pmEntry.comment && forProjectName !== pmEntry.projectName"-->
+            <!--               (click)="onStartEditing(pmEntry.projectName)"-->
+            <!--               class="action-label"-->
+            <!--               style="opacity: 50%">{{'global.addComment' | translate}}</p>-->
             <app-inline-text-editor *ngIf="showCommentEditor && forProjectName === pmEntry.projectName"
                                     [comment]="pmEntry.projectComment?.comment"
                                     (commentChange)="onCommentChange(pmEntry, $event)"></app-inline-text-editor>

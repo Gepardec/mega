@@ -120,12 +120,16 @@
       "projectHours": "Projektstunden fakt. / nicht fakt."
     },
     "noPmEntriesFound": "Keine Projekteinträge gefunden",
-    "projectTimeState": "Projektzeitenkontrolle",
+    "projectTimeState": "Projektcontrolling",
     "billingState": "Rechnungslegung",
     "presetMonth": "im Folgemonat übernehmen",
     "updateStatusError": "Fehler beim Aktualisieren des Status",
     "updateProjectCommentError": "Fehler beim Aktualisieren der Anmerkung",
-    "projectCommentNotUpdated": "Anmerkung wurde nicht gespeichert"
+    "projectCommentNotUpdated": "Anmerkung wurde nicht gespeichert",
+    "tooltips": {
+      "projectTimeState": "Controllingarbeiten im Projekt (Ist-Datenerfassung, Projektüberwachung und -steuerung, Übermittlung/Abstimmung mit dem Kunden, ...)",
+      "billingState": "Rechnung und ggf. Zeitnachweis dem Kunden übermitteln"
+    }
   },
   "comments-for-employee": {
     "commentsFor": "Anmerkungen für {{firstAndSureName}}",

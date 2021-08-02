@@ -51,6 +51,7 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
   showCommentEditor = false;
   forProjectName: string;
   tooltipShowDelay = 500;
+  tooltipPosition = 'above';
 
   constructor(
     private dialog: MatDialog,
