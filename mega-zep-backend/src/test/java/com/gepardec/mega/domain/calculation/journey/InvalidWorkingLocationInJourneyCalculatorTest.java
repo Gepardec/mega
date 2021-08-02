@@ -204,4 +204,28 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
 
         assertTrue(warnings.isEmpty());
     }
+
+    @Test
+    void whenProjectEntryAndJourneyEntryHaveSameStartHourSort_thenNoWarning() {
+        JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(7, 7, JourneyDirection.TO, WorkingLocation.A);
+        ProjectEntry projectEntryOne = projectTimeEntryFor(7, 8, WorkingLocation.A);
+        ProjectEntry projectEntryTwo = projectTimeEntryFor(11, 12, WorkingLocation.A);
+        JourneyTimeEntry journeyTimeEntryTwo = journeyTimeEntryFor(12, 13, JourneyDirection.BACK, WorkingLocation.A);
+
+        List<JourneyWarning> warnings = calculator
+                .calculate(List.of(journeyTimeEntryOne, projectEntryOne, projectEntryTwo, journeyTimeEntryTwo));
+        assertTrue(warnings.isEmpty());
+    }
+
+    @Test
+    void whenProjectEntryAndJourneyEntryHaveSameStartHourSortReversed_thenNoWarning() {
+        JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(7, 7, JourneyDirection.TO, WorkingLocation.A);
+        ProjectEntry projectEntryOne = projectTimeEntryFor(7, 8, WorkingLocation.A);
+        ProjectEntry projectEntryTwo = projectTimeEntryFor(11, 12, WorkingLocation.A);
+        JourneyTimeEntry journeyTimeEntryTwo = journeyTimeEntryFor(12, 13, JourneyDirection.BACK, WorkingLocation.A);
+
+        List<JourneyWarning> warnings = calculator
+                .calculate(List.of(projectEntryOne, journeyTimeEntryOne, journeyTimeEntryTwo, projectEntryTwo));
+        assertTrue(warnings.isEmpty());
+    }
 }
