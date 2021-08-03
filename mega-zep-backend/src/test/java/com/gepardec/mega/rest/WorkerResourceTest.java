@@ -66,8 +66,8 @@ public class WorkerResourceTest {
         Employee employee = createEmployeeForUser(user);
         when(employeeService.getEmployee(anyString())).thenReturn(employee);
 
-        List<TimeWarning> timeWarnings = List.of(TimeWarning.of(LocalDate.now(), 0.0, 0.0, 0.0));
-        List<JourneyWarning> journeyWarnings = List.of(new JourneyWarning(LocalDate.now(), List.of("WARNING")));
+        List<TimeWarning> timeWarnings = List.of();
+        List<JourneyWarning> journeyWarnings = List.of();
 
         int vacationDays = 0;
         int homeofficeDays = 0;
