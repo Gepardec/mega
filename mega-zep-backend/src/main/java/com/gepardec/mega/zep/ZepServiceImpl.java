@@ -131,14 +131,14 @@ public class ZepServiceImpl implements ZepService {
 
     @CacheResult(cacheName = "fehlzeitentype")
     @Override
-    public List<FehlzeitType> getAbsenceForEmployee(Employee employee) {
+    public List<FehlzeitType> getAbsenceForEmployee(Employee employee, LocalDate date) {
         final ReadFehlzeitRequestType fehlzeitenRequest = new ReadFehlzeitRequestType();
         fehlzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
 
         final ReadFehlzeitSearchCriteriaType searchCriteria;
 
         try {
-            searchCriteria = createAbsenceSearchCriteria(employee);
+            searchCriteria = createAbsenceSearchCriteria(employee, date);
         } catch (DateTimeParseException e) {
             logger.error("invalid release date {0}", e);
             return null;
@@ -159,13 +159,13 @@ public class ZepServiceImpl implements ZepService {
 
     @CacheResult(cacheName = "projektzeittype")
     @Override
-    public List<ProjektzeitType> getBillableForEmployee(Employee employee) {
+    public List<ProjektzeitType> getBillableForEmployee(Employee employee, LocalDate date) {
         final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
         projektzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
 
         final ReadProjektzeitenSearchCriteriaType searchCriteria;
         try {
-            searchCriteria = createProjectTimeSearchCriteria(employee);
+            searchCriteria = createProjectTimeSearchCriteria(employee, date);
         } catch (DateTimeParseException e) {
             logger.error("invalid release date {0}", e);
             return null;
@@ -213,13 +213,13 @@ public class ZepServiceImpl implements ZepService {
 
     @CacheResult(cacheName = "projectentry")
     @Override
-    public List<ProjectEntry> getProjectTimes(Employee employee) {
+    public List<ProjectEntry> getProjectTimes(Employee employee, LocalDate date) {
         final ReadProjektzeitenRequestType projektzeitenRequest = new ReadProjektzeitenRequestType();
         projektzeitenRequest.setRequestHeader(zepSoapProvider.createRequestHeaderType());
 
         final ReadProjektzeitenSearchCriteriaType searchCriteria;
         try {
-            searchCriteria = createProjectTimeSearchCriteria(employee);
+            searchCriteria = createProjectTimeSearchCriteria(employee, date);
         } catch (DateTimeParseException e) {
             logger.error("invalid release date {0}", e);
             return null;
@@ -281,12 +281,11 @@ public class ZepServiceImpl implements ZepService {
         return zepSoapPortType.readProjekte(readProjekteRequestType);
     }
 
-    private ReadProjektzeitenSearchCriteriaType createProjectTimeSearchCriteria(Employee employee) {
+    private ReadProjektzeitenSearchCriteriaType createProjectTimeSearchCriteria(Employee employee, LocalDate date) {
         ReadProjektzeitenSearchCriteriaType searchCriteria = new ReadProjektzeitenSearchCriteriaType();
 
-        final String releaseDate = employee.releaseDate();
-        searchCriteria.setVon(getFirstDayOfFollowingMonth(releaseDate));
-        searchCriteria.setBis(getLastDayOfFollowingMonth(releaseDate));
+        searchCriteria.setVon(getFirstDayOfFollowingMonth(date.toString()));
+        searchCriteria.setBis(getLastDayOfFollowingMonth(date.toString()));
 
         UserIdListeType userIdListType = new UserIdListeType();
         userIdListType.getUserId().add(employee.userId());
@@ -307,12 +306,11 @@ public class ZepServiceImpl implements ZepService {
         return searchCriteria;
     }
 
-    private ReadFehlzeitSearchCriteriaType createAbsenceSearchCriteria(Employee employee) {
+    private ReadFehlzeitSearchCriteriaType createAbsenceSearchCriteria(Employee employee, LocalDate date) {
         ReadFehlzeitSearchCriteriaType searchCriteria = new ReadFehlzeitSearchCriteriaType();
 
-        final String releaseDate = employee.releaseDate();
-        searchCriteria.setStartdatum(getFirstDayOfFollowingMonth(releaseDate));
-        searchCriteria.setEnddatum(getLastDayOfFollowingMonth(releaseDate));
+        searchCriteria.setStartdatum(getFirstDayOfFollowingMonth(date.toString()));
+        searchCriteria.setEnddatum(getLastDayOfFollowingMonth(date.toString()));
 
         searchCriteria.setUserId(employee.userId());
         return searchCriteria;

@@ -18,15 +18,15 @@ public interface ZepService {
 
     void updateEmployeesReleaseDate(String userId, String releaseDate);
 
-    List<ProjectEntry> getProjectTimes(Employee employee);
+    List<ProjectEntry> getProjectTimes(Employee employee, LocalDate date);
 
     List<ProjektzeitType> getProjectTimesForEmployeePerProject(String project, LocalDate curDate);
 
     List<Project> getProjectsForMonthYear(final LocalDate monthYear);
 
-    List<FehlzeitType> getAbsenceForEmployee(Employee employee);
+    List<FehlzeitType> getAbsenceForEmployee(Employee employee, LocalDate date);
 
-    List<ProjektzeitType> getBillableForEmployee(Employee employee);
+    List<ProjektzeitType> getBillableForEmployee(Employee employee, LocalDate date);
 
     String getBillableTimesForEmployee(@Nonnull List<ProjektzeitType> projektzeitTypeList, @Nonnull Employee employee);
 

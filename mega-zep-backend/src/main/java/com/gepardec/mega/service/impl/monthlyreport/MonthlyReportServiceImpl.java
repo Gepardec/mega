@@ -46,8 +46,14 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     @Override
     public MonthlyReport getMonthendReportForUser(final String userId) {
         Employee employee = zepService.getEmployee(userId);
+        return getMonthendReportForUser(userId, LocalDate.parse(employee.releaseDate()));
+    }
 
-        return buildMonthlyReport(employee, zepService.getProjectTimes(employee), zepService.getBillableForEmployee(employee), zepService.getAbsenceForEmployee(employee));
+    @Override
+    public MonthlyReport getMonthendReportForUser(String userId, LocalDate date) {
+        Employee employee = zepService.getEmployee(userId);
+
+        return buildMonthlyReport(employee, zepService.getProjectTimes(employee, date), zepService.getBillableForEmployee(employee, date), zepService.getAbsenceForEmployee(employee, date));
     }
 
     @Override

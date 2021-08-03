@@ -64,7 +64,7 @@ class MonthlyReportServiceImplTest {
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenValid() {
         final Employee employee = createEmployee(0);
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
-        Mockito.when(zepService.getProjectTimes(Mockito.any())).thenReturn(new ArrayList<>());
+        Mockito.when(zepService.getProjectTimes(Mockito.any(), Mockito.any())).thenReturn(new ArrayList<>());
 
         Assertions.assertNotNull(workerService.getMonthendReportForUser("0"));
     }
@@ -73,7 +73,7 @@ class MonthlyReportServiceImplTest {
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenValid_NoWarning() {
         final Employee employee = createEmployee(0);
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
-        Mockito.when(zepService.getProjectTimes(Mockito.any())).thenReturn(createReadProjektzeitenResponseType(10));
+        Mockito.when(zepService.getProjectTimes(Mockito.any(), Mockito.any())).thenReturn(createReadProjektzeitenResponseType(10));
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
         Assertions.assertNotNull(monthendReportForUser);
@@ -86,7 +86,7 @@ class MonthlyReportServiceImplTest {
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenValid_Warning() {
         final Employee employee = createEmployee(0);
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
-        Mockito.when(zepService.getProjectTimes(Mockito.any())).thenReturn(createReadProjektzeitenResponseType(18));
+        Mockito.when(zepService.getProjectTimes(Mockito.any(), Mockito.any())).thenReturn(createReadProjektzeitenResponseType(18));
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
         Assertions.assertNotNull(monthendReportForUser);
