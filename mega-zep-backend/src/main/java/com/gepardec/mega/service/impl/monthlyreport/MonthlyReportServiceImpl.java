@@ -48,7 +48,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         Employee employee = zepService.getEmployee(userId);
         final LocalDate date;
 
-        if (employee != null) {
+        if (employee != null && employee.releaseDate() != null) {
             date = LocalDate.parse(employee.releaseDate());
         } else {
             date = null;
