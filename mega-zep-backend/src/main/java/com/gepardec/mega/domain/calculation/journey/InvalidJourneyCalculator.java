@@ -20,7 +20,7 @@ public class InvalidJourneyCalculator implements WarningCalculationStrategy<Jour
         final List<JourneyTimeEntry> groupedProjectTimeEntries = projectTimeEntries.stream()
                 .filter(entry -> Task.isJourney(entry.getTask()))
                 .map(JourneyTimeEntry.class::cast)
-                .sorted(Comparator.comparing(ProjectEntry::getFromTime))
+                .sorted(Comparator.comparing(ProjectEntry::getFromTime).thenComparing(ProjectEntry::getToTime))
                 .collect(Collectors.toList());
 
         final List<JourneyWarning> warnings = new ArrayList<>();

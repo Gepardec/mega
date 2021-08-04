@@ -21,13 +21,12 @@ public abstract class AbstractTimeWarningCalculationStrategy {
                 projectEntryStream = projectEntryStream.filter(predicate);
             }
         }
-        return projectEntryStream.sorted(Comparator.comparing(ProjectEntry::getFromTime))
+        return projectEntryStream.sorted(Comparator.comparing(ProjectEntry::getFromTime).thenComparing(ProjectEntry::getToTime))
                 .collect(Collectors.groupingBy(ProjectEntry::getDate, LinkedHashMap::new, Collectors.toUnmodifiableList()));
     }
 
     protected double calculateWorkingDuration(List<ProjectEntry> entriesPerDay) {
         return entriesPerDay.stream()
-                .filter(entry -> Task.isTask(entry.getTask()))
                 .map(ProjectEntry::getDurationInHours)
                 .collect(Collectors.summarizingDouble(Double::doubleValue))
                 .getSum();

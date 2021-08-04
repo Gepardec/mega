@@ -40,18 +40,18 @@ class ExceededMaximumWorkingHoursPerDayCalculatorTest {
                 .build();
     }
 
-    private JourneyTimeEntry journeyTimeEntryFor(int startHour, int endHour) {
-        return journeyTimeEntryFor(startHour, 0, endHour, 0);
+    private JourneyTimeEntry journeyTimeEntryFor(int startHour, int endHour, Vehicle vehicle) {
+        return journeyTimeEntryFor(startHour, 0, endHour, 0, vehicle);
     }
 
-    private JourneyTimeEntry journeyTimeEntryFor(int startHour, int startMinute, int endHour, int endMinute) {
+    private JourneyTimeEntry journeyTimeEntryFor(int startHour, int startMinute, int endHour, int endMinute, Vehicle vehicle) {
         return JourneyTimeEntry.builder()
                 .fromTime(LocalDateTime.of(2020, 1, 7, startHour, startMinute))
                 .toTime(LocalDateTime.of(2020, 1, 7, endHour, endMinute))
                 .task(Task.REISEN)
                 .workingLocation(WorkingLocation.MAIN)
                 .journeyDirection(JourneyDirection.TO)
-                .vehicle(Vehicle.OTHER_INACTIVE)
+                .vehicle(vehicle)
                 .build();
     }
 
@@ -66,12 +66,46 @@ class ExceededMaximumWorkingHoursPerDayCalculatorTest {
     }
 
     @Test
-    void whenOneJourneyEntry10HoursPerDay_thenWarning() {
+    void whenInactiveJourney10HoursPerDay_thenNoWarning() {
         ProjectTimeEntry timeEntryOne = projectTimeEntryFor(7, 12);
         ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(13, 18);
-        JourneyTimeEntry timeEntryThree = journeyTimeEntryFor(18, 22);
+        JourneyTimeEntry timeEntryThree = journeyTimeEntryFor(18, 22, Vehicle.CAR_INACTIVE);
 
         List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
+
+        assertTrue(warnings.isEmpty());
+    }
+
+    @Test
+    void whenActiveJourney14HoursPerDay_thenWarning() {
+        ProjectTimeEntry timeEntryOne = projectTimeEntryFor(7, 12);
+        ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(13, 18);
+        JourneyTimeEntry timeEntryThree = journeyTimeEntryFor(18, 22, Vehicle.CAR_ACTIVE);
+
+        List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
+
+        assertEquals(1, warnings.size());
+        assertEquals(4, warnings.get(0).getExcessWorkTime());
+    }
+
+    @Test
+    void whenActiveJourney12HoursPerDayUnordered_thenWarning() {
+        JourneyTimeEntry timeEntryOne = journeyTimeEntryFor(18, 22, Vehicle.CAR_ACTIVE);
+        JourneyTimeEntry timeEntryTwo = journeyTimeEntryFor(18, 22, Vehicle.CAR_ACTIVE);
+        JourneyTimeEntry timeEntryThree = journeyTimeEntryFor(18, 22, Vehicle.CAR_ACTIVE);
+
+        List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryTwo, timeEntryOne, timeEntryThree));
+
+        assertEquals(1, warnings.size());
+        assertEquals(2, warnings.get(0).getExcessWorkTime());
+    }
+
+    @Test
+    void when10HoursPerDayOnlyInactiveJourney_thenNoWarning() {
+        JourneyTimeEntry timeEntryOne = journeyTimeEntryFor(7, 12, Vehicle.CAR_INACTIVE);
+        JourneyTimeEntry timeEntryTwo = journeyTimeEntryFor(13, 18, Vehicle.CAR_INACTIVE);
+
+        List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
 
         assertTrue(warnings.isEmpty());
     }
@@ -122,7 +156,7 @@ class ExceededMaximumWorkingHoursPerDayCalculatorTest {
     void whenOneJourneyEntry11HoursPerDay_thenWarning() {
         ProjectTimeEntry timeEntryOne = projectTimeEntryFor(7, 12);
         ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(13, 19);
-        JourneyTimeEntry timeEntryThree = journeyTimeEntryFor(19, 22);
+        JourneyTimeEntry timeEntryThree = journeyTimeEntryFor(19, 22, Vehicle.CAR_INACTIVE);
 
         List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
 
