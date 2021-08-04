@@ -2,6 +2,7 @@ package com.gepardec.mega.domain.calculation.time;
 
 import com.gepardec.mega.domain.calculation.AbstractTimeWarningCalculationStrategy;
 import com.gepardec.mega.domain.calculation.WarningCalculationStrategy;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
@@ -13,6 +14,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -47,9 +49,12 @@ public class InsufficientRestCalculator extends AbstractTimeWarningCalculationSt
     }
 
     private List<ProjectEntry> filterForTaskAndSortByFromDate(final List<ProjectEntry> projectTimeEntries) {
+        final Predicate<ProjectEntry> filterTask = entry -> Task.isTask(entry.getTask());
+        final Predicate<ProjectEntry> filterActiveTravelTime = entry -> Task.isJourney(entry.getTask()) && JourneyTimeEntry.class.cast(entry).getVehicle().activeTraveler;
+
         return projectTimeEntries.stream()
-                .filter(entry -> Task.isTask(entry.getTask()))
-                .sorted(Comparator.comparing(ProjectEntry::getFromTime))
+                .filter(filterTask.or(filterActiveTravelTime))
+                .sorted(Comparator.comparing(ProjectEntry::getFromTime).thenComparing(ProjectEntry::getToTime))
                 .collect(Collectors.toList());
     }
 
