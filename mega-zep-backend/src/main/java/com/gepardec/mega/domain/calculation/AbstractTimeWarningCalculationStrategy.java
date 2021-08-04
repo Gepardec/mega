@@ -27,7 +27,6 @@ public abstract class AbstractTimeWarningCalculationStrategy {
 
     protected double calculateWorkingDuration(List<ProjectEntry> entriesPerDay) {
         return entriesPerDay.stream()
-                .filter(entry -> Task.isTask(entry.getTask()))
                 .map(ProjectEntry::getDurationInHours)
                 .collect(Collectors.summarizingDouble(Double::doubleValue))
                 .getSum();
