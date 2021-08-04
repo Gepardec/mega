@@ -7,21 +7,26 @@
   <mat-card class="mat-elevation-z10">
     <mat-card-subtitle>{{employeeFunctions[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
     <mat-card-content>
-      {{monthlyReport.employee.firstname}} {{monthlyReport.employee.lastname}}
-      <span class="mat-card-date">
-        {{ isValidDate(monthlyReport.employee.releaseDate) ?
-        (getDateOfReport(monthlyReport.employee.releaseDate) | date: 'MMMM yyyy' : null : 'de-AT') :
-        ('monthly-report.notReleasedYet' | translate) }}
+
+      <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+        {{monthlyReport.employee.firstname}} {{monthlyReport.employee.lastname}}
+        <span fxFlex fxFlexOffset="65">{{'global.selectPayrollMonth' | translate}}</span>
+        <span fxFlex="15">
+          <app-datepicker-month-year (dateChanged)="dateChanged($event)" [date]="date"
+                                     [maxMonth]="maxMonthDate"></app-datepicker-month-year>
         </span>
+      </mat-toolbar-row>
     </mat-card-content>
   </mat-card>
 
+
   <div *ngIf="isValidDate(monthlyReport.employee.releaseDate); else invalidReleaseDate"
-       fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px"
-       class="twoColumnBlock">
+       class="twoColumnBlock" fxLayout="row" fxLayout.lt-lg="column"
+       fxLayoutGap="10px">
     <div fxFlex="27.5" fxLayout="column" fxLayoutGap="10px">
-      <app-time-check [monthlyReport]="monthlyReport" fxFlex="46.6%" ></app-time-check>
-      <app-general-info [monthlyReport]="monthlyReport" fxFlex = "46.6%"></app-general-info>
+      <app-time-check [monthlyReport]="monthlyReport" fxFlex="46.6%"></app-time-check>
+      <app-general-info (refreshMonthlyReport)="emitRefreshMonthlyReport()" [monthlyReport]="monthlyReport"
+                        fxFlex="46.6%"></app-general-info>
     </div>
     <div fxFlex="45">
       <app-employee-check (refreshMonthlyReport)="emitRefreshMonthlyReport()"
