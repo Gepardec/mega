@@ -12,7 +12,7 @@ export class MonthlyReportComponent implements OnInit {
 
   monthlyReport: MonthlyReport;
   private monthlyReportSubscription: Subscription;
-  generalInfoComponent: GeneralInfoComponent = new GeneralInfoComponent(this.cd, this.monthlyReportService);
+  generalInfoComponent: GeneralInfoComponent = new GeneralInfoComponent(this.monthlyReportService);
 
   constructor(private monthlyReportService: MonthlyReportService,
               private cd: ChangeDetectorRef) {
