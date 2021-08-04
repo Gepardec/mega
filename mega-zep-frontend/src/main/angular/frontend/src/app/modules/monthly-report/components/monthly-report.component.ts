@@ -26,9 +26,17 @@ export class MonthlyReportComponent implements OnInit {
 
     });
   }
+  getAllTimeEntries() {
+    this.monthlyReportSubscription = this.monthlyReportService.getAll().subscribe((monthlyReport: MonthlyReport) => {
+      this.monthlyReport = monthlyReport;
+      const splitReleaseDate = monthlyReport.employee.releaseDate.split("-");
+      this.monthlyReportService.selectedYear.next(+splitReleaseDate[0]);
+      this.monthlyReportService.selectedMonth.next(+splitReleaseDate[1]);
+    });
+  }
 
   ngOnInit(): void {
-    this.getAllTimeEntriesByDate(this.monthlyReportService.selectedYear.getValue(), this.monthlyReportService.selectedMonth.getValue());
+    this.getAllTimeEntries();
   }
 
   refreshMonthlyReport() {
