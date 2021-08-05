@@ -1,6 +1,6 @@
 <mat-card *ngIf="monthlyReport" class="mat-elevation-z10">
   <mat-card-title>
-    {{'monthly-report.title.general-info' | translate}} {{months[monthlyReportService.selectedMonth.getValue()]}} {{monthlyReportService.selectedYear.getValue()}}
+    {{'monthly-report.title.general-info' | translate}} {{month(monthlyReportService.selectedMonth.getValue())}} {{monthlyReportService.selectedYear.getValue()}}
   </mat-card-title>
   <table>
     <tr>
