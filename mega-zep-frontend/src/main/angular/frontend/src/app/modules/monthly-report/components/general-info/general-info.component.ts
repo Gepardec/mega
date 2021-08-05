@@ -23,6 +23,21 @@ export class GeneralInfoComponent implements OnInit {
     'Homeoffice'
   ];
 
+  months: string[] = [
+    'Jänner',
+    'Februar',
+    'März',
+    'April',
+    'Mai',
+    'Juni',
+    'Juli',
+    'August',
+    'September',
+    'Oktober',
+    'November',
+    'Dezember'
+  ];
+
   constructor(public monthlyReportService: MonthlyReportService) {
   }
 

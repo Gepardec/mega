@@ -5,17 +5,20 @@
      fxLayoutGap="10px">
 
   <mat-card class="mat-elevation-z10">
-    <mat-card-subtitle>{{employeeFunctions[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
+    <mat-card-subtitle  id="idname">{{employeeFunctions[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
     <mat-card-content>
 
-      <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
-        {{monthlyReport.employee.firstname}} {{monthlyReport.employee.lastname}}
-        <span fxFlex fxFlexOffset="65">{{'global.selectPayrollMonth' | translate}}</span>
-        <span fxFlex="15">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <span fxFlex="30">{{monthlyReport.employee.firstname}} {{monthlyReport.employee.lastname}}</span>
+
+        <div id="datediv">
+          <b><span>{{'global.selectPayrollMonth' | translate}}</span></b>
+        <span id="datepicker">
           <app-datepicker-month-year (dateChanged)="dateChanged($event)" [date]="date"
                                      [maxMonth]="maxMonthDate"></app-datepicker-month-year>
         </span>
-      </mat-toolbar-row>
+        </div>
+      </div>
     </mat-card-content>
   </mat-card>
 
