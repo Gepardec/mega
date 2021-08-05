@@ -32,7 +32,9 @@
         <lombok.version>1.18.20</lombok.version>
 
         <!-- application info -->
-        <revision>3.1.4</revision>
+        <!-- !!! IMPORTANT !!!! -->
+        <!-- remove -SNAPSHOT in release-branch but keep it in develop branch -->
+        <revision>3.1.5-SNAPSHOT</revision>
         <git.commit>local</git.commit>
         <git.branch>local</git.branch>
         <build.number>0</build.number>
