@@ -54,6 +54,7 @@ export class ProjectManagementComponent implements OnInit {
   selectedMonth = moment().subtract(1, 'month').month() + 1; // months 0 - 11
   showCommentEditor = false;
   forProjectName: string;
+  maxMonthDate: number = 1;
 
   constructor(private dialog: MatDialog,
               private pmService: ProjectManagementService,
@@ -64,6 +65,14 @@ export class ProjectManagementComponent implements OnInit {
               private snackbarService: SnackbarService,
               private translate: TranslateService,
               private projectCommentService: ProjectCommentService) {
+  }
+
+  get date() {
+    return moment()
+      .year(this.selectedYear)
+      .month(this.selectedMonth)
+      .date(1)
+      .startOf('day');
   }
 
   ngOnInit(): void {

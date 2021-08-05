@@ -55,7 +55,7 @@ app-display-monthly-report {
 }
 
 app-time-check, app-journey-check, app-employee-check, app-general-info {
-  .mat-card-content  {
+  .mat-card-content {
     font-size: 20px;
     overflow: auto;
     height: 100%;
@@ -114,10 +114,11 @@ app-employee-card, app-project-management {
   }
 }
 
-.mat-tooltip.om-tooltip {
+.mat-tooltip.om-tooltip, .mat-tooltip.pm-tooltip {
   font-size: 15px !important;
   white-space: pre-line;
 }
+
 
 app-project-overview-card, app-project-management {
   .btn-addComment {
