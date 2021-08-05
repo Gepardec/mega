@@ -11,8 +11,8 @@ import {GeneralInfoComponent} from "./general-info/general-info.component";
 export class MonthlyReportComponent implements OnInit {
 
   public monthlyReport: MonthlyReport;
-  private monthlyReportSubscription: Subscription;
   generalInfoComponent: GeneralInfoComponent = new GeneralInfoComponent(this.monthlyReportService);
+  private monthlyReportSubscription: Subscription;
 
   constructor(private monthlyReportService: MonthlyReportService,
               private cd: ChangeDetectorRef) {
@@ -46,7 +46,6 @@ export class MonthlyReportComponent implements OnInit {
   }
 
   refreshMonthlyReport() {
-    this.getAllTimeEntriesByDate(this.monthlyReportService.selectedYear.getValue(), this.monthlyReportService.selectedMonth.getValue());
-
+    this.getAllTimeEntriesByDate(this.monthlyReportService.selectedYear.getValue(), this.monthlyReportService.selectedMonth.getValue() + 1);
   }
 }

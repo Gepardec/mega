@@ -9,7 +9,6 @@ import {Moment} from "moment";
 import {OfficeManagementService} from '../../../office-management/services/office-management.service';
 import {MonthlyReportService} from '../../services/monthly-report.service';
 
-
 const moment = _moment;
 
 @Component({
@@ -35,6 +34,14 @@ export class DisplayMonthlyReportComponent implements OnInit {
               private monthlyReportService: MonthlyReportService) {
   }
 
+  get date() {
+    return moment()
+      .year(this.selectedYear)
+      .month(this.selectedMonth)
+      .date(1)
+      .startOf('day');
+  }
+
   ngOnInit() {
     this.translateService.get('EMPLOYEE_FUNCTIONS').subscribe(funcs => this.employeeFunctions = funcs);
 
@@ -48,13 +55,6 @@ export class DisplayMonthlyReportComponent implements OnInit {
 
   }
 
-  getDateOfReport(dateStr: string): Date {
-    const reportDate = new Date(dateStr);
-    reportDate.setDate(1);
-    reportDate.setMonth(reportDate.getMonth() + 2);
-    return reportDate;
-  }
-
   isValidDate(dateStr: string): boolean {
     const date = new Date(dateStr);
     return date.getTime() === date.getTime();
@@ -64,22 +64,9 @@ export class DisplayMonthlyReportComponent implements OnInit {
     this.refreshMonthlyReport.emit();
   }
 
-
-  get date() {
-    return moment()
-      .year(this.selectedYear)
-      .month(this.selectedMonth)
-      .date(1)
-      .startOf('day');
-  }
-
-
   dateChanged(date: Moment) {
-
     this.monthlyReportService.selectedYear.next(moment(date).year());
     this.monthlyReportService.selectedMonth.next(moment(date).month());
     this.emitRefreshMonthlyReport();
-
-
   }
 }
