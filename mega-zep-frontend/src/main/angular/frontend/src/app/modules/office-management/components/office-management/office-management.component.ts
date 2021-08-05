@@ -17,6 +17,7 @@ export class OfficeManagementComponent implements OnInit, OnDestroy {
   selectedYear: number;
   selectedMonth: number;
   dateSelectionSub: Subscription;
+  maxMonthDate: number = 1;
 
   constructor(private omService: OfficeManagementService) {
   }

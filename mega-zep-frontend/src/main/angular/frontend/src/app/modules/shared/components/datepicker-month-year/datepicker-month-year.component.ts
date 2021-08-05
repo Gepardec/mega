@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 
 import {FormControl} from '@angular/forms';
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
@@ -37,15 +37,17 @@ export const MY_FORMATS = {
     {provide: MAT_DATE_LOCALE, useValue: 'de-AT'}
   ]
 })
-export class DatepickerMonthYearComponent implements OnChanges {
+export class DatepickerMonthYearComponent implements OnChanges, OnInit {
+
 
   @ViewChild('picker') datePicker: MatDatepicker<any>;
   @Input() date: Moment;
+  @Input() maxMonth: number;
   @Output() dateChanged: EventEmitter<Moment> = new EventEmitter<Moment>();
 
   pickerDate: MatDatepicker<any>;
   dateControl = new FormControl(moment().subtract(1, 'month'));
-  maxDate = moment().subtract(1, 'month').format('YYYY-MM-DD');
+  maxDate = moment().subtract(0, 'month').format('YYYY-MM-DD');
 
   chosenYearHandler(normalizedYear: Moment) {
     const ctrlValue = this.dateControl.value;
@@ -55,12 +57,17 @@ export class DatepickerMonthYearComponent implements OnChanges {
 
   chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<any>) {
     const ctrlValue = this.dateControl.value;
+    ctrlValue.year(normalizedMonth.year());
     ctrlValue.month(normalizedMonth.month());
     this.dateControl.setValue(ctrlValue);
     datepicker.close();
 
     const changedDate = moment(this.dateControl.value);
     this.dateChanged.emit(changedDate);
+  }
+
+  ngOnInit() {
+    this.maxDate = moment().subtract(this.maxMonth, 'month').format('YYYY-MM-DD');
   }
 
   ngOnChanges(changes: SimpleChanges): void {
