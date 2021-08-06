@@ -45,6 +45,6 @@ export class MonthlyReportComponent implements OnInit {
   }
 
   refreshMonthlyReport() {
-    this.getAllTimeEntriesByDate(this.monthlyReportService.selectedYear.getValue(), this.monthlyReportService.selectedMonth.getValue() + 1);
+    this.getAllTimeEntriesByDate(this.monthlyReportService.selectedYear.getValue(), this.monthlyReportService.selectedMonth.getValue());
   }
 }
