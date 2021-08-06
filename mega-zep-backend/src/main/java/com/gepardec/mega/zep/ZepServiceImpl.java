@@ -56,7 +56,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static com.gepardec.mega.domain.utils.DateUtils.getFirstDayOfCurrentMonth;
 import static com.gepardec.mega.domain.utils.DateUtils.getFirstDayOfFollowingMonth;
+import static com.gepardec.mega.domain.utils.DateUtils.getLastDayOfCurrentMonth;
 import static com.gepardec.mega.domain.utils.DateUtils.getLastDayOfFollowingMonth;
 
 @RequestScoped
@@ -284,8 +286,8 @@ public class ZepServiceImpl implements ZepService {
     private ReadProjektzeitenSearchCriteriaType createProjectTimeSearchCriteria(Employee employee, LocalDate date) {
         ReadProjektzeitenSearchCriteriaType searchCriteria = new ReadProjektzeitenSearchCriteriaType();
 
-        searchCriteria.setVon(getFirstDayOfFollowingMonth(date.toString()));
-        searchCriteria.setBis(getLastDayOfFollowingMonth(date.toString()));
+        searchCriteria.setVon(getFirstDayOfCurrentMonth(date.toString()));
+        searchCriteria.setBis(getLastDayOfCurrentMonth(date.toString()));
 
         UserIdListeType userIdListType = new UserIdListeType();
         userIdListType.getUserId().add(employee.userId());
@@ -309,8 +311,8 @@ public class ZepServiceImpl implements ZepService {
     private ReadFehlzeitSearchCriteriaType createAbsenceSearchCriteria(Employee employee, LocalDate date) {
         ReadFehlzeitSearchCriteriaType searchCriteria = new ReadFehlzeitSearchCriteriaType();
 
-        searchCriteria.setStartdatum(getFirstDayOfFollowingMonth(date.toString()));
-        searchCriteria.setEnddatum(getLastDayOfFollowingMonth(date.toString()));
+        searchCriteria.setStartdatum(getFirstDayOfCurrentMonth(date.toString()));
+        searchCriteria.setEnddatum(getLastDayOfCurrentMonth(date.toString()));
 
         searchCriteria.setUserId(employee.userId());
         return searchCriteria;

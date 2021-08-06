@@ -39,14 +39,14 @@ class InsufficientRestTimeCalculatorTest {
                 .build();
     }
 
-    private JourneyTimeEntry journeyTimeEntryFor(int startDay, int startHour, int startMinute, int endDay, int endHour, int endMinute) {
+    private JourneyTimeEntry journeyTimeEntryFor(int startDay, int startHour, int startMinute, int endDay, int endHour, int endMinute, Vehicle vehicle) {
         return JourneyTimeEntry.builder()
                 .fromTime(LocalDateTime.of(2020, startDay, 7, startHour, startMinute))
                 .toTime(LocalDateTime.of(2020, endDay, 7, endHour, endMinute))
                 .task(Task.REISEN)
                 .workingLocation(WorkingLocation.MAIN)
                 .journeyDirection(JourneyDirection.TO)
-                .vehicle(Vehicle.OTHER_INACTIVE)
+                .vehicle(vehicle)
                 .build();
     }
 
@@ -95,13 +95,36 @@ class InsufficientRestTimeCalculatorTest {
     @Test
     void whenOneJourneyEntryAnd10HoursRestTime_thenWarning() {
         ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
-        JourneyTimeEntry timeEntryTwo = journeyTimeEntryFor(1, 22, 0, 2, 1, 0);
+        JourneyTimeEntry timeEntryTwo = journeyTimeEntryFor(1, 22, 0, 2, 1, 0, Vehicle.CAR_INACTIVE);
         ProjectTimeEntry timeEntryThree = projectTimeEntryFor(2, 8, 0, 11, 0);
 
         List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
 
         assertEquals(1, warnings.size());
         assertEquals(1, warnings.get(0).getMissingRestTime());
+    }
+
+    @Test
+    void whenOneJourneyEntryActiveAnd10HoursRestTime_thenWarning() {
+        ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
+        JourneyTimeEntry timeEntryTwo = journeyTimeEntryFor(1, 22, 0, 2, 1, 0, Vehicle.CAR_ACTIVE);
+        ProjectTimeEntry timeEntryThree = projectTimeEntryFor(2, 8, 0, 11, 0);
+
+        List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
+
+        assertEquals(1, warnings.size());
+        assertEquals(1, warnings.get(0).getMissingRestTime());
+    }
+
+    @Test
+    void whenJourneyEntryActiveAnd10HoursRestTime_thenWarning() {
+        ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
+        JourneyTimeEntry timeEntryTwo = journeyTimeEntryFor(2, 8, 0, 2, 9, 0, Vehicle.CAR_ACTIVE);
+
+
+        List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
+
+        assertEquals(0, warnings.size());
     }
 
     @Test
@@ -117,7 +140,7 @@ class InsufficientRestTimeCalculatorTest {
     @Test
     void whenOneJourneyEntryAnd11HoursRestTime_thenNoWarning() {
         ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
-        JourneyTimeEntry timeEntryTwo = journeyTimeEntryFor(1, 22, 0, 2, 1, 0);
+        JourneyTimeEntry timeEntryTwo = journeyTimeEntryFor(1, 22, 0, 2, 1, 0, Vehicle.CAR_INACTIVE);
         ProjectTimeEntry timeEntryThree = projectTimeEntryFor(2, 9, 0, 11, 0);
 
         List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));

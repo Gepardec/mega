@@ -50,6 +50,20 @@ class InsufficientBreakTimeCalculatorTest {
                 .vehicle(Vehicle.OTHER_INACTIVE)
                 .build();
     }
+    private JourneyTimeEntry journeyTimeEntryFor(int startHour, int endHour, Vehicle vehicle) {
+        return journeyTimeEntryFor(startHour, 0, endHour, 0, vehicle);
+    }
+
+    private JourneyTimeEntry journeyTimeEntryFor(int startHour, int startMinute, int endHour, int endMinute, Vehicle vehicle) {
+        return JourneyTimeEntry.builder()
+                .fromTime(LocalDateTime.of(2020, 1, 7, startHour, startMinute))
+                .toTime(LocalDateTime.of(2020, 1, 7, endHour, endMinute))
+                .task(Task.REISEN)
+                .workingLocation(WorkingLocation.MAIN)
+                .journeyDirection(JourneyDirection.TO)
+                .vehicle(vehicle)
+                .build();
+    }
 
     @Test
     void when6Hours_thenNoWarning() {
@@ -69,6 +83,28 @@ class InsufficientBreakTimeCalculatorTest {
 
         assertTrue(warnings.isEmpty());
     }
+
+    @Test
+    void when3And6HoursAnd1HBreakTimeActiveJourney_thenNoWarning() {
+        final JourneyTimeEntry journeyEntryOne = journeyTimeEntryFor(7, 10, Vehicle.CAR_ACTIVE);
+        final JourneyTimeEntry journeyEntryTwo = journeyTimeEntryFor(11, 17, Vehicle.CAR_ACTIVE);
+
+        final List<TimeWarning> warnings = calculator.calculate(List.of(journeyEntryOne,journeyEntryTwo));
+
+        assertTrue(warnings.isEmpty());
+    }
+
+    @Test
+    void when3And6HoursAndNoBreakTimeActiveJourney_thenWarning() {
+        final JourneyTimeEntry journeyEntryOne = journeyTimeEntryFor(7, 10, Vehicle.CAR_ACTIVE);
+        final JourneyTimeEntry journeyEntryTwo = journeyTimeEntryFor(10, 16, Vehicle.CAR_ACTIVE);
+
+        final List<TimeWarning> warnings = calculator.calculate(List.of(journeyEntryOne,journeyEntryTwo));
+
+        assertEquals(1, warnings.size());
+        assertEquals(0.5, warnings.get(0).getMissingBreakTime());
+    }
+
 
     @Test
     void when3EntriesAndTwo30MinutesBreak_thenNoWarning() {

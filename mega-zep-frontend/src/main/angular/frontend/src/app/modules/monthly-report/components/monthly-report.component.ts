@@ -10,9 +10,9 @@ import {GeneralInfoComponent} from "./general-info/general-info.component";
 })
 export class MonthlyReportComponent implements OnInit {
 
-  monthlyReport: MonthlyReport;
-  private monthlyReportSubscription: Subscription;
+  public monthlyReport: MonthlyReport;
   generalInfoComponent: GeneralInfoComponent = new GeneralInfoComponent(this.monthlyReportService);
+  private monthlyReportSubscription: Subscription;
 
   constructor(private monthlyReportService: MonthlyReportService,
               private cd: ChangeDetectorRef) {
@@ -28,10 +28,15 @@ export class MonthlyReportComponent implements OnInit {
 
   getAllTimeEntries() {
     this.monthlyReportSubscription = this.monthlyReportService.getAll().subscribe((monthlyReport: MonthlyReport) => {
-      this.monthlyReport = monthlyReport;
-      const splitReleaseDate = monthlyReport.employee.releaseDate.split("-");
-      this.monthlyReportService.selectedYear.next(+splitReleaseDate[0]);
-      this.monthlyReportService.selectedMonth.next(+splitReleaseDate[1]);
+      if (monthlyReport) {
+        this.monthlyReport = monthlyReport;
+        const splitReleaseDate = this.monthlyReport.employee.releaseDate.split("-");
+        this.monthlyReportService.selectedYear.next(+splitReleaseDate[0]);
+        this.monthlyReportService.selectedMonth.next(+splitReleaseDate[1]);
+      } else {
+        console.log("MonthlyReport should only be undefined for the tests!");
+      }
+
     });
   }
 
@@ -40,6 +45,6 @@ export class MonthlyReportComponent implements OnInit {
   }
 
   refreshMonthlyReport() {
-    this.getAllTimeEntriesByDate(this.monthlyReportService.selectedYear.getValue(), this.monthlyReportService.selectedMonth.getValue());
+    this.getAllTimeEntriesByDate(this.monthlyReportService.selectedYear.getValue(), this.monthlyReportService.selectedMonth.getValue() + 1);
   }
 }

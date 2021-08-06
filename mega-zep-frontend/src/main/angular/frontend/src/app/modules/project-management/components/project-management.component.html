@@ -31,7 +31,12 @@
               <tbody>
               <tr>
                 <td class="label">
-                  {{'project-management.projectTimeState' | translate}}
+                  <span [matTooltipPosition]="tooltipPosition"
+                        [matTooltipShowDelay]="tooltipShowDelay"
+                        matTooltip="{{'project-management.tooltips.projectTimeState' | translate}}"
+                        matTooltipClass="pm-tooltip">
+              {{'project-management.projectTimeState' | translate}}
+            </span>
                 </td>
                 <td>
                   <app-project-state-select #controlProjectStateSelect
@@ -47,7 +52,12 @@
               </tr>
               <tr class="spacing">
                 <td class="label">
-                  {{'project-management.billingState' | translate}}
+                  <span [matTooltipPosition]="tooltipPosition"
+                        [matTooltipShowDelay]="tooltipShowDelay"
+                        matTooltip="{{'project-management.tooltips.billingState' | translate}}"
+                        matTooltipClass="pm-tooltip">
+              {{'project-management.billingState' | translate}}
+            </span>
                 </td>
                 <td class="states">
                   <app-project-state-select #controlBillingStateSelect

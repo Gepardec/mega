@@ -1,6 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MonthlyReport} from '../../models/MonthlyReport';
 import {MonthlyReportService} from "../../services/monthly-report.service";
+import * as _moment from 'moment';
+
+const moment = _moment;
 
 @Component({
   selector: 'app-general-info',
@@ -53,5 +56,10 @@ export class GeneralInfoComponent implements OnInit {
     }
 
     return (this.monthlyReportService.billableTimeHours / this.monthlyReportService.totalWorkingTimeHours) * 100;
+  }
+
+  month(number: number): string{
+    moment.locale('de');
+    return moment().month(number).format("MMMM");
   }
 }
