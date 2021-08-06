@@ -56,6 +56,7 @@ export class ProjectManagementComponent implements OnInit {
   forProjectName: string;
   tooltipShowDelay = 500;
   tooltipPosition = 'above';
+  maxMonthDate: number = 1;
 
   constructor(private dialog: MatDialog,
               private pmService: ProjectManagementService,
@@ -66,6 +67,14 @@ export class ProjectManagementComponent implements OnInit {
               private snackbarService: SnackbarService,
               private translate: TranslateService,
               private projectCommentService: ProjectCommentService) {
+  }
+
+  get date() {
+    return moment()
+      .year(this.selectedYear)
+      .month(this.selectedMonth)
+      .date(1)
+      .startOf('day');
   }
 
   ngOnInit(): void {

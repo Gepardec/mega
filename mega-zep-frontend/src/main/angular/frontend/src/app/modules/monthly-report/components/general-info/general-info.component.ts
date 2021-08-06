@@ -1,5 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MonthlyReport} from '../../models/MonthlyReport';
+import {MonthlyReportService} from "../../services/monthly-report.service";
+import * as _moment from 'moment';
+
+const moment = _moment;
 
 @Component({
   selector: 'app-general-info',
@@ -12,9 +16,6 @@ export class GeneralInfoComponent implements OnInit {
   @Input() monthlyReport: MonthlyReport;
   @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>();
 
-  billablePercentage: number;
-  totalWorkingTimeHours: number;
-  billableTimeHours: number;
 
   identifiers: string[] = [
     'Gesamte Arbeitszeit',
@@ -25,11 +26,16 @@ export class GeneralInfoComponent implements OnInit {
     'Homeoffice'
   ];
 
-  constructor() {
+  constructor(public monthlyReportService: MonthlyReportService) {
+  }
+
+  update(monthlyReport: MonthlyReport) {
+    this.monthlyReport = monthlyReport;
+    this.ngOnInit();
   }
 
   ngOnInit(): void {
-    this.billablePercentage = this.calculateBillingPercentage(this.monthlyReport.totalWorkingTime, this.monthlyReport.billableTime);
+    this.monthlyReportService.billablePercentage = this.calculateBillingPercentage(this.monthlyReport.totalWorkingTime, this.monthlyReport.billableTime);
   }
 
   calculateBillingPercentage(totalWorkingTime: string, billableTime: string): number {
@@ -41,14 +47,19 @@ export class GeneralInfoComponent implements OnInit {
       return 0;
     }
 
-    this.totalWorkingTimeHours = ((+spTotalWorkingTime[0] * 60) + (+spTotalWorkingTime[1])) / 60;
-    this.billableTimeHours = ((+spBillableTime[0] * 60) + (+spBillableTime[1])) / 60;
+    this.monthlyReportService.totalWorkingTimeHours = ((+spTotalWorkingTime[0] * 60) + (+spTotalWorkingTime[1])) / 60;
+    this.monthlyReportService.billableTimeHours = ((+spBillableTime[0] * 60) + (+spBillableTime[1])) / 60;
 
     // prevent division by zero
-    if (this.totalWorkingTimeHours === 0 || this.billableTimeHours === 0) {
+    if (this.monthlyReportService.totalWorkingTimeHours === 0 || this.monthlyReportService.billableTimeHours === 0) {
       return 0;
     }
 
-    return (this.billableTimeHours / this.totalWorkingTimeHours) * 100;
+    return (this.monthlyReportService.billableTimeHours / this.monthlyReportService.totalWorkingTimeHours) * 100;
+  }
+
+  month(number: number): string{
+    moment.locale('de');
+    return moment().month(number).format("MMMM");
   }
 }

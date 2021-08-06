@@ -12,6 +12,7 @@ import com.gepardec.mega.zep.ZepService;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,6 +56,9 @@ public class ProjectServiceImpl implements ProjectService {
         com.gepardec.mega.db.entity.project.Project finalProjectEntity = projectEntity;
         project.getProjectLeads().forEach(lead -> {
             User user = userRepository.findById(lead.getId());
+            if (finalProjectEntity.getProjectLeads() == null) {
+                finalProjectEntity.setProjectLeads(new HashSet<>());
+            }
             finalProjectEntity.getProjectLeads().add(user);
         });
 
@@ -62,28 +66,33 @@ public class ProjectServiceImpl implements ProjectService {
 
         LocalDate currentMonth = LocalDate.now().minusMonths(1).withDayOfMonth(1);
 
-        boolean noProjectEntriesExist = projectEntity.getProjectEntries().stream().noneMatch(pe -> pe.getDate().equals(currentMonth));
+        boolean noProjectEntriesExist = true;
+        if (projectEntity.getProjectEntries() != null) {
+            noProjectEntriesExist = projectEntity.getProjectEntries().stream().noneMatch(pe -> pe.getDate().equals(currentMonth));
+        }
 
         if (noProjectEntriesExist) {
-            project.getProjectEntries().forEach(projectEntry -> {
+            if (project.getProjectEntries() != null) {
+                project.getProjectEntries().forEach(projectEntry -> {
 
-                User owner = userRepository.findById(projectEntry.getOwner().getId());
-                User assignee = userRepository.findById(projectEntry.getAssignee().getId());
+                    User owner = userRepository.findById(projectEntry.getOwner().getId());
+                    User assignee = userRepository.findById(projectEntry.getAssignee().getId());
 
-                ProjectEntry pe = new ProjectEntry();
-                pe.setPreset(projectEntry.isPreset());
-                pe.setProject(projectEntry.getProject());
-                pe.setStep(projectEntry.getStep());
-                pe.setState(projectEntry.getState());
-                pe.setUpdatedDate(projectEntry.getUpdatedDate());
-                pe.setCreationDate(projectEntry.getCreationDate());
-                pe.setDate(projectEntry.getDate());
-                pe.setName(projectEntry.getName());
-                pe.setOwner(owner);
-                pe.setAssignee(assignee);
+                    ProjectEntry pe = new ProjectEntry();
+                    pe.setPreset(projectEntry.isPreset());
+                    pe.setProject(projectEntry.getProject());
+                    pe.setStep(projectEntry.getStep());
+                    pe.setState(projectEntry.getState());
+                    pe.setUpdatedDate(projectEntry.getUpdatedDate());
+                    pe.setCreationDate(projectEntry.getCreationDate());
+                    pe.setDate(projectEntry.getDate());
+                    pe.setName(projectEntry.getName());
+                    pe.setOwner(owner);
+                    pe.setAssignee(assignee);
 
-                finalProjectEntity1.addProjectEntry(pe);
-            });
+                    finalProjectEntity1.addProjectEntry(pe);
+                });
+            }
         }
 
         projectEntity.setName(project.getName());

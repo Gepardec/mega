@@ -59,6 +59,8 @@ public class Project {
      *
      * @see User
      */
+    // need to remove initialization due to:
+    // https://stackoverflow.com/questions/66932114/jpa-hibernate-lazy-loaded-list-is-empty-after-flush
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "project_employee",
@@ -67,7 +69,7 @@ public class Project {
             uniqueConstraints = @UniqueConstraint(columnNames = {
                     "project_id", "employee_id"})
     )
-    private Set<User> projectLeads = new HashSet<>(0);
+    private Set<User> projectLeads;
 
     /**
      * The project entries of the project
@@ -80,10 +82,13 @@ public class Project {
             joinColumns = {@JoinColumn(name = "project_id")},
             inverseJoinColumns = {@JoinColumn(name = "project_entry_id")}
     )
-    private Set<ProjectEntry> projectEntries = new HashSet<>(0);
+    private Set<ProjectEntry> projectEntries;
 
     // needed to be consistent with the database
     public void addProjectEntry(ProjectEntry projectEntry) {
+        if(projectEntries == null){
+            projectEntries = new HashSet<>();
+        }
         projectEntries.add(projectEntry);
         projectEntry.setProject(this);
     }

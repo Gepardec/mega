@@ -1,27 +1,27 @@
 <mat-card *ngIf="monthlyReport" class="mat-elevation-z10">
   <mat-card-title>
-    {{'monthly-report.title.general-info' | translate}}
+    {{'monthly-report.title.general-info' | translate}} {{month(monthlyReportService.selectedMonth.getValue())}} {{monthlyReportService.selectedYear.getValue()}}
   </mat-card-title>
   <table>
     <tr>
       <td class="headers">{{identifiers[0]}}</td>
-      <td class="infovalue">{{totalWorkingTimeHours | number: '1.2-2': 'de-AT'}}</td>
-      <td class="identifier" *ngIf="totalWorkingTimeHours === 1">Stunde</td>
-      <td class="identifier" *ngIf="totalWorkingTimeHours > 1 || totalWorkingTimeHours === 0">Stunden</td>
+      <td class="infovalue">{{monthlyReportService.totalWorkingTimeHours | number: '1.2-2': 'de-AT'}}</td>
+      <td class="identifier" *ngIf="monthlyReportService.totalWorkingTimeHours === 1">Stunde</td>
+      <td class="identifier" *ngIf="monthlyReportService.totalWorkingTimeHours > 1 || monthlyReportService.totalWorkingTimeHours === 0">Stunden</td>
     </tr>
     <tr class="info-line">
       <td class="headers">{{identifiers[1]}}</td>
-      <td class="infovalue">{{billableTimeHours | number: '1.2-2': 'de-AT'}}</td>
-      <td class="identifier" *ngIf="billableTimeHours === 1">Stunde</td>
-      <td class="identifier" *ngIf="billableTimeHours > 1 || billableTimeHours === 0">Stunden</td>
+      <td class="infovalue">{{monthlyReportService.billableTimeHours | number: '1.2-2': 'de-AT'}}</td>
+      <td class="identifier" *ngIf="monthlyReportService.billableTimeHours === 1">Stunde</td>
+      <td class="identifier" *ngIf="monthlyReportService.billableTimeHours > 1 || monthlyReportService.billableTimeHours === 0">Stunden</td>
     </tr>
     <tr class="info-line">
       <td class="headers">{{identifiers[2]}}</td>
-      <td class="identifier" class="infovalue">{{billablePercentage | number: '1.2-2': 'de-AT'}}</td>
+      <td class="infovalue">{{monthlyReportService.billablePercentage | number: '1.2-2': 'de-AT'}}</td>
       <td class="identifier">%</td>
     </tr>
-    <!-- remve until calculation is fixed -->
-    <!--<tr>
+
+    <tr>
       <td colspan="3"><hr></td>
     </tr>
     <tr class="info-line">
@@ -41,7 +41,7 @@
       <td class="infovalue">{{monthlyReport.homeofficeDays}}</td>
       <td class="identifier" *ngIf="monthlyReport.homeofficeDays === 1">Tag</td>
       <td class="identifier" *ngIf="monthlyReport.homeofficeDays > 1 || monthlyReport.homeofficeDays === 0">Tage</td>
-    </tr>-->
+    </tr>
   </table>
 
 </mat-card>

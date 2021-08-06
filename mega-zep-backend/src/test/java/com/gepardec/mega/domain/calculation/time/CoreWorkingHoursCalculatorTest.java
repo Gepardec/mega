@@ -89,9 +89,9 @@ class CoreWorkingHoursCalculatorTest {
     }
 
     @Test
-    void whenStoppedToLateAt23_thenWarning() {
-        ProjectTimeEntry start = projectTimeEntryFor(6, 12);
-        ProjectTimeEntry end = projectTimeEntryFor(18, 23);
+    void whenStartedToEarlyAndBothActiveTravel_thenWarning() {
+        JourneyTimeEntry start = journeyTimeEntryFor(5, 12, Vehicle.CAR_ACTIVE);
+        JourneyTimeEntry end = journeyTimeEntryFor(13, 16, Vehicle.CAR_ACTIVE);
 
         List<TimeWarning> result = calculator.calculate(List.of(start, end));
 
@@ -130,6 +130,16 @@ class CoreWorkingHoursCalculatorTest {
     @Test
     void whenDataListEmpty_thenNoWarnings() {
         assertTrue(calculator.calculate(List.of()).isEmpty());
+    }
+
+    @Test
+    void whenStoppedToLateAt23_thenWarning() {
+        ProjectTimeEntry start = projectTimeEntryFor(6, 12);
+        ProjectTimeEntry end = projectTimeEntryFor(18, 23);
+
+        List<TimeWarning> result = calculator.calculate(List.of(start, end));
+
+        assertEquals(1, result.size());
     }
 
     @Test

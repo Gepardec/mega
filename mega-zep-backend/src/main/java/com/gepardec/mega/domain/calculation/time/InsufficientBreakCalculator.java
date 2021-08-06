@@ -2,6 +2,7 @@ package com.gepardec.mega.domain.calculation.time;
 
 import com.gepardec.mega.domain.calculation.AbstractTimeWarningCalculationStrategy;
 import com.gepardec.mega.domain.calculation.WarningCalculationStrategy;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * This calculator calculates the 'break time' on a single working day.
@@ -31,7 +33,10 @@ public class InsufficientBreakCalculator extends AbstractTimeWarningCalculationS
     public List<TimeWarning> calculate(List<ProjectEntry> projectTimes) {
         final List<TimeWarning> warnings = new ArrayList<>();
 
-        final Map<LocalDate, List<ProjectEntry>> groupedProjectTimeEntries = groupProjectEntriesByFromDate(projectTimes, List.of((entry) -> Task.isTask(entry.getTask())));
+        final Predicate<ProjectEntry> filterTask = entry -> Task.isTask(entry.getTask());
+        final Predicate<ProjectEntry> filterActiveTravelTime = entry -> Task.isJourney(entry.getTask()) && JourneyTimeEntry.class.cast(entry).getVehicle().activeTraveler;
+
+        final Map<LocalDate, List<ProjectEntry>> groupedProjectTimeEntries = groupProjectEntriesByFromDate(projectTimes, List.of(filterTask.or(filterActiveTravelTime)));
 
         for (final Map.Entry<LocalDate, List<ProjectEntry>> projectTimeEntry : groupedProjectTimeEntries.entrySet()) {
 
