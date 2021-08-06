@@ -49,7 +49,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         final LocalDate date;
 
         if (employee != null && employee.releaseDate() != null) {
-            date = LocalDate.parse(employee.releaseDate());
+            date = LocalDate.parse(employee.releaseDate()).plusMonths(1);
         } else {
             date = null;
         }
@@ -60,7 +60,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     public MonthlyReport getMonthendReportForUser(String userId, LocalDate date) {
         Employee employee = zepService.getEmployee(userId);
 
-        return buildMonthlyReport(employee, zepService.getProjectTimes(employee, date), zepService.getBillableForEmployee(employee, date), zepService.getAbsenceForEmployee(employee, date));
+        return buildMonthlyReport(employee, zepService.getProjectTimes(employee, date), zepService.getBillableForEmployee(employee, date), zepService.getAbsenceForEmployee(employee, date), stepEntryService.findEmployeeCheckState(employee, date));
     }
 
     @Override
@@ -71,7 +71,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         return stepEntryService.setOpenAndAssignedStepEntriesDone(employee, stepId, from, to);
     }
 
-    private MonthlyReport buildMonthlyReport(Employee employee, List<ProjectEntry> projectEntries, List<ProjektzeitType> billableEntries, List<FehlzeitType> absenceEntries) {
+    private MonthlyReport buildMonthlyReport(Employee employee, List<ProjectEntry> projectEntries, List<ProjektzeitType> billableEntries, List<FehlzeitType> absenceEntries, Optional<EmployeeState> employeeCheckState) {
         final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(projectEntries);
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectEntries);
 
@@ -96,7 +96,6 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                     ));
         }
 
-        final Optional<EmployeeState> employeeCheckState = stepEntryService.findEmployeeCheckState(employee);
         final boolean isAssigned = employeeCheckState.isPresent();
 
         final List<StepEntry> allOwnedAndAssignedStepEntries = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(employee);
