@@ -54,6 +54,8 @@ export class ProjectManagementComponent implements OnInit {
   selectedMonth = moment().subtract(1, 'month').month() + 1; // months 0 - 11
   showCommentEditor = false;
   forProjectName: string;
+  tooltipShowDelay = 500;
+  tooltipPosition = 'above';
 
   constructor(private dialog: MatDialog,
               private pmService: ProjectManagementService,
