@@ -34,16 +34,16 @@ public class StepEntryServiceImpl implements StepEntryService {
 
     @Override
     public Optional<EmployeeState> findEmployeeCheckState(final Employee employee) {
-        // Null Pointer Check
-        return findEmployeeCheckState(employee, LocalDate.parse(employee.releaseDate()));
+        if(employee != null){
+            return findEmployeeCheckState(employee, LocalDate.parse(employee.releaseDate()));
+        }
+        return Optional.empty();
     }
 
     @Override
     public Optional<EmployeeState> findEmployeeCheckState(final Employee employee, LocalDate date) {
-        LocalDate entryDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-
         Optional<StepEntry> stepEntries =
-                stepEntryRepository.findAllOwnedAndAssignedStepEntriesForEmployee(entryDate, employee.email());
+                stepEntryRepository.findAllOwnedAndAssignedStepEntriesForEmployee(date, employee.email());
 
         return stepEntries.map(StepEntry::getState);
     }
