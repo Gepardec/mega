@@ -49,7 +49,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         final LocalDate date;
 
         if (employee != null && employee.releaseDate() != null) {
-            date = LocalDate.parse(employee.releaseDate());
+            date = LocalDate.parse(employee.releaseDate()).plusMonths(1);
         } else {
             date = null;
         }

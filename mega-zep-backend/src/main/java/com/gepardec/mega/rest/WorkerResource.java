@@ -39,8 +39,7 @@ public class WorkerResource implements WorkerResourceAPI {
     @Override
     public MonthlyReport monthlyReport() {
         Employee employee = employeeService.getEmployee(Objects.requireNonNull(userContext.user()).userId());
-        LocalDate date = LocalDate.parse(employee.releaseDate());
-        return monthlyReport(date.getYear(), date.getMonthValue());
+        return monthlyReportService.getMonthendReportForUser(Objects.requireNonNull(employee.userId()));
     }
 
     @Override
