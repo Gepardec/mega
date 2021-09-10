@@ -23,6 +23,7 @@ export class CommentsForEmployeeComponent implements OnInit {
   step: Step;
   project = '';
   currentMonthYear: string;
+  isAddCommentButtonDisabled: boolean = true;
   @Output() commentHasChanged: EventEmitter<void> = new EventEmitter<void>();
 
   @ViewChild('newMessage') newCommentTextarea;
@@ -42,6 +43,8 @@ export class CommentsForEmployeeComponent implements OnInit {
     this.userService.user.subscribe((user) => {
       this.user = user;
     });
+
+    this.commentHasChanged.subscribe(() => this.onCommentChange());
   }
 
   toggleIsEditing(comment: Comment) {
@@ -120,5 +123,10 @@ export class CommentsForEmployeeComponent implements OnInit {
     months -= d1.getMonth();
     months += d2.getMonth();
     return Math.abs(months);
+  }
+
+  onCommentChange() {
+    const textLength = this.newCommentTextarea?.nativeElement?.value?.length;
+    this.isAddCommentButtonDisabled = textLength == 0 || textLength > this.MAXIMUM_LETTERS;
   }
 }

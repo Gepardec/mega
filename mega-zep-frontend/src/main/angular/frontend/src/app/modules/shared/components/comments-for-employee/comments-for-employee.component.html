@@ -11,6 +11,7 @@
         <textarea
           #newMessage
           [maxLength]="MAXIMUM_LETTERS"
+          (keyup)="onCommentChange()"
           cdkAutosizeMaxRows="10"
           cdkAutosizeMinRows="5"
           cdkTextareaAutosize
@@ -18,9 +19,14 @@
         <mat-hint align="end">{{newMessage.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
       </mat-form-field>
 
-      <button (click)="createCommentForEmployee(newMessage.value);newMessage.value = ''" mat-raised-button>
-        {{'comments-for-employee.addCommentBtn' | translate}}
-      </button>
+      <span matTooltip="{{'comments-for-employee.characterRangeTooltip' | translate}}" [matTooltipDisabled]="!isAddCommentButtonDisabled" [matTooltipPosition]="'right'">
+        <button
+          [disabled]="isAddCommentButtonDisabled"
+          (click)="createCommentForEmployee(newMessage.value);newMessage.value = ''"
+          mat-raised-button>
+          {{'comments-for-employee.addCommentBtn' | translate}}
+        </button>
+      </span>
     </div>
     <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table">
 
@@ -69,6 +75,7 @@
         <td class="mat-cell">
           <ng-container *ngIf="comment.isEditing">
             <button
+              [disabled]="editMessageInput.value.length == 0 || editMessageInput.value.length > MAXIMUM_LETTERS"
               (click)="comment.message = editMessageInput.value; toggleIsEditing(comment); updateCommentForEmployee(comment);"
               mat-icon-button>
               <mat-icon>done</mat-icon>

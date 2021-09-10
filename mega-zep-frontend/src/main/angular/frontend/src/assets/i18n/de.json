@@ -146,7 +146,8 @@
     "editCommentLabel": "Anmerkung bearbeiten",
     "noCommentsYet": "Noch keine Anmerkungen vorhanden",
     "close": "Schließen",
-    "save": "Änderungen speichern"
+    "save": "Änderungen speichern",
+    "characterRangeTooltip": "Die Anmerkung muss zwischen 1 und 500 Zeichen beinhalten"
   },
   "info-dialog": {
     "title": "MEGA Version",
