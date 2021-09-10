@@ -11,7 +11,6 @@
         <textarea
           #newMessage
           [maxLength]="MAXIMUM_LETTERS"
-          (keyup)="onCommentChange()"
           cdkAutosizeMaxRows="10"
           cdkAutosizeMinRows="5"
           cdkTextareaAutosize
@@ -19,9 +18,11 @@
         <mat-hint align="end">{{newMessage.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
       </mat-form-field>
 
-      <span matTooltip="{{'comments-for-employee.characterRangeTooltip' | translate}}" [matTooltipDisabled]="!isAddCommentButtonDisabled" [matTooltipPosition]="'right'">
+      <span matTooltip="{{'comments-for-employee.characterRangeTooltip' | translate}}"
+            [matTooltipDisabled]="!(newMessage?.value?.length == 0 || newMessage?.value?.length > MAXIMUM_LETTERS)"
+            [matTooltipPosition]="'right'">
         <button
-          [disabled]="isAddCommentButtonDisabled"
+          [disabled]="newMessage?.value?.length == 0 || newMessage?.value?.length > MAXIMUM_LETTERS"
           (click)="createCommentForEmployee(newMessage.value);newMessage.value = ''"
           mat-raised-button>
           {{'comments-for-employee.addCommentBtn' | translate}}
