@@ -3,7 +3,6 @@ package com.gepardec.mega.rest;
 import com.gepardec.mega.application.interceptor.RolesAllowed;
 import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.db.entity.employee.EmployeeState;
-import com.gepardec.mega.db.entity.employee.User;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.UserContext;
@@ -16,7 +15,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 @RequestScoped
@@ -70,10 +68,4 @@ public class WorkerResource implements WorkerResourceAPI {
 
         return monthlyReport;
     }
-
-    @Override
-    public List<User> getAll() {
-        return employeeService.getAll();
-    }
-
 }

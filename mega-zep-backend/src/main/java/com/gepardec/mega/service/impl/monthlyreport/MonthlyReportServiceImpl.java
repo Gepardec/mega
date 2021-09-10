@@ -22,14 +22,18 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequestScoped
 public class MonthlyReportServiceImpl implements MonthlyReportService {
 
-    private static final String BILLABLE_TIME_FORMAT = "HH:mm";
+    public static final String COMPENSATORY_DAYS = "FA";
+    public static final String HOME_OFFICE_DAYS = "HO";
+    public static final String VACATION_DAYS = "UB";
 
     @Inject
     ZepService zepService;
@@ -60,7 +64,12 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     public MonthlyReport getMonthendReportForUser(String userId, LocalDate date) {
         Employee employee = zepService.getEmployee(userId);
 
-        return buildMonthlyReport(employee, zepService.getProjectTimes(employee, date), zepService.getBillableForEmployee(employee, date), zepService.getAbsenceForEmployee(employee, date), stepEntryService.findEmployeeCheckState(employee, date));
+        List<FehlzeitType> absenceForEmployee = zepService.getAbsenceForEmployee(employee, date);
+        absenceForEmployee = absenceForEmployee.stream()
+                .map(fehlzeit -> trimDurationToCurrentMonth(fehlzeit, date))
+                .collect(Collectors.toList());
+
+        return buildMonthlyReport(employee, zepService.getProjectTimes(employee, date), zepService.getBillableForEmployee(employee, date), absenceForEmployee, stepEntryService.findEmployeeCheckState(employee, date));
     }
 
     @Override
@@ -69,6 +78,15 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
 
         return stepEntryService.setOpenAndAssignedStepEntriesDone(employee, stepId, from, to);
+    }
+
+    private FehlzeitType trimDurationToCurrentMonth(FehlzeitType fehlzeitType, LocalDate date) {
+        if (LocalDate.parse(fehlzeitType.getEnddatum()).getMonthValue() > date.getMonthValue()) {
+            fehlzeitType.setEnddatum(date.with(TemporalAdjusters.lastDayOfMonth()).toString());
+        } else if (LocalDate.parse(fehlzeitType.getStartdatum()).getMonthValue() < date.getMonthValue()) {
+            fehlzeitType.setStartdatum(date.with(TemporalAdjusters.firstDayOfMonth()).toString());
+        }
+        return fehlzeitType;
     }
 
     private MonthlyReport buildMonthlyReport(Employee employee, List<ProjectEntry> projectEntries, List<ProjektzeitType> billableEntries, List<FehlzeitType> absenceEntries, Optional<EmployeeState> employeeCheckState) {
@@ -112,24 +130,21 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                 .otherChecksDone(otherChecksDone)
                 .billableTime(zepService.getBillableTimesForEmployee(billableEntries, employee, true))
                 .totalWorkingTime(zepService.getTotalWorkingTimeForEmployee(billableEntries, employee))
-                .compensatoryDays(getAbsenceTimesForEmployee(absenceEntries, employee, "FA"))
-                .homeofficeDays(getAbsenceTimesForEmployee(absenceEntries, employee, "HO"))
-                .vacationDays(getAbsenceTimesForEmployee(absenceEntries, employee, "UB"))
+                .compensatoryDays(getAbsenceTimesForEmployee(absenceEntries, employee, COMPENSATORY_DAYS))
+                .homeofficeDays(getAbsenceTimesForEmployee(absenceEntries, employee, HOME_OFFICE_DAYS))
+                .vacationDays(getAbsenceTimesForEmployee(absenceEntries, employee, VACATION_DAYS))
                 .build();
     }
 
     private int getAbsenceTimesForEmployee(@Nonnull List<FehlzeitType> fehlZeitTypeList, @Nonnull Employee employee, String absenceType) {
         int totalAbsence = fehlZeitTypeList.stream()
                 .filter(fzt -> fzt.getFehlgrund().equals(absenceType))
+                .filter(FehlzeitType::isGenehmigt)
                 .map(ftl -> (Period.between(LocalDate.parse(ftl.getStartdatum()), LocalDate.parse(ftl.getEnddatum()))))
-                .map(ftl -> (ftl.getDays()))
-                .reduce(0, Integer::sum);
+                .mapToInt(Period::getDays)
+                .sum();
 
-        totalAbsence += Period.ofDays((int) fehlZeitTypeList.stream()
-                .filter(fzt -> fzt.getFehlgrund().equals(absenceType))
-                .count())
-                .getDays();
-
-        return totalAbsence;
+        // Conditionally add missing day because Period.between() does not include the given endDate
+        return totalAbsence > 0 ? totalAbsence + 1 : totalAbsence;
     }
 }

@@ -40,7 +40,7 @@ public class EmployeeServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        beanUnderTest = new EmployeeServiceImpl(logger, zepService, managedExecutor, userRepository, 10);
+        beanUnderTest = new EmployeeServiceImpl(logger, zepService, managedExecutor, 10);
     }
 
     @Test
