@@ -26,7 +26,6 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequestScoped
 public class MonthlyReportServiceImpl implements MonthlyReportService {
@@ -34,6 +33,8 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     public static final String COMPENSATORY_DAYS = "FA";
     public static final String HOME_OFFICE_DAYS = "HO";
     public static final String VACATION_DAYS = "UB";
+
+    private LocalDate currentMonthYear;
 
     @Inject
     ZepService zepService;
@@ -63,13 +64,13 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     @Override
     public MonthlyReport getMonthendReportForUser(String userId, LocalDate date) {
         Employee employee = zepService.getEmployee(userId);
+        currentMonthYear = date;
 
-        List<FehlzeitType> absenceForEmployee = zepService.getAbsenceForEmployee(employee, date);
-        absenceForEmployee = absenceForEmployee.stream()
-                .map(fehlzeit -> trimDurationToCurrentMonth(fehlzeit, date))
-                .collect(Collectors.toList());
-
-        return buildMonthlyReport(employee, zepService.getProjectTimes(employee, date), zepService.getBillableForEmployee(employee, date), absenceForEmployee, stepEntryService.findEmployeeCheckState(employee, date));
+        return buildMonthlyReport(employee,
+                zepService.getProjectTimes(employee, date),
+                zepService.getBillableForEmployee(employee, date),
+                zepService.getAbsenceForEmployee(employee, date),
+                stepEntryService.findEmployeeCheckState(employee, date));
     }
 
     @Override
@@ -78,15 +79,6 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
 
         return stepEntryService.setOpenAndAssignedStepEntriesDone(employee, stepId, from, to);
-    }
-
-    private FehlzeitType trimDurationToCurrentMonth(FehlzeitType fehlzeitType, LocalDate date) {
-        if (LocalDate.parse(fehlzeitType.getEnddatum()).getMonthValue() > date.getMonthValue()) {
-            fehlzeitType.setEnddatum(date.with(TemporalAdjusters.lastDayOfMonth()).toString());
-        } else if (LocalDate.parse(fehlzeitType.getStartdatum()).getMonthValue() < date.getMonthValue()) {
-            fehlzeitType.setStartdatum(date.with(TemporalAdjusters.firstDayOfMonth()).toString());
-        }
-        return fehlzeitType;
     }
 
     private MonthlyReport buildMonthlyReport(Employee employee, List<ProjectEntry> projectEntries, List<ProjektzeitType> billableEntries, List<FehlzeitType> absenceEntries, Optional<EmployeeState> employeeCheckState) {
@@ -137,14 +129,22 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     }
 
     private int getAbsenceTimesForEmployee(@Nonnull List<FehlzeitType> fehlZeitTypeList, @Nonnull Employee employee, String absenceType) {
-        int totalAbsence = fehlZeitTypeList.stream()
+        return fehlZeitTypeList.stream()
                 .filter(fzt -> fzt.getFehlgrund().equals(absenceType))
                 .filter(FehlzeitType::isGenehmigt)
+                .map(this::trimDurationToCurrentMonth)
                 .map(ftl -> (Period.between(LocalDate.parse(ftl.getStartdatum()), LocalDate.parse(ftl.getEnddatum()))))
                 .mapToInt(Period::getDays)
+                .map(days -> days + 1) // add missing day because Period.between() does not include the given endDate
                 .sum();
+    }
 
-        // Conditionally add missing day because Period.between() does not include the given endDate
-        return totalAbsence > 0 ? totalAbsence + 1 : totalAbsence;
+    private FehlzeitType trimDurationToCurrentMonth(FehlzeitType fehlzeit) {
+        if (LocalDate.parse(fehlzeit.getEnddatum()).getMonthValue() > currentMonthYear.getMonthValue()) {
+            fehlzeit.setEnddatum(currentMonthYear.with(TemporalAdjusters.lastDayOfMonth()).toString());
+        } else if (LocalDate.parse(fehlzeit.getStartdatum()).getMonthValue() < currentMonthYear.getMonthValue()) {
+            fehlzeit.setStartdatum(currentMonthYear.with(TemporalAdjusters.firstDayOfMonth()).toString());
+        }
+        return fehlzeit;
     }
 }
