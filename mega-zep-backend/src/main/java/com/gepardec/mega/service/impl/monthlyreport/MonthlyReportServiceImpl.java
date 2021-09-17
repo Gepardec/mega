@@ -122,13 +122,13 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                 .otherChecksDone(otherChecksDone)
                 .billableTime(zepService.getBillableTimesForEmployee(billableEntries, employee, true))
                 .totalWorkingTime(zepService.getTotalWorkingTimeForEmployee(billableEntries, employee))
-                .compensatoryDays(getAbsenceTimesForEmployee(absenceEntries, employee, COMPENSATORY_DAYS))
-                .homeofficeDays(getAbsenceTimesForEmployee(absenceEntries, employee, HOME_OFFICE_DAYS))
-                .vacationDays(getAbsenceTimesForEmployee(absenceEntries, employee, VACATION_DAYS))
+                .compensatoryDays(getAbsenceTimesForEmployee(absenceEntries, COMPENSATORY_DAYS))
+                .homeofficeDays(getAbsenceTimesForEmployee(absenceEntries, HOME_OFFICE_DAYS))
+                .vacationDays(getAbsenceTimesForEmployee(absenceEntries, VACATION_DAYS))
                 .build();
     }
 
-    private int getAbsenceTimesForEmployee(@Nonnull List<FehlzeitType> fehlZeitTypeList, @Nonnull Employee employee, String absenceType) {
+    private int getAbsenceTimesForEmployee(@Nonnull List<FehlzeitType> fehlZeitTypeList, String absenceType) {
         return fehlZeitTypeList.stream()
                 .filter(fzt -> fzt.getFehlgrund().equals(absenceType))
                 .filter(FehlzeitType::isGenehmigt)
