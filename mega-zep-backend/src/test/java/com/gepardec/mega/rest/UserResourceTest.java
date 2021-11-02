@@ -1,79 +1,71 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.UserServiceMock;
-import com.gepardec.mega.service.model.User;
+import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.domain.model.SecurityContext;
+import com.gepardec.mega.domain.model.User;
+import com.gepardec.mega.domain.model.UserContext;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.http.ContentType;
+import io.quarkus.test.junit.mockito.InjectMock;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
+import java.util.Set;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.when;
 
 @QuarkusTest
-class UserResourceTest {
+class
+UserResourceTest {
 
-    @Inject
-    UserServiceMock userServiceMock;
+    @InjectMock
+    private SecurityContext securityContext;
 
-    private User user;
+    @InjectMock
+    private UserContext userContext;
 
-    @BeforeEach
-    void beforeEach() {
-        user = UserServiceMock.createUser();
-        userServiceMock.setUser(user);
+    @Test
+    void get_whenUserNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
+        final User user = createUserForRole(Role.EMPLOYEE);
+        when(userContext.user()).thenReturn(user);
+
+        given().get("/user")
+                .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @Test
-    void login_withoutIdToken_returnsBadRequest() {
-        given().contentType(ContentType.TEXT)
-                .post("/user/login")
-                .then().statusCode(HttpStatus.SC_BAD_REQUEST);
+    void get_whenUserIsLogged_thenReturnsHttpStatusOK() {
+        final User user = createUserForRole(Role.EMPLOYEE);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
+
+        given().get("/user")
+                .then().assertThat().statusCode(HttpStatus.SC_OK);
     }
 
     @Test
-    void login_withIdTokenAndContentTypeXML_returnsUnsupportedMediaType() {
-        given().contentType(ContentType.XML)
-                .post("/user/login")
-                .then().statusCode(HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE);
+    void get_whenUserIsLogged_thenReturnsUser() {
+        final User user = createUserForRole(Role.EMPLOYEE);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
+
+        final User actual = given()
+                .get("/user")
+                .then().assertThat().statusCode(HttpStatus.SC_OK)
+                .extract().as(User.class);
+
+        Assertions.assertEquals(user, actual);
     }
 
-    @Test
-    void login_withIdTokenAndContentTypeJSON_returnsOK() {
-        given().contentType(ContentType.JSON)
-                .body("fakeIdToken")
-                .post("/user/login")
-                .then().statusCode(HttpStatus.SC_OK);
-    }
-
-    @Test
-    void login_withIdTokenAndContentTypeTEXT_returnsOK() {
-        given().contentType(ContentType.TEXT)
-                .body("fakeIdToken")
-                .post("/user/login")
-                .then().statusCode(HttpStatus.SC_OK);
-    }
-
-    @Test
-    void login_withIdToken_returnsLoggedUser() {
-        given().contentType(ContentType.TEXT)
-                .body("fakeIdToken")
-                .post("/user/login")
-                .then().statusCode(HttpStatus.SC_OK)
-                .body("email", equalTo(user.getEmail()))
-                .body("lastname", equalTo(user.getLastname()))
-                .body("firstname", equalTo(user.getFirstname()))
-                .body("role", equalTo(user.getRole().name()))
-                .body("pictureUrl", equalTo(user.getPictureUrl()));
-    }
-
-    @Test
-    void logout_whenLogout_userDataNull() {
-        given().post("/user/logout")
-                .then()
-                .statusCode(HttpStatus.SC_OK);
+    private User createUserForRole(final Role role) {
+        return User.builder()
+                .dbId(1)
+                .userId("1")
+                .email("thomas.herzog@gpeardec.com")
+                .firstname("Thomas")
+                .lastname("Herzog")
+                .roles(Set.of(role))
+                .build();
     }
 }

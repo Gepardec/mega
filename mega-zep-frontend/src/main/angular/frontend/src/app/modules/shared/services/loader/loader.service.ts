@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Overlay, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal } from '@angular/cdk/portal';
-import { MatSpinner } from '@angular/material/progress-spinner';
+import {Injectable} from '@angular/core';
+import {Overlay, OverlayRef} from '@angular/cdk/overlay';
+import {ComponentPortal} from '@angular/cdk/portal';
+import {MatSpinner} from '@angular/material/progress-spinner';
 
 @Injectable({
   providedIn: 'root'
@@ -12,17 +12,6 @@ export class LoaderService {
   private requests = 0;
 
   constructor(private overlay: Overlay) {
-  }
-
-  private cdkSpinnerCreate() {
-    return this.overlay.create({
-      hasBackdrop: true,
-      backdropClass: 'dark-backdrop',
-      positionStrategy: this.overlay.position()
-        .global()
-        .centerHorizontally()
-        .centerVertically()
-    });
   }
 
   showSpinner() {
@@ -37,5 +26,16 @@ export class LoaderService {
     if (this.requests === 0) {
       this.spinnerRef.detach();
     }
+  }
+
+  private cdkSpinnerCreate() {
+    return this.overlay.create({
+      hasBackdrop: true,
+      backdropClass: 'dark-backdrop',
+      positionStrategy: this.overlay.position()
+        .global()
+        .centerHorizontally()
+        .centerVertically()
+    });
   }
 }

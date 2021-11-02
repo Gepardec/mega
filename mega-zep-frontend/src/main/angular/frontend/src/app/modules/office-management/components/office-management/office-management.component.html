@@ -1,0 +1,12 @@
+<mat-toolbar class="mat-elevation-z6" color="accent">
+  <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+    <span fxFlex fxFlexOffset="65">{{'global.selectPayrollMonth' | translate}}</span>
+    <span fxFlex="15">
+          <app-datepicker-month-year (dateChanged)="dateChanged($event)" [date]="date"
+                                     [maxMonth]="maxMonthDate"></app-datepicker-month-year>
+        </span>
+  </mat-toolbar-row>
+</mat-toolbar>
+<app-enterprise-card></app-enterprise-card>
+<app-project-overview-card></app-project-overview-card>
+<app-employee-card></app-employee-card>

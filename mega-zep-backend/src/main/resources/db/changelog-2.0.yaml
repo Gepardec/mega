@@ -1,0 +1,326 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1605169381318-1
+      author: mega (generated)
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: sequence_comment_id
+            startValue: 1
+  - changeSet:
+      id: 1605169381318-2
+      author: mega (generated)
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: sequence_step_entry_id
+            startValue: 1
+  - changeSet:
+      id: 1605169381318-3
+      author: mega (generated)
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: sequence_step_id
+            startValue: 1
+  - changeSet:
+      id: 1605169381318-4
+      author: mega (generated)
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: sequence_user_id
+            startValue: 1
+  - changeSet:
+      id: 1605169381318-5
+      author: mega (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: commentPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: creation_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: message
+                  type: VARCHAR(500)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: state
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: update_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: step_entry_id
+                  type: BIGINT
+            tableName: comment
+  - changeSet:
+      id: 1605169381318-6
+      author: mega (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: employee_userPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: active
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: creation_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: firstname
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: lastname
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: locale
+                  type: VARCHAR(10)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: update_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: zep_id
+                  type: VARCHAR(100)
+              - column:
+                  name: release_date
+                  type: date
+            tableName: employee_user
+  - changeSet:
+      id: 1605169381318-7
+      author: mega (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: role
+                  type: VARCHAR(255)
+            tableName: employee_user_roles
+  - changeSet:
+      id: 1605169381318-8
+      author: mega (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: stepPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: ordinal
+                  type: INTEGER
+              - column:
+                  constraints:
+                    nullable: false
+                  name: role
+                  type: VARCHAR(255)
+            tableName: step
+  - changeSet:
+      id: 1605169381318-9
+      author: mega (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: step_entryPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: creation_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: entry_date
+                  type: date
+              - column:
+                  name: project
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: state
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: update_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: assignee_employee_user_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: owner_employee_user_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: step_id
+                  type: BIGINT
+            tableName: step_entry
+  - changeSet:
+      id: 1605169381318-10
+      author: mega (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: email
+            constraintName: uidx_email
+            tableName: employee_user
+  - changeSet:
+      id: 1605169381318-11
+      author: mega (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: ordinal
+            constraintName: uidx_ordinal
+            tableName: step
+  - changeSet:
+      id: 1605169381318-12
+      author: mega (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: zep_id
+            constraintName: uidx_zep_id
+            tableName: employee_user
+  - changeSet:
+      id: 1605169381318-13
+      author: mega (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: id
+            baseTableName: employee_user_roles
+            constraintName: FKjulmxy756d87nr7mkoyh5ahbu
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: employee_user
+            validate: true
+  - changeSet:
+      id: 1605169381318-14
+      author: mega (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: assignee_employee_user_id
+            baseTableName: step_entry
+            constraintName: fk_assignee_employee_user_id
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: employee_user
+            validate: true
+  - changeSet:
+      id: 1605169381318-15
+      author: mega (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: owner_employee_user_id
+            baseTableName: step_entry
+            constraintName: fk_owner_employee_user_id
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: employee_user
+            validate: true
+  - changeSet:
+      id: 1605169381318-16
+      author: mega (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: step_entry_id
+            baseTableName: comment
+            constraintName: fk_step_entry
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: step_entry
+            validate: true
+  - changeSet:
+      id: 1605169381318-17
+      author: mega (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: step_id
+            baseTableName: step_entry
+            constraintName: fk_step_id
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: step
+            validate: true
+  - changeSet:
+      id: insert-step
+      author: thoma
+      changes:
+        - loadData:
+            tableName: step
+            separator: ';'
+            file: 'db/data/step-2.0.csv'

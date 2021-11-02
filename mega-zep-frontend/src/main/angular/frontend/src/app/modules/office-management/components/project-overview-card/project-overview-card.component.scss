@@ -1,0 +1,66 @@
+@import 'src/styles/colors';
+
+.release {
+  color: black !important;
+  border-radius: 5px;
+  padding: 5px;
+  width: fit-content;
+  margin-top: 8px;
+}
+
+.done {
+  background-color: $mega-success-green-transparent;
+}
+
+.open {
+  background-color: $mega-danger-red-transparent;
+}
+
+.wip {
+  background-color: $mega-warning-yellow-transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: $mega-success-green;
+}
+
+th, td {
+  font-size: 17px;
+}
+
+table {
+  margin-bottom: 30px;
+}
+
+.action-label {
+  cursor: pointer;
+  white-space: pre-wrap;
+}
+
+.mat-column-name {
+  flex: 0 0 20%;
+}
+
+.mat-column-controlEmployeesState {
+  flex: 0 0 10%;
+}
+
+.mat-column-controlProjectState {
+  flex: 0 0 10%;
+}
+
+.mat-column-controlBillingState {
+  flex: 0 0 10%;
+}
+
+.mat-column-comment {
+  > :nth-child(2) {
+    flex-grow: 1;
+    max-width: 600px;
+  }
+}

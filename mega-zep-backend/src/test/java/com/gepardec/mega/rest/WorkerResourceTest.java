@@ -1,138 +1,132 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.GoogleTokenVerifierMock;
-import com.gepardec.mega.SessionUserMock;
-import com.gepardec.mega.WorkerServiceMock;
-import com.gepardec.mega.aplication.security.Role;
-import com.gepardec.mega.monthlyreport.MonthlyReport;
-import com.gepardec.mega.monthlyreport.journey.JourneyWarning;
-import com.gepardec.mega.monthlyreport.warning.TimeWarning;
-import com.gepardec.mega.service.model.Employee;
-import com.gepardec.mega.util.EmployeeTestUtil;
-import com.gepardec.mega.zep.service.impl.WorkerServiceImpl;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.gepardec.mega.db.entity.employee.EmployeeState;
+import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.domain.model.SecurityContext;
+import com.gepardec.mega.domain.model.User;
+import com.gepardec.mega.domain.model.UserContext;
+import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
+import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
+import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
+import com.gepardec.mega.service.api.employee.EmployeeService;
+import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Answers;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.inject.Inject;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 @QuarkusTest
 public class WorkerResourceTest {
 
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-    private GoogleIdToken googleIdToken;
+    @InjectMock
+    MonthlyReportService monthlyReportService;
 
-    @Mock
-    private WorkerServiceImpl workerService;
+    @InjectMock
+    private EmployeeService employeeService;
 
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-    private GoogleIdTokenVerifier googleIdTokenVerifier;
+    @InjectMock
+    private SecurityContext securityContext;
 
-    @Inject
-    SessionUserMock sessionUserMock;
-
-    @Inject
-    WorkerServiceMock workerServiceMock;
-
-    @Inject
-    GoogleTokenVerifierMock googleTokenVerifierMock;
-
-    @BeforeEach
-    void beforeEach() throws Exception {
-        final String userId = "1337-thomas.herzog";
-        final String email = "thomas.herzog@gepardec.com";
-        Mockito.when(googleIdTokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
-        googleTokenVerifierMock.setDelegate(googleIdTokenVerifier);
-        sessionUserMock.init(userId, email, "", Role.ADMINISTRATOR.roleId);
-        workerServiceMock.setDelegate(workerService);
-    }
-
-
+    @InjectMock
+    private UserContext userContext;
 
     @Test
-    void employeeMonthendReport_withPOST_returnsMethodNotAllowed() {
+    void monthlyReport_whenPOST_thenReturnsHttpStatusMETHOD_NOT_ALLOWED() {
         given().contentType(ContentType.JSON)
                 .post("/worker/monthendreports")
                 .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
     }
 
     @Test
-    void employeeMonthendReport_withNoReport_returnsNotFound() {
-        given().contentType(ContentType.JSON)
-                .get("/worker/monthendreports")
-                .then().statusCode(HttpStatus.SC_NOT_FOUND);
+    void monthlyReport_whenUserNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
+        final User user = createUserForRole(Role.EMPLOYEE);
+        when(userContext.user()).thenReturn(user);
+
+        given().get("/worker/monthendreports")
+                .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @Test
     void employeeMonthendReport_withReport_returnsReport() {
-        final Employee employee = EmployeeTestUtil.createEmployee(0);
-        final com.gepardec.mega.monthlyreport.MonthlyReport expected = createZepMonthlyReport(employee);
-        Mockito.when(workerService.getMonthendReportForUser(Mockito.anyString())).thenReturn(expected);
+        User user = createUserForRole(Role.EMPLOYEE);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
 
-        final MonthlyReport actual = given().contentType(ContentType.JSON)
+        Employee employee = createEmployeeForUser(user);
+        when(employeeService.getEmployee(anyString())).thenReturn(employee);
+
+        List<TimeWarning> timeWarnings = List.of();
+        List<JourneyWarning> journeyWarnings = List.of();
+
+        int vacationDays = 0;
+        int homeofficeDays = 0;
+        int compensatoryDays = 0;
+        String billableTime = "00:00";
+        String totalWorkingTime = "00:00";
+
+        MonthlyReport expected = MonthlyReport.builder()
+                .employee(employee)
+                .timeWarnings(timeWarnings)
+                .journeyWarnings(journeyWarnings)
+                .comments(List.of())
+                .employeeCheckState(EmployeeState.OPEN)
+                .isAssigned(false)
+                .employeeProgresses(List.of())
+                .otherChecksDone(true)
+                .billableTime(billableTime)
+                .totalWorkingTime(totalWorkingTime)
+                .compensatoryDays(compensatoryDays)
+                .homeofficeDays(homeofficeDays)
+                .vacationDays(vacationDays)
+                .build();
+
+        when(monthlyReportService.getMonthendReportForUser(anyString())).thenReturn(expected);
+
+        MonthlyReport actual = given().contentType(ContentType.JSON)
                 .get("/worker/monthendreports")
-                .then().assertThat().statusCode(HttpStatus.SC_OK)
-                .extract().as(MonthlyReport.class);
+                .as(MonthlyReport.class);
 
-        EmployeeTestUtil.assertEmployee(actual.getEmployee(), employee);
-        assertTimeWarnings(expected.getTimeWarnings(), actual.getTimeWarnings());
-        assertJourneyWarnings(expected.getJourneyWarnings(), actual.getJourneyWarnings());
+        assertEquals(employee, actual.employee());
+        assertEquals(actual.timeWarnings(), timeWarnings);
+        assertEquals(actual.journeyWarnings(), journeyWarnings);
+        assertEquals(actual.billableTime(), billableTime);
+        assertEquals(actual.totalWorkingTime(), totalWorkingTime);
+        assertEquals(actual.vacationDays(), vacationDays);
+        assertEquals(actual.homeofficeDays(), homeofficeDays);
+        assertEquals(actual.compensatoryDays(), compensatoryDays);
     }
 
-    private com.gepardec.mega.monthlyreport.MonthlyReport createZepMonthlyReport(final Employee employee) {
-        final List<TimeWarning> timeWarnings = Collections.singletonList(TimeWarning.of(LocalDate.now(), 0.0, 0.0, 0.0));
-        final List<JourneyWarning> journeyWarnings = Collections.singletonList(new JourneyWarning(LocalDate.now(), Collections.singletonList("WARNING")));
-
-        final MonthlyReport monthlyReport = new MonthlyReport();
-        monthlyReport.setTimeWarnings(timeWarnings);
-        monthlyReport.setJourneyWarnings(journeyWarnings);
-        monthlyReport.setEmployee(employee);
-        return monthlyReport;
+    private Employee createEmployeeForUser(final User user) {
+        return Employee.builder()
+                .email(user.email())
+                .firstname(user.firstname())
+                .lastname(user.lastname())
+                .title("Ing.")
+                .userId(user.userId())
+                .releaseDate("2020-01-01")
+                .active(true)
+                .build();
     }
 
-    private void assertJourneyWarnings(List<com.gepardec.mega.monthlyreport.journey.JourneyWarning> expected, List<JourneyWarning> actual) {
-        Assertions.assertEquals(expected.size(), actual.size());
-        for (int i = 0; i < expected.size(); i++) {
-            assertJourneyWarning(expected.get(i), actual.get(i));
-        }
-    }
-
-    private void assertJourneyWarning(com.gepardec.mega.monthlyreport.journey.JourneyWarning expected, JourneyWarning actual) {
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(expected.getDate(), actual.getDate(), "date"),
-                () -> Assertions.assertIterableEquals(expected.getWarnings(), actual.getWarnings(), "warnings")
-        );
-    }
-
-    private void assertTimeWarnings(List<com.gepardec.mega.monthlyreport.warning.TimeWarning> expected, List<TimeWarning> actual) {
-        Assertions.assertEquals(expected.size(), actual.size());
-        for (int i = 0; i < expected.size(); i++) {
-            assertTimeWarning(expected.get(i), actual.get(i));
-        }
-    }
-
-    private void assertTimeWarning(com.gepardec.mega.monthlyreport.warning.TimeWarning expected, TimeWarning actual) {
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(expected.getDate(), actual.getDate(), "date"),
-                () -> Assertions.assertEquals(expected.getExcessWorkTime(), actual.getExcessWorkTime(), "exessWorkTime"),
-                () -> Assertions.assertEquals(expected.getMissingBreakTime(), actual.getMissingBreakTime(), "missingBreakTime"),
-                () -> Assertions.assertEquals(expected.getMissingRestTime(), actual.getMissingRestTime(), "missingRestTime")
-        );
+    private User createUserForRole(final Role role) {
+        return User.builder()
+                .dbId(1)
+                .userId("1")
+                .email("thomas.herzog@gpeardec.com")
+                .firstname("Thomas")
+                .lastname("Herzog")
+                .roles(Set.of(role))
+                .build();
     }
 }

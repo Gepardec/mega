@@ -1,0 +1,73 @@
+<mat-card *ngIf="monthlyReport" class="mat-elevation-z10">
+  <mat-card-title>{{'monthly-report.title.time' | translate}}</mat-card-title>
+
+  <mat-card-content *ngIf="monthlyReport.timeWarnings.length === 0; else timeContent"
+                    fxLayout="column" fxLayoutAlign="center center">
+    <app-state-indicator [state]="State.DONE" size="large"></app-state-indicator>
+    <p>{{'monthly-report.ok' | translate}}</p>
+  </mat-card-content>
+
+  <ng-template #timeContent>
+    <mat-card-content>
+      <mat-table [dataSource]="monthlyReport.timeWarnings" class="mat-elevation-z10 table-container">
+        <ng-container matColumnDef="warning">
+          <mat-header-cell *matHeaderCellDef>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let timeEntry">
+            <span class="mobile-label"></span>
+            <span *ngIf="displayWarningsTooltip(timeEntry)">
+            <app-state-indicator size="small"></app-state-indicator>
+            </span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="dateTime">
+          <mat-header-cell *matHeaderCellDef>
+            {{'monthly-report.table.time.day' | translate}}
+          </mat-header-cell>
+          <mat-cell
+            *matCellDef="let timeEntry">
+            <span class="mobile-label">{{'monthly-report.table.time.day' | translate}}</span>
+            {{timeEntry.date | date:'E dd.MM.yyyy' : null : 'de-AT'}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="restTime">
+          <mat-header-cell *matHeaderCellDef>
+            {{'monthly-report.table.time.missingRestTime' | translate}}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let timeEntry">
+            <span class="mobile-label">{{'monthly-report.table.time.missingRestTime' | translate}}</span>
+            {{timeEntry.missingRestTime}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="breakTime">
+          <mat-header-cell *matHeaderCellDef>
+            {{'monthly-report.table.time.missingBreakTime' | translate}}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let timeEntry">
+            <span class="mobile-label">{{'monthly-report.table.time.missingBreakTime' | translate}}</span>
+            {{timeEntry.missingBreakTime}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="workingTime">
+          <mat-header-cell *matHeaderCellDef>
+            {{'monthly-report.table.time.excessWorkTime' | translate}}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let timeEntry">
+            <span class="mobile-label">{{'monthly-report.table.time.excessWorkTime' | translate}}</span>
+            {{timeEntry.excessWorkTime}}
+          </mat-cell>
+        </ng-container>
+
+        <mat-row *matRowDef="let row; columns: displayedColumns;" [matTooltip]="displayWarningsTooltip(row)"></mat-row>
+        <mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+          mat-header-row>
+        </mat-header-row>
+      </mat-table>
+    </mat-card-content>
+  </ng-template>
+</mat-card>

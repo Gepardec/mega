@@ -1,38 +1,79 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.aplication.security.Secured;
-import com.gepardec.mega.aplication.security.SessionUser;
-import com.gepardec.mega.monthlyreport.MonthlyReport;
-import com.gepardec.mega.zep.service.api.WorkerService;
+import com.gepardec.mega.application.interceptor.RolesAllowed;
+import com.gepardec.mega.application.interceptor.Secured;
+import com.gepardec.mega.db.entity.employee.EmployeeState;
+import com.gepardec.mega.db.entity.employee.User;
+import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.domain.model.UserContext;
+import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
+import com.gepardec.mega.service.api.employee.EmployeeService;
+import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
+import com.gepardec.mega.service.api.stepentry.StepEntryService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 @RequestScoped
+@RolesAllowed(Role.EMPLOYEE)
 @Secured
-@Path("/worker")
-public class WorkerResource {
+public class WorkerResource implements WorkerResourceAPI {
 
     @Inject
-    WorkerService workerService;
+    MonthlyReportService monthlyReportService;
 
     @Inject
-    SessionUser sessionUser;
+    UserContext userContext;
 
-    @GET
-    @Path("/monthendreports")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getMonthEndReports() {
-        final MonthlyReport monthlyReport = workerService.getMonthendReportForUser(sessionUser.getUserId());
+    @Inject
+    EmployeeService employeeService;
+
+    @Inject
+    StepEntryService stepEntryService;
+
+    @Override
+    public MonthlyReport monthlyReport() {
+        Employee employee = employeeService.getEmployee(Objects.requireNonNull(userContext.user()).userId());
+        return monthlyReportService.getMonthendReportForUser(Objects.requireNonNull(employee.userId()));
+    }
+
+    @Override
+    public MonthlyReport monthlyReport(Integer year, Integer month) {
+        LocalDate date = LocalDate.of(year, month, 1);
+
+        Employee employee = employeeService.getEmployee(Objects.requireNonNull(userContext.user()).userId());
+
+        MonthlyReport monthlyReport = monthlyReportService.getMonthendReportForUser(Objects.requireNonNull(employee).userId(), date);
 
         if (monthlyReport == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            monthlyReport = MonthlyReport.builder()
+                    .employee(employee)
+                    .timeWarnings(Collections.emptyList())
+                    .journeyWarnings(Collections.emptyList())
+                    .comments(Collections.emptyList())
+                    .employeeCheckState(EmployeeState.OPEN)
+                    .isAssigned(false)
+                    .employeeProgresses(Collections.emptyList())
+                    .otherChecksDone(false)
+                    .billableTime("00:00")
+                    .totalWorkingTime("00:00")
+                    .compensatoryDays(0)
+                    .homeofficeDays(0)
+                    .vacationDays(0)
+                    .build();
         }
-        return Response.ok(monthlyReport).build();
+
+        return monthlyReport;
     }
+
+    @Override
+    public List<User> getAll() {
+        return employeeService.getAll();
+    }
+
 }

@@ -1,143 +1,203 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.EmployeeServiceMock;
-import com.gepardec.mega.GoogleTokenVerifierMock;
-import com.gepardec.mega.SessionUserMock;
-import com.gepardec.mega.aplication.security.Role;
-import com.gepardec.mega.service.api.EmployeeService;
-import com.gepardec.mega.service.model.Employee;
-import com.gepardec.mega.util.EmployeeTestUtil;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.domain.model.SecurityContext;
+import com.gepardec.mega.domain.model.User;
+import com.gepardec.mega.domain.model.UserContext;
+import com.gepardec.mega.service.api.employee.EmployeeService;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.common.mapper.TypeRef;
-import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Answers;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collections;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.Set;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 @QuarkusTest
-public class EmployeeResourceTest {
+class EmployeeResourceTest {
 
-    @Mock
-    private EmployeeService employeeService;
+    @InjectMock
+    EmployeeService employeeService;
 
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-    private GoogleIdToken googleIdToken;
+    @InjectMock
+    private SecurityContext securityContext;
 
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-    private GoogleIdTokenVerifier googleIdTokenVerifier;
+    @InjectMock
+    private UserContext userContext;
 
-    @Inject
-    SessionUserMock sessionUserMock;
+    @Test
+    void list_whenUserNotLoggedAndInRoleOFFICE_MANAGEMENT_thenReturnsHttpStatusUNAUTHORIZED() {
+        when(userContext.user()).thenReturn(createUserForRole(Role.OFFICE_MANAGEMENT));
 
-    @Inject
-    GoogleTokenVerifierMock googleTokenVerifierMock;
-
-    @Inject
-    EmployeeServiceMock employeeServiceMock;
-
-    @BeforeEach
-    void beforeEach() throws Exception {
-        final String userId = "1337-thomas.herzog";
-        final String email = "thomas.herzog@gepardec.com";
-        Mockito.when(googleIdTokenVerifier.verify(Mockito.anyString())).thenReturn(googleIdToken);
-        googleTokenVerifierMock.setDelegate(googleIdTokenVerifier);
-        sessionUserMock.init(userId, email, "", Role.ADMINISTRATOR.roleId);
-        employeeServiceMock.setDelegate(employeeService);
+        given().get("/employees")
+                .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
 
     @Test
-    void employees_withPOST_returnsMethodNotAllowed() {
+    void list_whenUserNotLoggedAndInRolePROJECT_LEAD_thenReturnsHttpStatusUNAUTHORIZED() {
+        when(userContext.user()).thenReturn(createUserForRole(Role.PROJECT_LEAD));
+
+        given().get("/employees")
+                .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
+    }
+
+    @Test
+    void list_whenUserLoggedAndInRoleEMPLOYEE_thenReturnsHttpStatusFORBIDDEN() {
+        final User user = createUserForRole(Role.EMPLOYEE);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
+
+        given().get("/employees")
+                .then().assertThat().statusCode(HttpStatus.SC_FORBIDDEN);
+    }
+
+    @Test
+    void list_whenUserLoggedAndInRoleOFFICE_MANAGEMENT_thenReturnsHttpStatusOK() {
+        final User user = createUserForRole(Role.OFFICE_MANAGEMENT);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
+        final Employee userAsEmployee = createEmployeeForUser(user);
+        when(employeeService.getEmployee(anyString())).thenReturn(userAsEmployee);
+
+        given().get("/employees")
+                .then().assertThat().statusCode(HttpStatus.SC_OK);
+    }
+
+    @Test
+    void list_whenUserLoggedAndInRolePROJECT_LEAD_thenReturnsHttpStatusOK() {
+        final User user = createUserForRole(Role.PROJECT_LEAD);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
+
+        given().get("/employees")
+                .then().assertThat().statusCode(HttpStatus.SC_OK);
+    }
+
+    @Test
+    void list_whenUserLoggedAndInRoleOFFICE_MANAGEMENT_thenReturnsEmployees() {
+        final User user = createUserForRole(Role.OFFICE_MANAGEMENT);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
+        final Employee userAsEmployee = createEmployeeForUser(user);
+        when(employeeService.getAllActiveEmployees()).thenReturn(List.of(userAsEmployee));
+
+        final List<Employee> employees = given().get("/employees").as(new TypeRef<>() {
+
+        });
+
+        assertEquals(1, employees.size());
+        final Employee actual = employees.get(0);
+        assertEquals(userAsEmployee, actual);
+    }
+
+    @Test
+    void update_whenContentTypeNotSet_returnsHttpStatusUNSUPPORTED_MEDIA_TYPE() {
+        given().put("/employees")
+                .then().statusCode(HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE);
+    }
+
+    @Test
+    void update_whenContentTypeIsTextPlain_returnsHttpStatusUNSUPPORTED_MEDIA_TYPE() {
+        final User user = createUserForRole(Role.PROJECT_LEAD);
+        when(userContext.user()).thenReturn(user);
+
+        given().contentType(MediaType.TEXT_PLAIN)
+                .put("/employees")
+                .then().statusCode(HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE);
+    }
+
+    @Test
+    void update_whenEmptyBody_returnsHttpStatusBAD_REQUEST() {
+        final User user = createUserForRole(Role.PROJECT_LEAD);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
+
+        given().contentType(MediaType.APPLICATION_JSON)
+                .put("/employees")
+                .then().statusCode(HttpStatus.SC_BAD_REQUEST);
+    }
+
+    @Test
+    void update_whenEmptyList_returnsHttpStatusBAD_REQUEST() {
+        final User user = createUserForRole(Role.PROJECT_LEAD);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
+
+        given().contentType(MediaType.APPLICATION_JSON)
+                .body(List.of())
+                .put("/employees")
+                .then().statusCode(HttpStatus.SC_BAD_REQUEST);
+    }
+
+    @Test
+    void update_whenValidRequest_returnsHttpStatusOK() {
+        final User user = createUserForRole(Role.PROJECT_LEAD);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
+        final Employee employee = createEmployeeForUser(user);
+
+        given().contentType(MediaType.APPLICATION_JSON)
+                .body(List.of(employee))
+                .put("/employees")
+                .then().statusCode(HttpStatus.SC_OK);
+    }
+
+    @Test
+    void update_whenValidRequestAndEmployeeServiceReturnsInvalidEmails_returnsInvalidEmails() {
+        final User user = createUserForRole(Role.PROJECT_LEAD);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
+        final Employee userAsEmployee = createEmployeeForUser(user);
+        final List<String> expected = List.of("invalid1@gmail.com", "invalid2@gmail.com");
+        when(employeeService.updateEmployeesReleaseDate(anyList())).thenReturn(expected);
+
+        final List<String> emails = given().contentType(MediaType.APPLICATION_JSON)
+                .body(List.of(userAsEmployee))
+                .put("/employees")
+                .as(new TypeRef<>() {
+
+                });
+
+        assertEquals(2, emails.size());
+        assertTrue(emails.containsAll(expected));
+    }
+
+    @Test
+    void noMethod_whenHttpMethodIsPOST_returns405() {
         given().post("/employees")
                 .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
     }
 
-    @Test
-    void employees_withValidRequest_returnsActiveEmployees() {
-        final List<Employee> employees = IntStream.range(1, 10).mapToObj(EmployeeTestUtil::createEmployee).collect(Collectors.toList());
-        Mockito.when(employeeService.getAllActiveEmployees()).thenReturn(employees);
-
-        final List<Employee> actual = given().get("/employees")
-                .then().assertThat().statusCode(HttpStatus.SC_OK)
-                .extract().as(new TypeRef<>() {
-                });
-
-        Assertions.assertEquals(employees.size(), actual.size());
-        for (int i = 0; i < employees.size(); i++) {
-            EmployeeTestUtil.assertEmployee(actual.get(i), employees.get(i));
-        }
+    private Employee createEmployeeForUser(final User user) {
+        return Employee.builder()
+                .email(user.email())
+                .firstname(user.firstname())
+                .lastname(user.lastname())
+                .title("Ing.")
+                .userId(user.userId())
+                .releaseDate("2020-01-01")
+                .active(true)
+                .build();
     }
 
-    @Test
-    void employeesUpdate_withPOST_returnsMethodNotAllowed() {
-        given().contentType(ContentType.JSON)
-                .post("/employees")
-                .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
-    }
-
-    @Test
-    void employeesUpdate_withEmptyBody_returnsBadRequest() {
-        given().contentType(ContentType.JSON)
-                .put("/employees")
-                .then().statusCode(HttpStatus.SC_BAD_REQUEST);
-    }
-
-    @Test
-    void employeesUpdate_withEmptyArray_returnsBadRequest() {
-        given().contentType(ContentType.JSON)
-                .body(new ArrayList<>())
-                .put("/employees")
-                .then().statusCode(HttpStatus.SC_BAD_REQUEST);
-    }
-
-    @Test
-    void employeesUpdate_withInvalidEmployees_returnsInvalidEmails() {
-        final List<Employee> employees = IntStream.range(1, 11).mapToObj(EmployeeTestUtil::createEmployee).collect(Collectors.toList());
-        final List<String> expected = employees.subList(0, 5).stream().map(Employee::getEmail).collect(Collectors.toList());
-        Mockito.when(employeeService.updateEmployeesReleaseDate(Mockito.anyList())).thenReturn(expected);
-        employeeServiceMock.setDelegate(employeeService);
-
-        final List<String> actual = given().contentType(ContentType.JSON)
-                .body(employees)
-                .put("/employees")
-                .then().assertThat().statusCode(HttpStatus.SC_OK)
-                .extract().as(new TypeRef<>() {
-                });
-
-        Assertions.assertEquals(expected.size(), actual.size());
-        Assertions.assertTrue(actual.containsAll(expected));
-    }
-
-    @Test
-    void employeesUpdate_withAllValidEmployees_returnsNothing() {
-        final List<Employee> employees = IntStream.range(1, 11).mapToObj(EmployeeTestUtil::createEmployee).collect(Collectors.toList());
-        Mockito.when(employeeService.updateEmployeesReleaseDate(Mockito.anyList())).thenReturn(Collections.emptyList());
-        employeeServiceMock.setDelegate(employeeService);
-
-        final List<String> actual = given().contentType(ContentType.JSON)
-                .body(employees)
-                .put("/employees")
-                .then().assertThat().statusCode(HttpStatus.SC_OK)
-                .extract().as(new TypeRef<>() {
-                });
-
-        Assertions.assertTrue(actual.isEmpty());
+    private User createUserForRole(final Role role) {
+        return User.builder()
+                .dbId(1)
+                .userId("1")
+                .email("thomas.herzog@gpeardec.com")
+                .firstname("Thomas")
+                .lastname("Herzog")
+                .roles(Set.of(role))
+                .build();
     }
 }

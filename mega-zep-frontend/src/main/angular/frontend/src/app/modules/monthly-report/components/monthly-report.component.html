@@ -1,0 +1,4 @@
+<ng-container *ngIf="monthlyReport">
+  <app-display-monthly-report (refreshMonthlyReport)="refreshMonthlyReport()"
+                              [monthlyReport]="monthlyReport"></app-display-monthly-report>
+</ng-container>

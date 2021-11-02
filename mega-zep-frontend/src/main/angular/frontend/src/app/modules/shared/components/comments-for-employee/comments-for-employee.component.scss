@@ -1,0 +1,23 @@
+@import 'src/styles/colors.scss';
+
+mat-form-field {
+  width: 100%;
+}
+
+.saveBtn {
+  background-color: $mega-success-green;
+  color: white;
+}
+
+pre {
+  font-family: inherit;
+  margin-top: 15px;
+}
+
+th, td {
+  font-size: 17px;
+}
+
+table {
+  width: 100%;
+}

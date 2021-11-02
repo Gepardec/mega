@@ -1,27 +1,66 @@
-<mat-toolbar class="toolbar" color="primary">
-  <mat-toolbar-row>
-    <img class="logo-mega" [src]= "assetsPath + logoMega" alt="Logo MEGA">
-
-    <nav mat-tab-nav-bar *ngIf="user">
+<mat-sidenav-container fxFlexFill>
+  <mat-sidenav #sidenav fxHide.gt-md="true" mode="over" opened="false">
+    <mat-nav-list *ngIf="user">
+      <a mat-list-item>
+        <app-user-actions (logout)="onLogout($event); sidenav.close()" [user]="user"></app-user-actions>
+      </a>
       <ng-container *ngFor="let link of links">
-        <a mat-tab-link *ngIf="showLink(link)" [routerLink]="link.path" routerLinkActive #rla="routerLinkActive"
-           [active]="rla.isActive">
+        <a (click)="sidenav.close()"
+           *ngIf="showLink(link)"
+           [routerLink]="link.path"
+           mat-list-item
+           routerLinkActive>
           {{ link.name }}
         </a>
       </ng-container>
-    </nav>
+      <a [href]="zepUrl" mat-list-item target="_blank">
+        <mat-icon>open_in_new</mat-icon>
+        ZEP
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
 
-    <span class="filler"></span>
+  <mat-sidenav-content>
+    <mat-toolbar class="toolbar mat-elevation-z10">
+      <div *ngIf="user" fxHide.gt-md="true" fxShow="true">
+        <button (click)="sidenav.toggle()" mat-icon-button>
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
 
-    <a [href]="spreadSheetUrl" target="_blank" *ngIf="user">
-      <img class="excelImg" [src] = "assetsPath + excelLogo" alt="Dashboard Link">
-    </a>
-    <a [href]="zepUrl" target="_blank" *ngIf="user">
-      <img class="zepImg" [src] = "assetsPath + zepLogo" alt="ZEP Link">
-    </a>
+      <img [src]="assetsPath + logoMega" alt="Logo MEGA" class="logo-mega mr-3">
 
-    <div class="useractions" *ngIf="user">
-      <app-user-actions [user]="user" (logout)="onLogout($event)"></app-user-actions>
+      <div *ngIf="user" fxHide.lt-lg="true" fxLayout="row" fxShow="true" style="width: 100%">
+        <nav mat-tab-nav-bar>
+          <ng-container *ngFor="let link of links">
+            <div #rla="routerLinkActive" *ngIf="showLink(link)" [active]="rla.isActive" [routerLink]="link.path"
+                 mat-tab-link
+                 routerLinkActive>
+              {{ link.name }}
+            </div>
+          </ng-container>
+        </nav>
+
+        <span fxFlex="1 1 auto"></span>
+
+        <div fxLayout="row" fxLayoutGap="15px">
+          <a
+            [href]="zepUrl"
+            mat-mini-fab
+            target="_blank">
+            <img [src]="assetsPath + zepLogo" alt="ZEP Link">
+          </a>
+
+          <div *ngIf="user">
+            <app-user-actions (logout)="onLogout($event)" [user]="user"></app-user-actions>
+          </div>
+        </div>
+      </div>
+    </mat-toolbar>
+
+    <div class="router-outlet">
+      <router-outlet></router-outlet>
     </div>
-  </mat-toolbar-row>
-</mat-toolbar>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,25 +1,8 @@
-@import "src/app/styles/button-style";
-@import "src/app/styles/center-component";
-
-.mat-card {
-  height: 20vh;
-  width: 15vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.mega-button {
-  width: 75%;
-}
-
-.google-img {
-  max-width: 7%;
-  margin-right: 2%;
-  margin-bottom: 2%;
-}
-
 .text {
   font-size: 18px;
+}
+
+.login-container {
+  height: 80%;
+  text-align: center;
 }

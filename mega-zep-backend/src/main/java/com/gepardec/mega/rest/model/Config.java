@@ -1,26 +1,40 @@
 package com.gepardec.mega.rest.model;
 
-public class Config {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import lombok.extern.jackson.Jacksonized;
 
+@Builder(builderClassName = "Builder")
+@Getter
+@ToString
+@EqualsAndHashCode
+@Accessors(fluent = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Jacksonized
+public class Config {
+    @JsonProperty
+    private final String excelUrl;
+
+    @JsonProperty
+    private final String budgetCalculationExcelUrl;
+
+    @JsonProperty
+    private final String zepOrigin;
+
+    @JsonProperty
     private final String clientId;
+
+    @JsonProperty
     private final String issuer;
+
+    @JsonProperty
     private final String scope;
 
-    public Config(String clientId, String issuer, String scope) {
-        this.clientId = clientId;
-        this.issuer = issuer;
-        this.scope = scope;
-    }
-
-    public String getClientId() {
-        return clientId;
-    }
-
-    public String getIssuer() {
-        return issuer;
-    }
-
-    public String getScope() {
-        return scope;
-    }
+    @JsonProperty
+    private final String version;
 }

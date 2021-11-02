@@ -1,58 +1,102 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.gepardec.mega</groupId>
-        <artifactId>mega</artifactId>
-        <version>${revision}</version>
-    </parent>
+    <groupId>com.gepardec.mega</groupId>
     <artifactId>mega-zep-backend</artifactId>
+    <version>${revision}</version>
     <name>MEGA ZEP-Backend</name>
     <properties>
-        <cxf-codegen-plugin.version>3.3.3</cxf-codegen-plugin.version>
+        <jacoco.version>0.8.6</jacoco.version>
+        <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
+        <maven-resource-plugin.version>3.1.0</maven-resource-plugin.version>
+        <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
+        <cxf-codegen-plugin.version>3.3.4</cxf-codegen-plugin.version>
+        <liquibase-maven-plugin.version>4.0.0</liquibase-maven-plugin.version>
+        <native2ascii-maven-plugin.plugin.version>2.0.1</native2ascii-maven-plugin.plugin.version>
+
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
-        <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.version>1.2.1.Final</quarkus.version>
-        <surefire-plugin.version>2.22.2</surefire-plugin.version>
+        <maven.version>3.6.3</maven.version>
 
-        <quarkus.package.uber.jar>false</quarkus.package.uber.jar>
+        <commons-lang3.version>3.9</commons-lang3.version>
+        <commons-io.version>2.7</commons-io.version>
+        <google-api-client.version>1.30.4</google-api-client.version>
+        <guava.version>30.1.1-jre</guava.version>
+        <quarkus-plugin.version>1.7.6.Final</quarkus-plugin.version>
+        <quarkus.platform.version>1.7.6.Final</quarkus.platform.version>
+        <ws.rt.version>2.3.2</ws.rt.version>
+        <xml.resolver.version>20050927</xml.resolver.version>
+        <lombok.version>1.18.20</lombok.version>
 
-        <sonar.projectKey>mega-zep-backend</sonar.projectKey>
-        <sonar.projectName>mega-zep-backend</sonar.projectName>
-        <sonar.projectVersion>${revision}</sonar.projectVersion>
-        <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+        <!-- application info -->
+        <!-- !!! IMPORTANT !!!! -->
+        <!-- remove -SNAPSHOT in release-branch but keep it in develop branch -->
+        <revision>3.1.5-SNAPSHOT</revision>
+        <git.commit>local</git.commit>
+        <git.branch>local</git.branch>
+        <build.number>0</build.number>
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss</maven.build.timestamp.format>
     </properties>
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>${quarkus.platform.group-id}</groupId>
-                <artifactId>${quarkus.platform.artifact-id}</artifactId>
-                <version>${quarkus.version}</version>
+                <groupId>io.quarkus</groupId>
+                <artifactId>quarkus-universe-bom</artifactId>
+                <version>${quarkus.platform.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
+        <!-- Quarkus REST-Extensions -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-resteasy-jsonb</artifactId>
+            <artifactId>quarkus-resteasy-jackson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-config-yaml</artifactId>
+        </dependency>
+        <!-- Quarkus MicroProfile-Extensions -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-openapi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-health</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-context-propagation</artifactId>
+        </dependency>
+        <!-- Quarkus JPA-Extensions -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-orm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-orm-panache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-postgresql</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-hibernate-validator</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-jsonp</artifactId>
-        </dependency>
+        <!-- Other Quarkus-Extensions -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
@@ -63,74 +107,94 @@
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-junit5</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-smallrye-openapi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
             <artifactId>quarkus-undertow</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-smallrye-health</artifactId>
-        </dependency>
-        <!-- Context Propagation extension -->
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-smallrye-context-propagation</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-mailer</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-liquibase</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-cache</artifactId>
+        </dependency>
+        <!-- Additional Dependencies -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>rt</artifactId>
+            <version>${ws.rt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.org.apache.xml.internal</groupId>
+            <artifactId>resolver</artifactId>
+            <version>${xml.resolver.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client</artifactId>
+            <version>${google-api-client.version}</version>
+        </dependency>
+
+        <!-- Test Dependencies -->
+        <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.9</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>28.1-jre</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.xml.ws</groupId>
-            <artifactId>rt</artifactId>
-            <version>2.3.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.org.apache.xml.internal</groupId>
-            <artifactId>resolver</artifactId>
-            <version>20050927</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpcore</artifactId>
-            <version>4.4.10</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.api-client</groupId>
-            <artifactId>google-api-client</artifactId>
-            <version>1.30.4</version>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5-mockito</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>3.2.4</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.agent</artifactId>
+            <classifier>runtime</classifier>
+            <scope>test</scope>
+            <version>${jacoco.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
         </dependency>
     </dependencies>
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.cxf</groupId>
@@ -149,7 +213,8 @@
                                 <wsdlOption>
                                     <wsdl>${project.basedir}/src/main/resources/wsdl/zep_v7.wsdl</wsdl>
                                     <bindingFiles>
-                                        <bindingFile>${project.basedir}/src/main/resources/wsdl/zep-bindings.xml</bindingFile>
+                                        <bindingFile>${project.basedir}/src/main/resources/wsdl/zep-bindings.xml
+                                        </bindingFile>
                                     </bindingFiles>
                                 </wsdlOption>
                             </wsdlOptions>
@@ -158,12 +223,35 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <configuration>
+                    <!-- We need to exclude generated files, otherwise these files pollute our coverage -->
+                    <excludes>
+                        <exclude>**/provantis/**</exclude>
+                        <exclude>**/AutoValue_*</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>prepare-agent-integration</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
-                <version>${quarkus.version}</version>
-                <configuration>
-                    <uberJar>${quarkus.package.uber.jar}</uberJar>
-                </configuration>
+                <version>${quarkus-plugin.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -176,7 +264,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire-plugin.version}</version>
                 <configuration>
-                    <!-- not mail sending for test-->
                     <systemPropertyVariables>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                         <quarkus.mailer.mock>true</quarkus.mailer.mock>
@@ -184,123 +271,97 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
-                        <phase>compile</phase>
                         <goals>
-                            <goal>copy-resources</goal>
+                            <goal>enforce</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/config</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/config</directory>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
+                            <rules>
+                                <requireMavenVersion>
+                                    <message>This project requires a maven '${maven.version}' or greater. You can
+                                        download it
+                                        from here https://maven.apache.org/download.cgi
+                                    </message>
+                                    <version>${maven.version}</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <message>To build this project JDK ${maven.compiler.target} (or
+                                        greater) is required. Please install it.
+                                    </message>
+                                    <version>${maven.compiler.target}</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>${liquibase-maven-plugin.version}</version>
+                <configuration>
+                    <propertyFile>liquibase.properties</propertyFile>
+                    <!--
+                        liquibase:diff uses workstation's 'user.name' property but
+                        liquibase:generateChangeLog uses 'changeSetAuthor' property
+                    -->
+                    <systemProperties>
+                        <user.name>mega</user.name>
+                    </systemProperties>
+                </configuration>
+                <!-- Keep the version here, these dependencies are only used here -->
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.validation</groupId>
+                        <artifactId>validation-api</artifactId>
+                        <version>2.0.1.Final</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.liquibase.ext</groupId>
+                        <artifactId>liquibase-hibernate5</artifactId>
+                        <version>4.0.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                        <version>5.2.8.RELEASE</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework.data</groupId>
+                        <artifactId>spring-data-jpa</artifactId>
+                        <version>2.3.3.RELEASE</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.yaml</groupId>
+                        <artifactId>snakeyaml</artifactId>
+                        <version>1.26</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <!-- Now we can use UTF-8 in the properties files which get converted transparently -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native2ascii-maven-plugin</artifactId>
+                <version>${native2ascii-maven-plugin.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>utf8-to-ascii</id>
+                        <goals>
+                            <goal>resources</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <srcDir>src/main/resources/</srcDir>
+                            <includes>
+                                <include>**/*.properties</include>
+                            </includes>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
-    <profiles>
-        <profile>
-            <id>native</id>
-            <activation>
-                <property>
-                    <name>native</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>io.quarkus</groupId>
-                        <artifactId>quarkus-maven-plugin</artifactId>
-                        <version>${quarkus.version}</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>native-image</goal>
-                                </goals>
-                                <configuration>
-                                    <enableHttpUrlHandler>true</enableHttpUrlHandler>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>${surefire-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>integration-test</goal>
-                                    <goal>verify</goal>
-                                </goals>
-                                <configuration>
-                                    <systemPropertyVariables>
-                                        <skipTests>true</skipTests>
-                                        <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
-                                    </systemPropertyVariables>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>sonar</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.5</version>
-                        <configuration>
-                            <append>true</append>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>prepare-agent</id>
-                                <goals>
-                                    <goal>prepare-agent</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>prepare-agent-integration</id>
-                                <goals>
-                                    <goal>prepare-agent-integration</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>jacoco-site</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>report</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.sonarsource.scanner.maven</groupId>
-                        <artifactId>sonar-maven-plugin</artifactId>
-                        <version>3.7.0.1746</version>
-                        <executions>
-                            <execution>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sonar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>

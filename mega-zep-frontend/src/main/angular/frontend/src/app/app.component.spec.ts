@@ -7,6 +7,7 @@ import { ConfigService } from './modules/shared/services/config/config.service';
 import { UserService } from './modules/shared/services/user/user.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Config } from './modules/shared/models/Config';
+import { TranslateModule } from '@ngx-translate/core';
 
 describe('AppComponent', () => {
 
@@ -16,7 +17,15 @@ describe('AppComponent', () => {
 
   class ConfigServiceMock {
     getConfig(): Observable<Config> {
-      return new BehaviorSubject<Config>({clientId: 'DUMMY', scope: 'email', issuer: 'https://accounts.google.com'});
+      return new BehaviorSubject<Config>({
+        clientId: 'DUMMY',
+        scope: 'email',
+        issuer: 'https://accounts.google.com',
+        version: '1',
+        excelUrl: 'DUMMY',
+        zepOrigin: 'DUMMY',
+        budgetCalculationExcelUrl: 'DUMMY'
+      });
     }
   }
 
@@ -27,7 +36,8 @@ describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        TranslateModule.forRoot()
       ],
       declarations: [
         AppComponent

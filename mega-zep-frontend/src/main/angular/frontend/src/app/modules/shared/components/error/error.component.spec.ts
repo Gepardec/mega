@@ -1,8 +1,10 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {ErrorComponent} from './error.component';
-import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
-import {RouterTestingModule} from "@angular/router/testing";
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {RouterTestingModule} from '@angular/router/testing';
+import {TranslateModule} from '@ngx-translate/core';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('ErrorComponent', () => {
   let component: ErrorComponent;
@@ -11,7 +13,7 @@ describe('ErrorComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ErrorComponent],
-      imports: [RouterTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule, TranslateModule.forRoot()],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
       .compileComponents();

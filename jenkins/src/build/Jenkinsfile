@@ -1,12 +1,17 @@
 #!groovy
+package build
 
 pipeline {
     agent any
 
     environment {
-        REVISION = buildRevisionForBranch()
+        REVISION = buildRevisionForBranch('./mega-zep-backend')
         // POD must have' max_limits * 2' regarding memory
-        NODE_RESOURCE_LIMITS = "--initial-old-space-size=1024 --max-old-space-size=1024"
+        NODE_RESOURCE_LIMITS = "--initial-old-space-size=6144 --max-old-space-size=6144"
+    }
+
+    parameters {
+        booleanParam(name: 'deployToDev', defaultValue: 'false', description: 'True if the build shall be deployed to dev')
     }
 
     options {
@@ -47,14 +52,25 @@ pipeline {
                                 script {
                                     container('nodejs') {
                                         dir('mega-zep-frontend/src/main/angular/frontend') {
-                                            openshift.withCluster() {
-                                                sh "oc start-build mega-zep-frontend --commit=${env.GIT_COMMIT} \
+                                            lock('mega-build-openshift-nodejs') {
+                                                openshift.withCluster() {
+                                                    sh "oc start-build mega-zep-frontend --commit=${env.GIT_COMMIT} \
                                                                                          --from-dir=dist/frontend \
                                                                                          --follow \
                                                                                          --wait"
-                                                openshift.tag("mega-zep-frontend:latest", "mega-zep-frontend:${env.REVISION}")
+                                                    openshift.tag("mega-zep-frontend:latest", "mega-zep-frontend:${env.REVISION}")
+                                                }
                                             }
                                         }
+                                    }
+                                }
+                            }
+                        }
+                        stage("Push Image") {
+                            steps {
+                                script {
+                                    container('nodejs') {
+                                        copyImage("mega-zep-frontend:${env.REVISION}")
                                     }
                                 }
                             }
@@ -74,13 +90,22 @@ pipeline {
                             steps {
                                 script {
                                     container('quarkus') {
-                                        withCredentials([file(credentialsId: 'jenkins-mega-secrets', variable: 'FILE')]) {
-                                            sh "mkdir -p ./mega-zep-backend/config"
-                                            sh "cp -f ${FILE} ./mega-zep-backend/config/application.properties"
-                                            sh "mvn -B -s jenkins-settings.xml \
-                                                   install \
-                                                   -Drevision=${env.REVISION} \
-                                                   -Dquarkus.package.uber.jar=true"
+                                        withCredentials([file(credentialsId: 'jenkins-mega', variable: 'FILE')]) {
+                                            dir('mega-zep-backend') {
+                                                sh "cp -f ${FILE} ./.env"
+                                                sh "mvn -B -s ${WORKSPACE}/jenkins/src/build/jenkins-settings.xml \
+                                                        clean compile install \
+                                                        -Drevision=${env.REVISION} \
+                                                        -Dgit.commit=${env.GIT_COMMIT} \
+                                                        -Dgit.branch=${env.GIT_BRANCH} \
+                                                        -Dbuild.number=${env.BUILD_NUMBER} \
+                                                        -Dmega.endpoint.test.enable=false"
+                                                jacoco(execPattern: 'target/*.exec',
+                                                        classPattern: 'target/classes',
+                                                        sourcePattern: 'src/main/java',
+                                                        sourceExclusionPattern: 'src/test/java',
+                                                        exclusionPattern: '**/provantis/**,**/AutoValue_*')
+                                            }
                                         }
                                     }
                                 }
@@ -91,12 +116,23 @@ pipeline {
                                 script {
                                     container('quarkus') {
                                         dir('mega-zep-backend/target/') {
-                                            openshift.withCluster() {
-                                                def artifact = "mega-zep-backend-${env.REVISION}-runner.jar"
-                                                sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait"
-                                                openshift.tag("mega-zep-backend:latest", "mega-zep-backend:${env.REVISION}")
+                                            lock('mega-build-openshift-quarkus') {
+                                                openshift.withCluster() {
+                                                    def artifact = "mega-zep-backend-${env.REVISION}-runner.jar"
+                                                    sh "oc start-build mega-zep-backend --from-file=${artifact} --follow --wait"
+                                                    openshift.tag("mega-zep-backend:latest", "mega-zep-backend:${env.REVISION}")
+                                                }
                                             }
                                         }
+                                    }
+                                }
+                            }
+                        }
+                        stage("Push Image") {
+                            steps {
+                                script {
+                                    container('quarkus') {
+                                        copyImage("mega-zep-backend:${env.REVISION}")
                                     }
                                 }
                             }
@@ -105,16 +141,19 @@ pipeline {
                 }
             }
         }
+
         stage('Deploy DEV') {
             when {
-                branch "develop"
+                expression {
+                    return params.deployToDev
+                }
             }
             steps {
                 script {
                     build job: 'mega-release', parameters: [
                             string(name: 'Branch', value: "master"),
-                            string(name: 'sourceEnvironment', value: 'dev'),
-                            string(name: 'targetEnvironment', value: "dev"),
+                            string(name: 'target', value: "dev"),
+                            string(name: 'stage', value: "default"),
                             string(name: 'version', value: "${env.REVISION}")]
                 }
             }
@@ -154,20 +193,27 @@ Build for Branch '${env.GIT_BRANCH}@${env.GIT_COMMIT}' has been fixed.
     }
 }
 
-def buildRevisionForBranch(String pomLocation = "./") {
-    def branch = "${env.GIT_BRANCH}".trim().toLowerCase()
-    def revision = "";
-    if (branch.equals("develop")) {
-        pom = readMavenPom file: pomLocation + 'pom.xml'
+def copyImage(String sourceImageTag, String targetImageTag = sourceImageTag) {
+    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+        sh "skopeo copy --src-tls-verify=false \
+                    --dest-tls-verify=false \
+                    --src-creds openshift:\$(oc whoami -t) \
+                    --dest-creds=${USERNAME}:${PASSWORD} \
+                    docker://docker-registry.default.svc:5000/57-mega-dev/${sourceImageTag} \
+                    docker://registry.hub.docker.com/${USERNAME}/${targetImageTag}"
+    }
+}
+
+def buildRevisionForBranch(String pomLocation = ".") {
+    String branch = "${env.GIT_BRANCH}"
+    if (branch == "develop") {
+        pom = readMavenPom file: pomLocation + '/pom.xml'
         return pom.properties['revision']
     } else if (branch.startsWith("feature/")) {
         return branch.replace("/", "-").toUpperCase()
-    } else if (branch.startsWith("PR-")) {
-        return branch.replace("/", "-").toUpperCase()
     } else if (branch.startsWith("release/") || branch.startsWith("hotfix/")) {
-        pom = readMavenPom file: pomLocation + 'pom.xml'
-        return pom.properties['revision']
+        return branch.replace("release/", "").replace("hotfix/", "")
     } else {
-        error("Branch not detected. branch=${branch}")
+        error("Cannot caluclate version for branch=${branch}")
     }
 }

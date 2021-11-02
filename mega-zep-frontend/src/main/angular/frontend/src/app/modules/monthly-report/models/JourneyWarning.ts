@@ -1,4 +1,4 @@
 export class JourneyWarning {
-  date: Date;
+  date: string;
   warnings: Array<string>;
 }

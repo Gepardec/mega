@@ -1,0 +1,106 @@
+#!groovy
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'Branch', defaultValue: 'master', description: 'The branch/commit/tag to get the Jenkinsfile from')
+        booleanParam(name: 'release', defaultValue: 'master', description: 'The branch/commit/tag to get the Jenkinsfile from')
+    }
+
+    options {
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('Prepare') {
+            steps {
+                script {
+                    echo """
+hello
+"""
+                }
+            }
+        }
+
+        stage('Build/Test') {
+            steps {
+                script {
+                    build job: URLEncoder.encode("mega-build/${env.GIT_BRANCH}", "UTF-8"), propagate: true, wait: true
+                }
+            }
+        }
+
+        stage('Deploy DEV') {
+            steps {
+                script {
+                    triggerDeploy("revision", "dev", "dev")
+                }
+            }
+        }
+
+        stage('Smoke Test') {
+            steps {
+                script {
+                    echo "Smoke test goe here"
+                }
+            }
+        }
+
+        stage('Deploy STAGE') {
+            steps {
+                script {
+                    triggerDeploy("revision", "dev", "test")
+                }
+            }
+        }
+
+        stage('Smoke STAGE') {
+            steps {
+                script {
+                    askOk("test")
+                }
+            }
+        }
+
+        stage('Deploy PROD') {
+            when {
+                expression {
+                    return params.release
+                }
+            }
+            steps {
+                script {
+                    triggerDeploy("revision", "test", "prod")
+                }
+            }
+        }
+
+        stage('Smoke Test') {
+            when {
+                expression {
+                    return params.release
+                }
+            }
+            steps {
+                script {
+                    askOk("prod")
+                }
+            }
+        }
+    }
+}
+
+def triggerDeploy(String revision, String source, String target) {
+    build job: 'mega-deploy', parameters: [
+            string(name: 'Branch', value: "master"),
+            string(name: 'sourceEnvironment', value: "${source}"),
+            string(name: 'targetEnvironment', value: "${target}"),
+            string(name: 'version', value: "${revision}")]
+}
+
+def askOk(String stage) {
+    input {
+        message "Does ${stage} deployment work?"
+        ok "Yes"
+    }
+}

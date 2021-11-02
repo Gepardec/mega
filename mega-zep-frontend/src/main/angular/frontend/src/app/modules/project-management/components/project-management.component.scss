@@ -1,0 +1,79 @@
+@import 'src/styles/colors.scss';
+
+table {
+  width: 100%;
+}
+
+th, td {
+  font-size: 17px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: $mega-success-green;
+}
+
+.headers-align .mat-expansion-panel-header-title,
+.headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+mat-panel-title {
+  flex-grow: 0.5;
+}
+
+mat-panel-description {
+  flex-grow: 0.4;
+}
+
+.headers-align mat-expansion-panel-header {
+  margin-left: 10px;
+}
+
+.headers-align .mat-expansion-panel-header-description,
+.headers-align .mat-expansion-panel-header-title {
+  align-items: center;
+}
+
+table.projectActions {
+  width: auto;
+}
+
+table.projectActions > th, td {
+  font-size: inherit;
+}
+
+tr.spacing > td {
+  padding-top: 5px;
+}
+
+.preset-next-month {
+  margin-left: 15px;
+}
+
+.label {
+  padding-right: 15px;
+}
+
+.mat-expansion-panel-header-description {
+  display: flex;
+
+  > :nth-child(2) {
+    flex-grow: 1;
+  }
+}
+
+.comment-container {
+  display: flex;
+  padding-left: 15px;
+  white-space: pre-wrap;
+
+  > :nth-child(1) {
+    flex-grow: 1;
+    max-width: 600px;
+  }
+}

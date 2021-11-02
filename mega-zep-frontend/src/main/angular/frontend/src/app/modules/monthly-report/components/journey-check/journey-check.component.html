@@ -1,0 +1,47 @@
+<mat-card *ngIf="monthlyReport" class="mat-elevation-z10">
+  <mat-card-title>
+    {{'monthly-report.title.journey' | translate}}
+  </mat-card-title>
+
+  <mat-card-content
+    *ngIf="monthlyReport.journeyWarnings.length === 0; else journeyContent"
+    fxLayout="column" fxLayoutAlign="center center">
+    <app-state-indicator [state]="State.DONE" size="large"></app-state-indicator>
+    <p>{{'monthly-report.ok' | translate}}</p>
+  </mat-card-content>
+
+  <ng-template #journeyContent>
+    <mat-card-content>
+      <mat-table [dataSource]="monthlyReport.journeyWarnings">
+        <ng-container matColumnDef="dateJourney">
+          <mat-header-cell *matHeaderCellDef>
+            {{'monthly-report.table.journey.day' | translate}}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let journeyEntry">
+            <span class="mobile-label">{{'monthly-report.table.journey.day' | translate}}</span>
+            {{journeyEntry.date | date:'E dd.MM.yyyy' : null : 'de-AT'}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="warningJourney">
+          <mat-header-cell *matHeaderCellDef>
+            {{'monthly-report.table.journey.warning' | translate}}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let journeyEntry">
+            <span class="mobile-label">{{'monthly-report.table.journey.warning' | translate}}</span>
+            {{getJourneyWarningString(journeyEntry.warnings)}}
+          </mat-cell>
+        </ng-container>
+
+        <mat-row
+          *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+
+        <mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+          mat-header-row>
+        </mat-header-row>
+      </mat-table>
+    </mat-card-content>
+  </ng-template>
+</mat-card>

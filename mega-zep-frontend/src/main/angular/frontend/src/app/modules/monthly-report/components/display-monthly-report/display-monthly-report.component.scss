@@ -1,0 +1,22 @@
+.twoColumnBlock {
+  height: calc(100vh - 180px);
+}
+
+.mat-card-date {
+  float: right;
+}
+
+#idname{
+  margin-bottom: 0;
+
+}
+
+#datediv{
+  position: relative;
+  right: 0;
+  width: auto;
+}
+
+#datepicker{
+  padding-left: 10px;
+}

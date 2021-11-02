@@ -1,0 +1,267 @@
+# GLOBAL Properties
+quarkus:
+  package:
+    type: "uber-jar"
+
+  scheduler:
+    enabled: true
+
+  swagger-ui:
+    always-include: true
+
+  http:
+    cors:
+      ~: true
+      access-control-allow-credentials: true
+    root-path: "/"
+    port: 8080
+
+  log:
+    console:
+      enable: true
+      level: "ALL"
+
+  liquibase:
+    change-log: "db/changelog-master.xml"
+    migrate-at-start: false
+
+  cache:
+    caffeine:
+      "employee":
+        initial-capacity: 50
+        expire-after-write: 3M
+      "fehlzeitentype":
+        expire-after-write: 3M
+      "projektzeittype":
+        expire-after-write: 3M
+      "projectentry":
+        expire-after-write: 3M
+      "project":
+        expire-after-write: 3M
+
+  mailer:
+    auth-methods: "DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN"
+    from: "service@gepardec.com (MEGA Mailer)"
+    host: "smtp.gmail.com"
+    port: 465
+    ssl: true
+    username: "service@gepardec.com"
+    password: "${MAILER_PASSWORD}"
+
+  default-locale: "de"
+  locales: 'en,de'
+
+mega:
+  info:
+    build:
+      version: "${revision}"
+      date: "${timestamp}"
+      number: "${build.number}"
+
+    git:
+      branch: "${git.branch}"
+      commit: "${git.commit}"
+
+  wiki:
+    eom-url: "https://sites.google.com/a/gepardec.com/internal/home/zeiterfassung-mit-zep/monatsende-kontrolle-von-arbeitszeiten"
+
+  zep:
+    admin-token: "${TOKEN}"
+
+  excel-url: "https://docs.google.com/spreadsheets/d/1u1G_hNW8ePZqthzWJOEh3qOHc6Fy_R2TQwn5wCMsTt0/"
+
+  # URL zum Planrechnung-Excel
+  budget-calculation-excel-url: "https://docs.google.com/spreadsheets/d/1Da3XrY9WuBrftJc0oBVySx58Ms1LWWhNkb3gfpZ4anA/"
+
+  oauth:
+    issuer: "https://accounts.google.com"
+    scope: "openid profile email"
+
+## DEV Properties
+"%dev":
+  quarkus:
+    mailer:
+      mock: true
+    datasource:
+      db-kind: "postgresql"
+      username: "mega"
+      password: "mega"
+      jdbc:
+        url: "jdbc:postgresql://localhost:5432/mega"
+
+  mega:
+    dash-url: "http://localhost:4444/index.html"
+    zep:
+      origin: "https://www.zep-online.de/zepgepardecservices_test"
+      soap-path: "/sync/soap.php?v=7"
+
+    oauth:
+      client-id: "60018822787-gkagrsid8bugtlnts2eqfvtf4n6loefu.apps.googleusercontent.com"
+
+    mail:
+      subject-prefix: "LOCAL: "
+
+      employees:
+        notification: true
+
+      reminder:
+        om:
+          - "thomas.herzog@gepardec.com"
+          - "werner.bruckmueller@gepardec.com"
+          - "christoph.ruhsam@gepardec.com"
+          - "armin.lang@gepardec.com"
+          - "manuel.vilim@gepardec.com"
+          - "philipp.wurm@gepardec.com"
+          - "oliver.tod@gepardec.com"
+          - "patrick.holzer@gepardec.com"
+          - "robin.fischer@gepardec.com"
+          - "alexandra.stummer@gepardec.com"
+          - "michael.leitner@gepardec.com"
+
+## TEST Properties
+"%test":
+  quarkus:
+
+    scheduler:
+      enabled: false
+
+    mailer:
+      mock: true
+
+    datasource:
+      db-kind: "h2"
+      jdbc:
+        url: 'jdbc:h2:mem:mega;MODE=PostgreSQL;INIT=create schema if not exists mega\;SET SCHEMA mega'
+    hibernate-orm:
+      database:
+        generation: "create"
+      sql-load-script: "db/import/import-projects.sql"
+  mega:
+    dash-url: "http://localhost:8080/index.html"
+
+    oauth:
+      client-id: "60018822787-4nlv6e1tit3q8ssfbe2e013790p939dt.apps.googleusercontent.com"
+
+    zep:
+      origin: "https://www.zep-online.de/zepgepardecservices_test"
+      soap-path: "/sync/soap.php?v=7"
+
+    mail:
+      subject-prefix: "UNIT-TEST: "
+
+      employees:
+        notification: true
+
+      reminder:
+        om:
+          - "thomas.herzog@gepardec.com"
+          - "philipp.wurm@gepardec.com"
+          - "werner.bruckmueller@gepardec.com"
+
+# PROD Properties
+"%prod":
+  quarkus:
+    mailer:
+      mock: true
+
+    datasource:
+      db-kind: "postgresql"
+      username: "${DB_USER}"
+      password: "${DB_PASSWORD}"
+      jdbc:
+        url: "jdbc:postgresql://${DB_HOST}/mega"
+
+# DEV-STAGE Properties
+"%devstage":
+  quarkus:
+    mailer:
+      mock: true
+
+  mega:
+    dash-url: "https://mega-zep-frontend-57-mega-dev.cloud.itandtel.at/index.html"
+
+    oauth:
+      client-id: "60018822787-4nlv6e1tit3q8ssfbe2e013790p939dt.apps.googleusercontent.com"
+
+    zep:
+      origin: "https://www.zep-online.de/zepgepardecservices_test"
+      soap-path: "/sync/soap.php?v=7"
+
+    mail:
+      subject-prefix: "Development Stage: "
+
+      employees:
+        notification: false
+
+      reminder:
+        om:
+          - "thomas.herzog@gepardec.com"
+          - "werner.bruckmueller@gepardec.com"
+          - "christoph.ruhsam@gepardec.com"
+          - "armin.lang@gepardec.com"
+          - "manuel.vilim@gepardec.com"
+          - "philipp.wurm@gepardec.com"
+          - "oliver.tod@gepardec.com"
+          - "patrick.holzer@gepardec.com"
+          - "robin.fischer@gepardec.com"
+          - "alexandra.stummer@gepardec.com"
+
+# TEST-STAGE Properties
+"%teststage":
+  quarkus:
+    mailer:
+      mock: true
+
+  mega:
+    dash-url: "https://mega-zep-frontend-57-mega-test.cloud.itandtel.at/index.html"
+
+    oauth:
+      client-id: "60018822787-361in5i8h2kaqfmj7ue0ocn5s4acf5ci.apps.googleusercontent.com"
+
+    zep:
+      origin: "https://www.zep-online.de/zepgepardecservices_test"
+      soap-path: "/sync/soap.php?v=7"
+
+    mail:
+      subject-prefix: "Test Stage: "
+
+      employees:
+        notification: false
+
+      reminder:
+        om:
+          - "office@gepardec.com"
+          - "guenter.pirklbauer@gepardec.com"
+          - "werner.bruckmueller@gepardec.com"
+          - "manuel.vilim@gepardec.com"
+          - "armin.lang@gepardec.com"
+          - "alexandra.stummer@gepardec.com"
+
+# PROD-STAGE Properties
+"%prodstage":
+  quarkus:
+    mailer:
+      mock: false
+
+  mega:
+    dash-url: "https://mega.gepardec.com/index.html"
+
+    oauth:
+      client-id: "60018822787-u23ip1l6n7gbql7mpsh560ffj56uagsr.apps.googleusercontent.com"
+
+    zep:
+      origin: "https://www.zep-online.de/zepgepardecservices"
+      soap-path: "/sync/soap.php?v=7"
+
+    mail:
+      employees:
+        notification: true
+
+      reminder:
+        om:
+          - "office@gepardec.com"
+          - "guenter.pirklbauer@gepardec.com"
+          - "werner.bruckmueller@gepardec.com"
+          - "manuel.vilim@gepardec.com"
+          - "alexandra.stummer@gepardec.com"
+          - "armin.lang@gepardec.com"

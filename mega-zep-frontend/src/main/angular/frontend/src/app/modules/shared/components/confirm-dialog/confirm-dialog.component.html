@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>
+  {{'confirm-dialog.title' | translate}}
+</h1>
+
+<div mat-dialog-content>
+  <p>{{'confirm-dialog.message' | translate}}</p>
+</div>
+
+<div mat-dialog-actions>
+  <button (click)="onDismiss()" mat-button>{{'confirm-dialog.dismiss' | translate}}</button>
+  <button (click)="onConfirm()" color="primary" mat-raised-button>{{'confirm-dialog.confirm' | translate}}</button>
+</div>

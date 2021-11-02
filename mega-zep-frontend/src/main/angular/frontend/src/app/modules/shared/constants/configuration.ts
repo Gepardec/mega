@@ -1,33 +1,14 @@
 export const configuration = {
-  PAGE_NAMES: {
-    LOGIN: 'Login',
-    EMPLOYEES: 'MITARBEITERÜBERSICHT',
-    MONTHLY_REPORT: 'MEIN MEGA',
-    ERROR: 'Error'
-  },
-
   PAGE_URLS: {
     MONTHLY_REPORT: 'monthlyReport',
-    EMPLOYEES: 'employees',
+    OFFICE_MANAGEMENT: 'officeManagement',
+    PROJECT_MANAGEMENT: 'projectManagement',
     LOGIN: 'login',
     ERROR: 'error'
   },
 
-  SPREADSHEET_URL: 'https://docs.google.com/spreadsheets/d/1wUJHMtkY47RhLIGytg_MXVe_hgPAj_yzozLMcv5hrdU/edit#gid=604001411',
-  ZEP_URL: 'https://www.zep-online.de/zepgepardecservices',
-
-  EMPLOYEE_FUNCTIONS: {
-    '01': 'Technische/r PL',
-    '02': 'SoftwareentwicklerIn',
-    '03': 'Verwaltung',
-    '04': 'Senior',
-    '05': 'Junior',
-    '06': 'ExpertIn Inbetriebnahme',
-    '06-1': 'Software-ArchitektIn',
-    '07': 'FerialpraktikantIn',
-    '08': 'Consultant Senior',
-    '99': 'Reisezeiten'
-  },
+  OFFICE_MANAGEMENT_SEGMENT: `view/index.php?menu=MitarbeiterVerwaltungMgr&
+  modelContentMenu=true&mgr=MitarbeiterProjektzeitMgr&contentModelId=`,
 
   dateFormat: 'yyyy-MM-dd',
 
@@ -41,5 +22,11 @@ export const configuration = {
     Off: 6
   },
 
-  logWithDate: true
+  logWithDate: true,
+
+  snackbar: {
+    horizontalPosition: 'center',
+    verticalPosition: 'top',
+    duration: 5000
+  }
 };

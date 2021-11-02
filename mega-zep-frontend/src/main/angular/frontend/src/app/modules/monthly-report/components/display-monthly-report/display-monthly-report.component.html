@@ -1,0 +1,51 @@
+<div *ngIf="monthlyReport"
+     fxFlexAlign="center"
+     fxFlexFill
+     fxLayout="column"
+     fxLayoutGap="10px">
+
+  <mat-card class="mat-elevation-z10">
+    <mat-card-subtitle  id="idname">{{employeeFunctions[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
+    <mat-card-content>
+
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <span fxFlex="30">{{monthlyReport.employee.firstname}} {{monthlyReport.employee.lastname}}</span>
+
+        <div id="datediv">
+          <b><span>{{'global.selectPayrollMonth' | translate}}</span></b>
+        <span id="datepicker">
+          <app-datepicker-month-year (dateChanged)="dateChanged($event)" [date]="date"
+                                     [maxMonth]="maxMonthDate"></app-datepicker-month-year>
+        </span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+
+  <div *ngIf="isValidDate(monthlyReport.employee.releaseDate); else invalidReleaseDate"
+       class="twoColumnBlock" fxLayout="row" fxLayout.lt-lg="column"
+       fxLayoutGap="10px">
+    <div fxFlex="27.5" fxLayout="column" fxLayoutGap="10px">
+      <app-time-check [monthlyReport]="monthlyReport" fxFlex="46.6%"></app-time-check>
+      <app-general-info (refreshMonthlyReport)="emitRefreshMonthlyReport()" [monthlyReport]="monthlyReport"
+                        fxFlex="46.6%"></app-general-info>
+    </div>
+    <div fxFlex="45">
+      <app-employee-check (refreshMonthlyReport)="emitRefreshMonthlyReport()"
+                          [monthlyReport]="monthlyReport"></app-employee-check>
+    </div>
+    <div fxFlex="27.5">
+      <app-journey-check [monthlyReport]="monthlyReport"></app-journey-check>
+    </div>
+  </div>
+
+  <ng-template #invalidReleaseDate>
+    <mat-card class="mat-elevation-z10">
+      <mat-card-title>{{'monthly-report.timeCheckNotPossible' | translate}}</mat-card-title>
+      <mat-card-content>
+        <p>{{'monthly-report.timeCheckNotPossiblePrompt' | translate }}</p>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+</div>

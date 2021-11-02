@@ -1,9 +1,9 @@
-import {Injectable, Injector, ErrorHandler, NgZone} from '@angular/core';
+import {ErrorHandler, Injectable, NgZone} from '@angular/core';
 import {LoggingService} from '../logging/logging.service';
 import {ErrorService} from './error.service';
 import {configuration} from '../../constants/configuration';
-import {Router} from "@angular/router";
-import {UserService} from "../user/user.service";
+import {Router} from '@angular/router';
+import {UserService} from '../user/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,40 +13,39 @@ export class ErrorHandlerService implements ErrorHandler {
   private readonly HTTP_STATUS_UNAUTHORIZED: number = 401;
   private readonly HTTP_STATUS_FORBIDDEN: number = 403;
 
-  errorService: ErrorService;
-
-  constructor(private injector: Injector) {
-    // TODO: using injector is bad practice, we should refactor this and move potential cyclic dependency router to error-service
-    this.errorService = this.injector.get(ErrorService);
+  constructor(
+    private errorService: ErrorService,
+    private router: Router,
+    private userService: UserService,
+    private loggingService: LoggingService,
+    private ngZone: NgZone
+  ) {
   }
 
   handleError(error: any): void {
-    const logger = this.injector.get(LoggingService);
+    const message = this.errorService.getErrorMessage(error);
+    this.loggingService.writeToLog(message, configuration.LogLevel.Debug);
 
-    let message = this.errorService.getErrorMessage(error);
-    logger.writeToLog(message, configuration.LogLevel.Debug);
-
-    let logout = error.status === this.HTTP_STATUS_UNAUTHORIZED || error.status === this.HTTP_STATUS_FORBIDDEN;
+    const logout = error.status === this.HTTP_STATUS_UNAUTHORIZED || error.status === this.HTTP_STATUS_FORBIDDEN;
 
     this.showErrorPage(message, logout);
   }
 
   showErrorPage(message: string, logout: boolean) {
     let redirectUrl;
-    const router = this.injector.get(Router);
-    const zone = this.injector.get(NgZone);
 
     if (logout) {
       redirectUrl = configuration.PAGE_URLS.LOGIN;
 
-      const userService = this.injector.get(UserService);
-      userService.logoutWithoutRedirect();
+      this.userService.logoutWithoutRedirect();
     } else {
-      redirectUrl = router.url;
+      redirectUrl = this.router.url;
     }
 
     this.errorService.storeLastErrorData(message, redirectUrl);
-    // TODO: use of zone is dangerous and should be avoided, as mentioned above we should move the router to error-service to solve cyclic dependency
-    zone.run(() => router.navigate([configuration.PAGE_URLS.ERROR]));
+
+    // TODO: use of zone is dangerous and should be avoided
+    //  as mentioned above we should move the router to error-service to solve cyclic dependency
+    this.ngZone.run(() => this.router.navigate([configuration.PAGE_URLS.ERROR]));
   }
 }

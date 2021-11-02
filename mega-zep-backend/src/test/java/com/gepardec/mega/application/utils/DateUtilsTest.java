@@ -1,6 +1,6 @@
 package com.gepardec.mega.application.utils;
 
-import com.gepardec.mega.aplication.utils.DateUtils;
+import com.gepardec.mega.domain.utils.DateUtils;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -32,7 +32,6 @@ class DateUtilsTest {
         assertThrows(DateTimeParseException.class, () -> DateUtils.getLastDayOfFollowingMonth(""));
     }
 
-
     @Test
     void getFirstDayOfFollowingMonth_normalDate_returnFirstDayOfNextMonth() {
         assertEquals("2019-02-01", DateUtils.getFirstDayOfFollowingMonth("2019-01-31"));
@@ -42,7 +41,6 @@ class DateUtilsTest {
     void getFirstDayOfFollowingMonth_decemberDate_returnJanuaryDate() {
         assertEquals("2020-01-01", DateUtils.getFirstDayOfFollowingMonth("2019-12-01"));
     }
-
 
     @Test
     void getFirstDayOfFollowingMonth_nullString_throwException() {
@@ -76,7 +74,6 @@ class DateUtilsTest {
 
     @Test
     void getDayByDate_normalInput_shouldRetornCorrectDay() {
-        assertEquals("Montag", DateUtils.getDayByDate(LocalDate.of(2019,11,18)));
+        assertEquals("Montag", DateUtils.getDayByDate(LocalDate.of(2019, 11, 18)));
     }
-
 }

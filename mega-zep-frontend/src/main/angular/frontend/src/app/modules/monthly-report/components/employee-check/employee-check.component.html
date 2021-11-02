@@ -1,0 +1,53 @@
+<mat-card *ngIf="monthlyReport" class="mat-elevation-z10">
+  <mat-card-title>{{'monthly-report.title.emc' | translate}}</mat-card-title>
+  <mat-card-content class="text-center" fxLayout="column" fxLayoutAlign="center center">
+    <ng-container>
+      <ng-container [ngSwitch]="monthlyReport.employeeCheckState">
+        <ng-container *ngSwitchCase="State.OPEN">
+          <ng-container *ngIf="monthlyReport.assigned; else noTimesThisMonth">
+            <app-state-indicator (mouseenter)="openEmployeeProgress()" (mouseleave)="closeEmployeeProgress()"
+                                 [state]="State.OPEN" size="large"></app-state-indicator>
+            <p>{{'monthly-report.pleaseCheckPrompt' | translate}}</p>
+            <button (click)="setOpenAndUnassignedStepEntriesDone()"
+                    mat-raised-button>{{'monthly-report.confirmBtnText' | translate}}</button>
+          </ng-container>
+
+          <ng-template #noTimesThisMonth>
+            <app-state-indicator (mouseenter)="openEmployeeProgress()" (mouseleave)="closeEmployeeProgress()"
+                                 size="large"></app-state-indicator>
+            <p>{{'monthly-report.noTimesCurrentMonth' | translate}}</p>
+          </ng-template>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="State.DONE">
+          <ng-container *ngIf="!monthlyReport.otherChecksDone">
+            <app-state-indicator (mouseenter)="openEmployeeProgress()" (mouseleave)="closeEmployeeProgress()"
+                                 size="large"></app-state-indicator>
+            <p>{{'monthly-report.checkWip' | translate}}</p>
+          </ng-container>
+          <ng-container *ngIf="monthlyReport.otherChecksDone">
+            <app-state-indicator (mouseenter)="openEmployeeProgress()" (mouseleave)="closeEmployeeProgress()"
+                                 [state]="State.DONE" size="large"></app-state-indicator>
+            <p>{{'monthly-report.checkSuccess' | translate}}</p>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <p *ngIf="monthlyReport.comments?.length > 0">{{'monthly-report.commentsToDo' | translate}}</p>
+      <mat-selection-list (selectionChange)="selectionChange($event)" style="width: 80%">
+        <mat-list-option
+          #option
+          *ngFor="let comment of monthlyReport.comments"
+          [disabled]="option.selected"
+          [ngClass]="option.selected ? 'done green' : 'red'"
+          [selected]="comment.state === State.DONE"
+          [value]="comment">
+          {{comment.updateDate | date: 'dd.MM.yyyy'}}
+          {{comment?.authorName}}:
+          <div (click)="$event.stopPropagation()" [innerHTML]="parseBody(comment.message)"
+               style="white-space: pre-line"></div>
+        </mat-list-option>
+      </mat-selection-list>
+    </ng-container>
+  </mat-card-content>
+</mat-card>

@@ -1,6 +1,6 @@
-import {Component, Injector, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
-import {ErrorService} from "../../services/error/error.service";
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {ErrorService} from '../../services/error/error.service';
 
 @Component({
   selector: 'app-error',
@@ -14,16 +14,14 @@ export class ErrorComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private injector: Injector
+    private errorService: ErrorService
   ) {
   }
 
   ngOnInit() {
-    // TODO: using injector is bad practice, we should refactor this
-    const errorService = this.injector.get(ErrorService);
-    this.errorMessage = errorService.message;
-    this.redirectUrl = errorService.redirectUrl;
-    errorService.removeLastErrorData();
+    this.errorMessage = this.errorService.message;
+    this.redirectUrl = this.errorService.redirectUrl;
+    this.errorService.removeLastErrorData();
   }
 
   navigatePreviousPage() {

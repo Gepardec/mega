@@ -1,5 +1,5 @@
-<mat-form-field>
-  <input matInput [matDatepicker]="picker" [max]="today" [value]="selectedDate ? selectedDate : null" disabled>
-  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+<mat-form-field appearance="standard" style="font-size: 18px">
+  <input [matDatepicker]="picker" [max]="today" [value]="selectedDate" disabled matInput>
+  <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
   <mat-datepicker #picker disabled="false"></mat-datepicker>
 </mat-form-field>
