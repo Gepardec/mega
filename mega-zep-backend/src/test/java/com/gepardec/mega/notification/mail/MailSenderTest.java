@@ -44,8 +44,8 @@ class MailSenderTest {
                 Arguments.of(Mail.OM_RELEASE, "UNIT-TEST: Reminder: Freigaben durchführen"),
                 Arguments.of(Mail.OM_ADMINISTRATIVE, "UNIT-TEST: Reminder: Administratives"),
                 Arguments.of(Mail.OM_SALARY, "UNIT-TEST: Reminder: Gehälter"),
-                Arguments.of(Mail.COMMENT_CREATED, "UNIT-TEST: MEGA: Anmerkung von Max Mustermann erhalten"),
-                Arguments.of(Mail.COMMENT_CLOSED, "UNIT-TEST: MEGA: Anmerkung von Max Mustermann erledigt")
+                Arguments.of(Mail.COMMENT_CREATED, "UNIT-TEST: MEGA: Anmerkung von Thomas erhalten"),
+                Arguments.of(Mail.COMMENT_CLOSED, "UNIT-TEST: MEGA: Anmerkung von Thomas erledigt")
         );
     }
 
@@ -58,18 +58,18 @@ class MailSenderTest {
     @ParameterizedTest
     @MethodSource("emailsWithSubject")
     void send_toEmployees_shouldContainEmpleyNotificationData(final Mail mail, final String subject) {
-        final String to = "no-replay@gmail.com";
+        final String to = "no-reply@gmail.com";
         final Map<String, String> mailParameter = Map.of(
-                MailParameter.CREATOR, "Max",
-                MailParameter.RECIPIENT, "Max",
+                MailParameter.CREATOR, "Thomas",
+                MailParameter.RECIPIENT, "Herbert",
                 MailParameter.COMMENT, "my comment");
-        mailSender.send(mail, to, "Max", Locale.GERMAN, mailParameter, List.of("Max"));
+        mailSender.send(mail, to, "Jamal", Locale.GERMAN, mailParameter, List.of("Thomas"));
         List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
         assertAll(
                 () -> assertEquals(1, sent.size()),
                 () -> assertTrue(Mail.COMMENT_CLOSED.equals(mail) ?
-                        sent.get(0).getHtml().startsWith("<p>Hallo " + "Max") :
-                        sent.get(0).getHtml().startsWith("<p>Hallo " + "Max")),
+                        sent.get(0).getHtml().startsWith("<p>Hallo " + "Herbert") :
+                        sent.get(0).getHtml().startsWith("<p>Hallo " + "Jamal")),
                 () -> assertEquals(subject, sent.get(0).getSubject()));
     }
 
