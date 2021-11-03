@@ -141,7 +141,7 @@ class EmployeeMapperTest {
         final BeschaeftigungszeitType activeEmployment = createBeschaeftigungszeitType(LocalDate.now().minusDays(7), LocalDate.now().plusDays(1));
         final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(List.of(activeEmployment));
         final MitarbeiterType employee = new MitarbeiterType();
-        employee.setEmail("thomas.herzog@gepardec.com");
+        employee.setEmail("no-reply@gepardec.com");
         employee.setVorname("Thomas");
         employee.setNachname("Herzog");
         employee.setTitel("Ing.");

@@ -215,7 +215,7 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString())
         ).thenReturn(createStepEntriesForPM());
 
-        List<ProjectEmployees> projectEmployees = stepEntryService.getProjectEmployeesForPM(LocalDate.now(), LocalDate.now(), "marko.gattringer@gepardec.com");
+        List<ProjectEmployees> projectEmployees = stepEntryService.getProjectEmployeesForPM(LocalDate.now(), LocalDate.now(), "no-reply@gepardec.com");
         assertNotNull(projectEmployees);
         assertEquals(1L, projectEmployees.size());
         assertEquals("Liwest-EMS", projectEmployees.get(0).projectId());
@@ -224,10 +224,10 @@ class StepEntryServiceImplTest {
 
     private List<StepEntry> createStepEntriesForPM() {
         return List.of(
-                createStepEntry(1L, "marko.gattringer@gepardec.com", "008-mgattringer"),
-                createStepEntry(2L, "guenter.pirklbauer@gepardec.com", "010-gpirklbauer"),
-                createStepEntry(3L, "christoph.kofler@gepardec.com", "012-ckofler"),
-                createStepEntry(4L, "thomas.herzog@gepardec.com", "020-therzog")
+                createStepEntry(1L, "no-reply@gepardec.com", "008-mgattringer"),
+                createStepEntry(2L, "no-reply@gepardec.com", "010-gpirklbauer"),
+                createStepEntry(3L, "no-reply@gepardec.com", "012-ckofler"),
+                createStepEntry(4L, "no-reply@gepardec.com", "020-therzog")
         );
     }
 

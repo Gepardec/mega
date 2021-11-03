@@ -53,13 +53,13 @@ class ReminderEmailSenderTest {
 
     @Test
     void sendReminderToOm_whenUser_thenSendsMail() {
-        when(userService.findByRoles(List.of(Role.OFFICE_MANAGEMENT))).thenReturn(List.of(userFor("thomas.herzog@gepardec.com", "Thomas")));
+        when(userService.findByRoles(List.of(Role.OFFICE_MANAGEMENT))).thenReturn(List.of(userFor("no-reply@gepardec.com", "Thomas")));
 
         reminderEmailSender.sendReminderToOm(OM_RELEASE);
         assertAll(
                 () -> assertEquals(1, mailbox.getTotalMessagesSent()),
                 () -> assertEquals("UNIT-TEST: Reminder: Freigaben durchführen",
-                        mailbox.getMessagesSentTo("thomas.herzog@gepardec.com").get(0).getSubject())
+                        mailbox.getMessagesSentTo("no-reply@gepardec.com").get(0).getSubject())
         );
     }
 
@@ -74,13 +74,13 @@ class ReminderEmailSenderTest {
 
     @Test
     void sendReminderToPl_whenUser_thenSendsMail() {
-        when(userService.findByRoles(List.of(Role.PROJECT_LEAD))).thenReturn(List.of(userFor("thomas.herzog@gepardec.com", "Thomas")));
+        when(userService.findByRoles(List.of(Role.PROJECT_LEAD))).thenReturn(List.of(userFor("no-reply@gepardec.com", "Thomas")));
 
         reminderEmailSender.sendReminderToPl();
         assertAll(
                 () -> assertEquals(1, mailbox.getTotalMessagesSent()),
                 () -> assertEquals("UNIT-TEST: Reminder: Projekte kontrollieren und abrechnen",
-                        mailbox.getMessagesSentTo("thomas.herzog@gepardec.com").get(0).getSubject())
+                        mailbox.getMessagesSentTo("no-reply@gepardec.com").get(0).getSubject())
         );
     }
 
@@ -95,13 +95,13 @@ class ReminderEmailSenderTest {
 
     @Test
     void sendReminderToUser_whenUser_thenSendsMail() {
-        when(userService.findActiveUsers()).thenReturn(List.of(userFor("thomas.herzog@gepardec.com", "Thomas")));
+        when(userService.findActiveUsers()).thenReturn(List.of(userFor("no-reply@gepardec.com", "Thomas")));
 
         reminderEmailSender.sendReminderToUser();
         assertAll(
                 () -> assertEquals(1, mailbox.getTotalMessagesSent()),
                 () -> assertEquals("UNIT-TEST: Friendly Reminder: Buchungen kontrollieren",
-                        mailbox.getMessagesSentTo("thomas.herzog@gepardec.com").get(0).getSubject())
+                        mailbox.getMessagesSentTo("no-reply@gepardec.com").get(0).getSubject())
         );
     }
 

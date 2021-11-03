@@ -42,7 +42,7 @@ class SyncServiceMapperTest {
     private SyncServiceMapper mapper;
 
     private Employee employeeForLanguage(final String language) {
-        return employeeFor("1", "thomas.herzog@gepardec.com", language);
+        return employeeFor("1", "no-reply@gepardec.com", language);
     }
 
     private Employee employeeForEmail(final String email) {
@@ -50,7 +50,7 @@ class SyncServiceMapperTest {
     }
 
     private Employee employeeForUserId(final String userId) {
-        return employeeFor(userId, "thomas.herzog@gepardec.com", DEFAULT_FRENCH_LOCALE.getLanguage());
+        return employeeFor(userId, "no-reply@gepardec.com", DEFAULT_FRENCH_LOCALE.getLanguage());
     }
 
     private Employee employeeFor(final String userId, final String email, final String language) {
@@ -109,7 +109,7 @@ class SyncServiceMapperTest {
 
         final Employee employee = Employee.builder()
                 .userId("2")
-                .email("thomas.herzog@gepardec.com")
+                .email("no-reply@gepardec.com")
                 .firstname("Thomas")
                 .lastname("Herzog")
                 .language("de")
@@ -121,7 +121,7 @@ class SyncServiceMapperTest {
 
         assertAll(
                 () -> assertEquals("2", actual.getZepId()),
-                () -> assertEquals("thomas.herzog@gepardec.com", actual.getEmail()),
+                () -> assertEquals("no-reply@gepardec.com", actual.getEmail()),
                 () -> assertEquals("Thomas", actual.getFirstname()),
                 () -> assertEquals("Herzog", actual.getLastname()),
                 () -> assertEquals(Locale.GERMAN, actual.getLocale()),
@@ -147,7 +147,7 @@ class SyncServiceMapperTest {
         when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
         final Employee employee = Employee.builder()
                 .userId("1")
-                .email("thomas.herzog@gepardec.com")
+                .email("no-reply@gepardec.com")
                 .firstname("Thomas")
                 .lastname("Herzog")
                 .language("de")
@@ -160,7 +160,7 @@ class SyncServiceMapperTest {
 
         assertAll(
                 () -> assertEquals("1", actual.getZepId()),
-                () -> assertEquals("thomas.herzog@gepardec.com", actual.getEmail()),
+                () -> assertEquals("no-reply@gepardec.com", actual.getEmail()),
                 () -> assertEquals("Thomas", actual.getFirstname()),
                 () -> assertEquals("Herzog", actual.getLastname()),
                 () -> assertEquals(Locale.GERMAN, actual.getLocale()),
@@ -209,7 +209,7 @@ class SyncServiceMapperTest {
     @Test
     void whenNoOmEmails_thenNoUserHasRoleOfficeManagement() {
         when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
-        final Employee employee = employeeForEmail("thomas.herzog@gepardec.com");
+        final Employee employee = employeeForEmail("no-reply@gepardec.com");
 
         final User actual = mapper.mapEmployeeToNewUser(employee, List.of(), DEFAULT_FRENCH_LOCALE);
 
@@ -219,7 +219,7 @@ class SyncServiceMapperTest {
     @Test
     void whenOmEmailsAndNoEmployeeIsOm_thenNoUserHasRoleOfficeManagement() {
         when(notificationConfig.getOmMailAddresses()).thenReturn(List.of("herzog.thomas81@gmail.com"));
-        final Employee employee = employeeForEmail("thomas.herzog@gepardec.com");
+        final Employee employee = employeeForEmail("no-reply@gepardec.com");
 
         final User actual = mapper.mapEmployeeToNewUser(employee, List.of(), DEFAULT_FRENCH_LOCALE);
 
@@ -228,8 +228,8 @@ class SyncServiceMapperTest {
 
     @Test
     void whenOmEmailsAndEmployeeIsOm_thenUserHasRoleOfficeManagement() {
-        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of("thomas.herzog@gepardec.com"));
-        final Employee employee = employeeForEmail("thomas.herzog@gepardec.com");
+        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of("no-reply@gepardec.com"));
+        final Employee employee = employeeForEmail("no-reply@gepardec.com");
 
         final User actual = mapper.mapEmployeeToNewUser(employee, List.of(), DEFAULT_FRENCH_LOCALE);
 

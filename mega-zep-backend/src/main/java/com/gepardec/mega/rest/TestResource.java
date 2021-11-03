@@ -56,7 +56,7 @@ public class TestResource implements TestResourceAPI {
         Optional.ofNullable(mailSender)
                 .orElseThrow(() -> new IllegalStateException("TestResource is disabled and 'MailSender' is null"))
                 .send(Mail.COMMENT_CREATED,
-                        "thomas.herzog@gepardec.com",
+                        "no-reply@gepardec.com",
                         "Thomas",
                         Locale.GERMAN,
                         Map.of(MailParameter.CREATOR, "Werner",
@@ -64,7 +64,7 @@ public class TestResource implements TestResourceAPI {
                                 MailParameter.COMMENT, "This is my comment"),
                         List.of("Thomas"));
         mailSender.send(Mail.COMMENT_CLOSED,
-                "thomas.herzog@gepardec.com",
+                "no-reply@gepardec.com",
                 "Thomas",
                 Locale.GERMAN,
                 Map.of(MailParameter.CREATOR, "Werner",

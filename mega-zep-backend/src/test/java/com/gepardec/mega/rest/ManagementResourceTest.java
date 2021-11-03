@@ -91,7 +91,7 @@ public class ManagementResourceTest {
         when(userContext.user()).thenReturn(user);
 
         when(employeeService.getAllActiveEmployees())
-                .thenReturn(List.of(Employee.builder().releaseDate("2020-01-01").email("marko.gattringer@gepardec.com").build()));
+                .thenReturn(List.of(Employee.builder().releaseDate("2020-01-01").email("no-reply@gepardec.com").build()));
 
         List<StepEntry> entries = List.of(
                 createStepEntryForStep(StepName.CONTROL_EXTERNAL_TIMES, EmployeeState.DONE),
@@ -123,7 +123,7 @@ public class ManagementResourceTest {
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.employeeCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.projectCheckState());
-        assertEquals("marko.gattringer@gepardec.com", entry.employee().email());
+        assertEquals("no-reply@gepardec.com", entry.employee().email());
         assertEquals("2020-01-01", entry.employee().releaseDate());
         assertEquals(3L, entry.totalComments());
         assertEquals(2L, entry.finishedComments());
@@ -204,8 +204,8 @@ public class ManagementResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        Employee mgattringer = createEmployee("008-mgattringer", "marko.gattringer@gepardec.com", "Marko", "Gattringer");
-        Employee jgartner = createEmployee("030-jgartner", "julian.gartner@gepardec.com", "Julian", "Gartner");
+        Employee mgattringer = createEmployee("008-mgattringer", "no-reply@gepardec.com", "Marko", "Gattringer");
+        Employee jgartner = createEmployee("030-jgartner", "no-reply@gepardec.com", "Julian", "Gartner");
 
         List<String> employees = List.of(mgattringer.userId(), jgartner.userId());
         List<String> leads = List.of("005-wbruckmueller");
@@ -319,8 +319,8 @@ public class ManagementResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        Employee mgattringer = createEmployee("008-mgattringer", "marko.gattringer@gepardec.com", "Marko", "Gattringer");
-        Employee jgartner = createEmployee("030-jgartner", "julian.gartner@gepardec.com", "Julian", "Gartner");
+        Employee mgattringer = createEmployee("008-mgattringer", "no-reply@gepardec.com", "Marko", "Gattringer");
+        Employee jgartner = createEmployee("030-jgartner", "no-reply@gepardec.com", "Julian", "Gartner");
 
         List<String> employees = List.of(mgattringer.userId(), jgartner.userId());
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
