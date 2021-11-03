@@ -50,7 +50,7 @@ public class EmployeeServiceImplTest {
         final Employee employee = beanUnderTest.getEmployee("someuserid");
         Assertions.assertNotNull(employee);
         Assertions.assertEquals("0", employee.userId());
-        Assertions.assertEquals("Thomas_0", employee.firstname());
+        Assertions.assertEquals("Max_0", employee.firstname());
     }
 
     @Test
@@ -65,7 +65,7 @@ public class EmployeeServiceImplTest {
         Assertions.assertFalse(employees.isEmpty());
         Assertions.assertEquals(1, employees.size());
         Assertions.assertEquals("0", employees.get(0).userId());
-        Assertions.assertEquals("Thomas_0", employees.get(0).firstname());
+        Assertions.assertEquals("Max_0", employees.get(0).firstname());
     }
 
     @Test
@@ -134,7 +134,7 @@ public class EmployeeServiceImplTest {
     }
 
     private Employee createEmployeeWithActive(final int userId, boolean active) {
-        final String name = "Thomas_" + userId;
+        final String name = "Max_" + userId;
 
         final Employee employee = Employee.builder()
                 .email(name + "@gepardec.com")

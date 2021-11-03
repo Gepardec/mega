@@ -44,8 +44,8 @@ class MailSenderTest {
                 Arguments.of(Mail.OM_RELEASE, "UNIT-TEST: Reminder: Freigaben durchführen"),
                 Arguments.of(Mail.OM_ADMINISTRATIVE, "UNIT-TEST: Reminder: Administratives"),
                 Arguments.of(Mail.OM_SALARY, "UNIT-TEST: Reminder: Gehälter"),
-                Arguments.of(Mail.COMMENT_CREATED, "UNIT-TEST: MEGA: Anmerkung von Thomas erhalten"),
-                Arguments.of(Mail.COMMENT_CLOSED, "UNIT-TEST: MEGA: Anmerkung von Thomas erledigt")
+                Arguments.of(Mail.COMMENT_CREATED, "UNIT-TEST: MEGA: Anmerkung von Max Mustermann erhalten"),
+                Arguments.of(Mail.COMMENT_CLOSED, "UNIT-TEST: MEGA: Anmerkung von Max Mustermann erledigt")
         );
     }
 
@@ -58,26 +58,26 @@ class MailSenderTest {
     @ParameterizedTest
     @MethodSource("emailsWithSubject")
     void send_toEmployees_shouldContainEmpleyNotificationData(final Mail mail, final String subject) {
-        final String to = "garfield.atHome@gmail.com";
+        final String to = "no-replay@gmail.com";
         final Map<String, String> mailParameter = Map.of(
-                MailParameter.CREATOR, "Thomas",
-                MailParameter.RECIPIENT, "Herbert",
+                MailParameter.CREATOR, "Max",
+                MailParameter.RECIPIENT, "Max",
                 MailParameter.COMMENT, "my comment");
-        mailSender.send(mail, to, "Jamal", Locale.GERMAN, mailParameter, List.of("Thomas"));
+        mailSender.send(mail, to, "Max", Locale.GERMAN, mailParameter, List.of("Max"));
         List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
         assertAll(
                 () -> assertEquals(1, sent.size()),
                 () -> assertTrue(Mail.COMMENT_CLOSED.equals(mail) ?
-                        sent.get(0).getHtml().startsWith("<p>Hallo " + "Herbert") :
-                        sent.get(0).getHtml().startsWith("<p>Hallo " + "Jamal")),
+                        sent.get(0).getHtml().startsWith("<p>Hallo " + "Max") :
+                        sent.get(0).getHtml().startsWith("<p>Hallo " + "Max")),
                 () -> assertEquals(subject, sent.get(0).getSubject()));
     }
 
     @Test
     void send_send10Mails_allMailsShouldBeInMailBox() {
-        final String to = "garfield.atHome@gmail.com";
+        final String to = "no-reply@gmail.com";
         for (int i = 0; i < 10; i++) {
-            mailSender.send(Mail.EMPLOYEE_CHECK_PROJECTTIME, to, "Jamal", Locale.GERMAN);
+            mailSender.send(Mail.EMPLOYEE_CHECK_PROJECTTIME, to, "Max", Locale.GERMAN);
         }
         List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
         assertEquals(10, sent.size());
@@ -85,8 +85,8 @@ class MailSenderTest {
 
     @Test
     void send_projectControllingMailContainsPlanrechnungUrl() {
-        final String to = "garfield.atHome@gmail.com";
-        mailSender.send(Mail.PL_PROJECT_CONTROLLING, to, "Jamal", Locale.GERMAN);
+        final String to = "no-reply@gmail.com";
+        mailSender.send(Mail.PL_PROJECT_CONTROLLING, to, "Max", Locale.GERMAN);
         List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
         assertAll(
                 () -> assertEquals(1, sent.size()),

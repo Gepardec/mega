@@ -77,7 +77,7 @@ class MonthlyReportServiceImplTest {
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
         Assertions.assertNotNull(monthendReportForUser);
-        Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.employee().email());
+        Assertions.assertEquals("Max_0@gepardec.com", monthendReportForUser.employee().email());
         Assertions.assertNotNull(monthendReportForUser.timeWarnings());
         Assertions.assertTrue(monthendReportForUser.timeWarnings().isEmpty());
     }
@@ -90,7 +90,7 @@ class MonthlyReportServiceImplTest {
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
         Assertions.assertNotNull(monthendReportForUser);
-        Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.employee().email());
+        Assertions.assertEquals("Max_0@gepardec.com", monthendReportForUser.employee().email());
         Assertions.assertNotNull(monthendReportForUser.timeWarnings());
         Assertions.assertFalse(monthendReportForUser.timeWarnings().isEmpty());
         Assertions.assertEquals(LocalDate.of(2020, 1, 31), monthendReportForUser.timeWarnings().get(0).getDate());
@@ -119,7 +119,7 @@ class MonthlyReportServiceImplTest {
     }
 
     private Employee createEmployeeWithReleaseDate(final int userId, String releaseDate) {
-        final String name = "Thomas_" + userId;
+        final String name = "Max_" + userId;
 
         final Employee employee = Employee.builder()
                 .email(name + "@gepardec.com")
