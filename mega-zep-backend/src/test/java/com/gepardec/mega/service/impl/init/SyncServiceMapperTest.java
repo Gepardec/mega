@@ -57,8 +57,8 @@ class SyncServiceMapperTest {
         return Employee.builder()
                 .userId(userId)
                 .email(email)
-                .firstname("Thomas")
-                .lastname("Herzog")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .language(language)
                 .releaseDate("NULL")
                 .active(true)
@@ -103,15 +103,15 @@ class SyncServiceMapperTest {
         final User user = new User();
         user.setZepId("2");
         user.setRoles(Set.of(Role.EMPLOYEE, Role.OFFICE_MANAGEMENT, Role.PROJECT_LEAD));
-        user.setFirstname("Werner");
-        user.setLastname("Bruckmüller");
+        user.setFirstname("Max");
+        user.setLastname("Mustermann");
         user.setActive(false);
 
         final Employee employee = Employee.builder()
                 .userId("2")
                 .email("no-reply@gepardec.com")
-                .firstname("Thomas")
-                .lastname("Herzog")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .language("de")
                 .active(true)
                 .build();
@@ -122,8 +122,8 @@ class SyncServiceMapperTest {
         assertAll(
                 () -> assertEquals("2", actual.getZepId()),
                 () -> assertEquals("no-reply@gepardec.com", actual.getEmail()),
-                () -> assertEquals("Thomas", actual.getFirstname()),
-                () -> assertEquals("Herzog", actual.getLastname()),
+                () -> assertEquals("Max", actual.getFirstname()),
+                () -> assertEquals("Mustermann", actual.getLastname()),
                 () -> assertEquals(Locale.GERMAN, actual.getLocale()),
                 () -> assertNull(actual.getReleaseDate()),
                 () -> assertTrue(actual.getActive()),
@@ -148,8 +148,8 @@ class SyncServiceMapperTest {
         final Employee employee = Employee.builder()
                 .userId("1")
                 .email("no-reply@gepardec.com")
-                .firstname("Thomas")
-                .lastname("Herzog")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .language("de")
                 .releaseDate("2020-11-12")
                 .active(true)
@@ -161,8 +161,8 @@ class SyncServiceMapperTest {
         assertAll(
                 () -> assertEquals("1", actual.getZepId()),
                 () -> assertEquals("no-reply@gepardec.com", actual.getEmail()),
-                () -> assertEquals("Thomas", actual.getFirstname()),
-                () -> assertEquals("Herzog", actual.getLastname()),
+                () -> assertEquals("Max", actual.getFirstname()),
+                () -> assertEquals("Mustermann", actual.getLastname()),
                 () -> assertEquals(Locale.GERMAN, actual.getLocale()),
                 () -> assertEquals(LocalDate.of(2020, 11, 12), actual.getReleaseDate()),
                 () -> assertTrue(actual.getActive()),
@@ -218,7 +218,7 @@ class SyncServiceMapperTest {
 
     @Test
     void whenOmEmailsAndNoEmployeeIsOm_thenNoUserHasRoleOfficeManagement() {
-        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of("herzog.thomas81@gmail.com"));
+        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of("max.mustermann81@gmail.com"));
         final Employee employee = employeeForEmail("no-reply@gepardec.com");
 
         final User actual = mapper.mapEmployeeToNewUser(employee, List.of(), DEFAULT_FRENCH_LOCALE);

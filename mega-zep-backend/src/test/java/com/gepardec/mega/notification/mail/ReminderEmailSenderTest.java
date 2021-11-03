@@ -53,7 +53,7 @@ class ReminderEmailSenderTest {
 
     @Test
     void sendReminderToOm_whenUser_thenSendsMail() {
-        when(userService.findByRoles(List.of(Role.OFFICE_MANAGEMENT))).thenReturn(List.of(userFor("no-reply@gepardec.com", "Thomas")));
+        when(userService.findByRoles(List.of(Role.OFFICE_MANAGEMENT))).thenReturn(List.of(userFor("no-reply@gepardec.com", "Max")));
 
         reminderEmailSender.sendReminderToOm(OM_RELEASE);
         assertAll(
@@ -74,7 +74,7 @@ class ReminderEmailSenderTest {
 
     @Test
     void sendReminderToPl_whenUser_thenSendsMail() {
-        when(userService.findByRoles(List.of(Role.PROJECT_LEAD))).thenReturn(List.of(userFor("no-reply@gepardec.com", "Thomas")));
+        when(userService.findByRoles(List.of(Role.PROJECT_LEAD))).thenReturn(List.of(userFor("no-reply@gepardec.com", "Max")));
 
         reminderEmailSender.sendReminderToPl();
         assertAll(
@@ -95,7 +95,7 @@ class ReminderEmailSenderTest {
 
     @Test
     void sendReminderToUser_whenUser_thenSendsMail() {
-        when(userService.findActiveUsers()).thenReturn(List.of(userFor("no-reply@gepardec.com", "Thomas")));
+        when(userService.findActiveUsers()).thenReturn(List.of(userFor("no-reply@gepardec.com", "Max")));
 
         reminderEmailSender.sendReminderToUser();
         assertAll(

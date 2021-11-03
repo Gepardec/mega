@@ -254,7 +254,7 @@ class StepEntryServiceImplTest {
     private Employee createEmployee() {
         return Employee.builder()
                 .userId("1")
-                .email("thomas.herzog@gpeardec.com")
+                .email("max.mustermann@gpeardec.com")
                 .releaseDate(LocalDate.now().toString())
                 .build();
     }

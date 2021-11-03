@@ -142,8 +142,8 @@ class EmployeeMapperTest {
         final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(List.of(activeEmployment));
         final MitarbeiterType employee = new MitarbeiterType();
         employee.setEmail("no-reply@gepardec.com");
-        employee.setVorname("Thomas");
-        employee.setNachname("Herzog");
+        employee.setVorname("Max");
+        employee.setNachname("Mustermann");
         employee.setTitel("Ing.");
         employee.setUserId("1");
         employee.setAnrede("Herr");

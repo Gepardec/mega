@@ -204,8 +204,8 @@ public class ManagementResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        Employee mgattringer = createEmployee("008-mgattringer", "no-reply@gepardec.com", "Marko", "Gattringer");
-        Employee jgartner = createEmployee("030-jgartner", "no-reply@gepardec.com", "Julian", "Gartner");
+        Employee mgattringer = createEmployee("008-mgattringer", "no-reply@gepardec.com", "Max", "Mustermann");
+        Employee jgartner = createEmployee("030-jgartner", "no-reply@gepardec.com", "Max", "Mustermann");
 
         List<String> employees = List.of(mgattringer.userId(), jgartner.userId());
         List<String> leads = List.of("005-wbruckmueller");
@@ -319,8 +319,8 @@ public class ManagementResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        Employee mgattringer = createEmployee("008-mgattringer", "no-reply@gepardec.com", "Marko", "Gattringer");
-        Employee jgartner = createEmployee("030-jgartner", "no-reply@gepardec.com", "Julian", "Gartner");
+        Employee mgattringer = createEmployee("008-mgattringer", "no-reply@gepardec.com", "Max", "Mustermann");
+        Employee jgartner = createEmployee("030-jgartner", "no-reply@gepardec.com", "Max", "Mustermann");
 
         List<String> employees = List.of(mgattringer.userId(), jgartner.userId());
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
@@ -355,7 +355,7 @@ public class ManagementResourceTest {
 
     private com.gepardec.mega.db.entity.employee.User createUser() {
         com.gepardec.mega.db.entity.employee.User user = new com.gepardec.mega.db.entity.employee.User();
-        user.setEmail("werner.bruckmueller@gpeardec.com");
+        user.setEmail("no-reply@gpeardec.com");
         return user;
     }
 
@@ -363,9 +363,9 @@ public class ManagementResourceTest {
         return User.builder()
                 .dbId(1)
                 .userId("005-wbruckmueller")
-                .email("werner.bruckmueller@gpeardec.com")
-                .firstname("Werner")
-                .lastname("Bruckmüller")
+                .email("no-reply@gpeardec.com")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .roles(Set.of(role))
                 .build();
     }

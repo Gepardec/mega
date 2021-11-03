@@ -37,8 +37,8 @@ class UserContextProducerTest {
         final User user = User.builder()
                 .dbId(1)
                 .userId("1")
-                .firstname("Thomas")
-                .lastname("Herzog")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .email("no-reply@gepardec.com")
                 .roles(Set.of(Role.EMPLOYEE))
                 .build();

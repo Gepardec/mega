@@ -69,8 +69,8 @@ class ForbiddenExceptionMapperTest {
                 .dbId(1)
                 .userId("1")
                 .email(email)
-                .firstname("Test")
-                .lastname("Mail Deamon")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .roles(Set.of(Role.EMPLOYEE))
                 .build();
     }

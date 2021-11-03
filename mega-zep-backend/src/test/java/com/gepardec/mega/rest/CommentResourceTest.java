@@ -81,7 +81,7 @@ class CommentResourceTest {
     @Test
     void getAllCommentsForEmployee_whenMethodPOST_thenReturnsStatusMETHOD_NOT_ALLOWED() {
         given().contentType(ContentType.JSON)
-                .queryParam("email", "marko.gattringer@gmx.at")
+                .queryParam("email", "no-reply@gmx.at")
                 .queryParam("releasedate", "2020-10-01")
                 .post("/comments/getallcommentsforemployee")
                 .then().assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
@@ -93,7 +93,7 @@ class CommentResourceTest {
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON)
-                .queryParam("email", "marko.gattringer@gmx.at")
+                .queryParam("email", "no-reply@gmx.at")
                 .queryParam("releasedate", "2020-10-01")
                 .get("/comments/getallcommentsforemployee")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
@@ -106,7 +106,7 @@ class CommentResourceTest {
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON)
-                .queryParam("email", "marko.gattringergmx.at")
+                .queryParam("email", "noreplygmx.at")
                 .queryParam("releasedate", "2020-10-01")
                 .get("/comments/getallcommentsforemployee")
                 .then().assertThat().statusCode(HttpStatus.SC_BAD_REQUEST);
@@ -131,7 +131,7 @@ class CommentResourceTest {
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON)
-                .queryParam("email", "marko.gattringer@gmx.at")
+                .queryParam("email", "no-reply@gmx.at")
                 .get("/comments/getallcommentsforemployee")
                 .then().assertThat().statusCode(HttpStatus.SC_BAD_REQUEST);
     }
@@ -147,7 +147,7 @@ class CommentResourceTest {
                 .thenReturn(List.of(comment));
 
         List<Comment> comments = given().contentType(ContentType.JSON)
-                .queryParam("email", "marko.gattringer@gmx.at")
+                .queryParam("email", "no-reply@gmx.at")
                 .queryParam("date", "2020-10-01")
                 .get("/comments/getallcommentsforemployee")
                 .as(new TypeRef<>() {
@@ -279,9 +279,9 @@ class CommentResourceTest {
         return com.gepardec.mega.domain.model.User.builder()
                 .userId("1")
                 .dbId(1)
-                .email("thomas.herzog@gpeardec.com")
-                .firstname("Thomas")
-                .lastname("Herzog")
+                .email("no-reply@gepardec.com")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .roles(roles)
                 .build();
     }
