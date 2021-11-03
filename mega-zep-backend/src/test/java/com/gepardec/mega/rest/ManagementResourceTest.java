@@ -204,11 +204,11 @@ public class ManagementResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        Employee mgattringer = createEmployee("008-mgattringer", "no-reply@gepardec.com", "Max", "Mustermann");
-        Employee jgartner = createEmployee("030-jgartner", "no-reply@gepardec.com", "Max", "Mustermann");
+        Employee mgattringer = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
+        Employee jgartner = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
 
         List<String> employees = List.of(mgattringer.userId(), jgartner.userId());
-        List<String> leads = List.of("005-wbruckmueller");
+        List<String> leads = List.of("005");
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
         ProjectEmployees rgkkwc = createProject("ÖGK-RGKK2WC-2020", employees);
         when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
@@ -300,7 +300,7 @@ public class ManagementResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        List<String> leads = List.of("005-wbruckmueller");
+        List<String> leads = List.of("005");
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", List.of());
         when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
                 .thenReturn(List.of(rgkkcc));
@@ -319,8 +319,8 @@ public class ManagementResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        Employee mgattringer = createEmployee("008-mgattringer", "no-reply@gepardec.com", "Max", "Mustermann");
-        Employee jgartner = createEmployee("030-jgartner", "no-reply@gepardec.com", "Max", "Mustermann");
+        Employee mgattringer = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
+        Employee jgartner = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
 
         List<String> employees = List.of(mgattringer.userId(), jgartner.userId());
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
@@ -362,7 +362,7 @@ public class ManagementResourceTest {
     private User createUserForRole(final Role role) {
         return User.builder()
                 .dbId(1)
-                .userId("005-wbruckmueller")
+                .userId("005")
                 .email("no-reply@gpeardec.com")
                 .firstname("Max")
                 .lastname("Mustermann")

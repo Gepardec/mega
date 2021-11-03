@@ -219,15 +219,15 @@ class StepEntryServiceImplTest {
         assertNotNull(projectEmployees);
         assertEquals(1L, projectEmployees.size());
         assertEquals("Liwest-EMS", projectEmployees.get(0).projectId());
-        assertTrue(projectEmployees.get(0).employees().containsAll(List.of("008-mgattringer", "010-gpirklbauer", "012-ckofler", "020-therzog")));
+        assertTrue(projectEmployees.get(0).employees().containsAll(List.of("008", "010", "012", "020")));
     }
 
     private List<StepEntry> createStepEntriesForPM() {
         return List.of(
-                createStepEntry(1L, "no-reply@gepardec.com", "008-mgattringer"),
-                createStepEntry(2L, "no-reply@gepardec.com", "010-gpirklbauer"),
-                createStepEntry(3L, "no-reply@gepardec.com", "012-ckofler"),
-                createStepEntry(4L, "no-reply@gepardec.com", "020-therzog")
+                createStepEntry(1L, "no-reply@gepardec.com", "008"),
+                createStepEntry(2L, "no-reply@gepardec.com", "010"),
+                createStepEntry(3L, "no-reply@gepardec.com", "012"),
+                createStepEntry(4L, "no-reply@gepardec.com", "020")
         );
     }
 
