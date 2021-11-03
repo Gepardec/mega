@@ -123,9 +123,9 @@ public class WorkerResourceTest {
         return User.builder()
                 .dbId(1)
                 .userId("1")
-                .email("thomas.herzog@gpeardec.com")
-                .firstname("Thomas")
-                .lastname("Herzog")
+                .email("max.mustermann@gpeardec.com")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .roles(Set.of(role))
                 .build();
     }
