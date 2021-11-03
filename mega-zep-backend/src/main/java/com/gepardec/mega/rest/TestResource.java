@@ -57,20 +57,20 @@ public class TestResource implements TestResourceAPI {
                 .orElseThrow(() -> new IllegalStateException("TestResource is disabled and 'MailSender' is null"))
                 .send(Mail.COMMENT_CREATED,
                         "no-reply@gepardec.com",
-                        "Thomas",
+                        "Max",
                         Locale.GERMAN,
-                        Map.of(MailParameter.CREATOR, "Werner",
-                                MailParameter.RECIPIENT, "Thomas",
+                        Map.of(MailParameter.CREATOR, "Max",
+                                MailParameter.RECIPIENT, "Max",
                                 MailParameter.COMMENT, "This is my comment"),
-                        List.of("Thomas"));
+                        List.of("Max"));
         mailSender.send(Mail.COMMENT_CLOSED,
                 "no-reply@gepardec.com",
-                "Thomas",
+                "Max",
                 Locale.GERMAN,
-                Map.of(MailParameter.CREATOR, "Werner",
-                        MailParameter.RECIPIENT, "Thomas",
+                Map.of(MailParameter.CREATOR, "Max",
+                        MailParameter.RECIPIENT, "Max",
                         MailParameter.COMMENT, "This is my comment"),
-                List.of("Thomas"));
+                List.of("Max"));
         return Response.ok("ok").build();
     }
 }
