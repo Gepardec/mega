@@ -185,7 +185,7 @@ class ZepServiceImplTest {
 
     private MitarbeiterType createMitarbeiterType(final int userId) {
         final MitarbeiterType mitarbeiter = new MitarbeiterType();
-        final String name = "Thomas_" + userId;
+        final String name = "Max_" + userId;
 
         mitarbeiter.setEmail(name + "@gepardec.com");
         mitarbeiter.setVorname(name);

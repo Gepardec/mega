@@ -95,9 +95,9 @@ class CommentServiceImplTest {
     void cntFinishedAndTotalCommentsForEmployee_whenFromDateIsNull_thenThrowsException() {
         Employee empl = Employee.builder()
                 .userId("1")
-                .email("thomas.herzog@gpeardec.com")
+                .email("max.mustermann@gpeardec.com")
                 .releaseDate(null)
-                .firstname("Thomas")
+                .firstname("Max")
                 .build();
 
         NullPointerException thrown = assertThrows(
@@ -113,9 +113,9 @@ class CommentServiceImplTest {
     void cntFinishedAndTotalCommentsForEmployee_whenToDateIsNull_thenThrowsException() {
         Employee empl = Employee.builder()
                 .userId("1")
-                .email("thomas.herzog@gpeardec.com")
+                .email("max.mustermann@gpeardec.com")
                 .releaseDate(null)
-                .firstname("Thomas")
+                .firstname("Max")
                 .build();
 
         NullPointerException thrown = assertThrows(
@@ -284,9 +284,9 @@ class CommentServiceImplTest {
     private Employee createEmployee() {
         return Employee.builder()
                 .userId("1")
-                .email("thomas.herzog@gpeardec.com")
+                .email("max.mustermann@gpeardec.com")
                 .releaseDate(LocalDate.now().toString())
-                .firstname("Thomas")
+                .firstname("Max")
                 .build();
     }
 
@@ -305,8 +305,8 @@ class CommentServiceImplTest {
 
     private User createUser() {
         User user = new User();
-        user.setEmail("thomas.herzog@gpeardec.com");
-        user.setFirstname("Thomas");
+        user.setEmail("max.mustermann@gpeardec.com");
+        user.setFirstname("Max");
         return user;
     }
 }
