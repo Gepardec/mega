@@ -204,17 +204,17 @@ public class ManagementResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        Employee mgattringer = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
-        Employee jgartner = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
+        Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
+        Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
 
-        List<String> employees = List.of(mgattringer.userId(), jgartner.userId());
+        List<String> employees = List.of(employee1.userId(), employee2.userId());
         List<String> leads = List.of("005");
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
         ProjectEmployees rgkkwc = createProject("ÖGK-RGKK2WC-2020", employees);
         when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
                 .thenReturn(List.of(rgkkcc, rgkkwc));
 
-        when(employeeService.getAllActiveEmployees()).thenReturn(List.of(mgattringer, jgartner));
+        when(employeeService.getAllActiveEmployees()).thenReturn(List.of(employee1, employee2));
 
         List<StepEntry> stepEntries = List.of(
                 createStepEntryForStep(StepName.CONTROL_EXTERNAL_TIMES, EmployeeState.DONE),
@@ -263,18 +263,18 @@ public class ManagementResourceTest {
         assertFalse(projectRgkkcc.get().presetControlBillingState());
 
         List<ManagementEntry> rgkkccEntries = projectRgkkcc.get().entries();
-        Optional<ManagementEntry> entryMgattringer = rgkkccEntries.stream()
-                .filter(m -> mgattringer.userId().equalsIgnoreCase(m.employee().userId()))
+        Optional<ManagementEntry> entrymmustermann = rgkkccEntries.stream()
+                .filter(m -> employee1.userId().equalsIgnoreCase(m.employee().userId()))
                 .findFirst();
         // assert management entry
-        Assert.assertTrue(entryMgattringer.isPresent());
-        ManagementEntry entry = entryMgattringer.get();
+        Assert.assertTrue(entrymmustermann.isPresent());
+        ManagementEntry entry = entrymmustermann.get();
         assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.employeeCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.projectCheckState());
-        assertEquals(mgattringer.email(), entry.employee().email());
-        assertEquals(mgattringer.releaseDate(), entry.employee().releaseDate());
+        assertEquals(employee1.email(), entry.employee().email());
+        assertEquals(employee1.releaseDate(), entry.employee().releaseDate());
         assertEquals(3L, entry.totalComments());
         assertEquals(2L, entry.finishedComments());
 
@@ -319,10 +319,10 @@ public class ManagementResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        Employee mgattringer = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
-        Employee jgartner = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
+        Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
+        Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
 
-        List<String> employees = List.of(mgattringer.userId(), jgartner.userId());
+        List<String> employees = List.of(employee1.userId(), employee2.userId());
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
         when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
                 .thenReturn(List.of(rgkkcc));
