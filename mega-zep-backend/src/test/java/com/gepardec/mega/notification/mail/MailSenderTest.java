@@ -58,7 +58,7 @@ class MailSenderTest {
     @ParameterizedTest
     @MethodSource("emailsWithSubject")
     void send_toEmployees_shouldContainEmpleyNotificationData(final Mail mail, final String subject) {
-        final String to = "garfield.atHome@gmail.com";
+        final String to = "no-reply@gmail.com";
         final Map<String, String> mailParameter = Map.of(
                 MailParameter.CREATOR, "Thomas",
                 MailParameter.RECIPIENT, "Herbert",
@@ -75,9 +75,9 @@ class MailSenderTest {
 
     @Test
     void send_send10Mails_allMailsShouldBeInMailBox() {
-        final String to = "garfield.atHome@gmail.com";
+        final String to = "no-reply@gmail.com";
         for (int i = 0; i < 10; i++) {
-            mailSender.send(Mail.EMPLOYEE_CHECK_PROJECTTIME, to, "Jamal", Locale.GERMAN);
+            mailSender.send(Mail.EMPLOYEE_CHECK_PROJECTTIME, to, "Max", Locale.GERMAN);
         }
         List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
         assertEquals(10, sent.size());
@@ -85,8 +85,8 @@ class MailSenderTest {
 
     @Test
     void send_projectControllingMailContainsPlanrechnungUrl() {
-        final String to = "garfield.atHome@gmail.com";
-        mailSender.send(Mail.PL_PROJECT_CONTROLLING, to, "Jamal", Locale.GERMAN);
+        final String to = "no-reply@gmail.com";
+        mailSender.send(Mail.PL_PROJECT_CONTROLLING, to, "Max", Locale.GERMAN);
         List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
         assertAll(
                 () -> assertEquals(1, sent.size()),

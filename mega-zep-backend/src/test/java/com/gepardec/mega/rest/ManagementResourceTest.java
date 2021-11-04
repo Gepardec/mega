@@ -91,7 +91,7 @@ public class ManagementResourceTest {
         when(userContext.user()).thenReturn(user);
 
         when(employeeService.getAllActiveEmployees())
-                .thenReturn(List.of(Employee.builder().releaseDate("2020-01-01").email("marko.gattringer@gepardec.com").build()));
+                .thenReturn(List.of(Employee.builder().releaseDate("2020-01-01").email("no-reply@gepardec.com").build()));
 
         List<StepEntry> entries = List.of(
                 createStepEntryForStep(StepName.CONTROL_EXTERNAL_TIMES, EmployeeState.DONE),
@@ -123,7 +123,7 @@ public class ManagementResourceTest {
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.employeeCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.projectCheckState());
-        assertEquals("marko.gattringer@gepardec.com", entry.employee().email());
+        assertEquals("no-reply@gepardec.com", entry.employee().email());
         assertEquals("2020-01-01", entry.employee().releaseDate());
         assertEquals(3L, entry.totalComments());
         assertEquals(2L, entry.finishedComments());
@@ -204,17 +204,17 @@ public class ManagementResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        Employee mgattringer = createEmployee("008-mgattringer", "marko.gattringer@gepardec.com", "Marko", "Gattringer");
-        Employee jgartner = createEmployee("030-jgartner", "julian.gartner@gepardec.com", "Julian", "Gartner");
+        Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
+        Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
 
-        List<String> employees = List.of(mgattringer.userId(), jgartner.userId());
-        List<String> leads = List.of("005-wbruckmueller");
+        List<String> employees = List.of(employee1.userId(), employee2.userId());
+        List<String> leads = List.of("005");
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
         ProjectEmployees rgkkwc = createProject("ÖGK-RGKK2WC-2020", employees);
         when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
                 .thenReturn(List.of(rgkkcc, rgkkwc));
 
-        when(employeeService.getAllActiveEmployees()).thenReturn(List.of(mgattringer, jgartner));
+        when(employeeService.getAllActiveEmployees()).thenReturn(List.of(employee1, employee2));
 
         List<StepEntry> stepEntries = List.of(
                 createStepEntryForStep(StepName.CONTROL_EXTERNAL_TIMES, EmployeeState.DONE),
@@ -263,18 +263,18 @@ public class ManagementResourceTest {
         assertFalse(projectRgkkcc.get().presetControlBillingState());
 
         List<ManagementEntry> rgkkccEntries = projectRgkkcc.get().entries();
-        Optional<ManagementEntry> entryMgattringer = rgkkccEntries.stream()
-                .filter(m -> mgattringer.userId().equalsIgnoreCase(m.employee().userId()))
+        Optional<ManagementEntry> entrymmustermann = rgkkccEntries.stream()
+                .filter(m -> employee1.userId().equalsIgnoreCase(m.employee().userId()))
                 .findFirst();
         // assert management entry
-        Assert.assertTrue(entryMgattringer.isPresent());
-        ManagementEntry entry = entryMgattringer.get();
+        Assert.assertTrue(entrymmustermann.isPresent());
+        ManagementEntry entry = entrymmustermann.get();
         assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.employeeCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.projectCheckState());
-        assertEquals(mgattringer.email(), entry.employee().email());
-        assertEquals(mgattringer.releaseDate(), entry.employee().releaseDate());
+        assertEquals(employee1.email(), entry.employee().email());
+        assertEquals(employee1.releaseDate(), entry.employee().releaseDate());
         assertEquals(3L, entry.totalComments());
         assertEquals(2L, entry.finishedComments());
 
@@ -300,7 +300,7 @@ public class ManagementResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        List<String> leads = List.of("005-wbruckmueller");
+        List<String> leads = List.of("005");
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", List.of());
         when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
                 .thenReturn(List.of(rgkkcc));
@@ -319,10 +319,10 @@ public class ManagementResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        Employee mgattringer = createEmployee("008-mgattringer", "marko.gattringer@gepardec.com", "Marko", "Gattringer");
-        Employee jgartner = createEmployee("030-jgartner", "julian.gartner@gepardec.com", "Julian", "Gartner");
+        Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
+        Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
 
-        List<String> employees = List.of(mgattringer.userId(), jgartner.userId());
+        List<String> employees = List.of(employee1.userId(), employee2.userId());
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
         when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
                 .thenReturn(List.of(rgkkcc));
@@ -355,17 +355,17 @@ public class ManagementResourceTest {
 
     private com.gepardec.mega.db.entity.employee.User createUser() {
         com.gepardec.mega.db.entity.employee.User user = new com.gepardec.mega.db.entity.employee.User();
-        user.setEmail("werner.bruckmueller@gpeardec.com");
+        user.setEmail("no-reply@gpeardec.com");
         return user;
     }
 
     private User createUserForRole(final Role role) {
         return User.builder()
                 .dbId(1)
-                .userId("005-wbruckmueller")
-                .email("werner.bruckmueller@gpeardec.com")
-                .firstname("Werner")
-                .lastname("Bruckmüller")
+                .userId("005")
+                .email("no-reply@gpeardec.com")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .roles(Set.of(role))
                 .build();
     }

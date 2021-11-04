@@ -42,7 +42,7 @@ class SyncServiceMapperTest {
     private SyncServiceMapper mapper;
 
     private Employee employeeForLanguage(final String language) {
-        return employeeFor("1", "thomas.herzog@gepardec.com", language);
+        return employeeFor("1", "no-reply@gepardec.com", language);
     }
 
     private Employee employeeForEmail(final String email) {
@@ -50,15 +50,15 @@ class SyncServiceMapperTest {
     }
 
     private Employee employeeForUserId(final String userId) {
-        return employeeFor(userId, "thomas.herzog@gepardec.com", DEFAULT_FRENCH_LOCALE.getLanguage());
+        return employeeFor(userId, "no-reply@gepardec.com", DEFAULT_FRENCH_LOCALE.getLanguage());
     }
 
     private Employee employeeFor(final String userId, final String email, final String language) {
         return Employee.builder()
                 .userId(userId)
                 .email(email)
-                .firstname("Thomas")
-                .lastname("Herzog")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .language(language)
                 .releaseDate("NULL")
                 .active(true)
@@ -103,15 +103,15 @@ class SyncServiceMapperTest {
         final User user = new User();
         user.setZepId("2");
         user.setRoles(Set.of(Role.EMPLOYEE, Role.OFFICE_MANAGEMENT, Role.PROJECT_LEAD));
-        user.setFirstname("Werner");
-        user.setLastname("Bruckmüller");
+        user.setFirstname("Max");
+        user.setLastname("Mustermann");
         user.setActive(false);
 
         final Employee employee = Employee.builder()
                 .userId("2")
-                .email("thomas.herzog@gepardec.com")
-                .firstname("Thomas")
-                .lastname("Herzog")
+                .email("no-reply@gepardec.com")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .language("de")
                 .active(true)
                 .build();
@@ -121,9 +121,9 @@ class SyncServiceMapperTest {
 
         assertAll(
                 () -> assertEquals("2", actual.getZepId()),
-                () -> assertEquals("thomas.herzog@gepardec.com", actual.getEmail()),
-                () -> assertEquals("Thomas", actual.getFirstname()),
-                () -> assertEquals("Herzog", actual.getLastname()),
+                () -> assertEquals("no-reply@gepardec.com", actual.getEmail()),
+                () -> assertEquals("Max", actual.getFirstname()),
+                () -> assertEquals("Mustermann", actual.getLastname()),
                 () -> assertEquals(Locale.GERMAN, actual.getLocale()),
                 () -> assertNull(actual.getReleaseDate()),
                 () -> assertTrue(actual.getActive()),
@@ -147,9 +147,9 @@ class SyncServiceMapperTest {
         when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
         final Employee employee = Employee.builder()
                 .userId("1")
-                .email("thomas.herzog@gepardec.com")
-                .firstname("Thomas")
-                .lastname("Herzog")
+                .email("no-reply@gepardec.com")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .language("de")
                 .releaseDate("2020-11-12")
                 .active(true)
@@ -160,9 +160,9 @@ class SyncServiceMapperTest {
 
         assertAll(
                 () -> assertEquals("1", actual.getZepId()),
-                () -> assertEquals("thomas.herzog@gepardec.com", actual.getEmail()),
-                () -> assertEquals("Thomas", actual.getFirstname()),
-                () -> assertEquals("Herzog", actual.getLastname()),
+                () -> assertEquals("no-reply@gepardec.com", actual.getEmail()),
+                () -> assertEquals("Max", actual.getFirstname()),
+                () -> assertEquals("Mustermann", actual.getLastname()),
                 () -> assertEquals(Locale.GERMAN, actual.getLocale()),
                 () -> assertEquals(LocalDate.of(2020, 11, 12), actual.getReleaseDate()),
                 () -> assertTrue(actual.getActive()),
@@ -209,7 +209,7 @@ class SyncServiceMapperTest {
     @Test
     void whenNoOmEmails_thenNoUserHasRoleOfficeManagement() {
         when(notificationConfig.getOmMailAddresses()).thenReturn(List.of());
-        final Employee employee = employeeForEmail("thomas.herzog@gepardec.com");
+        final Employee employee = employeeForEmail("no-reply@gepardec.com");
 
         final User actual = mapper.mapEmployeeToNewUser(employee, List.of(), DEFAULT_FRENCH_LOCALE);
 
@@ -218,8 +218,8 @@ class SyncServiceMapperTest {
 
     @Test
     void whenOmEmailsAndNoEmployeeIsOm_thenNoUserHasRoleOfficeManagement() {
-        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of("herzog.thomas81@gmail.com"));
-        final Employee employee = employeeForEmail("thomas.herzog@gepardec.com");
+        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of("max.mustermann81@gmail.com"));
+        final Employee employee = employeeForEmail("no-reply@gepardec.com");
 
         final User actual = mapper.mapEmployeeToNewUser(employee, List.of(), DEFAULT_FRENCH_LOCALE);
 
@@ -228,8 +228,8 @@ class SyncServiceMapperTest {
 
     @Test
     void whenOmEmailsAndEmployeeIsOm_thenUserHasRoleOfficeManagement() {
-        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of("thomas.herzog@gepardec.com"));
-        final Employee employee = employeeForEmail("thomas.herzog@gepardec.com");
+        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of("no-reply@gepardec.com"));
+        final Employee employee = employeeForEmail("no-reply@gepardec.com");
 
         final User actual = mapper.mapEmployeeToNewUser(employee, List.of(), DEFAULT_FRENCH_LOCALE);
 

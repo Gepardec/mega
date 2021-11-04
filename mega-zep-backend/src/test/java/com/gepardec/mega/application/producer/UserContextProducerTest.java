@@ -37,9 +37,9 @@ class UserContextProducerTest {
         final User user = User.builder()
                 .dbId(1)
                 .userId("1")
-                .firstname("Thomas")
-                .lastname("Herzog")
-                .email("thomas.herzog@gepardec.com")
+                .firstname("Max")
+                .lastname("Mustermann")
+                .email("no-reply@gepardec.com")
                 .roles(Set.of(Role.EMPLOYEE))
                 .build();
         when(securityContext.email()).thenReturn("test@gepardec.com");

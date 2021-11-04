@@ -66,7 +66,7 @@ class CommentResourceTest {
         Comment comment = Comment.builder()
                 .id(0L)
                 .message("Pausen eintragen!")
-                .authorEmail("evelyn.pirklbauer@gepardec.com")
+                .authorEmail("no-reply@gepardec.com")
                 .state(EmployeeState.IN_PROGRESS)
                 .build();
 
@@ -81,7 +81,7 @@ class CommentResourceTest {
     @Test
     void getAllCommentsForEmployee_whenMethodPOST_thenReturnsStatusMETHOD_NOT_ALLOWED() {
         given().contentType(ContentType.JSON)
-                .queryParam("email", "marko.gattringer@gmx.at")
+                .queryParam("email", "no-reply@gmx.at")
                 .queryParam("releasedate", "2020-10-01")
                 .post("/comments/getallcommentsforemployee")
                 .then().assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
@@ -93,7 +93,7 @@ class CommentResourceTest {
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON)
-                .queryParam("email", "marko.gattringer@gmx.at")
+                .queryParam("email", "no-reply@gmx.at")
                 .queryParam("releasedate", "2020-10-01")
                 .get("/comments/getallcommentsforemployee")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
@@ -106,7 +106,7 @@ class CommentResourceTest {
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON)
-                .queryParam("email", "marko.gattringergmx.at")
+                .queryParam("email", "noreplygmx.at")
                 .queryParam("releasedate", "2020-10-01")
                 .get("/comments/getallcommentsforemployee")
                 .then().assertThat().statusCode(HttpStatus.SC_BAD_REQUEST);
@@ -131,7 +131,7 @@ class CommentResourceTest {
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON)
-                .queryParam("email", "marko.gattringer@gmx.at")
+                .queryParam("email", "no-reply@gmx.at")
                 .get("/comments/getallcommentsforemployee")
                 .then().assertThat().statusCode(HttpStatus.SC_BAD_REQUEST);
     }
@@ -142,12 +142,12 @@ class CommentResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        Comment comment = Comment.builder().id(0L).message("Pausen eintragen!").authorEmail("evelyn.pirklbauer@gepardec.com").state(EmployeeState.IN_PROGRESS).build();
+        Comment comment = Comment.builder().id(0L).message("Pausen eintragen!").authorEmail("no-reply@gepardec.com").state(EmployeeState.IN_PROGRESS).build();
         when(commentService.findCommentsForEmployee(ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(List.of(comment));
 
         List<Comment> comments = given().contentType(ContentType.JSON)
-                .queryParam("email", "marko.gattringer@gmx.at")
+                .queryParam("email", "no-reply@gmx.at")
                 .queryParam("date", "2020-10-01")
                 .get("/comments/getallcommentsforemployee")
                 .as(new TypeRef<>() {
@@ -194,7 +194,7 @@ class CommentResourceTest {
         NewCommentEntry newCommentEntry = NewCommentEntry.builder()
                 .comment("Pausen eintragen!")
                 .employee(employee).stepId(2L)
-                .assigneeEmail("marko.gattringer@gepardec.com")
+                .assigneeEmail("no-reply@gepardec.com")
                 .currentMonthYear("2020-10-01")
                 .project("")
                 .build();
@@ -279,9 +279,9 @@ class CommentResourceTest {
         return com.gepardec.mega.domain.model.User.builder()
                 .userId("1")
                 .dbId(1)
-                .email("thomas.herzog@gpeardec.com")
-                .firstname("Thomas")
-                .lastname("Herzog")
+                .email("no-reply@gepardec.com")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .roles(roles)
                 .build();
     }

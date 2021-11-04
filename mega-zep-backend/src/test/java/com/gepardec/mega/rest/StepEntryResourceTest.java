@@ -76,9 +76,9 @@ class StepEntryResourceTest {
         return User.builder()
                 .userId("1")
                 .dbId(1)
-                .email("thomas.herzog@gpeardec.com")
-                .firstname("Thomas")
-                .lastname("Herzog")
+                .email("max.mustermann@gpeardec.com")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .roles(roles)
                 .build();
     }
@@ -86,7 +86,7 @@ class StepEntryResourceTest {
     private EmployeeStep createEmployeeStep() {
         Employee employee = Employee.builder()
                 .userId("1")
-                .email("thomas.herzog@gpeardec.com")
+                .email("max.mustermann@gpeardec.com")
                 .build();
 
         return EmployeeStep.builder()
