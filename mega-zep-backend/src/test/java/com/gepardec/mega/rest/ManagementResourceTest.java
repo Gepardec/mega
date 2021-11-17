@@ -366,7 +366,7 @@ public class ManagementResourceTest {
         assertEquals(3L, entry.totalComments());
         assertEquals(2L, entry.finishedComments());
 
-        //assert billable/non billable time
+        // assert billable/non billable time
         assertEquals(Duration.ofMinutes(240), result.get(0).aggregatedBillableWorkTimeInSeconds());
         assertEquals(Duration.ofMinutes(120), result.get(0).aggregatedNonBillableWorkTimeInSeconds());
     }
@@ -453,7 +453,7 @@ public class ManagementResourceTest {
         assertEquals(3L, entry.totalComments());
         assertEquals(2L, entry.finishedComments());
 
-        //assert billable/non billable time
+        // assert billable/non billable time
         assertEquals(Duration.ofMinutes(0), result.get(0).aggregatedBillableWorkTimeInSeconds());
         assertEquals(Duration.ofMinutes(0), result.get(0).aggregatedNonBillableWorkTimeInSeconds());
     }
@@ -510,7 +510,7 @@ public class ManagementResourceTest {
                 .as(new TypeRef<>() {
                 });
 
-        //assert billable/non billable time
+        // assert billable/non billable time
         assertEquals(Duration.ofMinutes(0), result.get(0).aggregatedBillableWorkTimeInSeconds());
         assertEquals(Duration.ofMinutes(0), result.get(0).aggregatedNonBillableWorkTimeInSeconds());
     }
