@@ -240,7 +240,6 @@ public class ManagementResourceTest {
                 ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
         ).thenReturn(stepEntries);
 
-        // TODO add concrete parameter values instead of any
         when(projectEntryService.findByNameAndDate(ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(projectEntries);
 
@@ -324,7 +323,6 @@ public class ManagementResourceTest {
                 ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
         ).thenReturn(stepEntries);
 
-        // TODO add concrete parameter values instead of any
         when(projectEntryService.findByNameAndDate(ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(projectEntries);
 
@@ -412,7 +410,6 @@ public class ManagementResourceTest {
                 ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
         ).thenReturn(stepEntries);
 
-        // TODO add concrete parameter values instead of any
         when(projectEntryService.findByNameAndDate(ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(projectEntries);
 
@@ -500,7 +497,6 @@ public class ManagementResourceTest {
                 ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
         ).thenReturn(stepEntries);
 
-        // TODO add concrete parameter values instead of any
         when(projectEntryService.findByNameAndDate(ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(projectEntries);
 
