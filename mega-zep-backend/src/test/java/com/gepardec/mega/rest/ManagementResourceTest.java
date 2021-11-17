@@ -22,6 +22,7 @@ import com.gepardec.mega.service.api.project.ProjectService;
 import com.gepardec.mega.service.api.projectentry.ProjectEntryService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.zep.ZepService;
+import de.provantis.zep.ProjektzeitType;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.common.mapper.TypeRef;
@@ -32,7 +33,10 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.wildfly.common.Assert;
 
+import javax.inject.Inject;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +63,9 @@ public class ManagementResourceTest {
 
     @InjectMock
     ProjectEntryService projectEntryService;
+
+    @Inject
+    ManagementResource managementResource;
 
     @InjectMock
     private SecurityContext securityContext;
@@ -238,12 +245,15 @@ public class ManagementResourceTest {
         ).thenReturn(stepEntries);
 
         // TODO add concrete parameter values instead of any
-        when(projectEntryService.findByNameAndDate(Mockito.any(), Mockito.any(), Mockito.any()))
+        when(projectEntryService.findByNameAndDate(ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(projectEntries);
 
         when(zepService.getProjectTimesForEmployeePerProject(
                 ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class)
-        )).thenReturn(Collections.emptyList());
+        )).thenReturn(getProjectTimeTypeList());
+
+        when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class))).thenReturn("02:00");
+        when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class), ArgumentMatchers.anyBoolean())).thenReturn("02:00");
 
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/10")
@@ -277,7 +287,182 @@ public class ManagementResourceTest {
         assertEquals(employee1.releaseDate(), entry.employee().releaseDate());
         assertEquals(3L, entry.totalComments());
         assertEquals(2L, entry.finishedComments());
+    }
 
+    @Test
+    void getProjectManagementEntries_whenProjectTimes_thenCorrectAggregatedWorkTimes() {
+        final User user = createUserForRole(Role.PROJECT_LEAD);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
+
+        Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
+        Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
+
+        List<String> employees = List.of(employee1.userId(), employee2.userId());
+        List<String> leads = List.of("005");
+        ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
+        ProjectEmployees rgkkwc = createProject("ÖGK-RGKK2WC-2020", employees);
+        when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
+                .thenReturn(List.of(rgkkcc, rgkkwc));
+
+        when(employeeService.getAllActiveEmployees()).thenReturn(List.of(employee1, employee2));
+
+        List<StepEntry> stepEntries = List.of(
+                createStepEntryForStep(StepName.CONTROL_EXTERNAL_TIMES, EmployeeState.DONE),
+                createStepEntryForStep(StepName.CONTROL_INTERNAL_TIMES, EmployeeState.OPEN),
+                createStepEntryForStep(StepName.CONTROL_TIME_EVIDENCES, EmployeeState.DONE),
+                createStepEntryForStep(StepName.CONTROL_TIMES, EmployeeState.OPEN)
+        );
+
+        List<ProjectEntry> projectEntries = List.of(
+                createProjectEntryForStepWithStateAndPreset(ProjectStep.CONTROL_PROJECT, State.NOT_RELEVANT, true),
+                createProjectEntryForStepWithStateAndPreset(ProjectStep.CONTROL_BILLING, State.DONE, false)
+        );
+
+        when(commentService.cntFinishedAndTotalCommentsForEmployee(
+                ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
+        ).thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
+
+        when(stepEntryService.findAllStepEntriesForEmployeeAndProject(
+                ArgumentMatchers.any(Employee.class), ArgumentMatchers.anyString(), ArgumentMatchers.anyString(),
+                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
+        ).thenReturn(stepEntries);
+
+        // TODO add concrete parameter values instead of any
+        when(projectEntryService.findByNameAndDate(ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
+                .thenReturn(projectEntries);
+
+        when(zepService.getProjectTimesForEmployeePerProject(
+                ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class)
+        )).thenReturn(getProjectTimeTypeList());
+
+        when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class))).thenReturn("01:00");
+        when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class), ArgumentMatchers.eq(true))).thenReturn("02:00");
+
+        List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
+                .get("/management/projectmanagemententries/2020/09")
+                .as(new TypeRef<>() {
+                });
+
+        assertEquals(2, result.size());
+        Optional<ProjectManagementEntry> projectRgkkcc = result.stream()
+                .filter(p -> rgkkcc.projectId().equalsIgnoreCase(p.projectName()))
+                .findFirst();
+
+        // assert project management entry
+        Assert.assertTrue(projectRgkkcc.isPresent());
+        assertEquals(com.gepardec.mega.domain.model.ProjectState.NOT_RELEVANT, projectRgkkcc.get().controlProjectState());
+        assertEquals(com.gepardec.mega.domain.model.ProjectState.DONE, projectRgkkcc.get().controlBillingState());
+        assertTrue(projectRgkkcc.get().presetControlProjectState());
+        assertFalse(projectRgkkcc.get().presetControlBillingState());
+
+        List<ManagementEntry> rgkkccEntries = projectRgkkcc.get().entries();
+        Optional<ManagementEntry> entrymmustermann = rgkkccEntries.stream()
+                .filter(m -> employee1.userId().equalsIgnoreCase(m.employee().userId()))
+                .findFirst();
+        // assert management entry
+        Assert.assertTrue(entrymmustermann.isPresent());
+        ManagementEntry entry = entrymmustermann.get();
+        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
+        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
+        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.employeeCheckState());
+        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.projectCheckState());
+        assertEquals(employee1.email(), entry.employee().email());
+        assertEquals(employee1.releaseDate(), entry.employee().releaseDate());
+        assertEquals(3L, entry.totalComments());
+        assertEquals(2L, entry.finishedComments());
+
+        //assert billable/non billable time
+        assertEquals(Duration.ofMinutes(240), result.get(0).aggregatedBillableWorkTimeInSeconds());
+        assertEquals(Duration.ofMinutes(120), result.get(0).aggregatedNonBillableWorkTimeInSeconds());
+    }
+
+    @Test
+    void getProjectManagementEntries_whenNoProjectTimes_thenZeroAggregatedWorkTimes() {
+        final User user = createUserForRole(Role.PROJECT_LEAD);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
+
+        Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
+        Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
+
+        List<String> employees = List.of(employee1.userId(), employee2.userId());
+        List<String> leads = List.of("005");
+        ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
+        ProjectEmployees rgkkwc = createProject("ÖGK-RGKK2WC-2020", employees);
+        when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
+                .thenReturn(List.of(rgkkcc, rgkkwc));
+
+        when(employeeService.getAllActiveEmployees()).thenReturn(List.of(employee1, employee2));
+
+        List<StepEntry> stepEntries = List.of(
+                createStepEntryForStep(StepName.CONTROL_EXTERNAL_TIMES, EmployeeState.DONE),
+                createStepEntryForStep(StepName.CONTROL_INTERNAL_TIMES, EmployeeState.OPEN),
+                createStepEntryForStep(StepName.CONTROL_TIME_EVIDENCES, EmployeeState.DONE),
+                createStepEntryForStep(StepName.CONTROL_TIMES, EmployeeState.OPEN)
+        );
+
+        List<ProjectEntry> projectEntries = List.of(
+                createProjectEntryForStepWithStateAndPreset(ProjectStep.CONTROL_PROJECT, State.NOT_RELEVANT, true),
+                createProjectEntryForStepWithStateAndPreset(ProjectStep.CONTROL_BILLING, State.DONE, false)
+        );
+
+        when(commentService.cntFinishedAndTotalCommentsForEmployee(
+                ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
+        ).thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
+
+        when(stepEntryService.findAllStepEntriesForEmployeeAndProject(
+                ArgumentMatchers.any(Employee.class), ArgumentMatchers.anyString(), ArgumentMatchers.anyString(),
+                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
+        ).thenReturn(stepEntries);
+
+        // TODO add concrete parameter values instead of any
+        when(projectEntryService.findByNameAndDate(ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
+                .thenReturn(projectEntries);
+
+        when(zepService.getProjectTimesForEmployeePerProject(
+                ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class)
+        )).thenReturn(getProjectTimeTypeList());
+
+        when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class))).thenReturn("00:00");
+        when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class), ArgumentMatchers.eq(true))).thenReturn("00:00");
+
+        List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
+                .get("/management/projectmanagemententries/2020/09")
+                .as(new TypeRef<>() {
+                });
+
+        assertEquals(2, result.size());
+        Optional<ProjectManagementEntry> projectRgkkcc = result.stream()
+                .filter(p -> rgkkcc.projectId().equalsIgnoreCase(p.projectName()))
+                .findFirst();
+
+        // assert project management entry
+        Assert.assertTrue(projectRgkkcc.isPresent());
+        assertEquals(com.gepardec.mega.domain.model.ProjectState.NOT_RELEVANT, projectRgkkcc.get().controlProjectState());
+        assertEquals(com.gepardec.mega.domain.model.ProjectState.DONE, projectRgkkcc.get().controlBillingState());
+        assertTrue(projectRgkkcc.get().presetControlProjectState());
+        assertFalse(projectRgkkcc.get().presetControlBillingState());
+
+        List<ManagementEntry> rgkkccEntries = projectRgkkcc.get().entries();
+        Optional<ManagementEntry> entrymmustermann = rgkkccEntries.stream()
+                .filter(m -> employee1.userId().equalsIgnoreCase(m.employee().userId()))
+                .findFirst();
+        // assert management entry
+        Assert.assertTrue(entrymmustermann.isPresent());
+        ManagementEntry entry = entrymmustermann.get();
+        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
+        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
+        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.employeeCheckState());
+        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.projectCheckState());
+        assertEquals(employee1.email(), entry.employee().email());
+        assertEquals(employee1.releaseDate(), entry.employee().releaseDate());
+        assertEquals(3L, entry.totalComments());
+        assertEquals(2L, entry.finishedComments());
+
+        //assert billable/non billable time
+        assertEquals(Duration.ofMinutes(0), result.get(0).aggregatedBillableWorkTimeInSeconds());
+        assertEquals(Duration.ofMinutes(0), result.get(0).aggregatedNonBillableWorkTimeInSeconds());
     }
 
     @Test
@@ -338,6 +523,7 @@ public class ManagementResourceTest {
         assertEquals(0L, result.size());
     }
 
+
     private Step createStep(StepName stepName) {
         Step step = new Step();
         step.setName(stepName.name());
@@ -392,5 +578,31 @@ public class ManagementResourceTest {
         p.setState(state);
         p.setPreset(preset);
         return p;
+    }
+
+    private List<ProjektzeitType> getProjectTimeTypeList() {
+        List<ProjektzeitType> timeType = new ArrayList<>();
+        ProjektzeitType projektzeitType = new ProjektzeitType();
+        projektzeitType.setDauer("4");
+        projektzeitType.setVon("08:00");
+        projektzeitType.setBis("12:00");
+        projektzeitType.setIstFakturierbar(true);
+
+        ProjektzeitType projektzeitType1 = new ProjektzeitType();
+        projektzeitType1.setDauer("0");
+        projektzeitType1.setVon("00:00");
+        projektzeitType1.setBis("00:00");
+
+        ProjektzeitType projektzeitType2 = new ProjektzeitType();
+        projektzeitType2.setDauer("2");
+        projektzeitType2.setVon("13:00");
+        projektzeitType2.setBis("15:00");
+        projektzeitType2.setIstFakturierbar(false);
+
+        timeType.add(projektzeitType);
+        timeType.add(projektzeitType1);
+        timeType.add(projektzeitType2);
+
+        return timeType;
     }
 }
