@@ -64,9 +64,6 @@ public class ManagementResourceTest {
     @InjectMock
     ProjectEntryService projectEntryService;
 
-    @Inject
-    ManagementResource managementResource;
-
     @InjectMock
     private SecurityContext securityContext;
 
