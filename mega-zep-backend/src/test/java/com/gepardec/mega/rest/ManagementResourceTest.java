@@ -30,7 +30,6 @@ import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import org.wildfly.common.Assert;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -263,7 +262,7 @@ public class ManagementResourceTest {
                 .findFirst();
 
         // assert project management entry
-        Assert.assertTrue(projectRgkkcc.isPresent());
+        assertTrue(projectRgkkcc.isPresent());
         assertEquals(com.gepardec.mega.domain.model.ProjectState.NOT_RELEVANT, projectRgkkcc.get().controlProjectState());
         assertEquals(com.gepardec.mega.domain.model.ProjectState.DONE, projectRgkkcc.get().controlBillingState());
         assertTrue(projectRgkkcc.get().presetControlProjectState());
@@ -274,7 +273,7 @@ public class ManagementResourceTest {
                 .filter(m -> employee1.userId().equalsIgnoreCase(m.employee().userId()))
                 .findFirst();
         // assert management entry
-        Assert.assertTrue(entrymmustermann.isPresent());
+        assertTrue(entrymmustermann.isPresent());
         ManagementEntry entry = entrymmustermann.get();
         assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
@@ -347,7 +346,7 @@ public class ManagementResourceTest {
                 .findFirst();
 
         // assert project management entry
-        Assert.assertTrue(projectRgkkcc.isPresent());
+        assertTrue(projectRgkkcc.isPresent());
         assertEquals(com.gepardec.mega.domain.model.ProjectState.NOT_RELEVANT, projectRgkkcc.get().controlProjectState());
         assertEquals(com.gepardec.mega.domain.model.ProjectState.DONE, projectRgkkcc.get().controlBillingState());
         assertTrue(projectRgkkcc.get().presetControlProjectState());
@@ -358,7 +357,7 @@ public class ManagementResourceTest {
                 .filter(m -> employee1.userId().equalsIgnoreCase(m.employee().userId()))
                 .findFirst();
         // assert management entry
-        Assert.assertTrue(entrymmustermann.isPresent());
+        assertTrue(entrymmustermann.isPresent());
         ManagementEntry entry = entrymmustermann.get();
         assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
@@ -435,7 +434,7 @@ public class ManagementResourceTest {
                 .findFirst();
 
         // assert project management entry
-        Assert.assertTrue(projectRgkkcc.isPresent());
+        assertTrue(projectRgkkcc.isPresent());
         assertEquals(com.gepardec.mega.domain.model.ProjectState.NOT_RELEVANT, projectRgkkcc.get().controlProjectState());
         assertEquals(com.gepardec.mega.domain.model.ProjectState.DONE, projectRgkkcc.get().controlBillingState());
         assertTrue(projectRgkkcc.get().presetControlProjectState());
@@ -446,7 +445,7 @@ public class ManagementResourceTest {
                 .filter(m -> employee1.userId().equalsIgnoreCase(m.employee().userId()))
                 .findFirst();
         // assert management entry
-        Assert.assertTrue(entrymmustermann.isPresent());
+        assertTrue(entrymmustermann.isPresent());
         ManagementEntry entry = entrymmustermann.get();
         assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
         assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
@@ -456,6 +455,64 @@ public class ManagementResourceTest {
         assertEquals(employee1.releaseDate(), entry.employee().releaseDate());
         assertEquals(3L, entry.totalComments());
         assertEquals(2L, entry.finishedComments());
+
+        //assert billable/non billable time
+        assertEquals(Duration.ofMinutes(0), result.get(0).aggregatedBillableWorkTimeInSeconds());
+        assertEquals(Duration.ofMinutes(0), result.get(0).aggregatedNonBillableWorkTimeInSeconds());
+    }
+
+    @Test
+    void getProjectManagementEntries_whenManagementEntryIsNull_thenNoNullPointerException() {
+        final User user = createUserForRole(Role.PROJECT_LEAD);
+        when(securityContext.email()).thenReturn(user.email());
+        when(userContext.user()).thenReturn(user);
+
+        Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
+        Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
+
+        List<String> employees = List.of(employee1.userId(), employee2.userId());
+        List<String> leads = List.of("005");
+        ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
+        ProjectEmployees rgkkwc = createProject("ÖGK-RGKK2WC-2020", employees);
+        when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
+                .thenReturn(List.of(rgkkcc, rgkkwc));
+
+        when(employeeService.getAllActiveEmployees()).thenReturn(List.of(employee1, employee2));
+
+        List<StepEntry> stepEntries = List.of(
+                createStepEntryForStep(StepName.CONTROL_EXTERNAL_TIMES, EmployeeState.DONE),
+                createStepEntryForStep(StepName.CONTROL_INTERNAL_TIMES, EmployeeState.OPEN),
+                createStepEntryForStep(StepName.CONTROL_TIME_EVIDENCES, EmployeeState.DONE),
+                createStepEntryForStep(StepName.CONTROL_TIMES, EmployeeState.OPEN)
+        );
+
+        List<ProjectEntry> projectEntries = List.of(
+                createProjectEntryForStepWithStateAndPreset(ProjectStep.CONTROL_PROJECT, State.NOT_RELEVANT, true),
+                createProjectEntryForStepWithStateAndPreset(ProjectStep.CONTROL_BILLING, State.DONE, false)
+        );
+
+        when(commentService.cntFinishedAndTotalCommentsForEmployee(
+                ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
+        ).thenReturn(FinishedAndTotalComments.builder().finishedComments(2L).totalComments(3L).build());
+
+        when(stepEntryService.findAllStepEntriesForEmployeeAndProject(
+                ArgumentMatchers.any(Employee.class), ArgumentMatchers.anyString(), ArgumentMatchers.anyString(),
+                ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
+        ).thenReturn(stepEntries);
+
+        // TODO add concrete parameter values instead of any
+        when(projectEntryService.findByNameAndDate(ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
+                .thenReturn(projectEntries);
+
+        when(zepService.getProjectTimesForEmployeePerProject(
+                ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class)
+        )).thenReturn(getProjectTimeTypeList());
+
+
+        List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
+                .get("/management/projectmanagemententries/2020/09")
+                .as(new TypeRef<>() {
+                });
 
         //assert billable/non billable time
         assertEquals(Duration.ofMinutes(0), result.get(0).aggregatedBillableWorkTimeInSeconds());

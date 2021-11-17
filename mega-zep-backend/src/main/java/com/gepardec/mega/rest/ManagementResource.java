@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -123,9 +124,6 @@ public class ManagementResource implements ManagementResourceAPI {
 
         Map<String, Employee> employees = createEmployeeCache();
 
-        long aggregatedBillableTimeInMinutes = 0;
-        long aggregatedNonBillableTimeInMinutes = 0;
-
         for (ProjectEmployees currentProject : projectEmployees) {
             List<ManagementEntry> entries = createManagementEntriesForProject(currentProject, employees, from, to);
             List<ProjectEntry> projectEntries = projectEntryService.findByNameAndDate(currentProject.projectId(), from, to);
@@ -158,15 +156,18 @@ public class ManagementResource implements ManagementResourceAPI {
     }
 
     private Duration calculateProjectDuration(List<String> entries) {
-        return Duration.ofMinutes(
-                entries.stream().map(billableTime -> {
-                    long hours = Long.parseLong(billableTime.split(":")[0]);
-                    long minutes = Long.parseLong(billableTime.split(":")[1]);
-                    return hours * 60 + minutes;
-                })
-                        .reduce(0L, Long::sum)
-        );
-
+        if (entries != null && entries.get(0) != null) {
+            return Duration.ofMinutes(
+                    entries.stream().map(billableTime -> {
+                                long hours = Long.parseLong(billableTime.split(":")[0]);
+                                long minutes = Long.parseLong(billableTime.split(":")[1]);
+                                return hours * 60 + minutes;
+                            })
+                            .reduce(0L, Long::sum)
+            );
+        } else {
+            return Duration.ofMinutes(0);
+        }
     }
 
     private ProjectEntry getProjectEntryForProjectStep(List<ProjectEntry> projectEntries, ProjectStep projectStep) {
