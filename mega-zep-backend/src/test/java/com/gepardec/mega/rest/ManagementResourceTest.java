@@ -33,7 +33,6 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.wildfly.common.Assert;
 
-import javax.inject.Inject;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
