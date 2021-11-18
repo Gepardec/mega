@@ -293,4 +293,8 @@ export class ProjectManagementComponent implements OnInit {
       this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.projectCommentNotUpdated'));
     }
   }
+
+  convertDurationToTime(durationInSeconds: number): number {
+    return durationInSeconds / 60 / 60;
+  }
 }
