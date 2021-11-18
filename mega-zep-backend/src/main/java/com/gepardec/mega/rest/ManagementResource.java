@@ -32,9 +32,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequestScoped
@@ -156,18 +158,18 @@ public class ManagementResource implements ManagementResourceAPI {
     }
 
     private Duration calculateProjectDuration(List<String> entries) {
-        if (entries != null && entries.get(0) != null) {
-            return Duration.ofMinutes(
-                    entries.stream().map(billableTime -> {
-                                long hours = Long.parseLong(billableTime.split(":")[0]);
-                                long minutes = Long.parseLong(billableTime.split(":")[1]);
-                                return hours * 60 + minutes;
-                            })
-                            .reduce(0L, Long::sum)
-            );
-        } else {
-            return Duration.ofMinutes(0);
-        }
+        return Duration.ofMinutes(
+                Optional.ofNullable(entries)
+                        .orElseGet(Collections::emptyList)
+                        .stream()
+                        .filter(Objects::nonNull)
+                        .map(billableTime -> {
+                            long hours = Long.parseLong(billableTime.split(":")[0]);
+                            long minutes = Long.parseLong(billableTime.split(":")[1]);
+                            return hours * 60 + minutes;
+                        })
+                        .reduce(0L, Long::sum)
+        );
     }
 
     private ProjectEntry getProjectEntryForProjectStep(List<ProjectEntry> projectEntries, ProjectStep projectStep) {
