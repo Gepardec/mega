@@ -7,6 +7,7 @@ import com.gepardec.mega.domain.calculation.time.CoreWorkingHoursCalculator;
 import com.gepardec.mega.domain.calculation.time.ExceededMaximumWorkingHoursPerDayCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientBreakCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientRestCalculator;
+import com.gepardec.mega.domain.calculation.time.TimeOverlapCalculator;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntryWarning;
@@ -44,6 +45,9 @@ public class WarningCalculator {
             final List<TimeWarning> calculatedWarnings = calculation.calculate(projectTimeList);
             calculatedWarnings.forEach(warning -> addToTimeWarnings(warnings, warning));
         }
+
+        TimeOverlapCalculator timeOverlapCalculator = new TimeOverlapCalculator();
+        warnings.addAll(timeOverlapCalculator.calculate(projectTimeList));
 
         warnings.sort(Comparator.comparing(ProjectEntryWarning::getDate));
         return warnings;
