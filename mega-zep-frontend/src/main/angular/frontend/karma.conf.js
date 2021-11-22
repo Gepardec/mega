@@ -3,7 +3,7 @@
 
 module.exports = function (config) {
   config.set({
-    basePath: '',
+    basePath: '.',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [
       require('karma-jasmine'),
@@ -37,7 +37,7 @@ module.exports = function (config) {
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    browsers: ['ChromeHeadless'],
+    browsers: ['Chrome'],
     autoWatch: false,
     restartOnFileChange: true
   });
