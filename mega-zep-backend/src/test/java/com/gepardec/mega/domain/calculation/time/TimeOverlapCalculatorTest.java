@@ -4,10 +4,7 @@ import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
 import com.gepardec.mega.domain.model.monthlyreport.TimeOverlapWarning;
-import com.gepardec.mega.domain.model.monthlyreport.TimeOverlapWarningType;
-import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
-import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -19,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@QuarkusTest
 class TimeOverlapCalculatorTest {
 
     private final TimeOverlapCalculator timeOverlapCalculator = new TimeOverlapCalculator();

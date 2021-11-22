@@ -5,7 +5,6 @@ import com.gepardec.mega.domain.calculation.WarningCalculationStrategy;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.TimeOverlapWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeOverlapWarningType;
-import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 
 import java.util.ArrayList;
 import java.util.List;
