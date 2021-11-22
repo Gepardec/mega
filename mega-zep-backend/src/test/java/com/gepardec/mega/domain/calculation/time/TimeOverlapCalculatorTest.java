@@ -3,8 +3,11 @@ package com.gepardec.mega.domain.calculation.time;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
+import com.gepardec.mega.domain.model.monthlyreport.TimeOverlapWarning;
+import com.gepardec.mega.domain.model.monthlyreport.TimeOverlapWarningType;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -16,16 +19,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TimeOverlapCalculatorTest {
+@QuarkusTest
+class TimeOverlapCalculatorTest {
 
     private final TimeOverlapCalculator timeOverlapCalculator = new TimeOverlapCalculator();
-    private final String warningString = "Überschneidungen bitte Kontrollieren, bezüglich Ausnahmen bei Reisen bitte Rücksprache mit HR";
 
     @Test
     void calculate_whenProjectEntriesWithoutOverlap_thenNoWarning() {
         List<ProjectEntry> projectEntries = generateProjectEntriesListWithoutOverlap();
 
-        List<TimeWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
+        List<TimeOverlapWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
 
         assertTrue(warnings.isEmpty());
     }
@@ -34,7 +37,7 @@ public class TimeOverlapCalculatorTest {
     void calculate_whenProjectEntriesStartAndEndOverlap_thenNoWarning() {
         List<ProjectEntry> projectEntries = generateProjectEntriesListWhereEndAndStartOverlap();
 
-        List<TimeWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
+        List<TimeOverlapWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
 
         assertTrue(warnings.isEmpty());
     }
@@ -43,17 +46,16 @@ public class TimeOverlapCalculatorTest {
     void calculate_whenProjectEntriesOverlap_thenWarning() {
         List<ProjectEntry> projectEntries = generateProjectEntriesWithOverlap();
 
-        List<TimeWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
+        List<TimeOverlapWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
 
         assertFalse(warnings.isEmpty());
-        assertEquals(warningString, warnings.get(0).getWarnings().get(0));
     }
 
     @Test
     void calculate_whenProjectEntriesOverlap_thenCorrectDate() {
         List<ProjectEntry> projectEntries = generateProjectEntriesWithOverlap();
 
-        List<TimeWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
+        List<TimeOverlapWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
 
         assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate());
     }
@@ -74,11 +76,9 @@ public class TimeOverlapCalculatorTest {
         projectEntries.add(entryFour);
         projectEntries.add(entryFive);
 
-        List<TimeWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
+        List<TimeOverlapWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
 
         assertEquals(2, warnings.size());
-        assertEquals(warningString, warnings.get(0).getWarnings().get(0));
-        assertEquals(warningString, warnings.get(1).getWarnings().get(0));
     }
 
     private ProjectTimeEntry projectTimeEntry(int startHour, int startMinute, int endHour, int endMinute) {
