@@ -8,7 +8,7 @@ import {MatSpinner} from '@angular/material/progress-spinner';
 })
 export class LoaderService {
 
-  private spinnerRef: OverlayRef = this.cdkSpinnerCreate();
+  spinnerRef: OverlayRef = this.cdkSpinnerCreate();
   private requests = 0;
 
   constructor(private overlay: Overlay) {
