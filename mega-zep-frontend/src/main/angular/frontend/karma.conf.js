@@ -39,7 +39,14 @@ module.exports = function (config) {
     logLevel: config.LOG_INFO,
     browsers: ['Chrome', 'ChromeHeadlessNoSandbox'],
     autoWatch: false,
-    restartOnFileChange: true
+    restartOnFileChange: true,
+
+    customLaunchers: {
+      ChromeHeadlessNoSandbox: {
+        base: "ChromeHeadless",
+        flags: ["--no-sandbox"]
+      }
+    }
   });
 };
 
