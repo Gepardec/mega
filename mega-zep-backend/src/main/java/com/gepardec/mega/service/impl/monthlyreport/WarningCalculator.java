@@ -47,10 +47,11 @@ public class WarningCalculator {
 
     public List<TimeWarning> determineTimeWarnings(List<ProjectEntry> projectTimeList) {
         final List<TimeWarning> warnings = new ArrayList<>();
-        for (final WarningCalculationStrategy<TimeWarning> calculation : timeWarningCalculators) {
+
+        timeWarningCalculators.forEach(calculation -> {
             final List<TimeWarning> calculatedWarnings = calculation.calculate(projectTimeList);
             calculatedWarnings.forEach(warning -> addToTimeWarnings(warnings, warning));
-        }
+        });
 
         warnings.sort(Comparator.comparing(ProjectEntryWarning::getDate));
         return warnings;
@@ -58,10 +59,12 @@ public class WarningCalculator {
 
     public List<JourneyWarning> determineJourneyWarnings(List<ProjectEntry> projectTimeList) {
         final List<JourneyWarning> warnings = new ArrayList<>();
-        for (WarningCalculationStrategy<JourneyWarning> calculator : journeyWarningCalculators) {
+
+        journeyWarningCalculators.forEach(calculator -> {
             final List<JourneyWarning> calculatedWarnings = calculator.calculate(projectTimeList);
             calculatedWarnings.forEach(warning -> addToJourneyWarnings(warnings, warning));
-        }
+        });
+
         warnings.sort(Comparator.comparing(JourneyWarning::getDate));
         return warnings;
     }
@@ -70,10 +73,10 @@ public class WarningCalculator {
         TimeOverlapCalculator timeOverlapCalculator = new TimeOverlapCalculator();
         final List<TimeOverlapWarning> warnings = new ArrayList<>();
 
-        for (WarningCalculationStrategy<TimeOverlapWarning> calculator : timeOverlapCalculators) {
+        timeOverlapCalculators.forEach(calculator -> {
             final List<TimeOverlapWarning> calculatedOverlapWarnings = calculator.calculate(projectTimeList);
             calculatedOverlapWarnings.forEach(warning -> addToTimeOverlapWarnings(warnings, warning));
-        }
+        });
 
         warnings.sort(Comparator.comparing(TimeOverlapWarning::getDate));
         return warnings;
