@@ -6,35 +6,37 @@ import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.TimeOverlapWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeOverlapWarningType;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TimeOverlapCalculator extends AbstractTimeWarningCalculationStrategy implements WarningCalculationStrategy<TimeOverlapWarning> {
 
     @Override
     public List<TimeOverlapWarning> calculate(List<ProjectEntry> projectEntries) {
-        List<TimeOverlapWarning> warningList = new ArrayList<>();
+        Set<TimeOverlapWarning> warningList = new HashSet<>();
 
-        for (int i = 0; i < projectEntries.size(); i++) {
-            for (int j = i + 1; j < projectEntries.size(); j ++) {
-                if (isOverlapping(projectEntries.get(i), projectEntries.get(j))) {
-                    List<String> tempWarning = new ArrayList<>();
+        projectEntries.forEach(entry -> {
+            projectEntries.forEach(projectEntry -> {
+                if (isOverlapping(entry, projectEntry) && entry != projectEntry) {
                     TimeOverlapWarning tempTimeOverlapWarning = new TimeOverlapWarning();
-                    tempTimeOverlapWarning.setDate(projectEntries.get(i).getDate());
+                    tempTimeOverlapWarning.setDate(entry.getDate());
                     tempTimeOverlapWarning.getWarningTypes().add(TimeOverlapWarningType.TIME_OVERLAP);
                     warningList.add(tempTimeOverlapWarning);
                 }
-            }
-        }
+            });
+        });
 
-        return warningList;
+        return new ArrayList<>(warningList);
     }
 
-    private boolean isOverlapping(ProjectEntry elementOne, ProjectEntry elementTwo) {
-        if (elementOne.getToTime().equals(elementTwo.getFromTime()) || elementOne.getFromTime().equals(elementTwo.getToTime())) {
+    private boolean isOverlapping(@NotNull ProjectEntry entryOne, @NotNull ProjectEntry entryTwo) {
+        if (entryOne.getToTime().equals(entryTwo.getFromTime()) || entryOne.getFromTime().equals(entryTwo.getToTime())) {
             return false;
         } else {
-            return !(elementOne.getToTime().isBefore(elementTwo.getFromTime()) || elementOne.getFromTime().isAfter(elementTwo.getToTime()));
+            return !(entryOne.getToTime().isBefore(entryTwo.getFromTime()) || entryOne.getFromTime().isAfter(entryTwo.getToTime()));
         }
     }
 }
