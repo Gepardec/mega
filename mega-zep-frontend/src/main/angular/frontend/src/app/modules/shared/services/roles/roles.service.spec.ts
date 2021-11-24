@@ -39,12 +39,12 @@ describe('RolesService', () => {
     router = TestBed.inject(Router);
   });
 
-  describe('on common', () => {
-    it('should return false if no user is logged in', () => {
+  describe('#on common', () => {
+    it('#isAllowed - should return false if no user is logged in', () => {
       expect(rolesService.isAllowed(configuration.PAGE_URLS.OFFICE_MANAGEMENT)).toBe(false);
     });
 
-    it('should return false if route is not found', () => {
+    it('#isAllowed - should return false if route is not found', () => {
 
       spyOnProperty(userService.user, 'value').and.returnValue({
         userId: '07-johndoe',
@@ -58,8 +58,8 @@ describe('RolesService', () => {
     });
   });
 
-  describe('on employee', () => {
-    it('should return true if user roles are sufficient', () => {
+  describe('#on employee', () => {
+    it('#isAllowed - should return true if user roles are sufficient', () => {
 
       spyOnProperty(userService.user, 'value').and.returnValue({
         userId: '07-johndoe',
@@ -72,7 +72,7 @@ describe('RolesService', () => {
       expect(rolesService.isAllowed(configuration.PAGE_URLS.MONTHLY_REPORT)).toBe(true);
     });
 
-    it('should return false if user roles are insufficient', () => {
+    it('#isAllowed - should return false if user roles are insufficient', () => {
 
       spyOnProperty(userService.user, 'value').and.returnValue({
         userId: '07-johndoe',
@@ -86,8 +86,8 @@ describe('RolesService', () => {
     });
   });
 
-  describe('on office managment', () => {
-    it('should return true if user roles are sufficient', () => {
+  describe('#on office managment', () => {
+    it('#isAllowed - should return true if user roles are sufficient', () => {
 
       spyOnProperty(userService.user, 'value').and.returnValue(
         {
@@ -102,7 +102,7 @@ describe('RolesService', () => {
       expect(rolesService.isAllowed(configuration.PAGE_URLS.OFFICE_MANAGEMENT)).toBe(true);
     });
 
-    it('should return false if user roles are sufficient', () => {
+    it('#isAllowed - should return false if user roles are sufficient', () => {
 
       spyOnProperty(userService.user, 'value').and.returnValue({
         userId: '07-johndoe',
@@ -116,8 +116,8 @@ describe('RolesService', () => {
     });
   });
 
-  describe('on project lead', () => {
-    it('should return true if user roles are sufficient', () => {
+  describe('#on project lead', () => {
+    it('#isAllowed - should return true if user roles are sufficient', () => {
 
       spyOnProperty(userService.user, 'value').and.returnValue(
         {
@@ -132,7 +132,7 @@ describe('RolesService', () => {
       expect(rolesService.isAllowed(configuration.PAGE_URLS.PROJECT_MANAGEMENT)).toBe(true);
     });
 
-    it('should return false if user roles are sufficient', () => {
+    it('#isAllowed - should return false if user roles are sufficient', () => {
       spyOnProperty(userService.user, 'value').and.returnValue(
         {
           userId: '07-johndoe',

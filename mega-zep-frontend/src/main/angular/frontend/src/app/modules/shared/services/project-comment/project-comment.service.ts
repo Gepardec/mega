@@ -13,7 +13,7 @@ export class ProjectCommentService {
               private configService: ConfigService) {
   }
 
-  get(monthYear: string, projectName: string) {
+  get(monthYear: string, projectName: string): Observable<ProjectComment> {
     return this.httpClient.get<ProjectComment>(
       this.configService.getBackendUrlWithContext('/projectcomments'), {
         params: {
@@ -23,7 +23,7 @@ export class ProjectCommentService {
       });
   }
 
-  create(comment: string, yearMonth: string, projectName: string) {
+  create(comment: string, yearMonth: string, projectName: string): Observable<ProjectComment> {
     return this.httpClient.post<ProjectComment>(
       this.configService.getBackendUrlWithContext('/projectcomments'),
       new ProjectComment(comment, yearMonth, projectName));

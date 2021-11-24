@@ -7,11 +7,8 @@ import {LogEntry} from '../../models/LogEntry';
 })
 export class LoggingService {
 
-  private level: number = configuration.LogLevel.All;
+  private level: number = configuration.LogLevel.Debug;
   private logWithDate: boolean = configuration.logWithDate;
-
-  constructor() {
-  }
 
   public writeToLog(msg: string,
                     level: number): void {
@@ -20,8 +17,7 @@ export class LoggingService {
       entry.message = msg;
       entry.level = level;
       entry.logWithDate = this.logWithDate;
-      console.log('test');
-      console.log(entry.buildLogString());
+
       console.log(entry.buildLogString());
     }
   }
@@ -33,7 +29,7 @@ export class LoggingService {
       this.level === configuration.LogLevel.All) {
       ret = true;
     }
-    console.log(ret);
+
     return ret;
   }
 }
