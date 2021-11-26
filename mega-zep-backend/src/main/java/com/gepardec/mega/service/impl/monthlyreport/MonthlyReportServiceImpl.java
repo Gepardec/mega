@@ -2,11 +2,13 @@ package com.gepardec.mega.service.impl.monthlyreport;
 
 import com.gepardec.mega.db.entity.employee.EmployeeState;
 import com.gepardec.mega.db.entity.employee.StepEntry;
+import com.gepardec.mega.domain.calculation.time.TimeOverlapCalculator;
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
+import com.gepardec.mega.domain.model.monthlyreport.TimeOverlapWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.rest.model.PmProgress;
@@ -74,6 +76,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     private MonthlyReport buildMonthlyReport(Employee employee, List<ProjectEntry> projectEntries, List<ProjektzeitType> billableEntries, List<FehlzeitType> absenceEntries, Optional<EmployeeState> employeeCheckState) {
         final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(projectEntries);
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectEntries);
+        final List<TimeOverlapWarning> timeOverlapWarnings = warningCalculator.determineTimeOverlapWarning(projectEntries);
 
         final List<Comment> comments = new ArrayList<>();
         List<PmProgress> pmProgresses = new ArrayList<>();
@@ -105,6 +108,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                 .employee(employee)
                 .timeWarnings(timeWarnings)
                 .journeyWarnings(journeyWarnings)
+                .timeOverlapWarning(timeOverlapWarnings)
                 .comments(comments)
                 .employeeCheckState(employeeCheckState.orElse(EmployeeState.OPEN))
                 .isAssigned(isAssigned)
