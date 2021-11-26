@@ -154,6 +154,7 @@ export class ProjectManagementComponent implements OnInit {
     this.pmService.getEntries(this.selectedYear, this.selectedMonth, false).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
       this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
+      this.pmEntries.sort((a, b) => a.projectName.localeCompare(b.projectName));
       this.pmEntries.forEach(pmEntry => {
           this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []));
 
