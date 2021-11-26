@@ -22,8 +22,7 @@ public class TimeOverlapWarning implements ProjectEntryWarning {
     @JsonIgnore
     private List<TimeOverlapWarningType> warningTypes = new ArrayList<>(0);
 
-    public TimeOverlapWarning() {
-    }
+    public TimeOverlapWarning() {}
 
     TimeOverlapWarning(LocalDate date) {
         this.date = date;
@@ -32,7 +31,6 @@ public class TimeOverlapWarning implements ProjectEntryWarning {
     public static TimeOverlapWarning of(LocalDate date) {
         return new TimeOverlapWarning(date);
     }
-
 
     public LocalDate getDate() {
         return date;
@@ -76,5 +74,4 @@ public class TimeOverlapWarning implements ProjectEntryWarning {
     public int hashCode() {
         return Objects.hash(date, warnings, warningTypes);
     }
-
 }
