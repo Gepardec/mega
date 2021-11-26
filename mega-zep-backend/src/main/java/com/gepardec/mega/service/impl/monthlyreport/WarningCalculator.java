@@ -41,7 +41,6 @@ public class WarningCalculator {
             new TimeOverlapCalculator()
     );
 
-
     @Inject
     ResourceBundle messages;
 
@@ -99,7 +98,6 @@ public class WarningCalculator {
     }
 
     private void addToJourneyWarnings(final List<JourneyWarning> warnings, JourneyWarning newJourneyWarning) {
-
         // convert enum type to string message
         newJourneyWarning.getWarningTypes()
                 .forEach(warningType -> newJourneyWarning.getWarnings().add(textForWarningType(warningType)));
