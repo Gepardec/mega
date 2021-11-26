@@ -7,12 +7,15 @@ import com.gepardec.mega.domain.calculation.time.CoreWorkingHoursCalculator;
 import com.gepardec.mega.domain.calculation.time.ExceededMaximumWorkingHoursPerDayCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientBreakCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientRestCalculator;
+import com.gepardec.mega.domain.calculation.time.NoEntryCalculator;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntryWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.WarningType;
+import de.provantis.zep.FehlzeitType;
 
+import javax.annotation.Nonnull;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -28,7 +31,10 @@ public class WarningCalculator {
             new ExceededMaximumWorkingHoursPerDayCalculator(),
             new InsufficientBreakCalculator(),
             new InsufficientRestCalculator(),
-            new CoreWorkingHoursCalculator());
+            new CoreWorkingHoursCalculator()/*,
+            new NoEntryCalculator()*/);
+
+
 
     private static final List<WarningCalculationStrategy<JourneyWarning>> journeyWarningCalculators = List.of(
             new InvalidJourneyCalculator(),
@@ -44,6 +50,17 @@ public class WarningCalculator {
             final List<TimeWarning> calculatedWarnings = calculation.calculate(projectTimeList);
             calculatedWarnings.forEach(warning -> addToTimeWarnings(warnings, warning));
         }
+
+        warnings.sort(Comparator.comparing(ProjectEntryWarning::getDate));
+        return warnings;
+    }
+    //TODO
+    public List<TimeWarning> determineNoTimeEntries(@Nonnull List<ProjectEntry> projectTimeList, @Nonnull List<FehlzeitType> fehlZeitTypeList) {
+        NoEntryCalculator calculator = new NoEntryCalculator();
+        final List<TimeWarning> warnings = new ArrayList<>();
+
+        final List<TimeWarning> calculatedWarnings = calculator.calculate(projectTimeList, fehlZeitTypeList);
+        calculatedWarnings.forEach(warning -> addToTimeWarnings(warnings, warning));
 
         warnings.sort(Comparator.comparing(ProjectEntryWarning::getDate));
         return warnings;
