@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class TimeOverlapWarning implements ProjectEntryWarning {
-
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
