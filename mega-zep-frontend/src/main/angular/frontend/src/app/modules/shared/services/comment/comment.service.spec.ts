@@ -55,7 +55,7 @@ describe('CommentService', () => {
     testRequest.flush(1);
   });
 
-  it('#getCommentsForEmployee - should return comments for employee', () => {
+  it('#getCommentsForEmployee - should return comments for employee', (done) => {
     const firstComment = CommentsMock.get().find(comment => comment.id === 1);
 
     const date = moment().format(CommentsMock.dateFormat);
@@ -63,26 +63,28 @@ describe('CommentService', () => {
       .subscribe(comments => {
         expect(comments).not.toBeNull();
         expect(comments.length).toEqual(1);
+        done();
       });
 
     const testRequest = httpTestingController.expectOne(configService.getBackendUrlWithContext(`/comments/getallcommentsforemployee?email=${firstComment.authorEmail}&date=${date}`));
     testRequest.flush([firstComment]);
   });
 
-  it('#createNewComment - should return new comment', () => {
+  it('#createNewComment - should return new comment', (done) => {
     const newComment = CommentsMock.createNew();
 
     commentService.createNewComment(new Employee(), newComment.message, newComment.authorEmail, Step.ACCEPT_TIMES, 'LIW-Microservices', moment().format(CommentsMock.dateFormat))
       .subscribe((comment: Comment) => {
         expect(comment).not.toBeNull();
         expect(comment.id).toEqual(4);
+        done();
       });
 
     const testRequest = httpTestingController.expectOne(configService.getBackendUrlWithContext('/comments'));
     testRequest.flush(newComment);
   });
 
-  it('#updateComment - should return updated comment', () => {
+  it('#updateComment - should return updated comment', (done) => {
     const updatedComment = CommentsMock.get().find(comment => comment.id === 1);
     updatedComment.message = "new message";
 
@@ -91,19 +93,21 @@ describe('CommentService', () => {
         expect(comment).not.toBeNull();
         expect(comment.id).toEqual(1);
         expect(comment.message).toEqual('new message');
+        done();
       });
 
     const testRequest = httpTestingController.expectOne(configService.getBackendUrlWithContext('/comments'));
     testRequest.flush(updatedComment);
   });
 
-  it('#deleteComment - should return deleted comment', () => {
+  it('#deleteComment - should return deleted comment', (done) => {
     const deletedComment = CommentsMock.get().find(comment => comment.id === 1);
 
     commentService.updateComment(deletedComment)
       .subscribe((comment: Comment) => {
         expect(comment).not.toBeNull();
         expect(comment.id).toEqual(1);
+        done();
       });
 
     const testRequest = httpTestingController.expectOne(configService.getBackendUrlWithContext('/comments'));
