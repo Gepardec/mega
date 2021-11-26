@@ -1,6 +1,7 @@
 import {ManagementEntry} from '../../shared/models/ManagementEntry';
 import {ProjectState} from '../../shared/models/ProjectState';
 import {ProjectComment} from '../../shared/models/ProjectComment';
+import {Duration} from "moment";
 
 
 export class ProjectManagementEntry {

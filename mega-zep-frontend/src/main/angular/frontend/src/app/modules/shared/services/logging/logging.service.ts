@@ -25,7 +25,7 @@ export class LoggingService {
   private shouldLog(level: number) {
     let ret = false;
     if ((level >= this.level &&
-        level !== configuration.LogLevel.Off) ||
+      level !== configuration.LogLevel.Off) ||
       this.level === configuration.LogLevel.All) {
       ret = true;
     }
