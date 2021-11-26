@@ -56,38 +56,9 @@ describe('OfficeManagementService', () => {
 
   class OfficeManagementMock {
 
-    private static email: string = 'max.muster@gepardec.com';
-    private static firstname: string = 'Max';
-    private static lastname: string = 'Muster';
-
     static year: number = 2021;
     static month: number = 10;
-
     static responseStatus: number = 200;
-
-    static employee: Employee = {
-      email: OfficeManagementMock.email,
-      active: true,
-      firstname: OfficeManagementMock.firstname,
-      lastname: OfficeManagementMock.lastname,
-      releaseDate: '2021-10-01',
-      salutation: 'Herr',
-      title: 'MSc',
-      userId: '011-mmuster',
-      workDescription: 'Software-Engineer'
-    }
-
-    static employeeProgresses: Array<PmProgress> = [
-      {
-        firstname: OfficeManagementMock.firstname,
-        lastname: OfficeManagementMock.lastname,
-        state: State.DONE,
-        assigneeEmail: OfficeManagementMock.email,
-        project: 'Liw-Microservices',
-        stepId: 1
-      }
-    ]
-
     static managementEntries: Array<ManagementEntry> = [
       {
         employee: OfficeManagementMock.employee,
@@ -101,6 +72,30 @@ describe('OfficeManagementService', () => {
         finishedComments: 10,
         nonBillableTime: '14',
         totalComments: 20
+      }
+    ]
+    private static email: string = 'max.muster@gepardec.com';
+    private static firstname: string = 'Max';
+    private static lastname: string = 'Muster';
+    static employee: Employee = {
+      email: OfficeManagementMock.email,
+      active: true,
+      firstname: OfficeManagementMock.firstname,
+      lastname: OfficeManagementMock.lastname,
+      releaseDate: '2021-10-01',
+      salutation: 'Herr',
+      title: 'MSc',
+      userId: '011-mmuster',
+      workDescription: 'Software-Engineer'
+    }
+    static employeeProgresses: Array<PmProgress> = [
+      {
+        firstname: OfficeManagementMock.firstname,
+        lastname: OfficeManagementMock.lastname,
+        state: State.DONE,
+        assigneeEmail: OfficeManagementMock.email,
+        project: 'Liw-Microservices',
+        stepId: 1
       }
     ]
 

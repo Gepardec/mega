@@ -18,12 +18,12 @@
         <mat-hint align="end">{{newMessage.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
       </mat-form-field>
 
-      <span matTooltip="{{'comments-for-employee.characterRangeTooltip' | translate}}"
-            [matTooltipDisabled]="!(newMessage?.value?.length == 0 || newMessage?.value?.length > MAXIMUM_LETTERS)"
-            [matTooltipPosition]="'right'">
+      <span [matTooltipDisabled]="!(newMessage?.value?.length == 0 || newMessage?.value?.length > MAXIMUM_LETTERS)"
+            [matTooltipPosition]="'right'"
+            matTooltip="{{'comments-for-employee.characterRangeTooltip' | translate}}">
         <button
-          [disabled]="newMessage?.value?.length == 0 || newMessage?.value?.length > MAXIMUM_LETTERS"
           (click)="createCommentForEmployee(newMessage.value);newMessage.value = ''"
+          [disabled]="newMessage?.value?.length == 0 || newMessage?.value?.length > MAXIMUM_LETTERS"
           mat-raised-button>
           {{'comments-for-employee.addCommentBtn' | translate}}
         </button>
@@ -76,8 +76,8 @@
         <td class="mat-cell">
           <ng-container *ngIf="comment.isEditing">
             <button
-              [disabled]="editMessageInput.value.length == 0 || editMessageInput.value.length > MAXIMUM_LETTERS"
               (click)="comment.message = editMessageInput.value; toggleIsEditing(comment); updateCommentForEmployee(comment);"
+              [disabled]="editMessageInput.value.length == 0 || editMessageInput.value.length > MAXIMUM_LETTERS"
               mat-icon-button>
               <mat-icon>done</mat-icon>
             </button>

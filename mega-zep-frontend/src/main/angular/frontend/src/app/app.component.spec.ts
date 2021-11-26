@@ -1,13 +1,13 @@
-import { async, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { AppComponent } from './app.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { ConfigService } from './modules/shared/services/config/config.service';
-import { UserService } from './modules/shared/services/user/user.service';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Config } from './modules/shared/models/Config';
-import { TranslateModule } from '@ngx-translate/core';
+import {async, TestBed} from '@angular/core/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {AppComponent} from './app.component';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {OAuthService} from 'angular-oauth2-oidc';
+import {ConfigService} from './modules/shared/services/config/config.service';
+import {UserService} from './modules/shared/services/user/user.service';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {Config} from './modules/shared/models/Config';
+import {TranslateModule} from '@ngx-translate/core';
 
 describe('AppComponent', () => {
 

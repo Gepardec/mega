@@ -48,10 +48,9 @@ export class InlineTextEditorComponent implements OnInit, AfterViewInit {
 
   onCancel(event, inputElement: HTMLTextAreaElement) {
     console.log(event);
-    if (!event.relatedTarget || event.relatedTarget.id !== 'savebutton'){
+    if (!event.relatedTarget || event.relatedTarget.id !== 'savebutton') {
       this.commentChange.emit(this.comment);
-    }
-    else {
+    } else {
       this.onSave(inputElement);
     }
   }

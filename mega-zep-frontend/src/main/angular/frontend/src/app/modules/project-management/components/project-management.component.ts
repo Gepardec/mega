@@ -150,27 +150,6 @@ export class ProjectManagementComponent implements OnInit {
       .subscribe(() => row.projectCheckState = State.DONE);
   }
 
-  private getPmEntries() {
-    this.pmService.getEntries(this.selectedYear, this.selectedMonth, false).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
-      this.pmEntries = pmEntries;
-      this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
-      this.pmEntries.forEach(pmEntry => {
-          this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []));
-          this.projectCommentService.get(this.getFormattedDate(), pmEntry.projectName)
-            .subscribe(projectComment => {
-              pmEntry.projectComment = projectComment;
-            });
-        }
-      );
-    });
-  }
-
-  private findEntriesForProject(projectName: string) {
-    return this.pmEntries.filter(entry => {
-      return entry.projectName === projectName;
-    })[0].entries;
-  }
-
   getCurrentReleaseDate(): Date {
     if (this.pmEntries) {
       const entries = [];
@@ -190,10 +169,6 @@ export class ProjectManagementComponent implements OnInit {
     }
 
     return new Date();
-  }
-
-  private getFormattedDate() {
-    return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
   }
 
   onChangeControlProjectState($event: MatSelectChange, pmEntry: ProjectManagementEntry, controlProjectStateSelect: ProjectStateSelectComponent) {
@@ -296,5 +271,30 @@ export class ProjectManagementComponent implements OnInit {
 
   convertDurationToTime(durationInSeconds: number): number {
     return durationInSeconds / 60 / 60;
+  }
+
+  private getPmEntries() {
+    this.pmService.getEntries(this.selectedYear, this.selectedMonth, false).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
+      this.pmEntries = pmEntries;
+      this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
+      this.pmEntries.forEach(pmEntry => {
+          this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []));
+          this.projectCommentService.get(this.getFormattedDate(), pmEntry.projectName)
+            .subscribe(projectComment => {
+              pmEntry.projectComment = projectComment;
+            });
+        }
+      );
+    });
+  }
+
+  private findEntriesForProject(projectName: string) {
+    return this.pmEntries.filter(entry => {
+      return entry.projectName === projectName;
+    })[0].entries;
+  }
+
+  private getFormattedDate() {
+    return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
   }
 }

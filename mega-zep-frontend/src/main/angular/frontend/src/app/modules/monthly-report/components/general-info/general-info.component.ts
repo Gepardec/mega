@@ -58,7 +58,7 @@ export class GeneralInfoComponent implements OnInit {
     return (this.monthlyReportService.billableTimeHours / this.monthlyReportService.totalWorkingTimeHours) * 100;
   }
 
-  month(number: number): string{
+  month(number: number): string {
     moment.locale('de');
     return moment().month(number).format("MMMM");
   }

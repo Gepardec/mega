@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { GeneralInfoComponent } from './general-info.component';
+import {GeneralInfoComponent} from './general-info.component';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
 
@@ -11,10 +11,10 @@ describe('GeneralInfoComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [TranslateModule.forRoot()],
-      declarations: [ GeneralInfoComponent ],
+      declarations: [GeneralInfoComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
