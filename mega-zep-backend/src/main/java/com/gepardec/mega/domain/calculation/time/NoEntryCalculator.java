@@ -80,4 +80,10 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
         return absenceDates;
     }
 
+    public List<LocalDate> getLocalDateList(LocalDate startDate, LocalDate endDate) {
+        List<LocalDate> list = new ArrayList<>();
+        for (int i = startDate.getDayOfMonth(); i <= endDate.getDayOfMonth(); i++) {
+
+        }
+    }
 }
