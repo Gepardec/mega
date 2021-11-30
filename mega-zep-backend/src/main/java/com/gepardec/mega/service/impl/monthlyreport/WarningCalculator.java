@@ -11,7 +11,6 @@ import com.gepardec.mega.domain.calculation.time.TimeOverlapCalculator;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntryWarning;
-import com.gepardec.mega.domain.model.monthlyreport.TimeOverlapWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.WarningType;
 
@@ -30,15 +29,12 @@ public class WarningCalculator {
             new ExceededMaximumWorkingHoursPerDayCalculator(),
             new InsufficientBreakCalculator(),
             new InsufficientRestCalculator(),
-            new CoreWorkingHoursCalculator());
+            new CoreWorkingHoursCalculator(),
+            new TimeOverlapCalculator());
 
     private static final List<WarningCalculationStrategy<JourneyWarning>> journeyWarningCalculators = List.of(
             new InvalidJourneyCalculator(),
             new InvalidWorkingLocationInJourneyCalculator()
-    );
-
-    private static final List<WarningCalculationStrategy<TimeOverlapWarning>> timeOverlapCalculators = List.of(
-            new TimeOverlapCalculator()
     );
 
     @Inject
@@ -65,19 +61,6 @@ public class WarningCalculator {
         });
 
         warnings.sort(Comparator.comparing(JourneyWarning::getDate));
-        return warnings;
-    }
-
-    public List<TimeOverlapWarning> determineTimeOverlapWarning(List<ProjectEntry> projectTimeList) {
-        TimeOverlapCalculator timeOverlapCalculator = new TimeOverlapCalculator();
-        final List<TimeOverlapWarning> warnings = new ArrayList<>();
-
-        timeOverlapCalculators.forEach(calculator -> {
-            final List<TimeOverlapWarning> calculatedOverlapWarnings = calculator.calculate(projectTimeList);
-            calculatedOverlapWarnings.forEach(warning -> addToTimeOverlapWarnings(warnings, warning));
-        });
-
-        warnings.sort(Comparator.comparing(TimeOverlapWarning::getDate));
         return warnings;
     }
 
@@ -111,22 +94,6 @@ public class WarningCalculator {
             journeyWarning.get().getWarningTypes().addAll(newJourneyWarning.getWarningTypes());
         } else {
             warnings.add(newJourneyWarning);
-        }
-    }
-
-    private void addToTimeOverlapWarnings(final List<TimeOverlapWarning> warnings, TimeOverlapWarning newTimeOverlapWarning) {
-        newTimeOverlapWarning.getWarningTypes()
-                .forEach(warningType ->newTimeOverlapWarning.getWarnings().add(textForWarningType(warningType)));
-
-        Optional<TimeOverlapWarning> timeOverlapWarning = warnings.stream()
-                .filter(warn -> warn.getDate().isEqual(newTimeOverlapWarning.getDate()))
-                .findAny();
-
-        if (timeOverlapWarning.isPresent()) {
-            timeOverlapWarning.get().getWarnings().addAll(newTimeOverlapWarning.getWarnings());
-            timeOverlapWarning.get().getWarningTypes().addAll(newTimeOverlapWarning.getWarningTypes());
-        } else {
-            warnings.add(newTimeOverlapWarning);
         }
     }
 

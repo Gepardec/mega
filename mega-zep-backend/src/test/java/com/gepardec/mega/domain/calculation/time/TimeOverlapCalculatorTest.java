@@ -3,7 +3,7 @@ package com.gepardec.mega.domain.calculation.time;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
-import com.gepardec.mega.domain.model.monthlyreport.TimeOverlapWarning;
+import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +24,7 @@ class TimeOverlapCalculatorTest {
     void calculate_whenProjectEntriesWithoutOverlap_thenNoWarning() {
         List<ProjectEntry> projectEntries = generateProjectEntriesListWithoutOverlap();
 
-        List<TimeOverlapWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
+        List<TimeWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
 
         assertTrue(warnings.isEmpty());
     }
@@ -33,7 +33,7 @@ class TimeOverlapCalculatorTest {
     void calculate_whenProjectEntriesStartAndEndOverlap_thenNoWarning() {
         List<ProjectEntry> projectEntries = generateProjectEntriesListWhereEndAndStartOverlap();
 
-        List<TimeOverlapWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
+        List<TimeWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
 
         assertTrue(warnings.isEmpty());
     }
@@ -42,7 +42,7 @@ class TimeOverlapCalculatorTest {
     void calculate_whenProjectEntriesOverlap_thenWarning() {
         List<ProjectEntry> projectEntries = generateProjectEntriesWithOverlap();
 
-        List<TimeOverlapWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
+        List<TimeWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
 
         assertFalse(warnings.isEmpty());
     }
@@ -51,7 +51,7 @@ class TimeOverlapCalculatorTest {
     void calculate_whenProjectEntriesOverlap_thenCorrectDate() {
         List<ProjectEntry> projectEntries = generateProjectEntriesWithOverlap();
 
-        List<TimeOverlapWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
+        List<TimeWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
 
         assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate());
     }
@@ -72,7 +72,7 @@ class TimeOverlapCalculatorTest {
         projectEntries.add(entryFour);
         projectEntries.add(entryFive);
 
-        List<TimeOverlapWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
+        List<TimeWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
 
         assertEquals(2, warnings.size());
     }
