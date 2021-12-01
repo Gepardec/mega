@@ -54,7 +54,7 @@ public class WarningCalculator {
         warnings.sort(Comparator.comparing(ProjectEntryWarning::getDate));
         return warnings;
     }
-    //TODO
+
     public List<TimeWarning> determineNoTimeEntries(@Nonnull List<ProjectEntry> projectTimeList, @Nonnull List<FehlzeitType> fehlZeitTypeList) {
         NoEntryCalculator calculator = new NoEntryCalculator();
         final List<TimeWarning> warnings = new ArrayList<>();

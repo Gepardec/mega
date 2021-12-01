@@ -1,52 +1,78 @@
 package com.gepardec.mega.domain.calculation.time;
 
 import com.gepardec.mega.domain.calculation.AbstractTimeWarningCalculationStrategy;
-import com.gepardec.mega.domain.calculation.WarningCalculationStrategy;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarningType;
-import de.jollyday.Holiday;
 import de.jollyday.HolidayCalendar;
 import de.jollyday.HolidayManager;
 import de.provantis.zep.FehlzeitType;
 
+import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.YearMonth;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
-    //TODO
-    public List<TimeWarning> calculate(List<ProjectEntry> projectTimeEntries, List<FehlzeitType> absenceEntries) {
-        final List<TimeWarning> warnings = new ArrayList<>();
-        List<LocalDate> businessDays = getBusinessDaysOfMonth(projectTimeEntries.get(0).getDate().getYear(), projectTimeEntries.get(0).getDate().getMonth().getValue());
 
-        businessDays.forEach(date -> {
+    public List<TimeWarning> calculate(@NotNull List<ProjectEntry> projectTimeEntries, @NotNull List<FehlzeitType> absenceEntries) {
+        if (projectTimeEntries.isEmpty()) {
+            TimeWarning timeWarning = new TimeWarning();
+            timeWarning.getWarningTypes().add(TimeWarningType.EMPTY_ENTRY_LIST);
+            List<TimeWarning> timeWarnings = new ArrayList<>();
+            timeWarnings.add(timeWarning);
+
+            return timeWarnings;
+        } else {
+            Set<TimeWarning> warnings = new HashSet<>();
+            List<LocalDate> datesWithBookings = new ArrayList<>();
+            List<LocalDate> businessDays = getBusinessDaysOfMonth(projectTimeEntries.get(0).getDate().getYear(), projectTimeEntries.get(0).getDate().getMonth().getValue());
+            //create lists of all compensatory and vacation days
+            List<LocalDate> compensatoryDays = filterAbscenceTypesAndCompileLocalDateList("FA", absenceEntries);
+            List<LocalDate> vacationDays = filterAbscenceTypesAndCompileLocalDateList("UB", absenceEntries);
+
+            //remove compensatoryDays and vacationDays from businessDays list
+            businessDays.removeAll(compensatoryDays);
+            businessDays.removeAll(vacationDays);
+
+            //check business days against days which have booking entries
             projectTimeEntries.forEach(projectTimeEntry -> {
-                if (!date.equals(projectTimeEntry.getDate())) {
-                    warnings.add(createTimeWarning(date));
-                }
+                businessDays.forEach(date -> {
+                    if(date.equals(projectTimeEntry.getDate())) {
+                        datesWithBookings.add(date);
+                    }
+                });
             });
-        });
 
-        return warnings;
+            //remove dates with booking entries
+            businessDays.removeAll(datesWithBookings);
+            //create warnings for remaining business days
+            businessDays.forEach(date -> {
+                warnings.add(createTimeWarning(date));
+            });
+
+            return new ArrayList<>(warnings);
+        }
+
     }
-    //TODO change to private
-    public List<LocalDate> getBusinessDaysOfMonth(int year, int month) {
+
+    private List<LocalDate> getBusinessDaysOfMonth(@NotNull int year, @NotNull int month) {
         YearMonth yearMonth = YearMonth.of(year, month);
         int daysInMonth = yearMonth.lengthOfMonth();
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = LocalDate.of(year, month, daysInMonth);
         return getBusinessDays(startDate, endDate);
     }
-    //TODO change to private
-    public List<LocalDate> getBusinessDays(LocalDate startDate, LocalDate endDate) {
+
+    private List<LocalDate> getBusinessDays(@NotNull LocalDate startDate, @NotNull LocalDate endDate) {
         Predicate<LocalDate> isWeekend = date -> date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY;
         Predicate<LocalDate> isHoliday = this::isHoliday;
         endDate = endDate.plusDays(1);
@@ -54,8 +80,8 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
                 .filter(isWeekend.or(isHoliday).negate())
                 .collect(Collectors.toList());
     }
-    //TODO change to private
-    public boolean isHoliday(LocalDate date) {
+
+    private boolean isHoliday(@NotNull LocalDate date) {
         HolidayManager holidayManager = HolidayManager.getInstance(HolidayCalendar.AUSTRIA);
         return holidayManager.isHoliday(date);
     }
@@ -67,23 +93,37 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
 
         return timeWarning;
     }
-    //TODO change to private
-    public List<LocalDate> convertAbsenceEntriesToDates(List<FehlzeitType> absenceEntries) {
+
+    private List<LocalDate> convertAbsenceEntriesToDates(@NotNull List<FehlzeitType> absenceEntries) {
         List<LocalDate> absenceDates = new ArrayList<>();
         absenceEntries.forEach(fzt -> {
             LocalDate startDate = LocalDate.parse(fzt.getStartdatum());
             LocalDate endDate = LocalDate.parse(fzt.getEnddatum());
-
-
         });
 
         return absenceDates;
     }
 
-    public List<LocalDate> getLocalDateList(LocalDate startDate, LocalDate endDate) {
-        List<LocalDate> list = new ArrayList<>();
-        for (int i = startDate.getDayOfMonth(); i <= endDate.getDayOfMonth(); i++) {
+    private List<LocalDate> filterAbscenceTypesAndCompileLocalDateList(@NotNull String type, @NotNull List<FehlzeitType> absenceEntries) {
+        List<LocalDate> compensatoryDays = new ArrayList<>();
+        absenceEntries.stream()
+                .filter(fzt -> fzt.getFehlgrund().equals(type))
+                .forEach(fzt -> {
+                    if (fzt.getStartdatum().equals(fzt.getEnddatum())) {
+                        LocalDate date = LocalDate.parse(fzt.getStartdatum());
+                        compensatoryDays.add(date);
+                    } else {
+                        LocalDate startDate = LocalDate.parse(fzt.getStartdatum());
+                        LocalDate endDate = LocalDate.parse(fzt.getEnddatum());
+                        List<LocalDate> datesBetweenStartAndEnd = Stream.iterate(startDate, date -> date.plusDays(1))
+                                .limit(ChronoUnit.DAYS.between(startDate, endDate))
+                                .collect(Collectors.toList());
+                        compensatoryDays.add(startDate);
+                        compensatoryDays.addAll(datesBetweenStartAndEnd);
+                        compensatoryDays.add(endDate);
+                    }
+                });
 
-        }
+        return compensatoryDays;
     }
 }

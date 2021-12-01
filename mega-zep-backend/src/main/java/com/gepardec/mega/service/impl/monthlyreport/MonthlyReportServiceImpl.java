@@ -74,9 +74,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     private MonthlyReport buildMonthlyReport(Employee employee, List<ProjectEntry> projectEntries, List<ProjektzeitType> billableEntries, List<FehlzeitType> absenceEntries, Optional<EmployeeState> employeeCheckState) {
         final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(projectEntries);
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectEntries);
-        //TODO
-        final List<TimeWarning> noEntryWarning = warningCalculator.determineNoTimeEntries(projectEntries, absenceEntries);
-        timeWarnings.addAll(noEntryWarning);
+        timeWarnings.addAll(warningCalculator.determineNoTimeEntries(projectEntries, absenceEntries));
 
         final List<Comment> comments = new ArrayList<>();
         List<PmProgress> pmProgresses = new ArrayList<>();
