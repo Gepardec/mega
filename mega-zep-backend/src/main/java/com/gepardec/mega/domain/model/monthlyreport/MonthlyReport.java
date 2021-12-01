@@ -38,10 +38,6 @@ public class MonthlyReport {
 
     @Nullable
     @JsonProperty
-    private final List<TimeOverlapWarning> timeOverlapWarning;
-
-    @Nullable
-    @JsonProperty
     private final List<Comment> comments;
 
     @Nullable
