@@ -197,9 +197,11 @@
               </mat-cell>
 
               <mat-footer-cell *matFooterCellDef>
-                <app-billable-times-fraction
-                  [billableTimes]="convertDurationToTime(pmEntry.aggregatedBillableWorkTimeInSeconds)"
-                  [nonBillableTimes]="convertDurationToTime(pmEntry.aggregatedNonBillableWorkTimeInSeconds)"></app-billable-times-fraction>
+                <strong>
+                  <app-billable-times-fraction
+                    [billableTimes]="convertDurationToTime(pmEntry.aggregatedBillableWorkTimeInSeconds)"
+                    [nonBillableTimes]="convertDurationToTime(pmEntry.aggregatedNonBillableWorkTimeInSeconds)"></app-billable-times-fraction>
+                </strong>
               </mat-footer-cell>
             </ng-container>
 
