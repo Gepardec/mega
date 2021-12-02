@@ -7,6 +7,7 @@ import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectEntryWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.rest.model.PmProgress;
@@ -23,6 +24,7 @@ import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,6 +77,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(projectEntries);
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectEntries);
         timeWarnings.addAll(warningCalculator.determineNoTimeEntries(projectEntries, absenceEntries));
+        timeWarnings.sort(Comparator.comparing(ProjectEntryWarning::getDate));
 
         final List<Comment> comments = new ArrayList<>();
         List<PmProgress> pmProgresses = new ArrayList<>();

@@ -23,8 +23,8 @@ import java.util.stream.Stream;
 
 public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
 
-    public List<TimeWarning> calculate(@NotNull List<ProjectEntry> projectTimeEntries, @NotNull List<FehlzeitType> absenceEntries) {
-        if (projectTimeEntries.isEmpty()) {
+    public List<TimeWarning> calculate(@NotNull List<ProjectEntry> projectEntries, @NotNull List<FehlzeitType> absenceEntries) {
+        if (projectEntries.isEmpty()) {
             TimeWarning timeWarning = new TimeWarning();
             timeWarning.getWarningTypes().add(TimeWarningType.EMPTY_ENTRY_LIST);
             List<TimeWarning> timeWarnings = new ArrayList<>();
@@ -35,14 +35,14 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
             Set<TimeWarning> warnings = new HashSet<>();
             List<LocalDate> datesWithBookings = new ArrayList<>();
 
-            List<LocalDate> businessDays = getBusinessDaysOfMonth(projectTimeEntries.get(0).getDate().getYear(), projectTimeEntries.get(0).getDate().getMonth().getValue());
+            List<LocalDate> businessDays = getBusinessDaysOfMonth(projectEntries.get(0).getDate().getYear(), projectEntries.get(0).getDate().getMonth().getValue());
             List<LocalDate> compensatoryDays = filterAbsenceTypesAndCompileLocalDateList("FA", absenceEntries);
             List<LocalDate> vacationDays = filterAbsenceTypesAndCompileLocalDateList("UB", absenceEntries);
 
             businessDays.removeAll(compensatoryDays);
             businessDays.removeAll(vacationDays);
 
-            projectTimeEntries.forEach(projectTimeEntry -> {
+            projectEntries.forEach(projectTimeEntry -> {
                 businessDays.forEach(date -> {
                     if(date.equals(projectTimeEntry.getDate())) {
                         datesWithBookings.add(date);
