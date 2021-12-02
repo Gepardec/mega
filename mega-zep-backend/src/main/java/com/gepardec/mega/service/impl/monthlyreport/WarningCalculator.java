@@ -7,15 +7,13 @@ import com.gepardec.mega.domain.calculation.time.CoreWorkingHoursCalculator;
 import com.gepardec.mega.domain.calculation.time.ExceededMaximumWorkingHoursPerDayCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientBreakCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientRestCalculator;
-import com.gepardec.mega.domain.calculation.time.NoEntryCalculator;
+import com.gepardec.mega.domain.calculation.time.TimeOverlapCalculator;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntryWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.WarningType;
-import de.provantis.zep.FehlzeitType;
 
-import javax.annotation.Nonnull;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -31,10 +29,8 @@ public class WarningCalculator {
             new ExceededMaximumWorkingHoursPerDayCalculator(),
             new InsufficientBreakCalculator(),
             new InsufficientRestCalculator(),
-            new CoreWorkingHoursCalculator()/*,
-            new NoEntryCalculator()*/);
-
-
+            new CoreWorkingHoursCalculator(),
+            new TimeOverlapCalculator());
 
     private static final List<WarningCalculationStrategy<JourneyWarning>> journeyWarningCalculators = List.of(
             new InvalidJourneyCalculator(),
@@ -46,21 +42,11 @@ public class WarningCalculator {
 
     public List<TimeWarning> determineTimeWarnings(List<ProjectEntry> projectTimeList) {
         final List<TimeWarning> warnings = new ArrayList<>();
-        for (final WarningCalculationStrategy<TimeWarning> calculation : timeWarningCalculators) {
+
+        timeWarningCalculators.forEach(calculation -> {
             final List<TimeWarning> calculatedWarnings = calculation.calculate(projectTimeList);
             calculatedWarnings.forEach(warning -> addToTimeWarnings(warnings, warning));
-        }
-
-        warnings.sort(Comparator.comparing(ProjectEntryWarning::getDate));
-        return warnings;
-    }
-
-    public List<TimeWarning> determineNoTimeEntries(@Nonnull List<ProjectEntry> projectTimeList, @Nonnull List<FehlzeitType> fehlZeitTypeList) {
-        NoEntryCalculator calculator = new NoEntryCalculator();
-        final List<TimeWarning> warnings = new ArrayList<>();
-
-        final List<TimeWarning> calculatedWarnings = calculator.calculate(projectTimeList, fehlZeitTypeList);
-        calculatedWarnings.forEach(warning -> addToTimeWarnings(warnings, warning));
+        });
 
         warnings.sort(Comparator.comparing(ProjectEntryWarning::getDate));
         return warnings;
@@ -68,10 +54,12 @@ public class WarningCalculator {
 
     public List<JourneyWarning> determineJourneyWarnings(List<ProjectEntry> projectTimeList) {
         final List<JourneyWarning> warnings = new ArrayList<>();
-        for (WarningCalculationStrategy<JourneyWarning> calculator : journeyWarningCalculators) {
+
+        journeyWarningCalculators.forEach(calculator -> {
             final List<JourneyWarning> calculatedWarnings = calculator.calculate(projectTimeList);
             calculatedWarnings.forEach(warning -> addToJourneyWarnings(warnings, warning));
-        }
+        });
+
         warnings.sort(Comparator.comparing(JourneyWarning::getDate));
         return warnings;
     }
@@ -93,7 +81,6 @@ public class WarningCalculator {
     }
 
     private void addToJourneyWarnings(final List<JourneyWarning> warnings, JourneyWarning newJourneyWarning) {
-
         // convert enum type to string message
         newJourneyWarning.getWarningTypes()
                 .forEach(warningType -> newJourneyWarning.getWarnings().add(textForWarningType(warningType)));
