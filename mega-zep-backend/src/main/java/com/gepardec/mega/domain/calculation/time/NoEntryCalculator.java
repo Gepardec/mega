@@ -34,16 +34,14 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
         } else {
             Set<TimeWarning> warnings = new HashSet<>();
             List<LocalDate> datesWithBookings = new ArrayList<>();
+
             List<LocalDate> businessDays = getBusinessDaysOfMonth(projectTimeEntries.get(0).getDate().getYear(), projectTimeEntries.get(0).getDate().getMonth().getValue());
-            //create lists of all compensatory and vacation days
             List<LocalDate> compensatoryDays = filterAbscenceTypesAndCompileLocalDateList("FA", absenceEntries);
             List<LocalDate> vacationDays = filterAbscenceTypesAndCompileLocalDateList("UB", absenceEntries);
 
-            //remove compensatoryDays and vacationDays from businessDays list
             businessDays.removeAll(compensatoryDays);
             businessDays.removeAll(vacationDays);
 
-            //check business days against days which have booking entries
             projectTimeEntries.forEach(projectTimeEntry -> {
                 businessDays.forEach(date -> {
                     if(date.equals(projectTimeEntry.getDate())) {
@@ -52,16 +50,13 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
                 });
             });
 
-            //remove dates with booking entries
             businessDays.removeAll(datesWithBookings);
-            //create warnings for remaining business days
             businessDays.forEach(date -> {
                 warnings.add(createTimeWarning(date));
             });
 
             return new ArrayList<>(warnings);
         }
-
     }
 
     private List<LocalDate> getBusinessDaysOfMonth(@NotNull int year, @NotNull int month) {
