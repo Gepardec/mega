@@ -40,7 +40,6 @@ public class NoEntryCalculatorTest {
 
     @Test
     void calculate_whenMissingEntry_thenCorrectWarningWithCorrectDate() {
-        //create expected list
         TimeWarning expectedTimeWarning = new TimeWarning();
         expectedTimeWarning.getWarningTypes().add(TimeWarningType.EMPTY_ENTRY_LIST);
         expectedTimeWarning.setDate(LocalDate.of(2021, 2, 26));
