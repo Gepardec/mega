@@ -101,23 +101,26 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
 
     private List<LocalDate> filterAbsenceTypesAndCompileLocalDateList(String type, List<FehlzeitType> absenceEntries) {
         List<LocalDate> compensatoryDays = new ArrayList<>();
-        absenceEntries.stream()
-                .filter(fzt -> fzt.getFehlgrund().equals(type))
-                .forEach(fzt -> {
-                    if (fzt.getStartdatum().equals(fzt.getEnddatum())) {
-                        LocalDate date = LocalDate.parse(fzt.getStartdatum());
-                        compensatoryDays.add(date);
-                    } else {
-                        LocalDate startDate = LocalDate.parse(fzt.getStartdatum());
-                        LocalDate endDate = LocalDate.parse(fzt.getEnddatum());
-                        List<LocalDate> datesBetweenStartAndEnd = Stream.iterate(startDate, date -> date.plusDays(1))
-                                .limit(ChronoUnit.DAYS.between(startDate, endDate))
-                                .collect(Collectors.toList());
-                        compensatoryDays.add(startDate);
-                        compensatoryDays.addAll(datesBetweenStartAndEnd);
-                        compensatoryDays.add(endDate);
-                    }
-                });
+
+        if(!absenceEntries.isEmpty()) {
+            absenceEntries.stream()
+                    .filter(fzt -> fzt.getFehlgrund().equals(type))
+                    .forEach(fzt -> {
+                        if (fzt.getStartdatum().equals(fzt.getEnddatum())) {
+                            LocalDate date = LocalDate.parse(fzt.getStartdatum());
+                            compensatoryDays.add(date);
+                        } else {
+                            LocalDate startDate = LocalDate.parse(fzt.getStartdatum());
+                            LocalDate endDate = LocalDate.parse(fzt.getEnddatum());
+                            List<LocalDate> datesBetweenStartAndEnd = Stream.iterate(startDate, date -> date.plusDays(1))
+                                    .limit(ChronoUnit.DAYS.between(startDate, endDate))
+                                    .collect(Collectors.toList());
+                            compensatoryDays.add(startDate);
+                            compensatoryDays.addAll(datesBetweenStartAndEnd);
+                            compensatoryDays.add(endDate);
+                        }
+                    });
+        }
 
         return compensatoryDays;
     }

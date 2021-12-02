@@ -5,6 +5,8 @@ import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
+import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
+import com.gepardec.mega.domain.model.monthlyreport.TimeWarningType;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
@@ -22,7 +24,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MonthlyReportServiceImplTest {
@@ -33,7 +41,7 @@ class MonthlyReportServiceImplTest {
     @Mock
     private ResourceBundle resourceBundle;
 
-    @Spy
+    @Mock
     private WarningCalculator warningCalculator;
 
     @Mock
@@ -42,12 +50,19 @@ class MonthlyReportServiceImplTest {
     @Mock
     private StepEntryService stepEntryService;
 
+    @Mock
+    ResourceBundle messages;
+
+    //@Mock
+    //private WarningCalculator warningCalculator;
+
     @InjectMocks
     private MonthlyReportServiceImpl workerService;
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterNull() {
-        Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(null);
+        when(zepService.getEmployee(Mockito.any())).thenReturn(null);
+        when(warningCalculator.determineNoTimeEntries(anyList(), anyList())).thenReturn(new ArrayList<TimeWarning>());
 
         Assertions.assertNotNull(workerService.getMonthendReportForUser("0"));
     }
@@ -55,7 +70,7 @@ class MonthlyReportServiceImplTest {
     // @Test FIXME
     void testGetMonthendReportForUser_MitarbeiterValid() {
         final Employee employee = createEmployeeWithReleaseDate(0, "NULL");
-        Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
+        when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
 
         Assertions.assertNotNull(workerService.getMonthendReportForUser("0"));
     }
@@ -63,8 +78,9 @@ class MonthlyReportServiceImplTest {
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenValid() {
         final Employee employee = createEmployee(0);
-        Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
-        Mockito.when(zepService.getProjectTimes(Mockito.any(), Mockito.any())).thenReturn(new ArrayList<>());
+        when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(), Mockito.any())).thenReturn(new ArrayList<>());
+        when(warningCalculator.determineNoTimeEntries(anyList(), anyList())).thenReturn(new ArrayList<TimeWarning>());
 
         Assertions.assertNotNull(workerService.getMonthendReportForUser("0"));
     }
@@ -72,8 +88,9 @@ class MonthlyReportServiceImplTest {
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenValid_NoWarning() {
         final Employee employee = createEmployee(0);
-        Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
-        Mockito.when(zepService.getProjectTimes(Mockito.any(), Mockito.any())).thenReturn(createReadProjektzeitenResponseType(10));
+        when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(), Mockito.any())).thenReturn(createReadProjektzeitenResponseType(10));
+        when(warningCalculator.determineNoTimeEntries(anyList(), anyList())).thenReturn(new ArrayList<TimeWarning>());
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
         Assertions.assertNotNull(monthendReportForUser);
@@ -85,17 +102,31 @@ class MonthlyReportServiceImplTest {
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenValid_Warning() {
         final Employee employee = createEmployee(0);
-        Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
-        Mockito.when(zepService.getProjectTimes(Mockito.any(), Mockito.any())).thenReturn(createReadProjektzeitenResponseType(18));
+        when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(), Mockito.any())).thenReturn(createReadProjektzeitenResponseType(18));
+        when(zepService.getAbsenceForEmployee(any(Employee.class), any(LocalDate.class))).thenReturn(new ArrayList<>());
+        when(warningCalculator.determineTimeWarnings(anyList())).thenReturn(createTimeWarningList());
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
         Assertions.assertNotNull(monthendReportForUser);
         Assertions.assertEquals("Max_0@gepardec.com", monthendReportForUser.employee().email());
         Assertions.assertNotNull(monthendReportForUser.timeWarnings());
-        Assertions.assertFalse(monthendReportForUser.timeWarnings().isEmpty());
+        Assertions.assertFalse(Objects.requireNonNull(monthendReportForUser.timeWarnings()).isEmpty());
         Assertions.assertEquals(LocalDate.of(2020, 1, 31), monthendReportForUser.timeWarnings().get(0).getDate());
         Assertions.assertEquals(1d, monthendReportForUser.timeWarnings().get(0).getExcessWorkTime());
         Assertions.assertEquals(0.5d, monthendReportForUser.timeWarnings().get(0).getMissingBreakTime());
+    }
+
+    private List<TimeWarning> createTimeWarningList() {
+        TimeWarning timewarning = new TimeWarning();
+        timewarning.setDate(LocalDate.of(2020, 1, 31));
+        timewarning.getWarningTypes().add(TimeWarningType.OUTSIDE_CORE_WORKING_TIME);
+        timewarning.setExcessWorkTime(1d);
+        timewarning.setMissingBreakTime(0.5d);
+        List<TimeWarning> timeWarningList = new ArrayList<>();
+        timeWarningList.add(timewarning);
+
+        return timeWarningList;
     }
 
     private List<ProjectEntry> createReadProjektzeitenResponseType(int bisHours) {

@@ -19,6 +19,7 @@ import de.provantis.zep.FehlzeitType;
 import javax.annotation.Nonnull;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -67,7 +68,7 @@ public class WarningCalculator {
         return warnings;
     }
 
-    public List<TimeWarning> determineNoTimeEntries(@Nonnull List<ProjectEntry> projectEntries, @Nonnull List<FehlzeitType> absenceEntries) {
+    public List<TimeWarning> determineNoTimeEntries(List<ProjectEntry> projectEntries, List<FehlzeitType> absenceEntries) {
         NoEntryCalculator calculator = new NoEntryCalculator();
         final List<TimeWarning> warnings = new ArrayList<>();
 
