@@ -36,8 +36,8 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
             List<LocalDate> datesWithBookings = new ArrayList<>();
 
             List<LocalDate> businessDays = getBusinessDaysOfMonth(projectTimeEntries.get(0).getDate().getYear(), projectTimeEntries.get(0).getDate().getMonth().getValue());
-            List<LocalDate> compensatoryDays = filterAbscenceTypesAndCompileLocalDateList("FA", absenceEntries);
-            List<LocalDate> vacationDays = filterAbscenceTypesAndCompileLocalDateList("UB", absenceEntries);
+            List<LocalDate> compensatoryDays = filterAbsenceTypesAndCompileLocalDateList("FA", absenceEntries);
+            List<LocalDate> vacationDays = filterAbsenceTypesAndCompileLocalDateList("UB", absenceEntries);
 
             businessDays.removeAll(compensatoryDays);
             businessDays.removeAll(vacationDays);
@@ -59,7 +59,7 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
         }
     }
 
-    private List<LocalDate> getBusinessDaysOfMonth(@NotNull int year, @NotNull int month) {
+    private List<LocalDate> getBusinessDaysOfMonth(int year, int month) {
         YearMonth yearMonth = YearMonth.of(year, month);
         int daysInMonth = yearMonth.lengthOfMonth();
         LocalDate startDate = LocalDate.of(year, month, 1);
@@ -67,7 +67,7 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
         return getBusinessDays(startDate, endDate);
     }
 
-    private List<LocalDate> getBusinessDays(@NotNull LocalDate startDate, @NotNull LocalDate endDate) {
+    private List<LocalDate> getBusinessDays(LocalDate startDate, LocalDate endDate) {
         Predicate<LocalDate> isWeekend = date -> date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY;
         Predicate<LocalDate> isHoliday = this::isHoliday;
         endDate = endDate.plusDays(1);
@@ -76,7 +76,7 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
                 .collect(Collectors.toList());
     }
 
-    private boolean isHoliday(@NotNull LocalDate date) {
+    private boolean isHoliday(LocalDate date) {
         HolidayManager holidayManager = HolidayManager.getInstance(HolidayCalendar.AUSTRIA);
         return holidayManager.isHoliday(date);
     }
@@ -89,7 +89,7 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
         return timeWarning;
     }
 
-    private List<LocalDate> convertAbsenceEntriesToDates(@NotNull List<FehlzeitType> absenceEntries) {
+    private List<LocalDate> convertAbsenceEntriesToDates(List<FehlzeitType> absenceEntries) {
         List<LocalDate> absenceDates = new ArrayList<>();
         absenceEntries.forEach(fzt -> {
             LocalDate startDate = LocalDate.parse(fzt.getStartdatum());
@@ -99,7 +99,7 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
         return absenceDates;
     }
 
-    private List<LocalDate> filterAbscenceTypesAndCompileLocalDateList(@NotNull String type, @NotNull List<FehlzeitType> absenceEntries) {
+    private List<LocalDate> filterAbsenceTypesAndCompileLocalDateList(String type, List<FehlzeitType> absenceEntries) {
         List<LocalDate> compensatoryDays = new ArrayList<>();
         absenceEntries.stream()
                 .filter(fzt -> fzt.getFehlgrund().equals(type))
