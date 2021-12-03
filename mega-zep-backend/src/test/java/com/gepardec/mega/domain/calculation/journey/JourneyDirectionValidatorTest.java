@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.gepardec.mega.domain.model.monthlyreport.JourneyDirection.*;
+import static com.gepardec.mega.domain.model.monthlyreport.JourneyDirection.BACK;
+import static com.gepardec.mega.domain.model.monthlyreport.JourneyDirection.FURTHER;
+import static com.gepardec.mega.domain.model.monthlyreport.JourneyDirection.TO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

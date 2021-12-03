@@ -1,7 +1,11 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.db.entity.employee.EmployeeState;
-import com.gepardec.mega.domain.model.*;
+import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.domain.model.SecurityContext;
+import com.gepardec.mega.domain.model.User;
+import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
