@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -67,7 +67,7 @@ class StepEntryResourceTest {
                 .put("/stepentry/close")
                 .as(Boolean.class);
 
-        assertTrue(updated);
+        assertThat(updated).isTrue();
     }
 
     private User createUserForRole(final Role role) {

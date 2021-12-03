@@ -6,7 +6,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 

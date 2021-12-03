@@ -16,7 +16,6 @@ import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 
@@ -28,9 +27,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -66,9 +64,8 @@ class CommentServiceImplTest {
         List<com.gepardec.mega.domain.model.Comment> domainComments = commentService.findCommentsForEmployee(
                 employee, fromDate, toDate
         );
-        Assertions.assertFalse(domainComments.isEmpty());
-        Assertions.assertEquals(1, domainComments.size());
-        Assertions.assertEquals(1, domainComments.get(0).id());
+        assertThat(domainComments).hasSize(1);
+        assertThat(domainComments.get(0).id()).isEqualTo(1);
     }
 
     @Test
@@ -77,18 +74,14 @@ class CommentServiceImplTest {
         when(commentRepository.setStatusDone(ArgumentMatchers.anyLong())).thenReturn(0);
 
         int updatedCount = commentService.setDone(commentMapper.mapDbCommentToDomainComment(createComment(1L, EmployeeState.IN_PROGRESS)));
-        Assertions.assertEquals(0, updatedCount);
+        assertThat(updatedCount).isEqualTo(0);
     }
 
     @Test
     void cntFinishedAndTotalCommentsForEmployee_whenEmployeeIsNull_thenThrowsException() {
-        NullPointerException thrown = assertThrows(
-                NullPointerException.class,
-                () -> commentService.cntFinishedAndTotalCommentsForEmployee(null, null, null),
-                "Expected NullpointerException was not thrown!"
-        );
-
-        assertEquals("Employee must not be null!", thrown.getMessage());
+        assertThatThrownBy(() -> commentService.cntFinishedAndTotalCommentsForEmployee(null, null, null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("Employee must not be null!");
     }
 
     @Test
@@ -100,13 +93,9 @@ class CommentServiceImplTest {
                 .firstname("Max")
                 .build();
 
-        NullPointerException thrown = assertThrows(
-                NullPointerException.class,
-                () -> commentService.cntFinishedAndTotalCommentsForEmployee(empl, null, null),
-                "Expected NullpointerException was not thrown!"
-        );
-
-        assertEquals("From date must not be null!", thrown.getMessage());
+        assertThatThrownBy(() -> commentService.cntFinishedAndTotalCommentsForEmployee(empl, null, null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("From date must not be null!");
     }
 
     @Test
@@ -118,13 +107,9 @@ class CommentServiceImplTest {
                 .firstname("Max")
                 .build();
 
-        NullPointerException thrown = assertThrows(
-                NullPointerException.class,
-                () -> commentService.cntFinishedAndTotalCommentsForEmployee(empl, LocalDate.now(), null),
-                "Expected NullpointerException was not thrown!"
-        );
-
-        assertEquals("To date must not be null!", thrown.getMessage());
+        assertThatThrownBy(() -> commentService.cntFinishedAndTotalCommentsForEmployee(empl, LocalDate.now(), null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("To date must not be null!");
     }
 
     @Test
@@ -143,9 +128,9 @@ class CommentServiceImplTest {
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
         FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
-        assertNotNull(result);
-        assertEquals(3L, result.totalComments());
-        assertEquals(1L, result.finishedComments());
+        assertThat(result).isNotNull();
+        assertThat(result.totalComments()).isEqualTo(3L);
+        assertThat(result.finishedComments()).isEqualTo(1L);
     }
 
     @Test
@@ -164,9 +149,9 @@ class CommentServiceImplTest {
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
         FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
-        assertNotNull(result);
-        assertEquals(3L, result.totalComments());
-        assertEquals(0L, result.finishedComments());
+        assertThat(result).isNotNull();
+        assertThat(result.totalComments()).isEqualTo(3L);
+        assertThat(result.finishedComments()).isEqualTo(0L);
     }
 
     @Test
@@ -181,20 +166,16 @@ class CommentServiceImplTest {
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
         FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
-        assertNotNull(result);
-        assertEquals(0L, result.totalComments());
-        assertEquals(0L, result.finishedComments());
+        assertThat(result).isNotNull();
+        assertThat(result.totalComments()).isEqualTo(0L);
+        assertThat(result.finishedComments()).isEqualTo(0L);
     }
 
     @Test
     void createNewCommentForEmployee_whenEmployeeIsNull_thenThrowsException() {
-        NullPointerException thrown = assertThrows(
-                NullPointerException.class,
-                () -> commentService.cntFinishedAndTotalCommentsForEmployee(null, null, null),
-                "Expected NullpointerException was not thrown!"
-        );
-
-        assertEquals("Employee must not be null!", thrown.getMessage());
+        assertThatThrownBy(() -> commentService.cntFinishedAndTotalCommentsForEmployee(null, null, null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("Employee must not be null!");
     }
 
     @Test
@@ -240,23 +221,19 @@ class CommentServiceImplTest {
                 Mail.COMMENT_CREATED, employee.email(), employee.firstname(), Locale.GERMAN, expectedMailParameter, List.of(creator)
         );
 
-        assertNotNull(createdComment);
-        assertEquals("My new comment!", createdComment.message());
-        assertEquals(stepEntry.getAssignee().getEmail(), createdComment.authorEmail());
-        assertEquals(EmployeeState.OPEN, createdComment.state());
+        assertThat(createdComment).isNotNull();
+        assertThat(createdComment.message()).isEqualTo("My new comment!");
+        assertThat(createdComment.authorEmail()).isEqualTo(stepEntry.getAssignee().getEmail());
+        assertThat(createdComment.state()).isEqualTo(EmployeeState.OPEN);
     }
 
     @Test
     void updateComment_whenEntityNotFound_thenThrowsException() {
         when(commentRepository.findById(ArgumentMatchers.anyLong())).thenReturn(null);
 
-        EntityNotFoundException thrown = assertThrows(
-                EntityNotFoundException.class,
-                () -> commentService.updateComment(1L, "My message!"),
-                "Expected EntityNotFoundException was not thrown!"
-        );
-
-        assertEquals("No entity found for id = 1", thrown.getMessage());
+        assertThatThrownBy(() -> commentService.updateComment(1L, "My message!"))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("No entity found for id = 1");
     }
 
     @Test
@@ -266,8 +243,8 @@ class CommentServiceImplTest {
         when(commentRepository.update(ArgumentMatchers.any(Comment.class))).thenReturn(null);
 
         com.gepardec.mega.domain.model.Comment updatedComment = commentService.updateComment(1L, "Updated message");
-        assertNotNull(updatedComment);
-        assertEquals("Updated message", updatedComment.message());
+        assertThat(updatedComment).isNotNull();
+        assertThat(updatedComment.message()).isEqualTo("Updated message");
     }
 
     private Comment createComment(Long id, EmployeeState employeeState) {
