@@ -16,9 +16,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 class MailSenderTest {
@@ -51,7 +50,7 @@ class MailSenderTest {
 
     @BeforeEach
     void init() {
-        assertTrue(mailMockSetting, "This test can only run when mail mocking is true");
+        assertThat(mailMockSetting).as("This test can only run when mail mocking is true").isTrue();
         mailbox.clear();
     }
 
@@ -65,12 +64,15 @@ class MailSenderTest {
                 MailParameter.COMMENT, "my comment");
         mailSender.send(mail, to, "Jamal", Locale.GERMAN, mailParameter, List.of("Thomas"));
         List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
-        assertAll(
-                () -> assertEquals(1, sent.size()),
-                () -> assertTrue(Mail.COMMENT_CLOSED.equals(mail) ?
-                        sent.get(0).getHtml().startsWith("<p>Hallo " + "Herbert") :
-                        sent.get(0).getHtml().startsWith("<p>Hallo " + "Jamal")),
-                () -> assertEquals(subject, sent.get(0).getSubject()));
+
+        assertThat(sent).hasSize(1);
+        assertThat(sent.get(0).getSubject()).isEqualTo(subject);
+
+        if (Mail.COMMENT_CLOSED.equals(mail)) {
+            assertThat(sent.get(0).getHtml()).startsWith("<p>Hallo " + "Herbert");
+        } else {
+            assertThat(sent.get(0).getHtml()).startsWith("<p>Hallo " + "Jamal");
+        }
     }
 
     @Test
@@ -80,7 +82,7 @@ class MailSenderTest {
             mailSender.send(Mail.EMPLOYEE_CHECK_PROJECTTIME, to, "Max", Locale.GERMAN);
         }
         List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
-        assertEquals(10, sent.size());
+        assertThat(sent).hasSize(10);
     }
 
     @Test
@@ -89,8 +91,8 @@ class MailSenderTest {
         mailSender.send(Mail.PL_PROJECT_CONTROLLING, to, "Max", Locale.GERMAN);
         List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
         assertAll(
-                () -> assertEquals(1, sent.size()),
-                () -> assertTrue(sent.get(0).getHtml().contains(applicationConfig.getBudgetCalculationExcelUrlAsString()))
+                () -> assertThat(sent).hasSize(1),
+                () -> assertThat(sent.get(0).getHtml()).contains(applicationConfig.getBudgetCalculationExcelUrlAsString())
         );
     }
 }

@@ -4,7 +4,6 @@ import com.gepardec.mega.application.exception.ForbiddenException;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.UserContext;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,11 +15,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.Set;
 
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ForbiddenExceptionMapperTest {
@@ -51,7 +47,7 @@ class ForbiddenExceptionMapperTest {
         when(uriInfo.getPath()).thenReturn("/path/resource");
         final Response response = mapper.toResponse(new ForbiddenException("exception-message"));
 
-        Assertions.assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
+        assertThat(response.getStatus()).isEqualTo(Response.Status.FORBIDDEN.getStatusCode());
         verify(logger, times(1)).warn(anyString(), eq("no-reply@gepardec.com"), eq("/path/resource"), eq("exception-message"));
     }
 
@@ -61,7 +57,7 @@ class ForbiddenExceptionMapperTest {
         when(uriInfo.getPath()).thenReturn("/path/resource");
         final Response response = mapper.toResponse(new ForbiddenException("exception-message"));
 
-        Assertions.assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
+        assertThat(response.getStatus()).isEqualTo(Response.Status.FORBIDDEN.getStatusCode());
     }
 
     private User createUserForEmail(final String email) {

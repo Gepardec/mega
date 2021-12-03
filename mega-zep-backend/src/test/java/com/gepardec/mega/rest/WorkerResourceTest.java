@@ -1,11 +1,7 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.db.entity.employee.EmployeeState;
-import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.Role;
-import com.gepardec.mega.domain.model.SecurityContext;
-import com.gepardec.mega.domain.model.User;
-import com.gepardec.mega.domain.model.UserContext;
+import com.gepardec.mega.domain.model.*;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
@@ -17,12 +13,11 @@ import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
@@ -97,14 +92,14 @@ public class WorkerResourceTest {
                 .get("/worker/monthendreports")
                 .as(MonthlyReport.class);
 
-        assertEquals(employee, actual.employee());
-        assertEquals(actual.timeWarnings(), timeWarnings);
-        assertEquals(actual.journeyWarnings(), journeyWarnings);
-        assertEquals(actual.billableTime(), billableTime);
-        assertEquals(actual.totalWorkingTime(), totalWorkingTime);
-        assertEquals(actual.vacationDays(), vacationDays);
-        assertEquals(actual.homeofficeDays(), homeofficeDays);
-        assertEquals(actual.compensatoryDays(), compensatoryDays);
+        assertThat(actual.employee()).isEqualTo(employee);
+        assertThat(timeWarnings).isEqualTo(actual.timeWarnings());
+        assertThat(journeyWarnings).isEqualTo(actual.journeyWarnings());
+        assertThat(billableTime).isEqualTo(actual.billableTime());
+        assertThat(totalWorkingTime).isEqualTo(actual.totalWorkingTime());
+        assertThat(vacationDays).isEqualTo(actual.vacationDays());
+        assertThat(homeofficeDays).isEqualTo(actual.homeofficeDays());
+        assertThat(compensatoryDays).isEqualTo(actual.compensatoryDays());
     }
 
     private Employee createEmployeeForUser(final User user) {

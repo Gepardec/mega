@@ -1,12 +1,7 @@
 package com.gepardec.mega.rest;
 
 import com.gepardec.mega.db.entity.employee.EmployeeState;
-import com.gepardec.mega.domain.model.Comment;
-import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.Role;
-import com.gepardec.mega.domain.model.SecurityContext;
-import com.gepardec.mega.domain.model.User;
-import com.gepardec.mega.domain.model.UserContext;
+import com.gepardec.mega.domain.model.*;
 import com.gepardec.mega.rest.model.NewCommentEntry;
 import com.gepardec.mega.service.api.comment.CommentService;
 import io.quarkus.test.junit.QuarkusTest;
@@ -23,8 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -75,7 +69,7 @@ class CommentResourceTest {
                 .put("/comments/setdone")
                 .as(Integer.class);
 
-        assertEquals(1, updatedCount);
+        assertThat(updatedCount).isEqualTo(1);
     }
 
     @Test
@@ -153,8 +147,8 @@ class CommentResourceTest {
                 .as(new TypeRef<>() {
                 });
 
-        assertEquals(1L, comments.size());
-        assertEquals(comment, comments.get(0));
+        assertThat(comments).hasSize(1);
+        assertThat(comments.get(0)).isEqualTo(comment);
     }
 
     @Test
@@ -203,8 +197,8 @@ class CommentResourceTest {
                 .post("/comments")
                 .as(Comment.class);
 
-        assertNotNull(createdComment);
-        assertEquals(newCommentEntry.comment(), createdComment.message());
+        assertThat(createdComment).isNotNull();
+        assertThat(createdComment.message()).isEqualTo(newCommentEntry.comment());
     }
 
     @Test
@@ -234,7 +228,7 @@ class CommentResourceTest {
                 .delete("/comments/1")
                 .as(Boolean.class);
 
-        assertEquals(result, Boolean.TRUE);
+        assertThat(Boolean.TRUE).isEqualTo(result);
     }
 
     @Test
@@ -270,7 +264,7 @@ class CommentResourceTest {
                 .put("/comments")
                 .as(Comment.class);
 
-        assertEquals(comment, updatedComment);
+        assertThat(updatedComment).isEqualTo(comment);
     }
 
     private com.gepardec.mega.domain.model.User createUserForRole(final Role role) {

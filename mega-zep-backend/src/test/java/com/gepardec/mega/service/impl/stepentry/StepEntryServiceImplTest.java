@@ -10,7 +10,6 @@ import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 
@@ -20,13 +19,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.*;
 
 @QuarkusTest
 class StepEntryServiceImplTest {
@@ -46,8 +41,8 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.anyString())).thenReturn(stepEntries);
 
         Optional<EmployeeState> states = stepEntryService.findEmployeeCheckState(createEmployee());
-        assertTrue(states.isPresent());
-        Assertions.assertEquals(EmployeeState.IN_PROGRESS, states.get());
+        assertThat(states).isPresent();
+        assertThat(states).get().isEqualTo(EmployeeState.IN_PROGRESS);
     }
 
     @Test
@@ -56,7 +51,7 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.anyString())).thenReturn(List.of());
 
         Optional<EmployeeState> states = stepEntryService.findEmployeeCheckState(createEmployee());
-        assertTrue(states.isEmpty());
+        assertThat(states).isEmpty();
     }
 
     @Test
@@ -70,7 +65,7 @@ class StepEntryServiceImplTest {
 
         boolean areOtherChecksDone = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(createEmployee())
                 .stream().allMatch(stepEntry -> stepEntry.getState() == EmployeeState.DONE);
-        Assertions.assertFalse(areOtherChecksDone);
+        assertThat(areOtherChecksDone).isFalse();
     }
 
     @Test
@@ -80,7 +75,8 @@ class StepEntryServiceImplTest {
 
         boolean areOtherChecksDone = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(createEmployee())
                 .stream().allMatch(stepEntry -> stepEntry.getState() == EmployeeState.DONE);
-        assertTrue(areOtherChecksDone);
+
+        assertThat(areOtherChecksDone).isTrue();
     }
 
     @Test
@@ -97,7 +93,8 @@ class StepEntryServiceImplTest {
 
         boolean areOtherChecksDone = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(createEmployee())
                 .stream().allMatch(stepEntry -> stepEntry.getState() == EmployeeState.DONE);
-        assertTrue(areOtherChecksDone);
+
+        assertThat(areOtherChecksDone).isTrue();
     }
 
     @Test
@@ -110,7 +107,7 @@ class StepEntryServiceImplTest {
         LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
         LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
         boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(employee, 0L, from, to);
-        Assertions.assertFalse(updated);
+        assertThat(updated).isFalse();
     }
 
     @Test
@@ -122,19 +119,17 @@ class StepEntryServiceImplTest {
         Employee employee = createEmployee();
         LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
         LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+
         boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(employee, 1L, from, to);
-        assertTrue(updated);
+
+        assertThat(updated).isTrue();
     }
 
     @Test
     void findAllStepEntriesForEmployee_whenEmployeeIsNull_thenThrowsException() {
-        NullPointerException thrown = assertThrows(
-                NullPointerException.class,
-                () -> stepEntryService.findAllStepEntriesForEmployee(null, null, null),
-                "Expected NullpointerException was not thrown!"
-        );
-
-        assertEquals("Employee must not be null!", thrown.getMessage());
+        assertThatThrownBy(() -> stepEntryService.findAllStepEntriesForEmployee(null, null, null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("Employee must not be null!");
     }
 
     @Test
@@ -155,20 +150,15 @@ class StepEntryServiceImplTest {
                 empl.email()
         );
 
-        Assertions.assertEquals(1L, result.size());
-        StepEntry entry = result.get(0);
-        Assertions.assertEquals(1L, entry.getId());
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getId()).isEqualTo(1L);
     }
 
     @Test
     void findStepEntryForEmployeeAtStep_whenEmployeeIsNull_thenThrowsException() {
-        NullPointerException thrown = assertThrows(
-                NullPointerException.class,
-                () -> stepEntryService.findStepEntryForEmployeeAtStep(2L, null, "", ""),
-                "Expected NullpointerException was not thrown!"
-        );
-
-        assertEquals("Employee must not be null!", thrown.getMessage());
+        assertThatThrownBy(() -> stepEntryService.findStepEntryForEmployeeAtStep(2L, null, "", ""))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("Employee must not be null!");
     }
 
     @Test
@@ -182,13 +172,10 @@ class StepEntryServiceImplTest {
         )).thenReturn(Optional.empty());
 
         Employee empl = createEmployee();
-        IllegalStateException thrown = assertThrows(
-                IllegalStateException.class,
-                () -> stepEntryService.findStepEntryForEmployeeAtStep(2L, empl, "", empl.releaseDate()),
-                "Expected IllegalStateException was not thrown!"
-        );
 
-        assertTrue(thrown.getMessage().contains("No StepEntries found for Employee "));
+        assertThatThrownBy(() -> stepEntryService.findStepEntryForEmployeeAtStep(2L, empl, "", empl.releaseDate()))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("No StepEntries found for Employee ");
     }
 
     @Test
@@ -203,10 +190,10 @@ class StepEntryServiceImplTest {
 
         Employee empl = createEmployee();
         StepEntry stepEntry = stepEntryService.findStepEntryForEmployeeAtStep(2L, empl, "", empl.releaseDate());
-        assertNotNull(stepEntry);
-        assertEquals(1L, stepEntry.getId());
-        assertEquals("Liwest-EMS", stepEntry.getProject());
-        assertEquals(EmployeeState.IN_PROGRESS, stepEntry.getState());
+        assertThat(stepEntry).isNotNull();
+        assertThat(stepEntry.getId()).isEqualTo(1L);
+        assertThat(stepEntry.getProject()).isEqualTo("Liwest-EMS");
+        assertThat(stepEntry.getState()).isEqualTo(EmployeeState.IN_PROGRESS);
     }
 
     @Test
@@ -216,10 +203,10 @@ class StepEntryServiceImplTest {
         ).thenReturn(createStepEntriesForPM());
 
         List<ProjectEmployees> projectEmployees = stepEntryService.getProjectEmployeesForPM(LocalDate.now(), LocalDate.now(), "no-reply@gepardec.com");
-        assertNotNull(projectEmployees);
-        assertEquals(1L, projectEmployees.size());
-        assertEquals("Liwest-EMS", projectEmployees.get(0).projectId());
-        assertTrue(projectEmployees.get(0).employees().containsAll(List.of("008", "010", "012", "020")));
+        assertThat(projectEmployees).isNotNull();
+        assertThat(projectEmployees).hasSize(1);
+        assertThat(projectEmployees.get(0).projectId()).isEqualTo("Liwest-EMS");
+        assertThat(projectEmployees.get(0).employees()).containsExactlyInAnyOrder("008", "010", "012", "020");
     }
 
     private List<StepEntry> createStepEntriesForPM() {

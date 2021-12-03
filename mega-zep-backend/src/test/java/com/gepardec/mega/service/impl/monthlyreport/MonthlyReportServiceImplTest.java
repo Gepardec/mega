@@ -1,15 +1,10 @@
 package com.gepardec.mega.service.impl.monthlyreport;
 
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
-import com.gepardec.mega.domain.model.monthlyreport.Task;
-import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
+import com.gepardec.mega.domain.model.monthlyreport.*;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.zep.ZepService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,6 +18,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class MonthlyReportServiceImplTest {
@@ -49,7 +46,7 @@ class MonthlyReportServiceImplTest {
     void testGetMonthendReportForUser_MitarbeiterNull() {
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(null);
 
-        Assertions.assertNotNull(workerService.getMonthendReportForUser("0"));
+        assertThat(workerService.getMonthendReportForUser("0")).isNotNull();
     }
 
     // @Test FIXME
@@ -57,7 +54,7 @@ class MonthlyReportServiceImplTest {
         final Employee employee = createEmployeeWithReleaseDate(0, "NULL");
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
 
-        Assertions.assertNotNull(workerService.getMonthendReportForUser("0"));
+        assertThat(workerService.getMonthendReportForUser("0")).isNotNull();
     }
 
     @Test
@@ -66,7 +63,7 @@ class MonthlyReportServiceImplTest {
         Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
         Mockito.when(zepService.getProjectTimes(Mockito.any(), Mockito.any())).thenReturn(new ArrayList<>());
 
-        Assertions.assertNotNull(workerService.getMonthendReportForUser("0"));
+        assertThat(workerService.getMonthendReportForUser("0")).isNotNull();
     }
 
     @Test
@@ -76,10 +73,10 @@ class MonthlyReportServiceImplTest {
         Mockito.when(zepService.getProjectTimes(Mockito.any(), Mockito.any())).thenReturn(createReadProjektzeitenResponseType(10));
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
-        Assertions.assertNotNull(monthendReportForUser);
-        Assertions.assertEquals("Max_0@gepardec.com", monthendReportForUser.employee().email());
-        Assertions.assertNotNull(monthendReportForUser.timeWarnings());
-        Assertions.assertTrue(monthendReportForUser.timeWarnings().isEmpty());
+        assertThat(monthendReportForUser).isNotNull();
+        assertThat(monthendReportForUser.employee().email()).isEqualTo("Max_0@gepardec.com");
+        assertThat(monthendReportForUser.timeWarnings()).isNotNull();
+        assertThat(monthendReportForUser.timeWarnings()).isEmpty();
     }
 
     @Test
@@ -89,13 +86,12 @@ class MonthlyReportServiceImplTest {
         Mockito.when(zepService.getProjectTimes(Mockito.any(), Mockito.any())).thenReturn(createReadProjektzeitenResponseType(18));
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
-        Assertions.assertNotNull(monthendReportForUser);
-        Assertions.assertEquals("Max_0@gepardec.com", monthendReportForUser.employee().email());
-        Assertions.assertNotNull(monthendReportForUser.timeWarnings());
-        Assertions.assertFalse(monthendReportForUser.timeWarnings().isEmpty());
-        Assertions.assertEquals(LocalDate.of(2020, 1, 31), monthendReportForUser.timeWarnings().get(0).getDate());
-        Assertions.assertEquals(1d, monthendReportForUser.timeWarnings().get(0).getExcessWorkTime());
-        Assertions.assertEquals(0.5d, monthendReportForUser.timeWarnings().get(0).getMissingBreakTime());
+        assertThat(monthendReportForUser).isNotNull();
+        assertThat(monthendReportForUser.employee().email()).isEqualTo("Max_0@gepardec.com");
+        assertThat(monthendReportForUser.timeWarnings()).isNotNull();
+        assertThat(monthendReportForUser.timeWarnings().get(0).getDate()).isEqualTo(LocalDate.of(2020, 1, 31));
+        assertThat(monthendReportForUser.timeWarnings().get(0).getExcessWorkTime()).isEqualTo(1d);
+        assertThat(monthendReportForUser.timeWarnings().get(0).getMissingBreakTime()).isEqualTo(0.5d);
     }
 
     private List<ProjectEntry> createReadProjektzeitenResponseType(int bisHours) {

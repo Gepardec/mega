@@ -3,7 +3,6 @@ package com.gepardec.mega.application.interceptor;
 import com.gepardec.mega.application.exception.ForbiddenException;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.UserContext;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
@@ -15,11 +14,8 @@ import javax.interceptor.InvocationContext;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class RolesAllowedInterceptorTest {
@@ -49,14 +45,14 @@ class RolesAllowedInterceptorTest {
         when(invocationContext.getMethod().getAnnotation(any())).thenReturn(null);
         when(invocationContext.getTarget()).thenReturn(new TargetNoAnnotation());
 
-        Assertions.assertThrows(NullPointerException.class, () -> rolesAllowedInterceptor.intercept(invocationContext));
+        assertThatThrownBy(() -> rolesAllowedInterceptor.intercept(invocationContext))
+                .isInstanceOf(NullPointerException.class);
     }
 
     @Test
     void intercept_whenNotLogged_thenThrowsForbiddenException() {
         when(invocationContext.getMethod().getAnnotation(any())).thenReturn(createAnnotation(new Role[]{Role.EMPLOYEE}));
-
-        assertThrows(ForbiddenException.class, () -> rolesAllowedInterceptor.intercept(invocationContext));
+        assertThatThrownBy(() -> rolesAllowedInterceptor.intercept(invocationContext)).isInstanceOf(ForbiddenException.class);
     }
 
     @Test
@@ -64,7 +60,7 @@ class RolesAllowedInterceptorTest {
         when(invocationContext.getMethod().getAnnotation(any())).thenReturn(createAnnotation(new Role[]{Role.OFFICE_MANAGEMENT}));
         when(userContext.user().roles()).thenReturn(Set.of(Role.EMPLOYEE));
 
-        assertThrows(ForbiddenException.class, () -> rolesAllowedInterceptor.intercept(invocationContext));
+        assertThatThrownBy(() -> rolesAllowedInterceptor.intercept(invocationContext)).isInstanceOf(ForbiddenException.class);
     }
 
     @Test

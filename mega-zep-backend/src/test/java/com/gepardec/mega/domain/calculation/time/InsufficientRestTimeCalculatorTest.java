@@ -1,21 +1,13 @@
 package com.gepardec.mega.domain.calculation.time;
 
-import com.gepardec.mega.domain.model.monthlyreport.JourneyDirection;
-import com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
-import com.gepardec.mega.domain.model.monthlyreport.Task;
-import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
-import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
-import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
+import com.gepardec.mega.domain.model.monthlyreport.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class InsufficientRestTimeCalculatorTest {
 
@@ -23,7 +15,7 @@ class InsufficientRestTimeCalculatorTest {
 
     @Test
     void calculate_whenDataListEmpty_thenNoWarningsCreated() {
-        assertTrue(calculator.calculate(List.of()).isEmpty());
+        assertThat(calculator.calculate(Collections.emptyList())).isEmpty();
     }
 
     private ProjectTimeEntry projectTimeEntryFor(int day, int startHour, int startMinute, int endHour, int endMinute) {
@@ -52,7 +44,7 @@ class InsufficientRestTimeCalculatorTest {
 
     @Test
     void whenDataListEmpty_thenNoWarningsCreated() {
-        assertTrue(calculator.calculate(List.of()).isEmpty());
+        assertThat(calculator.calculate(Collections.emptyList())).isEmpty();
     }
 
     @Test
@@ -62,12 +54,12 @@ class InsufficientRestTimeCalculatorTest {
 
         List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
 
-        assertEquals(1, warnings.size());
+        assertThat(warnings).hasSize(1);
         TimeWarning warning = warnings.get(0);
-        assertNotNull(warning.getDate());
-        assertNotNull(warning.getMissingRestTime());
-        assertNull(warning.getExcessWorkTime());
-        assertNull(warning.getMissingBreakTime());
+        assertThat(warning.getDate()).isNotNull();
+        assertThat(warning.getMissingRestTime()).isNotNull();
+        assertThat(warning.getExcessWorkTime()).isNull();
+        assertThat(warning.getMissingBreakTime()).isNull();
     }
 
     @Test
@@ -77,8 +69,8 @@ class InsufficientRestTimeCalculatorTest {
 
         List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryTwo, timeEntryOne));
 
-        assertEquals(1, warnings.size());
-        assertEquals(1, warnings.get(0).getMissingRestTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getMissingRestTime()).isEqualTo(1);
     }
 
     @Test
@@ -88,8 +80,8 @@ class InsufficientRestTimeCalculatorTest {
 
         List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
 
-        assertEquals(1, warnings.size());
-        assertEquals(1, warnings.get(0).getMissingRestTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getMissingRestTime()).isEqualTo(1);
     }
 
     @Test
@@ -100,8 +92,8 @@ class InsufficientRestTimeCalculatorTest {
 
         List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
 
-        assertEquals(1, warnings.size());
-        assertEquals(1, warnings.get(0).getMissingRestTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getMissingRestTime()).isEqualTo(1);
     }
 
     @Test
@@ -112,8 +104,8 @@ class InsufficientRestTimeCalculatorTest {
 
         List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
 
-        assertEquals(1, warnings.size());
-        assertEquals(1, warnings.get(0).getMissingRestTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getMissingRestTime()).isEqualTo(1);
     }
 
     @Test
@@ -124,7 +116,7 @@ class InsufficientRestTimeCalculatorTest {
 
         List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
 
-        assertEquals(0, warnings.size());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -134,7 +126,7 @@ class InsufficientRestTimeCalculatorTest {
 
         List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -145,6 +137,6 @@ class InsufficientRestTimeCalculatorTest {
 
         List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 }

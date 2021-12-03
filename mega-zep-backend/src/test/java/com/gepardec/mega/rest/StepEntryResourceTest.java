@@ -1,10 +1,6 @@
 package com.gepardec.mega.rest;
 
-import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.domain.model.Role;
-import com.gepardec.mega.domain.model.SecurityContext;
-import com.gepardec.mega.domain.model.User;
-import com.gepardec.mega.domain.model.UserContext;
+import com.gepardec.mega.domain.model.*;
 import com.gepardec.mega.rest.model.EmployeeStep;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import io.quarkus.test.junit.QuarkusTest;
@@ -19,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -67,7 +63,7 @@ class StepEntryResourceTest {
                 .put("/stepentry/close")
                 .as(Boolean.class);
 
-        assertTrue(updated);
+        assertThat(updated).isTrue();
     }
 
     private User createUserForRole(final Role role) {

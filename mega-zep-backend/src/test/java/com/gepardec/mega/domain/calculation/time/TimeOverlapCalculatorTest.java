@@ -1,10 +1,6 @@
 package com.gepardec.mega.domain.calculation.time;
 
-import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
-import com.gepardec.mega.domain.model.monthlyreport.Task;
-import com.gepardec.mega.domain.model.monthlyreport.TimeOverlapWarning;
-import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
+import com.gepardec.mega.domain.model.monthlyreport.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -12,9 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class TimeOverlapCalculatorTest {
 
@@ -26,7 +20,7 @@ class TimeOverlapCalculatorTest {
 
         List<TimeOverlapWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -35,7 +29,7 @@ class TimeOverlapCalculatorTest {
 
         List<TimeOverlapWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -44,7 +38,7 @@ class TimeOverlapCalculatorTest {
 
         List<TimeOverlapWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
 
-        assertFalse(warnings.isEmpty());
+        assertThat(warnings).isNotEmpty();
     }
 
     @Test
@@ -53,7 +47,7 @@ class TimeOverlapCalculatorTest {
 
         List<TimeOverlapWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
 
-        assertEquals(LocalDate.of(2020, 1, 7), warnings.get(0).getDate());
+        assertThat(warnings.get(0).getDate()).isEqualTo(LocalDate.of(2020, 1, 7));
     }
 
     @Test
@@ -74,16 +68,7 @@ class TimeOverlapCalculatorTest {
 
         List<TimeOverlapWarning> warnings = timeOverlapCalculator.calculate(projectEntries);
 
-        assertEquals(2, warnings.size());
-    }
-
-    private ProjectTimeEntry projectTimeEntry(int startHour, int startMinute, int endHour, int endMinute) {
-        return ProjectTimeEntry.builder()
-                .fromTime(LocalDateTime.of(2020, 1, 7, startHour, startMinute))
-                .toTime(LocalDateTime.of(2020, 1, 7, endHour, endMinute))
-                .task(Task.BEARBEITEN)
-                .workingLocation(WorkingLocation.MAIN)
-                .build();
+        assertThat(warnings).hasSize(2);
     }
 
     private ProjectTimeEntry projectTimeEntry(int day, int startHour, int startMinute, int endHour, int endMinute) {

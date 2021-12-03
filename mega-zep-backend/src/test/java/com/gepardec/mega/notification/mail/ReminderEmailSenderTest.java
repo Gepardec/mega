@@ -15,9 +15,8 @@ import java.util.List;
 import java.util.Set;
 
 import static com.gepardec.mega.notification.mail.Mail.OM_RELEASE;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -38,7 +37,7 @@ class ReminderEmailSenderTest {
 
     @BeforeEach
     void init() {
-        assertTrue(mailMockSetting, "This test can only run when mail mocking is true");
+        assertThat(mailMockSetting).as("This test can only run when mail mocking is true").isTrue();
         mailbox.clear();
     }
 
@@ -48,7 +47,7 @@ class ReminderEmailSenderTest {
 
         reminderEmailSender.sendReminderToOm(OM_RELEASE);
 
-        assertEquals(0, mailbox.getTotalMessagesSent());
+        assertThat(mailbox.getTotalMessagesSent()).isEqualTo(0);
     }
 
     @Test
@@ -57,9 +56,9 @@ class ReminderEmailSenderTest {
 
         reminderEmailSender.sendReminderToOm(OM_RELEASE);
         assertAll(
-                () -> assertEquals(1, mailbox.getTotalMessagesSent()),
-                () -> assertEquals("UNIT-TEST: Reminder: Freigaben durchführen",
-                        mailbox.getMessagesSentTo("no-reply@gepardec.com").get(0).getSubject())
+                () -> assertThat(mailbox.getTotalMessagesSent()).isEqualTo(1),
+                () -> assertThat(mailbox.getMessagesSentTo("no-reply@gepardec.com").get(0).getSubject())
+                        .isEqualTo("UNIT-TEST: Reminder: Freigaben durchführen")
         );
     }
 
@@ -69,7 +68,7 @@ class ReminderEmailSenderTest {
 
         reminderEmailSender.sendReminderToPl();
 
-        assertEquals(0, mailbox.getTotalMessagesSent());
+        assertThat(mailbox.getTotalMessagesSent()).isEqualTo(0);
     }
 
     @Test
@@ -78,9 +77,8 @@ class ReminderEmailSenderTest {
 
         reminderEmailSender.sendReminderToPl();
         assertAll(
-                () -> assertEquals(1, mailbox.getTotalMessagesSent()),
-                () -> assertEquals("UNIT-TEST: Reminder: Projekte kontrollieren und abrechnen",
-                        mailbox.getMessagesSentTo("no-reply@gepardec.com").get(0).getSubject())
+                () -> assertThat(mailbox.getTotalMessagesSent()).isEqualTo(1),
+                () -> assertThat(mailbox.getMessagesSentTo("no-reply@gepardec.com").get(0).getSubject()).isEqualTo("UNIT-TEST: Reminder: Projekte kontrollieren und abrechnen")
         );
     }
 
@@ -90,7 +88,7 @@ class ReminderEmailSenderTest {
 
         reminderEmailSender.sendReminderToUser();
 
-        assertEquals(0, mailbox.getTotalMessagesSent());
+        assertThat(mailbox.getTotalMessagesSent()).isEqualTo(0);
     }
 
     @Test
@@ -99,9 +97,8 @@ class ReminderEmailSenderTest {
 
         reminderEmailSender.sendReminderToUser();
         assertAll(
-                () -> assertEquals(1, mailbox.getTotalMessagesSent()),
-                () -> assertEquals("UNIT-TEST: Friendly Reminder: Buchungen kontrollieren",
-                        mailbox.getMessagesSentTo("no-reply@gepardec.com").get(0).getSubject())
+                () -> assertThat(mailbox.getTotalMessagesSent()).isEqualTo(1),
+                () -> assertThat(mailbox.getMessagesSentTo("no-reply@gepardec.com").get(0).getSubject()).isEqualTo("UNIT-TEST: Friendly Reminder: Buchungen kontrollieren")
         );
     }
 

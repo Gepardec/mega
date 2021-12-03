@@ -1,16 +1,11 @@
 package com.gepardec.mega.service.impl.init;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
-import com.gepardec.mega.domain.model.Project;
-import com.gepardec.mega.domain.model.Role;
-import com.gepardec.mega.domain.model.Step;
-import com.gepardec.mega.domain.model.StepEntry;
-import com.gepardec.mega.domain.model.User;
+import com.gepardec.mega.domain.model.*;
 import com.gepardec.mega.service.api.project.ProjectService;
 import com.gepardec.mega.service.api.step.StepService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.service.api.user.UserService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,11 +21,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class StepEntrySyncServiceImplTest {
@@ -179,15 +171,15 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Project Lead 1
-        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 1).count());
-        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 1).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 1).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 1).count()).isEqualTo(1);
 
         // Project Lead 2
-        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 2).count());
-        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 2).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 2).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 2).count()).isEqualTo(1);
 
         // Steps
-        Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count()).isEqualTo(0);
     }
 
     @Test
@@ -216,15 +208,15 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Project Lead 1
-        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 1).count());
-        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 1).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 1).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 1).count()).isEqualTo(1);
 
         // Project Lead 2
-        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 2).count());
-        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 2).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 2).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 2).count()).isEqualTo(1);
 
         // Steps
-        Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count()).isEqualTo(0);
     }
 
     @Test
@@ -241,15 +233,15 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Project Lead 1
-        Assertions.assertEquals(3, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 1).count());
-        Assertions.assertEquals(8, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 1).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 1).count()).isEqualTo(3);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 1).count()).isEqualTo(8);
 
         // Project Lead 2
-        Assertions.assertEquals(2, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 2).count());
-        Assertions.assertEquals(4, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 2).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 2).count()).isEqualTo(2);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 2).count()).isEqualTo(4);
 
         // Steps
-        Assertions.assertEquals(10, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count()).isEqualTo(10);
     }
 
     @Test
@@ -266,13 +258,13 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Office Managment 3
-        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 3).count());
-        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 3).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 3).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 3).count()).isEqualTo(1);
 
         // Steps
-        Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count());
-        Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count());
-        Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count()).isEqualTo(0);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count()).isEqualTo(0);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count()).isEqualTo(0);
     }
 
     @Test
@@ -289,13 +281,13 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Office Managment 3
-        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 3).count());
-        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 3).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 3).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 3).count()).isEqualTo(1);
 
         // Steps
-        Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count());
-        Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count());
-        Assertions.assertEquals(0, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count()).isEqualTo(0);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count()).isEqualTo(0);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count()).isEqualTo(0);
     }
 
     @Test
@@ -312,13 +304,13 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Office Managment 3
-        Assertions.assertEquals(4, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 3).count());
-        Assertions.assertEquals(19, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 3).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 3).count()).isEqualTo(4);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 3).count()).isEqualTo(19);
 
         // Steps
-        Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count());
-        Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count());
-        Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count()).isEqualTo(6);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count()).isEqualTo(6);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count()).isEqualTo(6);
     }
 
     @Test
@@ -347,19 +339,19 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Employee 4
-        Assertions.assertEquals(5, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 4).count());
-        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 4).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 4).count()).isEqualTo(5);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 4).count()).isEqualTo(1);
 
         // Employee 5
-        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 5).count());
-        Assertions.assertEquals(7, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 5).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 5).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 5).count()).isEqualTo(7);
 
         // Employee 6
-        Assertions.assertEquals(7, stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 6).count());
-        Assertions.assertEquals(1, stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 6).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.owner().dbId() == 6).count()).isEqualTo(7);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 6).count()).isEqualTo(1);
 
         // Steps
-        Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIMES")).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIMES")).count()).isEqualTo(6);
     }
 
     @Test
@@ -388,13 +380,13 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Project 1
-        Assertions.assertEquals(4, stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().projectId().equals(String.valueOf(1))).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().projectId().equals(String.valueOf(1))).count()).isEqualTo(4);
 
         // Project 2
-        Assertions.assertEquals(3, stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().projectId().equals(String.valueOf(2))).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().projectId().equals(String.valueOf(2))).count()).isEqualTo(3);
 
         // Project 3
-        Assertions.assertEquals(3, stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().projectId().equals(String.valueOf(3))).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().projectId().equals(String.valueOf(3))).count()).isEqualTo(3);
     }
 
     @Test
@@ -411,18 +403,18 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Step 1
-        Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIMES")).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIMES")).count()).isEqualTo(6);
 
         // Step 2
-        Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count()).isEqualTo(6);
 
         // Step 3
-        Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count()).isEqualTo(6);
 
         // Step 4
-        Assertions.assertEquals(10, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count()).isEqualTo(10);
 
         // Step 5
-        Assertions.assertEquals(6, stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count());
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count()).isEqualTo(6);
     }
 }

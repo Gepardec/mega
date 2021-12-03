@@ -1,12 +1,6 @@
 package com.gepardec.mega.zep.mapper;
 
-import com.gepardec.mega.domain.model.monthlyreport.JourneyDirection;
-import com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
-import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
-import com.gepardec.mega.domain.model.monthlyreport.Task;
-import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
-import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
+import com.gepardec.mega.domain.model.monthlyreport.*;
 import de.provantis.zep.ProjektzeitType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,10 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ProjectEntryMapperTest {
 
@@ -48,7 +40,7 @@ class ProjectEntryMapperTest {
 
     @Test
     void whenNull_thenReturnsNull() {
-        assertNull(mapper.map(null));
+        assertThat(mapper.map(null)).isNull();
     }
 
     @Test
@@ -56,21 +48,21 @@ class ProjectEntryMapperTest {
         ProjektzeitType projektzeitType = projektzeitTypeFor("testen", WorkingLocation.MAIN.zepOrt, JourneyDirection.TO.getDirection(),
                 Vehicle.OTHER_INACTIVE.id);
 
-        assertThrows(IllegalArgumentException.class, () -> mapper.map(projektzeitType));
+        assertThatThrownBy(() -> mapper.map(projektzeitType)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void withOrtIsNotAWorkingLocation_thenThrowsIllegalArgumentException() {
         ProjektzeitType projektzeitType = projektzeitTypeFor(Task.REISEN.name(), "unbekannt", JourneyDirection.TO.getDirection(), Vehicle.OTHER_INACTIVE.id);
 
-        assertThrows(IllegalArgumentException.class, () -> mapper.map(projektzeitType));
+        assertThatThrownBy(() -> mapper.map(projektzeitType)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void withReiseRichtungIsNotAJourneyDirection_thenThrowsIllegalArgumentException() {
         ProjektzeitType projektzeitType = projektzeitTypeFor(Task.REISEN.name(), WorkingLocation.MAIN.zepOrt, "100", Vehicle.OTHER_INACTIVE.id);
 
-        assertThrows(IllegalArgumentException.class, () -> mapper.map(projektzeitType));
+        assertThatThrownBy(() -> mapper.map(projektzeitType)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -78,7 +70,7 @@ class ProjectEntryMapperTest {
         ProjektzeitType projektzeitType = projektzeitTypeFor(Task.REISEN.name(), WorkingLocation.MAIN.zepOrt, JourneyDirection.TO.getDirection(),
                 "UNKOWN");
 
-        assertThrows(IllegalArgumentException.class, () -> mapper.map(projektzeitType));
+        assertThatThrownBy(() -> mapper.map(projektzeitType)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -87,7 +79,7 @@ class ProjectEntryMapperTest {
 
         ProjectEntry actual = mapper.map(projektzeitType);
 
-        assertTrue(actual instanceof ProjectTimeEntry);
+        assertThat(actual).isInstanceOf(ProjectTimeEntry.class);
     }
 
     @Test
@@ -96,7 +88,7 @@ class ProjectEntryMapperTest {
 
         ProjectEntry actual = mapper.map(projektzeitType);
 
-        assertTrue(actual instanceof ProjectTimeEntry);
+        assertThat(actual).isInstanceOf(ProjectTimeEntry.class);
     }
 
     @Test
@@ -105,7 +97,7 @@ class ProjectEntryMapperTest {
 
         ProjectEntry actual = mapper.map(projektzeitType);
 
-        assertTrue(actual instanceof ProjectTimeEntry);
+        assertThat(actual).isInstanceOf(ProjectTimeEntry.class);
     }
 
     @Test
@@ -121,10 +113,10 @@ class ProjectEntryMapperTest {
 
         ProjectTimeEntry actual = (ProjectTimeEntry) mapper.map(projektzeitType);
 
-        assertEquals(projektzeitType.getDatum(), actual.getDate().format(dateFormatter));
-        assertEquals(projektzeitType.getVon(), actual.getFromTime().format(timeFormatter));
-        assertEquals(projektzeitType.getBis(), actual.getToTime().format(timeFormatter));
-        assertEquals(projektzeitType.getTaetigkeit().toUpperCase(), actual.getTask().name());
+        assertThat(actual.getDate().format(dateFormatter)).isEqualTo(projektzeitType.getDatum());
+        assertThat(actual.getFromTime().format(timeFormatter)).isEqualTo(projektzeitType.getVon());
+        assertThat(actual.getToTime().format(timeFormatter)).isEqualTo(projektzeitType.getBis());
+        assertThat(actual.getTask().name()).isEqualTo(projektzeitType.getTaetigkeit().toUpperCase());
     }
 
     @Test
@@ -134,7 +126,7 @@ class ProjectEntryMapperTest {
 
         ProjectEntry actual = mapper.map(projektzeitType);
 
-        assertTrue(actual instanceof JourneyTimeEntry);
+        assertThat(actual).isInstanceOf(JourneyTimeEntry.class);
     }
 
     @Test
@@ -151,22 +143,22 @@ class ProjectEntryMapperTest {
 
         JourneyTimeEntry actual = (JourneyTimeEntry) mapper.map(projektzeitType);
 
-        assertEquals(projektzeitType.getDatum(), actual.getDate().format(dateFormatter));
-        assertEquals(projektzeitType.getVon(), actual.getFromTime().format(timeFormatter));
-        assertEquals(projektzeitType.getBis(), actual.getToTime().format(timeFormatter));
-        assertEquals(projektzeitType.getTaetigkeit().toUpperCase(), actual.getTask().name());
-        assertEquals(projektzeitType.getOrt(), WorkingLocation.MAIN.zepOrt);
-        assertEquals(projektzeitType.getReiseRichtung(), JourneyDirection.TO.getDirection());
+        assertThat(actual.getDate().format(dateFormatter)).isEqualTo(projektzeitType.getDatum());
+        assertThat(actual.getFromTime().format(timeFormatter)).isEqualTo(projektzeitType.getVon());
+        assertThat(actual.getToTime().format(timeFormatter)).isEqualTo(projektzeitType.getBis());
+        assertThat(actual.getTask().name()).isEqualTo(projektzeitType.getTaetigkeit().toUpperCase());
+        assertThat(WorkingLocation.MAIN.zepOrt).isEqualTo(projektzeitType.getOrt());
+        assertThat(JourneyDirection.TO.getDirection()).isEqualTo(projektzeitType.getReiseRichtung());
     }
 
     @Test
     void whenEmptyList_thenReturnsEmptyList() {
-        assertTrue(mapper.mapList(List.of()).isEmpty());
+        assertThat(mapper.mapList(List.of())).isEmpty();
     }
 
     @Test
     void whenNullInList_thenFiltersNullElement() {
-        assertTrue(mapper.mapList(Collections.singletonList(null)).isEmpty());
+        assertThat(mapper.mapList(Collections.singletonList(null))).isEmpty();
     }
 
     @Test
@@ -175,8 +167,8 @@ class ProjectEntryMapperTest {
 
         List<ProjectEntry> actual = mapper.mapList(List.of(projektzeitType));
 
-        assertEquals(1, actual.size());
-        assertTrue(actual.get(0) instanceof ProjectTimeEntry);
+        assertThat(actual).hasSize(1);
+        assertThat(actual.get(0)).isInstanceOf(ProjectTimeEntry.class);
     }
 
     @Test
@@ -186,7 +178,7 @@ class ProjectEntryMapperTest {
 
         List<ProjectEntry> actual = mapper.mapList(List.of(projektzeitType));
 
-        assertEquals(1, actual.size());
-        assertTrue(actual.get(0) instanceof JourneyTimeEntry);
+        assertThat(actual).hasSize(1);
+        assertThat(actual.get(0)).isInstanceOf(JourneyTimeEntry.class);
     }
 }
