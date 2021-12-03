@@ -64,7 +64,6 @@ class CommentServiceImplTest {
         List<com.gepardec.mega.domain.model.Comment> domainComments = commentService.findCommentsForEmployee(
                 employee, fromDate, toDate
         );
-        assertThat(domainComments).isEmpty();
         assertThat(domainComments).hasSize(1);
         assertThat(domainComments.get(0).id()).isEqualTo(1);
     }
