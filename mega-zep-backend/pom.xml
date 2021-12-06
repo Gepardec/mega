@@ -31,7 +31,7 @@
         <xml.resolver.version>20050927</xml.resolver.version>
         <lombok.version>1.18.20</lombok.version>
         <jollyday.version>0.5.10</jollyday.version>
-        <assertj.version>3.9.1</assertj.version>
+        <assertj.version>3.21.0</assertj.version>
         <!-- application info -->
         <!-- !!! IMPORTANT !!!! -->
         <!-- remove -SNAPSHOT in release-branch but keep it in develop branch -->
