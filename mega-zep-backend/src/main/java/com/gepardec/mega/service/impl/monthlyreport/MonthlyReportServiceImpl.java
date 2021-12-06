@@ -26,6 +26,7 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RequestScoped
@@ -50,12 +51,20 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         Employee employee = zepService.getEmployee(userId);
         final LocalDate date;
 
-        if (employee != null && employee.releaseDate() != null) {
-            date = LocalDate.parse(employee.releaseDate()).plusMonths(1);
+        if ((employee != null) && (employee.releaseDate() != null) && checkReleaseDate(employee.releaseDate())) {
+            date = LocalDate.parse(Objects.requireNonNull(employee.releaseDate())).plusMonths(1);
+
         } else {
             date = null;
         }
         return getMonthendReportForUser(userId, date);
+    }
+
+    private boolean checkReleaseDate(String releaseDate) {
+        if (releaseDate.matches("^\\d\\d\\d\\d-{1}\\d\\d-{1}\\d\\d$")) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -82,9 +91,12 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         final List<Comment> comments = new ArrayList<>();
         List<PmProgress> pmProgresses = new ArrayList<>();
         if (employee != null) {
-            LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-            LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
-            comments.addAll(commentService.findCommentsForEmployee(employee, fromDate, toDate));
+
+            if (checkReleaseDate(employee.releaseDate())) {
+                LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+                LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+                comments.addAll(commentService.findCommentsForEmployee(employee, fromDate, toDate));
+            }
 
             final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(employee.email(), employee.releaseDate());
             allOwnedStepEntriesForPMProgress

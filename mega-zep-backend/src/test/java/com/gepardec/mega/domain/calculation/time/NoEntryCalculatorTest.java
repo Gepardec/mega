@@ -14,10 +14,10 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class NoEntryCalculatorTest {
+class NoEntryCalculatorTest {
 
     private NoEntryCalculator noEntryCalculator;
 
@@ -33,9 +33,10 @@ public class NoEntryCalculatorTest {
         List<TimeWarning> expectedTimeWarningsList = new ArrayList<>();
         expectedTimeWarningsList.add(expectedTimeWarning);
 
-        List<TimeWarning> result = noEntryCalculator.calculate(new ArrayList<ProjectEntry>(), new ArrayList<FehlzeitType>());
+        List<TimeWarning> result = noEntryCalculator.calculate(new ArrayList<>(), new ArrayList<>());
 
-        assertEquals(expectedTimeWarningsList, result);
+        assertThat(result)
+                .isEqualTo(expectedTimeWarningsList);
     }
 
     @Test
@@ -46,35 +47,39 @@ public class NoEntryCalculatorTest {
         List<TimeWarning> expectedTimeWarningsList = new ArrayList<>();
         expectedTimeWarningsList.add(expectedTimeWarning);
 
-        List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryList(1), new ArrayList<FehlzeitType>());
+        List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryList(1), new ArrayList<>());
 
-        assertEquals(expectedTimeWarningsList.get(0).getDate(), result.get(0).getDate());
+        assertThat(result.get(0).getDate())
+                .isEqualTo(expectedTimeWarningsList.get(0).getDate());
     }
 
     @Test
     void calculate_whenAllEntries_thenNoWarning() {
-        List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryList(0), new ArrayList<FehlzeitType>());
+        List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryList(0), new ArrayList<>());
 
-        assertTrue(result.isEmpty());
+        assertThat(result.isEmpty())
+                .isTrue();
     }
 
     @Test
     void calculate_whenAllEntriesAndVacationDayOnWorkingDay_thenNoWarning() {
         List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryList(2), createAbsenceListFromUBType());
 
-        assertTrue(result.isEmpty());
+        assertThat(result.isEmpty())
+                .isTrue();
     }
 
     @Test
     void calculate_whenAllEntriesAndCompensatoryDayOnWorkingDay_thenNoWarning() {
         List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryList(2), createAbsenceListFromFAType());
 
-        assertTrue(result.isEmpty());
+        assertThat(result.isEmpty())
+                .isTrue();
     }
 
     @Test
     void calculate_whenAllEntriesInMonthWithHolidayOnFirstNov_thenNoWarning() {
-        List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryListForNovember(), new ArrayList<FehlzeitType>());
+        List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryListForNovember(), new ArrayList<>());
 
         assertTrue(result.isEmpty());
     }
@@ -103,16 +108,6 @@ public class NoEntryCalculatorTest {
         fehlZeit.add(fehlzeitType);
 
         return fehlZeit;
-    }
-
-    private List<LocalDate> getLocalDateList(int month, int from, int to) {
-        List<LocalDate> list = new ArrayList<>();
-
-        for (int i = from; i <= to; i++) {
-            list.add(LocalDate.of(2021, month, i));
-        }
-
-        return list;
     }
 
     private List<ProjectEntry> createProjectEntryList(int amountOfMissingEntries) {

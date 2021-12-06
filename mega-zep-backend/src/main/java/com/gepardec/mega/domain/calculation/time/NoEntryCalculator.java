@@ -1,6 +1,7 @@
 package com.gepardec.mega.domain.calculation.time;
 
 import com.gepardec.mega.domain.calculation.AbstractTimeWarningCalculationStrategy;
+import com.gepardec.mega.domain.model.monthlyreport.AbsenteeType;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarningType;
@@ -31,32 +32,29 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
             timeWarnings.add(timeWarning);
 
             return timeWarnings;
-        } else {
-            Set<TimeWarning> warnings = new HashSet<>();
-            List<LocalDate> datesWithBookings = new ArrayList<>();
-
-            List<LocalDate> businessDays = getBusinessDaysOfMonth(projectEntries.get(0).getDate().getYear(), projectEntries.get(0).getDate().getMonth().getValue());
-            List<LocalDate> compensatoryDays = filterAbsenceTypesAndCompileLocalDateList("FA", absenceEntries);
-            List<LocalDate> vacationDays = filterAbsenceTypesAndCompileLocalDateList("UB", absenceEntries);
-
-            businessDays.removeAll(compensatoryDays);
-            businessDays.removeAll(vacationDays);
-
-            projectEntries.forEach(projectTimeEntry -> {
-                businessDays.forEach(date -> {
-                    if(date.equals(projectTimeEntry.getDate())) {
-                        datesWithBookings.add(date);
-                    }
-                });
-            });
-
-            businessDays.removeAll(datesWithBookings);
-            businessDays.forEach(date -> {
-                warnings.add(createTimeWarning(date));
-            });
-
-            return new ArrayList<>(warnings);
         }
+        Set<TimeWarning> warnings = new HashSet<>();
+        List<LocalDate> datesWithBookings = new ArrayList<>();
+
+        List<LocalDate> businessDays = getBusinessDaysOfMonth(projectEntries.get(0).getDate().getYear(), projectEntries.get(0).getDate().getMonth().getValue());
+        List<LocalDate> compensatoryDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.COMPENSATORY_DAYS.getType(), absenceEntries);
+        List<LocalDate> vacationDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.VACATION_DAYS.getType(), absenceEntries);
+
+        businessDays.removeAll(compensatoryDays);
+        businessDays.removeAll(vacationDays);
+
+        projectEntries.forEach(projectTimeEntry -> businessDays.forEach(date -> {
+            if(date.equals(projectTimeEntry.getDate())) {
+                datesWithBookings.add(date);
+            }
+        }));
+
+        businessDays.removeAll(datesWithBookings);
+        businessDays.forEach(date -> {
+            warnings.add(createTimeWarning(date));
+        });
+
+        return new ArrayList<>(warnings);
     }
 
     private List<LocalDate> getBusinessDaysOfMonth(int year, int month) {
@@ -87,16 +85,6 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
         timeWarning.getWarningTypes().add(TimeWarningType.NO_TIME_ENTRY);
 
         return timeWarning;
-    }
-
-    private List<LocalDate> convertAbsenceEntriesToDates(List<FehlzeitType> absenceEntries) {
-        List<LocalDate> absenceDates = new ArrayList<>();
-        absenceEntries.forEach(fzt -> {
-            LocalDate startDate = LocalDate.parse(fzt.getStartdatum());
-            LocalDate endDate = LocalDate.parse(fzt.getEnddatum());
-        });
-
-        return absenceDates;
     }
 
     private List<LocalDate> filterAbsenceTypesAndCompileLocalDateList(String type, List<FehlzeitType> absenceEntries) {

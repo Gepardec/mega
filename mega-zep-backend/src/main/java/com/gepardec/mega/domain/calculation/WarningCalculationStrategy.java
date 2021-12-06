@@ -2,7 +2,6 @@ package com.gepardec.mega.domain.calculation;
 
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntryWarning;
-import de.provantis.zep.FehlzeitType;
 
 import java.util.List;
 
