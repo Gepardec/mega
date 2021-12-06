@@ -14,8 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class InvalidJourneyCalculatorTest {
 
@@ -62,9 +61,9 @@ class InvalidJourneyCalculatorTest {
 
         final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntry));
 
-        assertEquals(1, warnings.size());
-        assertEquals(1, warnings.get(0).getWarningTypes().size());
-        assertEquals(JourneyWarningType.BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes()).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.BACK_MISSING);
 
     }
 
@@ -75,9 +74,9 @@ class InvalidJourneyCalculatorTest {
 
         final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntry, projectTimeEntry));
 
-        assertEquals(1, warnings.size());
-        assertEquals(1, warnings.get(0).getWarningTypes().size());
-        assertEquals(JourneyWarningType.BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes()).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.BACK_MISSING);
     }
 
     @Test
@@ -89,10 +88,10 @@ class InvalidJourneyCalculatorTest {
         final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
 
         // TODO: Both journey entries cause TO_MISSING Warning, because all are checked separately
-        assertEquals(2, warnings.size());
-        assertEquals(1, warnings.get(0).getWarningTypes().size());
-        assertEquals(JourneyWarningType.TO_MISSING, warnings.get(0).getWarningTypes().get(0));
-        assertEquals(JourneyWarningType.TO_MISSING, warnings.get(1).getWarningTypes().get(0));
+        assertThat(warnings).hasSize(2);
+        assertThat(warnings.get(0).getWarningTypes()).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.TO_MISSING);
+        assertThat(warnings.get(1).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.TO_MISSING);
     }
 
     @Test
@@ -104,10 +103,10 @@ class InvalidJourneyCalculatorTest {
         final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
 
         // TODO: Both journey entries cause BACK_MISSING Warning, because all are checked separately
-        assertEquals(2, warnings.size());
-        assertEquals(1, warnings.get(0).getWarningTypes().size());
-        assertEquals(JourneyWarningType.BACK_MISSING, warnings.get(0).getWarningTypes().get(0));
-        assertEquals(JourneyWarningType.BACK_MISSING, warnings.get(1).getWarningTypes().get(0));
+        assertThat(warnings).hasSize(2);
+        assertThat(warnings.get(0).getWarningTypes()).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.BACK_MISSING);
+        assertThat(warnings.get(1).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.BACK_MISSING);
     }
 
     @Test
@@ -119,10 +118,10 @@ class InvalidJourneyCalculatorTest {
         final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
 
         // TODO: Both journey entries cause TO_MISSING Warning, because all are checked separately
-        assertEquals(2, warnings.size());
-        assertEquals(1, warnings.get(0).getWarningTypes().size());
-        assertEquals(JourneyWarningType.TO_MISSING, warnings.get(0).getWarningTypes().get(0));
-        assertEquals(JourneyWarningType.TO_MISSING, warnings.get(1).getWarningTypes().get(0));
+        assertThat(warnings).hasSize(2);
+        assertThat(warnings.get(0).getWarningTypes()).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.TO_MISSING);
+        assertThat(warnings.get(1).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.TO_MISSING);
     }
 
     @Test
@@ -134,10 +133,10 @@ class InvalidJourneyCalculatorTest {
         final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
 
         // TODO: Both journey entries cause TO_MISSING Warning, because all are checked separately
-        assertEquals(2, warnings.size());
-        assertEquals(1, warnings.get(0).getWarningTypes().size());
-        assertEquals(JourneyWarningType.TO_MISSING, warnings.get(0).getWarningTypes().get(0));
-        assertEquals(JourneyWarningType.TO_MISSING, warnings.get(1).getWarningTypes().get(0));
+        assertThat(warnings).hasSize(2);
+        assertThat(warnings.get(0).getWarningTypes()).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.TO_MISSING);
+        assertThat(warnings.get(1).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.TO_MISSING);
     }
 
     @Test
@@ -148,7 +147,7 @@ class InvalidJourneyCalculatorTest {
 
         final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -158,7 +157,7 @@ class InvalidJourneyCalculatorTest {
 
         final List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, journeyTimeEntryThree));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -172,6 +171,6 @@ class InvalidJourneyCalculatorTest {
         final List<JourneyWarning> warnings = calculator
                 .calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree, projectTimeEntryFour, journeyTimeEntryFive));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 }

@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -95,9 +94,9 @@ class EmployeeResourceTest {
 
         });
 
-        assertEquals(1, employees.size());
+        assertThat(employees).hasSize(1);
         final Employee actual = employees.get(0);
-        assertEquals(userAsEmployee, actual);
+        assertThat(actual).isEqualTo(userAsEmployee);
     }
 
     @Test
@@ -168,8 +167,8 @@ class EmployeeResourceTest {
 
                 });
 
-        assertEquals(2, emails.size());
-        assertTrue(emails.containsAll(expected));
+        assertThat(emails).hasSize(2);
+        assertThat(emails).containsAll(expected);
     }
 
     @Test

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
@@ -42,7 +42,7 @@ class LocaleProducerTest {
         producer.init();
         final Locale actual = producer.getCurrentLocale();
 
-        assertEquals(DEFAULT_LOCALE, actual);
+        assertThat(actual).isEqualTo(DEFAULT_LOCALE);
     }
 
     @Test
@@ -52,7 +52,7 @@ class LocaleProducerTest {
         producer.init();
         final Locale actual = producer.getCurrentLocale();
 
-        assertEquals(DEFAULT_LOCALE, actual);
+        assertThat(actual).isEqualTo(DEFAULT_LOCALE);
     }
 
     @Test
@@ -62,7 +62,7 @@ class LocaleProducerTest {
         producer.init();
         final Locale actual = producer.getCurrentLocale();
 
-        assertEquals(Locale.GERMAN, actual);
+        assertThat(actual).isEqualTo(Locale.GERMAN);
     }
 
     @Test
@@ -72,6 +72,6 @@ class LocaleProducerTest {
         producer.init();
         final Locale actual = producer.getCurrentLocale();
 
-        assertEquals(Locale.ENGLISH, actual);
+        assertThat(actual).isEqualTo(Locale.ENGLISH);
     }
 }

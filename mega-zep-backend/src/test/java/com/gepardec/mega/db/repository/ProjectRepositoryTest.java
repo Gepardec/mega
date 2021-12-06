@@ -9,8 +9,7 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
 class ProjectRepositoryTest {
@@ -35,8 +34,8 @@ class ProjectRepositoryTest {
         Project p = projectRepository.findById(project.getId());
 
         Assertions.assertAll(
-                () -> assertNotNull(p),
-                () -> assertEquals(project.getName(), p.getName())
+                () -> assertThat(p).isNotNull(),
+                () -> assertThat(p.getName()).isEqualTo(project.getName())
         );
     }
 }

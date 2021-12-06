@@ -14,9 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,12 +48,12 @@ class UserContextProducerTest {
         final UserContext userContext = producer.createUserContext();
 
         // Then
-        assertNotNull(userContext.user());
-        assertEquals(user, userContext.user());
+        assertThat(userContext.user()).isNotNull();
+        assertThat(userContext.user()).isEqualTo(user);
     }
 
     @Test
     void createUserContext_whenSecurityContextIsEmpty_thenThrowsUnauthorizedException() {
-        assertThrows(UnauthorizedException.class, () -> producer.createUserContext());
+        assertThatThrownBy(() -> producer.createUserContext()).isInstanceOf(UnauthorizedException.class);
     }
 }

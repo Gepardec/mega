@@ -5,7 +5,6 @@ import com.gepardec.mega.domain.model.ProjectFilter;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.zep.ZepService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,7 +44,7 @@ class ProjectServiceImplTest {
         final List<Project> projectsForMonthYear = projectService.getProjectsForMonthYear(LocalDate.now());
 
         // Then
-        Assertions.assertTrue(projectsForMonthYear.isEmpty());
+        assertThat(projectsForMonthYear).isEmpty();
     }
 
     @Test
@@ -61,7 +61,7 @@ class ProjectServiceImplTest {
         final List<Project> projectsForMonthYear = projectService.getProjectsForMonthYear(LocalDate.now());
 
         // Then
-        Assertions.assertFalse(projectsForMonthYear.isEmpty());
+        assertThat(projectsForMonthYear).isNotEmpty();
     }
 
     @Test
@@ -85,9 +85,8 @@ class ProjectServiceImplTest {
         final List<Project> projectsForMonthYear = projectService.getProjectsForMonthYear(LocalDate.now(), List.of(ProjectFilter.IS_CUSTOMER_PROJECT));
 
         // Then
-        Assertions.assertFalse(projectsForMonthYear.isEmpty());
-        Assertions.assertEquals(1, projectsForMonthYear.size());
-        Assertions.assertEquals("Kunde", projectsForMonthYear.get(0).projectId());
+        assertThat(projectsForMonthYear).hasSize(1);
+        assertThat(projectsForMonthYear.get(0).projectId()).isEqualTo("Kunde");
     }
 
     @Test
@@ -118,8 +117,7 @@ class ProjectServiceImplTest {
         final List<Project> projectsForMonthYear = projectService.getProjectsForMonthYear(LocalDate.now(), List.of(ProjectFilter.IS_LEADS_AVAILABLE));
 
         // Then
-        Assertions.assertFalse(projectsForMonthYear.isEmpty());
-        Assertions.assertEquals(1, projectsForMonthYear.size());
-        Assertions.assertEquals("1", projectsForMonthYear.get(0).projectId());
+        assertThat(projectsForMonthYear).hasSize(1);
+        assertThat(projectsForMonthYear.get(0).projectId()).isEqualTo("1");
     }
 }

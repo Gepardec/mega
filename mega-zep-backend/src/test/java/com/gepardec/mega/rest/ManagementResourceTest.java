@@ -40,9 +40,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -120,16 +118,16 @@ public class ManagementResourceTest {
                 .as(new TypeRef<>() {
                 });
 
-        assertEquals(1L, result.size());
+        assertThat(result).hasSize(1);
         ManagementEntry entry = result.get(0);
-        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.employeeCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.projectCheckState());
-        assertEquals("no-reply@gepardec.com", entry.employee().email());
-        assertEquals("2020-01-01", entry.employee().releaseDate());
-        assertEquals(3L, entry.totalComments());
-        assertEquals(2L, entry.finishedComments());
+        assertThat(entry.customerCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.DONE);
+        assertThat(entry.internalCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
+        assertThat(entry.employeeCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
+        assertThat(entry.projectCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.DONE);
+        assertThat(entry.employee().email()).isEqualTo("no-reply@gepardec.com");
+        assertThat(entry.employee().releaseDate()).isEqualTo("2020-01-01");
+        assertThat(entry.totalComments()).isEqualTo(3L);
+        assertThat(entry.finishedComments()).isEqualTo(2L);
     }
 
     @Test
@@ -159,7 +157,7 @@ public class ManagementResourceTest {
                 .as(new TypeRef<>() {
                 });
 
-        assertEquals(0L, result.size());
+        assertThat(result).isEmpty();
     }
 
     @Test
@@ -183,7 +181,7 @@ public class ManagementResourceTest {
                 .as(new TypeRef<>() {
                 });
 
-        assertEquals(0L, result.size());
+        assertThat(result).isEmpty();
     }
 
     @Test
@@ -255,33 +253,33 @@ public class ManagementResourceTest {
                 .as(new TypeRef<>() {
                 });
 
-        assertEquals(2, result.size());
+        assertThat(result).hasSize(2);
         Optional<ProjectManagementEntry> projectRgkkcc = result.stream()
                 .filter(p -> rgkkcc.projectId().equalsIgnoreCase(p.projectName()))
                 .findFirst();
 
         // assert project management entry
-        assertTrue(projectRgkkcc.isPresent());
-        assertEquals(com.gepardec.mega.domain.model.ProjectState.NOT_RELEVANT, projectRgkkcc.get().controlProjectState());
-        assertEquals(com.gepardec.mega.domain.model.ProjectState.DONE, projectRgkkcc.get().controlBillingState());
-        assertTrue(projectRgkkcc.get().presetControlProjectState());
-        assertFalse(projectRgkkcc.get().presetControlBillingState());
+        assertThat(projectRgkkcc).isPresent();
+        assertThat(projectRgkkcc.get().controlProjectState()).isEqualTo(com.gepardec.mega.domain.model.ProjectState.NOT_RELEVANT);
+        assertThat(projectRgkkcc.get().controlBillingState()).isEqualTo(com.gepardec.mega.domain.model.ProjectState.DONE);
+        assertThat(projectRgkkcc.get().presetControlProjectState()).isTrue();
+        assertThat(projectRgkkcc.get().presetControlBillingState()).isFalse();
 
         List<ManagementEntry> rgkkccEntries = projectRgkkcc.get().entries();
         Optional<ManagementEntry> entrymmustermann = rgkkccEntries.stream()
                 .filter(m -> employee1.userId().equalsIgnoreCase(m.employee().userId()))
                 .findFirst();
         // assert management entry
-        assertTrue(entrymmustermann.isPresent());
+        assertThat(entrymmustermann).isPresent();
         ManagementEntry entry = entrymmustermann.get();
-        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.employeeCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.projectCheckState());
-        assertEquals(employee1.email(), entry.employee().email());
-        assertEquals(employee1.releaseDate(), entry.employee().releaseDate());
-        assertEquals(3L, entry.totalComments());
-        assertEquals(2L, entry.finishedComments());
+        assertThat(entry.customerCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.DONE);
+        assertThat(entry.internalCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
+        assertThat(entry.employeeCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
+        assertThat(entry.projectCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.DONE);
+        assertThat(entry.employee().email()).isEqualTo(employee1.email());
+        assertThat(entry.employee().releaseDate()).isEqualTo(employee1.releaseDate());
+        assertThat(entry.totalComments()).isEqualTo(3L);
+        assertThat(entry.finishedComments()).isEqualTo(2L);
     }
 
     @Test
@@ -338,37 +336,37 @@ public class ManagementResourceTest {
                 .as(new TypeRef<>() {
                 });
 
-        assertEquals(2, result.size());
+        assertThat(result).hasSize(2);
         Optional<ProjectManagementEntry> projectRgkkcc = result.stream()
                 .filter(p -> rgkkcc.projectId().equalsIgnoreCase(p.projectName()))
                 .findFirst();
 
         // assert project management entry
-        assertTrue(projectRgkkcc.isPresent());
-        assertEquals(com.gepardec.mega.domain.model.ProjectState.NOT_RELEVANT, projectRgkkcc.get().controlProjectState());
-        assertEquals(com.gepardec.mega.domain.model.ProjectState.DONE, projectRgkkcc.get().controlBillingState());
-        assertTrue(projectRgkkcc.get().presetControlProjectState());
-        assertFalse(projectRgkkcc.get().presetControlBillingState());
+        assertThat(projectRgkkcc).isPresent();
+        assertThat(projectRgkkcc.get().controlProjectState()).isEqualTo(com.gepardec.mega.domain.model.ProjectState.NOT_RELEVANT);
+        assertThat(projectRgkkcc.get().controlBillingState()).isEqualTo(com.gepardec.mega.domain.model.ProjectState.DONE);
+        assertThat(projectRgkkcc.get().presetControlProjectState()).isTrue();
+        assertThat(projectRgkkcc.get().presetControlBillingState()).isFalse();
 
         List<ManagementEntry> rgkkccEntries = projectRgkkcc.get().entries();
         Optional<ManagementEntry> entrymmustermann = rgkkccEntries.stream()
                 .filter(m -> employee1.userId().equalsIgnoreCase(m.employee().userId()))
                 .findFirst();
         // assert management entry
-        assertTrue(entrymmustermann.isPresent());
+        assertThat(entrymmustermann).isPresent();
         ManagementEntry entry = entrymmustermann.get();
-        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.employeeCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.projectCheckState());
-        assertEquals(employee1.email(), entry.employee().email());
-        assertEquals(employee1.releaseDate(), entry.employee().releaseDate());
-        assertEquals(3L, entry.totalComments());
-        assertEquals(2L, entry.finishedComments());
+        assertThat(entry.customerCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.DONE);
+        assertThat(entry.internalCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
+        assertThat(entry.employeeCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
+        assertThat(entry.projectCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.DONE);
+        assertThat(entry.employee().email()).isEqualTo(employee1.email());
+        assertThat(entry.employee().releaseDate()).isEqualTo(employee1.releaseDate());
+        assertThat(entry.totalComments()).isEqualTo(3L);
+        assertThat(entry.finishedComments()).isEqualTo(2L);
 
         // assert billable/non billable time
-        assertEquals(Duration.ofMinutes(240), result.get(0).aggregatedBillableWorkTimeInSeconds());
-        assertEquals(Duration.ofMinutes(120), result.get(0).aggregatedNonBillableWorkTimeInSeconds());
+        assertThat(result.get(0).aggregatedBillableWorkTimeInSeconds()).isEqualTo(Duration.ofMinutes(240));
+        assertThat(result.get(0).aggregatedNonBillableWorkTimeInSeconds()).isEqualTo(Duration.ofMinutes(120));
     }
 
     @Test
@@ -425,37 +423,37 @@ public class ManagementResourceTest {
                 .as(new TypeRef<>() {
                 });
 
-        assertEquals(2, result.size());
+        assertThat(result).hasSize(2);
         Optional<ProjectManagementEntry> projectRgkkcc = result.stream()
                 .filter(p -> rgkkcc.projectId().equalsIgnoreCase(p.projectName()))
                 .findFirst();
 
         // assert project management entry
-        assertTrue(projectRgkkcc.isPresent());
-        assertEquals(com.gepardec.mega.domain.model.ProjectState.NOT_RELEVANT, projectRgkkcc.get().controlProjectState());
-        assertEquals(com.gepardec.mega.domain.model.ProjectState.DONE, projectRgkkcc.get().controlBillingState());
-        assertTrue(projectRgkkcc.get().presetControlProjectState());
-        assertFalse(projectRgkkcc.get().presetControlBillingState());
+        assertThat(projectRgkkcc).isPresent();
+        assertThat(projectRgkkcc.get().controlProjectState()).isEqualTo(com.gepardec.mega.domain.model.ProjectState.NOT_RELEVANT);
+        assertThat(projectRgkkcc.get().controlBillingState()).isEqualTo(com.gepardec.mega.domain.model.ProjectState.DONE);
+        assertThat(projectRgkkcc.get().presetControlProjectState()).isTrue();
+        assertThat(projectRgkkcc.get().presetControlBillingState()).isFalse();
 
         List<ManagementEntry> rgkkccEntries = projectRgkkcc.get().entries();
         Optional<ManagementEntry> entrymmustermann = rgkkccEntries.stream()
                 .filter(m -> employee1.userId().equalsIgnoreCase(m.employee().userId()))
                 .findFirst();
         // assert management entry
-        assertTrue(entrymmustermann.isPresent());
+        assertThat(entrymmustermann).isPresent();
         ManagementEntry entry = entrymmustermann.get();
-        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.customerCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.internalCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.OPEN, entry.employeeCheckState());
-        assertEquals(com.gepardec.mega.domain.model.State.DONE, entry.projectCheckState());
-        assertEquals(employee1.email(), entry.employee().email());
-        assertEquals(employee1.releaseDate(), entry.employee().releaseDate());
-        assertEquals(3L, entry.totalComments());
-        assertEquals(2L, entry.finishedComments());
+        assertThat(entry.customerCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.DONE);
+        assertThat(entry.internalCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
+        assertThat(entry.employeeCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
+        assertThat(entry.projectCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.DONE);
+        assertThat(entry.employee().email()).isEqualTo(employee1.email());
+        assertThat(entry.employee().releaseDate()).isEqualTo(employee1.releaseDate());
+        assertThat(entry.totalComments()).isEqualTo(3L);
+        assertThat(entry.finishedComments()).isEqualTo(2L);
 
         // assert billable/non billable time
-        assertEquals(Duration.ofMinutes(0), result.get(0).aggregatedBillableWorkTimeInSeconds());
-        assertEquals(Duration.ofMinutes(0), result.get(0).aggregatedNonBillableWorkTimeInSeconds());
+        assertThat(result.get(0).aggregatedBillableWorkTimeInSeconds()).isEqualTo(Duration.ofMinutes(0));
+        assertThat(result.get(0).aggregatedNonBillableWorkTimeInSeconds()).isEqualTo(Duration.ofMinutes(0));
     }
 
     @Test
@@ -511,8 +509,8 @@ public class ManagementResourceTest {
                 });
 
         // assert billable/non billable time
-        assertEquals(Duration.ofMinutes(0), result.get(0).aggregatedBillableWorkTimeInSeconds());
-        assertEquals(Duration.ofMinutes(0), result.get(0).aggregatedNonBillableWorkTimeInSeconds());
+        assertThat(result.get(0).aggregatedBillableWorkTimeInSeconds()).isEqualTo(Duration.ofMinutes(0));
+        assertThat(result.get(0).aggregatedNonBillableWorkTimeInSeconds()).isEqualTo(Duration.ofMinutes(0));
     }
 
     @Test
@@ -526,7 +524,7 @@ public class ManagementResourceTest {
                 .as(new TypeRef<>() {
                 });
 
-        assertEquals(0L, result.size());
+        assertThat(result).isEmpty();
     }
 
     @Test
@@ -545,7 +543,7 @@ public class ManagementResourceTest {
                 .as(new TypeRef<>() {
                 });
 
-        assertEquals(0L, result.size());
+        assertThat(result).isEmpty();
     }
 
     @Test
@@ -570,7 +568,7 @@ public class ManagementResourceTest {
                 .as(new TypeRef<>() {
                 });
 
-        assertEquals(0L, result.size());
+        assertThat(result).isEmpty();
     }
 
 
