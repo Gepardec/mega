@@ -33,6 +33,7 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
 
             return timeWarnings;
         }
+
         Set<TimeWarning> warnings = new HashSet<>();
         List<LocalDate> datesWithBookings = new ArrayList<>();
 
