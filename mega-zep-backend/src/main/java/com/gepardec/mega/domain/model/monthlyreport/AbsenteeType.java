@@ -4,7 +4,7 @@ public enum AbsenteeType {
     COMPENSATORY_DAYS("FA"),
     VACATION_DAYS("UB");
 
-    public String type;
+    private final String type;
 
     AbsenteeType(String type) {
         this.type = type;

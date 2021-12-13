@@ -51,7 +51,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         Employee employee = zepService.getEmployee(userId);
         final LocalDate date;
 
-        if ((employee != null) && (employee.releaseDate() != null) && checkReleaseDate(employee.releaseDate())) {
+        if ((employee != null) && (employee.releaseDate() != null) && checkReleaseDate(Objects.requireNonNull(employee.releaseDate()))) {
             date = LocalDate.parse(Objects.requireNonNull(employee.releaseDate())).plusMonths(1);
 
         } else {
@@ -61,6 +61,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     }
 
     private boolean checkReleaseDate(String releaseDate) {
+        // checks for the correct format (YYYY-mm-dd) for LocalDate.parse to avoid Exception
         if (releaseDate.matches("^\\d\\d\\d\\d-{1}\\d\\d-{1}\\d\\d$")) {
             return true;
         }
