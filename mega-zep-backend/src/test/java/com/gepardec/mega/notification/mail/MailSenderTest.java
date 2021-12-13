@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @QuarkusTest
 class MailSenderTest {
 
+    public static final String GOOGLE_DOCS_PLANRECHNUNGS_URL = "https://docs.google.com/spreadsheets/d/12T9Iiy0WRuinN5Zdw1AfeXYABPsxoVwL17sJKfky5JA";
     @ConfigProperty(name = "quarkus.mailer.mock")
     boolean mailMockSetting;
 
@@ -93,6 +94,17 @@ class MailSenderTest {
         assertAll(
                 () -> assertThat(sent).hasSize(1),
                 () -> assertThat(sent.get(0).getHtml()).contains(applicationConfig.getBudgetCalculationExcelUrlAsString())
+        );
+    }
+
+    @Test
+    void send_projectControllingMailContainsCorrectGoogleDocsURL() {
+        final String to = "garfield.atHome@gmail.com";
+        mailSender.send(Mail.PL_PROJECT_CONTROLLING, to, "Jamal", Locale.GERMAN);
+        List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
+        assertAll(
+                () -> assertEquals(1, sent.size()),
+                () -> assertTrue(sent.get(0).getHtml().contains(GOOGLE_DOCS_PLANRECHNUNGS_URL))
         );
     }
 }
