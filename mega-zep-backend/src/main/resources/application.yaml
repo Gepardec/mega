@@ -158,7 +158,7 @@ mega:
           - "thomas.herzog@gepardec.com"
           - "philipp.wurm@gepardec.com"
           - "werner.bruckmueller@gepardec.com"
-          - "andreas.mayer@gepardec.com"
+
 
 # PROD Properties
 "%prod":
@@ -239,7 +239,7 @@ mega:
           - "manuel.vilim@gepardec.com"
           - "armin.lang@gepardec.com"
           - "alexandra.stummer@gepardec.com"
-          - "andreas.mayer@gepardec.com"
+
 
 
 # PROD-STAGE Properties
