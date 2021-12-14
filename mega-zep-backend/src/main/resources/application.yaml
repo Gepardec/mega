@@ -159,6 +159,7 @@ mega:
           - "philipp.wurm@gepardec.com"
           - "werner.bruckmueller@gepardec.com"
 
+
 # PROD Properties
 "%prod":
   quarkus:
@@ -238,6 +239,8 @@ mega:
           - "manuel.vilim@gepardec.com"
           - "armin.lang@gepardec.com"
           - "alexandra.stummer@gepardec.com"
+
+
 
 # PROD-STAGE Properties
 "%prodstage":

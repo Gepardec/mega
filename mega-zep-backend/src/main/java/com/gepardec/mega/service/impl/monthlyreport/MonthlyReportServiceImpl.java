@@ -7,6 +7,7 @@ import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
+import com.gepardec.mega.domain.model.monthlyreport.ProjectEntryWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.rest.model.PmProgress;
@@ -23,7 +24,9 @@ import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RequestScoped
@@ -48,12 +51,21 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         Employee employee = zepService.getEmployee(userId);
         final LocalDate date;
 
-        if (employee != null && employee.releaseDate() != null) {
-            date = LocalDate.parse(employee.releaseDate()).plusMonths(1);
+        if ((employee != null) && (employee.releaseDate() != null) && checkReleaseDate(Objects.requireNonNull(employee.releaseDate()))) {
+            date = LocalDate.parse(Objects.requireNonNull(employee.releaseDate())).plusMonths(1);
+
         } else {
             date = null;
         }
         return getMonthendReportForUser(userId, date);
+    }
+
+    private boolean checkReleaseDate(String releaseDate) {
+        // checks for the correct format (YYYY-mm-dd) for LocalDate.parse to avoid Exception
+        if (releaseDate.matches("^\\d\\d\\d\\d-{1}\\d\\d-{1}\\d\\d$")) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -74,13 +86,18 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     private MonthlyReport buildMonthlyReport(Employee employee, List<ProjectEntry> projectEntries, List<ProjektzeitType> billableEntries, List<FehlzeitType> absenceEntries, Optional<EmployeeState> employeeCheckState) {
         final List<JourneyWarning> journeyWarnings = warningCalculator.determineJourneyWarnings(projectEntries);
         final List<TimeWarning> timeWarnings = warningCalculator.determineTimeWarnings(projectEntries);
+        timeWarnings.addAll(warningCalculator.determineNoTimeEntries(projectEntries, absenceEntries));
+        timeWarnings.sort(Comparator.comparing(ProjectEntryWarning::getDate));
 
         final List<Comment> comments = new ArrayList<>();
         List<PmProgress> pmProgresses = new ArrayList<>();
         if (employee != null) {
-            LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-            LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
-            comments.addAll(commentService.findCommentsForEmployee(employee, fromDate, toDate));
+
+            if (checkReleaseDate(employee.releaseDate())) {
+                LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
+                LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+                comments.addAll(commentService.findCommentsForEmployee(employee, fromDate, toDate));
+            }
 
             final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(employee.email(), employee.releaseDate());
             allOwnedStepEntriesForPMProgress
