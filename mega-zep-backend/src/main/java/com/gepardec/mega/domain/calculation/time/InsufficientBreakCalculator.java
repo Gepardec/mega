@@ -52,13 +52,13 @@ public class InsufficientBreakCalculator extends AbstractTimeWarningCalculationS
         }
         return warnings;
     }
-
+    //TODO overlapping entries can result i wrong calculations
     private double calculateBreakTimeSummaryForAllDayEntries(final List<ProjectEntry> entriesPerDay) {
         BigDecimal breakTime = BigDecimal.ZERO;
         for (int i = 0; i < entriesPerDay.size(); i++) {
             final ProjectEntry actualEntry = entriesPerDay.get(i);
             final ProjectEntry nextEntry = getNextEntryOrNull(i, entriesPerDay);
-            if (nextEntry != null) {
+            if (nextEntry != null && (actualEntry.getToTime().isBefore(nextEntry.getFromTime()))) {
                 final BigDecimal currentBreakTime = BigDecimal.valueOf(Duration.between(actualEntry.getToTime(), nextEntry.getFromTime()).toMinutes())
                         .setScale(2, RoundingMode.HALF_EVEN)
                         .divide(BigDecimal.valueOf(60), RoundingMode.HALF_EVEN);
