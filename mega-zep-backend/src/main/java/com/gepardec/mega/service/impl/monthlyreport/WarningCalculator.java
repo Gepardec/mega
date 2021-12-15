@@ -5,6 +5,7 @@ import com.gepardec.mega.domain.calculation.journey.InvalidJourneyCalculator;
 import com.gepardec.mega.domain.calculation.journey.InvalidWorkingLocationInJourneyCalculator;
 import com.gepardec.mega.domain.calculation.time.CoreWorkingHoursCalculator;
 import com.gepardec.mega.domain.calculation.time.ExceededMaximumWorkingHoursPerDayCalculator;
+import com.gepardec.mega.domain.calculation.time.HolidayCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientBreakCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientRestCalculator;
 import com.gepardec.mega.domain.calculation.time.NoEntryCalculator;
@@ -34,7 +35,8 @@ public class WarningCalculator {
             new InsufficientBreakCalculator(),
             new InsufficientRestCalculator(),
             new CoreWorkingHoursCalculator(),
-            new TimeOverlapCalculator());
+            new TimeOverlapCalculator(),
+            new HolidayCalculator());
 
     private static final List<WarningCalculationStrategy<JourneyWarning>> journeyWarningCalculators = List.of(
             new InvalidJourneyCalculator(),
