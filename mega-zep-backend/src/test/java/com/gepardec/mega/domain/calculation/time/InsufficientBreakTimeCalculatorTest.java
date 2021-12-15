@@ -1,6 +1,5 @@
 package com.gepardec.mega.domain.calculation.time;
 
-import com.gepardec.mega.domain.model.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyDirection;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
