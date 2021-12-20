@@ -5,7 +5,8 @@ public enum TimeWarningType implements WarningType {
     TIME_OVERLAP,
     NO_TIME_ENTRY,
     EMPTY_ENTRY_LIST,
-    HOLIDAY;
+    HOLIDAY,
+    WEEKEND;
 
     @Override
     public String warningType() {

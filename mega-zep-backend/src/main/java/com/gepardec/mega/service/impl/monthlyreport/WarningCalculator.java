@@ -10,6 +10,7 @@ import com.gepardec.mega.domain.calculation.time.InsufficientBreakCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientRestCalculator;
 import com.gepardec.mega.domain.calculation.time.NoEntryCalculator;
 import com.gepardec.mega.domain.calculation.time.TimeOverlapCalculator;
+import com.gepardec.mega.domain.calculation.time.WeekendCalculator;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntryWarning;
@@ -36,7 +37,8 @@ public class WarningCalculator {
             new InsufficientRestCalculator(),
             new CoreWorkingHoursCalculator(),
             new TimeOverlapCalculator(),
-            new HolidayCalculator());
+            new HolidayCalculator(),
+            new WeekendCalculator());
 
     private static final List<WarningCalculationStrategy<JourneyWarning>> journeyWarningCalculators = List.of(
             new InvalidJourneyCalculator(),
