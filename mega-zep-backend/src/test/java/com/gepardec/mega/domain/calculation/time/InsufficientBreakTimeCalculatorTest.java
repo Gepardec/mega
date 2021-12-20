@@ -225,7 +225,7 @@ class InsufficientBreakTimeCalculatorTest {
         final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
 
         assertThat(warnings)
-                .hasSize(0);
+                .isEmpty();
     }
 
     @Test
@@ -255,6 +255,6 @@ class InsufficientBreakTimeCalculatorTest {
         final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree, timeEntryFour));
 
         assertThat(warnings)
-                .hasSize(0);
+                .isEmpty();
     }
 }
