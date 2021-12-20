@@ -18,10 +18,8 @@ import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.WarningType;
 import de.provantis.zep.FehlzeitType;
 
-import javax.annotation.Nonnull;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
