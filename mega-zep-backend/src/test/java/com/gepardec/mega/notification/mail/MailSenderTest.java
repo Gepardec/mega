@@ -105,8 +105,8 @@ class MailSenderTest {
         mailSender.send(Mail.PL_PROJECT_CONTROLLING, to, "Jamal", Locale.GERMAN);
         List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
         assertAll(
-                () -> assertEquals(1, sent.size()),
-                () -> assertTrue(sent.get(0).getHtml().contains(GOOGLE_DOCS_PLANRECHNUNGS_URL))
+                () -> assertThat(sent.size()).isEqualTo(1),
+                () -> assertThat(sent.get(0).getHtml().contains(GOOGLE_DOCS_PLANRECHNUNGS_URL)).isTrue()
         );
     }
 }
