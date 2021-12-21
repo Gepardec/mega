@@ -52,7 +52,7 @@ public class Schedules {
 
     //FIXME: Remove this scheduled task in January 2022.
     @Scheduled(identity = "Generate step entries on the 21st of December 2021",
-            cron = "0 0 0 21 DEC ? *")
+            cron = "0 0 0 22 DEC ? *")
     void generateStepEntries() {
         stepEntrySyncService.generateStepEntriesFromScheduler();
     }
