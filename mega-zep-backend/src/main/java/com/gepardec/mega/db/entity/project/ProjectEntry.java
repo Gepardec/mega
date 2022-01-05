@@ -237,11 +237,16 @@ public class ProjectEntry {
 
         ProjectEntry that = (ProjectEntry) o;
 
-        return id != null ? id.equals(that.id) : that.id == null;
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
+        return step == that.step;
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + step.hashCode();
+        return result;
     }
 }
