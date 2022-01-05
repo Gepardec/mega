@@ -43,16 +43,8 @@ public class Schedules {
         syncService.syncEmployees();
     }
 
-    //FIXME: Reactivate this scheduled task again in January 2022.
-//    @Scheduled(identity = "Generate step entries on the second last day of a month",
-//            cron = "0 0 0 L-2 * ? *")
-//    void generateStepEntries() {
-//        stepEntrySyncService.generateStepEntriesFromScheduler();
-//    }
-
-    //FIXME: Remove this scheduled task in January 2022.
-    @Scheduled(identity = "Generate step entries on the 21st of December 2021",
-            cron = "0 0 0 22 DEC ? *")
+    @Scheduled(identity = "Generate step entries on the second last day of a month",
+            cron = "0 0 0 L-2 * ? *")
     void generateStepEntries() {
         stepEntrySyncService.generateStepEntriesFromScheduler();
     }
