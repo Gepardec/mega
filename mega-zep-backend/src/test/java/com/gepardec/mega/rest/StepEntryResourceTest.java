@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -67,7 +67,7 @@ class StepEntryResourceTest {
                 .put("/stepentry/close")
                 .as(Boolean.class);
 
-        assertTrue(updated);
+        assertThat(updated).isTrue();
     }
 
     private User createUserForRole(final Role role) {
@@ -76,9 +76,9 @@ class StepEntryResourceTest {
         return User.builder()
                 .userId("1")
                 .dbId(1)
-                .email("thomas.herzog@gpeardec.com")
-                .firstname("Thomas")
-                .lastname("Herzog")
+                .email("max.mustermann@gpeardec.com")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .roles(roles)
                 .build();
     }
@@ -86,7 +86,7 @@ class StepEntryResourceTest {
     private EmployeeStep createEmployeeStep() {
         Employee employee = Employee.builder()
                 .userId("1")
-                .email("thomas.herzog@gpeardec.com")
+                .email("max.mustermann@gpeardec.com")
                 .build();
 
         return EmployeeStep.builder()

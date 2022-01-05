@@ -5,24 +5,28 @@ import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.Task;
+import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
+import com.gepardec.mega.domain.model.monthlyreport.TimeWarningType;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.zep.ZepService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MonthlyReportServiceImplTest {
@@ -33,7 +37,7 @@ class MonthlyReportServiceImplTest {
     @Mock
     private ResourceBundle resourceBundle;
 
-    @Spy
+    @Mock
     private WarningCalculator warningCalculator;
 
     @Mock
@@ -42,60 +46,96 @@ class MonthlyReportServiceImplTest {
     @Mock
     private StepEntryService stepEntryService;
 
+    @Mock
+    ResourceBundle messages;
+
     @InjectMocks
     private MonthlyReportServiceImpl workerService;
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterNull() {
-        Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(null);
+        when(zepService.getEmployee(Mockito.any())).thenReturn(null);
+        when(warningCalculator.determineNoTimeEntries(Mockito.anyList(), Mockito.anyList())).thenReturn(new ArrayList<>());
 
-        Assertions.assertNotNull(workerService.getMonthendReportForUser("0"));
+        assertThat(workerService.getMonthendReportForUser("0"))
+                .isNotNull();
     }
 
-    // @Test FIXME
+    @Test
     void testGetMonthendReportForUser_MitarbeiterValid() {
         final Employee employee = createEmployeeWithReleaseDate(0, "NULL");
-        Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
 
-        Assertions.assertNotNull(workerService.getMonthendReportForUser("0"));
+        assertThat(workerService.getMonthendReportForUser("0"))
+                .isNotNull();
     }
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenValid() {
         final Employee employee = createEmployee(0);
-        Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
-        Mockito.when(zepService.getProjectTimes(Mockito.any(), Mockito.any())).thenReturn(new ArrayList<>());
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(new ArrayList<>());
+        when(warningCalculator.determineNoTimeEntries(Mockito.anyList(), Mockito.anyList())).thenReturn(new ArrayList<>());
 
-        Assertions.assertNotNull(workerService.getMonthendReportForUser("0"));
+        assertThat(workerService.getMonthendReportForUser("0"))
+                .isNotNull();
     }
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenValid_NoWarning() {
         final Employee employee = createEmployee(0);
-        Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
-        Mockito.when(zepService.getProjectTimes(Mockito.any(), Mockito.any())).thenReturn(createReadProjektzeitenResponseType(10));
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjektzeitenResponseType(10));
+        when(warningCalculator.determineNoTimeEntries(Mockito.anyList(), Mockito.anyList())).thenReturn(new ArrayList<>());
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
-        Assertions.assertNotNull(monthendReportForUser);
-        Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.employee().email());
-        Assertions.assertNotNull(monthendReportForUser.timeWarnings());
-        Assertions.assertTrue(monthendReportForUser.timeWarnings().isEmpty());
+
+        assertThat(monthendReportForUser)
+                .isNotNull();
+        assertThat(monthendReportForUser.employee().email())
+                .isEqualTo("Max_0@gepardec.com");
+        assertThat(monthendReportForUser.timeWarnings())
+                .isNotNull();
+        assertThat(monthendReportForUser.timeWarnings().isEmpty())
+                .isTrue();
     }
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenValid_Warning() {
         final Employee employee = createEmployee(0);
-        Mockito.when(zepService.getEmployee(Mockito.any())).thenReturn(employee);
-        Mockito.when(zepService.getProjectTimes(Mockito.any(), Mockito.any())).thenReturn(createReadProjektzeitenResponseType(18));
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjektzeitenResponseType(18));
+        when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(new ArrayList<>());
+        when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(createTimeWarningList());
 
         final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
-        Assertions.assertNotNull(monthendReportForUser);
-        Assertions.assertEquals("Thomas_0@gepardec.com", monthendReportForUser.employee().email());
-        Assertions.assertNotNull(monthendReportForUser.timeWarnings());
-        Assertions.assertFalse(monthendReportForUser.timeWarnings().isEmpty());
-        Assertions.assertEquals(LocalDate.of(2020, 1, 31), monthendReportForUser.timeWarnings().get(0).getDate());
-        Assertions.assertEquals(1d, monthendReportForUser.timeWarnings().get(0).getExcessWorkTime());
-        Assertions.assertEquals(0.5d, monthendReportForUser.timeWarnings().get(0).getMissingBreakTime());
+
+        assertThat(monthendReportForUser)
+                .isNotNull();
+        assertThat(monthendReportForUser.employee().email())
+                .isEqualTo("Max_0@gepardec.com");
+        assertThat(monthendReportForUser.timeWarnings())
+                .isNotNull();
+        assertThat(Objects.requireNonNull(monthendReportForUser.timeWarnings()).isEmpty())
+                .isFalse();
+        assertThat(monthendReportForUser.timeWarnings().get(0).getDate())
+                .isEqualTo(LocalDate.of(2020, 1, 31));
+        assertThat(monthendReportForUser.timeWarnings().get(0).getExcessWorkTime())
+                .isEqualTo(1d);
+        assertThat(monthendReportForUser.timeWarnings().get(0).getMissingBreakTime())
+                .isEqualTo(0.5d);
+    }
+
+    private List<TimeWarning> createTimeWarningList() {
+        TimeWarning timewarning = new TimeWarning();
+        timewarning.setDate(LocalDate.of(2020, 1, 31));
+        timewarning.getWarningTypes().add(TimeWarningType.OUTSIDE_CORE_WORKING_TIME);
+        timewarning.setExcessWorkTime(1d);
+        timewarning.setMissingBreakTime(0.5d);
+        List<TimeWarning> timeWarningList = new ArrayList<>();
+        timeWarningList.add(timewarning);
+
+        return timeWarningList;
     }
 
     private List<ProjectEntry> createReadProjektzeitenResponseType(int bisHours) {
@@ -119,7 +159,7 @@ class MonthlyReportServiceImplTest {
     }
 
     private Employee createEmployeeWithReleaseDate(final int userId, String releaseDate) {
-        final String name = "Thomas_" + userId;
+        final String name = "Max_" + userId;
 
         final Employee employee = Employee.builder()
                 .email(name + "@gepardec.com")

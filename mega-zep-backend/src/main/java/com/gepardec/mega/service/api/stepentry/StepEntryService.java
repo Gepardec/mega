@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StepEntryService {
+    Optional<EmployeeState> findEmployeeCheckState(final Employee employee, LocalDate date);
+
     Optional<EmployeeState> findEmployeeCheckState(final Employee employee);
 
     List<com.gepardec.mega.db.entity.employee.StepEntry> findAllOwnedAndUnassignedStepEntriesForOtherChecks(final Employee employee);

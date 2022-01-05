@@ -14,9 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class CoreWorkingHoursCalculatorTest {
 
@@ -63,7 +61,7 @@ class CoreWorkingHoursCalculatorTest {
 
         List<TimeWarning> result = calculator.calculate(List.of(travelAfter, end, start, travelBefore));
 
-        assertTrue(result.isEmpty());
+        assertThat(result).isEmpty();
     }
 
     @Test
@@ -73,9 +71,9 @@ class CoreWorkingHoursCalculatorTest {
 
         List<TimeWarning> result = calculator.calculate(List.of(start, end));
 
-        assertFalse(result.isEmpty(), "Warnings should have been detected");
-        assertEquals(1, result.get(0).getWarningTypes().size(), "One WarningType should have been set");
-        assertEquals(TimeWarningType.OUTSIDE_CORE_WORKING_TIME, result.get(0).getWarningTypes().get(0));
+        assertThat(result).isNotEmpty();
+        assertThat(result.get(0).getWarningTypes()).as("One WarningType should have been set").hasSize(1);
+        assertThat(result.get(0).getWarningTypes().get(0)).isEqualTo(TimeWarningType.OUTSIDE_CORE_WORKING_TIME);
     }
 
     @Test
@@ -85,7 +83,7 @@ class CoreWorkingHoursCalculatorTest {
 
         List<TimeWarning> result = calculator.calculate(List.of(start, end));
 
-        assertEquals(1, result.size());
+        assertThat(result).hasSize(1);
     }
 
     @Test
@@ -95,7 +93,7 @@ class CoreWorkingHoursCalculatorTest {
 
         List<TimeWarning> result = calculator.calculate(List.of(start, end));
 
-        assertEquals(1, result.size());
+        assertThat(result).hasSize(1);
     }
 
     @Test
@@ -105,7 +103,7 @@ class CoreWorkingHoursCalculatorTest {
 
         List<TimeWarning> result = calculator.calculate(List.of(start, end));
 
-        assertEquals(1, result.size());
+        assertThat(result).hasSize(1);
     }
 
     @Test
@@ -115,7 +113,7 @@ class CoreWorkingHoursCalculatorTest {
 
         List<TimeWarning> result = calculator.calculate(List.of(start, end));
 
-        assertEquals(1, result.size());
+        assertThat(result).hasSize(1);
     }
 
     @Test
@@ -124,12 +122,12 @@ class CoreWorkingHoursCalculatorTest {
 
         List<TimeWarning> result = calculator.calculate(List.of(start));
 
-        assertEquals(1, result.size());
+        assertThat(result).hasSize(1);
     }
 
     @Test
     void whenDataListEmpty_thenNoWarnings() {
-        assertTrue(calculator.calculate(List.of()).isEmpty());
+        assertThat(calculator.calculate(List.of())).isEmpty();
     }
 
     @Test
@@ -139,7 +137,7 @@ class CoreWorkingHoursCalculatorTest {
 
         List<TimeWarning> result = calculator.calculate(List.of(start, end));
 
-        assertEquals(1, result.size());
+        assertThat(result).hasSize(1);
     }
 
     @Test
@@ -154,7 +152,7 @@ class CoreWorkingHoursCalculatorTest {
         List<TimeWarning> result = calculator
                 .calculate(List.of(travelInactiveBefore, travelActiveBefore, start, end, travelActiveAfter, travelInactiveAfter));
 
-        assertTrue(result.isEmpty());
+        assertThat(result).isEmpty();
     }
 
     @Test
@@ -164,6 +162,6 @@ class CoreWorkingHoursCalculatorTest {
 
         List<TimeWarning> result = calculator.calculate(List.of(start, end));
 
-        assertTrue(result.isEmpty());
+        assertThat(result).isEmpty();
     }
 }

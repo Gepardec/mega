@@ -13,10 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class InsufficientBreakTimeCalculatorTest {
 
@@ -71,7 +68,7 @@ class InsufficientBreakTimeCalculatorTest {
 
         final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntry));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -81,7 +78,7 @@ class InsufficientBreakTimeCalculatorTest {
 
         final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -91,7 +88,7 @@ class InsufficientBreakTimeCalculatorTest {
 
         final List<TimeWarning> warnings = calculator.calculate(List.of(journeyEntryOne,journeyEntryTwo));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -101,8 +98,8 @@ class InsufficientBreakTimeCalculatorTest {
 
         final List<TimeWarning> warnings = calculator.calculate(List.of(journeyEntryOne,journeyEntryTwo));
 
-        assertEquals(1, warnings.size());
-        assertEquals(0.5, warnings.get(0).getMissingBreakTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getMissingBreakTime()).isEqualTo(0.5);
     }
 
 
@@ -114,7 +111,7 @@ class InsufficientBreakTimeCalculatorTest {
 
         final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -125,12 +122,12 @@ class InsufficientBreakTimeCalculatorTest {
 
         final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
     void whenDataListEmpty_thenNoWarningsCreated() {
-        assertTrue(calculator.calculate(List.of()).isEmpty());
+        assertThat(calculator.calculate(List.of())).isEmpty();
     }
 
     @Test
@@ -139,15 +136,15 @@ class InsufficientBreakTimeCalculatorTest {
 
         final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntry));
 
-        assertEquals(1, warnings.size());
-        assertEquals(0.5, warnings.get(0).getMissingBreakTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getMissingBreakTime()).isEqualTo(0.5);
 
-        assertEquals(1, warnings.size());
+        assertThat(warnings).hasSize(1);
         final TimeWarning warning = warnings.get(0);
-        assertNotNull(warning.getDate());
-        assertNotNull(warning.getMissingBreakTime());
-        assertNull(warning.getMissingRestTime());
-        assertNull(warning.getExcessWorkTime());
+        assertThat(warning.getDate()).isNotNull();
+        assertThat(warning.getMissingBreakTime()).isNotNull();
+        assertThat(warning.getMissingRestTime()).isNull();
+        assertThat(warning.getExcessWorkTime()).isNull();
     }
 
     @Test
@@ -157,8 +154,8 @@ class InsufficientBreakTimeCalculatorTest {
 
         final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryTwo, timeEntryOne));
 
-        assertEquals(1, warnings.size());
-        assertEquals(0.5, warnings.get(0).getMissingBreakTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getMissingBreakTime()).isEqualTo(0.5);
     }
 
     @Test
@@ -167,8 +164,8 @@ class InsufficientBreakTimeCalculatorTest {
 
         final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntry));
 
-        assertEquals(1, warnings.size());
-        assertEquals(0.5, warnings.get(0).getMissingBreakTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getMissingBreakTime()).isEqualTo(0.5);
     }
 
     @Test
@@ -178,8 +175,8 @@ class InsufficientBreakTimeCalculatorTest {
 
         final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
 
-        assertEquals(1, warnings.size());
-        assertEquals(0.5, warnings.get(0).getMissingBreakTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getMissingBreakTime()).isEqualTo(0.5);
     }
 
     @Test
@@ -189,8 +186,8 @@ class InsufficientBreakTimeCalculatorTest {
 
         final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
 
-        assertEquals(1, warnings.size());
-        assertEquals(0.25, warnings.get(0).getMissingBreakTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getMissingBreakTime()).isEqualTo(0.25);
     }
 
     @Test
@@ -201,8 +198,8 @@ class InsufficientBreakTimeCalculatorTest {
 
         final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
 
-        assertEquals(1, warnings.size());
-        assertEquals(0.16, warnings.get(0).getMissingBreakTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getMissingBreakTime()).isEqualTo(0.16);
     }
 
     @Test
@@ -213,7 +210,7 @@ class InsufficientBreakTimeCalculatorTest {
 
         final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
 
-        assertEquals(1, warnings.size());
-        assertEquals(0.25, warnings.get(0).getMissingBreakTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getMissingBreakTime()).isEqualTo(0.25);
     }
 }

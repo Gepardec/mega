@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.jackson.Jacksonized;
 
 import javax.annotation.Nullable;
+import java.time.Duration;
 import java.util.List;
 
 @Builder(builderClassName = "Builder")
@@ -42,4 +43,12 @@ public class ProjectManagementEntry {
 
     @JsonProperty
     private final List<ManagementEntry> entries;
+
+    @JsonProperty
+    private final Duration aggregatedBillableWorkTimeInSeconds;
+
+    @JsonProperty
+    private final Duration aggregatedNonBillableWorkTimeInSeconds;
+
+
 }

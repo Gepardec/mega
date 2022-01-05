@@ -15,10 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
@@ -48,8 +46,8 @@ class SecurityContextProducerTest {
         final SecurityContext securityContext = producer.createSecurityContext();
 
         // Then
-        assertNotNull(securityContext.email());
-        assertEquals("test@gepardec.com", securityContext.email());
+        assertThat(securityContext.email()).isNotNull();
+        assertThat(securityContext.email()).isEqualTo("test@gepardec.com");
     }
 
     @Test
@@ -62,14 +60,14 @@ class SecurityContextProducerTest {
         final SecurityContext securityContext = producer.createSecurityContext();
 
         // Then
-        assertNull(securityContext.email());
+        assertThat(securityContext.email()).isNull();
     }
 
     @Test
     void createSecurityContext_whenNoXAuthorizationHeader_thenThrowsUnauthorizedException() {
         when(request.getHeader(eq(SecurityContextProducer.X_AUTHORIZATION_HEADER))).thenReturn(null);
 
-        assertThrows(UnauthorizedException.class, () -> producer.createSecurityContext());
+        assertThatThrownBy(() -> producer.createSecurityContext()).isInstanceOf(UnauthorizedException.class);
     }
 
     @Test
@@ -77,7 +75,7 @@ class SecurityContextProducerTest {
         when(request.getHeader(eq(SecurityContextProducer.X_AUTHORIZATION_HEADER))).thenReturn("123");
         when(googleIdTokenVerifier.verify(eq("123"))).thenThrow(new UnauthorizedException());
 
-        assertThrows(UnauthorizedException.class, () -> producer.createSecurityContext());
+        assertThatThrownBy(() -> producer.createSecurityContext()).isInstanceOf(UnauthorizedException.class);
     }
 
     @Test
@@ -90,6 +88,6 @@ class SecurityContextProducerTest {
         final SecurityContext securityContext = producer.createSecurityContext();
 
         // Then
-        assertNull(securityContext.email());
+        assertThat(securityContext.email()).isNull();
     }
 }

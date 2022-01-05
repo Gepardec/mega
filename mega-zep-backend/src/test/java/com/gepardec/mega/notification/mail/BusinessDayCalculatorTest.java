@@ -18,8 +18,8 @@ import static com.gepardec.mega.notification.mail.Mail.OM_CONTROL_PROJECTTIMES;
 import static com.gepardec.mega.notification.mail.Mail.OM_RELEASE;
 import static com.gepardec.mega.notification.mail.Mail.OM_SALARY;
 import static com.gepardec.mega.notification.mail.Mail.PL_PROJECT_CONTROLLING;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class BusinessDayCalculatorTest {
@@ -145,10 +145,10 @@ class BusinessDayCalculatorTest {
     }
 
     private void assertReminderEmpty(Optional<Mail> actualReminder) {
-        assertEquals(Optional.empty(), actualReminder);
+        assertThat(actualReminder).isEmpty();
     }
 
     private void assertReminderEquals(Mail expectedMail, Optional<Mail> actualReminder) {
-        assertEquals(expectedMail, actualReminder.get());
+        assertThat(actualReminder).get().isEqualTo(expectedMail);
     }
 }

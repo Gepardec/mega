@@ -4,7 +4,8 @@
       <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
         <span fxFlex fxFlexOffset="65">{{'global.selectPayrollMonth' | translate}}</span>
         <span fxFlex="15">
-          <app-datepicker-month-year (dateChanged)="dateChanged($event)" [date]="date" [maxMonth]="maxMonthDate"></app-datepicker-month-year>
+          <app-datepicker-month-year (dateChanged)="dateChanged($event)" [date]="date"
+                                     [maxMonth]="maxMonthDate"></app-datepicker-month-year>
         </span>
 
       </mat-toolbar-row>
@@ -31,7 +32,12 @@
               <tbody>
               <tr>
                 <td class="label">
-                  {{'project-management.projectTimeState' | translate}}
+                  <span [matTooltipPosition]="tooltipPosition"
+                        [matTooltipShowDelay]="tooltipShowDelay"
+                        matTooltip="{{'project-management.tooltips.projectTimeState' | translate}}"
+                        matTooltipClass="pm-tooltip">
+              {{'project-management.projectTimeState' | translate}}
+            </span>
                 </td>
                 <td>
                   <app-project-state-select #controlProjectStateSelect
@@ -47,7 +53,12 @@
               </tr>
               <tr class="spacing">
                 <td class="label">
-                  {{'project-management.billingState' | translate}}
+                  <span [matTooltipPosition]="tooltipPosition"
+                        [matTooltipShowDelay]="tooltipShowDelay"
+                        matTooltip="{{'project-management.tooltips.billingState' | translate}}"
+                        matTooltipClass="pm-tooltip">
+              {{'project-management.billingState' | translate}}
+            </span>
                 </td>
                 <td class="states">
                   <app-project-state-select #controlBillingStateSelect
@@ -105,6 +116,7 @@
                               [checked]="pmSelectionModels.get(pmEntry.projectName)?.isSelected(row)">
                 </mat-checkbox>
               </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
             </ng-container>
 
             <ng-container matColumnDef="employeeName">
@@ -117,6 +129,7 @@
                   <b>{{row.employee.firstname}} {{row.employee.lastname}}</b>
                 </a>
               </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
             </ng-container>
 
             <ng-container matColumnDef="projectCheckState">
@@ -127,6 +140,7 @@
                 <app-state-select [value]="row.projectCheckState"
                                   (selectionChange)="closeProjectCheck(pmEntry.projectName, row)"></app-state-select>
               </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
             </ng-container>
 
             <ng-container matColumnDef="employeeCheckState">
@@ -136,6 +150,7 @@
                 <span class="mobile-label">{{'project-management.table.employeeCheckState' | translate}}</span>
                 <app-state-indicator [state]="row.employeeCheckState"></app-state-indicator>
               </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
             </ng-container>
 
             <ng-container matColumnDef="internalCheckState">
@@ -145,6 +160,7 @@
                 <span class="mobile-label">{{'project-management.table.internalCheckState' | translate}}</span>
                 <app-state-indicator [state]="row.internalCheckState"></app-state-indicator>
               </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
             </ng-container>
 
             <ng-container matColumnDef="customerCheckState">
@@ -154,6 +170,7 @@
                 <span class="mobile-label">{{'project-management.table.customerCheckState' | translate}}</span>
                 <app-state-indicator [state]="row.customerCheckState"></app-state-indicator>
               </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
             </ng-container>
 
             <ng-container matColumnDef="doneCommentsIndicator">
@@ -167,6 +184,7 @@
                                                [finishedComments]="row.finishedComments"></app-done-comments-indicator>
                 </button>
               </mat-cell>
+              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
             </ng-container>
 
             <ng-container matColumnDef="projectHours">
@@ -174,12 +192,22 @@
                                class="text-center">{{'project-management.table.projectHours' | translate}}</mat-header-cell>
               <mat-cell *matCellDef="let row">
                 <span class="mobile-label">{{'project-management.table.projectHours' | translate}}</span>
-                <app-billable-times [billableTimes]="row.billableTime" [nonBillableTimes]="row.nonBillableTime"></app-billable-times>
+                <app-billable-times [billableTimes]="row.billableTime"
+                                    [nonBillableTimes]="row.nonBillableTime"></app-billable-times>
               </mat-cell>
+
+              <mat-footer-cell *matFooterCellDef>
+                <strong>
+                  <app-billable-times-fraction
+                    [billableTimes]="convertDurationToTime(pmEntry.aggregatedBillableWorkTimeInSeconds)"
+                    [nonBillableTimes]="convertDurationToTime(pmEntry.aggregatedNonBillableWorkTimeInSeconds)"></app-billable-times-fraction>
+                </strong>
+              </mat-footer-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            <mat-footer-row *matFooterRowDef="displayedColumns">Total</mat-footer-row>
           </mat-table>
         </div>
       </mat-expansion-panel>

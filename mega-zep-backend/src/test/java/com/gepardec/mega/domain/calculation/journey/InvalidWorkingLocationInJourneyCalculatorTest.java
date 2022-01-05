@@ -16,8 +16,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class InvalidWorkingLocationInJourneyCalculatorTest {
 
@@ -65,9 +64,9 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
 
         List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectEntryTwo, journeyTimeEntryThree));
 
-        assertEquals(1, warnings.size());
-        assertEquals(1, warnings.get(0).getWarningTypes().size());
-        assertEquals(JourneyWarningType.INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes()).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.INVALID_WORKING_LOCATION);
     }
 
     @Test
@@ -78,9 +77,9 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
 
         List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectEntryTwo, journeyTimeEntryThree));
 
-        assertEquals(1, warnings.size());
-        assertEquals(1, warnings.get(0).getWarningTypes().size());
-        assertEquals(JourneyWarningType.INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes()).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.INVALID_WORKING_LOCATION);
     }
 
     /*
@@ -101,9 +100,9 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
         List<JourneyWarning> warnings = calculator
                 .calculate(List.of(journeyTimeEntryOne, projectEntryTwo, projectEntryThree, journeyTimeEntryFour));
 
-        assertEquals(1, warnings.size());
-        assertEquals(1, warnings.get(0).getWarningTypes().size());
-        assertEquals(JourneyWarningType.INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes()).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.INVALID_WORKING_LOCATION);
     }
 
     @Test
@@ -116,9 +115,9 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
         List<JourneyWarning> warnings = calculator
                 .calculate(List.of(journeyTimeEntryOne, projectEntryTwo, projectEntryThree, journeyTimeEntryFour));
 
-        assertEquals(1, warnings.size());
-        assertEquals(1, warnings.get(0).getWarningTypes().size());
-        assertEquals(JourneyWarningType.INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes()).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.INVALID_WORKING_LOCATION);
     }
 
     @Test
@@ -134,9 +133,9 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
                 .calculate(List.of(journeyTimeEntryOne, projectEntryTwo, journeyTimeEntryThree, journeyTimeEntryFour, projectEntryFive,
                         journeyTimeEntrySix));
 
-        assertEquals(1, warnings.size());
-        assertEquals(1, warnings.get(0).getWarningTypes().size());
-        assertEquals(JourneyWarningType.INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes()).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.INVALID_WORKING_LOCATION);
     }
 
     @Test
@@ -149,7 +148,7 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
         List<JourneyWarning> warnings = calculator
                 .calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree, projectTimeEntryFour));
 
-        assertEquals(0, warnings.size());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -162,7 +161,7 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
         List<JourneyWarning> warnings = calculator
                 .calculate(List.of(journeyTimeEntryOne, projectTimeEntryTwo, journeyTimeEntryThree, projectTimeEntryFour));
 
-        assertEquals(1, warnings.size());
+        assertThat(warnings).hasSize(1);
     }
 
     @Test
@@ -173,7 +172,7 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
 
         List<JourneyWarning> warnings = calculator.calculate(List.of(journeyTimeEntryOne, projectEntryTwo, journeyTimeEntryThree));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -186,7 +185,7 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
         List<JourneyWarning> warnings = calculator
                 .calculate(List.of(journeyTimeEntryOne, projectEntryTwo, projectEntryThree, journeyTimeEntryFour));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -202,7 +201,7 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
                 .calculate(List.of(journeyTimeEntryOne, projectEntryTwo, journeyTimeEntryThree, journeyTimeEntryFour, projectEntryFive,
                         journeyTimeEntrySix));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -214,7 +213,7 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
 
         List<JourneyWarning> warnings = calculator
                 .calculate(List.of(journeyTimeEntryOne, projectEntryOne, projectEntryTwo, journeyTimeEntryTwo));
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -226,6 +225,6 @@ class InvalidWorkingLocationInJourneyCalculatorTest {
 
         List<JourneyWarning> warnings = calculator
                 .calculate(List.of(projectEntryOne, journeyTimeEntryOne, journeyTimeEntryTwo, projectEntryTwo));
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 }

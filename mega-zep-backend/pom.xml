@@ -30,7 +30,8 @@
         <ws.rt.version>2.3.2</ws.rt.version>
         <xml.resolver.version>20050927</xml.resolver.version>
         <lombok.version>1.18.20</lombok.version>
-
+        <jollyday.version>0.5.10</jollyday.version>
+        <assertj.version>3.21.0</assertj.version>
         <!-- application info -->
         <!-- !!! IMPORTANT !!!! -->
         <!-- remove -SNAPSHOT in release-branch but keep it in develop branch -->
@@ -152,6 +153,11 @@
             <artifactId>google-api-client</artifactId>
             <version>${google-api-client.version}</version>
         </dependency>
+        <dependency>
+            <groupId>de.jollyday</groupId>
+            <artifactId>jollyday</artifactId>
+            <version>${jollyday.version}</version>
+        </dependency>
 
         <!-- Test Dependencies -->
         <dependency>
@@ -170,6 +176,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jdbc-h2</artifactId>
             <scope>test</scope>
@@ -181,11 +192,16 @@
             <scope>test</scope>
             <version>${jacoco.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
