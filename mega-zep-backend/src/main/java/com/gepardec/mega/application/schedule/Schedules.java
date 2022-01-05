@@ -18,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 @Dependent
 public class Schedules {
 
+    // Documentation: https://docs.oracle.com/cd/E12058_01/doc/doc.1014/e12030/cron_expressions.htm
+
     @Inject
     SyncService syncService;
 
@@ -33,7 +35,7 @@ public class Schedules {
     @Inject
     ReminderEmailSender reminderEmailSender;
 
-    @Scheduled(identity = "Sync ZEP-Employees with Users in the database",
+    @Scheduled(identity = "Sync ZEP-Employees with Users in the database every 30 minutes",
             every = "PT30M",
             delay = 15, delayUnit = TimeUnit.SECONDS)
         // We need to wait for liquibase to finish, but is executed in parallel
@@ -41,8 +43,16 @@ public class Schedules {
         syncService.syncEmployees();
     }
 
-    @Scheduled(identity = "Generate step entries on the second last day of a month",
-            cron = "0 0 0 L-2 * ? *")
+    //FIXME: Reactivate this scheduled task again in January 2022.
+//    @Scheduled(identity = "Generate step entries on the second last day of a month",
+//            cron = "0 0 0 L-2 * ? *")
+//    void generateStepEntries() {
+//        stepEntrySyncService.generateStepEntriesFromScheduler();
+//    }
+
+    //FIXME: Remove this scheduled task in January 2022.
+    @Scheduled(identity = "Generate step entries on the 21st of December 2021",
+            cron = "0 0 0 22 DEC ? *")
     void generateStepEntries() {
         stepEntrySyncService.generateStepEntriesFromScheduler();
     }
