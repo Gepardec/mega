@@ -19,7 +19,7 @@ public class WeekendCalculator extends AbstractTimeWarningCalculationStrategy im
     public List<TimeWarning> calculate(List<ProjectEntry> projectTimeEntries) {
         List<TimeWarning> warnings = new ArrayList<>();
         if (projectTimeEntries.isEmpty()) {
-            return new ArrayList<>();
+            return warnings;
         } else {
             int year = projectTimeEntries.get(0).getDate().getYear();
             int month = projectTimeEntries.get(0).getDate().getMonth().getValue();

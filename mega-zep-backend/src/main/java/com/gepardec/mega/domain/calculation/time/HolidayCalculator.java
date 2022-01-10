@@ -17,10 +17,6 @@ public class HolidayCalculator extends AbstractTimeWarningCalculationStrategy im
     public List<TimeWarning> calculate(List<ProjectEntry> projectEntries) {
         List<TimeWarning> warnings = new ArrayList<>();
 
-        if (projectEntries.isEmpty()) {
-            return new ArrayList<>();
-        }
-
         projectEntries.forEach(entry -> {
             if (isHoliday(entry.getDate())) {
                 warnings.add(createTimeWarning(entry.getDate()));
