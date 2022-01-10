@@ -8,6 +8,7 @@ import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -212,5 +213,48 @@ class InsufficientBreakTimeCalculatorTest {
 
         assertThat(warnings).hasSize(1);
         assertThat(warnings.get(0).getMissingBreakTime()).isEqualTo(0.25);
+    }
+
+    @Test
+    @DisplayName("Tests for false positives which have been observed before a fix was introduced")
+    void calculate_whenOverlappingEntriesWithBreaks_thenNoBreakWarnings() {
+        final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(8, 0, 11, 0);
+        final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(11, 30, 13, 0);
+        final ProjectTimeEntry timeEntryThree = projectTimeEntryFor(12, 15, 16, 0);
+
+        final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree));
+
+        assertThat(warnings)
+                .isEmpty();
+    }
+
+    @Test
+    @DisplayName("Tests for correct warnings when overlapping entries exist")
+    void calculate_whenOverlappingEntriesWithoutBreaks_thenBreakWarnings() {
+        final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(8, 0, 12, 0);
+        final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(11, 30, 12, 0);
+        final ProjectTimeEntry timeEntryThree = projectTimeEntryFor(12, 0, 16, 45);
+        final ProjectTimeEntry timeEntryFour = projectTimeEntryFor(12, 30, 16, 30);
+
+        final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree, timeEntryFour));
+
+        assertThat(warnings)
+                .hasSize(1);
+        assertThat(warnings.get(0).getMissingBreakTime())
+                .isEqualTo(0.50d);
+    }
+
+    @Test
+    @DisplayName("Tests for false positives when overlapping entries exist")
+    void calculate_whenOverlappingEntriesWithBreak_thenNoBreakWarnings() {
+        final ProjectTimeEntry timeEntryOne = projectTimeEntryFor(8, 0, 12, 0);
+        final ProjectTimeEntry timeEntryTwo = projectTimeEntryFor(11, 30, 12, 0);
+        final ProjectTimeEntry timeEntryThree = projectTimeEntryFor(12, 30, 16, 45);
+        final ProjectTimeEntry timeEntryFour = projectTimeEntryFor(12, 30, 16, 30);
+
+        final List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo, timeEntryThree, timeEntryFour));
+
+        assertThat(warnings)
+                .isEmpty();
     }
 }

@@ -18,6 +18,8 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 class MailSenderTest {
@@ -103,8 +105,8 @@ class MailSenderTest {
         mailSender.send(Mail.PL_PROJECT_CONTROLLING, to, "Jamal", Locale.GERMAN);
         List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
         assertAll(
-                () -> assertEquals(1, sent.size()),
-                () -> assertTrue(sent.get(0).getHtml().contains(GOOGLE_DOCS_PLANRECHNUNGS_URL))
+                () -> assertThat(sent.size()).isEqualTo(1),
+                () -> assertThat(sent.get(0).getHtml().contains(GOOGLE_DOCS_PLANRECHNUNGS_URL)).isTrue()
         );
     }
 }
