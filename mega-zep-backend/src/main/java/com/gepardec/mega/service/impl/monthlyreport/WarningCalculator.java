@@ -5,10 +5,12 @@ import com.gepardec.mega.domain.calculation.journey.InvalidJourneyCalculator;
 import com.gepardec.mega.domain.calculation.journey.InvalidWorkingLocationInJourneyCalculator;
 import com.gepardec.mega.domain.calculation.time.CoreWorkingHoursCalculator;
 import com.gepardec.mega.domain.calculation.time.ExceededMaximumWorkingHoursPerDayCalculator;
+import com.gepardec.mega.domain.calculation.time.HolidayCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientBreakCalculator;
 import com.gepardec.mega.domain.calculation.time.InsufficientRestCalculator;
 import com.gepardec.mega.domain.calculation.time.NoEntryCalculator;
 import com.gepardec.mega.domain.calculation.time.TimeOverlapCalculator;
+import com.gepardec.mega.domain.calculation.time.WeekendCalculator;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntryWarning;
@@ -16,10 +18,8 @@ import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.WarningType;
 import de.provantis.zep.FehlzeitType;
 
-import javax.annotation.Nonnull;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -34,7 +34,9 @@ public class WarningCalculator {
             new InsufficientBreakCalculator(),
             new InsufficientRestCalculator(),
             new CoreWorkingHoursCalculator(),
-            new TimeOverlapCalculator());
+            new TimeOverlapCalculator(),
+            new HolidayCalculator(),
+            new WeekendCalculator());
 
     private static final List<WarningCalculationStrategy<JourneyWarning>> journeyWarningCalculators = List.of(
             new InvalidJourneyCalculator(),
