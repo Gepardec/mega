@@ -35,7 +35,7 @@
         <!-- application info -->
         <!-- !!! IMPORTANT !!!! -->
         <!-- remove -SNAPSHOT in release-branch but keep it in develop branch -->
-        <revision>3.1.9</revision>
+        <revision>3.1.10</revision>
         <git.commit>local</git.commit>
         <git.branch>local</git.branch>
         <build.number>0</build.number>

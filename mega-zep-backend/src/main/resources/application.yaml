@@ -51,6 +51,9 @@ quarkus:
   default-locale: "de"
   locales: 'en,de'
 
+  transaction-manager:
+    default-transaction-timeout: "240s"
+
 mega:
   info:
     build:
@@ -117,7 +120,7 @@ mega:
           - "patrick.holzer@gepardec.com"
           - "robin.fischer@gepardec.com"
           - "alexandra.stummer@gepardec.com"
-          - "michael.leitner@gepardec.com"
+          - "sandra.kepplinger@gepardec.com"
 
 ## TEST Properties
 "%test":
@@ -208,6 +211,7 @@ mega:
           - "patrick.holzer@gepardec.com"
           - "robin.fischer@gepardec.com"
           - "alexandra.stummer@gepardec.com"
+          - "sandra.kepplinger@gepardec.com"
 
 # TEST-STAGE Properties
 "%teststage":
@@ -239,6 +243,7 @@ mega:
           - "manuel.vilim@gepardec.com"
           - "armin.lang@gepardec.com"
           - "alexandra.stummer@gepardec.com"
+          - "sandra.kepplinger@gepardec.com"
 
 
 
@@ -270,3 +275,4 @@ mega:
           - "manuel.vilim@gepardec.com"
           - "alexandra.stummer@gepardec.com"
           - "armin.lang@gepardec.com"
+          - "sandra.kepplinger@gepardec.com"
