@@ -12,8 +12,11 @@ import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
 import com.gepardec.mega.service.impl.monthlyreport.WarningCalculator;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,9 +24,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -32,6 +35,9 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class WarningCalculatorTest {
 
+    private static final Integer[] HOLIDAYS = {8, 25, 26};
+    private static final Integer[] WEEKEND_DAYS = {5, 6, 12, 13, 19, 20, 26, 27};
+
     @InjectMocks
     WarningCalculator calculator;
 
@@ -39,7 +45,7 @@ class WarningCalculatorTest {
     ResourceBundle messages;
 
     private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int endHour) {
-        return projectTimeEntryFor(1, startHour, 0, 1, endHour, 0, WorkingLocation.MAIN);
+        return projectTimeEntryFor(2, startHour, 0, 1, endHour, 0, WorkingLocation.MAIN);
     }
 
     private ProjectTimeEntry projectTimeEntryFor(final int day, final int startHour, final int endHour) {
@@ -91,7 +97,7 @@ class WarningCalculatorTest {
 
         final List<TimeWarning> result = calculator.determineTimeWarnings(List.of(end, start));
 
-        assertTrue(result.isEmpty());
+        assertThat(result).isEmpty();
     }
 
     @Test
@@ -101,7 +107,7 @@ class WarningCalculatorTest {
 
         final List<TimeWarning> result = calculator.determineTimeWarnings(List.of(start, end));
 
-        assertEquals(1, result.size());
+        assertThat(result).hasSize(1);
     }
 
     @Test
@@ -122,7 +128,7 @@ class WarningCalculatorTest {
 
         final List<TimeWarning> warnings = calculator.determineTimeWarnings(List.of(start, end));
 
-        assertEquals("WARNING_STRING", warnings.get(0).getWarnings().get(0));
+        assertThat(warnings.get(0).getWarnings().get(0)).isEqualTo("WARNING_STRING");
     }
 
     @Test
@@ -132,7 +138,7 @@ class WarningCalculatorTest {
 
         final List<TimeWarning> result = calculator.determineTimeWarnings(List.of(start, end));
 
-        assertTrue(result.isEmpty());
+        assertThat(result).isEmpty();
     }
 
     @Test
@@ -145,9 +151,9 @@ class WarningCalculatorTest {
         final List<JourneyWarning> warnings = calculator
                 .determineJourneyWarnings(List.of(journeyTimeEntryFour, projectEntryThree, projectEntryTwo, journeyTimeEntryOne));
 
-        assertEquals(1, warnings.size());
-        assertEquals(2, warnings.get(0).getWarningTypes().size());
-        assertEquals(JourneyWarningType.INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes()).hasSize(2);
+        assertThat(warnings.get(0).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.INVALID_WORKING_LOCATION);
     }
 
     /*
@@ -168,9 +174,9 @@ class WarningCalculatorTest {
         final List<JourneyWarning> warnings = calculator
                 .determineJourneyWarnings(List.of(journeyTimeEntryOne, projectEntryTwo, projectEntryThree, journeyTimeEntryFour));
 
-        assertEquals(1, warnings.size());
-        assertEquals(1, warnings.get(0).getWarningTypes().size());
-        assertEquals(JourneyWarningType.INVALID_WORKING_LOCATION, warnings.get(0).getWarningTypes().get(0));
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes()).hasSize(1);
+        assertThat(warnings.get(0).getWarningTypes().get(0)).isEqualTo(JourneyWarningType.INVALID_WORKING_LOCATION);
     }
 
     @Test
@@ -187,7 +193,7 @@ class WarningCalculatorTest {
                         List.of(journeyTimeEntryOne, projectEntryTwo, journeyTimeEntryThree, journeyTimeEntryFour, projectEntryFive,
                                 journeyTimeEntrySix));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -200,8 +206,8 @@ class WarningCalculatorTest {
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(secondDaytimeEntryTwo, secondDaytimeEntryOne, firstDaytimeEntryTwo, firstDaytimeEntryOne));
 
-        assertEquals(1, warnings.size());
-        assertEquals(firstDaytimeEntryOne.getDate(), warnings.get(0).getDate());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getDate()).isEqualTo(firstDaytimeEntryOne.getDate());
     }
 
     @Test
@@ -214,24 +220,24 @@ class WarningCalculatorTest {
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(firstDaytimeEntryOne, firstDaytimeEntryTwo, secondDaytimeEntryOne, secondDaytimeEntryTwo));
 
-        assertEquals(1, warnings.size());
-        assertEquals(firstDaytimeEntryOne.getDate(), warnings.get(0).getDate());
-        assertEquals(0.25, warnings.get(0).getMissingBreakTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getDate()).isEqualTo(firstDaytimeEntryOne.getDate());
+        assertThat(warnings.get(0).getMissingBreakTime()).isEqualTo(0.25);
     }
 
     @Test
     void when2DaysAndSecondDayWith15MinBreakTime_thenWarning() {
-        final ProjectTimeEntry firstDaytimeEntryOne = projectTimeEntryFor(1, 7, 12);
-        final ProjectTimeEntry firstDaytimeEntryTwo = projectTimeEntryFor(1, 12, 30, 16, 30);
-        final ProjectTimeEntry secondDaytimeEntryOne = projectTimeEntryFor(2, 7, 12);
-        final ProjectTimeEntry secondDaytimeEntryTwo = projectTimeEntryFor(2, 12, 15, 16, 15);
+        final ProjectTimeEntry firstDaytimeEntryOne = projectTimeEntryFor(2, 7, 12);
+        final ProjectTimeEntry firstDaytimeEntryTwo = projectTimeEntryFor(2, 12, 30, 16, 30);
+        final ProjectTimeEntry secondDaytimeEntryOne = projectTimeEntryFor(3, 7, 12);
+        final ProjectTimeEntry secondDaytimeEntryTwo = projectTimeEntryFor(3, 12, 15, 16, 15);
 
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(firstDaytimeEntryOne, firstDaytimeEntryTwo, secondDaytimeEntryOne, secondDaytimeEntryTwo));
 
-        assertEquals(1, warnings.size());
-        assertEquals(secondDaytimeEntryOne.getDate(), warnings.get(0).getDate());
-        assertEquals(0.25, warnings.get(0).getMissingBreakTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getDate()).isEqualTo(secondDaytimeEntryOne.getDate());
+        assertThat(warnings.get(0).getMissingBreakTime()).isEqualTo(0.25);
     }
 
     @Test
@@ -244,90 +250,90 @@ class WarningCalculatorTest {
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(firstDaytimeEntryOne, firstDaytimeEntryTwo, secondDaytimeEntryOne, secondDaytimeEntryTwo));
 
-        assertEquals(2, warnings.size());
+        assertThat(warnings).hasSize(2);
     }
 
     @Test
     void whenUnordered_thenOrdered() {
-        final ProjectTimeEntry firstDaytimeEntry = projectTimeEntryFor(1, 16, 22);
-        final ProjectTimeEntry secondDaytimeEntryOne = projectTimeEntryFor(2, 8, 12);
-        final ProjectTimeEntry secondDaytimeEntryTwo = projectTimeEntryFor(2, 17, 22);
-        final ProjectTimeEntry thirdDaytimeEntry = projectTimeEntryFor(3, 9, 12);
+        final ProjectTimeEntry firstDaytimeEntry = projectTimeEntryFor(7, 16, 22);
+        final ProjectTimeEntry secondDaytimeEntryOne = projectTimeEntryFor(8, 8, 12);
+        final ProjectTimeEntry secondDaytimeEntryTwo = projectTimeEntryFor(8, 17, 22);
+        final ProjectTimeEntry thirdDaytimeEntry = projectTimeEntryFor(9, 9, 12);
 
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(thirdDaytimeEntry, secondDaytimeEntryTwo, secondDaytimeEntryOne, firstDaytimeEntry));
 
-        assertEquals(1, warnings.size());
-        assertEquals(secondDaytimeEntryOne.getDate(), warnings.get(0).getDate());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getDate()).isEqualTo(secondDaytimeEntryOne.getDate());
     }
 
     @Test
     void when2DaysAndBothWith30MinBreakTime_thenNoWarning() {
-        final ProjectTimeEntry firstDaytimeEntryOne = projectTimeEntryFor(1, 7, 12);
-        final ProjectTimeEntry firstDaytimeEntryTwo = projectTimeEntryFor(1, 12, 30, 16, 30);
-        final ProjectTimeEntry secondDaytimeEntryOne = projectTimeEntryFor(2, 7, 12);
-        final ProjectTimeEntry secondDaytimeEntryTwo = projectTimeEntryFor(2, 12, 30, 16, 30);
+        final ProjectTimeEntry firstDaytimeEntryOne = projectTimeEntryFor(2, 7, 12);
+        final ProjectTimeEntry firstDaytimeEntryTwo = projectTimeEntryFor(2, 12, 30, 16, 30);
+        final ProjectTimeEntry secondDaytimeEntryOne = projectTimeEntryFor(3, 7, 12);
+        final ProjectTimeEntry secondDaytimeEntryTwo = projectTimeEntryFor(3, 12, 30, 16, 30);
 
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(firstDaytimeEntryOne, firstDaytimeEntryTwo, secondDaytimeEntryOne, secondDaytimeEntryTwo));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
     void when3DaysAndSecondDayWith10HourRestTime_thenWarning() {
-        final ProjectTimeEntry firstDaytimeEntry = projectTimeEntryFor(1, 16, 22);
-        final ProjectTimeEntry secondDaytimeEntryOne = projectTimeEntryFor(2, 8, 12);
-        final ProjectTimeEntry secondDaytimeEntryTwo = projectTimeEntryFor(2, 17, 22);
-        final ProjectTimeEntry thirdDaytimeEntry = projectTimeEntryFor(3, 9, 12);
+        final ProjectTimeEntry firstDaytimeEntry = projectTimeEntryFor(7, 16, 22);
+        final ProjectTimeEntry secondDaytimeEntryOne = projectTimeEntryFor(8, 8, 12);
+        final ProjectTimeEntry secondDaytimeEntryTwo = projectTimeEntryFor(8, 17, 22);
+        final ProjectTimeEntry thirdDaytimeEntry = projectTimeEntryFor(9, 9, 12);
 
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(firstDaytimeEntry, secondDaytimeEntryOne, secondDaytimeEntryTwo, thirdDaytimeEntry));
 
-        assertEquals(1, warnings.size());
-        assertEquals(secondDaytimeEntryOne.getDate(), warnings.get(0).getDate());
-        assertEquals(1, warnings.get(0).getMissingRestTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getDate()).isEqualTo(secondDaytimeEntryOne.getDate());
+        assertThat(warnings.get(0).getMissingRestTime()).isEqualTo(1);
     }
 
     @Test
     void when3DaysAndThirdDayWith10HourRestTime_thenWarning() {
-        final ProjectTimeEntry firstDaytimeEntry = projectTimeEntryFor(1, 16, 22);
-        final ProjectTimeEntry secondDaytimeEntryOne = projectTimeEntryFor(2, 9, 12);
-        final ProjectTimeEntry secondDaytimeEntryTwo = projectTimeEntryFor(2, 17, 22);
-        final ProjectTimeEntry thirdDaytimeEntry = projectTimeEntryFor(3, 8, 12);
+        final ProjectTimeEntry firstDaytimeEntry = projectTimeEntryFor(7, 16, 22);
+        final ProjectTimeEntry secondDaytimeEntryOne = projectTimeEntryFor(8, 9, 12);
+        final ProjectTimeEntry secondDaytimeEntryTwo = projectTimeEntryFor(8, 17, 22);
+        final ProjectTimeEntry thirdDaytimeEntry = projectTimeEntryFor(9, 8, 12);
 
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(firstDaytimeEntry, secondDaytimeEntryOne, secondDaytimeEntryTwo, thirdDaytimeEntry));
 
-        assertEquals(1, warnings.size());
-        assertEquals(thirdDaytimeEntry.getDate(), warnings.get(0).getDate());
-        assertEquals(1, warnings.get(0).getMissingRestTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getDate()).isEqualTo(thirdDaytimeEntry.getDate());
+        assertThat(warnings.get(0).getMissingRestTime()).isEqualTo(1);
     }
 
     @Test
     void when3DaysAndAllDaysWith10HourRestTime_thenTwoWarnings() {
-        final ProjectTimeEntry firstDaytimeEntry = projectTimeEntryFor(1, 16, 22);
-        final ProjectTimeEntry secondDaytimeEntryOne = projectTimeEntryFor(2, 8, 12);
-        final ProjectTimeEntry secondDaytimeEntryTwo = projectTimeEntryFor(2, 17, 22);
-        final ProjectTimeEntry thirdDaytimeEntry = projectTimeEntryFor(3, 8, 12);
+        final ProjectTimeEntry firstDaytimeEntry = projectTimeEntryFor(7, 16, 22);
+        final ProjectTimeEntry secondDaytimeEntryOne = projectTimeEntryFor(8, 8, 12);
+        final ProjectTimeEntry secondDaytimeEntryTwo = projectTimeEntryFor(8, 17, 22);
+        final ProjectTimeEntry thirdDaytimeEntry = projectTimeEntryFor(9, 8, 12);
 
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(firstDaytimeEntry, secondDaytimeEntryOne, secondDaytimeEntryTwo, thirdDaytimeEntry));
 
-        assertEquals(2, warnings.size());
+        assertThat(warnings).hasSize(2);
     }
 
     @Test
     void when3DaysAndAndAllWith11HourRestTime_thenNoWarning() {
-        final ProjectTimeEntry firstDaytimeEntry = projectTimeEntryFor(1, 16, 22);
-        final ProjectTimeEntry secondDaytimeEntryOne = projectTimeEntryFor(2, 9, 12);
-        final ProjectTimeEntry secondDaytimeEntryTwo = projectTimeEntryFor(2, 17, 22);
-        final ProjectTimeEntry thirdDaytimeEntry = projectTimeEntryFor(3, 9, 12);
+        final ProjectTimeEntry firstDaytimeEntry = projectTimeEntryFor(7, 16, 22);
+        final ProjectTimeEntry secondDaytimeEntryOne = projectTimeEntryFor(8, 9, 12);
+        final ProjectTimeEntry secondDaytimeEntryTwo = projectTimeEntryFor(8, 17, 22);
+        final ProjectTimeEntry thirdDaytimeEntry = projectTimeEntryFor(9, 9, 12);
 
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(firstDaytimeEntry, secondDaytimeEntryOne, secondDaytimeEntryTwo, thirdDaytimeEntry));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
@@ -340,8 +346,8 @@ class WarningCalculatorTest {
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(secondDayTimeEntryTwo, secondDayTimeEntryOne, firstDayTimeEntryTwo, firstDayTimeEntryOne));
 
-        assertEquals(1, warnings.size());
-        assertEquals(firstDayTimeEntryOne.getDate(), warnings.get(0).getDate());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getDate()).isEqualTo(firstDayTimeEntryOne.getDate());
     }
 
     @Test
@@ -354,22 +360,22 @@ class WarningCalculatorTest {
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(firstDayTimeEntryOne, firstDayTimeEntryTwo, secondDayTimeEntryOne, secondDayTimeEntryTwo));
 
-        assertEquals(1, warnings.size());
-        assertEquals(1, warnings.get(0).getExcessWorkTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getExcessWorkTime()).isEqualTo(1);
     }
 
     @Test
     void when2DaysAndSecondDayWith11Hours_thenWarning() {
-        final ProjectTimeEntry firstDayTimeEntryOne = projectTimeEntryFor(1, 7, 12);
-        final ProjectTimeEntry firstDayTimeEntryTwo = projectTimeEntryFor(1, 13, 16);
-        final ProjectTimeEntry secondDayTimeEntryOne = projectTimeEntryFor(2, 7, 12);
-        final ProjectTimeEntry secondDayTimeEntryTwo = projectTimeEntryFor(2, 13, 19);
+        final ProjectTimeEntry firstDayTimeEntryOne = projectTimeEntryFor(2, 7, 12);
+        final ProjectTimeEntry firstDayTimeEntryTwo = projectTimeEntryFor(2, 13, 16);
+        final ProjectTimeEntry secondDayTimeEntryOne = projectTimeEntryFor(3, 7, 12);
+        final ProjectTimeEntry secondDayTimeEntryTwo = projectTimeEntryFor(3, 13, 19);
 
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(firstDayTimeEntryOne, firstDayTimeEntryTwo, secondDayTimeEntryOne, secondDayTimeEntryTwo));
 
-        assertEquals(1, warnings.size());
-        assertEquals(1, warnings.get(0).getExcessWorkTime());
+        assertThat(warnings).hasSize(1);
+        assertThat(warnings.get(0).getExcessWorkTime()).isEqualTo(1);
     }
 
     @Test
@@ -382,31 +388,108 @@ class WarningCalculatorTest {
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(firstDayTimeEntryOne, firstDayTimeEntryTwo, secondDayTimeEntryOne, secondDayTimeEntryTwo));
 
-        assertEquals(2, warnings.size());
+        assertThat(warnings).hasSize(2);
     }
 
     @Test
     void when2DaysAndAllDaysWith10Hours_thenNoWarning() {
-        final ProjectTimeEntry firstDayTimeEntryOne = projectTimeEntryFor(1, 7, 12);
-        final ProjectTimeEntry firstDayTimeEntryTwo = projectTimeEntryFor(1, 13, 16);
-        final ProjectTimeEntry secondDayTimeEntryOne = projectTimeEntryFor(2, 7, 12);
-        final ProjectTimeEntry secondDayTimeEntryTwo = projectTimeEntryFor(2, 13, 16);
+        final ProjectTimeEntry firstDayTimeEntryOne = projectTimeEntryFor(2, 7, 12);
+        final ProjectTimeEntry firstDayTimeEntryTwo = projectTimeEntryFor(2, 13, 16);
+        final ProjectTimeEntry secondDayTimeEntryOne = projectTimeEntryFor(3, 7, 12);
+        final ProjectTimeEntry secondDayTimeEntryTwo = projectTimeEntryFor(3, 13, 16);
 
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(firstDayTimeEntryOne, firstDayTimeEntryTwo, secondDayTimeEntryOne, secondDayTimeEntryTwo));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
     }
 
     @Test
     void whenJourneuOverXDays_thenNoWarning() {
-        final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(1, 7, 12, JourneyDirection.TO, WorkingLocation.A, Vehicle.OTHER_INACTIVE);
-        final ProjectTimeEntry secondDayTimeEntryTwo = projectTimeEntryFor(2, 13, 16, WorkingLocation.MAIN);
-        final JourneyTimeEntry thirdTimeEntryOne = journeyTimeEntryFor(3, 7, 12, JourneyDirection.BACK, WorkingLocation.A, Vehicle.OTHER_INACTIVE);
+        final JourneyTimeEntry journeyTimeEntryOne = journeyTimeEntryFor(7, 7, 12, JourneyDirection.TO, WorkingLocation.A, Vehicle.OTHER_INACTIVE);
+        final ProjectTimeEntry secondDayTimeEntryTwo = projectTimeEntryFor(8, 13, 16, WorkingLocation.MAIN);
+        final JourneyTimeEntry thirdTimeEntryOne = journeyTimeEntryFor(9, 7, 12, JourneyDirection.BACK, WorkingLocation.A, Vehicle.OTHER_INACTIVE);
 
         final List<TimeWarning> warnings = calculator
                 .determineTimeWarnings(List.of(journeyTimeEntryOne, secondDayTimeEntryTwo, thirdTimeEntryOne));
 
-        assertTrue(warnings.isEmpty());
+        assertThat(warnings).isEmpty();
+    }
+
+    @Test
+    void whenEntryIsOnHoliday_thenReturnsWarning() {
+        final ProjectTimeEntry entryOne = projectTimeEntryFor(1, 8, 0);
+
+        final List<TimeWarning> result = calculator.determineTimeWarnings(List.of(entryOne));
+
+        assertThat(result)
+                .isNotEmpty();
+        assertThat(result.size())
+                .isEqualTo(1);
+        assertThat(result.get(0).getDate())
+                .isEqualTo(entryOne.getDate());
+    }
+
+    @Test
+    void whenEntryIsOnWeekend_thenReturnsWarning() {
+        final ProjectTimeEntry entryOne = projectTimeEntryFor(4, 8, 0);
+
+        final List<TimeWarning> result = calculator.determineTimeWarnings(List.of(entryOne));
+
+        assertThat(result)
+                .isNotEmpty();
+        assertThat(result.size())
+                .isEqualTo(1);
+        assertThat(result.get(0).getDate())
+                .isEqualTo(entryOne.getDate());
+    }
+
+    @ParameterizedTest
+    @DisplayName("Tests all holidays for december 2020")
+    @MethodSource("holidaysStream")
+    void whenEntryDayIsHoliday_thenReturnsWarning(int day) {
+        final ProjectTimeEntry entryOne = getProjectTimeEntry(day);
+
+        final List<TimeWarning> result = calculator.determineTimeWarnings(List.of(entryOne));
+
+        assertThat(result)
+                .isNotEmpty();
+        assertThat(result.size())
+                .isEqualTo(1);
+        assertThat(result.get(0).getDate())
+                .isEqualTo(entryOne.getDate());
+    }
+
+    @ParameterizedTest
+    @DisplayName("Tests all weekend days for december 2020")
+    @MethodSource("weekendDaysStream")
+    void whenEntryDayIsOnWeekend_thenReturnsWarning(int day) {
+        final ProjectTimeEntry entryOne = getProjectTimeEntry(day);
+
+        final List<TimeWarning> result = calculator.determineTimeWarnings(List.of(entryOne));
+
+        assertThat(result)
+                .isNotEmpty();
+        assertThat(result.size())
+                .isEqualTo(1);
+        assertThat(result.get(0).getDate())
+                .isEqualTo(entryOne.getDate());
+    }
+
+    static Stream<Integer> holidaysStream() {
+        return Stream.of(HOLIDAYS);
+    }
+
+    static Stream<Integer> weekendDaysStream() {
+        return Stream.of(WEEKEND_DAYS);
+    }
+
+    private ProjectTimeEntry getProjectTimeEntry(int day) {
+        return ProjectTimeEntry.builder()
+                .fromTime(LocalDateTime.of(2020, 12, day, 8, 0))
+                .toTime(LocalDateTime.of(2020, 12, day, 12, 0))
+                .task(Task.BEARBEITEN)
+                .workingLocation(WorkingLocation.MAIN)
+                .build();
     }
 }

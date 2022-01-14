@@ -7,12 +7,12 @@ import com.gepardec.mega.domain.model.UserContext;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -55,16 +55,16 @@ UserResourceTest {
                 .then().assertThat().statusCode(HttpStatus.SC_OK)
                 .extract().as(User.class);
 
-        Assertions.assertEquals(user, actual);
+        assertThat(actual).isEqualTo(user);
     }
 
     private User createUserForRole(final Role role) {
         return User.builder()
                 .dbId(1)
                 .userId("1")
-                .email("thomas.herzog@gpeardec.com")
-                .firstname("Thomas")
-                .lastname("Herzog")
+                .email("max.mustermann@gpeardec.com")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .roles(Set.of(role))
                 .build();
     }

@@ -7,73 +7,74 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class DateUtilsTest {
 
     @Test
     void getLastDayOfFollowingMonth_normalDate_returnLastDayOfMonth() {
-        assertEquals("2017-12-31", DateUtils.getLastDayOfFollowingMonth("2017-11-10"));
+        assertThat(DateUtils.getLastDayOfFollowingMonth("2017-11-10")).isEqualTo("2017-12-31");
     }
 
     @Test
     void getLastDayOfFollowingMonth_decemberDate_returnLastDayOfMonthJanuary() {
-        assertEquals("2018-01-31", DateUtils.getLastDayOfFollowingMonth("2017-12-01"));
+        assertThat(DateUtils.getLastDayOfFollowingMonth("2017-12-01")).isEqualTo("2018-01-31");
     }
 
     @Test
     void getLastDayOfFollowingMonth_nullString_throwException() {
-        assertThrows(NullPointerException.class, () -> DateUtils.getLastDayOfFollowingMonth(null));
+        assertThatThrownBy(() -> DateUtils.getLastDayOfFollowingMonth(null)).isInstanceOf(NullPointerException.class);
     }
 
     @Test
     void getLastDayOfFollowingMonth_emptyDate_returnLastDayOfMonthJanuary() {
-        assertThrows(DateTimeParseException.class, () -> DateUtils.getLastDayOfFollowingMonth(""));
+        assertThatThrownBy(() -> DateUtils.getLastDayOfFollowingMonth("")).isInstanceOf(DateTimeParseException.class);
     }
 
     @Test
     void getFirstDayOfFollowingMonth_normalDate_returnFirstDayOfNextMonth() {
-        assertEquals("2019-02-01", DateUtils.getFirstDayOfFollowingMonth("2019-01-31"));
+        assertThat(DateUtils.getFirstDayOfFollowingMonth("2019-01-31")).isEqualTo("2019-02-01");
     }
 
     @Test
     void getFirstDayOfFollowingMonth_decemberDate_returnJanuaryDate() {
-        assertEquals("2020-01-01", DateUtils.getFirstDayOfFollowingMonth("2019-12-01"));
+        assertThat(DateUtils.getFirstDayOfFollowingMonth("2019-12-01")).isEqualTo("2020-01-01");
     }
 
     @Test
     void getFirstDayOfFollowingMonth_nullString_throwException() {
-        assertThrows(NullPointerException.class, () -> DateUtils.getFirstDayOfFollowingMonth(null));
+        assertThatThrownBy(() -> DateUtils.getFirstDayOfFollowingMonth(null)).isInstanceOf(NullPointerException.class);
     }
 
     @Test
     void getFirstDayOfFollowingMonth_emptyDate_returnLastDayOfMonthJanuary() {
-        assertThrows(DateTimeParseException.class, () -> DateUtils.getLastDayOfFollowingMonth(""));
+        assertThatThrownBy(() -> DateUtils.getLastDayOfFollowingMonth("")).isInstanceOf(DateTimeParseException.class);
     }
 
     @Test
     void toDateTime_correctInput_shouldReturnDateTime() {
-        assertEquals(LocalDateTime.of(2019, 11, 18, 10, 11), DateUtils.parseDateTime("2019-11-18", "10:11"));
+        assertThat(DateUtils.parseDateTime("2019-11-18", "10:11")).isEqualTo(LocalDateTime.of(2019, 11, 18, 10, 11));
     }
 
     @Test
     void toDateTime_emptyDate_shouldThrowException() {
-        assertThrows(DateTimeParseException.class, () -> DateUtils.parseDateTime("", "10:11"));
+        assertThatThrownBy(() -> DateUtils.parseDateTime("", "10:11")).isInstanceOf(DateTimeParseException.class);
     }
 
     @Test
     void toDateTime_emptyTime_shouldThrowException() {
-        assertThrows(DateTimeParseException.class, () -> DateUtils.parseDateTime("2019-11-18", ""));
+        assertThatThrownBy(() -> DateUtils.parseDateTime("2019-11-18", "")).isInstanceOf(DateTimeParseException.class);
     }
 
     @Test
     void calcDiffInHours_correctInput_shouldReturnHours() {
-        assertEquals(8.75d, DateUtils.calcDiffInHours(LocalDateTime.of(2019, 11, 18, 10, 15), LocalDateTime.of(2019, 11, 18, 19, 0)));
+        double diffInHours = DateUtils.calcDiffInHours(LocalDateTime.of(2019, 11, 18, 10, 15), LocalDateTime.of(2019, 11, 18, 19, 0));
+        assertThat(diffInHours).isEqualTo(8.75d);
     }
 
     @Test
     void getDayByDate_normalInput_shouldRetornCorrectDay() {
-        assertEquals("Montag", DateUtils.getDayByDate(LocalDate.of(2019, 11, 18)));
+        assertThat(DateUtils.getDayByDate(LocalDate.of(2019, 11, 18))).isEqualTo("Montag");
     }
 }
