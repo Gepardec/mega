@@ -12,7 +12,7 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.InjectionPoint;
 import java.lang.reflect.Member;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,7 +44,7 @@ class LoggerProducerTest {
 
         final Logger logger = producer.createLogger(ip);
 
-        assertEquals(Object.class.getName(), logger.getName());
+        assertThat(logger.getName()).isEqualTo(Object.class.getName());
     }
 
     @Test
@@ -56,7 +56,7 @@ class LoggerProducerTest {
 
         final Logger logger = producer.createLogger(ip);
 
-        assertEquals(Object.class.getName(), logger.getName());
+        assertThat(logger.getName()).isEqualTo(Object.class.getName());
     }
 
     @Test
@@ -66,6 +66,6 @@ class LoggerProducerTest {
 
         final Logger logger = producer.createLogger(ip);
 
-        assertEquals("default", logger.getName());
+        assertThat(logger.getName()).isEqualTo("default");
     }
 }

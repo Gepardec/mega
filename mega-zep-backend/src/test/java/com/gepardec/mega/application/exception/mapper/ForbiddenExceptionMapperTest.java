@@ -4,7 +4,6 @@ import com.gepardec.mega.application.exception.ForbiddenException;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.UserContext;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,6 +15,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
@@ -47,21 +47,21 @@ class ForbiddenExceptionMapperTest {
 
     @Test
     void toResponse_whenUserNotLogged_thenLoggerWarnCalledAndMessageContainsUserEmail() {
-        when(userContext.user()).thenReturn(createUserForEmail("thomas.herzog@gepardec.com"));
+        when(userContext.user()).thenReturn(createUserForEmail("no-reply@gepardec.com"));
         when(uriInfo.getPath()).thenReturn("/path/resource");
         final Response response = mapper.toResponse(new ForbiddenException("exception-message"));
 
-        Assertions.assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
-        verify(logger, times(1)).warn(anyString(), eq("thomas.herzog@gepardec.com"), eq("/path/resource"), eq("exception-message"));
+        assertThat(response.getStatus()).isEqualTo(Response.Status.FORBIDDEN.getStatusCode());
+        verify(logger, times(1)).warn(anyString(), eq("no-reply@gepardec.com"), eq("/path/resource"), eq("exception-message"));
     }
 
     @Test
     void toResponse_whenCalled_thenReturnsHttpErrorFORBIDDEN() {
-        when(userContext.user()).thenReturn(createUserForEmail("thomas.herzog@gepardec.com"));
+        when(userContext.user()).thenReturn(createUserForEmail("no-reply@gepardec.com"));
         when(uriInfo.getPath()).thenReturn("/path/resource");
         final Response response = mapper.toResponse(new ForbiddenException("exception-message"));
 
-        Assertions.assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
+        assertThat(response.getStatus()).isEqualTo(Response.Status.FORBIDDEN.getStatusCode());
     }
 
     private User createUserForEmail(final String email) {
@@ -69,8 +69,8 @@ class ForbiddenExceptionMapperTest {
                 .dbId(1)
                 .userId("1")
                 .email(email)
-                .firstname("Thomas")
-                .lastname("Herzog")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .roles(Set.of(Role.EMPLOYEE))
                 .build();
     }

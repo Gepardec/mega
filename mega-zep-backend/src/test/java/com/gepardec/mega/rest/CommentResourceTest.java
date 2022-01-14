@@ -23,8 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -66,7 +65,7 @@ class CommentResourceTest {
         Comment comment = Comment.builder()
                 .id(0L)
                 .message("Pausen eintragen!")
-                .authorEmail("evelyn.pirklbauer@gepardec.com")
+                .authorEmail("no-reply@gepardec.com")
                 .state(EmployeeState.IN_PROGRESS)
                 .build();
 
@@ -75,13 +74,13 @@ class CommentResourceTest {
                 .put("/comments/setdone")
                 .as(Integer.class);
 
-        assertEquals(1, updatedCount);
+        assertThat(updatedCount).isEqualTo(1);
     }
 
     @Test
     void getAllCommentsForEmployee_whenMethodPOST_thenReturnsStatusMETHOD_NOT_ALLOWED() {
         given().contentType(ContentType.JSON)
-                .queryParam("email", "marko.gattringer@gmx.at")
+                .queryParam("email", "no-reply@gmx.at")
                 .queryParam("releasedate", "2020-10-01")
                 .post("/comments/getallcommentsforemployee")
                 .then().assertThat().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
@@ -93,7 +92,7 @@ class CommentResourceTest {
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON)
-                .queryParam("email", "marko.gattringer@gmx.at")
+                .queryParam("email", "no-reply@gmx.at")
                 .queryParam("releasedate", "2020-10-01")
                 .get("/comments/getallcommentsforemployee")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
@@ -106,7 +105,7 @@ class CommentResourceTest {
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON)
-                .queryParam("email", "marko.gattringergmx.at")
+                .queryParam("email", "noreplygmx.at")
                 .queryParam("releasedate", "2020-10-01")
                 .get("/comments/getallcommentsforemployee")
                 .then().assertThat().statusCode(HttpStatus.SC_BAD_REQUEST);
@@ -131,7 +130,7 @@ class CommentResourceTest {
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON)
-                .queryParam("email", "marko.gattringer@gmx.at")
+                .queryParam("email", "no-reply@gmx.at")
                 .get("/comments/getallcommentsforemployee")
                 .then().assertThat().statusCode(HttpStatus.SC_BAD_REQUEST);
     }
@@ -142,19 +141,19 @@ class CommentResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        Comment comment = Comment.builder().id(0L).message("Pausen eintragen!").authorEmail("evelyn.pirklbauer@gepardec.com").state(EmployeeState.IN_PROGRESS).build();
+        Comment comment = Comment.builder().id(0L).message("Pausen eintragen!").authorEmail("no-reply@gepardec.com").state(EmployeeState.IN_PROGRESS).build();
         when(commentService.findCommentsForEmployee(ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(List.of(comment));
 
         List<Comment> comments = given().contentType(ContentType.JSON)
-                .queryParam("email", "marko.gattringer@gmx.at")
+                .queryParam("email", "no-reply@gmx.at")
                 .queryParam("date", "2020-10-01")
                 .get("/comments/getallcommentsforemployee")
                 .as(new TypeRef<>() {
                 });
 
-        assertEquals(1L, comments.size());
-        assertEquals(comment, comments.get(0));
+        assertThat(comments).hasSize(1);
+        assertThat(comments.get(0)).isEqualTo(comment);
     }
 
     @Test
@@ -194,7 +193,7 @@ class CommentResourceTest {
         NewCommentEntry newCommentEntry = NewCommentEntry.builder()
                 .comment("Pausen eintragen!")
                 .employee(employee).stepId(2L)
-                .assigneeEmail("marko.gattringer@gepardec.com")
+                .assigneeEmail("no-reply@gepardec.com")
                 .currentMonthYear("2020-10-01")
                 .project("")
                 .build();
@@ -203,8 +202,8 @@ class CommentResourceTest {
                 .post("/comments")
                 .as(Comment.class);
 
-        assertNotNull(createdComment);
-        assertEquals(newCommentEntry.comment(), createdComment.message());
+        assertThat(createdComment).isNotNull();
+        assertThat(createdComment.message()).isEqualTo(newCommentEntry.comment());
     }
 
     @Test
@@ -234,7 +233,7 @@ class CommentResourceTest {
                 .delete("/comments/1")
                 .as(Boolean.class);
 
-        assertEquals(result, Boolean.TRUE);
+        assertThat(Boolean.TRUE).isEqualTo(result);
     }
 
     @Test
@@ -270,7 +269,7 @@ class CommentResourceTest {
                 .put("/comments")
                 .as(Comment.class);
 
-        assertEquals(comment, updatedComment);
+        assertThat(updatedComment).isEqualTo(comment);
     }
 
     private com.gepardec.mega.domain.model.User createUserForRole(final Role role) {
@@ -279,9 +278,9 @@ class CommentResourceTest {
         return com.gepardec.mega.domain.model.User.builder()
                 .userId("1")
                 .dbId(1)
-                .email("thomas.herzog@gpeardec.com")
-                .firstname("Thomas")
-                .lastname("Herzog")
+                .email("no-reply@gepardec.com")
+                .firstname("Max")
+                .lastname("Mustermann")
                 .roles(roles)
                 .build();
     }

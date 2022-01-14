@@ -2,7 +2,6 @@ package com.gepardec.mega.notification.mail;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
 import com.gepardec.mega.application.producer.ResourceBundleProducer;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
@@ -12,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Locale;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
@@ -33,49 +33,49 @@ class NotificationHelperTest {
     void whenReminderEMPLOYEE_CHECK_PROJECTTIME_thenEmailPathReturned() {
         final String path = notificationHelper.templatePathForMail(Mail.EMPLOYEE_CHECK_PROJECTTIME, locale);
 
-        Assertions.assertEquals("emails/EMPLOYEE_CHECK_PROJECTTIME.html", path);
+        assertThat(path).isEqualTo("emails/EMPLOYEE_CHECK_PROJECTTIME.html");
     }
 
     @Test
     void whenReminderOM_CONTROL_EMPLOYEES_CONTENT_thenEmailPathReturned() {
         final String path = notificationHelper.templatePathForMail(Mail.OM_CONTROL_EMPLOYEES_CONTENT, locale);
 
-        Assertions.assertEquals("emails/OM_CONTROL_EMPLOYEES_CONTENT.html", path);
+        assertThat(path).isEqualTo("emails/OM_CONTROL_EMPLOYEES_CONTENT.html");
     }
 
     @Test
     void whenReminderPL_PROJECT_CONTROLLING_thenEmailPathReturned() {
         final String path = notificationHelper.templatePathForMail(Mail.PL_PROJECT_CONTROLLING, locale);
 
-        Assertions.assertEquals("emails/PL_PROJECT_CONTROLLING.html", path);
+        assertThat(path).isEqualTo("emails/PL_PROJECT_CONTROLLING.html");
     }
 
     @Test
     void whenReminderOM_RELEASE_thenEmailPathReturned() {
         final String path = notificationHelper.templatePathForMail(Mail.OM_RELEASE, locale);
 
-        Assertions.assertEquals("emails/OM_RELEASE.html", path);
+        assertThat(path).isEqualTo("emails/OM_RELEASE.html");
     }
 
     @Test
     void whenReminderOM_ADMINISTRATIVE_thenEmailPathReturned() {
         final String path = notificationHelper.templatePathForMail(Mail.OM_ADMINISTRATIVE, locale);
 
-        Assertions.assertEquals("emails/OM_ADMINISTRATIVE.html", path);
+        assertThat(path).isEqualTo("emails/OM_ADMINISTRATIVE.html");
     }
 
     @Test
     void whenReminderOM_SALARY_thenEmailPathReturned() {
         final String path = notificationHelper.templatePathForMail(Mail.OM_SALARY, locale);
 
-        Assertions.assertEquals("emails/OM_SALARY.html", path);
+        assertThat(path).isEqualTo("emails/OM_SALARY.html");
     }
 
     @Test
     void _whenReminderOM_CONTROL_PROJECTTIMES_thenEmailPathReturned() {
         final String path = notificationHelper.templatePathForMail(Mail.OM_CONTROL_PROJECTTIMES, locale);
 
-        Assertions.assertEquals("emails/OM_CONTROL_PROJECTTIMES.html", path);
+        assertThat(path).isEqualTo("emails/OM_CONTROL_PROJECTTIMES.html");
     }
 
     @Test
@@ -85,7 +85,7 @@ class NotificationHelperTest {
                 .thenReturn("Subject");
         final String subject = notificationHelper.subjectForMail(Mail.EMPLOYEE_CHECK_PROJECTTIME, Locale.GERMAN);
 
-        Assertions.assertEquals("Subject", subject);
+        assertThat(subject).isEqualTo("Subject");
     }
 
     @Test
@@ -95,6 +95,6 @@ class NotificationHelperTest {
                 .thenReturn("Subject");
         final String subject = notificationHelper.subjectForMail(Mail.EMPLOYEE_CHECK_PROJECTTIME, Locale.GERMAN);
 
-        Assertions.assertEquals("DEV: Subject", subject);
+        assertThat(subject).isEqualTo("DEV: Subject");
     }
 }

@@ -26,13 +26,17 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequestScoped
@@ -127,6 +131,15 @@ public class ManagementResource implements ManagementResourceAPI {
             List<ProjectEntry> projectEntries = projectEntryService.findByNameAndDate(currentProject.projectId(), from, to);
 
             if (!entries.isEmpty() && !projectEntries.isEmpty()) {
+
+                Duration billable = calculateProjectDuration(entries.stream()
+                        .map(ManagementEntry::billableTime)
+                        .collect(Collectors.toList()));
+
+                Duration nonBillable = calculateProjectDuration(entries.stream()
+                        .map(ManagementEntry::nonBillableTime)
+                        .collect(Collectors.toList()));
+
                 projectManagementEntries.add(ProjectManagementEntry.builder()
                         .projectName(currentProject.projectId())
                         .controlProjectState(ProjectState.byName(getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_PROJECT).getState().name()))
@@ -134,11 +147,29 @@ public class ManagementResource implements ManagementResourceAPI {
                         .presetControlProjectState(getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_PROJECT).isPreset())
                         .presetControlBillingState(getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_BILLING).isPreset())
                         .entries(entries)
+                        .aggregatedBillableWorkTimeInSeconds(billable)
+                        .aggregatedNonBillableWorkTimeInSeconds(nonBillable)
                         .build()
                 );
             }
         }
+
         return projectManagementEntries;
+    }
+
+    private Duration calculateProjectDuration(List<String> entries) {
+        return Duration.ofMinutes(
+                Optional.ofNullable(entries)
+                        .orElseGet(Collections::emptyList)
+                        .stream()
+                        .filter(Objects::nonNull)
+                        .map(billableTime -> {
+                            long hours = Long.parseLong(billableTime.split(":")[0]);
+                            long minutes = Long.parseLong(billableTime.split(":")[1]);
+                            return hours * 60 + minutes;
+                        })
+                        .reduce(0L, Long::sum)
+        );
     }
 
     private ProjectEntry getProjectEntryForProjectStep(List<ProjectEntry> projectEntries, ProjectStep projectStep) {

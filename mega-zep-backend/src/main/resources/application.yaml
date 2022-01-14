@@ -112,6 +112,7 @@ mega:
           - "thomas.herzog@gepardec.com"
           - "werner.bruckmueller@gepardec.com"
           - "christoph.ruhsam@gepardec.com"
+          - "andreas.mayer@gepardec.com"
           - "armin.lang@gepardec.com"
           - "manuel.vilim@gepardec.com"
           - "philipp.wurm@gepardec.com"
@@ -161,6 +162,7 @@ mega:
           - "philipp.wurm@gepardec.com"
           - "werner.bruckmueller@gepardec.com"
 
+
 # PROD Properties
 "%prod":
   quarkus:
@@ -201,6 +203,7 @@ mega:
           - "thomas.herzog@gepardec.com"
           - "werner.bruckmueller@gepardec.com"
           - "christoph.ruhsam@gepardec.com"
+          - "andreas.mayer@gepardec.com"
           - "armin.lang@gepardec.com"
           - "manuel.vilim@gepardec.com"
           - "philipp.wurm@gepardec.com"
@@ -241,6 +244,8 @@ mega:
           - "armin.lang@gepardec.com"
           - "alexandra.stummer@gepardec.com"
           - "sandra.kepplinger@gepardec.com"
+
+
 
 # PROD-STAGE Properties
 "%prodstage":

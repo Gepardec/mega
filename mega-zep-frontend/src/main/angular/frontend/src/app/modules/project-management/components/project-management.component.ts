@@ -54,6 +54,8 @@ export class ProjectManagementComponent implements OnInit {
   selectedMonth = moment().subtract(1, 'month').month() + 1; // months 0 - 11
   showCommentEditor = false;
   forProjectName: string;
+  tooltipShowDelay = 500;
+  tooltipPosition = 'above';
   maxMonthDate: number = 1;
 
   constructor(private dialog: MatDialog,
@@ -152,8 +154,17 @@ export class ProjectManagementComponent implements OnInit {
     this.pmService.getEntries(this.selectedYear, this.selectedMonth, false).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
       this.pmEntries = pmEntries;
       this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
+      this.pmEntries.sort((a, b) => a.projectName.localeCompare(b.projectName));
       this.pmEntries.forEach(pmEntry => {
           this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []));
+
+          const allDone = this.getFilteredAndSortedPmEntries(pmEntry, State.DONE, State.DONE, State.DONE, State.DONE);
+          const notAllDone = pmEntry.entries.filter(entry => !allDone.find(done => done.employee.email === entry.employee.email))
+            .sort((a, b) => a.employee.lastname.concat(a.employee.firstname)
+              .localeCompare(b.employee.lastname.concat(b.employee.firstname)));
+
+          pmEntry.entries = notAllDone.concat(allDone);
+
           this.projectCommentService.get(this.getFormattedDate(), pmEntry.projectName)
             .subscribe(projectComment => {
               pmEntry.projectComment = projectComment;
@@ -161,6 +172,14 @@ export class ProjectManagementComponent implements OnInit {
         }
       );
     });
+  }
+
+  getFilteredAndSortedPmEntries(pmEntry: ProjectManagementEntry, customerCheckState: State, projectCheckState: State, employeeCheckState: State, internalCheckState: State) {
+    return pmEntry.entries
+      .filter(val => val.customerCheckState === customerCheckState && val.projectCheckState === projectCheckState &&
+        val.employeeCheckState === employeeCheckState && val.internalCheckState === internalCheckState)
+      .sort((a, b) => a.employee.lastname.concat(a.employee.firstname)
+        .localeCompare(b.employee.lastname.concat(b.employee.firstname)));
   }
 
   private findEntriesForProject(projectName: string) {
@@ -290,5 +309,9 @@ export class ProjectManagementComponent implements OnInit {
     if (returnClicked) {
       this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.projectCommentNotUpdated'));
     }
+  }
+
+  convertDurationToTime(durationInSeconds: number): number {
+    return durationInSeconds / 60 / 60;
   }
 }

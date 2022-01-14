@@ -40,6 +40,7 @@ public class WorkerResource implements WorkerResourceAPI {
     @Override
     public MonthlyReport monthlyReport() {
         Employee employee = employeeService.getEmployee(Objects.requireNonNull(userContext.user()).userId());
+
         LocalDate date = LocalDate.parse(employee.releaseDate()).with(TemporalAdjusters.firstDayOfNextMonth());
         return monthlyReport(date.getYear(), date.getMonthValue());
     }

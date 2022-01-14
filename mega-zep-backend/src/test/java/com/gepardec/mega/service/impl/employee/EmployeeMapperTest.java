@@ -5,12 +5,13 @@ import com.gepardec.mega.domain.utils.DateUtils;
 import de.provantis.zep.BeschaeftigungszeitListeType;
 import de.provantis.zep.BeschaeftigungszeitType;
 import de.provantis.zep.MitarbeiterType;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class EmployeeMapperTest {
 
@@ -23,7 +24,7 @@ class EmployeeMapperTest {
 
     @Test
     void map_whenEmployeeIsNull_thenReturnsNull() {
-        Assertions.assertNull(mapper.map(null));
+        assertThat(mapper.map(null)).isNull();
     }
 
     @Test
@@ -31,7 +32,7 @@ class EmployeeMapperTest {
         final MitarbeiterType employee = new MitarbeiterType();
 
         final Employee actual = mapper.map(employee);
-        Assertions.assertFalse(actual.active());
+        assertThat(actual.active()).isFalse();
     }
 
     @Test
@@ -40,7 +41,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(new BeschaeftigungszeitListeType());
 
         final Employee actual = mapper.map(employee);
-        Assertions.assertFalse(actual.active());
+        assertThat(actual.active()).isFalse();
     }
 
     @Test
@@ -51,7 +52,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        Assertions.assertFalse(actual.active());
+        assertThat(actual.active()).isFalse();
     }
 
     @Test
@@ -64,7 +65,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        Assertions.assertFalse(actual.active());
+        assertThat(actual.active()).isFalse();
     }
 
     @Test
@@ -75,7 +76,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        Assertions.assertFalse(actual.active());
+        assertThat(actual.active()).isFalse();
     }
 
     @Test
@@ -87,7 +88,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        Assertions.assertFalse(actual.active());
+        assertThat(actual.active()).isFalse();
     }
 
     @Test
@@ -99,7 +100,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        Assertions.assertTrue(actual.active());
+        assertThat(actual.active()).isTrue();
     }
 
     @Test
@@ -110,7 +111,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        Assertions.assertTrue(actual.active());
+        assertThat(actual.active()).isTrue();
     }
 
     @Test
@@ -121,7 +122,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        Assertions.assertTrue(actual.active());
+        assertThat(actual.active()).isTrue();
     }
 
     @Test
@@ -133,7 +134,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        Assertions.assertTrue(actual.active());
+        assertThat(actual.active()).isTrue();
     }
 
     @Test
@@ -141,9 +142,9 @@ class EmployeeMapperTest {
         final BeschaeftigungszeitType activeEmployment = createBeschaeftigungszeitType(LocalDate.now().minusDays(7), LocalDate.now().plusDays(1));
         final BeschaeftigungszeitListeType employments = createBeschaeftigungszeitListeType(List.of(activeEmployment));
         final MitarbeiterType employee = new MitarbeiterType();
-        employee.setEmail("thomas.herzog@gepardec.com");
-        employee.setVorname("Thomas");
-        employee.setNachname("Herzog");
+        employee.setEmail("no-reply@gepardec.com");
+        employee.setVorname("Max");
+        employee.setNachname("Mustermann");
         employee.setTitel("Ing.");
         employee.setUserId("1");
         employee.setAnrede("Herr");
@@ -152,16 +153,16 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        Assertions.assertNotNull(employee);
-        Assertions.assertEquals(employee.getUserId(), actual.userId());
-        Assertions.assertEquals(employee.getEmail(), actual.email());
-        Assertions.assertEquals(employee.getVorname(), actual.firstname());
-        Assertions.assertEquals(employee.getNachname(), actual.lastname());
-        Assertions.assertEquals(employee.getTitel(), actual.title());
-        Assertions.assertEquals(employee.getAnrede(), actual.salutation());
-        Assertions.assertEquals(employee.getPreisgruppe(), actual.workDescription());
-        Assertions.assertEquals(employee.getFreigabedatum(), actual.releaseDate());
-        Assertions.assertTrue(actual.active());
+        assertThat(employee).isNotNull();
+        assertThat(actual.userId()).isEqualTo(employee.getUserId());
+        assertThat(actual.email()).isEqualTo(employee.getEmail());
+        assertThat(actual.firstname()).isEqualTo(employee.getVorname());
+        assertThat(actual.lastname()).isEqualTo(employee.getNachname());
+        assertThat(actual.title()).isEqualTo(employee.getTitel());
+        assertThat(actual.salutation()).isEqualTo(employee.getAnrede());
+        assertThat(actual.workDescription()).isEqualTo(employee.getPreisgruppe());
+        assertThat(actual.releaseDate()).isEqualTo(employee.getFreigabedatum());
+        assertThat(actual.active()).isTrue();
     }
 
     private BeschaeftigungszeitType createBeschaeftigungszeitType(final LocalDate start, final LocalDate end) {
