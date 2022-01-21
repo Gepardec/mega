@@ -8,14 +8,14 @@ describe('GeneralInfoComponent', () => {
   let component: GeneralInfoComponent;
   let fixture: ComponentFixture<GeneralInfoComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TranslateModule.forRoot()],
       declarations: [ GeneralInfoComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GeneralInfoComponent);
