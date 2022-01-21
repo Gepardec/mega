@@ -1,7 +1,8 @@
+@use '~@angular/material' as mat;
 @import '../../node_modules/@angular/material/theming';
 @import './colors';
 
-@include mat-core();
+@include mat.core();
 
 $gepardec-pal: (
   50 : #fdfae0,
@@ -36,8 +37,8 @@ $gepardec-pal: (
   )
 );
 
-$mega-primary: mat-palette($gepardec-pal);
-$mega-accent: mat-palette($gepardec-pal, A100);
-$mega-theme: mat-light-theme($mega-primary, $mega-accent);
+$mega-primary: mat.define-palette($gepardec-pal);
+$mega-accent: mat.define-palette($gepardec-pal, A100);
+$mega-theme: mat.define-light-theme($mega-primary, $mega-accent);
 
-@include angular-material-theme($mega-theme);
+@include mat.all-component-themes($mega-theme);
