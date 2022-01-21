@@ -8,7 +8,7 @@
     <version>${revision}</version>
     <name>MEGA ZEP-Backend</name>
     <properties>
-        <jacoco.version>0.8.6</jacoco.version>
+        <jacoco.version>0.8.7</jacoco.version>
         <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
         <maven-resource-plugin.version>3.1.0</maven-resource-plugin.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
@@ -31,7 +31,7 @@
 
         <ws.rt.version>2.3.5</ws.rt.version>
         <xml.resolver.version>20050927</xml.resolver.version>
-        <lombok.version>1.18.20</lombok.version>
+        <lombok.version>1.18.22</lombok.version>
         <jollyday.version>0.5.10</jollyday.version>
         <assertj.version>3.21.0</assertj.version>
         <!-- application info -->
@@ -199,12 +199,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>${assertj.version}</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
