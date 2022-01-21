@@ -34,5 +34,4 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
   emitEvent(date: string): void {
     this.dateEmitter.emit(date);
   }
-
 }
