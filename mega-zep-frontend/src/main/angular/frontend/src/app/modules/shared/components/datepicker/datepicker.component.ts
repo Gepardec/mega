@@ -20,7 +20,6 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
   }
 
   ngAfterViewInit(): void {
