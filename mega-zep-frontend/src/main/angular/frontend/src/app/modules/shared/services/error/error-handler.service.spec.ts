@@ -45,7 +45,8 @@ describe('ErrorHandlerService', () => {
     spyOn(errorService, 'getErrorMessage').and.callThrough();
     spyOn(loggingService, 'writeToLog').and.callThrough();
 
-    const error: ErrrorMock = {
+    const error: ErrorMock = {
+      name: ErrorHandlerMock.name,
       status: ErrorHandlerMock.httpStatusNotFound,
       message: ErrorHandlerMock.message
     }
@@ -78,8 +79,9 @@ describe('ErrorHandlerService', () => {
     expect(errorService.storeLastErrorData).toHaveBeenCalledWith(ErrorHandlerMock.message, router.url);
   });
 
-  class ErrrorMock {
+  class ErrorMock {
 
+    name: string;
     status: number;
     message: string;
 
