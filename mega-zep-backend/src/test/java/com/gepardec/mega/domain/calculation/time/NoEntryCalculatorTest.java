@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class NoEntryCalculatorTest {
 
@@ -81,7 +80,7 @@ class NoEntryCalculatorTest {
     void calculate_whenAllEntriesInMonthWithHolidayOnFirstNov_thenNoWarning() {
         List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryListForNovember(), new ArrayList<>());
 
-        assertTrue(result.isEmpty());
+        assertThat(result).isEmpty();
     }
 
     private List<FehlzeitType> createAbsenceListFromUBType() {
