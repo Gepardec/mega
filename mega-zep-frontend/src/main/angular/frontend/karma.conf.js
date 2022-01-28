@@ -38,7 +38,7 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     browsers: ['Chrome', 'ChromeHeadlessNoSandbox'],
-    autoWatch: false,
+    autoWatch: true,
     restartOnFileChange: true,
 
     customLaunchers: {
