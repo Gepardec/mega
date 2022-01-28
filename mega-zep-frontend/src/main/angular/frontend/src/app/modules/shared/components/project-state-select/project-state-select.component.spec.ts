@@ -68,7 +68,7 @@ fdescribe('ProjectStateSelectComponent', () => {
     const options = component.select.options;
     expect(options.length).toBe(PROJECT_STATES_LENGTH);
 
-    const optionDone = options.filter(option => option.value === ProjectState.DONE)[0];
+    const optionDone = options.find(option => option.value === ProjectState.DONE);
     expect(component.isDoneSelected).toBeFalse();
 
     optionDone.select();
@@ -77,5 +77,53 @@ fdescribe('ProjectStateSelectComponent', () => {
 
     expect(component.isDoneSelected).toBeTrue();
     expect(component.select.disabled).toBeTrue();
+  }));
+
+  it('#selectStateWorkInProgress - should disable option OPEN when WIP is selected', fakeAsync(() => {
+    fixture.detectChanges();
+
+    component.select.open();
+    fixture.detectChanges();
+    flush();
+
+    const options = component.select.options;
+    expect(options.length).toBe(PROJECT_STATES_LENGTH);
+
+    const optionWip = options.find(option => option.value === ProjectState.WORK_IN_PROGRESS);
+    expect(component.isInProgressSelected).toBeFalse();
+
+    optionWip.select();
+    fixture.detectChanges();
+    flush();
+
+    expect(component.isInProgressSelected).toBeTrue();
+    expect(component.select.disabled).toBeFalse();
+    expect(options.find(option => option.value === ProjectState.OPEN).disabled).toBeTrue();
+    expect(options.find(option => option.value === ProjectState.DONE).disabled).toBeFalse();
+    expect(options.find(option => option.value === ProjectState.NOT_RELEVANT).disabled).toBeFalse();
+  }));
+
+  it('#selectNotRelevant - should disable options WIP and DONE when NOT_RELEVANT is selected', fakeAsync(() => {
+    fixture.detectChanges();
+
+    component.select.open();
+    fixture.detectChanges();
+    flush();
+
+    const options = component.select.options;
+    expect(options.length).toBe(PROJECT_STATES_LENGTH);
+
+    const optionNotRelevant = options.find(option => option.value === ProjectState.NOT_RELEVANT);
+    expect(component.isNotRelevantSelected).toBeFalse();
+
+    optionNotRelevant.select();
+    fixture.detectChanges();
+    flush();
+
+    expect(component.isNotRelevantSelected).toBeTrue();
+    expect(component.select.disabled).toBeFalse();
+    expect(options.find(option => option.value === ProjectState.WORK_IN_PROGRESS).disabled).toBeTrue();
+    expect(options.find(option => option.value === ProjectState.DONE).disabled).toBeTrue();
+    expect(options.find(option => option.value === ProjectState.OPEN).disabled).toBeFalse();
   }));
 });
