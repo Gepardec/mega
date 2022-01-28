@@ -42,27 +42,24 @@ fdescribe('ProjectStateSelectComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#afterInit - should contain four ProjectStates', waitForAsync(() => {
+  fit('#afterInit - should contain four ProjectStates', waitForAsync(() => {
 
     fixture.detectChanges();
 
     const select = fixture.debugElement.queryAll(By.directive(MatSelect));
     expect(select.length).toBe(1);
 
-    click(select[0]);
-
+    fixture.componentInstance.select.open();
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {
-      console.log('entered whenStable()')
-
-      const options = fixture.debugElement.queryAll(By.directive(MatOption));
+      const options = fixture.debugElement.queryAll(By.css('.mat-option'));
 
       expect(options.length).toBe(4);
-      expect(options[0].nativeElement.textContent).toEqual(translateService.get('STATE.' + ProjectState.OPEN));
-      expect(options[1].nativeElement.textContent).toEqual(translateService.get('STATE.' + ProjectState.WORK_IN_PROGRESS));
-      expect(options[2].nativeElement.textContent).toEqual(translateService.get('STATE.' + ProjectState.DONE));
-      expect(options[3].nativeElement.textContent).toEqual(translateService.get('STATE.' + ProjectState.NOT_RELEVANT));
+      translateService.get('STATE.' + ProjectState.OPEN).subscribe(value => expect(options[0].nativeElement.textContent).toEqual(value));
+      translateService.get('STATE.' + ProjectState.WORK_IN_PROGRESS).subscribe(value => expect(options[1].nativeElement.textContent).toEqual(value));
+      translateService.get('STATE.' + ProjectState.DONE).subscribe(value => expect(options[2].nativeElement.textContent).toEqual(value));
+      translateService.get('STATE.' + ProjectState.NOT_RELEVANT).subscribe(value => expect(options[3].nativeElement.textContent).toEqual(value));
     });
   }));
 
