@@ -1,94 +1,81 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, flush, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {ProjectStateSelectComponent} from './project-state-select.component';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {CUSTOM_ELEMENTS_SCHEMA, DebugElement} from '@angular/core';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {By} from '@angular/platform-browser';
 import {ProjectState} from '../../models/ProjectState';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {AngularMaterialModule} from '../../../material/material-module';
-import {SharedModule} from '../../shared.module';
-import {MatSelect} from '@angular/material/select';
-import {MatOption} from '@angular/material/core';
-import {click} from '../../../../testing/click-simulator';
+
+const PROJECT_STATES_LENGTH = Object.keys(ProjectState).length;
+const STATE_PREFIX = 'STATE.';
 
 fdescribe('ProjectStateSelectComponent', () => {
 
   let fixture: ComponentFixture<ProjectStateSelectComponent>;
   let component: ProjectStateSelectComponent;
+
   let translateService: TranslateService;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ProjectStateSelectComponent],
       imports: [
         TranslateModule.forRoot(),
-        HttpClientTestingModule,
-        NoopAnimationsModule,
-        AngularMaterialModule,
-        SharedModule
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents()
-      .then(() => {
-        fixture = TestBed.createComponent(ProjectStateSelectComponent);
-        component = fixture.componentInstance;
-        translateService = TestBed.inject(TranslateService);
-      });
+        AngularMaterialModule
+      ]
+    }).compileComponents().then(() => {
+      fixture = TestBed.createComponent(ProjectStateSelectComponent);
+      component = fixture.componentInstance;
+      translateService = TestBed.inject(TranslateService);
+    });
   }));
 
   it('#should create', () => {
     expect(component).toBeTruthy();
   });
 
-  fit('#afterInit - should contain four ProjectStates', waitForAsync(() => {
+  it('#afterInit - should create select', fakeAsync(() => {
+    expect(component.select).toBeFalsy();
 
     fixture.detectChanges();
 
-    const select = fixture.debugElement.queryAll(By.directive(MatSelect));
-    expect(select.length).toBe(1);
-
-    fixture.componentInstance.select.open();
-    fixture.detectChanges();
-
-    fixture.whenStable().then(() => {
-      const options = fixture.debugElement.queryAll(By.css('.mat-option'));
-
-      expect(options.length).toBe(4);
-      translateService.get('STATE.' + ProjectState.OPEN).subscribe(value => expect(options[0].nativeElement.textContent).toEqual(value));
-      translateService.get('STATE.' + ProjectState.WORK_IN_PROGRESS).subscribe(value => expect(options[1].nativeElement.textContent).toEqual(value));
-      translateService.get('STATE.' + ProjectState.DONE).subscribe(value => expect(options[2].nativeElement.textContent).toEqual(value));
-      translateService.get('STATE.' + ProjectState.NOT_RELEVANT).subscribe(value => expect(options[3].nativeElement.textContent).toEqual(value));
-    });
+    expect(component.select).toBeTruthy();
   }));
 
-  it('#selectStateDone - should disable the select when state is DONE', waitForAsync(()  => {
-
+  it('#afterInit - should contain four ProjectStates', fakeAsync(() => {
     fixture.detectChanges();
 
-    const select = fixture.debugElement.queryAll(By.directive(MatSelect));
-    expect(select.length).toBe(1);
-
-    click(select[0]);
-
+    component.select.open();
     fixture.detectChanges();
+    flush();
 
-    fixture.whenStable().then(() => {
-      const options = fixture.debugElement.queryAll(By.directive(MatOption));
+    const options = component.select.options;
+    expect(options.length).toBe(PROJECT_STATES_LENGTH);
 
-      expect(options.length).toBe(4);
-      click(options.find(option => option.nativeElement.textContent === ProjectState.DONE));
-
-      fixture.detectChanges();
-
-      fixture.whenStable().then(() => {
-        const select = fixture.debugElement.queryAll(By.directive(MatSelect));
-
-        expect(select.length).toBe(1);
-        expect(select[0].nativeElement.disabled).toBe(false);
+    options.forEach((option, index) => {
+      // checks if the text of the option equals the translated value
+      translateService.get(STATE_PREFIX + Object.keys(ProjectState)[index]).subscribe(value => {
+        expect(option._getHostElement().innerText).toEqual(value);
       });
     });
   }));
 
-})
+  it('#selectStateDone - should disable the select when state is DONE', fakeAsync(() => {
+    fixture.detectChanges();
+
+    component.select.open();
+    fixture.detectChanges();
+    flush();
+
+    const options = component.select.options;
+    expect(options.length).toBe(PROJECT_STATES_LENGTH);
+
+    const optionDone = options.filter(option => option.value === ProjectState.DONE)[0];
+    expect(component.isDoneSelected).toBeFalse();
+
+    optionDone.select();
+    fixture.detectChanges();
+    flush();
+
+    expect(component.isDoneSelected).toBeTrue();
+    expect(component.select.disabled).toBeTrue();
+  }));
+});
