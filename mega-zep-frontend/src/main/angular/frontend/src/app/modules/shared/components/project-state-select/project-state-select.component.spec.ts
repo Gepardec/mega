@@ -1,15 +1,17 @@
-import {async, ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {ProjectStateSelectComponent} from './project-state-select.component';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
-import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {CUSTOM_ELEMENTS_SCHEMA, DebugElement} from '@angular/core';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {By} from '@angular/platform-browser';
 import {ProjectState} from '../../models/ProjectState';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {AngularMaterialModule} from '../../../material/material-module';
-import {MatOption} from '@angular/material/core';
 import {SharedModule} from '../../shared.module';
+import {MatSelect} from '@angular/material/select';
+import {MatOption} from '@angular/material/core';
+import {click} from '../../../../testing/click-simulator';
 
 fdescribe('ProjectStateSelectComponent', () => {
 
@@ -40,19 +42,56 @@ fdescribe('ProjectStateSelectComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#afterInit - should contain four ProjectStates', () => {
+  it('#afterInit - should contain four ProjectStates', waitForAsync(() => {
 
     fixture.detectChanges();
 
-    console.log(fixture.debugElement.children);
-    let dropdownElements = fixture.debugElement.queryAll(By.css('.mat-select'));
+    const select = fixture.debugElement.queryAll(By.directive(MatSelect));
+    expect(select.length).toBe(1);
 
-    expect(dropdownElements.length).toBe(4);
-    expect(dropdownElements[0].nativeElement.textContent).toEqual(translateService.get('STATE.' + ProjectState.OPEN));
-    expect(dropdownElements[1].nativeElement.textContent).toEqual(translateService.get('STATE.' + ProjectState.WORK_IN_PROGRESS));
-    expect(dropdownElements[2].nativeElement.textContent).toEqual(translateService.get('STATE.' + ProjectState.DONE));
-    expect(dropdownElements[3].nativeElement.textContent).toEqual(translateService.get('STATE.' + ProjectState.NOT_RELEVANT));
+    click(select[0]);
 
+    fixture.detectChanges();
 
-  });
-});
+    fixture.whenStable().then(() => {
+      console.log('entered whenStable()')
+
+      const options = fixture.debugElement.queryAll(By.directive(MatOption));
+
+      expect(options.length).toBe(4);
+      expect(options[0].nativeElement.textContent).toEqual(translateService.get('STATE.' + ProjectState.OPEN));
+      expect(options[1].nativeElement.textContent).toEqual(translateService.get('STATE.' + ProjectState.WORK_IN_PROGRESS));
+      expect(options[2].nativeElement.textContent).toEqual(translateService.get('STATE.' + ProjectState.DONE));
+      expect(options[3].nativeElement.textContent).toEqual(translateService.get('STATE.' + ProjectState.NOT_RELEVANT));
+    });
+  }));
+
+  it('#selectStateDone - should disable the select when state is DONE', waitForAsync(()  => {
+
+    fixture.detectChanges();
+
+    const select = fixture.debugElement.queryAll(By.directive(MatSelect));
+    expect(select.length).toBe(1);
+
+    click(select[0]);
+
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      const options = fixture.debugElement.queryAll(By.directive(MatOption));
+
+      expect(options.length).toBe(4);
+      click(options.find(option => option.nativeElement.textContent === ProjectState.DONE));
+
+      fixture.detectChanges();
+
+      fixture.whenStable().then(() => {
+        const select = fixture.debugElement.queryAll(By.directive(MatSelect));
+
+        expect(select.length).toBe(1);
+        expect(select[0].nativeElement.disabled).toBe(false);
+      });
+    });
+  }));
+
+})
