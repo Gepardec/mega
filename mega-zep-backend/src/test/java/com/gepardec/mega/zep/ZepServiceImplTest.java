@@ -18,17 +18,19 @@ import de.provantis.zep.ResponseHeaderType;
 import de.provantis.zep.UpdateMitarbeiterRequestType;
 import de.provantis.zep.UpdateMitarbeiterResponseType;
 import de.provantis.zep.ZepSoapPortType;
+import io.quarkus.test.Mock;
+import io.quarkus.test.junit.QuarkusMock;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -37,20 +39,20 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
 
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 class ZepServiceImplTest {
 
-    @Mock
-    private Logger logger;
+    ZepSoapPortType zepSoapPortType;
 
-    @Mock
-    private ZepSoapPortType zepSoapPortType;
+    @InjectMock
+    ZepSoapProvider zepSoapProvider;
 
-    @Mock
-    private ZepSoapProvider zepSoapProvider;
+    @Inject
+    Logger logger;
 
-    private ZepServiceImpl beanUnderTest;
+    ZepServiceImpl zepService;
 
     private final ProjectEntryMapper projectEntryMapper = new ProjectEntryMapper();
 
@@ -60,7 +62,9 @@ class ZepServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        beanUnderTest = new ZepServiceImpl(new EmployeeMapper(), logger, zepSoapPortType, zepSoapProvider, projectEntryMapper);
+        zepSoapPortType = mock(ZepSoapPortType.class);
+
+        zepService = new ZepServiceImpl(new EmployeeMapper(), logger, zepSoapPortType, zepSoapProvider, projectEntryMapper);
 
         final ReadProjekteResponseType readProjekteResponseType = new ReadProjekteResponseType();
         final ProjektListeType projektListeType = new ProjektListeType();
@@ -84,7 +88,7 @@ class ZepServiceImplTest {
                 List.of(createMitarbeiterType(0))
         ));
 
-        final Employee employee = beanUnderTest.getEmployee("0");
+        final Employee employee = zepService.getEmployee("0");
         assertThat(employee).isNotNull();
         assertThat(employee.userId()).isEqualTo("0");
 
@@ -97,7 +101,7 @@ class ZepServiceImplTest {
     void testGetEmployeesMitarbeiterZepResponseNull() {
         Mockito.when(zepSoapPortType.readMitarbeiter(Mockito.any(ReadMitarbeiterRequestType.class))).thenReturn(null);
 
-        final List<Employee> employee = beanUnderTest.getEmployees();
+        final List<Employee> employee = zepService.getEmployees();
         assertThat(employee).isNotNull();
         assertThat(employee).isEmpty();
     }
@@ -106,7 +110,7 @@ class ZepServiceImplTest {
     void testGetEmployeesMitarbeiterZepResponseMitarbeiterListeNull() {
         Mockito.when(zepSoapPortType.readMitarbeiter(Mockito.any(ReadMitarbeiterRequestType.class))).thenReturn(new ReadMitarbeiterResponseType());
 
-        final List<Employee> employee = beanUnderTest.getEmployees();
+        final List<Employee> employee = zepService.getEmployees();
         assertThat(employee).isNotNull();
         assertThat(employee).isEmpty();
     }
@@ -115,7 +119,7 @@ class ZepServiceImplTest {
     void testGetEmployeesMitarbeiterZepResponseMitarbeiterListeEmpty() {
         Mockito.when(zepSoapPortType.readMitarbeiter(Mockito.any(ReadMitarbeiterRequestType.class))).thenReturn(new ReadMitarbeiterResponseType());
 
-        final List<Employee> employee = beanUnderTest.getEmployees();
+        final List<Employee> employee = zepService.getEmployees();
         assertThat(employee).isNotNull();
         assertThat(employee).isEmpty();
     }
@@ -126,7 +130,7 @@ class ZepServiceImplTest {
                 List.of(createMitarbeiterType(0), createMitarbeiterType(1), createMitarbeiterType(2))
         ));
 
-        final List<Employee> employee = beanUnderTest.getEmployees();
+        final List<Employee> employee = zepService.getEmployees();
         assertThat(employee).isNotNull();
         assertThat(employee).hasSize(3);
 
@@ -140,7 +144,7 @@ class ZepServiceImplTest {
         Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any(UpdateMitarbeiterRequestType.class)))
                 .thenReturn(createUpaUpdateMitarbeiterResponseType(createResponseHeaderType("1337")));
 
-        assertThatThrownBy(() -> beanUnderTest.updateEmployeesReleaseDate("0", "2020-01-01"))
+        assertThatThrownBy(() -> zepService.updateEmployeesReleaseDate("0", "2020-01-01"))
                 .isInstanceOf(ZepServiceException.class)
                 .hasMessage("updateEmployeeReleaseDate failed with code: 1337");
 
@@ -153,7 +157,7 @@ class ZepServiceImplTest {
     void testUpdateEmployeesReleaseDateResponseNull() {
         Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any(UpdateMitarbeiterRequestType.class))).thenReturn(null);
 
-        beanUnderTest.updateEmployeesReleaseDate("0", "2020-01-01");
+        zepService.updateEmployeesReleaseDate("0", "2020-01-01");
 
         Mockito.verify(zepSoapPortType).updateMitarbeiter(Mockito.argThat(
                 argument -> argument.getMitarbeiter().getUserId().equals("0") && argument.getMitarbeiter().getFreigabedatum().equals("2020-01-01")
@@ -164,7 +168,7 @@ class ZepServiceImplTest {
     void testUpdateEmployeesReleaseDateResponseHeaderNull() {
         Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any(UpdateMitarbeiterRequestType.class))).thenReturn(createUpaUpdateMitarbeiterResponseType(null));
 
-        beanUnderTest.updateEmployeesReleaseDate("0", "2020-01-01");
+        zepService.updateEmployeesReleaseDate("0", "2020-01-01");
 
         Mockito.verify(zepSoapPortType).updateMitarbeiter(Mockito.argThat(
                 argument -> argument.getMitarbeiter().getUserId().equals("0") && argument.getMitarbeiter().getFreigabedatum().equals("2020-01-01")
@@ -176,7 +180,7 @@ class ZepServiceImplTest {
         Mockito.when(zepSoapPortType.updateMitarbeiter(Mockito.any(UpdateMitarbeiterRequestType.class)))
                 .thenReturn(createUpaUpdateMitarbeiterResponseType(createResponseHeaderType("0")));
 
-        beanUnderTest.updateEmployeesReleaseDate("0", "2020-01-01");
+        zepService.updateEmployeesReleaseDate("0", "2020-01-01");
 
         Mockito.verify(zepSoapPortType).updateMitarbeiter(Mockito.argThat(
                 argument -> argument.getMitarbeiter().getUserId().equals("0") && argument.getMitarbeiter().getFreigabedatum().equals("2020-01-01")
@@ -230,7 +234,7 @@ class ZepServiceImplTest {
         projektMitarbeiterListeType.getProjektmitarbeiter().add(projektMitarbeiterType);
 
         // When
-        final List<Project> projectsForMonthYear = beanUnderTest.getProjectsForMonthYear(monthYear);
+        final List<Project> projectsForMonthYear = zepService.getProjectsForMonthYear(monthYear);
 
         // Then
         assertThat(projectsForMonthYear).hasSize(1);
@@ -264,7 +268,7 @@ class ZepServiceImplTest {
         projektMitarbeiterListeType.getProjektmitarbeiter().add(projektMitarbeiterType);
 
         // When
-        final List<Project> projectsForMonthYear = beanUnderTest.getProjectsForMonthYear(monthYear);
+        final List<Project> projectsForMonthYear = zepService.getProjectsForMonthYear(monthYear);
 
         // Then
         assertThat(projectsForMonthYear).hasSize(1);
@@ -296,7 +300,7 @@ class ZepServiceImplTest {
         projektMitarbeiterListeType.getProjektmitarbeiter().add(projektMitarbeiterType2);
 
         // When
-        final List<Project> projectsForMonthYear = beanUnderTest.getProjectsForMonthYear(monthYear);
+        final List<Project> projectsForMonthYear = zepService.getProjectsForMonthYear(monthYear);
 
         // Then
         assertThat(projectsForMonthYear).hasSize(1);
@@ -321,7 +325,7 @@ class ZepServiceImplTest {
         projektMitarbeiterListeType.getProjektmitarbeiter().add(projektMitarbeiterType2);
 
         // When
-        final List<Project> projectsForMonthYear = beanUnderTest.getProjectsForMonthYear(monthYear);
+        final List<Project> projectsForMonthYear = zepService.getProjectsForMonthYear(monthYear);
 
         // Then
         assertThat(projectsForMonthYear).hasSize(1);

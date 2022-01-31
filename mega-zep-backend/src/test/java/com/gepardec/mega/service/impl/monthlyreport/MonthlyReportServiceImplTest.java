@@ -11,6 +11,7 @@ import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
 import com.gepardec.mega.zep.ZepService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
@@ -38,7 +39,8 @@ class MonthlyReportServiceImplTest {
     MonthlyReportServiceImpl monthlyReportService;
 
     @Test
-    // FIXME ask andreas for purpose
+    @Disabled
+        // FIXME ask andreas for purpose
     void testGetMonthendReportForUser_MitarbeiterNull() {
         when(zepService.getEmployee(Mockito.any())).thenReturn(null);
         when(warningCalculator.determineNoTimeEntries(Mockito.anyList(), Mockito.anyList())).thenReturn(new ArrayList<>());
