@@ -8,56 +8,42 @@ import com.gepardec.mega.domain.model.monthlyreport.Task;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarningType;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
-import com.gepardec.mega.service.api.comment.CommentService;
-import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.zep.ZepService;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 class MonthlyReportServiceImplTest {
 
-    @Mock
-    private ZepService zepService;
+    @InjectMock
+    ZepService zepService;
 
-    @Mock
-    private ResourceBundle resourceBundle;
+    @InjectMock
+    WarningCalculator warningCalculator;
 
-    @Mock
-    private WarningCalculator warningCalculator;
-
-    @Mock
-    private CommentService commentService;
-
-    @Mock
-    private StepEntryService stepEntryService;
-
-    @Mock
-    ResourceBundle messages;
-
-    @InjectMocks
-    private MonthlyReportServiceImpl workerService;
+    @Inject
+    MonthlyReportServiceImpl monthlyReportService;
 
     @Test
+    // FIXME ask andreas for purpose
     void testGetMonthendReportForUser_MitarbeiterNull() {
         when(zepService.getEmployee(Mockito.any())).thenReturn(null);
         when(warningCalculator.determineNoTimeEntries(Mockito.anyList(), Mockito.anyList())).thenReturn(new ArrayList<>());
 
-        assertThat(workerService.getMonthendReportForUser("0"))
+        assertThat(monthlyReportService.getMonthendReportForUser("0"))
                 .isNotNull();
     }
 
@@ -66,7 +52,7 @@ class MonthlyReportServiceImplTest {
         final Employee employee = createEmployeeWithReleaseDate(0, "NULL");
         when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
 
-        assertThat(workerService.getMonthendReportForUser("0"))
+        assertThat(monthlyReportService.getMonthendReportForUser("0"))
                 .isNotNull();
     }
 
@@ -77,18 +63,18 @@ class MonthlyReportServiceImplTest {
         when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(new ArrayList<>());
         when(warningCalculator.determineNoTimeEntries(Mockito.anyList(), Mockito.anyList())).thenReturn(new ArrayList<>());
 
-        assertThat(workerService.getMonthendReportForUser("0"))
+        assertThat(monthlyReportService.getMonthendReportForUser("0"))
                 .isNotNull();
     }
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid_ProjektzeitenValid_NoWarning() {
         final Employee employee = createEmployee(0);
-        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getEmployee(ArgumentMatchers.anyString())).thenReturn(employee);
         when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjektzeitenResponseType(10));
         when(warningCalculator.determineNoTimeEntries(Mockito.anyList(), Mockito.anyList())).thenReturn(new ArrayList<>());
 
-        final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
 
         assertThat(monthendReportForUser)
                 .isNotNull();
@@ -108,7 +94,7 @@ class MonthlyReportServiceImplTest {
         when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(new ArrayList<>());
         when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(createTimeWarningList());
 
-        final MonthlyReport monthendReportForUser = workerService.getMonthendReportForUser("0");
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
 
         assertThat(monthendReportForUser)
                 .isNotNull();

@@ -13,24 +13,25 @@ import javax.enterprise.inject.spi.InjectionPoint;
 import java.lang.reflect.Member;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 class LoggerProducerTest {
 
-    @Mock
     private InjectionPoint ip;
 
-    @Mock
     private Bean<?> bean;
 
-    @Mock
     private Member member;
 
     private LoggerProducer producer;
 
     @BeforeEach
     void beforeEach() {
+        ip = spy(InjectionPoint.class);
+        bean = spy(Bean.class);
+        member = spy(Member.class);
+
         producer = new LoggerProducer();
     }
 

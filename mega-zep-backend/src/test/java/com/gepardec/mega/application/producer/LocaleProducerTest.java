@@ -3,9 +3,6 @@ package com.gepardec.mega.application.producer;
 import com.gepardec.mega.application.configuration.ApplicationConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -13,31 +10,31 @@ import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 class LocaleProducerTest {
 
     private static final Locale DEFAULT_LOCALE = Locale.GERMAN;
 
-    @Mock
-    private HttpServletRequest request;
-
-    @Mock
-    private ApplicationConfig applicationConfig;
+    private HttpServletRequest requestSpy;
 
     private LocaleProducer producer;
 
     @BeforeEach
     void beforeEach() {
-        lenient().when(applicationConfig.getLocales()).thenReturn(List.of(Locale.GERMAN, Locale.ENGLISH));
-        lenient().when(applicationConfig.getDefaultLocale()).thenReturn(Locale.GERMAN);
-        producer = new LocaleProducer(applicationConfig, request);
+        requestSpy = spy(HttpServletRequest.class);
+        ApplicationConfig applicationConfigSpy = spy(ApplicationConfig.class);
+
+        lenient().when(applicationConfigSpy.getLocales()).thenReturn(List.of(Locale.GERMAN, Locale.ENGLISH));
+        lenient().when(applicationConfigSpy.getDefaultLocale()).thenReturn(Locale.GERMAN);
+
+        producer = new LocaleProducer(applicationConfigSpy, requestSpy);
     }
 
     @Test
     void init_whenRequestHasNoLocale_thenCurrentLocaleIsDefaultLocale() {
-        when(request.getLocale()).thenReturn(null);
+        when(requestSpy.getLocale()).thenReturn(null);
 
         producer.init();
         final Locale actual = producer.getCurrentLocale();
@@ -47,7 +44,7 @@ class LocaleProducerTest {
 
     @Test
     void init_whenRequestHasUnsupportedLocaleFRENCH_thenCurrentLocaleIsDefaultLocale() {
-        when(request.getLocale()).thenReturn(Locale.FRENCH);
+        when(requestSpy.getLocale()).thenReturn(Locale.FRENCH);
 
         producer.init();
         final Locale actual = producer.getCurrentLocale();
@@ -57,7 +54,7 @@ class LocaleProducerTest {
 
     @Test
     void init_whenRequestHasLocaleGERMAN_thenCurrentLocaleIsGERMAN() {
-        when(request.getLocale()).thenReturn(Locale.GERMAN);
+        when(requestSpy.getLocale()).thenReturn(Locale.GERMAN);
 
         producer.init();
         final Locale actual = producer.getCurrentLocale();
@@ -67,7 +64,7 @@ class LocaleProducerTest {
 
     @Test
     void init_whenRequestHasLocaleENGLISH_thenCurrentLocaleIsENGLISH() {
-        when(request.getLocale()).thenReturn(Locale.ENGLISH);
+        when(requestSpy.getLocale()).thenReturn(Locale.ENGLISH);
 
         producer.init();
         final Locale actual = producer.getCurrentLocale();

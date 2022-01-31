@@ -10,6 +10,8 @@ import com.gepardec.mega.service.api.project.ProjectService;
 import com.gepardec.mega.service.api.step.StepService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.service.api.user.UserService;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +22,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -32,29 +35,29 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 class StepEntrySyncServiceImplTest {
 
-    @Mock
-    private Logger logger;
+    @InjectMock
+    UserService userService;
 
-    @Mock
-    private UserService userService;
+    @InjectMock
+    ProjectService projectService;
 
-    @Mock
-    private ProjectService projectService;
+    @InjectMock
+    StepService stepService;
 
-    @Mock
-    private StepService stepService;
+    @InjectMock
+    StepEntryService stepEntryService;
 
-    @Mock
-    private StepEntryService stepEntryService;
+    @InjectMock
+    NotificationConfig notificationConfig;
 
-    @Mock
-    private NotificationConfig notificationConfig;
+    @Inject
+    Logger logger;
 
-    @InjectMocks
-    private StepEntrySyncServiceImpl stepEntrySyncService;
+    @Inject
+    StepEntrySyncServiceImpl stepEntrySyncService;
 
     @BeforeEach
     void setUp() {
