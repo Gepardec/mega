@@ -1,9 +1,11 @@
 package com.gepardec.mega.application.producer;
 
 import com.gepardec.mega.application.configuration.ApplicationConfig;
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Locale;
@@ -13,13 +15,15 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+@QuarkusTest
 class LocaleProducerTest {
 
     private static final Locale DEFAULT_LOCALE = Locale.GERMAN;
 
     private HttpServletRequest requestSpy;
 
-    private LocaleProducer producer;
+    @Inject
+    LocaleProducer producer;
 
     @BeforeEach
     void beforeEach() {

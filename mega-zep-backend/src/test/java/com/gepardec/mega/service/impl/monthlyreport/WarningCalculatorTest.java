@@ -1,4 +1,4 @@
-package com.gepardec.mega.domain.calculation;
+package com.gepardec.mega.service.impl.monthlyreport;
 
 import com.gepardec.mega.domain.model.monthlyreport.JourneyDirection;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyTimeEntry;
@@ -10,7 +10,6 @@ import com.gepardec.mega.domain.model.monthlyreport.Task;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
-import com.gepardec.mega.service.impl.monthlyreport.WarningCalculator;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,13 +35,14 @@ import static org.mockito.Mockito.when;
 class WarningCalculatorTest {
 
     private static final Integer[] HOLIDAYS = {8, 25, 26};
-    private static final Integer[] WEEKEND_DAYS = {5, 6, 12, 13, 19, 20, 26, 27};
 
-    @InjectMocks
-    WarningCalculator calculator;
+    private static final Integer[] WEEKEND_DAYS = {5, 6, 12, 13, 19, 20, 26, 27};
 
     @Mock
     ResourceBundle messages;
+
+    @InjectMocks
+    WarningCalculator calculator;
 
     private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int endHour) {
         return projectTimeEntryFor(2, startHour, 0, 1, endHour, 0, WorkingLocation.MAIN);

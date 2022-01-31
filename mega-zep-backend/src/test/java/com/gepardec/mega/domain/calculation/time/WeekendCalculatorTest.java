@@ -16,10 +16,11 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WeekendCalculatorTest {
+class WeekendCalculatorTest {
     private final WeekendCalculator calculator = new WeekendCalculator();
 
     private static final Integer[] BUSINESS_DAYS = {1, 2, 3, 6, 7, 8, 9, 10, 13, 14, 15, 16, 17, 20, 21, 22, 23, 24, 27, 28, 29, 30, 31};
+
     private static final Integer[] WEEKEND_DAYS = {4, 5, 11, 12, 18, 19, 25, 26};
 
     @ParameterizedTest

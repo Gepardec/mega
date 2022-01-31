@@ -1,5 +1,6 @@
 package com.gepardec.mega.application.producer;
 
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,12 +11,14 @@ import org.slf4j.Logger;
 
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.inject.Inject;
 import java.lang.reflect.Member;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+@QuarkusTest
 class LoggerProducerTest {
 
     private InjectionPoint ip;
@@ -24,15 +27,14 @@ class LoggerProducerTest {
 
     private Member member;
 
-    private LoggerProducer producer;
+    @Inject
+    LoggerProducer producer;
 
     @BeforeEach
     void beforeEach() {
         ip = spy(InjectionPoint.class);
         bean = spy(Bean.class);
         member = spy(Member.class);
-
-        producer = new LoggerProducer();
     }
 
     @Test

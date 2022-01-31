@@ -6,23 +6,23 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+
+import javax.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 class GoogleVerifierProducerTest {
 
-    @Mock
-    private OAuthConfig oAuthConfig;
+    @InjectMock
+    OAuthConfig oAuthConfig;
 
-    @InjectMocks
-    private GoogleVerifierProducer producer;
+    @Inject
+    GoogleVerifierProducer producer;
 
     @Test
     void createHttpTransport_whenCalled_thenReturnsHttpTransportInstance() {
