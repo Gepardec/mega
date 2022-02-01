@@ -1,9 +1,10 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {User} from '../../models/User';
 import {InfoDialogComponent} from '../info-dialog/info-dialog.component';
 import {OAuthService} from 'angular-oauth2-oidc';
 import {UserInfo} from "../../../monthly-report/models/UserInfo";
+import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
   selector: 'app-user-actions',
@@ -12,11 +13,9 @@ import {UserInfo} from "../../../monthly-report/models/UserInfo";
 })
 export class UserActionsComponent implements OnInit {
 
-  @Input()
-  user: User;
-
-  @Output()
-  logout: EventEmitter<void> = new EventEmitter();
+  @Input() user: User;
+  @Output() logout: EventEmitter<void> = new EventEmitter();
+  @ViewChild('menuTrigger') trigger: MatMenuTrigger;
 
   pictureUrl: string;
 

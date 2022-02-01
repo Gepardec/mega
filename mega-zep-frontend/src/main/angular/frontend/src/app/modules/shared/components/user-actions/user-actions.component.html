@@ -1,4 +1,4 @@
-<button [matMenuTriggerFor]="menu" id="userBtn" mat-button>
+<button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger" id="userBtn" mat-button>
   {{user?.firstname + " " + user?.lastname}}
   <mat-icon matListIcon>keyboard_arrow_down</mat-icon>
 </button>
