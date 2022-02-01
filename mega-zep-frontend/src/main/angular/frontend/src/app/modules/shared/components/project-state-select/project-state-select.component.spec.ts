@@ -8,7 +8,7 @@ import {AngularMaterialModule} from '../../../material/material-module';
 const PROJECT_STATES_LENGTH = Object.keys(ProjectState).length;
 const STATE_PREFIX = 'STATE.';
 
-fdescribe('ProjectStateSelectComponent', () => {
+describe('ProjectStateSelectComponent', () => {
 
   let fixture: ComponentFixture<ProjectStateSelectComponent>;
   let component: ProjectStateSelectComponent;
