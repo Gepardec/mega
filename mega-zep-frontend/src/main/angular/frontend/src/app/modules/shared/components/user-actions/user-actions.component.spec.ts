@@ -6,12 +6,12 @@ import {OAuthService} from 'angular-oauth2-oidc';
 import {UserInfo} from 'angular-oauth2-oidc/types';
 import {MatDialog} from "@angular/material/dialog";
 import {AngularMaterialModule} from "../../../material/material-module";
-import {TranslateModule, TranslateService} from "@ngx-translate/core";
+import {TranslateModule} from "@ngx-translate/core";
 import {expect} from "@angular/flex-layout/_private-utils/testing";
 import {By} from "@angular/platform-browser";
 import {MatButton} from "@angular/material/button";
 import {click} from "../../../../testing/click-simulator";
-import {MatMenu, MatMenuItem} from "@angular/material/menu";
+import {MatMenuItem} from "@angular/material/menu";
 
 describe('UserActionsComponent', () => {
 
@@ -53,13 +53,13 @@ describe('UserActionsComponent', () => {
   it('#menuTrigger - should open menu', () => {
     fixture.detectChanges();
 
-    expect(component.trigger.menuOpen).toBeFalse();
+    expect(component.menuTrigger.menuOpen).toBeFalse();
 
     const triggerButton = fixture.debugElement.query(By.directive(MatButton));
     click(triggerButton);
     fixture.detectChanges();
 
-    expect(component.trigger.menuOpen).toBeTrue();
+    expect(component.menuTrigger.menuOpen).toBeTrue();
   });
 
   it('#doLogout - should call logout on logout-button click', () => {
@@ -67,13 +67,13 @@ describe('UserActionsComponent', () => {
 
     fixture.detectChanges();
 
-    expect(component.trigger.menuOpen).toBeFalse();
+    expect(component.menuTrigger.menuOpen).toBeFalse();
 
     const triggerButton = fixture.debugElement.query(By.directive(MatButton));
     click(triggerButton);
     fixture.detectChanges();
 
-    expect(component.trigger.menuOpen).toBeTrue();
+    expect(component.menuTrigger.menuOpen).toBeTrue();
 
     const logoutButton = fixture.debugElement.query(By.css('#logoutBtn'));
     click(logoutButton);
@@ -87,13 +87,13 @@ describe('UserActionsComponent', () => {
 
     fixture.detectChanges();
 
-    expect(component.trigger.menuOpen).toBeFalse();
+    expect(component.menuTrigger.menuOpen).toBeFalse();
 
     const triggerButton = fixture.debugElement.query(By.directive(MatButton));
     click(triggerButton);
     fixture.detectChanges();
 
-    expect(component.trigger.menuOpen).toBeTrue();
+    expect(component.menuTrigger.menuOpen).toBeTrue();
 
     const infoDialogButton = fixture.debugElement.query(By.directive(MatMenuItem));
     click(infoDialogButton);

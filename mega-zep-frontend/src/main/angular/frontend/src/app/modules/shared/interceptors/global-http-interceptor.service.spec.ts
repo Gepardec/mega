@@ -71,8 +71,8 @@ describe('GlobalHttpInterceptorService', () => {
 
   class GlobalHttpInterceptorMock {
 
-    static urlWithContext: string = 'http://localhost:9876/info';
-    static url: string = 'http://localhost:9876';
+    static urlWithContext: string = 'http://localhost:9877/info';
+    static url: string = 'http://localhost:9877';
   }
 
   class InfoMock {

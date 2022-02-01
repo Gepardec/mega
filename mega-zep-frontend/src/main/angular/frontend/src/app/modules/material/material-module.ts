@@ -73,7 +73,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatToolbarModule,
     MatTooltipModule,
     MatBottomSheetModule,
-    OverlayModule,
+    OverlayModule
   ]
 })
 export class AngularMaterialModule {

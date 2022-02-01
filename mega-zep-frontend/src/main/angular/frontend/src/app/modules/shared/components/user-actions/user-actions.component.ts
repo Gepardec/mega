@@ -4,7 +4,7 @@ import {User} from '../../models/User';
 import {InfoDialogComponent} from '../info-dialog/info-dialog.component';
 import {OAuthService} from 'angular-oauth2-oidc';
 import {UserInfo} from "../../../monthly-report/models/UserInfo";
-import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
+import {MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
   selector: 'app-user-actions',
@@ -15,7 +15,7 @@ export class UserActionsComponent implements OnInit {
 
   @Input() user: User;
   @Output() logout: EventEmitter<void> = new EventEmitter();
-  @ViewChild('menuTrigger') trigger: MatMenuTrigger;
+  @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
 
   pictureUrl: string;
 
