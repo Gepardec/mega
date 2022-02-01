@@ -31,6 +31,9 @@ export class MonthlyReportService {
   }
 
   getAllByDate(year: number, month: number): Observable<MonthlyReport> {
-    return this.httpClient.get<MonthlyReport>(this.config.getBackendUrlWithContext(`/worker/monthendreports/${year}/${month + 1}`));
+    const newYear = moment().year(year).month(month).add(1, 'month').year();
+    const newMonth = moment().year(year).month(month).add(1, 'month').month();
+
+    return this.httpClient.get<MonthlyReport>(this.config.getBackendUrlWithContext(`/worker/monthendreports/${newYear}/${newMonth}`));
   }
 }
