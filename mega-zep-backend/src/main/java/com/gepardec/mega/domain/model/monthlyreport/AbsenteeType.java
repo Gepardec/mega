@@ -2,7 +2,8 @@ package com.gepardec.mega.domain.model.monthlyreport;
 
 public enum AbsenteeType {
     COMPENSATORY_DAYS("FA"),
-    VACATION_DAYS("UB");
+    VACATION_DAYS("UB"),
+    SICKNESS_DAYS("KR");
 
     private final String type;
 
