@@ -3,7 +3,7 @@ import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 
 import {BillableTimesComponent} from './billable-times.component';
 import {By} from '@angular/platform-browser';
-import {expect} from "@angular/flex-layout/_private-utils/testing";
+import {expect} from '@angular/flex-layout/_private-utils/testing';
 
 describe('BillableTimesComponent', () => {
   let component: BillableTimesComponent;
@@ -27,7 +27,7 @@ describe('BillableTimesComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display (non-)billable and transform them to fraction number', () => {
+  it('should display (non-)billable times and transform them to fraction number', () => {
     component.billableTimes = '80:30';
     component.nonBillableTimes = '04:15';
 
@@ -44,14 +44,19 @@ describe('BillableTimesComponent', () => {
     fixture.detectChanges();
 
     const billableTimesMatIcon = billableTimesElement().children[0];
-    expect(billableTimesMatIcon.name).toEqual("mat-icon");
-    expect(billableTimesMatIcon.nativeElement.innerHTML).toEqual("horizontal_rule");
+    expect(billableTimesMatIcon.name).toEqual('mat-icon');
+    expect(billableTimesMatIcon.nativeElement.innerHTML).toEqual('horizontal_rule');
 
     const nonBillableTimesMatIcon = nonBillableTimesElement().children[0];
-    expect(nonBillableTimesMatIcon.name).toEqual("mat-icon");
-    expect(nonBillableTimesMatIcon.nativeElement.innerHTML).toEqual("horizontal_rule");
+    expect(nonBillableTimesMatIcon.name).toEqual('mat-icon');
+    expect(nonBillableTimesMatIcon.nativeElement.innerHTML).toEqual('horizontal_rule');
   });
 
+  it('should display dollar coin icon on the left side', () => {
+    const dollarIcon = fixture.debugElement.query(By.css('.billable'));
+    expect(dollarIcon.name).toEqual('mat-icon');
+    expect(dollarIcon.nativeElement.innerHTML).toEqual('monetization_on');
+  });
 
   function billableTimesValue() {
     return billableTimesElement().nativeElement.innerHTML;
