@@ -71,6 +71,14 @@
         "day": "Tag",
         "warning": "Warnung"
       }
+    },
+    "generalInfo": {
+      "workingTime": "Gesamte Arbeitszeit",
+      "chargeableHours": "Fakturierbare Stunden",
+      "chargeability": "Chargeability",
+      "vacation": "Urlaub",
+      "timeCompensation": "Zeitausgleich",
+      "homeoffice": "Homeoffice"
     }
   },
   "office-management": {

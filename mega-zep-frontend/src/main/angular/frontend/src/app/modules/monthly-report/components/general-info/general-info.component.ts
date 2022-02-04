@@ -16,16 +16,6 @@ export class GeneralInfoComponent implements OnInit {
   @Input() monthlyReport: MonthlyReport;
   @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>();
 
-
-  identifiers: string[] = [
-    'Gesamte Arbeitszeit',
-    'Fakturierbare Stunden',
-    'Chargeability',
-    'Urlaub',
-    'Zeitausgleich',
-    'Homeoffice'
-  ];
-
   constructor(public monthlyReportService: MonthlyReportService) {
   }
 
