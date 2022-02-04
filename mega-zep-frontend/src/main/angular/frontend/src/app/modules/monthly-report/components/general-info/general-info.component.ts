@@ -14,7 +14,7 @@ const moment = _moment;
 export class GeneralInfoComponent implements OnInit {
 
   @Input() monthlyReport: MonthlyReport;
-  @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>();
+  @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>(); // TODO mit Oli abklären, ob dieses Event notwendig ist. Es wird nie gefeuert
 
   constructor(public monthlyReportService: MonthlyReportService) {
   }
@@ -25,7 +25,9 @@ export class GeneralInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.monthlyReportService.billablePercentage = this.calculateBillingPercentage(this.monthlyReport.totalWorkingTime, this.monthlyReport.billableTime);
+    if (this.monthlyReport) {
+      this.monthlyReportService.billablePercentage = this.calculateBillingPercentage(this.monthlyReport.totalWorkingTime, this.monthlyReport.billableTime);
+    }
   }
 
   calculateBillingPercentage(totalWorkingTime: string, billableTime: string): number {
