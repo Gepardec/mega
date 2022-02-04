@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MonthlyReport} from '../../models/MonthlyReport';
-import {MonthlyReportService} from "../../services/monthly-report.service";
+import {MonthlyReportService} from '../../services/monthly-report.service';
 import * as _moment from 'moment';
 
 const moment = _moment;
@@ -25,6 +25,10 @@ export class GeneralInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.calculateDynamicValue();
+  }
+
+  private calculateDynamicValue() {
     if (this.monthlyReport) {
       this.monthlyReportService.billablePercentage = this.calculateBillingPercentage(this.monthlyReport.totalWorkingTime, this.monthlyReport.billableTime);
     }

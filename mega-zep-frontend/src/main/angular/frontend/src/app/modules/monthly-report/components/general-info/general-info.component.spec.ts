@@ -36,7 +36,7 @@ describe('GeneralInfoComponent', () => {
   });
 
   it('should display values from monthly report', () => {
-    let monthlyReport = new MonthlyReport();
+    const monthlyReport = new MonthlyReport();
     monthlyReport.homeofficeDays = 10;
     monthlyReport.vacationDays = 3;
     monthlyReport.compensatoryDays = 2;
@@ -46,12 +46,41 @@ describe('GeneralInfoComponent', () => {
     fixture.detectChanges();
 
     assertMonthlyReportRow(5, 'Urlaub', '3', 'Tage');
+    assertMonthlyReportRow(6, 'Zeitausgleich', '2', 'Tage');
+    assertMonthlyReportRow(7, 'Homeoffice', '10', 'Tage');
 
+  });
 
-    // tr:nth-of-type(5) -> Urlaub
-    // tr:nth-of-type(6) -> ZAG
-    // tr:nth-of-type(7) -> Homeoffice
+  it('should display values from monthly report with one day', () => {
+    const monthlyReport = new MonthlyReport();
 
+    monthlyReport.homeofficeDays = 1;
+    monthlyReport.vacationDays = 1;
+    monthlyReport.compensatoryDays = 1;
+
+    component.monthlyReport = monthlyReport;
+
+    fixture.detectChanges();
+
+    assertMonthlyReportRow(5, 'Urlaub', '1', 'Tag');
+    assertMonthlyReportRow(6, 'Zeitausgleich', '1', 'Tag');
+    assertMonthlyReportRow(7, 'Homeoffice', '1', 'Tag');
+  });
+
+  it('should display working times and chargeability ', () => {
+    const monthlyReport = new MonthlyReport();
+
+    monthlyReport.totalWorkingTime = '80:00';
+    monthlyReport.billableTime = '60:00';
+
+    component.monthlyReport = monthlyReport;
+    component.ngOnInit();
+
+    fixture.detectChanges();
+
+    assertMonthlyReportRow(1, 'Gesamte Arbeitszeit', '80,00', 'Stunden');
+    assertMonthlyReportRow(2, 'Fakturierbare Stunden', '60,00', 'Stunden');
+    assertMonthlyReportRow(3, 'Chargeability', '75,00', '%');
 
   });
 
