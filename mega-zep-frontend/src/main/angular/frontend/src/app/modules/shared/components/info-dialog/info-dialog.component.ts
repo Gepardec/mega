@@ -17,5 +17,4 @@ export class InfoDialogComponent implements OnInit {
   ngOnInit(): void {
     this.infoService.getInfo().subscribe(info => this.info = info);
   }
-
 }
