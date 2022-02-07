@@ -12,8 +12,7 @@ describe('RolesGuard', () => {
       providers: [
         {provide: RolesService, useClass: RolesServiceMock}
       ]
-    })
-      .compileComponents().then(() => {
+    }).compileComponents().then(() => {
       guard = TestBed.inject(RolesGuard);
       rolesService = TestBed.inject(RolesService);
     });
@@ -25,8 +24,7 @@ describe('RolesGuard', () => {
 
   it('#canActivate - should return true', () => {
     spyOn(rolesService, 'isAllowed').and.returnValue(true);
-
-
+    
     const canActivate = guard.canActivate(createMockRoute("localhost:4020"), null);
 
     expect(rolesService.isAllowed).toHaveBeenCalled();
