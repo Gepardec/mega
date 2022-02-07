@@ -6,7 +6,6 @@ import {
   EventEmitter,
   Input,
   NgZone,
-  OnInit,
   Output,
   ViewChild
 } from '@angular/core';
@@ -18,19 +17,17 @@ import {take} from 'rxjs/operators';
   templateUrl: './inline-text-editor.component.html',
   styleUrls: ['./inline-text-editor.component.scss']
 })
-export class InlineTextEditorComponent implements OnInit, AfterViewInit {
+export class InlineTextEditorComponent implements AfterViewInit {
 
   @Input() comment: string
   @Output() commentChange = new EventEmitter<string>();
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
   @ViewChild('textarea') textarea: ElementRef;
+
   MAXIMUM_LETTERS = 500;
 
   constructor(private _ngZone: NgZone,
               private changeDectectorRef: ChangeDetectorRef) {
-  }
-
-  ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
@@ -47,11 +44,9 @@ export class InlineTextEditorComponent implements OnInit, AfterViewInit {
   }
 
   onCancel(event, inputElement: HTMLTextAreaElement) {
-    console.log(event);
-    if (!event.relatedTarget || event.relatedTarget.id !== 'savebutton'){
+    if (!event.relatedTarget || event.relatedTarget.id !== 'savebutton') {
       this.commentChange.emit(this.comment);
-    }
-    else {
+    } else {
       this.onSave(inputElement);
     }
   }
