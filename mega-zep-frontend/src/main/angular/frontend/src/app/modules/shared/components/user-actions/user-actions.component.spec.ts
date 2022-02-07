@@ -27,9 +27,7 @@ describe('UserActionsComponent', () => {
         AngularMaterialModule
       ],
       providers: [
-        {
-          provide: OAuthService, useClass: OAuthServiceMock
-        }
+        {provide: OAuthService, useClass: OAuthServiceMock}
       ]
     }).compileComponents().then(() => {
       fixture = TestBed.createComponent(UserActionsComponent);
