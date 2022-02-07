@@ -23,11 +23,11 @@ describe('BillableTimesFractionComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('#should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display (non-)billable times as fraction numbers', () => {
+  it('#afterInit - should display (non-)billable times as fraction numbers', () => {
     component.billableTimes = 14.5;
     component.nonBillableTimes = 1;
 
@@ -37,7 +37,7 @@ describe('BillableTimesFractionComponent', () => {
     expect(nonBillableTimesValue()).toEqual('1,00');
   });
 
-  it('should display horizontal rule if billable times are 0', () => {
+  it('#afterInit - should display horizontal rule if billable times are 0', () => {
     component.billableTimes = 0;
     component.nonBillableTimes = 0;
 
@@ -52,7 +52,7 @@ describe('BillableTimesFractionComponent', () => {
     expect(nonBillableTimesMatIcon.nativeElement.innerHTML).toEqual('horizontal_rule');
   });
 
-  it('should display dollar coin icon on the left side', () => {
+  it('#afterInit - should display dollar coin icon on the left side', () => {
     const dollarIcon = fixture.debugElement.query(By.css('.billable'));
     expect(dollarIcon.name).toEqual('mat-icon');
     expect(dollarIcon.nativeElement.innerHTML).toEqual('monetization_on');

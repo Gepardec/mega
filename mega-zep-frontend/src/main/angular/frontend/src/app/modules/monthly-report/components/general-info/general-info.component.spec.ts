@@ -6,7 +6,7 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {MonthlyReport} from '../../models/MonthlyReport';
 import {By} from '@angular/platform-browser';
 import {expect} from '@angular/flex-layout/_private-utils/testing';
-import { TranslateTestingModule } from 'ngx-translate-testing';
+import {TranslateTestingModule} from 'ngx-translate-testing';
 
 
 describe('GeneralInfoComponent', () => {
@@ -16,7 +16,7 @@ describe('GeneralInfoComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        TranslateTestingModule.withTranslations({ de: require('src/assets/i18n/de.json') }),
+        TranslateTestingModule.withTranslations({de: require('src/assets/i18n/de.json')}),
         HttpClientTestingModule
       ],
       declarations: [GeneralInfoComponent],
@@ -31,11 +31,11 @@ describe('GeneralInfoComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('#should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display values from monthly report', () => {
+  it('#afterInit - should display values from monthly report', () => {
     const monthlyReport = new MonthlyReport();
     monthlyReport.homeofficeDays = 10;
     monthlyReport.vacationDays = 3;
@@ -51,7 +51,7 @@ describe('GeneralInfoComponent', () => {
 
   });
 
-  it('should display values from monthly report with one day', () => {
+  it('#afterInit - should display values from monthly report with one day', () => {
     const monthlyReport = new MonthlyReport();
 
     monthlyReport.homeofficeDays = 1;
@@ -67,7 +67,7 @@ describe('GeneralInfoComponent', () => {
     assertMonthlyReportRow(7, 'Homeoffice', '1', 'Tag');
   });
 
-  it('should display working times and chargeability ', () => {
+  it('#afterInit - should display working times and chargeability ', () => {
     const monthlyReport = new MonthlyReport();
 
     monthlyReport.totalWorkingTime = '80:00';
