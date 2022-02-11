@@ -35,6 +35,7 @@ const moment = _moment;
   styleUrls: ['./project-management.component.scss']
 })
 export class ProjectManagementComponent implements OnInit {
+
   pmEntries: Array<ProjectManagementEntry>;
   displayedColumns = [
     'select',
@@ -84,17 +85,17 @@ export class ProjectManagementComponent implements OnInit {
     this.getPmEntries();
   }
 
-  dateChanged(date: Moment) {
+  dateChanged(date: Moment): void {
     this.selectedYear = moment(date).year();
     this.selectedMonth = moment(date).month() + 1;
     this.getPmEntries();
   }
 
-  areAllSelected(projectName: string) {
+  areAllSelected(projectName: string): boolean {
     return this.pmSelectionModels.get(projectName).selected.length === this.findEntriesForProject(projectName).length;
   }
 
-  masterToggle(projectName: string) {
+  masterToggle(projectName: string): void {
     this.areAllSelected(projectName) ?
       this.pmSelectionModels.get(projectName).clear() :
       this.findEntriesForProject(projectName).forEach(row => this.pmSelectionModels.get(projectName).select(row));
@@ -252,7 +253,7 @@ export class ProjectManagementComponent implements OnInit {
           this.snackbarService.showSnackbarWithMessage(this.translate.instant('project-management.updateStatusError'));
           pmEntry.presetControlProjectState = !$event.checked;
         }
-      })
+      });
   }
 
   onChangePresetControlBillingState($event: MatCheckboxChange, pmEntry: ProjectManagementEntry) {

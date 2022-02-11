@@ -1,27 +1,20 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 
 import {BillableTimesFractionComponent} from './billable-times-fraction.component';
 import {By} from '@angular/platform-browser';
 import {expect} from '@angular/flex-layout/_private-utils/testing';
 
 describe('BillableTimesFractionComponent', () => {
+
   let component: BillableTimesFractionComponent;
   let fixture: ComponentFixture<BillableTimesFractionComponent>;
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [BillableTimesFractionComponent],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
-      .compileComponents();
+    TestBed.configureTestingModule({}).compileComponents().then(() => {
+      fixture = TestBed.createComponent(BillableTimesFractionComponent);
+      component = fixture.componentInstance;
+    });
   }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(BillableTimesFractionComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
 
   it('#should create', () => {
     expect(component).toBeTruthy();
@@ -69,6 +62,7 @@ describe('BillableTimesFractionComponent', () => {
   function billableTimesElement() {
     return fixture.debugElement.query(By.css('.times-col-left'));
   }
+
   function nonBillableTimesElement() {
     return fixture.debugElement.query(By.css('.times-col-right'));
   }
