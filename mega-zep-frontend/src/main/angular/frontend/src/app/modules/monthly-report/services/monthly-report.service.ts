@@ -31,6 +31,13 @@ export class MonthlyReportService {
   }
 
   getAllByDate(year: number, month: number): Observable<MonthlyReport> {
-    return this.httpClient.get<MonthlyReport>(this.config.getBackendUrlWithContext(`/worker/monthendreports/${year}/${month + 1}`));
+    /*Due to the mannerism of moment.js, the month ranges from 0 (=January) to 11 (=December)
+    * Since the range of the month passed to the method is between 1 and 12, the given month has to be manipulated
+    * manually (month - 1). This ensures that moment.js returns us the correct new year/month.
+    * The month value returned by moment has to be re-translated into our date range, obviously (1 + ...).*/
+    const newYear = moment().year(year).month(month - 1).add(1, 'month').year();
+    const newMonth = 1 + moment().year(year).month(month - 1).add(1, 'month').month();
+
+    return this.httpClient.get<MonthlyReport>(this.config.getBackendUrlWithContext(`/worker/monthendreports/${newYear}/${newMonth}`));
   }
 }

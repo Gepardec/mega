@@ -39,14 +39,25 @@ describe('MonthlyReportService', () => {
     testResult.flush(MonthlyReportMock.monthlyReport);
   });
 
-  it('#getAll - should return MonthlyReport by date', (done) => {
-    monthlyReportService.getAllByDate(MonthlyReportMock.year, MonthlyReportMock.month)
+  it('#getAll - should return MonthlyReport by date November for next month in current year', (done) => {
+    monthlyReportService.getAllByDate(2021, 11)
       .subscribe(monthlyReport => {
         expect(monthlyReport).toEqual(MonthlyReportMock.monthlyReport);
         done();
       });
 
-    const testResult = httpTestingController.expectOne(configService.getBackendUrlWithContext(`/worker/monthendreports/${MonthlyReportMock.year}/${MonthlyReportMock.month + 1}`));
+    const testResult = httpTestingController.expectOne(configService.getBackendUrlWithContext('/worker/monthendreports/2021/12'));
+    testResult.flush(MonthlyReportMock.monthlyReport);
+  });
+
+  it('#getAll - should return MonthlyReport by date December for next month in next year', (done) => {
+    monthlyReportService.getAllByDate(2021, 12)
+      .subscribe(monthlyReport => {
+        expect(monthlyReport).toEqual(MonthlyReportMock.monthlyReport);
+        done();
+      });
+
+    const testResult = httpTestingController.expectOne(configService.getBackendUrlWithContext('/worker/monthendreports/2022/1'));
     testResult.flush(MonthlyReportMock.monthlyReport);
   });
 
