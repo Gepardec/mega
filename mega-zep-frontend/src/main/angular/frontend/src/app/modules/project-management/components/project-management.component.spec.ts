@@ -132,6 +132,18 @@ describe('ProjectManagementComponent', () => {
     expect(dialog.open).toHaveBeenCalled();
   }));
 
+  it('#isAnySelected - should call commentService.getCommentsForEmployee and dialog.open', () => {
+    fixture.detectChanges();
+
+    component.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
+    component.pmSelectionModels.set(ProjectManagementMock.project, new SelectionModel<ManagementEntry>());
+    component.pmSelectionModels.get(ProjectManagementMock.project).select(ProjectManagementMock.managementEntries[0]);
+
+    const isAnySelected = component.isAnySelected();
+
+    expect(isAnySelected).toBeTrue();
+  });
+
   class CommentsMock {
 
     static dateFormat: string = 'yyyy-MM-DD';
