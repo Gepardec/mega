@@ -3,7 +3,6 @@ package com.gepardec.mega.application.exception.mapper;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Spy;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
