@@ -44,7 +44,7 @@ describe('GlobalHttpInterceptorService', () => {
     expect(globalHttpInterceptorService).toBeTruthy();
   });
 
-  fit('#intercept - should return next.handle(req)', (done) => {
+  it('#intercept - should return next.handle(req)', (done) => {
     spyOn(loaderService, 'showSpinner').and.callThrough();
     spyOn(loaderService, 'stopSpinner').and.callThrough();
     spyOn(httpHandler, 'handle').and.callThrough();
@@ -58,7 +58,7 @@ describe('GlobalHttpInterceptorService', () => {
     const httpRequest = httpTestingController.expectOne(configService.getBackendUrlWithContext('/info'));
     httpRequest.flush(InfoMock.info);
     expect(httpHandler.handle).toHaveBeenCalled();
-    expect(httpRequest.request.urlWithParams).toEqual(GlobalHttpInterceptorMock.urlWithContext);
+    expect(httpRequest.request.urlWithParams).toContain(GlobalHttpInterceptorMock.context);
     expect(loaderService.showSpinner).not.toHaveBeenCalled();
     expect(loaderService.stopSpinner).not.toHaveBeenCalled();
   });
@@ -67,6 +67,7 @@ describe('GlobalHttpInterceptorService', () => {
 
     static urlWithContext: string = 'http://localhost:9876/info';
     static url: string = 'http://localhost:9876';
+    static context: string = '/info';
   }
 
   class InfoMock {
