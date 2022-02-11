@@ -44,7 +44,7 @@ describe('GlobalHttpInterceptorService', () => {
     expect(globalHttpInterceptorService).toBeTruthy();
   });
 
-  it('#intercept - should return next.handle(req)', (done) => {
+  fit('#intercept - should return next.handle(req)', (done) => {
     spyOn(loaderService, 'showSpinner').and.callThrough();
     spyOn(loaderService, 'stopSpinner').and.callThrough();
     spyOn(httpHandler, 'handle').and.callThrough();
@@ -65,8 +65,8 @@ describe('GlobalHttpInterceptorService', () => {
 
   class GlobalHttpInterceptorMock {
 
-    static urlWithContext: string = 'http://localhost:9877/info';
-    static url: string = 'http://localhost:9877';
+    static urlWithContext: string = 'http://localhost:9876/info';
+    static url: string = 'http://localhost:9876';
   }
 
   class InfoMock {
