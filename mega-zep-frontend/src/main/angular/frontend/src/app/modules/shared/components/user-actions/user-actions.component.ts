@@ -3,6 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {User} from '../../models/User';
 import {InfoDialogComponent} from '../info-dialog/info-dialog.component';
 import {OAuthService} from 'angular-oauth2-oidc';
+import {UserInfo} from "../../../monthly-report/models/UserInfo";
 
 @Component({
   selector: 'app-user-actions',
@@ -24,7 +25,9 @@ export class UserActionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.oAuthService.loadUserProfile().then(userInfo => this.pictureUrl = userInfo.picture);
+    this.oAuthService.loadUserProfile().then((userInfo: UserInfo) => {
+      this.pictureUrl = userInfo?.info?.picture;
+    });
   }
 
   doLogout() {
