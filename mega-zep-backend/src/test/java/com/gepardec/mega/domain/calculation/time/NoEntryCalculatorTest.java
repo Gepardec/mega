@@ -112,7 +112,7 @@ class NoEntryCalculatorTest {
     private List<ProjectEntry> createProjectEntryList(int amountOfMissingEntries) {
         List<ProjectEntry> entries = new ArrayList<>();
 
-        for(int i = 1; i <= (26-amountOfMissingEntries); i++) {
+        for (int i = 1; i <= (26 - amountOfMissingEntries); i++) {
             ProjectEntry projectEntry = ProjectTimeEntry.builder().fromTime(LocalDateTime.of(LocalDate.of(2021, 2, i), LocalTime.of(8, 0))).toTime(LocalDateTime.of(LocalDate.of(2021, 2, i), LocalTime.of(12, 0))).build();
             entries.add(projectEntry);
         }
@@ -123,7 +123,7 @@ class NoEntryCalculatorTest {
     private List<ProjectEntry> createProjectEntryListForNovember() {
         List<ProjectEntry> entries = new ArrayList<>();
 
-        for(int i = 2; i <= (30); i++) {
+        for (int i = 2; i <= (30); i++) {
             ProjectEntry projectEntry = ProjectTimeEntry.builder().fromTime(LocalDateTime.of(LocalDate.of(2021, 11, i), LocalTime.of(8, 0))).toTime(LocalDateTime.of(LocalDate.of(2021, 11, i), LocalTime.of(12, 0))).build();
             entries.add(projectEntry);
         }

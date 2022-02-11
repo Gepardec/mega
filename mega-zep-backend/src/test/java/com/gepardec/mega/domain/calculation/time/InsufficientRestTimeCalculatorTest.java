@@ -119,7 +119,6 @@ class InsufficientRestTimeCalculatorTest {
         ProjectTimeEntry timeEntryOne = projectTimeEntryFor(1, 16, 0, 22, 0);
         JourneyTimeEntry timeEntryTwo = journeyTimeEntryFor(2, 8, 0, 2, 9, 0, Vehicle.CAR_ACTIVE);
 
-
         List<TimeWarning> warnings = calculator.calculate(List.of(timeEntryOne, timeEntryTwo));
 
         assertThat(warnings).isEmpty();

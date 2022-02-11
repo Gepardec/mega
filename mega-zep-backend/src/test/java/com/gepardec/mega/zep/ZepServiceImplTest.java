@@ -18,8 +18,6 @@ import de.provantis.zep.ResponseHeaderType;
 import de.provantis.zep.UpdateMitarbeiterRequestType;
 import de.provantis.zep.UpdateMitarbeiterResponseType;
 import de.provantis.zep.ZepSoapPortType;
-import io.quarkus.test.Mock;
-import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,11 +36,14 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 
 @QuarkusTest
 class ZepServiceImplTest {
+
+    private final ProjectEntryMapper projectEntryMapper = new ProjectEntryMapper();
 
     ZepSoapPortType zepSoapPortType;
 
@@ -54,11 +55,30 @@ class ZepServiceImplTest {
 
     ZepServiceImpl zepService;
 
-    private final ProjectEntryMapper projectEntryMapper = new ProjectEntryMapper();
-
     private ProjektMitarbeiterListeType projektMitarbeiterListeType;
 
     private LocalDate monthYear;
+
+    private static Stream<Arguments> whenFilterProjectEmployeeMatchesVonBis_shouldBeIncluded() {
+        return Stream.of(
+                Arguments.of(null, null),
+                Arguments.of(null, "2020-12-31"),
+                Arguments.of("2020-01-01", null),
+                Arguments.of("2020-01-01", "2020-12-31"),
+                Arguments.of("2020-12-01", "2020-12-31"),
+                Arguments.of("2020-11-01", "2020-12-31"),
+                Arguments.of("2020-01-01", "2020-12-15"),
+                Arguments.of("2020-12-15", "2021-12-31"),
+                Arguments.of("2020-12-15", "2021-12-16")
+        );
+    }
+
+    private static Stream<Arguments> whenFilterProjectEmployeeNotMatchesVonBis_shouldNotBeIncluded() {
+        return Stream.of(
+                Arguments.of("2020-01-01", "2020-11-30"),
+                Arguments.of("2021-01-01", "2021-12-31")
+        );
+    }
 
     @BeforeEach
     void setUp() {
@@ -102,8 +122,11 @@ class ZepServiceImplTest {
         Mockito.when(zepSoapPortType.readMitarbeiter(Mockito.any(ReadMitarbeiterRequestType.class))).thenReturn(null);
 
         final List<Employee> employee = zepService.getEmployees();
-        assertThat(employee).isNotNull();
-        assertThat(employee).isEmpty();
+
+        assertAll(
+                () -> assertThat(employee).isNotNull(),
+                () -> assertThat(employee).isEmpty()
+        );
     }
 
     @Test
@@ -111,8 +134,12 @@ class ZepServiceImplTest {
         Mockito.when(zepSoapPortType.readMitarbeiter(Mockito.any(ReadMitarbeiterRequestType.class))).thenReturn(new ReadMitarbeiterResponseType());
 
         final List<Employee> employee = zepService.getEmployees();
-        assertThat(employee).isNotNull();
-        assertThat(employee).isEmpty();
+
+        assertAll(
+                () -> assertThat(employee).isNotNull(),
+                () -> assertThat(employee).isEmpty()
+        );
+
     }
 
     @Test
@@ -120,8 +147,11 @@ class ZepServiceImplTest {
         Mockito.when(zepSoapPortType.readMitarbeiter(Mockito.any(ReadMitarbeiterRequestType.class))).thenReturn(new ReadMitarbeiterResponseType());
 
         final List<Employee> employee = zepService.getEmployees();
-        assertThat(employee).isNotNull();
-        assertThat(employee).isEmpty();
+
+        assertAll(
+                () -> assertThat(employee).isNotNull(),
+                () -> assertThat(employee).isEmpty()
+        );
     }
 
     @Test
@@ -131,8 +161,11 @@ class ZepServiceImplTest {
         ));
 
         final List<Employee> employee = zepService.getEmployees();
-        assertThat(employee).isNotNull();
-        assertThat(employee).hasSize(3);
+
+        assertAll(
+                () -> assertThat(employee).isNotNull(),
+                () -> assertThat(employee).hasSize(3)
+        );
 
         Mockito.verify(zepSoapPortType).readMitarbeiter(Mockito.argThat(
                 argument -> argument.getReadMitarbeiterSearchCriteria() == null
@@ -242,20 +275,6 @@ class ZepServiceImplTest {
         assertThat(projectsForMonthYear.get(0).leads()).hasSize(1);
     }
 
-    private static Stream<Arguments> whenFilterProjectEmployeeMatchesVonBis_shouldBeIncluded() {
-        return Stream.of(
-                Arguments.of(null, null),
-                Arguments.of(null, "2020-12-31"),
-                Arguments.of("2020-01-01", null),
-                Arguments.of("2020-01-01", "2020-12-31"),
-                Arguments.of("2020-12-01", "2020-12-31"),
-                Arguments.of("2020-11-01", "2020-12-31"),
-                Arguments.of("2020-01-01", "2020-12-15"),
-                Arguments.of("2020-12-15", "2021-12-31"),
-                Arguments.of("2020-12-15", "2021-12-16")
-        );
-    }
-
     @ParameterizedTest
     @MethodSource("whenFilterProjectEmployeeNotMatchesVonBis_shouldNotBeIncluded")
     void whenFilterProjectEmployeeNotMatchesVonBis_shouldNotBeIncluded(final String von, final String bis) {
@@ -274,13 +293,6 @@ class ZepServiceImplTest {
         assertThat(projectsForMonthYear).hasSize(1);
         assertThat(projectsForMonthYear.get(0).employees()).isEmpty();
         assertThat(projectsForMonthYear.get(0).leads()).isEmpty();
-    }
-
-    private static Stream<Arguments> whenFilterProjectEmployeeNotMatchesVonBis_shouldNotBeIncluded() {
-        return Stream.of(
-                Arguments.of("2020-01-01", "2020-11-30"),
-                Arguments.of("2021-01-01", "2021-12-31")
-        );
     }
 
     @Test

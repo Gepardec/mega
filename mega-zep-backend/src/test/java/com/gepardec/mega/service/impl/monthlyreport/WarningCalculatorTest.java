@@ -117,7 +117,7 @@ class WarningCalculatorTest {
 
         calculator.determineTimeWarnings(List.of(start, end));
 
-        verify(messages, times(1)).getString(eq("warning.time.OUTSIDE_CORE_WORKING_TIME"));
+        verify(messages, times(1)).getString("warning.time.OUTSIDE_CORE_WORKING_TIME");
     }
 
     @Test

@@ -3,7 +3,6 @@ package com.gepardec.mega.notification.mail;
 import com.gepardec.mega.notification.mail.dates.BusinessDayCalculator;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
@@ -21,9 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @QuarkusTest
 class BusinessDayCalculatorTest {
-
-    @Inject
-    Logger logger;
 
     @Inject
     BusinessDayCalculator businessDayCalculator;

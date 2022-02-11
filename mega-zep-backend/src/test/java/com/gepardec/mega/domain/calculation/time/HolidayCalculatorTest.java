@@ -16,13 +16,21 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HolidayCalculatorTest {
-
-    private final HolidayCalculator calculator = new HolidayCalculator();
+class HolidayCalculatorTest {
 
     private static final Integer[] NON_HOLIDAYS = {1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 27, 28, 29, 30};
 
     private static final Integer[] HOLIDAYS = {8, 24, 25, 26, 31};
+
+    private final HolidayCalculator calculator = new HolidayCalculator();
+
+    static Stream<Integer> streamOfHolidays() {
+        return Stream.of(HOLIDAYS);
+    }
+
+    static Stream<Integer> streamOfNonHolidays() {
+        return Stream.of(NON_HOLIDAYS);
+    }
 
     @Test
     @DisplayName("Test if correct holiday warning for 8.12.2021 Immaculate Conception is created")
@@ -61,13 +69,5 @@ public class HolidayCalculatorTest {
                 .task(Task.BEARBEITEN)
                 .workingLocation(WorkingLocation.MAIN)
                 .build();
-    }
-
-    static Stream<Integer> streamOfHolidays() {
-        return Stream.of(HOLIDAYS);
-    }
-
-    static Stream<Integer> streamOfNonHolidays() {
-        return Stream.of(NON_HOLIDAYS);
     }
 }
