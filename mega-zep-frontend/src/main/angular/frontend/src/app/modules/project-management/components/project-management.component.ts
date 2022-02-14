@@ -133,7 +133,7 @@ export class ProjectManagementComponent implements OnInit {
     return this.findEntriesForProject(projectName).every(entry => entry.projectCheckState === State.DONE);
   }
 
-  closeProjectCheckForSelected() {
+  closeProjectCheckForSelected(): void {
     for (const [projectName, selectionModel] of this.pmSelectionModels.entries()) {
       if (selectionModel.selected.length > 0) {
         for (const entry of selectionModel.selected) {
@@ -175,7 +175,7 @@ export class ProjectManagementComponent implements OnInit {
     });
   }
 
-  getFilteredAndSortedPmEntries(pmEntry: ProjectManagementEntry, customerCheckState: State, projectCheckState: State, employeeCheckState: State, internalCheckState: State) {
+  getFilteredAndSortedPmEntries(pmEntry: ProjectManagementEntry, customerCheckState: State, projectCheckState: State, employeeCheckState: State, internalCheckState: State): Array<ManagementEntry> {
     return pmEntry.entries
       .filter(val => val.customerCheckState === customerCheckState && val.projectCheckState === projectCheckState &&
         val.employeeCheckState === employeeCheckState && val.internalCheckState === internalCheckState)
@@ -189,32 +189,11 @@ export class ProjectManagementComponent implements OnInit {
     })[0].entries;
   }
 
-  getCurrentReleaseDate(): Date {
-    if (this.pmEntries) {
-      const entries = [];
-
-      this.pmEntries.forEach(pmEntry => {
-        entries.push(pmEntry.entries.filter(entry => {
-          return entry.projectCheckState === State.OPEN ||
-            entry.customerCheckState === State.OPEN ||
-            entry.employeeCheckState === State.OPEN ||
-            entry.internalCheckState === State.OPEN;
-        }));
-      });
-
-      if (entries.length > 0) {
-        return new Date(entries[0][0].currentMonthYear);
-      }
-    }
-
-    return new Date();
-  }
-
   private getFormattedDate() {
     return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
   }
 
-  onChangeControlProjectState($event: MatSelectChange, pmEntry: ProjectManagementEntry, controlProjectStateSelect: ProjectStateSelectComponent) {
+  onChangeControlProjectState($event: MatSelectChange, pmEntry: ProjectManagementEntry, controlProjectStateSelect: ProjectStateSelectComponent): void {
     const newValue = $event.value as ProjectState;
     const preset = newValue !== 'NOT_RELEVANT' ? false : pmEntry.presetControlProjectState;
 
@@ -230,7 +209,7 @@ export class ProjectManagementComponent implements OnInit {
       });
   }
 
-  onChangeControlBillingState($event: MatSelectChange, pmEntry: ProjectManagementEntry, controlBillingStateSelect: ProjectStateSelectComponent) {
+  onChangeControlBillingState($event: MatSelectChange, pmEntry: ProjectManagementEntry, controlBillingStateSelect: ProjectStateSelectComponent): void {
     const newValue = $event.value as ProjectState;
     const preset = newValue !== 'NOT_RELEVANT' ? false : pmEntry.presetControlBillingState;
 
@@ -246,7 +225,7 @@ export class ProjectManagementComponent implements OnInit {
       });
   }
 
-  onChangePresetControlProjectState($event: MatCheckboxChange, pmEntry: ProjectManagementEntry) {
+  onChangePresetControlProjectState($event: MatCheckboxChange, pmEntry: ProjectManagementEntry): void {
     this.projectEntryService.updateProjectEntry(pmEntry.controlProjectState, pmEntry.presetControlProjectState, pmEntry.projectName, 'CONTROL_PROJECT', this.getFormattedDate())
       .subscribe(success => {
         if (!success) {
@@ -256,7 +235,7 @@ export class ProjectManagementComponent implements OnInit {
       });
   }
 
-  onChangePresetControlBillingState($event: MatCheckboxChange, pmEntry: ProjectManagementEntry) {
+  onChangePresetControlBillingState($event: MatCheckboxChange, pmEntry: ProjectManagementEntry): void {
     this.projectEntryService.updateProjectEntry(pmEntry.controlBillingState, pmEntry.presetControlBillingState, pmEntry.projectName, 'CONTROL_BILLING', this.getFormattedDate())
       .subscribe(success => {
         if (!success) {
@@ -266,16 +245,16 @@ export class ProjectManagementComponent implements OnInit {
       })
   }
 
-  isProjectStateNotRelevant(projectState: ProjectState) {
+  isProjectStateNotRelevant(projectState: ProjectState): boolean {
     return projectState === ProjectState.NOT_RELEVANT;
   }
 
-  onStartEditing(projectName: string) {
+  onStartEditing(projectName: string): void {
     this.forProjectName = projectName;
     this.showCommentEditor = true;
   }
 
-  onCommentChange(pmEntry: ProjectManagementEntry, comment: string) {
+  onCommentChange(pmEntry: ProjectManagementEntry, comment: string): void {
     this.showCommentEditor = false;
     this.forProjectName = null;
 
