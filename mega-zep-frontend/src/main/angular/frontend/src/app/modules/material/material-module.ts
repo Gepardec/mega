@@ -74,9 +74,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatTooltipModule,
     MatBottomSheetModule,
     OverlayModule,
-  ],
-  entryComponents: [
-    MatSpinner
   ]
 })
 export class AngularMaterialModule {

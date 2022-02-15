@@ -151,7 +151,7 @@ class CommentServiceImplTest {
         FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
         assertThat(result).isNotNull();
         assertThat(result.totalComments()).isEqualTo(3L);
-        assertThat(result.finishedComments()).isEqualTo(0L);
+        assertThat(result.finishedComments()).isZero();
     }
 
     @Test
@@ -167,8 +167,8 @@ class CommentServiceImplTest {
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
         FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
         assertThat(result).isNotNull();
-        assertThat(result.totalComments()).isEqualTo(0L);
-        assertThat(result.finishedComments()).isEqualTo(0L);
+        assertThat(result.totalComments()).isZero();
+        assertThat(result.finishedComments()).isZero();
     }
 
     @Test

@@ -2,7 +2,7 @@ import {TestBed} from '@angular/core/testing';
 import {ErrorHandlerService} from './error-handler.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {OAuthLogger, OAuthService, UrlHelperService} from 'angular-oauth2-oidc';
+import {OAuthLogger, OAuthModule, OAuthService, UrlHelperService} from 'angular-oauth2-oidc';
 import {UserService} from '../user/user.service';
 import {LoggingService} from '../logging/logging.service';
 import {ErrorService} from "./error.service";
@@ -19,7 +19,11 @@ describe('ErrorHandlerService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        OAuthModule.forRoot()
+      ],
       providers: [
         ErrorHandlerService,
         OAuthService,
@@ -45,7 +49,8 @@ describe('ErrorHandlerService', () => {
     spyOn(errorService, 'getErrorMessage').and.callThrough();
     spyOn(loggingService, 'writeToLog').and.callThrough();
 
-    const error: ErrrorMock = {
+    const error: ErrorMock = {
+      name: ErrorHandlerMock.name,
       status: ErrorHandlerMock.httpStatusNotFound,
       message: ErrorHandlerMock.message
     }
@@ -78,8 +83,9 @@ describe('ErrorHandlerService', () => {
     expect(errorService.storeLastErrorData).toHaveBeenCalledWith(ErrorHandlerMock.message, router.url);
   });
 
-  class ErrrorMock {
+  class ErrorMock {
 
+    name: string;
     status: number;
     message: string;
 

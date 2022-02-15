@@ -18,13 +18,12 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 class MailSenderTest {
 
     public static final String GOOGLE_DOCS_PLANRECHNUNGS_URL = "https://docs.google.com/spreadsheets/d/12T9Iiy0WRuinN5Zdw1AfeXYABPsxoVwL17sJKfky5JA";
+
     @ConfigProperty(name = "quarkus.mailer.mock")
     boolean mailMockSetting;
 
@@ -106,7 +105,7 @@ class MailSenderTest {
         List<io.quarkus.mailer.Mail> sent = mailbox.getMessagesSentTo(to);
         assertAll(
                 () -> assertThat(sent.size()).isEqualTo(1),
-                () -> assertThat(sent.get(0).getHtml().contains(GOOGLE_DOCS_PLANRECHNUNGS_URL)).isTrue()
+                () -> assertThat(sent.get(0).getHtml()).contains(GOOGLE_DOCS_PLANRECHNUNGS_URL)
         );
     }
 }

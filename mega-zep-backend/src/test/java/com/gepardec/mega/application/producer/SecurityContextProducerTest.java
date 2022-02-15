@@ -18,7 +18,6 @@ import java.security.GeneralSecurityException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -37,7 +36,7 @@ class SecurityContextProducerTest {
     @Test
     void createSecurityContext_whenGoogleIdTokenVerified_thenGoogleIdTokenSetAndLogged() throws GeneralSecurityException, IOException {
         // Given
-        when(request.getHeader(eq(SecurityContextProducer.X_AUTHORIZATION_HEADER))).thenReturn("12345");
+        when(request.getHeader(SecurityContextProducer.X_AUTHORIZATION_HEADER)).thenReturn("12345");
         final GoogleIdToken googleIdToken = mock(GoogleIdToken.class, Answers.RETURNS_DEEP_STUBS);
         when(googleIdTokenVerifier.verify(anyString())).thenReturn(googleIdToken);
         when(googleIdToken.getPayload().getEmail()).thenReturn("test@gepardec.com");
@@ -53,7 +52,7 @@ class SecurityContextProducerTest {
     @Test
     void createSecurityContext_whenGeneralSecurityException_thenGoogleIdTokenNullAndNotLogged() throws GeneralSecurityException, IOException {
         // Given
-        when(request.getHeader(eq(SecurityContextProducer.X_AUTHORIZATION_HEADER))).thenReturn("12345");
+        when(request.getHeader(SecurityContextProducer.X_AUTHORIZATION_HEADER)).thenReturn("12345");
         when(googleIdTokenVerifier.verify(anyString())).thenThrow(new GeneralSecurityException());
 
         // When
@@ -65,15 +64,15 @@ class SecurityContextProducerTest {
 
     @Test
     void createSecurityContext_whenNoXAuthorizationHeader_thenThrowsUnauthorizedException() {
-        when(request.getHeader(eq(SecurityContextProducer.X_AUTHORIZATION_HEADER))).thenReturn(null);
+        when(request.getHeader(SecurityContextProducer.X_AUTHORIZATION_HEADER)).thenReturn(null);
 
         assertThatThrownBy(() -> producer.createSecurityContext()).isInstanceOf(UnauthorizedException.class);
     }
 
     @Test
     void createSecurityContext_whenGoogleIdTokenIsNull_thenThrowsUnauthorizedException() throws GeneralSecurityException, IOException {
-        when(request.getHeader(eq(SecurityContextProducer.X_AUTHORIZATION_HEADER))).thenReturn("123");
-        when(googleIdTokenVerifier.verify(eq("123"))).thenThrow(new UnauthorizedException());
+        when(request.getHeader(SecurityContextProducer.X_AUTHORIZATION_HEADER)).thenReturn("123");
+        when(googleIdTokenVerifier.verify("123")).thenThrow(new UnauthorizedException());
 
         assertThatThrownBy(() -> producer.createSecurityContext()).isInstanceOf(UnauthorizedException.class);
     }
@@ -81,7 +80,7 @@ class SecurityContextProducerTest {
     @Test
     void createSecurityContext_whenIOException_thenGoogleIdTokenNullAndNotLogged() throws GeneralSecurityException, IOException {
         // Given
-        when(request.getHeader(eq(SecurityContextProducer.X_AUTHORIZATION_HEADER))).thenReturn("12345");
+        when(request.getHeader(SecurityContextProducer.X_AUTHORIZATION_HEADER)).thenReturn("12345");
         when(googleIdTokenVerifier.verify(anyString())).thenThrow(new IOException());
 
         // When

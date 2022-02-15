@@ -1,13 +1,10 @@
 package com.gepardec.mega.notification.mail;
 
 import com.gepardec.mega.notification.mail.dates.BusinessDayCalculator;
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -21,14 +18,11 @@ import static com.gepardec.mega.notification.mail.Mail.PL_PROJECT_CONTROLLING;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 class BusinessDayCalculatorTest {
 
-    @Mock
-    private Logger log;
-
-    @InjectMocks
-    private BusinessDayCalculator businessDayCalculator;
+    @Inject
+    BusinessDayCalculator businessDayCalculator;
 
     @Test
     void getEventForDate_firstDayOfMonthBusinessDay_shouldReturnUserCheckprojecttimes() {

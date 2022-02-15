@@ -65,11 +65,6 @@ import {InlineTextEditorComponent} from './components/inline-text-editor/inline-
     StateIndicatorComponent,
     DatepickerMonthYearComponent,
     InlineTextEditorComponent,
-  ],
-  entryComponents: [
-    CommentsForEmployeeComponent,
-    InfoDialogComponent,
-    ConfirmDialogComponent
   ]
 })
 export class SharedModule {
