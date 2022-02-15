@@ -88,18 +88,6 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getPmEntries() {
-    this.pmService.getEntries(this.selectedYear, this.selectedMonth, true).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
-      this.pmEntries = pmEntries;
-      this.pmEntries.forEach(pmEntry => {
-        this.projectCommentService.get(this.getFormattedDate(), pmEntry.projectName)
-          .subscribe(projectComment => {
-            pmEntry.projectComment = projectComment;
-          });
-      });
-    });
-  }
-
   isAtLeastOneEmployeeCheckDone(pmEntry: ProjectManagementEntry): ProjectState {
     for (let mgmtEntry of pmEntry.entries) {
       if (mgmtEntry.projectCheckState === State.DONE) {
@@ -151,11 +139,23 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
     }
   }
 
+  getTooltipText(projectState: ProjectState): string {
+    return this.translate.instant('STATE.' + projectState);
+  }
+
   private getFormattedDate() {
     return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format(configuration.dateFormat);
   }
 
-  getTooltipText(projectState: ProjectState) {
-    return this.translate.instant('STATE.' + projectState);
+  private getPmEntries() {
+    this.pmService.getEntries(this.selectedYear, this.selectedMonth, true).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
+      this.pmEntries = pmEntries;
+      this.pmEntries.forEach(pmEntry => {
+        this.projectCommentService.get(this.getFormattedDate(), pmEntry.projectName)
+          .subscribe(projectComment => {
+            pmEntry.projectComment = projectComment;
+          });
+      });
+    });
   }
 }
