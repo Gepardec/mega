@@ -1,7 +1,9 @@
 import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {MatDatepicker, MatDatepickerInputEvent} from '@angular/material/datepicker';
-import {formatDate} from '@angular/common';
 import {configuration} from '../../constants/configuration';
+
+import * as _moment from 'moment';
+const moment = _moment;
 
 @Component({
   selector: 'app-datepicker',
@@ -16,14 +18,12 @@ export class DatepickerComponent {
 
   today: Date = new Date();
 
-  private format = configuration.dateFormat;
-
   emitEvent(date: string): void {
     this.dateEmitter.emit(date);
   }
 
   getDateAndEmitEvent(event: MatDatepickerInputEvent<Date>) {
-    const date: string = formatDate(event.value, this.format, 'en-US');
+    const date :string = moment(event.value).format(configuration.dateFormat);
     this.emitEvent(date);
   }
 }

@@ -6,7 +6,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {expect} from "@angular/flex-layout/_private-utils/testing";
 
 import * as _moment from "moment";
-import {MatDatepickerInput, MatDatepickerInputEvent} from "@angular/material/datepicker";
 import {configuration} from "../../constants/configuration";
 
 const moment = _moment;
@@ -54,7 +53,7 @@ describe('DatepickerComponent', () => {
 
     spyOn(component.dateEmitter, 'emit').and.stub();
 
-    let event: any = { value : moment().subtract(1, 'month').format(DATE_FORMAT) };
+    let event: any = {value: moment().subtract(1, 'month').format(DATE_FORMAT)};
     component.getDateAndEmitEvent(event);
 
     expect(component.dateEmitter.emit).toHaveBeenCalledWith(event.value);
