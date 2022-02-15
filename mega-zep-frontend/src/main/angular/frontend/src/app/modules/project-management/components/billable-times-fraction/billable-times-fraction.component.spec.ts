@@ -3,6 +3,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BillableTimesFractionComponent} from './billable-times-fraction.component';
 import {By} from '@angular/platform-browser';
 import {expect} from '@angular/flex-layout/_private-utils/testing';
+import {AngularMaterialModule} from "../../../material/material-module";
 
 describe('BillableTimesFractionComponent', () => {
 
@@ -10,7 +11,11 @@ describe('BillableTimesFractionComponent', () => {
   let fixture: ComponentFixture<BillableTimesFractionComponent>;
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({}).compileComponents().then(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        AngularMaterialModule
+      ]
+    }).compileComponents().then(() => {
       fixture = TestBed.createComponent(BillableTimesFractionComponent);
       component = fixture.componentInstance;
     });
