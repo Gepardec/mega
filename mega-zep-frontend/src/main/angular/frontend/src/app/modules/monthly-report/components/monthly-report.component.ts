@@ -10,12 +10,17 @@ import {GeneralInfoComponent} from "./general-info/general-info.component";
 })
 export class MonthlyReportComponent implements OnInit {
 
-  public monthlyReport: MonthlyReport;
   generalInfoComponent: GeneralInfoComponent = new GeneralInfoComponent(this.monthlyReportService);
+
+  public monthlyReport: MonthlyReport;
   private monthlyReportSubscription: Subscription;
 
   constructor(private monthlyReportService: MonthlyReportService,
               private cd: ChangeDetectorRef) {
+  }
+
+  ngOnInit(): void {
+    this.getAllTimeEntries();
   }
 
   getAllTimeEntriesByDate(year: number, month: number) {
@@ -33,15 +38,8 @@ export class MonthlyReportComponent implements OnInit {
         const splitReleaseDate = this.monthlyReport.employee.releaseDate.split("-");
         this.monthlyReportService.selectedYear.next(+splitReleaseDate[0]);
         this.monthlyReportService.selectedMonth.next(+splitReleaseDate[1]);
-      } else {
-        console.log("MonthlyReport should only be undefined for the tests!");
       }
-
     });
-  }
-
-  ngOnInit(): void {
-    this.getAllTimeEntries();
   }
 
   refreshMonthlyReport() {
