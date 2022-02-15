@@ -20,6 +20,13 @@ pipeline {
     }
 
     stages {
+        stage('Lock openshift ressource for parallel') {
+            steps {
+                script {
+                    openshift.setLockName("openshift-${env.BUILD_TAG}")
+                }
+            }
+        }
         stage("Build") {
             parallel {
                 stage('frontend') {
