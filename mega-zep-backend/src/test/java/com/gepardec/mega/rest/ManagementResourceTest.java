@@ -44,7 +44,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-public class ManagementResourceTest {
+class ManagementResourceTest {
 
     @InjectMock
     EmployeeService employeeService;
@@ -62,13 +62,13 @@ public class ManagementResourceTest {
     ProjectEntryService projectEntryService;
 
     @InjectMock
+    ZepService zepService;
+
+    @InjectMock
     private SecurityContext securityContext;
 
     @InjectMock
     private UserContext userContext;
-
-    @InjectMock
-    ZepService zepService;
 
     @Test
     void getAllOfficeManagementEntries_whenNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
@@ -502,7 +502,6 @@ public class ManagementResourceTest {
                 ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class)
         )).thenReturn(getProjectTimeTypeList());
 
-
         List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/09")
                 .as(new TypeRef<>() {
@@ -533,7 +532,6 @@ public class ManagementResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        List<String> leads = List.of("005");
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", List.of());
         when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
                 .thenReturn(List.of(rgkkcc));
@@ -570,7 +568,6 @@ public class ManagementResourceTest {
 
         assertThat(result).isEmpty();
     }
-
 
     private Step createStep(StepName stepName) {
         Step step = new Step();

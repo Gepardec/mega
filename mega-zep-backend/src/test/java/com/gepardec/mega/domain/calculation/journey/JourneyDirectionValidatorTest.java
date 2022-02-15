@@ -1,7 +1,6 @@
 package com.gepardec.mega.domain.calculation.journey;
 
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarningType;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -68,7 +67,7 @@ class JourneyDirectionValidatorTest {
 
     @Test
     void whenFirstJourneyNotStartedAndNotFinishedAndSecondReturnsTrue_thenOnFirstJourneyReturnsJourneyToMissingWarning() {
-        Assertions.assertAll(
+        assertAll(
                 () -> assertThat(handler.validate(FURTHER, TO)).isEqualTo(JourneyWarningType.TO_MISSING),
                 () -> assertThat(handler.validate(TO, BACK)).isNull(),
                 () -> assertThat(handler.validate(BACK, null)).isNull());
@@ -76,7 +75,7 @@ class JourneyDirectionValidatorTest {
 
     @Test
     void whenFirstJourneyOnlyFinishedAndSecondJourneyIsValid_thenOnFirstJourneyReturnsJourneyToMissingWarning() {
-        Assertions.assertAll(
+        assertAll(
                 () -> assertThat(handler.validate(BACK, TO)).isEqualTo(JourneyWarningType.TO_MISSING),
                 () -> assertThat(handler.validate(TO, BACK)).isNull(),
                 () -> assertThat(handler.validate(BACK, null)).isNull());

@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @QuarkusTest
 class EnterpriseEntryRepositoryTest {
@@ -26,5 +29,9 @@ class EnterpriseEntryRepositoryTest {
         enterpriseEntry.setZepTimesReleased(State.OPEN);
 
         enterpriseEntryRepository.persist(enterpriseEntry);
+
+        Optional<EnterpriseEntry> enterpriseEntryValue = enterpriseEntryRepository.findByDate(LocalDate.now());
+        assertThat(enterpriseEntryValue).isPresent();
+        assertThat(enterpriseEntryValue.get().getZepTimesReleased()).isEqualTo(State.OPEN);
     }
 }
