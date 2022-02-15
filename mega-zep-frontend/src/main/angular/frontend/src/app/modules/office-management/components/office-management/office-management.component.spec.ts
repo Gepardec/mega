@@ -6,11 +6,10 @@ import {AngularMaterialModule} from "../../../material/material-module";
 import {OfficeManagementModule} from "../../office-management.module";
 import {RouterTestingModule} from "@angular/router/testing";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-
-import * as _moment from 'moment';
 import {OfficeManagementService} from "../../services/office-management.service";
 import {expect} from "@angular/flex-layout/_private-utils/testing";
 
+import * as _moment from 'moment';
 const moment = _moment;
 
 describe('OfficeManagementComponent', () => {
@@ -81,7 +80,7 @@ describe('OfficeManagementComponent', () => {
     spyOn(officeManagementService.selectedYear, 'next').and.stub();
     spyOn(officeManagementService.selectedMonth, 'next').and.stub();
 
-    component.ngOnDestroy();
+    component.dateChanged(moment());
     flush();
 
     expect(officeManagementService.selectedYear.next).toHaveBeenCalled();
