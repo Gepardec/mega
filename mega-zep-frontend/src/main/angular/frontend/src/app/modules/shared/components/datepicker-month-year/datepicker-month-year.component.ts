@@ -7,6 +7,7 @@ import {MatDatepicker} from '@angular/material/datepicker';
 
 import * as _moment from 'moment';
 import {Moment} from 'moment';
+import {configuration} from "../../constants/configuration";
 
 const moment = _moment;
 
@@ -46,10 +47,10 @@ export class DatepickerMonthYearComponent implements OnChanges, OnInit {
 
   pickerDate: MatDatepicker<any>;
   dateControl = new FormControl(moment().subtract(1, 'month'));
-  maxDate = moment().format('YYYY-MM-DD');
+  maxDate = moment().format(configuration.dateFormat);
 
   ngOnInit() {
-    this.maxDate = moment().subtract(this.maxMonth, 'month').format('YYYY-MM-DD');
+    this.maxDate = moment().subtract(this.maxMonth, 'month').format(configuration.dateFormat);
   }
 
   ngOnChanges(changes: SimpleChanges): void {

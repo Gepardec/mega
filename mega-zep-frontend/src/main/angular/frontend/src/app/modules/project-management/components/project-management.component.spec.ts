@@ -30,9 +30,10 @@ import {ProjectStateSelectComponent} from "../../shared/components/project-state
 import {MatCheckboxChange} from "@angular/material/checkbox";
 import {ProjectCommentService} from "../../shared/services/project-comment/project-comment.service";
 import {ProjectComment} from "../../shared/models/ProjectComment";
+import {configuration} from "../../shared/constants/configuration";
 
 const moment = _moment;
-const DATE_FORMAT: string = 'YYYY-MM-DD';
+const DATE_FORMAT: string = configuration.dateFormat;
 
 describe('ProjectManagementComponent', () => {
 
@@ -392,7 +393,7 @@ describe('ProjectManagementComponent', () => {
 
   class ProjectCommentsMock {
 
-    static dateFormat: string = 'yyyy-MM-DD';
+    static dateFormat: string = configuration.dateFormat;
 
     static get(): Array<ProjectComment> {
       return [
@@ -408,7 +409,7 @@ describe('ProjectManagementComponent', () => {
 
   class CommentsMock {
 
-    static dateFormat: string = 'yyyy-MM-DD';
+    static dateFormat: string = configuration.dateFormat;
 
     static get(): Array<Comment> {
       return [

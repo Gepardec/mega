@@ -152,7 +152,7 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
   }
 
   private getFormattedDate() {
-    return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
+    return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format(configuration.dateFormat);
   }
 
   getTooltipText(projectState: ProjectState) {

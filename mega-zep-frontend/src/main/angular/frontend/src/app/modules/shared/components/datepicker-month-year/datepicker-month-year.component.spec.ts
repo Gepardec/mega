@@ -6,9 +6,10 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ReactiveFormsModule} from '@angular/forms';
 
 import * as _moment from "moment";
+import {configuration} from "../../constants/configuration";
 
 const moment = _moment;
-const DATE_FORMAT: string = 'YYYY-MM-DD';
+const DATE_FORMAT: string = configuration.dateFormat;
 
 describe('DatepickerMonthYearComponent', () => {
 

@@ -18,9 +18,10 @@ import {CommentService} from "../../services/comment/comment.service";
 import {of} from "rxjs";
 import {Employee} from "../../models/Employee";
 import {ElementRef} from "@angular/core";
+import {configuration} from "../../constants/configuration";
 
 const moment = _moment;
-const DATE_FORMAT: string = 'YYYY-MM-DD';
+const DATE_FORMAT: string = configuration.dateFormat;
 
 describe('CommentsForEmployeeComponent', () => {
 

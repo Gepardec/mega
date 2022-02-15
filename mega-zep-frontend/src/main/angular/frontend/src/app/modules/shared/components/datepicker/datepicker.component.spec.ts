@@ -7,9 +7,10 @@ import {expect} from "@angular/flex-layout/_private-utils/testing";
 
 import * as _moment from "moment";
 import {MatDatepickerInput, MatDatepickerInputEvent} from "@angular/material/datepicker";
+import {configuration} from "../../constants/configuration";
 
 const moment = _moment;
-const DATE_FORMAT: string = 'YYYY-MM-DD';
+const DATE_FORMAT: string = configuration.dateFormat;
 
 describe('DatepickerComponent', () => {
 
