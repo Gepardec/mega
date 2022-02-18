@@ -13,7 +13,6 @@ import javax.enterprise.inject.spi.InjectionPoint;
 public class LoggerProducer {
 
     @Produces
-    @Default
     @Dependent
     Logger createLogger(final InjectionPoint ip) {
         if (ip.getBean() != null) {

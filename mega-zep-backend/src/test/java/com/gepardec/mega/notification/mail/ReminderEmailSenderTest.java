@@ -43,11 +43,11 @@ class ReminderEmailSenderTest {
 
     @Test
     void sendReminderToOm_whenNoUsers_thenNoMailSend() {
-        when(userService.findByRoles(eq(List.of(Role.OFFICE_MANAGEMENT)))).thenReturn(List.of());
+        when(userService.findByRoles(List.of(Role.OFFICE_MANAGEMENT))).thenReturn(List.of());
 
         reminderEmailSender.sendReminderToOm(OM_RELEASE);
 
-        assertThat(mailbox.getTotalMessagesSent()).isEqualTo(0);
+        assertThat(mailbox.getTotalMessagesSent()).isZero();
     }
 
     @Test
@@ -68,7 +68,7 @@ class ReminderEmailSenderTest {
 
         reminderEmailSender.sendReminderToPl();
 
-        assertThat(mailbox.getTotalMessagesSent()).isEqualTo(0);
+        assertThat(mailbox.getTotalMessagesSent()).isZero();
     }
 
     @Test
@@ -88,7 +88,7 @@ class ReminderEmailSenderTest {
 
         reminderEmailSender.sendReminderToUser();
 
-        assertThat(mailbox.getTotalMessagesSent()).isEqualTo(0);
+        assertThat(mailbox.getTotalMessagesSent()).isZero();
     }
 
     @Test

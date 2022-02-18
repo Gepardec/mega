@@ -18,6 +18,7 @@ import java.util.Set;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -167,8 +168,10 @@ class EmployeeResourceTest {
 
                 });
 
-        assertThat(emails).hasSize(2);
-        assertThat(emails).containsAll(expected);
+        assertAll(
+                () -> assertThat(emails).hasSize(2),
+                () -> assertThat(emails).containsAll(expected)
+        );
     }
 
     @Test

@@ -2,15 +2,12 @@ package com.gepardec.mega.application.exception.mapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
 class WebApplicationExceptionMapperTest {
 
     private WebApplicationExceptionMapper mapper;
