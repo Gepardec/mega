@@ -23,11 +23,11 @@ public class MapperManager {
         return mapperFactory.getMapperFacade().map(obj, type);
     }
 
-    public <T, V> List<V> mapAsList(List<T> objects, Class<V> type) {
-        this.mapperFactory.classMap(objects.getClass(), type)
+    public <T, V, W> List<W> mapAsList(List<T> objects, Class<V> sourceType, Class<W> destinationType) {
+        this.mapperFactory.classMap(sourceType, destinationType)
                 .mapNulls(true)
                 .byDefault()
                 .register();
-        return mapperFactory.getMapperFacade().mapAsList(objects, type);
+        return mapperFactory.getMapperFacade().mapAsList(objects, destinationType);
     }
 }
