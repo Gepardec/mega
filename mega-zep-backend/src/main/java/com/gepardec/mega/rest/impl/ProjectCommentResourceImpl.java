@@ -7,6 +7,7 @@ import com.gepardec.mega.service.api.ProjectCommentService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 
 @RequestScoped
 @Secured
@@ -16,20 +17,20 @@ public class ProjectCommentResourceImpl implements ProjectCommentResource {
     ProjectCommentService projectCommentService;
 
     @Override
-    public ProjectCommentDto get(
+    public Response get(
             String currentMonthYear,
             String projectName
     ) {
-        return projectCommentService.findForProjectNameWithCurrentYearMonth(projectName, currentMonthYear);
+        return Response.ok(projectCommentService.findForProjectNameWithCurrentYearMonth(projectName, currentMonthYear)).build();
     }
 
     @Override
-    public ProjectCommentDto create(ProjectCommentDto newProjectCommentDto) {
-        return projectCommentService.create(newProjectCommentDto);
+    public Response create(ProjectCommentDto newProjectCommentDto) {
+        return Response.ok(projectCommentService.create(newProjectCommentDto)).build();
     }
 
     @Override
-    public boolean update(ProjectCommentDto projectCommentDto) {
-        return projectCommentService.update(projectCommentDto.getId(), projectCommentDto.getComment());
+    public Response update(ProjectCommentDto projectCommentDto) {
+        return Response.ok(projectCommentService.update(projectCommentDto.getId(), projectCommentDto.getComment())).build();
     }
 }

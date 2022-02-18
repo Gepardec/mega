@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -44,6 +45,7 @@ import java.util.stream.Collectors;
 @RolesAllowed(value = {Role.PROJECT_LEAD, Role.OFFICE_MANAGEMENT})
 public class ManagementResourceImpl implements ManagementResource {
 
+    //TODO ask if YYYY is expected
     private static final String DATE_FORMAT_PATTERN = "YYYY-MM-dd";
 
     private static final String BILLABLE_TIME_FORMAT = "HH:mm";
@@ -67,7 +69,7 @@ public class ManagementResourceImpl implements ManagementResource {
     ZepService zepService;
 
     @Override
-    public List<ManagementEntryDto> getAllOfficeManagementEntries(Integer year, Integer month) {
+    public Response getAllOfficeManagementEntries(Integer year, Integer month) {
         LocalDate from = LocalDate.of(year, month, 1);
         LocalDate to = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
 
@@ -102,11 +104,11 @@ public class ManagementResourceImpl implements ManagementResource {
 
         }
 
-        return officeManagementEntries;
+        return Response.ok(officeManagementEntries).build();
     }
 
     @Override
-    public List<ProjectManagementEntryDto> getAllProjectManagementEntries(Integer year, Integer month, boolean allProjects) {
+    public Response getAllProjectManagementEntries(Integer year, Integer month, boolean allProjects) {
         if (userContext == null || userContext.user() == null) {
             throw new IllegalStateException("User context does not exist or user is null.");
         }
@@ -154,7 +156,7 @@ public class ManagementResourceImpl implements ManagementResource {
             }
         }
 
-        return projectManagementEntries;
+        return Response.ok(projectManagementEntries).build();
     }
 
     private Duration calculateProjectDuration(List<String> entries) {

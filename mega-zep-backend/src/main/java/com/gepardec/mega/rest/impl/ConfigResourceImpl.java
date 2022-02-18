@@ -8,6 +8,7 @@ import com.gepardec.mega.rest.model.ConfigDto;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 
 /**
  * Provides configuration for the frontend.
@@ -25,8 +26,8 @@ public class ConfigResourceImpl implements ConfigResource {
     ZepConfig zepConfig;
 
     @Override
-    public ConfigDto get() {
-        return ConfigDto.builder()
+    public Response get() {
+        final ConfigDto configDto = ConfigDto.builder()
                 .excelUrl(applicationConfig.getExcelUrlAsString())
                 .budgetCalculationExcelUrl(applicationConfig.getBudgetCalculationExcelUrlAsString())
                 .zepOrigin(zepConfig.getUrlForFrontend())
@@ -35,5 +36,7 @@ public class ConfigResourceImpl implements ConfigResource {
                 .scope(oauthConfig.getScope())
                 .version(applicationConfig.getVersion())
                 .build();
+
+        return Response.ok(configDto).build();
     }
 }

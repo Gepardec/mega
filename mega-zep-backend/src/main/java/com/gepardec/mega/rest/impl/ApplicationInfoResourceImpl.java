@@ -6,6 +6,7 @@ import com.gepardec.mega.rest.model.ApplicationInfoDto;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -16,10 +17,10 @@ public class ApplicationInfoResourceImpl implements ApplicationInfoResource {
     ApplicationConfig applicationConfig;
 
     @Override
-    public ApplicationInfoDto get() {
+    public Response get() {
         final Duration upTime = Duration.between(applicationConfig.getStartAt(), LocalDateTime.now());
 
-        return ApplicationInfoDto.builder()
+        final ApplicationInfoDto applicationInfoDto = ApplicationInfoDto.builder()
                 .version(applicationConfig.getVersion())
                 .buildDate(applicationConfig.getBuildDate())
                 .buildNumber(applicationConfig.getBuildNumber())
@@ -28,5 +29,6 @@ public class ApplicationInfoResourceImpl implements ApplicationInfoResource {
                 .startedAt(applicationConfig.getStartAt())
                 .upTime(upTime)
                 .build();
+        return Response.ok(applicationInfoDto).build();
     }
 }

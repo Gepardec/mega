@@ -9,6 +9,7 @@ import com.gepardec.mega.service.api.EnterpriseEntryService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 
@@ -21,18 +22,18 @@ public class EnterpriseResourceImpl implements EnterpriseResource {
     EnterpriseEntryService enterpriseEntryService;
 
     @Override
-    public EnterpriseEntryDto getEnterpriseEntryForMonthYear(Integer year, Integer month) {
+    public Response getEnterpriseEntryForMonthYear(Integer year, Integer month) {
         LocalDate from = LocalDate.of(year, month, 1);
         LocalDate to = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
 
-        return enterpriseEntryService.findByDate(from, to);
+        return Response.ok(enterpriseEntryService.findByDate(from, to)).build();
     }
 
     @Override
-    public boolean updateEnterpriseEntry(Integer year, Integer month, final EnterpriseEntryDto entryDto) {
+    public Response updateEnterpriseEntry(Integer year, Integer month, final EnterpriseEntryDto entryDto) {
         LocalDate from = LocalDate.of(year, month, 1);
         LocalDate to = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
 
-        return enterpriseEntryService.update(entryDto, from, to);
+        return Response.ok(enterpriseEntryService.update(entryDto, from, to)).build();
     }
 }

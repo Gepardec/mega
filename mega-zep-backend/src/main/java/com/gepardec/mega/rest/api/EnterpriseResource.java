@@ -10,17 +10,18 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Path("/enterprise")
 public interface EnterpriseResource {
     @GET
     @Path("/entriesformonthyear/{year}/{month}")
     @Produces(MediaType.APPLICATION_JSON)
-    EnterpriseEntryDto getEnterpriseEntryForMonthYear(@PathParam("year") Integer year, @PathParam("month") Integer month);
+    Response getEnterpriseEntryForMonthYear(@PathParam("year") Integer year, @PathParam("month") Integer month);
 
     @PUT
     @Path("/entry/{year}/{month}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    boolean updateEnterpriseEntry(@PathParam("year") Integer year, @PathParam("month") Integer month, @RequestBody EnterpriseEntryDto entryDto);
+    Response updateEnterpriseEntry(@PathParam("year") Integer year, @PathParam("month") Integer month, @RequestBody EnterpriseEntryDto entryDto);
 }

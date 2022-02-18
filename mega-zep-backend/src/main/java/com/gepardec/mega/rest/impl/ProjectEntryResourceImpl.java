@@ -7,6 +7,7 @@ import com.gepardec.mega.service.api.ProjectEntryService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 
 @RequestScoped
 @Secured
@@ -16,7 +17,7 @@ public class ProjectEntryResourceImpl implements ProjectEntryResource {
     ProjectEntryService projectEntryService;
 
     @Override
-    public boolean update(final ProjectEntryDto projectEntryDTO) {
-        return projectEntryService.update(projectEntryDTO);
+    public Response update(final ProjectEntryDto projectEntryDTO) {
+        return Response.ok(projectEntryService.update(projectEntryDTO)).build();
     }
 }

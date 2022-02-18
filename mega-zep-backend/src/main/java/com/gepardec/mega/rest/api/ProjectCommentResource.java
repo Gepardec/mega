@@ -11,12 +11,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Path("/projectcomments")
 public interface ProjectCommentResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    ProjectCommentDto get(
+    Response get(
             @QueryParam("date") @NotNull(message = "{projectCommentResource.date.notNull}") String currentMonthYear,
             @QueryParam("projectName") @NotNull(message = "{projectCommentResource.projectName.notNull}") String projectName
     );
@@ -24,10 +25,10 @@ public interface ProjectCommentResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    ProjectCommentDto create(@NotNull(message = "{projectCommentResource.projectCommentEntry.notNull}") ProjectCommentDto newProjectCommentDto);
+    Response create(@NotNull(message = "{projectCommentResource.projectCommentEntry.notNull}") ProjectCommentDto newProjectCommentDto);
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    boolean update(@NotNull(message = "{projectCommentResource.projectCommentEntry.notNull}") ProjectCommentDto projectCommentDto);
+    Response update(@NotNull(message = "{projectCommentResource.projectCommentEntry.notNull}") ProjectCommentDto projectCommentDto);
 }

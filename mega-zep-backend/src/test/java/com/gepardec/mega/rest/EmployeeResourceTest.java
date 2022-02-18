@@ -5,6 +5,8 @@ import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.SecurityContext;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.UserContext;
+import com.gepardec.mega.rest.mapper.MapperManager;
+import com.gepardec.mega.rest.model.EmployeeDto;
 import com.gepardec.mega.service.api.EmployeeService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
@@ -12,6 +14,7 @@ import io.restassured.common.mapper.TypeRef;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +28,9 @@ import static org.mockito.Mockito.when;
 
 @QuarkusTest
 class EmployeeResourceTest {
+
+    @Inject
+    MapperManager mapper;
 
     @InjectMock
     EmployeeService employeeService;
@@ -91,13 +97,13 @@ class EmployeeResourceTest {
         final Employee userAsEmployee = createEmployeeForUser(user);
         when(employeeService.getAllActiveEmployees()).thenReturn(List.of(userAsEmployee));
 
-        final List<Employee> employees = given().get("/employees").as(new TypeRef<>() {
+        final List<EmployeeDto> employees = given().get("/employees").as(new TypeRef<>() {
 
         });
 
         assertThat(employees).hasSize(1);
-        final Employee actual = employees.get(0);
-        assertThat(actual).isEqualTo(userAsEmployee);
+        final EmployeeDto actual = employees.get(0);
+        assertThat(actual).isEqualTo(mapper.map(userAsEmployee, EmployeeDto.class));
     }
 
     @Test
