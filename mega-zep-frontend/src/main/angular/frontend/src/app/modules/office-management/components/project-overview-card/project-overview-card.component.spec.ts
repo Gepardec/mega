@@ -32,6 +32,9 @@ describe('ProjectOverviewCardComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        ProjectOverviewCardComponent
+      ],
       imports: [
         HttpClientTestingModule,
         TranslateModule.forRoot(),

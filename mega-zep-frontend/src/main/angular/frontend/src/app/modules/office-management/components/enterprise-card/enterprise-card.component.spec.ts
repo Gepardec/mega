@@ -36,6 +36,9 @@ describe('EnterpriseCardComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        EnterpriseCardComponent
+      ],
       imports: [
         OfficeManagementModule,
         HttpClientTestingModule

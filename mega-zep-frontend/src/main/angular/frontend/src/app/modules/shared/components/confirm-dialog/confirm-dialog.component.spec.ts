@@ -12,7 +12,9 @@ describe('ConfirmDialogComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ConfirmDialogComponent],
+      declarations: [
+        ConfirmDialogComponent
+      ],
       imports: [
         AngularMaterialModule,
         TranslateModule.forRoot()

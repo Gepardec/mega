@@ -10,6 +10,7 @@ import {OfficeManagementService} from "../../services/office-management.service"
 import {expect} from "@angular/flex-layout/_private-utils/testing";
 
 import * as _moment from 'moment';
+
 const moment = _moment;
 
 describe('OfficeManagementComponent', () => {
@@ -21,6 +22,9 @@ describe('OfficeManagementComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        OfficeManagementComponent
+      ],
       imports: [
         OfficeManagementModule,
         HttpClientTestingModule,

@@ -51,6 +51,9 @@ describe('ProjectManagementComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        ProjectManagementComponent
+      ],
       imports: [
         TranslateModule.forRoot(),
         AngularMaterialModule,

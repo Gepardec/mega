@@ -12,6 +12,9 @@ describe('BillableTimesFractionComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        BillableTimesFractionComponent
+      ],
       imports: [
         AngularMaterialModule
       ]

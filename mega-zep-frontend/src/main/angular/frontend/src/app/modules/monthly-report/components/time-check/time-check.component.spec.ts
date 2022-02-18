@@ -8,6 +8,7 @@ import {configuration} from "../../../shared/constants/configuration";
 
 import * as _moment from 'moment';
 import {expect} from "@angular/flex-layout/_private-utils/testing";
+import {EmployeeCheckComponent} from "../employee-check/employee-check.component";
 
 const moment = _moment;
 
@@ -18,6 +19,9 @@ describe('TimeCheckComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        EmployeeCheckComponent
+      ],
       imports: [
         TranslateModule.forRoot(),
         AngularMaterialModule

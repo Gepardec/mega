@@ -6,7 +6,7 @@ import {MonthlyReport} from '../../models/MonthlyReport';
 import {By} from '@angular/platform-browser';
 import {expect} from '@angular/flex-layout/_private-utils/testing';
 import {TranslateTestingModule} from 'ngx-translate-testing';
-
+import {EmployeeCheckComponent} from "../employee-check/employee-check.component";
 
 describe('GeneralInfoComponent', () => {
 
@@ -15,6 +15,9 @@ describe('GeneralInfoComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        GeneralInfoComponent
+      ],
       imports: [
         TranslateTestingModule.withTranslations({de: require('src/assets/i18n/de.json')}),
         HttpClientTestingModule

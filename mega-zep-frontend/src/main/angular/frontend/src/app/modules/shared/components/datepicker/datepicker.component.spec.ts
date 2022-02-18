@@ -18,6 +18,9 @@ describe('DatepickerComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        DatepickerComponent
+      ],
       imports: [
         AngularMaterialModule,
         BrowserAnimationsModule

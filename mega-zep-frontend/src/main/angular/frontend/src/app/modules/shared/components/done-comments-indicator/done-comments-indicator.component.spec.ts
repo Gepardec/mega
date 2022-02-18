@@ -4,12 +4,18 @@ import {DoneCommentsIndicatorComponent} from './done-comments-indicator.componen
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('DoneCommentsIndicatorComponent', () => {
+
   let component: DoneCommentsIndicatorComponent;
   let fixture: ComponentFixture<DoneCommentsIndicatorComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
+      declarations: [
+        DoneCommentsIndicatorComponent
+      ],
+      imports: [
+        HttpClientTestingModule
+      ]
     }).compileComponents().then(() => {
       fixture = TestBed.createComponent(DoneCommentsIndicatorComponent);
       component = fixture.componentInstance;

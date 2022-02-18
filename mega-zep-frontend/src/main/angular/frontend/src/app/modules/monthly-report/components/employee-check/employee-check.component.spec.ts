@@ -32,6 +32,9 @@ describe('EmployeeCheckComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        EmployeeCheckComponent
+      ],
       imports: [
         TranslateModule.forRoot(),
         AngularMaterialModule,

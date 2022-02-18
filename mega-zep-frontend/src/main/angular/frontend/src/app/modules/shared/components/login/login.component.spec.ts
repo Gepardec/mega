@@ -16,6 +16,9 @@ describe('LoginComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        LoginComponent
+      ],
       imports: [
         RouterTestingModule,
         TranslateModule.forRoot()

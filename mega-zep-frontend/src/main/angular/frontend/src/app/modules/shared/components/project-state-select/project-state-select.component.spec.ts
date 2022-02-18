@@ -4,6 +4,7 @@ import {ProjectStateSelectComponent} from './project-state-select.component';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ProjectState} from '../../models/ProjectState';
 import {AngularMaterialModule} from '../../../material/material-module';
+import {PmProgressComponent} from "../pm-progress/pm-progress.component";
 
 const PROJECT_STATES_LENGTH = Object.keys(ProjectState).length;
 const STATE_PREFIX = 'STATE.';
@@ -17,6 +18,9 @@ describe('ProjectStateSelectComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        ProjectStateSelectComponent
+      ],
       imports: [
         TranslateModule.forRoot(),
         AngularMaterialModule

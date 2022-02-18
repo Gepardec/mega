@@ -20,6 +20,9 @@ describe('MonthlyReportComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        MonthlyReportComponent
+      ],
       imports: [
         HttpClientTestingModule,
         TranslateModule.forRoot(),

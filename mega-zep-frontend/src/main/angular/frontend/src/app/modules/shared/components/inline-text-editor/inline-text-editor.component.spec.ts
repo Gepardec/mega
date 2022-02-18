@@ -15,6 +15,9 @@ describe('InlineTextEditorComponent', () => {
 
   beforeEach(waitForAsync((() => {
     TestBed.configureTestingModule({
+      declarations: [
+        InlineTextEditorComponent
+      ],
       imports: [
         SharedModule,
         BrowserAnimationsModule

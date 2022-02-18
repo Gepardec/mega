@@ -13,7 +13,12 @@ describe('StateIndicatorComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [AngularMaterialModule]
+      declarations: [
+        StateIndicatorComponent
+      ],
+      imports: [
+        AngularMaterialModule
+      ]
     }).compileComponents().then(() => {
       fixture = TestBed.createComponent(StateIndicatorComponent);
       component = fixture.componentInstance;

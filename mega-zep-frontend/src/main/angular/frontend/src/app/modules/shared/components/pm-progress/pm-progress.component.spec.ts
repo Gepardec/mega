@@ -13,13 +13,16 @@ import {PmProgress} from "../../../monthly-report/models/PmProgress";
 import {State} from "../../models/State";
 import {expect} from "@angular/flex-layout/_private-utils/testing";
 
-describe('EmployeeProgressComponent', () => {
+describe('PmProgressComponent', () => {
 
   let component: PmProgressComponent;
   let fixture: ComponentFixture<PmProgressComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        PmProgressComponent
+      ],
       imports: [
         BrowserAnimationsModule,
         SharedModule,

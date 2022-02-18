@@ -22,6 +22,9 @@ describe('UserActionsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        UserActionsComponent
+      ],
       imports: [
         TranslateModule.forRoot(),
         AngularMaterialModule

@@ -33,6 +33,9 @@ describe('CommentsForEmployeeComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        CommentsForEmployeeComponent
+      ],
       imports: [
         AngularMaterialModule,
         TranslateModule.forRoot(),

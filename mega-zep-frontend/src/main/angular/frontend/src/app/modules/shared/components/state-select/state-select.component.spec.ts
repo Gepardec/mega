@@ -15,6 +15,9 @@ describe('StateSelectComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        StateSelectComponent
+      ],
       imports: [
         TranslateModule.forRoot(),
         AngularMaterialModule

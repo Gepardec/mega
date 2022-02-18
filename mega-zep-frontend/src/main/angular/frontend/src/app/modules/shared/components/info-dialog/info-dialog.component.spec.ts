@@ -18,6 +18,9 @@ describe('InfoDialogComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        InfoDialogComponent
+      ],
       imports: [
         HttpClientTestingModule,
         AngularMaterialModule,

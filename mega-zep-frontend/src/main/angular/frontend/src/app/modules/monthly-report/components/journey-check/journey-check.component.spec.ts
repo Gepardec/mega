@@ -11,6 +11,9 @@ describe('JourneyCheckComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        JourneyCheckComponent
+      ],
       imports: [
         TranslateModule.forRoot(),
         AngularMaterialModule,
