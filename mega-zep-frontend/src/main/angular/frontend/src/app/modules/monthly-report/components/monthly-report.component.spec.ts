@@ -10,6 +10,16 @@ import {TranslateModule} from "@ngx-translate/core";
 import {AngularMaterialModule} from "../../material/material-module";
 import {RouterTestingModule} from "@angular/router/testing";
 import {OAuthModule} from "angular-oauth2-oidc";
+import {DisplayMonthlyReportComponent} from './display-monthly-report/display-monthly-report.component';
+import {JourneyCheckComponent} from './journey-check/journey-check.component';
+import {StateIndicatorComponent} from '../../shared/components/state-indicator/state-indicator.component';
+import {EmployeeCheckComponent} from './employee-check/employee-check.component';
+import {GeneralInfoComponent} from './general-info/general-info.component';
+import {TimeCheckComponent} from './time-check/time-check.component';
+import {
+  DatepickerMonthYearComponent
+} from '../../shared/components/datepicker-month-year/datepicker-month-year.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 describe('MonthlyReportComponent', () => {
 
@@ -21,14 +31,23 @@ describe('MonthlyReportComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        MonthlyReportComponent
+        MonthlyReportComponent,
+        DisplayMonthlyReportComponent,
+        JourneyCheckComponent,
+        StateIndicatorComponent,
+        EmployeeCheckComponent,
+        GeneralInfoComponent,
+        TimeCheckComponent,
+        JourneyCheckComponent,
+        DatepickerMonthYearComponent,
       ],
       imports: [
         HttpClientTestingModule,
         TranslateModule.forRoot(),
         AngularMaterialModule,
         RouterTestingModule,
-        OAuthModule.forRoot()
+        OAuthModule.forRoot(),
+        ReactiveFormsModule
       ]
     }).compileComponents().then(() => {
       fixture = TestBed.createComponent(MonthlyReportComponent);

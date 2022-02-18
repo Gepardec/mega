@@ -31,6 +31,8 @@ import {MatCheckboxChange} from "@angular/material/checkbox";
 import {ProjectCommentService} from "../../shared/services/project-comment/project-comment.service";
 import {ProjectComment} from "../../shared/models/ProjectComment";
 import {configuration} from "../../shared/constants/configuration";
+import {DatepickerMonthYearComponent} from '../../shared/components/datepicker-month-year/datepicker-month-year.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 const moment = _moment;
 const DATE_FORMAT: string = configuration.dateFormat;
@@ -52,7 +54,8 @@ describe('ProjectManagementComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ProjectManagementComponent
+        ProjectManagementComponent,
+        DatepickerMonthYearComponent
       ],
       imports: [
         TranslateModule.forRoot(),
@@ -60,7 +63,8 @@ describe('ProjectManagementComponent', () => {
         BrowserAnimationsModule,
         HttpClientTestingModule,
         RouterTestingModule,
-        OAuthModule.forRoot()
+        OAuthModule.forRoot(),
+        ReactiveFormsModule
       ],
     }).compileComponents().then(() => {
       fixture = TestBed.createComponent(ProjectManagementComponent);
