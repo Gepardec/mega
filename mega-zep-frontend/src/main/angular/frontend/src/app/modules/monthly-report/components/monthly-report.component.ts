@@ -23,7 +23,7 @@ export class MonthlyReportComponent implements OnInit {
     this.getAllTimeEntries();
   }
 
-  getAllTimeEntriesByDate(year: number, month: number) {
+  getAllTimeEntriesByDate(year: number, month: number): void {
     this.monthlyReportSubscription = this.monthlyReportService.getAllByDate(year, month).subscribe((monthlyReport: MonthlyReport) => {
       this.monthlyReport = monthlyReport;
       this.generalInfoComponent.update(monthlyReport);
@@ -31,7 +31,7 @@ export class MonthlyReportComponent implements OnInit {
     });
   }
 
-  getAllTimeEntries() {
+  getAllTimeEntries(): void {
     this.monthlyReportSubscription = this.monthlyReportService.getAll().subscribe((monthlyReport: MonthlyReport) => {
       if (monthlyReport) {
         this.monthlyReport = monthlyReport;
@@ -42,7 +42,7 @@ export class MonthlyReportComponent implements OnInit {
     });
   }
 
-  refreshMonthlyReport() {
+  refreshMonthlyReport(): void {
     this.getAllTimeEntriesByDate(this.monthlyReportService.selectedYear.getValue(), this.monthlyReportService.selectedMonth.getValue());
   }
 }

@@ -72,6 +72,17 @@ describe('MonthlyReportComponent', () => {
     expect(monthlyReportService.getAll).toHaveBeenCalled();
   }));
 
+  it('#refreshMonthlyReport - should call monthlyReportService.getAllByDate', fakeAsync(() => {
+    fixture.detectChanges();
+
+    spyOn(monthlyReportService, 'getAllByDate').and.returnValue(of(MonthlyReportServiceMock.monthlyReport));
+
+    component.refreshMonthlyReport();
+    flush();
+
+    expect(monthlyReportService.getAllByDate).toHaveBeenCalled();
+  }));
+
   class EmployeeMock {
     static employee: Employee = {
       email: "LIW-Microservices",
