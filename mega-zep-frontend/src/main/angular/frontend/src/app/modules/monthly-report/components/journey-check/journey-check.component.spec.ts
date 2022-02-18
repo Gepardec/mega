@@ -26,7 +26,7 @@ describe('JourneyCheckComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#should create', () => {
+  it('#getJourneyWarningString - should set warnings', () => {
     fixture.detectChanges();
 
     const warnings: string = component.getJourneyWarningString(WarningsMock.warnings);

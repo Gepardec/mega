@@ -19,19 +19,13 @@ export class GeneralInfoComponent implements OnInit {
   constructor(public monthlyReportService: MonthlyReportService) {
   }
 
-  update(monthlyReport: MonthlyReport) {
-    this.monthlyReport = monthlyReport;
-    this.ngOnInit();
-  }
-
   ngOnInit(): void {
     this.calculateDynamicValue();
   }
 
-  private calculateDynamicValue() {
-    if (this.monthlyReport) {
-      this.monthlyReportService.billablePercentage = this.calculateBillingPercentage(this.monthlyReport.totalWorkingTime, this.monthlyReport.billableTime);
-    }
+  update(monthlyReport: MonthlyReport) {
+    this.monthlyReport = monthlyReport;
+    this.ngOnInit();
   }
 
   calculateBillingPercentage(totalWorkingTime: string, billableTime: string): number {
@@ -39,7 +33,7 @@ export class GeneralInfoComponent implements OnInit {
     let spBillableTime: string[] = billableTime.split(":");
 
     // if split is not possible return 0
-    if (spTotalWorkingTime.length < 1 || spBillableTime.length < 1) {
+    if (spTotalWorkingTime.length <= 1 || spBillableTime.length <= 1) {
       return 0;
     }
 
@@ -54,8 +48,14 @@ export class GeneralInfoComponent implements OnInit {
     return (this.monthlyReportService.billableTimeHours / this.monthlyReportService.totalWorkingTimeHours) * 100;
   }
 
-  month(number: number): string{
+  month(number: number): string {
     moment.locale('de');
     return moment().month(number).format("MMMM");
+  }
+
+  private calculateDynamicValue() {
+    if (this.monthlyReport) {
+      this.monthlyReportService.billablePercentage = this.calculateBillingPercentage(this.monthlyReport.totalWorkingTime, this.monthlyReport.billableTime);
+    }
   }
 }

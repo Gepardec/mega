@@ -1,7 +1,6 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {GeneralInfoComponent} from './general-info.component';
-import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {MonthlyReport} from '../../models/MonthlyReport';
 import {By} from '@angular/platform-browser';
@@ -10,26 +9,21 @@ import {TranslateTestingModule} from 'ngx-translate-testing';
 
 
 describe('GeneralInfoComponent', () => {
+
   let component: GeneralInfoComponent;
   let fixture: ComponentFixture<GeneralInfoComponent>;
 
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         TranslateTestingModule.withTranslations({de: require('src/assets/i18n/de.json')}),
         HttpClientTestingModule
-      ],
-      declarations: [GeneralInfoComponent],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
-      .compileComponents();
-  });
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(GeneralInfoComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+      ]
+    }).compileComponents().then(() => {
+      fixture = TestBed.createComponent(GeneralInfoComponent);
+      component = fixture.componentInstance;
+    });
+  }));
 
   it('#should create', () => {
     expect(component).toBeTruthy();
@@ -37,9 +31,12 @@ describe('GeneralInfoComponent', () => {
 
   it('#afterInit - should display values from monthly report', () => {
     const monthlyReport = new MonthlyReport();
+
     monthlyReport.homeofficeDays = 10;
     monthlyReport.vacationDays = 3;
     monthlyReport.compensatoryDays = 2;
+    monthlyReport.totalWorkingTime = '08:00';
+    monthlyReport.billableTime = '04:00';
 
     component.monthlyReport = monthlyReport;
 
@@ -57,6 +54,8 @@ describe('GeneralInfoComponent', () => {
     monthlyReport.homeofficeDays = 1;
     monthlyReport.vacationDays = 1;
     monthlyReport.compensatoryDays = 1;
+    monthlyReport.totalWorkingTime = '08:00';
+    monthlyReport.billableTime = '04:00';
 
     component.monthlyReport = monthlyReport;
 
@@ -81,7 +80,17 @@ describe('GeneralInfoComponent', () => {
     assertMonthlyReportRow(1, 'Gesamte Arbeitszeit', '80,00', 'Stunden');
     assertMonthlyReportRow(2, 'Fakturierbare Stunden', '60,00', 'Stunden');
     assertMonthlyReportRow(3, 'Chargeability', '75,00', '%');
+  });
 
+  it('#calculateBillingPercentage - should return 0', () => {
+    fixture.detectChanges();
+
+    const totalWorkingTime = '8000';
+    const billableTime = '600';
+
+    const billingPercentage = component.calculateBillingPercentage(totalWorkingTime, billableTime);
+
+    expect(billingPercentage).toEqual(0);
   });
 
   function assertMonthlyReportRow(rowNumber: number, expectedHeader: string, expectedDays: string, expectedIdentifier: string) {
