@@ -1,4 +1,4 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.api;
 
 import com.gepardec.mega.domain.model.Employee;
 
@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/employees")
-public interface EmployeeResourceAPI {
+public interface EmployeeResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     List<Employee> list();

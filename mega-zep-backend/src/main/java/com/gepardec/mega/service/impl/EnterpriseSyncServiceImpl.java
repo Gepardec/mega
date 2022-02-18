@@ -1,11 +1,11 @@
-package com.gepardec.mega.service.impl.init;
+package com.gepardec.mega.service.impl;
 
 import com.gepardec.mega.db.entity.common.State;
 import com.gepardec.mega.db.entity.enterprise.EnterpriseEntry;
 import com.gepardec.mega.db.repository.EnterpriseEntryRepository;
-import com.gepardec.mega.service.api.init.EnterpriseSyncService;
-import com.gepardec.mega.service.api.project.ProjectService;
-import com.gepardec.mega.service.api.user.UserService;
+import com.gepardec.mega.service.api.EnterpriseSyncService;
+import com.gepardec.mega.service.api.ProjectService;
+import com.gepardec.mega.service.api.UserService;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 

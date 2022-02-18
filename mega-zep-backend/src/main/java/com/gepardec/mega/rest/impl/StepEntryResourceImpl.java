@@ -1,11 +1,12 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.impl;
 
 import com.gepardec.mega.application.interceptor.Secured;
 import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.domain.utils.DateUtils;
-import com.gepardec.mega.rest.model.EmployeeStep;
-import com.gepardec.mega.rest.model.ProjectStep;
-import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import com.gepardec.mega.rest.api.StepEntryResource;
+import com.gepardec.mega.rest.model.EmployeeStepDto;
+import com.gepardec.mega.rest.model.ProjectStepDto;
+import com.gepardec.mega.service.api.StepEntryService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 
 @RequestScoped
 @Secured
-public class StepEntryResource implements StepEntryResourceAPI {
+public class StepEntryResourceImpl implements StepEntryResource {
 
     @Inject
     StepEntryService stepEntryService;
@@ -22,29 +23,29 @@ public class StepEntryResource implements StepEntryResourceAPI {
     UserContext userContext;
 
     @Override
-    public boolean close(final EmployeeStep employeeStep) {
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employeeStep.currentMonthYear()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employeeStep.currentMonthYear()));
+    public boolean close(final EmployeeStepDto employeeStepDto) {
+        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employeeStepDto.currentMonthYear()));
+        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employeeStepDto.currentMonthYear()));
 
-        return stepEntryService.setOpenAndAssignedStepEntriesDone(employeeStep.employee(), employeeStep.stepId(), from, to);
+        return stepEntryService.setOpenAndAssignedStepEntriesDone(employeeStepDto.employee(), employeeStepDto.stepId(), from, to);
     }
 
     @Override
-    public boolean closeForOffice(final EmployeeStep employeeStep) {
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(employeeStep.currentMonthYear()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(employeeStep.currentMonthYear()));
+    public boolean closeForOffice(final EmployeeStepDto employeeStepDto) {
+        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(employeeStepDto.currentMonthYear()));
+        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(employeeStepDto.currentMonthYear()));
 
-        return stepEntryService.setOpenAndAssignedStepEntriesDone(employeeStep.employee(), employeeStep.stepId(), from, to);
+        return stepEntryService.setOpenAndAssignedStepEntriesDone(employeeStepDto.employee(), employeeStepDto.stepId(), from, to);
     }
 
     @Override
-    public boolean close(final ProjectStep projectStep) {
+    public boolean close(final ProjectStepDto projectStepDto) {
         return stepEntryService.closeStepEntryForEmployeeInProject(
-                projectStep.employee(),
-                projectStep.stepId(),
-                projectStep.projectName(),
+                projectStepDto.employee(),
+                projectStepDto.stepId(),
+                projectStepDto.projectName(),
                 userContext.user().email(),
-                projectStep.currentMonthYear()
+                projectStepDto.currentMonthYear()
         );
     }
 }

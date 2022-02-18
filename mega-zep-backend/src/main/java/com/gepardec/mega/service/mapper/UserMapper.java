@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.impl.user;
+package com.gepardec.mega.service.mapper;
 
 import com.gepardec.mega.domain.model.User;
 

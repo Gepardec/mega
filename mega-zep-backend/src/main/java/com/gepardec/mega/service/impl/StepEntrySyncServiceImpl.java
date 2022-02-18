@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.impl.init;
+package com.gepardec.mega.service.impl;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
 import com.gepardec.mega.domain.model.Project;
@@ -7,11 +7,11 @@ import com.gepardec.mega.domain.model.State;
 import com.gepardec.mega.domain.model.Step;
 import com.gepardec.mega.domain.model.StepEntry;
 import com.gepardec.mega.domain.model.User;
-import com.gepardec.mega.service.api.init.StepEntrySyncService;
-import com.gepardec.mega.service.api.project.ProjectService;
-import com.gepardec.mega.service.api.step.StepService;
-import com.gepardec.mega.service.api.stepentry.StepEntryService;
-import com.gepardec.mega.service.api.user.UserService;
+import com.gepardec.mega.service.api.StepEntrySyncService;
+import com.gepardec.mega.service.api.ProjectService;
+import com.gepardec.mega.service.api.StepService;
+import com.gepardec.mega.service.api.StepEntryService;
+import com.gepardec.mega.service.api.UserService;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 

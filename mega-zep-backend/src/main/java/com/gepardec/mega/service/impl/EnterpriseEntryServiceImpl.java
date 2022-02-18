@@ -1,10 +1,11 @@
-package com.gepardec.mega.service.impl.enterpriseentry;
+package com.gepardec.mega.service.impl;
 
 import com.gepardec.mega.db.entity.common.State;
 import com.gepardec.mega.db.entity.enterprise.EnterpriseEntry;
 import com.gepardec.mega.db.repository.EnterpriseEntryRepository;
 import com.gepardec.mega.rest.model.EnterpriseEntryDto;
-import com.gepardec.mega.service.api.enterpriseentry.EnterpriseEntryService;
+import com.gepardec.mega.service.api.EnterpriseEntryService;
+import com.gepardec.mega.service.mapper.EnterpriseEntryMapper;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

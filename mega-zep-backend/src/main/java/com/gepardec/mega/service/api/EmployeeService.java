@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.api.employee;
+package com.gepardec.mega.service.api;
 
 import com.gepardec.mega.db.entity.employee.User;
 import com.gepardec.mega.domain.model.Employee;

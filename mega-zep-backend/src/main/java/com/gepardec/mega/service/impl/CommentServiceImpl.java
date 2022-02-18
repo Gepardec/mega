@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.impl.comment;
+package com.gepardec.mega.service.impl;
 
 import com.gepardec.mega.db.entity.employee.EmployeeState;
 import com.gepardec.mega.db.entity.employee.StepEntry;
@@ -10,8 +10,8 @@ import com.gepardec.mega.domain.model.FinishedAndTotalComments;
 import com.gepardec.mega.notification.mail.Mail;
 import com.gepardec.mega.notification.mail.MailParameter;
 import com.gepardec.mega.notification.mail.MailSender;
-import com.gepardec.mega.service.api.comment.CommentService;
-import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import com.gepardec.mega.service.api.CommentService;
+import com.gepardec.mega.service.api.StepEntryService;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -53,9 +53,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public int setDone(final Comment comment) {
-        com.gepardec.mega.db.entity.employee.Comment commentDb = commentRepository.findById(comment.id());
+        com.gepardec.mega.db.entity.employee.Comment commentDb = commentRepository.findById(comment.getId());
         sendMail(Mail.COMMENT_CLOSED, commentDb);
-        return commentRepository.setStatusDone(comment.id());
+        return commentRepository.setStatusDone(comment.getId());
     }
 
     @Override

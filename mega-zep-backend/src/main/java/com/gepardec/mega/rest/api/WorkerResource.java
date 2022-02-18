@@ -1,4 +1,4 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.api;
 
 import com.gepardec.mega.db.entity.employee.User;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/worker")
-public interface WorkerResourceAPI {
+public interface WorkerResource {
     @GET
     @Path("/monthendreports")
     @Produces(MediaType.APPLICATION_JSON)

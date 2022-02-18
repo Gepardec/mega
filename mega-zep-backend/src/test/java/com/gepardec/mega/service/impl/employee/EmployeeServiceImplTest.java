@@ -2,7 +2,8 @@ package com.gepardec.mega.service.impl.employee;
 
 import com.gepardec.mega.db.repository.UserRepository;
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.service.api.employee.EmployeeService;
+import com.gepardec.mega.service.api.EmployeeService;
+import com.gepardec.mega.service.impl.EmployeeServiceImpl;
 import com.gepardec.mega.zep.ZepService;
 import com.gepardec.mega.zep.ZepServiceException;
 import io.quarkus.test.junit.QuarkusTest;

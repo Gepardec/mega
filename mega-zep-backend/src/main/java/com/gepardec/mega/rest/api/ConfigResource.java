@@ -1,6 +1,6 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.api;
 
-import com.gepardec.mega.rest.model.Config;
+import com.gepardec.mega.rest.model.ConfigDto;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -8,9 +8,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/config")
-public interface ConfigResourceAPI {
+public interface ConfigResource {
     @Path("/")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    Config get();
+    ConfigDto get();
 }

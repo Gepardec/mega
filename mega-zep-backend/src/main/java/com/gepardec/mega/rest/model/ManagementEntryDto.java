@@ -21,7 +21,7 @@ import java.util.List;
 @Accessors(fluent = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Jacksonized
-public class ManagementEntry {
+public class ManagementEntryDto {
 
     @JsonProperty
     private final Employee employee;
@@ -40,7 +40,7 @@ public class ManagementEntry {
 
     @JsonProperty
     @Nullable
-    private final List<PmProgress> employeeProgresses;
+    private final List<PmProgressDto> employeeProgresses;
 
     @JsonProperty
     private final long totalComments;

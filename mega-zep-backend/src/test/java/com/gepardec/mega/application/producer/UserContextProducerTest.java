@@ -5,7 +5,7 @@ import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.SecurityContext;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.UserContext;
-import com.gepardec.mega.service.api.user.UserService;
+import com.gepardec.mega.service.api.UserService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Test;

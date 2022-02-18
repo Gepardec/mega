@@ -4,7 +4,7 @@ import com.gepardec.mega.application.exception.UnauthorizedException;
 import com.gepardec.mega.domain.model.SecurityContext;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.UserContext;
-import com.gepardec.mega.service.api.user.UserService;
+import com.gepardec.mega.service.api.UserService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;

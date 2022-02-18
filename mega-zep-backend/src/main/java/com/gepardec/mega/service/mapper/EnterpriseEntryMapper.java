@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.impl.enterpriseentry;
+package com.gepardec.mega.service.mapper;
 
 import com.gepardec.mega.db.entity.enterprise.EnterpriseEntry;
 import com.gepardec.mega.domain.model.ProjectState;

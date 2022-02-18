@@ -1,4 +1,4 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.impl;
 
 import com.gepardec.mega.application.interceptor.RolesAllowed;
 import com.gepardec.mega.application.interceptor.Secured;
@@ -8,9 +8,10 @@ import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
-import com.gepardec.mega.service.api.employee.EmployeeService;
-import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
-import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import com.gepardec.mega.rest.api.WorkerResource;
+import com.gepardec.mega.service.api.EmployeeService;
+import com.gepardec.mega.service.api.MonthlyReportService;
+import com.gepardec.mega.service.api.StepEntryService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -23,7 +24,7 @@ import java.util.Objects;
 @RequestScoped
 @RolesAllowed(Role.EMPLOYEE)
 @Secured
-public class WorkerResource implements WorkerResourceAPI {
+public class WorkerResourceImpl implements WorkerResource {
 
     @Inject
     MonthlyReportService monthlyReportService;

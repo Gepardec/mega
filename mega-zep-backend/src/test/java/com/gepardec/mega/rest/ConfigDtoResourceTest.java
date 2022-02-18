@@ -14,7 +14,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 @QuarkusTest
-class ConfigResourceTest {
+class ConfigDtoResourceTest {
 
     @Inject
     OAuthConfig oAuthConfig;

@@ -4,7 +4,7 @@ import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.utils.DateUtils;
-import com.gepardec.mega.service.impl.employee.EmployeeMapper;
+import com.gepardec.mega.service.mapper.EmployeeMapper;
 import com.gepardec.mega.zep.mapper.ProjectEntryMapper;
 import de.provantis.zep.FehlzeitType;
 import de.provantis.zep.KategorieListeType;
@@ -57,9 +57,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.gepardec.mega.domain.utils.DateUtils.getFirstDayOfCurrentMonth;
-import static com.gepardec.mega.domain.utils.DateUtils.getFirstDayOfFollowingMonth;
 import static com.gepardec.mega.domain.utils.DateUtils.getLastDayOfCurrentMonth;
-import static com.gepardec.mega.domain.utils.DateUtils.getLastDayOfFollowingMonth;
 
 @RequestScoped
 public class ZepServiceImpl implements ZepService {

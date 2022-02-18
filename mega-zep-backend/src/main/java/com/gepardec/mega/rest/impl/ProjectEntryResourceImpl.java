@@ -1,21 +1,22 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.impl;
 
 import com.gepardec.mega.application.interceptor.Secured;
-import com.gepardec.mega.rest.model.ProjectEntryDTO;
-import com.gepardec.mega.service.api.projectentry.ProjectEntryService;
+import com.gepardec.mega.rest.api.ProjectEntryResource;
+import com.gepardec.mega.rest.model.ProjectEntryDto;
+import com.gepardec.mega.service.api.ProjectEntryService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 @RequestScoped
 @Secured
-public class ProjectEntryResource implements ProjectEntryResourceAPI {
+public class ProjectEntryResourceImpl implements ProjectEntryResource {
 
     @Inject
     ProjectEntryService projectEntryService;
 
     @Override
-    public boolean update(final ProjectEntryDTO projectEntryDTO) {
+    public boolean update(final ProjectEntryDto projectEntryDTO) {
         return projectEntryService.update(projectEntryDTO);
     }
 }

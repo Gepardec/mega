@@ -5,6 +5,7 @@ import com.gepardec.mega.db.entity.employee.User;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.Role;
+import com.gepardec.mega.service.mapper.SyncServiceMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

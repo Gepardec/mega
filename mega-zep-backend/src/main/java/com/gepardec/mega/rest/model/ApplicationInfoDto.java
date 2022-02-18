@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @Accessors(fluent = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Jacksonized
-public class ApplicationInfo {
+public class ApplicationInfoDto {
     @JsonProperty
     private final String version;
 

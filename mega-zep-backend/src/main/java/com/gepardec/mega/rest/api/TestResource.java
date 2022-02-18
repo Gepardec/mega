@@ -1,4 +1,4 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.api;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -7,7 +7,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/test/")
-public interface TestResourceAPI {
+public interface TestResource {
     @Path("/sync/projects")
     @GET
     @Produces(MediaType.APPLICATION_JSON)

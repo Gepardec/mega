@@ -8,6 +8,8 @@ import com.gepardec.mega.domain.model.monthlyreport.Task;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarningType;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
+import com.gepardec.mega.service.impl.MonthlyReportServiceImpl;
+import com.gepardec.mega.service.helper.WarningCalculator;
 import com.gepardec.mega.zep.ZepService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;

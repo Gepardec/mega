@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.impl.project;
+package com.gepardec.mega.service.impl;
 
 import com.gepardec.mega.db.entity.employee.User;
 import com.gepardec.mega.db.entity.project.ProjectEntry;
@@ -6,7 +6,7 @@ import com.gepardec.mega.db.repository.ProjectRepository;
 import com.gepardec.mega.db.repository.UserRepository;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.ProjectFilter;
-import com.gepardec.mega.service.api.project.ProjectService;
+import com.gepardec.mega.service.api.ProjectService;
 import com.gepardec.mega.zep.ZepService;
 
 import javax.enterprise.context.ApplicationScoped;

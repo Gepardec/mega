@@ -1,7 +1,7 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.api;
 
 import com.gepardec.mega.domain.model.Comment;
-import com.gepardec.mega.rest.model.NewCommentEntry;
+import com.gepardec.mega.rest.model.NewCommentEntryDto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -15,35 +15,36 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/comments")
-public interface CommentResourceAPI {
+public interface CommentResource {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/setdone")
-    int setDone(@NotNull(message = "{commentResource.comment.notNull}") Comment comment);
+    Response setDone(@NotNull(message = "{commentResource.comment.notNull}") Comment comment);
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getallcommentsforemployee")
-    List<Comment> getAllCommentsForEmployee(
+    Response getAllCommentsForEmployee(
             @QueryParam("email") @NotNull(message = "{commentResource.email.notNull}") @Email(message = "{commentResource.email.invalid}") String employeeEmail,
             @QueryParam("date") @NotNull(message = "{commentResource.date.notNull}") String currentMonthYear);
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    Comment newCommentForEmployee(@NotNull(message = "{commentResource.commentEntry.notNull}") NewCommentEntry newComment);
+    Response newCommentForEmployee(@NotNull(message = "{commentResource.commentEntry.notNull}") NewCommentEntryDto newComment);
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    boolean deleteComment(@PathParam("id") @NotNull(message = "{commentResource.id.notNull}") Long id);
+    Response deleteComment(@PathParam("id") @NotNull(message = "{commentResource.id.notNull}") Long id);
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    Comment updateCommentForEmployee(@NotNull(message = "{commentResource.comment.notNull}") Comment comment);
+    Response updateCommentForEmployee(@NotNull(message = "{commentResource.comment.notNull}") Comment comment);
 }

@@ -1,4 +1,4 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.api;
 
 import com.gepardec.mega.domain.model.User;
 
@@ -8,7 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/user")
-public interface UserResourceAPI {
+public interface UserResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     User get();

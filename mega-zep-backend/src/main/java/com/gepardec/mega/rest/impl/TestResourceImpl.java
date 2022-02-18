@@ -1,11 +1,12 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.impl;
 
 import com.gepardec.mega.notification.mail.Mail;
 import com.gepardec.mega.notification.mail.MailParameter;
 import com.gepardec.mega.notification.mail.MailSender;
-import com.gepardec.mega.service.api.init.EnterpriseSyncService;
-import com.gepardec.mega.service.api.init.ProjectSyncService;
-import com.gepardec.mega.service.api.init.StepEntrySyncService;
+import com.gepardec.mega.rest.api.TestResource;
+import com.gepardec.mega.service.api.EnterpriseSyncService;
+import com.gepardec.mega.service.api.ProjectSyncService;
+import com.gepardec.mega.service.api.StepEntrySyncService;
 import io.quarkus.arc.properties.IfBuildProperty;
 
 import javax.enterprise.context.RequestScoped;
@@ -19,7 +20,7 @@ import java.util.Optional;
 // The property 'mega.endpoint.test.enable' is set to 'true' during CI/CD builds.
 @RequestScoped
 @IfBuildProperty(name = "mega.endpoint.test.enable", stringValue = "true", enableIfMissing = true)
-public class TestResource implements TestResourceAPI {
+public class TestResourceImpl implements TestResource {
 
     @Inject
     StepEntrySyncService stepEntrySyncService;

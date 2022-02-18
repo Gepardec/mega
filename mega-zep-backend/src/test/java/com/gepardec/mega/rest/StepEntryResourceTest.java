@@ -5,8 +5,8 @@ import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.SecurityContext;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.UserContext;
-import com.gepardec.mega.rest.model.EmployeeStep;
-import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import com.gepardec.mega.rest.model.EmployeeStepDto;
+import com.gepardec.mega.service.api.StepEntryService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.http.ContentType;
@@ -60,10 +60,10 @@ class StepEntryResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        EmployeeStep employeeStep = createEmployeeStep();
+        EmployeeStepDto employeeStepDto = createEmployeeStep();
 
         final boolean updated = given().contentType(ContentType.JSON)
-                .body(employeeStep)
+                .body(employeeStepDto)
                 .put("/stepentry/close")
                 .as(Boolean.class);
 
@@ -83,13 +83,13 @@ class StepEntryResourceTest {
                 .build();
     }
 
-    private EmployeeStep createEmployeeStep() {
+    private EmployeeStepDto createEmployeeStep() {
         Employee employee = Employee.builder()
                 .userId("1")
                 .email("max.mustermann@gpeardec.com")
                 .build();
 
-        return EmployeeStep.builder()
+        return EmployeeStepDto.builder()
                 .employee(employee)
                 .stepId(1L)
                 .currentMonthYear("2020-01-01")

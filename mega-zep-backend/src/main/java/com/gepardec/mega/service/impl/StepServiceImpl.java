@@ -1,8 +1,8 @@
-package com.gepardec.mega.service.impl.step;
+package com.gepardec.mega.service.impl;
 
 import com.gepardec.mega.db.repository.StepRepository;
 import com.gepardec.mega.domain.model.Step;
-import com.gepardec.mega.service.api.step.StepService;
+import com.gepardec.mega.service.api.StepService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

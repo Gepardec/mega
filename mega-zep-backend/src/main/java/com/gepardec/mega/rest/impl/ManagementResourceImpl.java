@@ -1,4 +1,4 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.impl;
 
 import com.gepardec.mega.application.interceptor.RolesAllowed;
 import com.gepardec.mega.application.interceptor.Secured;
@@ -13,20 +13,20 @@ import com.gepardec.mega.domain.model.ProjectState;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.StepName;
 import com.gepardec.mega.domain.model.UserContext;
-import com.gepardec.mega.rest.model.ManagementEntry;
-import com.gepardec.mega.rest.model.PmProgress;
-import com.gepardec.mega.rest.model.ProjectManagementEntry;
-import com.gepardec.mega.service.api.comment.CommentService;
-import com.gepardec.mega.service.api.employee.EmployeeService;
-import com.gepardec.mega.service.api.projectentry.ProjectEntryService;
-import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import com.gepardec.mega.rest.api.ManagementResource;
+import com.gepardec.mega.rest.model.ManagementEntryDto;
+import com.gepardec.mega.rest.model.PmProgressDto;
+import com.gepardec.mega.rest.model.ProjectManagementEntryDto;
+import com.gepardec.mega.service.api.CommentService;
+import com.gepardec.mega.service.api.EmployeeService;
+import com.gepardec.mega.service.api.ProjectEntryService;
+import com.gepardec.mega.service.api.StepEntryService;
 import com.gepardec.mega.zep.ZepService;
 import de.provantis.zep.ProjektzeitType;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 @RequestScoped
 @Secured
 @RolesAllowed(value = {Role.PROJECT_LEAD, Role.OFFICE_MANAGEMENT})
-public class ManagementResource implements ManagementResourceAPI {
+public class ManagementResourceImpl implements ManagementResource {
 
     private static final String DATE_FORMAT_PATTERN = "YYYY-MM-dd";
 
@@ -67,11 +67,11 @@ public class ManagementResource implements ManagementResourceAPI {
     ZepService zepService;
 
     @Override
-    public List<ManagementEntry> getAllOfficeManagementEntries(Integer year, Integer month) {
+    public List<ManagementEntryDto> getAllOfficeManagementEntries(Integer year, Integer month) {
         LocalDate from = LocalDate.of(year, month, 1);
         LocalDate to = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
 
-        List<ManagementEntry> officeManagementEntries = new ArrayList<>();
+        List<ManagementEntryDto> officeManagementEntries = new ArrayList<>();
         List<Employee> activeEmployees = employeeService.getAllActiveEmployees();
 
         for (Employee empl : activeEmployees) {
@@ -80,11 +80,11 @@ public class ManagementResource implements ManagementResourceAPI {
             String entryDate = LocalDate.of(year, month, 1).minusMonths(1).format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN));
 
             List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(empl.email(), entryDate);
-            List<PmProgress> pmProgresses = new ArrayList<>();
+            List<PmProgressDto> pmProgressDtos = new ArrayList<>();
 
             allOwnedStepEntriesForPMProgress
-                    .forEach(stepEntry -> pmProgresses.add(
-                            PmProgress.builder()
+                    .forEach(stepEntry -> pmProgressDtos.add(
+                            PmProgressDto.builder()
                                     .project(stepEntry.getProject())
                                     .assigneeEmail(stepEntry.getAssignee().getEmail())
                                     .state(stepEntry.getState())
@@ -94,10 +94,10 @@ public class ManagementResource implements ManagementResourceAPI {
                                     .build()
                     ));
 
-            ManagementEntry newManagementEntry = createManagementEntryForEmployee(empl, stepEntries, from, to, pmProgresses);
+            ManagementEntryDto newManagementEntryDto = createManagementEntryForEmployee(empl, stepEntries, from, to, pmProgressDtos);
 
-            if (newManagementEntry != null) {
-                officeManagementEntries.add(newManagementEntry);
+            if (newManagementEntryDto != null) {
+                officeManagementEntries.add(newManagementEntryDto);
             }
 
         }
@@ -106,7 +106,7 @@ public class ManagementResource implements ManagementResourceAPI {
     }
 
     @Override
-    public List<ProjectManagementEntry> getAllProjectManagementEntries(Integer year, Integer month, boolean allProjects) {
+    public List<ProjectManagementEntryDto> getAllProjectManagementEntries(Integer year, Integer month, boolean allProjects) {
         if (userContext == null || userContext.user() == null) {
             throw new IllegalStateException("User context does not exist or user is null.");
         }
@@ -122,25 +122,25 @@ public class ManagementResource implements ManagementResourceAPI {
             projectEmployees = stepEntryService.getProjectEmployeesForPM(from, to, Objects.requireNonNull(userContext.user()).email());
         }
 
-        List<ProjectManagementEntry> projectManagementEntries = new ArrayList<>();
+        List<ProjectManagementEntryDto> projectManagementEntries = new ArrayList<>();
 
         Map<String, Employee> employees = createEmployeeCache();
 
         for (ProjectEmployees currentProject : projectEmployees) {
-            List<ManagementEntry> entries = createManagementEntriesForProject(currentProject, employees, from, to);
+            List<ManagementEntryDto> entries = createManagementEntriesForProject(currentProject, employees, from, to);
             List<ProjectEntry> projectEntries = projectEntryService.findByNameAndDate(currentProject.projectId(), from, to);
 
             if (!entries.isEmpty() && !projectEntries.isEmpty()) {
 
                 Duration billable = calculateProjectDuration(entries.stream()
-                        .map(ManagementEntry::billableTime)
+                        .map(ManagementEntryDto::billableTime)
                         .collect(Collectors.toList()));
 
                 Duration nonBillable = calculateProjectDuration(entries.stream()
-                        .map(ManagementEntry::nonBillableTime)
+                        .map(ManagementEntryDto::nonBillableTime)
                         .collect(Collectors.toList()));
 
-                projectManagementEntries.add(ProjectManagementEntry.builder()
+                projectManagementEntries.add(ProjectManagementEntryDto.builder()
                         .projectName(currentProject.projectId())
                         .controlProjectState(ProjectState.byName(getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_PROJECT).getState().name()))
                         .controlBillingState(ProjectState.byName((getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_BILLING).getState().name())))
@@ -184,12 +184,12 @@ public class ManagementResource implements ManagementResourceAPI {
                 .collect(Collectors.toMap(Employee::userId, employee -> employee));
     }
 
-    private List<ManagementEntry> createManagementEntriesForProject(ProjectEmployees projectEmployees, Map<String, Employee> employees, LocalDate from, LocalDate to) {
+    private List<ManagementEntryDto> createManagementEntriesForProject(ProjectEmployees projectEmployees, Map<String, Employee> employees, LocalDate from, LocalDate to) {
         if (userContext == null || userContext.user() == null) {
             throw new IllegalStateException("User context does not exist or user is null.");
         }
 
-        List<ManagementEntry> entries = new ArrayList<>();
+        List<ManagementEntryDto> entries = new ArrayList<>();
 
         for (String userId : projectEmployees.employees()) {
 
@@ -199,7 +199,7 @@ public class ManagementResource implements ManagementResourceAPI {
                         empl, projectEmployees.projectId(), Objects.requireNonNull(userContext.user()).email(), from, to
                 );
 
-                ManagementEntry entry = createManagementEntryForEmployee(empl, projectEmployees.projectId(), stepEntries, from, to, null);
+                ManagementEntryDto entry = createManagementEntryForEmployee(empl, projectEmployees.projectId(), stepEntries, from, to, null);
 
                 if (entry != null) {
                     entries.add(entry);
@@ -210,23 +210,23 @@ public class ManagementResource implements ManagementResourceAPI {
         return entries;
     }
 
-    private ManagementEntry createManagementEntryForEmployee(Employee employee, List<StepEntry> stepEntries, LocalDate from, LocalDate to, List<PmProgress> pmProgresses) {
-        return createManagementEntryForEmployee(employee, null, stepEntries, from, to, pmProgresses);
+    private ManagementEntryDto createManagementEntryForEmployee(Employee employee, List<StepEntry> stepEntries, LocalDate from, LocalDate to, List<PmProgressDto> pmProgressDtos) {
+        return createManagementEntryForEmployee(employee, null, stepEntries, from, to, pmProgressDtos);
     }
 
-    private ManagementEntry createManagementEntryForEmployee(Employee employee, String projectId, List<StepEntry> stepEntries, LocalDate from, LocalDate to, List<PmProgress> pmProgresses) {
+    private ManagementEntryDto createManagementEntryForEmployee(Employee employee, String projectId, List<StepEntry> stepEntries, LocalDate from, LocalDate to, List<PmProgressDto> pmProgressDtos) {
         FinishedAndTotalComments finishedAndTotalComments = commentService.cntFinishedAndTotalCommentsForEmployee(employee, from, to);
 
         List<ProjektzeitType> projektzeitTypes = zepService.getProjectTimesForEmployeePerProject(projectId, from);
 
         if (!stepEntries.isEmpty()) {
-            return ManagementEntry.builder()
+            return ManagementEntryDto.builder()
                     .employee(employee)
                     .customerCheckState(extractCustomerCheckState(stepEntries))
                     .employeeCheckState(extractEmployeeCheckState(stepEntries))
                     .internalCheckState(extractInternalCheckState(stepEntries))
                     .projectCheckState(extractStateForProject(stepEntries, projectId))
-                    .employeeProgresses(pmProgresses)
+                    .employeeProgresses(pmProgressDtos)
                     .finishedComments(finishedAndTotalComments.finishedComments())
                     .totalComments(finishedAndTotalComments.totalComments())
                     .entryDate(stepEntries.get(0).getDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN)))

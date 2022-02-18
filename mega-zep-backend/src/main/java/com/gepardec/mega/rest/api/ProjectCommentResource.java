@@ -1,4 +1,4 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.api;
 
 import com.gepardec.mega.rest.model.ProjectCommentDto;
 
@@ -13,7 +13,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 @Path("/projectcomments")
-public interface ProjectCommentResourceAPI {
+public interface ProjectCommentResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     ProjectCommentDto get(

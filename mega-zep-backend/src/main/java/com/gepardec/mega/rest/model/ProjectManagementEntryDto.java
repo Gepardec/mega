@@ -21,7 +21,7 @@ import java.util.List;
 @Accessors(fluent = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Jacksonized
-public class ProjectManagementEntry {
+public class ProjectManagementEntryDto {
     @JsonProperty
     private final String projectName;
 
@@ -42,7 +42,7 @@ public class ProjectManagementEntry {
     private final Boolean presetControlBillingState;
 
     @JsonProperty
-    private final List<ManagementEntry> entries;
+    private final List<ManagementEntryDto> entries;
 
     @JsonProperty
     private final Duration aggregatedBillableWorkTimeInSeconds;

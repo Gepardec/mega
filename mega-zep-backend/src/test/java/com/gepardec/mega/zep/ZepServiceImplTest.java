@@ -2,7 +2,7 @@ package com.gepardec.mega.zep;
 
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
-import com.gepardec.mega.service.impl.employee.EmployeeMapper;
+import com.gepardec.mega.service.mapper.EmployeeMapper;
 import com.gepardec.mega.zep.mapper.ProjectEntryMapper;
 import de.provantis.zep.MitarbeiterListeType;
 import de.provantis.zep.MitarbeiterType;

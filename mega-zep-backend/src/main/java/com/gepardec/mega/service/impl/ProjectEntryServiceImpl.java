@@ -1,12 +1,12 @@
-package com.gepardec.mega.service.impl.projectentry;
+package com.gepardec.mega.service.impl;
 
 import com.gepardec.mega.db.entity.common.State;
 import com.gepardec.mega.db.entity.project.ProjectEntry;
 import com.gepardec.mega.db.repository.ProjectEntryRepository;
 import com.gepardec.mega.domain.model.ProjectState;
 import com.gepardec.mega.domain.model.ProjectStep;
-import com.gepardec.mega.rest.model.ProjectEntryDTO;
-import com.gepardec.mega.service.api.projectentry.ProjectEntryService;
+import com.gepardec.mega.rest.model.ProjectEntryDto;
+import com.gepardec.mega.service.api.ProjectEntryService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -26,7 +26,7 @@ public class ProjectEntryServiceImpl implements ProjectEntryService {
     }
 
     @Override
-    public boolean update(ProjectEntryDTO projectEntry) {
+    public boolean update(ProjectEntryDto projectEntry) {
         ProjectEntry projectEntity = findByNameAndEntryDateAndStep(projectEntry.projectName(), LocalDate.parse(projectEntry.currentMonthYear()), projectEntry.step());
         projectEntity.setState(mapProjectStateFromModelToDatabase(projectEntry.state()));
         projectEntity.setPreset(projectEntry.preset());

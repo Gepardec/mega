@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 @Accessors(fluent = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Jacksonized
-public class PmProgress {
+public class PmProgressDto {
     @JsonProperty
     @Nullable
     private final String project;

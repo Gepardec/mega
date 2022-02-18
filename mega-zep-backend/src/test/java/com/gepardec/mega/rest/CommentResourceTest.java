@@ -7,8 +7,10 @@ import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.SecurityContext;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.UserContext;
-import com.gepardec.mega.rest.model.NewCommentEntry;
-import com.gepardec.mega.service.api.comment.CommentService;
+import com.gepardec.mega.rest.mapper.MapperManager;
+import com.gepardec.mega.rest.model.CommentDto;
+import com.gepardec.mega.rest.model.NewCommentEntryDto;
+import com.gepardec.mega.service.api.CommentService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.common.mapper.TypeRef;
@@ -17,6 +19,7 @@ import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -29,14 +32,17 @@ import static org.mockito.Mockito.when;
 @QuarkusTest
 class CommentResourceTest {
 
-    @InjectMock
-    private UserContext userContext;
+    @Inject
+    MapperManager mapper;
 
     @InjectMock
-    private SecurityContext securityContext;
+    UserContext userContext;
 
     @InjectMock
-    private CommentService commentService;
+    SecurityContext securityContext;
+
+    @InjectMock
+    CommentService commentService;
 
     @Test
     void setCommentStatusDone_whenPOST_thenReturnsStatusMETHOD_NOT_ALLOWED() {
@@ -145,7 +151,7 @@ class CommentResourceTest {
         when(commentService.findCommentsForEmployee(ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(List.of(comment));
 
-        List<Comment> comments = given().contentType(ContentType.JSON)
+        List<CommentDto> comments = given().contentType(ContentType.JSON)
                 .queryParam("email", "no-reply@gmx.at")
                 .queryParam("date", "2020-10-01")
                 .get("/comments/getallcommentsforemployee")
@@ -153,7 +159,7 @@ class CommentResourceTest {
                 });
 
         assertThat(comments).hasSize(1);
-        assertThat(comments.get(0)).isEqualTo(comment);
+        assertThat(comments.get(0)).isEqualTo(mapper.map(comment, CommentDto.class));
     }
 
     @Test
@@ -190,20 +196,20 @@ class CommentResourceTest {
         )).thenReturn(Comment.builder().message("Pausen eintragen!").build());
 
         Employee employee = Employee.builder().build();
-        NewCommentEntry newCommentEntry = NewCommentEntry.builder()
+        NewCommentEntryDto newCommentEntryDto = NewCommentEntryDto.builder()
                 .comment("Pausen eintragen!")
                 .employee(employee).stepId(2L)
                 .assigneeEmail("no-reply@gepardec.com")
                 .currentMonthYear("2020-10-01")
                 .project("")
                 .build();
-        Comment createdComment = given().contentType(ContentType.JSON)
-                .body(newCommentEntry)
+        CommentDto createdComment = given().contentType(ContentType.JSON)
+                .body(newCommentEntryDto)
                 .post("/comments")
-                .as(Comment.class);
+                .as(CommentDto.class);
 
         assertThat(createdComment).isNotNull();
-        assertThat(createdComment.message()).isEqualTo(newCommentEntry.comment());
+        assertThat(createdComment.getMessage()).isEqualTo(newCommentEntryDto.comment());
     }
 
     @Test
@@ -264,12 +270,12 @@ class CommentResourceTest {
         when(commentService.updateComment(ArgumentMatchers.anyLong(), ArgumentMatchers.anyString()))
                 .thenReturn(comment);
 
-        Comment updatedComment = given().contentType(ContentType.JSON)
+        CommentDto updatedComment = given().contentType(ContentType.JSON)
                 .body(comment)
                 .put("/comments")
-                .as(Comment.class);
+                .as(CommentDto.class);
 
-        assertThat(updatedComment).isEqualTo(comment);
+        assertThat(updatedComment).isEqualTo(mapper.map(comment, CommentDto.class));
     }
 
     private com.gepardec.mega.domain.model.User createUserForRole(final Role role) {

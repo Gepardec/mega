@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gepardec.mega.db.entity.employee.EmployeeState;
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.rest.model.PmProgress;
+import com.gepardec.mega.rest.model.PmProgressDto;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -48,7 +48,7 @@ public class MonthlyReport {
     private final boolean isAssigned;
 
     @JsonProperty
-    private final List<PmProgress> employeeProgresses;
+    private final List<PmProgressDto> employeeProgresses;
 
     @JsonProperty
     private final boolean otherChecksDone;

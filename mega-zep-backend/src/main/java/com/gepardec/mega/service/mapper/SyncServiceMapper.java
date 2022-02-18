@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.impl.init;
+package com.gepardec.mega.service.mapper;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
 import com.gepardec.mega.db.entity.employee.User;

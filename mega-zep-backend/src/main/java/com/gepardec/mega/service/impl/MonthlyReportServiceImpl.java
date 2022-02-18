@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.impl.monthlyreport;
+package com.gepardec.mega.service.impl;
 
 import com.gepardec.mega.db.entity.employee.EmployeeState;
 import com.gepardec.mega.db.entity.employee.StepEntry;
@@ -10,10 +10,11 @@ import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntryWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.utils.DateUtils;
-import com.gepardec.mega.rest.model.PmProgress;
-import com.gepardec.mega.service.api.comment.CommentService;
-import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
-import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import com.gepardec.mega.rest.model.PmProgressDto;
+import com.gepardec.mega.service.api.CommentService;
+import com.gepardec.mega.service.api.MonthlyReportService;
+import com.gepardec.mega.service.api.StepEntryService;
+import com.gepardec.mega.service.helper.WarningCalculator;
 import com.gepardec.mega.zep.ZepService;
 import de.provantis.zep.FehlzeitType;
 import de.provantis.zep.ProjektzeitType;
@@ -90,7 +91,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         timeWarnings.sort(Comparator.comparing(ProjectEntryWarning::getDate));
 
         final List<Comment> comments = new ArrayList<>();
-        List<PmProgress> pmProgresses = new ArrayList<>();
+        List<PmProgressDto> pmProgressDtos = new ArrayList<>();
         if (employee != null) {
 
             if (checkReleaseDate(employee.releaseDate())) {
@@ -101,8 +102,8 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
 
             final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(employee.email(), employee.releaseDate());
             allOwnedStepEntriesForPMProgress
-                    .forEach(stepEntry -> pmProgresses.add(
-                            PmProgress.builder()
+                    .forEach(stepEntry -> pmProgressDtos.add(
+                            PmProgressDto.builder()
                                     .project(stepEntry.getProject())
                                     .assigneeEmail(stepEntry.getAssignee().getEmail())
                                     .firstname(stepEntry.getAssignee().getFirstname())
@@ -125,7 +126,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                 .comments(comments)
                 .employeeCheckState(employeeCheckState.orElse(EmployeeState.OPEN))
                 .isAssigned(isAssigned)
-                .employeeProgresses(pmProgresses)
+                .employeeProgresses(pmProgressDtos)
                 .otherChecksDone(otherChecksDone)
                 .billableTime(zepService.getBillableTimesForEmployee(billableEntries, employee, true))
                 .totalWorkingTime(zepService.getTotalWorkingTimeForEmployee(billableEntries, employee))

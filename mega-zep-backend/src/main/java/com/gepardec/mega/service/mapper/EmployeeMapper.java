@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.impl.employee;
+package com.gepardec.mega.service.mapper;
 
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.utils.DateUtils;

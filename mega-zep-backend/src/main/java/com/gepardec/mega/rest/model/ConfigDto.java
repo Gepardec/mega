@@ -16,7 +16,7 @@ import lombok.extern.jackson.Jacksonized;
 @Accessors(fluent = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Jacksonized
-public class Config {
+public class ConfigDto {
     @JsonProperty
     private final String excelUrl;
 

@@ -1,9 +1,9 @@
-package com.gepardec.mega.service.impl.employee;
+package com.gepardec.mega.service.impl;
 
 import com.gepardec.mega.db.entity.employee.User;
 import com.gepardec.mega.db.repository.UserRepository;
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.service.api.employee.EmployeeService;
+import com.gepardec.mega.service.api.EmployeeService;
 import com.gepardec.mega.zep.ZepService;
 import com.gepardec.mega.zep.ZepServiceException;
 import com.google.common.collect.Iterables;

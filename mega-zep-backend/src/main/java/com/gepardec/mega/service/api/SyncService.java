@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.api.init;
+package com.gepardec.mega.service.api;
 
 /**
  * @author Thomas Herzog <herzog.thomas81@gmail.com>

@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.impl.project;
+package com.gepardec.mega.service.impl;
 
 import com.gepardec.mega.db.entity.project.Project;
 import com.gepardec.mega.db.entity.project.ProjectComment;
@@ -7,7 +7,7 @@ import com.gepardec.mega.db.repository.ProjectRepository;
 import com.gepardec.mega.domain.mapper.ProjectCommentMapper;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.rest.model.ProjectCommentDto;
-import com.gepardec.mega.service.api.project.ProjectCommentService;
+import com.gepardec.mega.service.api.ProjectCommentService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.api.comment;
+package com.gepardec.mega.service.api;
 
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;

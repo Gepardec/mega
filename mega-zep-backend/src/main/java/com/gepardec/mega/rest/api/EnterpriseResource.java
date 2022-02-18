@@ -1,4 +1,4 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.api;
 
 import com.gepardec.mega.rest.model.EnterpriseEntryDto;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
@@ -12,7 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/enterprise")
-public interface EnterpriseResourceAPI {
+public interface EnterpriseResource {
     @GET
     @Path("/entriesformonthyear/{year}/{month}")
     @Produces(MediaType.APPLICATION_JSON)

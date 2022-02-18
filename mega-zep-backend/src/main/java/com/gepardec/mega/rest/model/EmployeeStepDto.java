@@ -17,7 +17,7 @@ import lombok.extern.jackson.Jacksonized;
 @Accessors(fluent = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Jacksonized
-public class EmployeeStep {
+public class EmployeeStepDto {
     @JsonProperty
     private final Long stepId;
 

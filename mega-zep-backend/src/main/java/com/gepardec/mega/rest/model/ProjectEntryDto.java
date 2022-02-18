@@ -19,7 +19,7 @@ import lombok.extern.jackson.Jacksonized;
 @Accessors(fluent = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Jacksonized
-public class ProjectEntryDTO {
+public class ProjectEntryDto {
     @JsonProperty
     private final ProjectState state;
 

@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.api.monthlyreport;
+package com.gepardec.mega.service.api;
 
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;

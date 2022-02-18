@@ -1,46 +1,33 @@
-package com.gepardec.mega.domain.model;
+package com.gepardec.mega.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gepardec.mega.db.entity.employee.EmployeeState;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
+import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
 
-import javax.annotation.Nullable;
-
-@Builder
-@Getter
-@ToString
-@EqualsAndHashCode
-@Accessors(fluent = true)
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Jacksonized
-public class Comment {
-    @JsonProperty
-    @Nullable
-    private final Long id;
+@Builder
+@Data
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class CommentDto {
 
     @JsonProperty
-    @Nullable
-    private final String message;
+    private Long id;
 
     @JsonProperty
-    @Nullable
-    private final String authorEmail;
+    private String message;
 
     @JsonProperty
-    @Nullable
-    private final String authorName;
+    private String authorEmail;
 
     @JsonProperty
-    @Nullable
-    private final String updateDate;
+    private String authorName;
 
     @JsonProperty
-    @Nullable
-    private final EmployeeState state;
+    private String updateDate;
+
+    @JsonProperty
+    private EmployeeState state;
 }

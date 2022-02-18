@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.impl.init;
+package com.gepardec.mega.service.impl;
 
 import com.gepardec.mega.db.entity.common.State;
 import com.gepardec.mega.db.entity.project.ProjectEntry;
@@ -6,10 +6,10 @@ import com.gepardec.mega.db.entity.project.ProjectStep;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.ProjectFilter;
 import com.gepardec.mega.domain.model.User;
-import com.gepardec.mega.service.api.init.ProjectSyncService;
-import com.gepardec.mega.service.api.project.ProjectService;
-import com.gepardec.mega.service.api.projectentry.ProjectEntryService;
-import com.gepardec.mega.service.api.user.UserService;
+import com.gepardec.mega.service.api.ProjectSyncService;
+import com.gepardec.mega.service.api.ProjectService;
+import com.gepardec.mega.service.api.ProjectEntryService;
+import com.gepardec.mega.service.api.UserService;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 

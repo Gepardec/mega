@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.api.step;
+package com.gepardec.mega.service.api;
 
 import com.gepardec.mega.domain.model.Step;
 

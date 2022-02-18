@@ -14,13 +14,13 @@ import com.gepardec.mega.domain.model.SecurityContext;
 import com.gepardec.mega.domain.model.StepName;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.UserContext;
-import com.gepardec.mega.rest.model.ManagementEntry;
-import com.gepardec.mega.rest.model.ProjectManagementEntry;
-import com.gepardec.mega.service.api.comment.CommentService;
-import com.gepardec.mega.service.api.employee.EmployeeService;
-import com.gepardec.mega.service.api.project.ProjectService;
-import com.gepardec.mega.service.api.projectentry.ProjectEntryService;
-import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import com.gepardec.mega.rest.model.ManagementEntryDto;
+import com.gepardec.mega.rest.model.ProjectManagementEntryDto;
+import com.gepardec.mega.service.api.CommentService;
+import com.gepardec.mega.service.api.EmployeeService;
+import com.gepardec.mega.service.api.ProjectService;
+import com.gepardec.mega.service.api.ProjectEntryService;
+import com.gepardec.mega.service.api.StepEntryService;
 import com.gepardec.mega.zep.ZepService;
 import de.provantis.zep.ProjektzeitType;
 import io.quarkus.test.junit.QuarkusTest;
@@ -113,13 +113,13 @@ class ManagementResourceTest {
                 ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class)
         )).thenReturn(Collections.emptyList());
 
-        List<ManagementEntry> result = given().contentType(ContentType.JSON)
+        List<ManagementEntryDto> result = given().contentType(ContentType.JSON)
                 .get("/management/officemanagemententries/2020/01")
                 .as(new TypeRef<>() {
                 });
 
         assertThat(result).hasSize(1);
-        ManagementEntry entry = result.get(0);
+        ManagementEntryDto entry = result.get(0);
         assertThat(entry.customerCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.DONE);
         assertThat(entry.internalCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
         assertThat(entry.employeeCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
@@ -152,7 +152,7 @@ class ManagementResourceTest {
         when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(entries);
 
-        List<ManagementEntry> result = given().contentType(ContentType.JSON)
+        List<ManagementEntryDto> result = given().contentType(ContentType.JSON)
                 .get("/management/officemanagemententries/2020/10")
                 .as(new TypeRef<>() {
                 });
@@ -176,7 +176,7 @@ class ManagementResourceTest {
         when(employeeService.getAllActiveEmployees())
                 .thenReturn(List.of());
 
-        List<ManagementEntry> result = given().contentType(ContentType.JSON)
+        List<ManagementEntryDto> result = given().contentType(ContentType.JSON)
                 .get("/management/officemanagemententries/2020/11")
                 .as(new TypeRef<>() {
                 });
@@ -248,13 +248,13 @@ class ManagementResourceTest {
         when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class))).thenReturn("02:00");
         when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class), ArgumentMatchers.anyBoolean())).thenReturn("02:00");
 
-        List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
+        List<ProjectManagementEntryDto> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/10")
                 .as(new TypeRef<>() {
                 });
 
         assertThat(result).hasSize(2);
-        Optional<ProjectManagementEntry> projectRgkkcc = result.stream()
+        Optional<ProjectManagementEntryDto> projectRgkkcc = result.stream()
                 .filter(p -> rgkkcc.projectId().equalsIgnoreCase(p.projectName()))
                 .findFirst();
 
@@ -265,13 +265,13 @@ class ManagementResourceTest {
         assertThat(projectRgkkcc.get().presetControlProjectState()).isTrue();
         assertThat(projectRgkkcc.get().presetControlBillingState()).isFalse();
 
-        List<ManagementEntry> rgkkccEntries = projectRgkkcc.get().entries();
-        Optional<ManagementEntry> entrymmustermann = rgkkccEntries.stream()
+        List<ManagementEntryDto> rgkkccEntries = projectRgkkcc.get().entries();
+        Optional<ManagementEntryDto> entrymmustermann = rgkkccEntries.stream()
                 .filter(m -> employee1.userId().equalsIgnoreCase(m.employee().userId()))
                 .findFirst();
         // assert management entry
         assertThat(entrymmustermann).isPresent();
-        ManagementEntry entry = entrymmustermann.get();
+        ManagementEntryDto entry = entrymmustermann.get();
         assertThat(entry.customerCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.DONE);
         assertThat(entry.internalCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
         assertThat(entry.employeeCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
@@ -331,13 +331,13 @@ class ManagementResourceTest {
         when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class))).thenReturn("01:00");
         when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class), ArgumentMatchers.eq(true))).thenReturn("02:00");
 
-        List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
+        List<ProjectManagementEntryDto> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/09")
                 .as(new TypeRef<>() {
                 });
 
         assertThat(result).hasSize(2);
-        Optional<ProjectManagementEntry> projectRgkkcc = result.stream()
+        Optional<ProjectManagementEntryDto> projectRgkkcc = result.stream()
                 .filter(p -> rgkkcc.projectId().equalsIgnoreCase(p.projectName()))
                 .findFirst();
 
@@ -348,13 +348,13 @@ class ManagementResourceTest {
         assertThat(projectRgkkcc.get().presetControlProjectState()).isTrue();
         assertThat(projectRgkkcc.get().presetControlBillingState()).isFalse();
 
-        List<ManagementEntry> rgkkccEntries = projectRgkkcc.get().entries();
-        Optional<ManagementEntry> entrymmustermann = rgkkccEntries.stream()
+        List<ManagementEntryDto> rgkkccEntries = projectRgkkcc.get().entries();
+        Optional<ManagementEntryDto> entrymmustermann = rgkkccEntries.stream()
                 .filter(m -> employee1.userId().equalsIgnoreCase(m.employee().userId()))
                 .findFirst();
         // assert management entry
         assertThat(entrymmustermann).isPresent();
-        ManagementEntry entry = entrymmustermann.get();
+        ManagementEntryDto entry = entrymmustermann.get();
         assertThat(entry.customerCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.DONE);
         assertThat(entry.internalCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
         assertThat(entry.employeeCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
@@ -418,13 +418,13 @@ class ManagementResourceTest {
         when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class))).thenReturn("00:00");
         when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class), ArgumentMatchers.eq(true))).thenReturn("00:00");
 
-        List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
+        List<ProjectManagementEntryDto> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/09")
                 .as(new TypeRef<>() {
                 });
 
         assertThat(result).hasSize(2);
-        Optional<ProjectManagementEntry> projectRgkkcc = result.stream()
+        Optional<ProjectManagementEntryDto> projectRgkkcc = result.stream()
                 .filter(p -> rgkkcc.projectId().equalsIgnoreCase(p.projectName()))
                 .findFirst();
 
@@ -435,13 +435,13 @@ class ManagementResourceTest {
         assertThat(projectRgkkcc.get().presetControlProjectState()).isTrue();
         assertThat(projectRgkkcc.get().presetControlBillingState()).isFalse();
 
-        List<ManagementEntry> rgkkccEntries = projectRgkkcc.get().entries();
-        Optional<ManagementEntry> entrymmustermann = rgkkccEntries.stream()
+        List<ManagementEntryDto> rgkkccEntries = projectRgkkcc.get().entries();
+        Optional<ManagementEntryDto> entrymmustermann = rgkkccEntries.stream()
                 .filter(m -> employee1.userId().equalsIgnoreCase(m.employee().userId()))
                 .findFirst();
         // assert management entry
         assertThat(entrymmustermann).isPresent();
-        ManagementEntry entry = entrymmustermann.get();
+        ManagementEntryDto entry = entrymmustermann.get();
         assertThat(entry.customerCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.DONE);
         assertThat(entry.internalCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
         assertThat(entry.employeeCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
@@ -502,7 +502,7 @@ class ManagementResourceTest {
                 ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class)
         )).thenReturn(getProjectTimeTypeList());
 
-        List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
+        List<ProjectManagementEntryDto> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/09")
                 .as(new TypeRef<>() {
                 });
@@ -518,7 +518,7 @@ class ManagementResourceTest {
         when(securityContext.email()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
-        List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
+        List<ProjectManagementEntryDto> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/11")
                 .as(new TypeRef<>() {
                 });
@@ -536,7 +536,7 @@ class ManagementResourceTest {
         when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
                 .thenReturn(List.of(rgkkcc));
 
-        List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
+        List<ProjectManagementEntryDto> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/11")
                 .as(new TypeRef<>() {
                 });
@@ -561,7 +561,7 @@ class ManagementResourceTest {
         when(stepEntryService.findAllStepEntriesForEmployee(ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(List.of());
 
-        List<ProjectManagementEntry> result = given().contentType(ContentType.JSON)
+        List<ProjectManagementEntryDto> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/11")
                 .as(new TypeRef<>() {
                 });

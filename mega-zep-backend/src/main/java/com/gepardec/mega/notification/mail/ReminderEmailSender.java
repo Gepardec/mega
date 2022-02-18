@@ -6,7 +6,7 @@ import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.notification.mail.dates.BusinessDayCalculator;
-import com.gepardec.mega.service.api.user.UserService;
+import com.gepardec.mega.service.api.UserService;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;

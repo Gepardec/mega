@@ -7,7 +7,7 @@ import com.gepardec.mega.db.repository.StepEntryRepository;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.ProjectEmployees;
 import com.gepardec.mega.domain.utils.DateUtils;
-import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import com.gepardec.mega.service.api.StepEntryService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Test;

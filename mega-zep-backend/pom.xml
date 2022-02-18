@@ -34,6 +34,7 @@
         <lombok.version>1.18.22</lombok.version>
         <jollyday.version>0.5.10</jollyday.version>
         <assertj.version>3.21.0</assertj.version>
+        <orika-core.version>1.5.4</orika-core.version>
         <!-- application info -->
         <!-- !!! IMPORTANT !!!! -->
         <!-- remove -SNAPSHOT in release-branch but keep it in develop branch -->
@@ -199,6 +200,11 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ma.glasnost.orika</groupId>
+            <artifactId>orika-core</artifactId>
+            <version>${orika-core.version}</version>
         </dependency>
     </dependencies>
     <build>

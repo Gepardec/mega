@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.impl;
+package com.gepardec.mega.service.helper;
 
 import com.gepardec.mega.domain.calculation.WarningCalculationStrategy;
 import com.gepardec.mega.domain.calculation.journey.InvalidJourneyCalculator;

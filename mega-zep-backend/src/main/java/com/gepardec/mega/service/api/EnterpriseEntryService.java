@@ -1,4 +1,4 @@
-package com.gepardec.mega.service.api.enterpriseentry;
+package com.gepardec.mega.service.api;
 
 import com.gepardec.mega.rest.model.EnterpriseEntryDto;
 

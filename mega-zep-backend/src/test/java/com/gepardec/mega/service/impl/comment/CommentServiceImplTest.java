@@ -12,8 +12,8 @@ import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.notification.mail.Mail;
 import com.gepardec.mega.notification.mail.MailParameter;
 import com.gepardec.mega.notification.mail.MailSender;
-import com.gepardec.mega.service.api.comment.CommentService;
-import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import com.gepardec.mega.service.api.CommentService;
+import com.gepardec.mega.service.api.StepEntryService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Test;
@@ -65,7 +65,7 @@ class CommentServiceImplTest {
                 employee, fromDate, toDate
         );
         assertThat(domainComments).hasSize(1);
-        assertThat(domainComments.get(0).id()).isEqualTo(1);
+        assertThat(domainComments.get(0).getId()).isEqualTo(1);
     }
 
     @Test
@@ -222,9 +222,9 @@ class CommentServiceImplTest {
         );
 
         assertThat(createdComment).isNotNull();
-        assertThat(createdComment.message()).isEqualTo("My new comment!");
-        assertThat(createdComment.authorEmail()).isEqualTo(stepEntry.getAssignee().getEmail());
-        assertThat(createdComment.state()).isEqualTo(EmployeeState.OPEN);
+        assertThat(createdComment.getMessage()).isEqualTo("My new comment!");
+        assertThat(createdComment.getAuthorEmail()).isEqualTo(stepEntry.getAssignee().getEmail());
+        assertThat(createdComment.getState()).isEqualTo(EmployeeState.OPEN);
     }
 
     @Test
@@ -244,7 +244,7 @@ class CommentServiceImplTest {
 
         com.gepardec.mega.domain.model.Comment updatedComment = commentService.updateComment(1L, "Updated message");
         assertThat(updatedComment).isNotNull();
-        assertThat(updatedComment.message()).isEqualTo("Updated message");
+        assertThat(updatedComment.getMessage()).isEqualTo("Updated message");
     }
 
     private Comment createComment(Long id, EmployeeState employeeState) {

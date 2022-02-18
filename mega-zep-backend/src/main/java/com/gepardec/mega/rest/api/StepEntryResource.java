@@ -1,7 +1,7 @@
-package com.gepardec.mega.rest;
+package com.gepardec.mega.rest.api;
 
-import com.gepardec.mega.rest.model.EmployeeStep;
-import com.gepardec.mega.rest.model.ProjectStep;
+import com.gepardec.mega.rest.model.EmployeeStepDto;
+import com.gepardec.mega.rest.model.ProjectStepDto;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
@@ -11,22 +11,22 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/stepentry")
-public interface StepEntryResourceAPI {
+public interface StepEntryResource {
     @PUT
     @Path("/close")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    boolean close(@NotNull(message = "{stepEntryResource.parameter.notNull}") EmployeeStep employeeStep);
+    boolean close(@NotNull(message = "{stepEntryResource.parameter.notNull}") EmployeeStepDto employeeStepDto);
 
     @PUT
     @Path("/closeforoffice")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    boolean closeForOffice(@NotNull(message = "{stepEntryResource.parameter.notNull}") EmployeeStep employeeStep);
+    boolean closeForOffice(@NotNull(message = "{stepEntryResource.parameter.notNull}") EmployeeStepDto employeeStepDto);
 
     @PUT
     @Path("/closeforproject")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    boolean close(@NotNull(message = "{stepEntryResource.parameter.notNull}") ProjectStep projectStep);
+    boolean close(@NotNull(message = "{stepEntryResource.parameter.notNull}") ProjectStepDto projectStepDto);
 }
