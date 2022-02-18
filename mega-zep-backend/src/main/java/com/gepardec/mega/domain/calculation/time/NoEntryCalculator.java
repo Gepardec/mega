@@ -40,20 +40,22 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
         List<LocalDate> businessDays = getBusinessDaysOfMonth(projectEntries.get(0).getDate().getYear(), projectEntries.get(0).getDate().getMonth().getValue());
         List<LocalDate> compensatoryDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.COMPENSATORY_DAYS.getType(), absenceEntries);
         List<LocalDate> vacationDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.VACATION_DAYS.getType(), absenceEntries);
+        List<LocalDate> sicknessDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.SICKNESS_DAYS.getType(), absenceEntries);
 
         businessDays.removeAll(compensatoryDays);
         businessDays.removeAll(vacationDays);
+        businessDays.removeAll(sicknessDays);
 
-        projectEntries.forEach(projectTimeEntry -> businessDays.forEach(date -> {
-            if(date.equals(projectTimeEntry.getDate())) {
-                datesWithBookings.add(date);
-            }
-        }));
+        projectEntries.forEach(projectTimeEntry ->
+                businessDays.forEach(date -> {
+                    if (date.equals(projectTimeEntry.getDate())) {
+                        datesWithBookings.add(date);
+                    }
+                })
+        );
 
         businessDays.removeAll(datesWithBookings);
-        businessDays.forEach(date -> {
-            warnings.add(createTimeWarning(date));
-        });
+        businessDays.forEach(date -> warnings.add(createTimeWarning(date)));
 
         return new ArrayList<>(warnings);
     }
@@ -91,7 +93,7 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
     private List<LocalDate> filterAbsenceTypesAndCompileLocalDateList(String type, List<FehlzeitType> absenceEntries) {
         List<LocalDate> compensatoryDays = new ArrayList<>();
 
-        if(!absenceEntries.isEmpty()) {
+        if (!absenceEntries.isEmpty()) {
             absenceEntries.stream()
                     .filter(fzt -> fzt.getFehlgrund().equals(type))
                     .forEach(fzt -> {

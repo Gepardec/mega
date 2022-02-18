@@ -14,6 +14,7 @@ quarkus:
       ~: true
       access-control-allow-credentials: true
     root-path: "/"
+    non-application-root-path: "/"
     port: 8080
 
   log:

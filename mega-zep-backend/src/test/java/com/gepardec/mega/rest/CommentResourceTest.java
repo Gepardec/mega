@@ -233,7 +233,7 @@ class CommentResourceTest {
                 .delete("/comments/1")
                 .as(Boolean.class);
 
-        assertThat(Boolean.TRUE).isEqualTo(result);
+        assertThat(result).isEqualTo(Boolean.TRUE);
     }
 
     @Test

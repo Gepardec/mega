@@ -5,13 +5,12 @@ import com.gepardec.mega.domain.model.ProjectFilter;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.zep.ZepService;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -20,13 +19,13 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 class ProjectServiceImplTest {
 
-    @Mock
+    @InjectMock
     ZepService zepService;
 
-    @InjectMocks
+    @Inject
     ProjectServiceImpl projectService;
 
     private Project.Builder projectFor(final String id) {
@@ -95,12 +94,12 @@ class ProjectServiceImplTest {
         when(zepService.getProjectsForMonthYear(Mockito.any())).thenReturn(List.of(
                 projectFor("1")
                         .leads(List.of(User.builder()
-                                .dbId(1)
-                                .userId("userId")
-                                .firstname("Gepard")
-                                .lastname("Gepardec")
-                                .email(String.format("%s%s.%s@gepardec.com", "Gepard", 1, "Gepardec"))
-                                .roles(Set.of(Role.EMPLOYEE)).build())
+                                        .dbId(1)
+                                        .userId("userId")
+                                        .firstname("Gepard")
+                                        .lastname("Gepardec")
+                                        .email(String.format("%s%s.%s@gepardec.com", "Gepard", 1, "Gepardec"))
+                                        .roles(Set.of(Role.EMPLOYEE)).build())
                                 .stream().map(User::userId).collect(Collectors.toList()))
                         .employees(List.of())
                         .categories(List.of())

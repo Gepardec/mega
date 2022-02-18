@@ -48,6 +48,7 @@ class InsufficientBreakTimeCalculatorTest {
                 .vehicle(Vehicle.OTHER_INACTIVE)
                 .build();
     }
+
     private JourneyTimeEntry journeyTimeEntryFor(int startHour, int endHour, Vehicle vehicle) {
         return journeyTimeEntryFor(startHour, 0, endHour, 0, vehicle);
     }
@@ -87,7 +88,7 @@ class InsufficientBreakTimeCalculatorTest {
         final JourneyTimeEntry journeyEntryOne = journeyTimeEntryFor(7, 10, Vehicle.CAR_ACTIVE);
         final JourneyTimeEntry journeyEntryTwo = journeyTimeEntryFor(11, 17, Vehicle.CAR_ACTIVE);
 
-        final List<TimeWarning> warnings = calculator.calculate(List.of(journeyEntryOne,journeyEntryTwo));
+        final List<TimeWarning> warnings = calculator.calculate(List.of(journeyEntryOne, journeyEntryTwo));
 
         assertThat(warnings).isEmpty();
     }
@@ -97,12 +98,11 @@ class InsufficientBreakTimeCalculatorTest {
         final JourneyTimeEntry journeyEntryOne = journeyTimeEntryFor(7, 10, Vehicle.CAR_ACTIVE);
         final JourneyTimeEntry journeyEntryTwo = journeyTimeEntryFor(10, 16, Vehicle.CAR_ACTIVE);
 
-        final List<TimeWarning> warnings = calculator.calculate(List.of(journeyEntryOne,journeyEntryTwo));
+        final List<TimeWarning> warnings = calculator.calculate(List.of(journeyEntryOne, journeyEntryTwo));
 
         assertThat(warnings).hasSize(1);
         assertThat(warnings.get(0).getMissingBreakTime()).isEqualTo(0.5);
     }
-
 
     @Test
     void when3EntriesAndTwo30MinutesBreak_thenNoWarning() {

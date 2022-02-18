@@ -1,5 +1,6 @@
 package com.gepardec.mega.domain.calculation.time;
 
+import com.gepardec.mega.domain.model.monthlyreport.AbsenteeType;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
@@ -13,9 +14,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class NoEntryCalculatorTest {
 
@@ -35,8 +37,7 @@ class NoEntryCalculatorTest {
 
         List<TimeWarning> result = noEntryCalculator.calculate(new ArrayList<>(), new ArrayList<>());
 
-        assertThat(result)
-                .isEqualTo(expectedTimeWarningsList);
+        assertThat(result).hasSize(1).containsExactlyElementsOf(expectedTimeWarningsList);
     }
 
     @Test
@@ -49,86 +50,101 @@ class NoEntryCalculatorTest {
 
         List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryList(1), new ArrayList<>());
 
-        assertThat(result.get(0).getDate())
-                .isEqualTo(expectedTimeWarningsList.get(0).getDate());
+        assertThat(result).hasSize(1)
+                .extracting(TimeWarning::getDate)
+                .containsExactly(expectedTimeWarningsList.get(0).getDate());
     }
 
     @Test
     void calculate_whenAllEntries_thenNoWarning() {
         List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryList(0), new ArrayList<>());
 
-        assertThat(result.isEmpty())
-                .isTrue();
+        assertThat(result).isEmpty();
     }
 
     @Test
     void calculate_whenAllEntriesAndVacationDayOnWorkingDay_thenNoWarning() {
         List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryList(2), createAbsenceListFromUBType());
 
-        assertThat(result.isEmpty())
-                .isTrue();
+        assertThat(result).isEmpty();
     }
 
     @Test
     void calculate_whenAllEntriesAndCompensatoryDayOnWorkingDay_thenNoWarning() {
         List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryList(2), createAbsenceListFromFAType());
 
-        assertThat(result.isEmpty())
-                .isTrue();
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void calculate_whenAllEntriesAndSicknessDayOnWorkingDay_thenNoWarning() {
+        List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryList(2), createAbsenceListFromKRType());
+
+        assertThat(result).isEmpty();
     }
 
     @Test
     void calculate_whenAllEntriesInMonthWithHolidayOnFirstNov_thenNoWarning() {
         List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryListForNovember(), new ArrayList<>());
 
-        assertTrue(result.isEmpty());
+        assertThat(result).isEmpty();
     }
 
     private List<FehlzeitType> createAbsenceListFromUBType() {
-        List<FehlzeitType> fehlZeit = new ArrayList<>();
+        List<FehlzeitType> fehlzeiten = new ArrayList<>();
         FehlzeitType fehlzeitType = new FehlzeitType();
         String startDate = LocalDate.of(2021, 2, 25).toString();
         String endDate = LocalDate.of(2021, 2, 26).toString();
         fehlzeitType.setStartdatum(startDate);
         fehlzeitType.setEnddatum(endDate);
-        fehlzeitType.setFehlgrund("UB");
-        fehlZeit.add(fehlzeitType);
+        fehlzeitType.setFehlgrund(AbsenteeType.VACATION_DAYS.getType());
+        fehlzeiten.add(fehlzeitType);
 
-        return fehlZeit;
+        return fehlzeiten;
     }
 
     private List<FehlzeitType> createAbsenceListFromFAType() {
-        List<FehlzeitType> fehlZeit = new ArrayList<>();
+        List<FehlzeitType> fehlzeiten = new ArrayList<>();
         FehlzeitType fehlzeitType = new FehlzeitType();
         String startDate = LocalDate.of(2021, 2, 25).toString();
         String endDate = LocalDate.of(2021, 2, 26).toString();
         fehlzeitType.setStartdatum(startDate);
         fehlzeitType.setEnddatum(endDate);
-        fehlzeitType.setFehlgrund("FA");
-        fehlZeit.add(fehlzeitType);
+        fehlzeitType.setFehlgrund(AbsenteeType.COMPENSATORY_DAYS.getType());
+        fehlzeiten.add(fehlzeitType);
 
-        return fehlZeit;
+        return fehlzeiten;
+    }
+
+    private List<FehlzeitType> createAbsenceListFromKRType() {
+        List<FehlzeitType> fehlzeiten = new ArrayList<>();
+        FehlzeitType fehlzeitType = new FehlzeitType();
+        String startDate = LocalDate.of(2021, 2, 25).toString();
+        String endDate = LocalDate.of(2021, 2, 26).toString();
+        fehlzeitType.setStartdatum(startDate);
+        fehlzeitType.setEnddatum(endDate);
+        fehlzeitType.setFehlgrund(AbsenteeType.SICKNESS_DAYS.getType());
+        fehlzeiten.add(fehlzeitType);
+
+        return fehlzeiten;
     }
 
     private List<ProjectEntry> createProjectEntryList(int amountOfMissingEntries) {
-        List<ProjectEntry> entries = new ArrayList<>();
-
-        for(int i = 1; i <= (26-amountOfMissingEntries); i++) {
-            ProjectEntry projectEntry = ProjectTimeEntry.builder().fromTime(LocalDateTime.of(LocalDate.of(2021, 2, i), LocalTime.of(8, 0))).toTime(LocalDateTime.of(LocalDate.of(2021, 2, i), LocalTime.of(12, 0))).build();
-            entries.add(projectEntry);
-        }
-
-        return entries;
+        return IntStream.rangeClosed(1, 26 - amountOfMissingEntries)
+                .mapToObj(i -> createProjectTimeEntry(2, i))
+                .collect(Collectors.toList());
     }
 
     private List<ProjectEntry> createProjectEntryListForNovember() {
-        List<ProjectEntry> entries = new ArrayList<>();
+        return IntStream.rangeClosed(2, 30)
+                .mapToObj(i -> createProjectTimeEntry(11, i))
+                .collect(Collectors.toList());
+    }
 
-        for(int i = 2; i <= (30); i++) {
-            ProjectEntry projectEntry = ProjectTimeEntry.builder().fromTime(LocalDateTime.of(LocalDate.of(2021, 11, i), LocalTime.of(8, 0))).toTime(LocalDateTime.of(LocalDate.of(2021, 11, i), LocalTime.of(12, 0))).build();
-            entries.add(projectEntry);
-        }
-
-        return entries;
+    private ProjectTimeEntry createProjectTimeEntry(int month, int day) {
+        return ProjectTimeEntry.builder()
+                .fromTime(LocalDateTime.of(LocalDate.of(2021, month, day), LocalTime.of(8, 0)))
+                .toTime(LocalDateTime.of(LocalDate.of(2021, month, day), LocalTime.of(12, 0)))
+                .build();
     }
 }

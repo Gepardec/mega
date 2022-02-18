@@ -10,6 +10,8 @@ import com.gepardec.mega.service.api.project.ProjectService;
 import com.gepardec.mega.service.api.step.StepService;
 import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import com.gepardec.mega.service.api.user.UserService;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +22,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -32,29 +35,29 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 class StepEntrySyncServiceImplTest {
 
-    @Mock
-    private Logger logger;
+    @InjectMock
+    UserService userService;
 
-    @Mock
-    private UserService userService;
+    @InjectMock
+    ProjectService projectService;
 
-    @Mock
-    private ProjectService projectService;
+    @InjectMock
+    StepService stepService;
 
-    @Mock
-    private StepService stepService;
+    @InjectMock
+    StepEntryService stepEntryService;
 
-    @Mock
-    private StepEntryService stepEntryService;
+    @InjectMock
+    NotificationConfig notificationConfig;
 
-    @Mock
-    private NotificationConfig notificationConfig;
+    @Inject
+    Logger logger;
 
-    @InjectMocks
-    private StepEntrySyncServiceImpl stepEntrySyncService;
+    @Inject
+    StepEntrySyncServiceImpl stepEntrySyncService;
 
     @BeforeEach
     void setUp() {
@@ -187,7 +190,7 @@ class StepEntrySyncServiceImplTest {
         assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 2).count()).isEqualTo(1);
 
         // Steps
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count()).isEqualTo(0);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count()).isZero();
     }
 
     @Test
@@ -224,7 +227,7 @@ class StepEntrySyncServiceImplTest {
         assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 2).count()).isEqualTo(1);
 
         // Steps
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count()).isEqualTo(0);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_TIME_EVIDENCES")).count()).isZero();
     }
 
     @Test
@@ -270,8 +273,8 @@ class StepEntrySyncServiceImplTest {
         assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 3).count()).isEqualTo(1);
 
         // Steps
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count()).isEqualTo(0);
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count()).isEqualTo(0);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count()).isZero();
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count()).isZero();
         assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count()).isEqualTo(0);
     }
 
@@ -293,9 +296,9 @@ class StepEntrySyncServiceImplTest {
         assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.assignee().dbId() == 3).count()).isEqualTo(1);
 
         // Steps
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count()).isEqualTo(0);
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count()).isEqualTo(0);
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count()).isEqualTo(0);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_INTERNAL_TIMES")).count()).isZero();
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("CONTROL_EXTERNAL_TIMES")).count()).isZero();
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.step().name().equals("ACCEPT_TIMES")).count()).isZero();
     }
 
     @Test

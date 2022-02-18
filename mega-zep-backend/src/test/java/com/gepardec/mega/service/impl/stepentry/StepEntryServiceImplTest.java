@@ -21,6 +21,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -205,10 +206,13 @@ class StepEntryServiceImplTest {
         ).thenReturn(createStepEntriesForPM());
 
         List<ProjectEmployees> projectEmployees = stepEntryService.getProjectEmployeesForPM(LocalDate.now(), LocalDate.now(), "no-reply@gepardec.com");
-        assertThat(projectEmployees).isNotNull();
-        assertThat(projectEmployees).hasSize(1);
-        assertThat(projectEmployees.get(0).projectId()).isEqualTo("Liwest-EMS");
-        assertThat(projectEmployees.get(0).employees()).containsExactlyInAnyOrder("008", "010", "012", "020");
+
+        assertAll(
+                () -> assertThat(projectEmployees).isNotNull(),
+                () -> assertThat(projectEmployees).hasSize(1),
+                () -> assertThat(projectEmployees.get(0).projectId()).isEqualTo("Liwest-EMS"),
+                () -> assertThat(projectEmployees.get(0).employees()).containsExactlyInAnyOrder("008", "010", "012", "020")
+        );
     }
 
     private List<StepEntry> createStepEntriesForPM() {

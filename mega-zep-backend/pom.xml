@@ -8,7 +8,7 @@
     <version>${revision}</version>
     <name>MEGA ZEP-Backend</name>
     <properties>
-        <jacoco.version>0.8.6</jacoco.version>
+        <jacoco.version>0.8.7</jacoco.version>
         <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
         <maven-resource-plugin.version>3.1.0</maven-resource-plugin.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
@@ -19,24 +19,26 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.version>3.6.3</maven.version>
+        <maven.version>3.8.1</maven.version>
 
-        <commons-lang3.version>3.9</commons-lang3.version>
-        <commons-io.version>2.7</commons-io.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <commons-io.version>2.11.0</commons-io.version>
         <google-api-client.version>1.30.4</google-api-client.version>
-        <guava.version>30.1.1-jre</guava.version>
-        <quarkus-plugin.version>1.7.6.Final</quarkus-plugin.version>
-        <quarkus.platform.version>1.7.6.Final</quarkus.platform.version>
-        <ws.rt.version>2.3.2</ws.rt.version>
+        <guava.version>31.0.1-jre</guava.version>
+
+        <quarkus-plugin.version>2.6.3.Final</quarkus-plugin.version>
+        <quarkus.platform.version>2.6.3.Final</quarkus.platform.version>
+
+        <ws.rt.version>2.3.5</ws.rt.version>
         <xml.resolver.version>20050927</xml.resolver.version>
-        <lombok.version>1.18.20</lombok.version>
+        <lombok.version>1.18.22</lombok.version>
         <jollyday.version>0.5.10</jollyday.version>
         <assertj.version>3.21.0</assertj.version>
         <!-- application info -->
         <!-- !!! IMPORTANT !!!! -->
         <!-- remove -SNAPSHOT in release-branch but keep it in develop branch -->
 
-        <revision>3.2.1</revision>
+        <revision>3.2.2</revision>
         <git.commit>local</git.commit>
         <git.branch>local</git.branch>
         <build.number>0</build.number>
@@ -47,7 +49,7 @@
         <dependencies>
             <dependency>
                 <groupId>io.quarkus</groupId>
-                <artifactId>quarkus-universe-bom</artifactId>
+                <artifactId>quarkus-bom</artifactId>
                 <version>${quarkus.platform.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -197,12 +199,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>${assertj.version}</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
