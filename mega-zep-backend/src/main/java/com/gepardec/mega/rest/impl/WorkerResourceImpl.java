@@ -44,7 +44,7 @@ public class WorkerResourceImpl implements WorkerResource {
 
     @Override
     public Response monthlyReport() {
-        Employee employee = employeeService.getEmployee(Objects.requireNonNull(userContext.user()).userId());
+        Employee employee = employeeService.getEmployee(Objects.requireNonNull(userContext.user()).getUserId());
 
         LocalDate date = LocalDate.parse(employee.getReleaseDate()).with(TemporalAdjusters.firstDayOfNextMonth());
         return monthlyReport(date.getYear(), date.getMonthValue());
@@ -54,7 +54,7 @@ public class WorkerResourceImpl implements WorkerResource {
     public Response monthlyReport(Integer year, Integer month) {
         LocalDate date = LocalDate.of(year, month, 1);
 
-        Employee employee = employeeService.getEmployee(Objects.requireNonNull(userContext.user()).userId());
+        Employee employee = employeeService.getEmployee(Objects.requireNonNull(userContext.user()).getUserId());
 
         MonthlyReport monthlyReport = monthlyReportService.getMonthendReportForUser(Objects.requireNonNull(employee).getUserId(), date);
 

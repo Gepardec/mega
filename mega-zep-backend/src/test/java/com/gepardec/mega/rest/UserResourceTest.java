@@ -36,7 +36,7 @@ class UserResourceTest {
     @Test
     void get_whenUserIsLogged_thenReturnsHttpStatusOK() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         given().get("/user")
@@ -46,7 +46,7 @@ class UserResourceTest {
     @Test
     void get_whenUserIsLogged_thenReturnsUser() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         final User actual = given()

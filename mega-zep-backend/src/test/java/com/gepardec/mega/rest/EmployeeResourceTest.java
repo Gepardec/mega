@@ -60,7 +60,7 @@ class EmployeeResourceTest {
     @Test
     void list_whenUserLoggedAndInRoleEMPLOYEE_thenReturnsHttpStatusFORBIDDEN() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         given().get("/employees")
@@ -70,7 +70,7 @@ class EmployeeResourceTest {
     @Test
     void list_whenUserLoggedAndInRoleOFFICE_MANAGEMENT_thenReturnsHttpStatusOK() {
         final User user = createUserForRole(Role.OFFICE_MANAGEMENT);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
         final Employee userAsEmployee = createEmployeeForUser(user);
         when(employeeService.getEmployee(anyString())).thenReturn(userAsEmployee);
@@ -82,7 +82,7 @@ class EmployeeResourceTest {
     @Test
     void list_whenUserLoggedAndInRolePROJECT_LEAD_thenReturnsHttpStatusOK() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         given().get("/employees")
@@ -92,7 +92,7 @@ class EmployeeResourceTest {
     @Test
     void list_whenUserLoggedAndInRoleOFFICE_MANAGEMENT_thenReturnsEmployees() {
         final User user = createUserForRole(Role.OFFICE_MANAGEMENT);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
         final Employee userAsEmployee = createEmployeeForUser(user);
         when(employeeService.getAllActiveEmployees()).thenReturn(List.of(userAsEmployee));
@@ -125,7 +125,7 @@ class EmployeeResourceTest {
     @Test
     void update_whenEmptyBody_returnsHttpStatusBAD_REQUEST() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         given().contentType(MediaType.APPLICATION_JSON)
@@ -136,7 +136,7 @@ class EmployeeResourceTest {
     @Test
     void update_whenEmptyList_returnsHttpStatusBAD_REQUEST() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         given().contentType(MediaType.APPLICATION_JSON)
@@ -148,7 +148,7 @@ class EmployeeResourceTest {
     @Test
     void update_whenValidRequest_returnsHttpStatusOK() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
         final Employee employee = createEmployeeForUser(user);
 
@@ -161,7 +161,7 @@ class EmployeeResourceTest {
     @Test
     void update_whenValidRequestAndEmployeeServiceReturnsInvalidEmails_returnsInvalidEmails() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
         final Employee userAsEmployee = createEmployeeForUser(user);
         final List<String> expected = List.of("invalid1@gmail.com", "invalid2@gmail.com");
@@ -188,11 +188,11 @@ class EmployeeResourceTest {
 
     private Employee createEmployeeForUser(final User user) {
         return Employee.builder()
-                .email(user.email())
-                .firstname(user.firstname())
-                .lastname(user.lastname())
+                .email(user.getEmail())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
                 .title("Ing.")
-                .userId(user.userId())
+                .userId(user.getUserId())
                 .releaseDate("2020-01-01")
                 .active(true)
                 .build();

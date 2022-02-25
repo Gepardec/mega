@@ -120,7 +120,7 @@ public class ManagementResourceImpl implements ManagementResource {
         if (allProjects) {
             projectEmployees = stepEntryService.getAllProjectEmployeesForPM(from, to);
         } else {
-            projectEmployees = stepEntryService.getProjectEmployeesForPM(from, to, Objects.requireNonNull(userContext.user()).email());
+            projectEmployees = stepEntryService.getProjectEmployeesForPM(from, to, Objects.requireNonNull(userContext.user()).getEmail());
         }
 
         List<ProjectManagementEntryDto> projectManagementEntries = new ArrayList<>();
@@ -197,7 +197,7 @@ public class ManagementResourceImpl implements ManagementResource {
             if (employees.containsKey(userId)) {
                 Employee employee = employees.get(userId);
                 List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployeeAndProject(
-                        employee, projectEmployees.getProjectId(), Objects.requireNonNull(userContext.user()).email(), from, to
+                        employee, projectEmployees.getProjectId(), Objects.requireNonNull(userContext.user()).getEmail(), from, to
                 );
 
                 ManagementEntryDto entry = createManagementEntryForEmployee(employee, projectEmployees.getProjectId(), stepEntries, from, to, null);
@@ -255,7 +255,7 @@ public class ManagementResourceImpl implements ManagementResource {
         boolean customerCheckStateOpen = stepEntries.stream()
                 .filter(stepEntry ->
                         StepName.CONTROL_EXTERNAL_TIMES.name().equalsIgnoreCase(stepEntry.getStep().getName())
-                                && StringUtils.equalsIgnoreCase(Objects.requireNonNull(userContext.user()).email(), stepEntry.getAssignee().getEmail())
+                                && StringUtils.equalsIgnoreCase(Objects.requireNonNull(userContext.user()).getEmail(), stepEntry.getAssignee().getEmail())
                 ).anyMatch(stepEntry -> EmployeeState.OPEN.equals(stepEntry.getState()));
 
         return customerCheckStateOpen ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
@@ -269,7 +269,7 @@ public class ManagementResourceImpl implements ManagementResource {
         boolean customerCheckStateOpen = stepEntries.stream()
                 .filter(stepEntry ->
                         StepName.CONTROL_INTERNAL_TIMES.name().equalsIgnoreCase(stepEntry.getStep().getName())
-                                && StringUtils.equalsIgnoreCase(Objects.requireNonNull(userContext.user()).email(), stepEntry.getAssignee().getEmail())
+                                && StringUtils.equalsIgnoreCase(Objects.requireNonNull(userContext.user()).getEmail(), stepEntry.getAssignee().getEmail())
                 ).anyMatch(stepEntry -> EmployeeState.OPEN.equals(stepEntry.getState()));
 
         return customerCheckStateOpen ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
@@ -288,7 +288,7 @@ public class ManagementResourceImpl implements ManagementResource {
                     } else {
                         return StepName.CONTROL_TIME_EVIDENCES.name().equalsIgnoreCase(se.getStep().getName()) &&
                                 StringUtils.equalsIgnoreCase(se.getProject(), projectId) &&
-                                StringUtils.equalsIgnoreCase(se.getAssignee().getEmail(), Objects.requireNonNull(userContext.user()).email());
+                                StringUtils.equalsIgnoreCase(se.getAssignee().getEmail(), Objects.requireNonNull(userContext.user()).getEmail());
                     }
                 })
                 .map(StepEntry::getState)

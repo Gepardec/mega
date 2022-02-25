@@ -70,35 +70,35 @@ class StepEntrySyncServiceImplTest {
                 projectFor(1)
                         .leads(
                                 List.of(userForProjectLead(1))
-                                        .stream().map(User::userId).collect(Collectors.toList()))
+                                        .stream().map(User::getUserId).collect(Collectors.toList()))
                         .employees(
                                 List.of(userForProjectLead(1),
                                         userForEmployee(4),
                                         userForEmployee(5),
                                         userForEmployee(6))
-                                        .stream().map(User::userId).collect(Collectors.toList()))
+                                        .stream().map(User::getUserId).collect(Collectors.toList()))
                         .startDate(LocalDate.now())
                         .build(),
                 projectFor(2)
                         .leads(
                                 List.of(userForProjectLead(2))
-                                        .stream().map(User::userId).collect(Collectors.toList()))
+                                        .stream().map(User::getUserId).collect(Collectors.toList()))
                         .employees(
                                 List.of(userForProjectLead(2),
                                         userForEmployee(5),
                                         userForEmployee(6))
-                                        .stream().map(User::userId).collect(Collectors.toList()))
+                                        .stream().map(User::getUserId).collect(Collectors.toList()))
                         .startDate(LocalDate.now())
                         .build(),
                 projectFor(3)
                         .leads(
                                 List.of(userForProjectLead(1))
-                                        .stream().map(User::userId).collect(Collectors.toList()))
+                                        .stream().map(User::getUserId).collect(Collectors.toList()))
                         .employees(
                                 List.of(userForProjectLead(1),
                                         userForEmployee(5),
                                         userForEmployee(6))
-                                        .stream().map(User::userId).collect(Collectors.toList()))
+                                        .stream().map(User::getUserId).collect(Collectors.toList()))
                         .startDate(LocalDate.now())
                         .build()
         ));
@@ -109,7 +109,7 @@ class StepEntrySyncServiceImplTest {
                         stepFor(4, "CONTROL_TIME_EVIDENCES", Role.PROJECT_LEAD).build(),
                         stepFor(5, "ACCEPT_TIMES", Role.OFFICE_MANAGEMENT).build()
                 ));
-        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of(userForOm(3).email()));
+        when(notificationConfig.getOmMailAddresses()).thenReturn(List.of(userForOm(3).getEmail()));
     }
 
     private User userForProjectLead(final int id) {
@@ -127,7 +127,7 @@ class StepEntrySyncServiceImplTest {
                 .build();
     }
 
-    private User.Builder userFor(final int id, final String firstname, final String lastname) {
+    private User.UserBuilder userFor(final int id, final String firstname, final String lastname) {
         return User.builder()
                 .dbId(id)
                 .userId(id + "-userId")
@@ -179,12 +179,12 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Project Lead 1
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().dbId() == 1).count()).isEqualTo(1);
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().dbId() == 1).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().getDbId() == 1).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().getDbId() == 1).count()).isEqualTo(1);
 
         // Project Lead 2
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().dbId() == 2).count()).isEqualTo(1);
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().dbId() == 2).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().getDbId() == 2).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().getDbId() == 2).count()).isEqualTo(1);
 
         // Steps
         assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getStep().getName().equals("CONTROL_TIME_EVIDENCES")).count()).isZero();
@@ -197,13 +197,13 @@ class StepEntrySyncServiceImplTest {
         when(projectService.getProjectsForMonthYear(Mockito.any(), Mockito.anyList())).thenReturn(List.of(projectFor(1)
                 .leads(
                         List.of(userForProjectLead(7))
-                                .stream().map(User::userId).collect(Collectors.toList()))
+                                .stream().map(User::getUserId).collect(Collectors.toList()))
                 .employees(
                         List.of(userForProjectLead(1),
                                 userForEmployee(4),
                                 userForEmployee(5),
                                 userForEmployee(6))
-                                .stream().map(User::userId).collect(Collectors.toList()))
+                                .stream().map(User::getUserId).collect(Collectors.toList()))
                 .startDate(LocalDate.now())
                 .build()));
 
@@ -216,12 +216,12 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Project Lead 1
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().dbId() == 1).count()).isEqualTo(1);
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().dbId() == 1).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().getDbId() == 1).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().getDbId() == 1).count()).isEqualTo(1);
 
         // Project Lead 2
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().dbId() == 2).count()).isEqualTo(1);
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().dbId() == 2).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().getDbId() == 2).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().getDbId() == 2).count()).isEqualTo(1);
 
         // Steps
         assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getStep().getName().equals("CONTROL_TIME_EVIDENCES")).count()).isZero();
@@ -241,12 +241,12 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Project Lead 1
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().dbId() == 1).count()).isEqualTo(3);
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().dbId() == 1).count()).isEqualTo(8);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().getDbId() == 1).count()).isEqualTo(3);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().getDbId() == 1).count()).isEqualTo(8);
 
         // Project Lead 2
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().dbId() == 2).count()).isEqualTo(2);
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().dbId() == 2).count()).isEqualTo(4);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().getDbId() == 2).count()).isEqualTo(2);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().getDbId() == 2).count()).isEqualTo(4);
 
         // Steps
         assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getStep().getName().equals("CONTROL_TIME_EVIDENCES")).count()).isEqualTo(10);
@@ -266,8 +266,8 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Office Managment 3
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().dbId() == 3).count()).isEqualTo(1);
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().dbId() == 3).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().getDbId() == 3).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().getDbId() == 3).count()).isEqualTo(1);
 
         // Steps
         assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getStep().getName().equals("CONTROL_INTERNAL_TIMES")).count()).isZero();
@@ -289,8 +289,8 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Office Managment 3
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().dbId() == 3).count()).isEqualTo(1);
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().dbId() == 3).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().getDbId() == 3).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().getDbId() == 3).count()).isEqualTo(1);
 
         // Steps
         assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getStep().getName().equals("CONTROL_INTERNAL_TIMES")).count()).isZero();
@@ -312,8 +312,8 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Office Managment 3
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().dbId() == 3).count()).isEqualTo(4);
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().dbId() == 3).count()).isEqualTo(19);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().getDbId() == 3).count()).isEqualTo(4);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().getDbId() == 3).count()).isEqualTo(19);
 
         // Steps
         assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getStep().getName().equals("CONTROL_INTERNAL_TIMES")).count()).isEqualTo(6);
@@ -347,16 +347,16 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Employee 4
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().dbId() == 4).count()).isEqualTo(5);
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().dbId() == 4).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().getDbId() == 4).count()).isEqualTo(5);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().getDbId() == 4).count()).isEqualTo(1);
 
         // Employee 5
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().dbId() == 5).count()).isEqualTo(1);
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().dbId() == 5).count()).isEqualTo(7);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().getDbId() == 5).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().getDbId() == 5).count()).isEqualTo(7);
 
         // Employee 6
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().dbId() == 6).count()).isEqualTo(7);
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().dbId() == 6).count()).isEqualTo(1);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getOwner().getDbId() == 6).count()).isEqualTo(7);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getAssignee().getDbId() == 6).count()).isEqualTo(1);
 
         // Steps
         assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.getStep().getName().equals("CONTROL_TIMES")).count()).isEqualTo(6);

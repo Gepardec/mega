@@ -65,7 +65,7 @@ class CommentResourceTest {
         when(commentService.setDone(ArgumentMatchers.any(Comment.class))).thenReturn(1);
 
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         Comment comment = Comment.builder()
@@ -107,7 +107,7 @@ class CommentResourceTest {
     @Test
     void getAllCommentsForEmployee_whenInvalidEmail_thenReturnsHttpStatusBAD_REQUEST() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON)
@@ -120,7 +120,7 @@ class CommentResourceTest {
     @Test
     void getAllCommentsForEmployee_whenEmailIsMissing_thenReturnsHttpStatusBAD_REQUEST() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON)
@@ -132,7 +132,7 @@ class CommentResourceTest {
     @Test
     void getAllCommentsForEmployee_whenReleaseDateIsMissing_thenReturnsHttpStatusBAD_REQUEST() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON)
@@ -144,7 +144,7 @@ class CommentResourceTest {
     @Test
     void getAllCommentsForEmployee_whenValid_thenReturnsListOfCommentsForEmployee() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         Comment comment = Comment.builder().id(0L).message("Pausen eintragen!").authorEmail("no-reply@gepardec.com").state(EmployeeState.IN_PROGRESS).build();
@@ -172,7 +172,7 @@ class CommentResourceTest {
     @Test
     void newCommentForEmployee_whenInvalidRequest_thenReturnsHttpStatusBAD_REQUEST() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON)
@@ -183,7 +183,7 @@ class CommentResourceTest {
     @Test
     void newCommentForEmployee_whenValid_thenReturnsCreatedComment() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         when(commentService.createNewCommentForEmployee(
@@ -229,7 +229,7 @@ class CommentResourceTest {
     @Test
     void deleteComment_whenValid_thenReturnsTrue() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         when(commentService.deleteCommentWithId(ArgumentMatchers.anyLong()))
@@ -252,7 +252,7 @@ class CommentResourceTest {
     @Test
     void updateCommentForEmployee_whenInvalidRequest_henReturnsHttpStatusBAD_REQUEST() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         given().contentType(ContentType.JSON)
@@ -263,7 +263,7 @@ class CommentResourceTest {
     @Test
     void updateCommentForEmployee_whenValid_thenReturnsUpdatedComment() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         Comment comment = Comment.builder().id(1L).message("Zeiten prüfen").build();

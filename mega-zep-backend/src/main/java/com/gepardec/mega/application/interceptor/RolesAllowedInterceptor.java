@@ -32,10 +32,10 @@ public class RolesAllowedInterceptor {
                 "Could not resolve Authorizaion annotation. Do you use Stereotype annotations, which are currently not supported?");
 
         Role[] allowedRoles = rolesAllowedAnnotation.value();
-        if (isInRole(userContext.user().roles(), allowedRoles)) {
+        if (isInRole(userContext.user().getRoles(), allowedRoles)) {
             return invocationContext.proceed();
         } else {
-            throw new ForbiddenException(String.format("User has insufficient role %s", userContext.user().roles()));
+            throw new ForbiddenException(String.format("User has insufficient role %s", userContext.user().getRoles()));
         }
     }
 

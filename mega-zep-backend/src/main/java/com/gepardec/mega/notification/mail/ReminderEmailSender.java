@@ -89,7 +89,7 @@ public class ReminderEmailSender {
             logger.warn("No PL email addresses configured, there sending nothing");
             return;
         }
-        users.forEach(user -> mailSender.send(PL_PROJECT_CONTROLLING, user.email(), user.firstname(), applicationConfig.getDefaultLocale()));
+        users.forEach(user -> mailSender.send(PL_PROJECT_CONTROLLING, user.getEmail(), user.getFirstname(), applicationConfig.getDefaultLocale()));
         logSentNotification(PL_PROJECT_CONTROLLING);
     }
 
@@ -99,14 +99,14 @@ public class ReminderEmailSender {
             logger.warn("No OM email addresses configured, there sending nothing");
             return;
         }
-        users.forEach(user -> mailSender.send(mail, user.email(), user.firstname(), applicationConfig.getDefaultLocale()));
+        users.forEach(user -> mailSender.send(mail, user.getEmail(), user.getFirstname(), applicationConfig.getDefaultLocale()));
         logSentNotification(mail);
     }
 
     void sendReminderToUser() {
         if (notificationConfig.isEmployeesNotification()) {
             userService.findActiveUsers()
-                    .forEach(user -> mailSender.send(EMPLOYEE_CHECK_PROJECTTIME, user.email(), user.firstname(), applicationConfig.getDefaultLocale()));
+                    .forEach(user -> mailSender.send(EMPLOYEE_CHECK_PROJECTTIME, user.getEmail(), user.getFirstname(), applicationConfig.getDefaultLocale()));
             logSentNotification(EMPLOYEE_CHECK_PROJECTTIME);
         } else {
             logger.info("NO Reminder to employes sent, cause mega.mail.employees.notification-property is false");

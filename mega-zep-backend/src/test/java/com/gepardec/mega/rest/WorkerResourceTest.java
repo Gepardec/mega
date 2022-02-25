@@ -59,7 +59,7 @@ public class WorkerResourceTest {
     @Test
     void employeeMonthendReport_withReport_returnsReport() {
         User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.getEmail()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.user()).thenReturn(user);
 
         Employee employee = createEmployeeForUser(user);
@@ -108,11 +108,11 @@ public class WorkerResourceTest {
 
     private Employee createEmployeeForUser(final User user) {
         return Employee.builder()
-                .email(user.email())
-                .firstname(user.firstname())
-                .lastname(user.lastname())
+                .email(user.getEmail())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
                 .title("Ing.")
-                .userId(user.userId())
+                .userId(user.getUserId())
                 .releaseDate("2020-01-01")
                 .active(true)
                 .build();

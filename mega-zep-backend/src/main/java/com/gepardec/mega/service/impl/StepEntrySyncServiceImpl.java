@@ -126,7 +126,7 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
 
     private List<StepEntry> createStepEntriesForOwnerProjects(final LocalDate date, final Step step, final List<Project> projects, final List<User> users, final User ownerUser) {
         return projects.stream()
-                .filter(project -> project.getEmployees().contains(ownerUser.userId()))
+                .filter(project -> project.getEmployees().contains(ownerUser.getUserId()))
                 .map(project -> createStepEntriesForOwnerProject(date, step, project, users, ownerUser))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
@@ -183,10 +183,10 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
     }
 
     private Optional<User> findUserByUserId(final List<User> users, final String userId) {
-        return users.stream().filter(user -> user.userId().equals(userId)).findFirst();
+        return users.stream().filter(user -> user.getUserId().equals(userId)).findFirst();
     }
 
     private Optional<User> findUserByEmail(final List<User> users, final String email) {
-        return users.stream().filter(user -> user.email().equals(email)).findFirst();
+        return users.stream().filter(user -> user.getEmail().equals(email)).findFirst();
     }
 }

@@ -101,7 +101,7 @@ class ProjectServiceImplTest {
                                         .lastname("Gepardec")
                                         .email(String.format("%s%s.%s@gepardec.com", "Gepard", 1, "Gepardec"))
                                         .roles(Set.of(Role.EMPLOYEE)).build())
-                                .stream().map(User::userId).collect(Collectors.toList()))
+                                .stream().map(User::getUserId).collect(Collectors.toList()))
                         .employees(List.of())
                         .categories(List.of())
                         .startDate(LocalDate.now())

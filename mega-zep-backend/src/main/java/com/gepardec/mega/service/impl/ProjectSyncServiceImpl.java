@@ -118,12 +118,12 @@ public class ProjectSyncServiceImpl implements ProjectSyncService {
     }
 
     private Optional<User> findUserByUserId(final List<User> users, final String userId) {
-        return users.stream().filter(user -> user.userId().equals(userId)).findFirst();
+        return users.stream().filter(user -> user.getUserId().equals(userId)).findFirst();
     }
 
     private com.gepardec.mega.db.entity.employee.User mapDomainUserToEntity(User user) {
         com.gepardec.mega.db.entity.employee.User u = new com.gepardec.mega.db.entity.employee.User();
-        u.setId(user.dbId());
+        u.setId(user.getDbId());
         return u;
     }
 
