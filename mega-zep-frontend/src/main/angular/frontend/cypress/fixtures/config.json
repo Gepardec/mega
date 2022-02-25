@@ -1,0 +1,9 @@
+{
+  "excelUrl": "https://docs.google.com/spreadsheets/d/1u1G_hNW8ePZqthzWJOEh3qOHc6Fy_R2TQwn5wCMsTt0/",
+  "budgetCalculationExcelUrl": "https://docs.google.com/spreadsheets/d/12T9Iiy0WRuinN5Zdw1AfeXYABPsxoVwL17sJKfky5JA",
+  "zepOrigin": "https://www.zep-online.de/zepgepardecservices_test",
+  "clientId": "359732753277-3pmg4v1h86oi7i2dnq643lp70lposdpn.apps.googleusercontent.com",
+  "issuer": "https://accounts.google.com",
+  "scope": "openid profile email",
+  "version": "3.1.10"
+}

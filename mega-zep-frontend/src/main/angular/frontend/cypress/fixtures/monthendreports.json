@@ -1,0 +1,27 @@
+{
+  "employee": {
+    "userId": "034-pholzer",
+    "email": "patrick.holzer@gepardec.com",
+    "title": null,
+    "firstname": "Patrick",
+    "lastname": "Holzer",
+    "salutation": "Herr",
+    "releaseDate": "2021-10-29",
+    "workDescription": "02",
+    "language": "de",
+    "active": true
+  },
+  "timeWarnings": [],
+  "journeyWarnings": [],
+  "comments": [],
+  "employeeCheckState": "OPEN",
+  "isAssigned": false,
+  "employeeProgresses": [],
+  "otherChecksDone": true,
+  "vacationDays": 0,
+  "homeofficeDays": 0,
+  "compensatoryDays": 0,
+  "billableTime": "00:00",
+  "totalWorkingTime": "00:00",
+  "assigned": false
+}

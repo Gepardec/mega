@@ -1,5 +1,3 @@
-import { configuration } from '../app/modules/shared/constants/configuration';
-
 export const environment = {
   production: true,
   // Base url
