@@ -5,10 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gepardec.mega.db.entity.employee.EmployeeState;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
 import lombok.extern.jackson.Jacksonized;
 
 import javax.annotation.Nullable;
