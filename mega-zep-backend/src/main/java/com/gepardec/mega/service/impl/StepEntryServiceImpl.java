@@ -65,17 +65,17 @@ public class StepEntryServiceImpl implements StepEntryService {
     @Transactional(Transactional.TxType.SUPPORTS)
     public void addStepEntry(com.gepardec.mega.domain.model.StepEntry stepEntry) {
         final User ownerDb = new User();
-        ownerDb.setId(stepEntry.owner().dbId());
+        ownerDb.setId(stepEntry.getOwner().dbId());
 
         final Step stepDb = new Step();
-        stepDb.setId(stepEntry.step().getDbId());
+        stepDb.setId(stepEntry.getStep().getDbId());
 
         final User assigneeDb = new User();
-        assigneeDb.setId(stepEntry.assignee().dbId());
+        assigneeDb.setId(stepEntry.getAssignee().dbId());
 
         final StepEntry stepEntryDb = new StepEntry();
-        stepEntryDb.setDate(stepEntry.date());
-        stepEntryDb.setProject(stepEntry.project() != null ? stepEntry.project().getProjectId() : null);
+        stepEntryDb.setDate(stepEntry.getDate());
+        stepEntryDb.setProject(stepEntry.getProject() != null ? stepEntry.getProject().getProjectId() : null);
         stepEntryDb.setState(EmployeeState.OPEN);
         stepEntryDb.setOwner(ownerDb);
         stepEntryDb.setAssignee(assigneeDb);
