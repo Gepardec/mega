@@ -88,7 +88,7 @@ class ManagementResourceTest {
     @Test
     void getAllOfficeManagementEntries_whenValid_thenReturnsListOfEntries() {
         final User user = createUserForRole(Role.OFFICE_MANAGEMENT);
-        when(securityContext.email()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
         when(employeeService.getAllActiveEmployees())
@@ -133,7 +133,7 @@ class ManagementResourceTest {
     @Test
     void getAllOfficeManagementEntries_whenNoActiveEmployeesFound_thenReturnsEmptyResultList() {
         final User user = createUserForRole(Role.OFFICE_MANAGEMENT);
-        when(securityContext.email()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
         when(employeeService.getAllActiveEmployees()).thenReturn(List.of());
@@ -163,7 +163,7 @@ class ManagementResourceTest {
     @Test
     void getAllOfficeManagementEntries_whenNoStepEntriesFound_thenReturnsEmptyResultList() {
         final User user = createUserForRole(Role.OFFICE_MANAGEMENT);
-        when(securityContext.email()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
         when(commentService.cntFinishedAndTotalCommentsForEmployee(
@@ -202,7 +202,7 @@ class ManagementResourceTest {
     @Test
     void getAllProjectManagementEntries_whenValid_thenReturnsListOfEntries() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
-        when(securityContext.email()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
         Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
@@ -255,7 +255,7 @@ class ManagementResourceTest {
 
         assertThat(result).hasSize(2);
         Optional<ProjectManagementEntryDto> projectRgkkcc = result.stream()
-                .filter(p -> rgkkcc.projectId().equalsIgnoreCase(p.projectName()))
+                .filter(p -> rgkkcc.getProjectId().equalsIgnoreCase(p.projectName()))
                 .findFirst();
 
         // assert project management entry
@@ -285,7 +285,7 @@ class ManagementResourceTest {
     @Test
     void getProjectManagementEntries_whenProjectTimes_thenCorrectAggregatedWorkTimes() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
-        when(securityContext.email()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
         Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
@@ -338,7 +338,7 @@ class ManagementResourceTest {
 
         assertThat(result).hasSize(2);
         Optional<ProjectManagementEntryDto> projectRgkkcc = result.stream()
-                .filter(p -> rgkkcc.projectId().equalsIgnoreCase(p.projectName()))
+                .filter(p -> rgkkcc.getProjectId().equalsIgnoreCase(p.projectName()))
                 .findFirst();
 
         // assert project management entry
@@ -372,7 +372,7 @@ class ManagementResourceTest {
     @Test
     void getProjectManagementEntries_whenNoProjectTimes_thenZeroAggregatedWorkTimes() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
-        when(securityContext.email()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
         Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
@@ -425,7 +425,7 @@ class ManagementResourceTest {
 
         assertThat(result).hasSize(2);
         Optional<ProjectManagementEntryDto> projectRgkkcc = result.stream()
-                .filter(p -> rgkkcc.projectId().equalsIgnoreCase(p.projectName()))
+                .filter(p -> rgkkcc.getProjectId().equalsIgnoreCase(p.projectName()))
                 .findFirst();
 
         // assert project management entry
@@ -459,7 +459,7 @@ class ManagementResourceTest {
     @Test
     void getProjectManagementEntries_whenManagementEntryIsNull_thenNoNullPointerException() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
-        when(securityContext.email()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
         Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
@@ -515,7 +515,7 @@ class ManagementResourceTest {
     @Test
     void getAllProjectManagementEntries_whenNoProjectsFound_thenReturnsEmptyList() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
-        when(securityContext.email()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
         List<ProjectManagementEntryDto> result = given().contentType(ContentType.JSON)
@@ -529,7 +529,7 @@ class ManagementResourceTest {
     @Test
     void getAllProjectManagementEntries_whenNoEmployeesAssignedToProject_thenReturnResultList() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
-        when(securityContext.email()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", List.of());
@@ -547,7 +547,7 @@ class ManagementResourceTest {
     @Test
     void getAllProjectManagementEntries_whenNoStepEntriesFound_thenReturnsResultList() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
-        when(securityContext.email()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
         Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");

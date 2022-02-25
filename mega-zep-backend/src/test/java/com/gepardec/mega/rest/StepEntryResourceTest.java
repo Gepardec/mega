@@ -57,7 +57,7 @@ class StepEntryResourceTest {
         ).thenReturn(true);
 
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.email()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
         EmployeeStepDto employeeStepDto = createEmployeeStep();

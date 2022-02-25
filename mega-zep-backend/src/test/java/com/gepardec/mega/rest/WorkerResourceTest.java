@@ -59,7 +59,7 @@ public class WorkerResourceTest {
     @Test
     void employeeMonthendReport_withReport_returnsReport() {
         User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.email()).thenReturn(user.email());
+        when(securityContext.getEmail()).thenReturn(user.email());
         when(userContext.user()).thenReturn(user);
 
         Employee employee = createEmployeeForUser(user);

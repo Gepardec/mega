@@ -45,8 +45,8 @@ class SecurityContextProducerTest {
         final SecurityContext securityContext = producer.createSecurityContext();
 
         // Then
-        assertThat(securityContext.email()).isNotNull();
-        assertThat(securityContext.email()).isEqualTo("test@gepardec.com");
+        assertThat(securityContext.getEmail()).isNotNull();
+        assertThat(securityContext.getEmail()).isEqualTo("test@gepardec.com");
     }
 
     @Test
@@ -59,7 +59,7 @@ class SecurityContextProducerTest {
         final SecurityContext securityContext = producer.createSecurityContext();
 
         // Then
-        assertThat(securityContext.email()).isNull();
+        assertThat(securityContext.getEmail()).isNull();
     }
 
     @Test
@@ -87,6 +87,6 @@ class SecurityContextProducerTest {
         final SecurityContext securityContext = producer.createSecurityContext();
 
         // Then
-        assertThat(securityContext.email()).isNull();
+        assertThat(securityContext.getEmail()).isNull();
     }
 }

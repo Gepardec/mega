@@ -40,7 +40,7 @@ class UserContextProducerTest {
                 .email("no-reply@gepardec.com")
                 .roles(Set.of(Role.EMPLOYEE))
                 .build();
-        when(securityContext.email()).thenReturn("test@gepardec.com");
+        when(securityContext.getEmail()).thenReturn("test@gepardec.com");
         when(userService.findUserForEmail("test@gepardec.com")).thenReturn(user);
 
         // When

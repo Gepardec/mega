@@ -20,7 +20,7 @@ public class SecuredInterceptor {
 
     @AroundInvoke
     public Object invoke(final InvocationContext invocationContext) throws Exception {
-        if (securityContext.email() == null) {
+        if (securityContext.getEmail() == null) {
             throw new UnauthorizedException("User is not logged in");
         }
         return invocationContext.proceed();

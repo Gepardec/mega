@@ -210,8 +210,8 @@ class StepEntryServiceImplTest {
         assertAll(
                 () -> assertThat(projectEmployees).isNotNull(),
                 () -> assertThat(projectEmployees).hasSize(1),
-                () -> assertThat(projectEmployees.get(0).projectId()).isEqualTo("Liwest-EMS"),
-                () -> assertThat(projectEmployees.get(0).employees()).containsExactlyInAnyOrder("008", "010", "012", "020")
+                () -> assertThat(projectEmployees.get(0).getProjectId()).isEqualTo("Liwest-EMS"),
+                () -> assertThat(projectEmployees.get(0).getEmployees()).containsExactlyInAnyOrder("008", "010", "012", "020")
         );
     }
 
