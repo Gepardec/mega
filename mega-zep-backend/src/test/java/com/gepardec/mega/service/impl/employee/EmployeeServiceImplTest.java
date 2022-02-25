@@ -55,8 +55,8 @@ class EmployeeServiceImplTest {
 
         final Employee employee = employeeService.getEmployee("someuserid");
         assertThat(employee).isNotNull();
-        assertThat(employee.userId()).isEqualTo("0");
-        assertThat(employee.firstname()).isEqualTo("Max_0");
+        assertThat(employee.getUserId()).isEqualTo("0");
+        assertThat(employee.getFirstname()).isEqualTo("Max_0");
     }
 
     @Test
@@ -71,8 +71,8 @@ class EmployeeServiceImplTest {
         assertAll(
                 () -> assertThat(employees).isNotNull(),
                 () -> assertThat(employees).hasSize(1),
-                () -> assertThat(employees.get(0).userId()).isEqualTo("0"),
-                () -> assertThat(employees.get(0).firstname()).isEqualTo("Max_0")
+                () -> assertThat(employees.get(0).getUserId()).isEqualTo("0"),
+                () -> assertThat(employees.get(0).getFirstname()).isEqualTo("Max_0")
         );
     }
 

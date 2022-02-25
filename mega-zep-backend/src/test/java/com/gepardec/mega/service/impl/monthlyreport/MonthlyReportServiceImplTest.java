@@ -82,7 +82,7 @@ class MonthlyReportServiceImplTest {
 
         assertThat(monthendReportForUser)
                 .isNotNull();
-        assertThat(monthendReportForUser.employee().email())
+        assertThat(monthendReportForUser.employee().getEmail())
                 .isEqualTo("Max_0@gepardec.com");
         assertThat(monthendReportForUser.timeWarnings())
                 .isNotNull();
@@ -102,7 +102,7 @@ class MonthlyReportServiceImplTest {
 
         assertThat(monthendReportForUser)
                 .isNotNull();
-        assertThat(monthendReportForUser.employee().email())
+        assertThat(monthendReportForUser.employee().getEmail())
                 .isEqualTo("Max_0@gepardec.com");
         assertThat(monthendReportForUser.timeWarnings())
                 .isNotNull();

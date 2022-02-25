@@ -36,15 +36,15 @@ public class SyncServiceMapper {
 
     public User mapEmployeeToNewUser(final Employee employee, List<Project> projects, Locale defaultLocale) {
         final User user = new User();
-        user.setZepId(employee.userId());
+        user.setZepId(employee.getUserId());
         return mapEmployeeToUser(user, employee, projects, defaultLocale);
     }
 
     public User mapEmployeeToUser(User user, Employee employee, List<Project> projects, Locale defaultLocale) {
-        user.setEmail(employee.email());
-        user.setFirstname(employee.firstname());
-        user.setLastname(employee.lastname());
-        user.setActive(employee.active());
+        user.setEmail(employee.getEmail());
+        user.setFirstname(employee.getFirstname());
+        user.setLastname(employee.getLastname());
+        user.setActive(employee.isActive());
         user.setReleaseDate(parseReleaseDate(employee));
         user.setRoles(determineRoles(employee, projects));
         setUserLocaleFromEmployeeLanguage(user, employee, defaultLocale);
@@ -53,11 +53,11 @@ public class SyncServiceMapper {
     }
 
     private LocalDate parseReleaseDate(Employee employee) {
-        if (StringUtils.isNotBlank(employee.releaseDate()) && !employee.releaseDate().equals("NULL")) {
+        if (StringUtils.isNotBlank(employee.getReleaseDate()) && !employee.getReleaseDate().equals("NULL")) {
             try {
-                return DateTimeFormatter.ISO_LOCAL_DATE.parse(employee.releaseDate(), TemporalQueries.localDate());
+                return DateTimeFormatter.ISO_LOCAL_DATE.parse(employee.getReleaseDate(), TemporalQueries.localDate());
             } catch (DateTimeParseException exception) {
-                log.warn("could not parse date {} for employee {}", employee.releaseDate(), employee.userId());
+                log.warn("could not parse date {} for employee {}", employee.getReleaseDate(), employee.getUserId());
             }
         }
         return null;
@@ -65,8 +65,8 @@ public class SyncServiceMapper {
 
     private Set<Role> determineRoles(final Employee employee, final List<Project> projects) {
         final boolean projectLead = projects.stream()
-                .anyMatch(project -> project.leads().contains(employee.userId()));
-        final boolean omEmployee = notificationConfig.getOmMailAddresses().stream().anyMatch(omEmail -> omEmail.equals(employee.email()));
+                .anyMatch(project -> project.leads().contains(employee.getUserId()));
+        final boolean omEmployee = notificationConfig.getOmMailAddresses().stream().anyMatch(omEmail -> omEmail.equals(employee.getEmail()));
 
         final Set<Role> roles = new HashSet<>();
         // Everyone if employee
@@ -82,17 +82,17 @@ public class SyncServiceMapper {
     }
 
     private void setUserLocaleFromEmployeeLanguage(final User user, final Employee employee, final Locale defaultLocale) {
-        if (employee.language() == null) {
+        if (employee.getLanguage() == null) {
             user.setLocale(defaultLocale);
         } else {
             try {
-                if (Stream.of(Locale.getISOLanguages()).noneMatch(language -> language.equals(employee.language()))) {
+                if (Stream.of(Locale.getISOLanguages()).noneMatch(language -> language.equals(employee.getLanguage()))) {
                     throw new IllegalArgumentException("Language is not a valid iso language");
                 }
-                user.setLocale(Locale.forLanguageTag(employee.language()));
+                user.setLocale(Locale.forLanguageTag(employee.getLanguage()));
             } catch (Exception e) {
-                log.warn("Employee '" + employee.email()
-                        + "' has an invalid language '" + employee.language()
+                log.warn("Employee '" + employee.getEmail()
+                        + "' has an invalid language '" + employee.getLanguage()
                         + "' set, therefore set default Locale '" + defaultLocale.toString() + "'");
                 user.setLocale(defaultLocale);
             }

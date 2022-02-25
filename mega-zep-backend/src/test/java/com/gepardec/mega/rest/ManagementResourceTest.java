@@ -124,8 +124,8 @@ class ManagementResourceTest {
         assertThat(entry.internalCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
         assertThat(entry.employeeCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
         assertThat(entry.projectCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.DONE);
-        assertThat(entry.employee().email()).isEqualTo("no-reply@gepardec.com");
-        assertThat(entry.employee().releaseDate()).isEqualTo("2020-01-01");
+        assertThat(entry.employee().getEmail()).isEqualTo("no-reply@gepardec.com");
+        assertThat(entry.employee().getReleaseDate()).isEqualTo("2020-01-01");
         assertThat(entry.totalComments()).isEqualTo(3L);
         assertThat(entry.finishedComments()).isEqualTo(2L);
     }
@@ -208,7 +208,7 @@ class ManagementResourceTest {
         Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
         Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
 
-        List<String> employees = List.of(employee1.userId(), employee2.userId());
+        List<String> employees = List.of(employee1.getUserId(), employee2.getUserId());
         List<String> leads = List.of("005");
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
         ProjectEmployees rgkkwc = createProject("ÖGK-RGKK2WC-2020", employees);
@@ -267,7 +267,7 @@ class ManagementResourceTest {
 
         List<ManagementEntryDto> rgkkccEntries = projectRgkkcc.get().entries();
         Optional<ManagementEntryDto> entrymmustermann = rgkkccEntries.stream()
-                .filter(m -> employee1.userId().equalsIgnoreCase(m.employee().userId()))
+                .filter(m -> employee1.getUserId().equalsIgnoreCase(m.employee().getUserId()))
                 .findFirst();
         // assert management entry
         assertThat(entrymmustermann).isPresent();
@@ -276,8 +276,8 @@ class ManagementResourceTest {
         assertThat(entry.internalCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
         assertThat(entry.employeeCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
         assertThat(entry.projectCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.DONE);
-        assertThat(entry.employee().email()).isEqualTo(employee1.email());
-        assertThat(entry.employee().releaseDate()).isEqualTo(employee1.releaseDate());
+        assertThat(entry.employee().getEmail()).isEqualTo(employee1.getEmail());
+        assertThat(entry.employee().getReleaseDate()).isEqualTo(employee1.getReleaseDate());
         assertThat(entry.totalComments()).isEqualTo(3L);
         assertThat(entry.finishedComments()).isEqualTo(2L);
     }
@@ -291,7 +291,7 @@ class ManagementResourceTest {
         Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
         Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
 
-        List<String> employees = List.of(employee1.userId(), employee2.userId());
+        List<String> employees = List.of(employee1.getUserId(), employee2.getUserId());
         List<String> leads = List.of("005");
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
         ProjectEmployees rgkkwc = createProject("ÖGK-RGKK2WC-2020", employees);
@@ -350,7 +350,7 @@ class ManagementResourceTest {
 
         List<ManagementEntryDto> rgkkccEntries = projectRgkkcc.get().entries();
         Optional<ManagementEntryDto> entrymmustermann = rgkkccEntries.stream()
-                .filter(m -> employee1.userId().equalsIgnoreCase(m.employee().userId()))
+                .filter(m -> employee1.getUserId().equalsIgnoreCase(m.employee().getUserId()))
                 .findFirst();
         // assert management entry
         assertThat(entrymmustermann).isPresent();
@@ -359,8 +359,8 @@ class ManagementResourceTest {
         assertThat(entry.internalCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
         assertThat(entry.employeeCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
         assertThat(entry.projectCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.DONE);
-        assertThat(entry.employee().email()).isEqualTo(employee1.email());
-        assertThat(entry.employee().releaseDate()).isEqualTo(employee1.releaseDate());
+        assertThat(entry.employee().getEmail()).isEqualTo(employee1.getEmail());
+        assertThat(entry.employee().getReleaseDate()).isEqualTo(employee1.getReleaseDate());
         assertThat(entry.totalComments()).isEqualTo(3L);
         assertThat(entry.finishedComments()).isEqualTo(2L);
 
@@ -378,7 +378,7 @@ class ManagementResourceTest {
         Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
         Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
 
-        List<String> employees = List.of(employee1.userId(), employee2.userId());
+        List<String> employees = List.of(employee1.getUserId(), employee2.getUserId());
         List<String> leads = List.of("005");
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
         ProjectEmployees rgkkwc = createProject("ÖGK-RGKK2WC-2020", employees);
@@ -437,7 +437,7 @@ class ManagementResourceTest {
 
         List<ManagementEntryDto> rgkkccEntries = projectRgkkcc.get().entries();
         Optional<ManagementEntryDto> entrymmustermann = rgkkccEntries.stream()
-                .filter(m -> employee1.userId().equalsIgnoreCase(m.employee().userId()))
+                .filter(m -> employee1.getUserId().equalsIgnoreCase(m.employee().getUserId()))
                 .findFirst();
         // assert management entry
         assertThat(entrymmustermann).isPresent();
@@ -446,8 +446,8 @@ class ManagementResourceTest {
         assertThat(entry.internalCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
         assertThat(entry.employeeCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.OPEN);
         assertThat(entry.projectCheckState()).isEqualTo(com.gepardec.mega.domain.model.State.DONE);
-        assertThat(entry.employee().email()).isEqualTo(employee1.email());
-        assertThat(entry.employee().releaseDate()).isEqualTo(employee1.releaseDate());
+        assertThat(entry.employee().getEmail()).isEqualTo(employee1.getEmail());
+        assertThat(entry.employee().getReleaseDate()).isEqualTo(employee1.getReleaseDate());
         assertThat(entry.totalComments()).isEqualTo(3L);
         assertThat(entry.finishedComments()).isEqualTo(2L);
 
@@ -465,7 +465,7 @@ class ManagementResourceTest {
         Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
         Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
 
-        List<String> employees = List.of(employee1.userId(), employee2.userId());
+        List<String> employees = List.of(employee1.getUserId(), employee2.getUserId());
         List<String> leads = List.of("005");
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
         ProjectEmployees rgkkwc = createProject("ÖGK-RGKK2WC-2020", employees);
@@ -553,7 +553,7 @@ class ManagementResourceTest {
         Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
         Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
 
-        List<String> employees = List.of(employee1.userId(), employee2.userId());
+        List<String> employees = List.of(employee1.getUserId(), employee2.getUserId());
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
         when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
                 .thenReturn(List.of(rgkkcc));

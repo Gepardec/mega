@@ -33,7 +33,7 @@ class EmployeeMapperTest {
         final MitarbeiterType employee = new MitarbeiterType();
 
         final Employee actual = mapper.map(employee);
-        assertThat(actual.active()).isFalse();
+        assertThat(actual.isActive()).isFalse();
     }
 
     @Test
@@ -42,7 +42,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(new BeschaeftigungszeitListeType());
 
         final Employee actual = mapper.map(employee);
-        assertThat(actual.active()).isFalse();
+        assertThat(actual.isActive()).isFalse();
     }
 
     @Test
@@ -53,7 +53,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        assertThat(actual.active()).isFalse();
+        assertThat(actual.isActive()).isFalse();
     }
 
     @Test
@@ -66,7 +66,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        assertThat(actual.active()).isFalse();
+        assertThat(actual.isActive()).isFalse();
     }
 
     @Test
@@ -77,7 +77,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        assertThat(actual.active()).isFalse();
+        assertThat(actual.isActive()).isFalse();
     }
 
     @Test
@@ -89,7 +89,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        assertThat(actual.active()).isFalse();
+        assertThat(actual.isActive()).isFalse();
     }
 
     @Test
@@ -101,7 +101,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        assertThat(actual.active()).isTrue();
+        assertThat(actual.isActive()).isTrue();
     }
 
     @Test
@@ -112,7 +112,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        assertThat(actual.active()).isTrue();
+        assertThat(actual.isActive()).isTrue();
     }
 
     @Test
@@ -123,7 +123,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        assertThat(actual.active()).isTrue();
+        assertThat(actual.isActive()).isTrue();
     }
 
     @Test
@@ -135,7 +135,7 @@ class EmployeeMapperTest {
         employee.setBeschaeftigungszeitListe(employments);
 
         final Employee actual = mapper.map(employee);
-        assertThat(actual.active()).isTrue();
+        assertThat(actual.isActive()).isTrue();
     }
 
     @Test
@@ -155,15 +155,15 @@ class EmployeeMapperTest {
 
         final Employee actual = mapper.map(employee);
         assertThat(employee).isNotNull();
-        assertThat(actual.userId()).isEqualTo(employee.getUserId());
-        assertThat(actual.email()).isEqualTo(employee.getEmail());
-        assertThat(actual.firstname()).isEqualTo(employee.getVorname());
-        assertThat(actual.lastname()).isEqualTo(employee.getNachname());
-        assertThat(actual.title()).isEqualTo(employee.getTitel());
-        assertThat(actual.salutation()).isEqualTo(employee.getAnrede());
-        assertThat(actual.workDescription()).isEqualTo(employee.getPreisgruppe());
-        assertThat(actual.releaseDate()).isEqualTo(employee.getFreigabedatum());
-        assertThat(actual.active()).isTrue();
+        assertThat(actual.getUserId()).isEqualTo(employee.getUserId());
+        assertThat(actual.getEmail()).isEqualTo(employee.getEmail());
+        assertThat(actual.getFirstname()).isEqualTo(employee.getVorname());
+        assertThat(actual.getLastname()).isEqualTo(employee.getNachname());
+        assertThat(actual.getTitle()).isEqualTo(employee.getTitel());
+        assertThat(actual.getSalutation()).isEqualTo(employee.getAnrede());
+        assertThat(actual.getWorkDescription()).isEqualTo(employee.getPreisgruppe());
+        assertThat(actual.getReleaseDate()).isEqualTo(employee.getFreigabedatum());
+        assertThat(actual.isActive()).isTrue();
     }
 
     private BeschaeftigungszeitType createBeschaeftigungszeitType(final LocalDate start, final LocalDate end) {

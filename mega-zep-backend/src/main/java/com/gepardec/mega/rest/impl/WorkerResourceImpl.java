@@ -46,7 +46,7 @@ public class WorkerResourceImpl implements WorkerResource {
     public Response monthlyReport() {
         Employee employee = employeeService.getEmployee(Objects.requireNonNull(userContext.user()).userId());
 
-        LocalDate date = LocalDate.parse(employee.releaseDate()).with(TemporalAdjusters.firstDayOfNextMonth());
+        LocalDate date = LocalDate.parse(employee.getReleaseDate()).with(TemporalAdjusters.firstDayOfNextMonth());
         return monthlyReport(date.getYear(), date.getMonthValue());
     }
 
@@ -56,7 +56,7 @@ public class WorkerResourceImpl implements WorkerResource {
 
         Employee employee = employeeService.getEmployee(Objects.requireNonNull(userContext.user()).userId());
 
-        MonthlyReport monthlyReport = monthlyReportService.getMonthendReportForUser(Objects.requireNonNull(employee).userId(), date);
+        MonthlyReport monthlyReport = monthlyReportService.getMonthendReportForUser(Objects.requireNonNull(employee).getUserId(), date);
 
         if (monthlyReport == null) {
             monthlyReport = MonthlyReport.builder()

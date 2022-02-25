@@ -191,7 +191,7 @@ public class ZepServiceImpl implements ZepService {
     @Override
     public String getBillableTimesForEmployee(@Nonnull List<ProjektzeitType> projektzeitTypeList, @Nonnull Employee employee, boolean billable) {
         Duration totalBillable = projektzeitTypeList.stream()
-                .filter(pzt -> pzt.getUserId().equals(employee.userId()))
+                .filter(pzt -> pzt.getUserId().equals(employee.getUserId()))
                 .filter(billable ? ProjektzeitType::isIstFakturierbar : Predicate.not(ProjektzeitType::isIstFakturierbar))
                 .map(pzt -> LocalTime.parse(pzt.getDauer()))
                 .map(lt -> Duration.between(LocalTime.MIN, lt))
@@ -203,7 +203,7 @@ public class ZepServiceImpl implements ZepService {
     @Override
     public String getTotalWorkingTimeForEmployee(@Nonnull List<ProjektzeitType> projektzeitTypeList, @Nonnull Employee employee) {
         Duration totalBillable = projektzeitTypeList.stream()
-                .filter(pzt -> pzt.getUserId().equals(employee.userId()))
+                .filter(pzt -> pzt.getUserId().equals(employee.getUserId()))
                 .map(pzt -> LocalTime.parse(pzt.getDauer()))
                 .map(lt -> Duration.between(LocalTime.MIN, lt))
                 .reduce(Duration.ZERO, Duration::plus);
@@ -288,7 +288,7 @@ public class ZepServiceImpl implements ZepService {
         searchCriteria.setBis(getLastDayOfCurrentMonth(date.toString()));
 
         UserIdListeType userIdListType = new UserIdListeType();
-        userIdListType.getUserId().add(employee.userId());
+        userIdListType.getUserId().add(employee.getUserId());
         searchCriteria.setUserIdListe(userIdListType);
         return searchCriteria;
     }
@@ -312,7 +312,7 @@ public class ZepServiceImpl implements ZepService {
         searchCriteria.setStartdatum(getFirstDayOfCurrentMonth(date.toString()));
         searchCriteria.setEnddatum(getLastDayOfCurrentMonth(date.toString()));
 
-        searchCriteria.setUserId(employee.userId());
+        searchCriteria.setUserId(employee.getUserId());
         return searchCriteria;
     }
 

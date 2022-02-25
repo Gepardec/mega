@@ -45,8 +45,7 @@ import java.util.stream.Collectors;
 @RolesAllowed(value = {Role.PROJECT_LEAD, Role.OFFICE_MANAGEMENT})
 public class ManagementResourceImpl implements ManagementResource {
 
-    //TODO ask if YYYY is expected
-    private static final String DATE_FORMAT_PATTERN = "YYYY-MM-dd";
+    private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd";
 
     private static final String BILLABLE_TIME_FORMAT = "HH:mm";
 
@@ -76,12 +75,12 @@ public class ManagementResourceImpl implements ManagementResource {
         List<ManagementEntryDto> officeManagementEntries = new ArrayList<>();
         List<Employee> activeEmployees = employeeService.getAllActiveEmployees();
 
-        for (Employee empl : activeEmployees) {
-            List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployee(empl, from, to);
+        for (Employee employee : activeEmployees) {
+            List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployee(employee, from, to);
 
             String entryDate = LocalDate.of(year, month, 1).minusMonths(1).format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN));
 
-            List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(empl.email(), entryDate);
+            List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(employee.getEmail(), entryDate);
             List<PmProgressDto> pmProgressDtos = new ArrayList<>();
 
             allOwnedStepEntriesForPMProgress
@@ -96,7 +95,7 @@ public class ManagementResourceImpl implements ManagementResource {
                                     .build()
                     ));
 
-            ManagementEntryDto newManagementEntryDto = createManagementEntryForEmployee(empl, stepEntries, from, to, pmProgressDtos);
+            ManagementEntryDto newManagementEntryDto = createManagementEntryForEmployee(employee, stepEntries, from, to, pmProgressDtos);
 
             if (newManagementEntryDto != null) {
                 officeManagementEntries.add(newManagementEntryDto);
@@ -183,7 +182,7 @@ public class ManagementResourceImpl implements ManagementResource {
 
     private Map<String, Employee> createEmployeeCache() {
         return employeeService.getAllActiveEmployees().stream()
-                .collect(Collectors.toMap(Employee::userId, employee -> employee));
+                .collect(Collectors.toMap(Employee::getUserId, employee -> employee));
     }
 
     private List<ManagementEntryDto> createManagementEntriesForProject(ProjectEmployees projectEmployees, Map<String, Employee> employees, LocalDate from, LocalDate to) {
@@ -196,12 +195,12 @@ public class ManagementResourceImpl implements ManagementResource {
         for (String userId : projectEmployees.employees()) {
 
             if (employees.containsKey(userId)) {
-                Employee empl = employees.get(userId);
+                Employee employee = employees.get(userId);
                 List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployeeAndProject(
-                        empl, projectEmployees.projectId(), Objects.requireNonNull(userContext.user()).email(), from, to
+                        employee, projectEmployees.projectId(), Objects.requireNonNull(userContext.user()).email(), from, to
                 );
 
-                ManagementEntryDto entry = createManagementEntryForEmployee(empl, projectEmployees.projectId(), stepEntries, from, to, null);
+                ManagementEntryDto entry = createManagementEntryForEmployee(employee, projectEmployees.projectId(), stepEntries, from, to, null);
 
                 if (entry != null) {
                     entries.add(entry);
@@ -229,8 +228,8 @@ public class ManagementResourceImpl implements ManagementResource {
                     .internalCheckState(extractInternalCheckState(stepEntries))
                     .projectCheckState(extractStateForProject(stepEntries, projectId))
                     .employeeProgresses(pmProgressDtos)
-                    .finishedComments(finishedAndTotalComments.finishedComments())
-                    .totalComments(finishedAndTotalComments.totalComments())
+                    .finishedComments(finishedAndTotalComments.getFinishedComments())
+                    .totalComments(finishedAndTotalComments.getTotalComments())
                     .entryDate(stepEntries.get(0).getDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN)))
                     .billableTime(zepService.getBillableTimesForEmployee(projektzeitTypes, employee, true))
                     .nonBillableTime(zepService.getBillableTimesForEmployee(projektzeitTypes, employee))

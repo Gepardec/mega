@@ -35,7 +35,7 @@ public class StepEntryServiceImpl implements StepEntryService {
     @Override
     public Optional<EmployeeState> findEmployeeCheckState(final Employee employee) {
         if(employee != null){
-            return findEmployeeCheckState(employee, LocalDate.parse(employee.releaseDate()));
+            return findEmployeeCheckState(employee, LocalDate.parse(employee.getReleaseDate()));
         }
         return Optional.empty();
     }
@@ -43,15 +43,15 @@ public class StepEntryServiceImpl implements StepEntryService {
     @Override
     public Optional<EmployeeState> findEmployeeCheckState(final Employee employee, LocalDate date) {
         Optional<StepEntry> stepEntries =
-                stepEntryRepository.findAllOwnedAndAssignedStepEntriesForEmployee(date, employee.email());
+                stepEntryRepository.findAllOwnedAndAssignedStepEntriesForEmployee(date, employee.getEmail());
 
         return stepEntries.map(StepEntry::getState);
     }
 
     @Override
     public List<StepEntry> findAllOwnedAndUnassignedStepEntriesForOtherChecks(Employee employee) {
-        LocalDate entryDate = parseReleaseDate(employee.releaseDate());
-        return stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(entryDate, employee.email());
+        LocalDate entryDate = parseReleaseDate(employee.getReleaseDate());
+        return stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(entryDate, employee.getEmail());
     }
 
     @Override
@@ -88,7 +88,7 @@ public class StepEntryServiceImpl implements StepEntryService {
 
     @Override
     public boolean setOpenAndAssignedStepEntriesDone(Employee employee, Long stepId, LocalDate from, LocalDate to) {
-        return stepEntryRepository.closeAssigned(from, to, employee.email(), stepId) > 0;
+        return stepEntryRepository.closeAssigned(from, to, employee.getEmail(), stepId) > 0;
     }
 
     @Override
@@ -96,13 +96,13 @@ public class StepEntryServiceImpl implements StepEntryService {
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(currentMonthYear));
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(currentMonthYear));
 
-        return stepEntryRepository.closeAssigned(fromDate, toDate, employee.email(), assigneeEmail, stepId, project) > 0;
+        return stepEntryRepository.closeAssigned(fromDate, toDate, employee.getEmail(), assigneeEmail, stepId, project) > 0;
     }
 
     @Override
     public List<StepEntry> findAllStepEntriesForEmployee(Employee employee, LocalDate from, LocalDate to) {
         Objects.requireNonNull(employee, "Employee must not be null!");
-        return stepEntryRepository.findAllOwnedStepEntriesInRange(from, to, employee.email());
+        return stepEntryRepository.findAllOwnedStepEntriesInRange(from, to, employee.getEmail());
     }
 
     @Override
@@ -111,8 +111,8 @@ public class StepEntryServiceImpl implements StepEntryService {
         Objects.requireNonNull(employee, "Employee must not be null!");
 
         List<StepEntry> stepEntries = new ArrayList<>();
-        stepEntries.addAll(stepEntryRepository.findAllOwnedStepEntriesInRange(from, to, employee.email(), projectId, assigneEmail));
-        stepEntries.addAll(stepEntryRepository.findAllOwnedStepEntriesInRange(from, to, employee.email()));
+        stepEntries.addAll(stepEntryRepository.findAllOwnedStepEntriesInRange(from, to, employee.getEmail(), projectId, assigneEmail));
+        stepEntries.addAll(stepEntryRepository.findAllOwnedStepEntriesInRange(from, to, employee.getEmail()));
         return stepEntries;
     }
 
@@ -122,10 +122,10 @@ public class StepEntryServiceImpl implements StepEntryService {
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(currentMonthYear));
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(currentMonthYear));
         Optional<StepEntry> stepEntry = stepEntryRepository.findStepEntryForEmployeeAtStepInRange(
-                fromDate, toDate, employee.email(), stepId, assigneeEmail
+                fromDate, toDate, employee.getEmail(), stepId, assigneeEmail
         );
         if (stepEntry.isEmpty()) {
-            throw new IllegalStateException(String.format("No StepEntries found for Employee %s", employee.email()));
+            throw new IllegalStateException(String.format("No StepEntries found for Employee %s", employee.getEmail()));
         }
 
         return stepEntry.get();
@@ -137,10 +137,10 @@ public class StepEntryServiceImpl implements StepEntryService {
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(currentMonthYear));
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(currentMonthYear));
         Optional<StepEntry> stepEntry = stepEntryRepository.findStepEntryForEmployeeAndProjectAtStepInRange(
-                fromDate, toDate, employee.email(), stepId, assigneeEmail, project
+                fromDate, toDate, employee.getEmail(), stepId, assigneeEmail, project
         );
         if (stepEntry.isEmpty()) {
-            throw new IllegalStateException(String.format("No StepEntries found for Employee %s", employee.email()));
+            throw new IllegalStateException(String.format("No StepEntries found for Employee %s", employee.getEmail()));
         }
 
         return stepEntry.get();

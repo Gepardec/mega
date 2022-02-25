@@ -59,8 +59,8 @@ class CommentServiceImplTest {
                 ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString())).thenReturn(List.of(createComment(1L, EmployeeState.OPEN)));
 
         Employee employee = createEmployee();
-        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate()));
+        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate()));
         List<com.gepardec.mega.domain.model.Comment> domainComments = commentService.findCommentsForEmployee(
                 employee, fromDate, toDate
         );
@@ -74,7 +74,7 @@ class CommentServiceImplTest {
         when(commentRepository.setStatusDone(ArgumentMatchers.anyLong())).thenReturn(0);
 
         int updatedCount = commentService.setDone(commentMapper.mapDbCommentToDomainComment(createComment(1L, EmployeeState.IN_PROGRESS)));
-        assertThat(updatedCount).isEqualTo(0);
+        assertThat(updatedCount).isZero();
     }
 
     @Test
@@ -86,28 +86,28 @@ class CommentServiceImplTest {
 
     @Test
     void cntFinishedAndTotalCommentsForEmployee_whenFromDateIsNull_thenThrowsException() {
-        Employee empl = Employee.builder()
+        Employee employee = Employee.builder()
                 .userId("1")
                 .email("max.mustermann@gpeardec.com")
                 .releaseDate(null)
                 .firstname("Max")
                 .build();
 
-        assertThatThrownBy(() -> commentService.cntFinishedAndTotalCommentsForEmployee(empl, null, null))
+        assertThatThrownBy(() -> commentService.cntFinishedAndTotalCommentsForEmployee(employee, null, null))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessage("From date must not be null!");
     }
 
     @Test
     void cntFinishedAndTotalCommentsForEmployee_whenToDateIsNull_thenThrowsException() {
-        Employee empl = Employee.builder()
+        Employee employee = Employee.builder()
                 .userId("1")
                 .email("max.mustermann@gpeardec.com")
                 .releaseDate(null)
                 .firstname("Max")
                 .build();
 
-        assertThatThrownBy(() -> commentService.cntFinishedAndTotalCommentsForEmployee(empl, LocalDate.now(), null))
+        assertThatThrownBy(() -> commentService.cntFinishedAndTotalCommentsForEmployee(employee, LocalDate.now(), null))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessage("To date must not be null!");
     }
@@ -125,12 +125,12 @@ class CommentServiceImplTest {
         ));
 
         Employee employee = createEmployee();
-        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate()));
+        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate()));
         FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
         assertThat(result).isNotNull();
-        assertThat(result.totalComments()).isEqualTo(3L);
-        assertThat(result.finishedComments()).isEqualTo(1L);
+        assertThat(result.getTotalComments()).isEqualTo(3L);
+        assertThat(result.getFinishedComments()).isEqualTo(1L);
     }
 
     @Test
@@ -146,12 +146,12 @@ class CommentServiceImplTest {
         ));
 
         Employee employee = createEmployee();
-        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate()));
+        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate()));
         FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
         assertThat(result).isNotNull();
-        assertThat(result.totalComments()).isEqualTo(3L);
-        assertThat(result.finishedComments()).isZero();
+        assertThat(result.getTotalComments()).isEqualTo(3L);
+        assertThat(result.getFinishedComments()).isZero();
     }
 
     @Test
@@ -163,12 +163,12 @@ class CommentServiceImplTest {
         )).thenReturn(List.of());
 
         Employee employee = createEmployee();
-        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate()));
+        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate()));
         FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
         assertThat(result).isNotNull();
-        assertThat(result.totalComments()).isZero();
-        assertThat(result.finishedComments()).isZero();
+        assertThat(result.getTotalComments()).isZero();
+        assertThat(result.getFinishedComments()).isZero();
     }
 
     @Test
@@ -213,12 +213,12 @@ class CommentServiceImplTest {
         String creator = stepEntry.getAssignee().getFirstname();
         Map<String, String> expectedMailParameter = Map.of(
                 MailParameter.CREATOR, creator,
-                MailParameter.RECIPIENT, employee.firstname(),
+                MailParameter.RECIPIENT, employee.getFirstname(),
                 MailParameter.COMMENT, newComment
         );
 
         verify(mailSender, times(1)).send(
-                Mail.COMMENT_CREATED, employee.email(), employee.firstname(), Locale.GERMAN, expectedMailParameter, List.of(creator)
+                Mail.COMMENT_CREATED, employee.getEmail(), employee.getFirstname(), Locale.GERMAN, expectedMailParameter, List.of(creator)
         );
 
         assertThat(createdComment).isNotNull();

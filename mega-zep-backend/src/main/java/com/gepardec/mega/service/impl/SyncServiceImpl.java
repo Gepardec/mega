@@ -101,7 +101,7 @@ public class SyncServiceImpl implements SyncService {
         final Map<String, User> zepIdToUser = mapZepIdToUser(users);
         final Locale defaultLocale = applicationConfig.getDefaultLocale();
         return employees.stream()
-                .filter(zepEmployee -> !zepIdToUser.containsKey(zepEmployee.userId()))
+                .filter(zepEmployee -> !zepIdToUser.containsKey(zepEmployee.getUserId()))
                 .map(employee -> mapper.mapEmployeeToNewUser(employee, projects, defaultLocale))
                 .collect(Collectors.toList());
     }
@@ -117,8 +117,8 @@ public class SyncServiceImpl implements SyncService {
     private List<User> filterModifiedEmployeesAndUpdateUsers(final List<Employee> employees, final List<User> users, final List<Project> projects) {
         final Map<String, User> zepIdToUser = mapZepIdToUser(users);
         final Map<User, Employee> existingUserToEmployee = employees.stream()
-                .filter(zepEmployee -> zepIdToUser.containsKey(zepEmployee.userId()))
-                .collect(Collectors.toMap(employee -> zepIdToUser.get(employee.userId()), Function.identity()));
+                .filter(zepEmployee -> zepIdToUser.containsKey(zepEmployee.getUserId()))
+                .collect(Collectors.toMap(employee -> zepIdToUser.get(employee.getUserId()), Function.identity()));
         final Locale defaultLocale = applicationConfig.getDefaultLocale();
         return existingUserToEmployee.entrySet().stream()
                 .map(entry -> mapper.mapEmployeeToUser(entry.getKey(), entry.getValue(), projects, defaultLocale))
@@ -132,6 +132,6 @@ public class SyncServiceImpl implements SyncService {
 
     private Map<String, Employee> mapZepIdToEmployee(final List<Employee> employees) {
         return employees.stream()
-                .collect(Collectors.toMap(Employee::userId, Function.identity()));
+                .collect(Collectors.toMap(Employee::getUserId, Function.identity()));
     }
 }

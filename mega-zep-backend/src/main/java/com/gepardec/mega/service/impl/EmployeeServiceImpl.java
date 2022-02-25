@@ -55,8 +55,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> getAllActiveEmployees() {
         return zepService.getEmployees().stream()
-                .filter(Employee::active)
-                .filter(employee -> Objects.nonNull(employee.email()))
+                .filter(Employee::isActive)
+                .filter(employee -> Objects.nonNull(employee.getEmail()))
                 .collect(Collectors.toList());
     }
 
@@ -75,11 +75,11 @@ public class EmployeeServiceImpl implements EmployeeService {
          */
         Iterables.partition(Optional.ofNullable(employees).orElseThrow(() -> new ZepServiceException("no employees to update")), employeeUpdateParallelExecutions).forEach((partition) -> {
             try {
-                CompletableFuture.allOf(partition.stream().map((employee) -> CompletableFuture.runAsync(() -> updateEmployeeReleaseDate(employee.userId(), employee.releaseDate()), managedExecutor)
+                CompletableFuture.allOf(partition.stream().map((employee) -> CompletableFuture.runAsync(() -> updateEmployeeReleaseDate(employee.getUserId(), employee.getReleaseDate()), managedExecutor)
                         .handle((aVoid, throwable) -> {
                             Optional.ofNullable(throwable).ifPresent((t) -> {
-                                logger.error(String.format("error updating %s", employee.userId()), t);
-                                failedUserIds.add(employee.userId());
+                                logger.error(String.format("error updating %s", employee.getUserId()), t);
+                                failedUserIds.add(employee.getUserId());
                             });
                             return null;
                         })).toArray(CompletableFuture[]::new)).get();
@@ -104,6 +104,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     private List<String> getUserIds(final List<Employee> employees) {
-        return employees.stream().map(Employee::userId).collect(Collectors.toList());
+        return employees.stream().map(Employee::getUserId).collect(Collectors.toList());
     }
 }

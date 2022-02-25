@@ -52,8 +52,8 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         Employee employee = zepService.getEmployee(userId);
         final LocalDate date;
 
-        if ((employee != null) && (employee.releaseDate() != null) && checkReleaseDate(Objects.requireNonNull(employee.releaseDate()))) {
-            date = LocalDate.parse(Objects.requireNonNull(employee.releaseDate())).plusMonths(1);
+        if ((employee != null) && (employee.getReleaseDate() != null) && checkReleaseDate(Objects.requireNonNull(employee.getReleaseDate()))) {
+            date = LocalDate.parse(Objects.requireNonNull(employee.getReleaseDate())).plusMonths(1);
 
         } else {
             date = null;
@@ -78,8 +78,8 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
 
     @Override
     public boolean setOpenAndUnassignedStepEntriesDone(Employee employee, Long stepId) {
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate()));
+        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate()));
 
         return stepEntryService.setOpenAndAssignedStepEntriesDone(employee, stepId, from, to);
     }
@@ -94,13 +94,13 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         List<PmProgressDto> pmProgressDtos = new ArrayList<>();
         if (employee != null) {
 
-            if (checkReleaseDate(employee.releaseDate())) {
-                LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-                LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+            if (checkReleaseDate(employee.getReleaseDate())) {
+                LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate()));
+                LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate()));
                 comments.addAll(commentService.findCommentsForEmployee(employee, fromDate, toDate));
             }
 
-            final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(employee.email(), employee.releaseDate());
+            final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(employee.getEmail(), employee.getReleaseDate());
             allOwnedStepEntriesForPMProgress
                     .forEach(stepEntry -> pmProgressDtos.add(
                             PmProgressDto.builder()

@@ -110,7 +110,7 @@ class ZepServiceImplTest {
 
         final Employee employee = zepService.getEmployee("0");
         assertThat(employee).isNotNull();
-        assertThat(employee.userId()).isEqualTo("0");
+        assertThat(employee.getUserId()).isEqualTo("0");
 
         Mockito.verify(zepSoapPortType).readMitarbeiter(Mockito.argThat(
                 argument -> argument.getReadMitarbeiterSearchCriteria() != null && argument.getReadMitarbeiterSearchCriteria().getUserId().equals("0")

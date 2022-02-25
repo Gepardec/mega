@@ -44,7 +44,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> findCommentsForEmployee(final Employee employee, LocalDate from, LocalDate to) {
         List<com.gepardec.mega.db.entity.employee.Comment> dbComments =
-                commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(from, to, employee.email());
+                commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(from, to, employee.getEmail());
 
         return dbComments
                 .stream()
@@ -66,7 +66,7 @@ public class CommentServiceImpl implements CommentService {
 
         List<com.gepardec.mega.db.entity.employee.Comment> allComments =
                 commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(
-                        from, to, employee.email()
+                        from, to, employee.getEmail()
                 );
 
         long finishedCommands = allComments.stream().filter(comment -> EmployeeState.DONE.equals(comment.getState())).count();
