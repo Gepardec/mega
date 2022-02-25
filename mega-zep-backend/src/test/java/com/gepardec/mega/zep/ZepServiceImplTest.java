@@ -271,8 +271,8 @@ class ZepServiceImplTest {
 
         // Then
         assertThat(projectsForMonthYear).hasSize(1);
-        assertThat(projectsForMonthYear.get(0).employees()).hasSize(1);
-        assertThat(projectsForMonthYear.get(0).leads()).hasSize(1);
+        assertThat(projectsForMonthYear.get(0).getEmployees()).hasSize(1);
+        assertThat(projectsForMonthYear.get(0).getLeads()).hasSize(1);
     }
 
     @ParameterizedTest
@@ -291,8 +291,8 @@ class ZepServiceImplTest {
 
         // Then
         assertThat(projectsForMonthYear).hasSize(1);
-        assertThat(projectsForMonthYear.get(0).employees()).isEmpty();
-        assertThat(projectsForMonthYear.get(0).leads()).isEmpty();
+        assertThat(projectsForMonthYear.get(0).getEmployees()).isEmpty();
+        assertThat(projectsForMonthYear.get(0).getLeads()).isEmpty();
     }
 
     @Test
@@ -316,8 +316,8 @@ class ZepServiceImplTest {
 
         // Then
         assertThat(projectsForMonthYear).hasSize(1);
-        assertThat(projectsForMonthYear.get(0).employees()).hasSize(1);
-        assertThat(projectsForMonthYear.get(0).leads()).hasSize(1);
+        assertThat(projectsForMonthYear.get(0).getEmployees()).hasSize(1);
+        assertThat(projectsForMonthYear.get(0).getLeads()).hasSize(1);
     }
 
     @Test
@@ -341,7 +341,7 @@ class ZepServiceImplTest {
 
         // Then
         assertThat(projectsForMonthYear).hasSize(1);
-        assertThat(projectsForMonthYear.get(0).employees()).isEmpty();
-        assertThat(projectsForMonthYear.get(0).leads()).isEmpty();
+        assertThat(projectsForMonthYear.get(0).getEmployees()).isEmpty();
+        assertThat(projectsForMonthYear.get(0).getLeads()).isEmpty();
     }
 }

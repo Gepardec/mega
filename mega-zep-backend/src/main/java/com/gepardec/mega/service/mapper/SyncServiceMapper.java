@@ -65,7 +65,7 @@ public class SyncServiceMapper {
 
     private Set<Role> determineRoles(final Employee employee, final List<Project> projects) {
         final boolean projectLead = projects.stream()
-                .anyMatch(project -> project.leads().contains(employee.getUserId()));
+                .anyMatch(project -> project.getLeads().contains(employee.getUserId()));
         final boolean omEmployee = notificationConfig.getOmMailAddresses().stream().anyMatch(omEmail -> omEmail.equals(employee.getEmail()));
 
         final Set<Role> roles = new HashSet<>();

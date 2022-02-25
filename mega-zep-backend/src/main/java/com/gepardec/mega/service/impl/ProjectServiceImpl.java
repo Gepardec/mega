@@ -110,9 +110,9 @@ public class ProjectServiceImpl implements ProjectService {
     private boolean filterProject(final Project project, final ProjectFilter projectFilter) {
         switch (projectFilter) {
             case IS_LEADS_AVAILABLE:
-                return !project.leads().isEmpty();
+                return !project.getLeads().isEmpty();
             case IS_CUSTOMER_PROJECT:
-                return !project.categories().contains(INTERN_PROJECT_CATEGORY);
+                return !project.getCategories().contains(INTERN_PROJECT_CATEGORY);
             default:
                 throw new IllegalStateException(String.format("projectFilter %s not implemented", projectFilter));
         }

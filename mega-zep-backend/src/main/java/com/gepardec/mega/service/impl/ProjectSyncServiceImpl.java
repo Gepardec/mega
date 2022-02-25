@@ -88,7 +88,7 @@ public class ProjectSyncServiceImpl implements ProjectSyncService {
     private Optional<com.gepardec.mega.db.entity.project.Project> createProjectEntityFromProject(List<User> activeUsers, Project project, LocalDate date) {
         com.gepardec.mega.db.entity.project.Project projectEntity = new com.gepardec.mega.db.entity.project.Project();
 
-        List<User> leads = project.leads()
+        List<User> leads = project.getLeads()
                 .stream()
                 .filter(Objects::nonNull)
                 .filter(userid -> !userid.isBlank())
@@ -106,9 +106,9 @@ public class ProjectSyncServiceImpl implements ProjectSyncService {
                 .collect(Collectors.toSet());
 
         projectEntity.setProjectLeads(mappedLeads);
-        projectEntity.setName(project.projectId());
-        projectEntity.setStartDate(project.startDate());
-        projectEntity.setEndDate(project.endDate());
+        projectEntity.setName(project.getProjectId());
+        projectEntity.setStartDate(project.getStartDate());
+        projectEntity.setEndDate(project.getEndDate());
 
         Arrays.stream(ProjectStep.values()).forEach(projectStep ->
                 projectEntity.addProjectEntry(createProjectEntry(projectEntity, mappedLeads, date, projectStep))

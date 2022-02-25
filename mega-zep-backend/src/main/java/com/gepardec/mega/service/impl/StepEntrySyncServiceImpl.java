@@ -126,14 +126,14 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
 
     private List<StepEntry> createStepEntriesForOwnerProjects(final LocalDate date, final Step step, final List<Project> projects, final List<User> users, final User ownerUser) {
         return projects.stream()
-                .filter(project -> project.employees().contains(ownerUser.userId()))
+                .filter(project -> project.getEmployees().contains(ownerUser.userId()))
                 .map(project -> createStepEntriesForOwnerProject(date, step, project, users, ownerUser))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
 
     private List<StepEntry> createStepEntriesForOwnerProject(final LocalDate date, final Step step, final Project project, final List<User> users, final User ownerUser) {
-        return project.leads()
+        return project.getLeads()
                 .stream()
                 .map(lead -> findUserByUserId(users, lead))
                 .filter(Optional::isPresent)

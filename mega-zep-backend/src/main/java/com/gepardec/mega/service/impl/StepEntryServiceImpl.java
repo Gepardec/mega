@@ -75,7 +75,7 @@ public class StepEntryServiceImpl implements StepEntryService {
 
         final StepEntry stepEntryDb = new StepEntry();
         stepEntryDb.setDate(stepEntry.date());
-        stepEntryDb.setProject(stepEntry.project() != null ? stepEntry.project().projectId() : null);
+        stepEntryDb.setProject(stepEntry.project() != null ? stepEntry.project().getProjectId() : null);
         stepEntryDb.setState(EmployeeState.OPEN);
         stepEntryDb.setOwner(ownerDb);
         stepEntryDb.setAssignee(assigneeDb);

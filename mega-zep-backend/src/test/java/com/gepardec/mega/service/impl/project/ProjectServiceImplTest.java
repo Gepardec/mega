@@ -29,7 +29,7 @@ class ProjectServiceImplTest {
     @Inject
     ProjectServiceImpl projectService;
 
-    private Project.Builder projectFor(final String id) {
+    private Project.ProjectBuilder projectFor(final String id) {
         return Project.builder()
                 .projectId(id)
                 .description(String.format("Description of Project %s", id));
@@ -86,7 +86,7 @@ class ProjectServiceImplTest {
 
         // Then
         assertThat(projectsForMonthYear).hasSize(1);
-        assertThat(projectsForMonthYear.get(0).projectId()).isEqualTo("Kunde");
+        assertThat(projectsForMonthYear.get(0).getProjectId()).isEqualTo("Kunde");
     }
 
     @Test
@@ -118,6 +118,6 @@ class ProjectServiceImplTest {
 
         // Then
         assertThat(projectsForMonthYear).hasSize(1);
-        assertThat(projectsForMonthYear.get(0).projectId()).isEqualTo("1");
+        assertThat(projectsForMonthYear.get(0).getProjectId()).isEqualTo("1");
     }
 }

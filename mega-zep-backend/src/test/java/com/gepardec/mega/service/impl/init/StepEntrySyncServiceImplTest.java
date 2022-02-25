@@ -137,7 +137,7 @@ class StepEntrySyncServiceImplTest {
                 .email(String.format("%s%s.%s@gepardec.com", firstname, id, lastname));
     }
 
-    private Project.Builder projectFor(final int id) {
+    private Project.ProjectBuilder projectFor(final int id) {
         return Project.builder()
                 .projectId(String.valueOf(id))
                 .description(String.format("Description of Project %s", id))
@@ -388,13 +388,13 @@ class StepEntrySyncServiceImplTest {
         final List<StepEntry> stepEntries = argumentCaptor.getAllValues();
 
         // Project 1
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().projectId().equals(String.valueOf(1))).count()).isEqualTo(4);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().getProjectId().equals(String.valueOf(1))).count()).isEqualTo(4);
 
         // Project 2
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().projectId().equals(String.valueOf(2))).count()).isEqualTo(3);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().getProjectId().equals(String.valueOf(2))).count()).isEqualTo(3);
 
         // Project 3
-        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().projectId().equals(String.valueOf(3))).count()).isEqualTo(3);
+        assertThat(stepEntries.stream().filter(stepEntry -> stepEntry.project() != null && stepEntry.project().getProjectId().equals(String.valueOf(3))).count()).isEqualTo(3);
     }
 
     @Test
