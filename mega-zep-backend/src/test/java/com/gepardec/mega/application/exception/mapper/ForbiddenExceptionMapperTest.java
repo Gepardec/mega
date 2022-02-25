@@ -47,7 +47,7 @@ class ForbiddenExceptionMapperTest {
 
     @Test
     void toResponse_whenUserNotLogged_thenLoggerWarnCalledAndMessageContainsUserEmail() {
-        when(userContext.user()).thenReturn(createUserForEmail("no-reply@gepardec.com"));
+        when(userContext.getUser()).thenReturn(createUserForEmail("no-reply@gepardec.com"));
         when(uriInfo.getPath()).thenReturn("/path/resource");
         final Response response = mapper.toResponse(new ForbiddenException("exception-message"));
 
@@ -57,7 +57,7 @@ class ForbiddenExceptionMapperTest {
 
     @Test
     void toResponse_whenCalled_thenReturnsHttpErrorFORBIDDEN() {
-        when(userContext.user()).thenReturn(createUserForEmail("no-reply@gepardec.com"));
+        when(userContext.getUser()).thenReturn(createUserForEmail("no-reply@gepardec.com"));
         when(uriInfo.getPath()).thenReturn("/path/resource");
         final Response response = mapper.toResponse(new ForbiddenException("exception-message"));
 

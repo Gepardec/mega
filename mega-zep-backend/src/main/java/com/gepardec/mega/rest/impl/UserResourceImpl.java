@@ -20,6 +20,6 @@ public class UserResourceImpl implements UserResource {
 
     @Override
     public Response get() {
-        return Response.ok(userContext.user()).build();
+        return Response.ok(userContext.getUser()).build();
     }
 }

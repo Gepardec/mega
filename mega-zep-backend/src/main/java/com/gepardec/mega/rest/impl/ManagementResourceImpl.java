@@ -108,7 +108,7 @@ public class ManagementResourceImpl implements ManagementResource {
 
     @Override
     public Response getAllProjectManagementEntries(Integer year, Integer month, boolean allProjects) {
-        if (userContext == null || userContext.user() == null) {
+        if (userContext == null || userContext.getUser() == null) {
             throw new IllegalStateException("User context does not exist or user is null.");
         }
 
@@ -120,7 +120,7 @@ public class ManagementResourceImpl implements ManagementResource {
         if (allProjects) {
             projectEmployees = stepEntryService.getAllProjectEmployeesForPM(from, to);
         } else {
-            projectEmployees = stepEntryService.getProjectEmployeesForPM(from, to, Objects.requireNonNull(userContext.user()).getEmail());
+            projectEmployees = stepEntryService.getProjectEmployeesForPM(from, to, Objects.requireNonNull(userContext.getUser()).getEmail());
         }
 
         List<ProjectManagementEntryDto> projectManagementEntries = new ArrayList<>();
@@ -186,7 +186,7 @@ public class ManagementResourceImpl implements ManagementResource {
     }
 
     private List<ManagementEntryDto> createManagementEntriesForProject(ProjectEmployees projectEmployees, Map<String, Employee> employees, LocalDate from, LocalDate to) {
-        if (userContext == null || userContext.user() == null) {
+        if (userContext == null || userContext.getUser() == null) {
             throw new IllegalStateException("User context does not exist or user is null.");
         }
 
@@ -197,7 +197,7 @@ public class ManagementResourceImpl implements ManagementResource {
             if (employees.containsKey(userId)) {
                 Employee employee = employees.get(userId);
                 List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployeeAndProject(
-                        employee, projectEmployees.getProjectId(), Objects.requireNonNull(userContext.user()).getEmail(), from, to
+                        employee, projectEmployees.getProjectId(), Objects.requireNonNull(userContext.getUser()).getEmail(), from, to
                 );
 
                 ManagementEntryDto entry = createManagementEntryForEmployee(employee, projectEmployees.getProjectId(), stepEntries, from, to, null);
@@ -248,35 +248,35 @@ public class ManagementResourceImpl implements ManagementResource {
     }
 
     private com.gepardec.mega.domain.model.State extractCustomerCheckState(List<StepEntry> stepEntries) {
-        if (userContext == null || userContext.user() == null) {
+        if (userContext == null || userContext.getUser() == null) {
             throw new IllegalStateException("User context does not exist or user is null.");
         }
 
         boolean customerCheckStateOpen = stepEntries.stream()
                 .filter(stepEntry ->
                         StepName.CONTROL_EXTERNAL_TIMES.name().equalsIgnoreCase(stepEntry.getStep().getName())
-                                && StringUtils.equalsIgnoreCase(Objects.requireNonNull(userContext.user()).getEmail(), stepEntry.getAssignee().getEmail())
+                                && StringUtils.equalsIgnoreCase(Objects.requireNonNull(userContext.getUser()).getEmail(), stepEntry.getAssignee().getEmail())
                 ).anyMatch(stepEntry -> EmployeeState.OPEN.equals(stepEntry.getState()));
 
         return customerCheckStateOpen ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
     }
 
     private com.gepardec.mega.domain.model.State extractInternalCheckState(List<StepEntry> stepEntries) {
-        if (userContext == null || userContext.user() == null) {
+        if (userContext == null || userContext.getUser() == null) {
             throw new IllegalStateException("User context does not exist.");
         }
 
         boolean customerCheckStateOpen = stepEntries.stream()
                 .filter(stepEntry ->
                         StepName.CONTROL_INTERNAL_TIMES.name().equalsIgnoreCase(stepEntry.getStep().getName())
-                                && StringUtils.equalsIgnoreCase(Objects.requireNonNull(userContext.user()).getEmail(), stepEntry.getAssignee().getEmail())
+                                && StringUtils.equalsIgnoreCase(Objects.requireNonNull(userContext.getUser()).getEmail(), stepEntry.getAssignee().getEmail())
                 ).anyMatch(stepEntry -> EmployeeState.OPEN.equals(stepEntry.getState()));
 
         return customerCheckStateOpen ? com.gepardec.mega.domain.model.State.OPEN : com.gepardec.mega.domain.model.State.DONE;
     }
 
     private com.gepardec.mega.domain.model.State extractStateForProject(List<StepEntry> stepEntries, String projectId) {
-        if (userContext == null || userContext.user() == null) {
+        if (userContext == null || userContext.getUser() == null) {
             throw new IllegalStateException("User context does not exist or user is null.");
         }
 
@@ -288,7 +288,7 @@ public class ManagementResourceImpl implements ManagementResource {
                     } else {
                         return StepName.CONTROL_TIME_EVIDENCES.name().equalsIgnoreCase(se.getStep().getName()) &&
                                 StringUtils.equalsIgnoreCase(se.getProject(), projectId) &&
-                                StringUtils.equalsIgnoreCase(se.getAssignee().getEmail(), Objects.requireNonNull(userContext.user()).getEmail());
+                                StringUtils.equalsIgnoreCase(se.getAssignee().getEmail(), Objects.requireNonNull(userContext.getUser()).getEmail());
                     }
                 })
                 .map(StepEntry::getState)

@@ -45,7 +45,7 @@ public class StepEntryResourceImpl implements StepEntryResource {
                 projectStepDto.employee(),
                 projectStepDto.stepId(),
                 projectStepDto.projectName(),
-                userContext.user().getEmail(),
+                userContext.getUser().getEmail(),
                 projectStepDto.currentMonthYear()
         )).build();
     }

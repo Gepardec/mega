@@ -44,7 +44,7 @@ class StepEntryResourceTest {
     @Test
     void close_whenUserNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         given().contentType(ContentType.JSON).put("/stepentry/close")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
@@ -58,7 +58,7 @@ class StepEntryResourceTest {
 
         final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.getEmail()).thenReturn(user.getEmail());
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         EmployeeStepDto employeeStepDto = createEmployeeStep();
 

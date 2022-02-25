@@ -27,7 +27,7 @@ class UserResourceTest {
     @Test
     void get_whenUserNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         given().get("/user")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
@@ -37,7 +37,7 @@ class UserResourceTest {
     void get_whenUserIsLogged_thenReturnsHttpStatusOK() {
         final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.getEmail()).thenReturn(user.getEmail());
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         given().get("/user")
                 .then().assertThat().statusCode(HttpStatus.SC_OK);
@@ -47,7 +47,7 @@ class UserResourceTest {
     void get_whenUserIsLogged_thenReturnsUser() {
         final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.getEmail()).thenReturn(user.getEmail());
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         final User actual = given()
                 .get("/user")

@@ -50,7 +50,7 @@ public class WorkerResourceTest {
     @Test
     void monthlyReport_whenUserNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         given().get("/worker/monthendreports")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
@@ -60,7 +60,7 @@ public class WorkerResourceTest {
     void employeeMonthendReport_withReport_returnsReport() {
         User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.getEmail()).thenReturn(user.getEmail());
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         Employee employee = createEmployeeForUser(user);
         when(employeeService.getEmployee(anyString())).thenReturn(employee);

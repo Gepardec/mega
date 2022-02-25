@@ -72,7 +72,7 @@ class ManagementResourceTest {
 
     @Test
     void getAllOfficeManagementEntries_whenNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
-        when(userContext.user()).thenReturn(createUserForRole(Role.OFFICE_MANAGEMENT));
+        when(userContext.getUser()).thenReturn(createUserForRole(Role.OFFICE_MANAGEMENT));
         given().contentType(ContentType.JSON)
                 .get("/management/officemanagemententries/2020/11")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
@@ -89,7 +89,7 @@ class ManagementResourceTest {
     void getAllOfficeManagementEntries_whenValid_thenReturnsListOfEntries() {
         final User user = createUserForRole(Role.OFFICE_MANAGEMENT);
         when(securityContext.getEmail()).thenReturn(user.getEmail());
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         when(employeeService.getAllActiveEmployees())
                 .thenReturn(List.of(Employee.builder().releaseDate("2020-01-01").email("no-reply@gepardec.com").build()));
@@ -134,7 +134,7 @@ class ManagementResourceTest {
     void getAllOfficeManagementEntries_whenNoActiveEmployeesFound_thenReturnsEmptyResultList() {
         final User user = createUserForRole(Role.OFFICE_MANAGEMENT);
         when(securityContext.getEmail()).thenReturn(user.getEmail());
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         when(employeeService.getAllActiveEmployees()).thenReturn(List.of());
 
@@ -164,7 +164,7 @@ class ManagementResourceTest {
     void getAllOfficeManagementEntries_whenNoStepEntriesFound_thenReturnsEmptyResultList() {
         final User user = createUserForRole(Role.OFFICE_MANAGEMENT);
         when(securityContext.getEmail()).thenReturn(user.getEmail());
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         when(commentService.cntFinishedAndTotalCommentsForEmployee(
                 ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class))
@@ -186,7 +186,7 @@ class ManagementResourceTest {
 
     @Test
     void getAllProjectManagementEntries_whenNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
-        when(userContext.user()).thenReturn(createUserForRole(Role.PROJECT_LEAD));
+        when(userContext.getUser()).thenReturn(createUserForRole(Role.PROJECT_LEAD));
         given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/11")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
@@ -203,7 +203,7 @@ class ManagementResourceTest {
     void getAllProjectManagementEntries_whenValid_thenReturnsListOfEntries() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
         when(securityContext.getEmail()).thenReturn(user.getEmail());
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
         Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
@@ -286,7 +286,7 @@ class ManagementResourceTest {
     void getProjectManagementEntries_whenProjectTimes_thenCorrectAggregatedWorkTimes() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
         when(securityContext.getEmail()).thenReturn(user.getEmail());
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
         Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
@@ -373,7 +373,7 @@ class ManagementResourceTest {
     void getProjectManagementEntries_whenNoProjectTimes_thenZeroAggregatedWorkTimes() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
         when(securityContext.getEmail()).thenReturn(user.getEmail());
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
         Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
@@ -460,7 +460,7 @@ class ManagementResourceTest {
     void getProjectManagementEntries_whenManagementEntryIsNull_thenNoNullPointerException() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
         when(securityContext.getEmail()).thenReturn(user.getEmail());
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
         Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
@@ -516,7 +516,7 @@ class ManagementResourceTest {
     void getAllProjectManagementEntries_whenNoProjectsFound_thenReturnsEmptyList() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
         when(securityContext.getEmail()).thenReturn(user.getEmail());
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         List<ProjectManagementEntryDto> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/11")
@@ -530,7 +530,7 @@ class ManagementResourceTest {
     void getAllProjectManagementEntries_whenNoEmployeesAssignedToProject_thenReturnResultList() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
         when(securityContext.getEmail()).thenReturn(user.getEmail());
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", List.of());
         when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
@@ -548,7 +548,7 @@ class ManagementResourceTest {
     void getAllProjectManagementEntries_whenNoStepEntriesFound_thenReturnsResultList() {
         final User user = createUserForRole(Role.PROJECT_LEAD);
         when(securityContext.getEmail()).thenReturn(user.getEmail());
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         Employee employee1 = createEmployee("008", "no-reply@gepardec.com", "Max", "Mustermann");
         Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");

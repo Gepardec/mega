@@ -47,8 +47,8 @@ class UserContextProducerTest {
         final UserContext userContext = producer.createUserContext();
 
         // Then
-        assertThat(userContext.user()).isNotNull();
-        assertThat(userContext.user()).isEqualTo(user);
+        assertThat(userContext.getUser()).isNotNull();
+        assertThat(userContext.getUser()).isEqualTo(user);
     }
 
     @Test

@@ -37,7 +37,7 @@ class RolesAllowedInterceptorTest {
     void invoke_whenAnnotationOnClassLevel_thenUsesClassLevelAnnotation() throws Exception {
         when(invocationContext.getMethod().getAnnotation(any())).thenReturn(null);
         when(invocationContext.getTarget()).thenReturn(new TargetWithAnnotation());
-        when(userContext.user().getRoles()).thenReturn(Set.of(Role.EMPLOYEE));
+        when(userContext.getUser().getRoles()).thenReturn(Set.of(Role.EMPLOYEE));
 
         rolesAllowedInterceptor.intercept(invocationContext);
 
@@ -64,7 +64,7 @@ class RolesAllowedInterceptorTest {
     @Test
     void invoke_whenLoggedAndNotInRole_thenThrowsForbiddenException() {
         when(invocationContext.getMethod().getAnnotation(any())).thenReturn(createAnnotation(new Role[]{Role.OFFICE_MANAGEMENT}));
-        when(userContext.user().getRoles()).thenReturn(Set.of(Role.EMPLOYEE));
+        when(userContext.getUser().getRoles()).thenReturn(Set.of(Role.EMPLOYEE));
 
         assertThatThrownBy(() -> rolesAllowedInterceptor.intercept(invocationContext)).isInstanceOf(ForbiddenException.class);
     }
@@ -72,7 +72,7 @@ class RolesAllowedInterceptorTest {
     @Test
     void invoke_whenLoggedAndInRoleMethodAnnotated_thenThrowsForbiddenException() throws Exception {
         when(invocationContext.getMethod().getAnnotation(any())).thenReturn(createAnnotation(Role.values()));
-        when(userContext.user().getRoles()).thenReturn(Set.of(Role.EMPLOYEE));
+        when(userContext.getUser().getRoles()).thenReturn(Set.of(Role.EMPLOYEE));
 
         rolesAllowedInterceptor.intercept(invocationContext);
 
