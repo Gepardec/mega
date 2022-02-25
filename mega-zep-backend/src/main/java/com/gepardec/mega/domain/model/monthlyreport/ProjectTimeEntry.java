@@ -1,28 +1,25 @@
 package com.gepardec.mega.domain.model.monthlyreport;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
-import lombok.extern.jackson.Jacksonized;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Builder(builderClassName = "Builder")
 @Getter
-@ToString
-@EqualsAndHashCode
-//@Accessors(fluent = true)
-@JsonIgnoreProperties(ignoreUnknown = true)
-@Jacksonized
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProjectTimeEntry implements ProjectEntry {
 
-    private final LocalDateTime fromTime;
+    private LocalDateTime fromTime;
 
-    private final LocalDateTime toTime;
+    private LocalDateTime toTime;
 
-    private final Task task;
+    private Task task;
 
-    private final WorkingLocation workingLocation;
+    private WorkingLocation workingLocation;
 }

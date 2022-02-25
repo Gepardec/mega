@@ -9,6 +9,7 @@ import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
+import com.gepardec.mega.rest.model.MonthlyReportDto;
 import com.gepardec.mega.service.api.EmployeeService;
 import com.gepardec.mega.service.api.MonthlyReportService;
 import io.quarkus.test.junit.QuarkusTest;
@@ -92,18 +93,18 @@ public class WorkerResourceTest {
 
         when(monthlyReportService.getMonthendReportForUser(anyString())).thenReturn(expected);
 
-        MonthlyReport actual = given().contentType(ContentType.JSON)
+        MonthlyReportDto actual = given().contentType(ContentType.JSON)
                 .get("/worker/monthendreports")
-                .as(MonthlyReport.class);
+                .as(MonthlyReportDto.class);
 
-        assertThat(actual.employee()).isEqualTo(employee);
-        assertThat(timeWarnings).isEqualTo(actual.timeWarnings());
-        assertThat(journeyWarnings).isEqualTo(actual.journeyWarnings());
-        assertThat(billableTime).isEqualTo(actual.billableTime());
-        assertThat(totalWorkingTime).isEqualTo(actual.totalWorkingTime());
-        assertThat(vacationDays).isEqualTo(actual.vacationDays());
-        assertThat(homeofficeDays).isEqualTo(actual.homeofficeDays());
-        assertThat(compensatoryDays).isEqualTo(actual.compensatoryDays());
+        assertThat(actual.getEmployee()).isEqualTo(employee);
+        assertThat(timeWarnings).isEqualTo(actual.getTimeWarnings());
+        assertThat(journeyWarnings).isEqualTo(actual.getJourneyWarnings());
+        assertThat(billableTime).isEqualTo(actual.getBillableTime());
+        assertThat(totalWorkingTime).isEqualTo(actual.getTotalWorkingTime());
+        assertThat(vacationDays).isEqualTo(actual.getVacationDays());
+        assertThat(homeofficeDays).isEqualTo(actual.getHomeofficeDays());
+        assertThat(compensatoryDays).isEqualTo(actual.getCompensatoryDays());
     }
 
     private Employee createEmployeeForUser(final User user) {

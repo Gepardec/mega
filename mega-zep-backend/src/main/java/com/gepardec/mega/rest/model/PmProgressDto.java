@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gepardec.mega.db.entity.employee.EmployeeState;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -12,32 +13,29 @@ import lombok.extern.jackson.Jacksonized;
 
 import javax.annotation.Nullable;
 
-@Builder(builderClassName = "Builder")
-@Getter
-@ToString
-@EqualsAndHashCode
-@Accessors(fluent = true)
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Jacksonized
+@Builder
+@Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PmProgressDto {
     @JsonProperty
     @Nullable
-    private final String project;
+    private String project;
 
     @JsonProperty
-    private final String assigneeEmail;
-
-    @JsonProperty
-    @Nullable
-    private final String firstname;
+    private String assigneeEmail;
 
     @JsonProperty
     @Nullable
-    private final String lastname;
+    private String firstname;
 
     @JsonProperty
-    private final EmployeeState state;
+    @Nullable
+    private String lastname;
 
     @JsonProperty
-    private final Long stepId;
+    private EmployeeState state;
+
+    @JsonProperty
+    private Long stepId;
 }

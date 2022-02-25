@@ -82,11 +82,11 @@ class MonthlyReportServiceImplTest {
 
         assertThat(monthendReportForUser)
                 .isNotNull();
-        assertThat(monthendReportForUser.employee().getEmail())
+        assertThat(monthendReportForUser.getEmployee().getEmail())
                 .isEqualTo("Max_0@gepardec.com");
-        assertThat(monthendReportForUser.timeWarnings())
+        assertThat(monthendReportForUser.getTimeWarnings())
                 .isNotNull();
-        assertThat(monthendReportForUser.timeWarnings().isEmpty())
+        assertThat(monthendReportForUser.getTimeWarnings().isEmpty())
                 .isTrue();
     }
 
@@ -102,17 +102,17 @@ class MonthlyReportServiceImplTest {
 
         assertThat(monthendReportForUser)
                 .isNotNull();
-        assertThat(monthendReportForUser.employee().getEmail())
+        assertThat(monthendReportForUser.getEmployee().getEmail())
                 .isEqualTo("Max_0@gepardec.com");
-        assertThat(monthendReportForUser.timeWarnings())
+        assertThat(monthendReportForUser.getTimeWarnings())
                 .isNotNull();
-        assertThat(Objects.requireNonNull(monthendReportForUser.timeWarnings()).isEmpty())
+        assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()).isEmpty())
                 .isFalse();
-        assertThat(monthendReportForUser.timeWarnings().get(0).getDate())
+        assertThat(monthendReportForUser.getTimeWarnings().get(0).getDate())
                 .isEqualTo(LocalDate.of(2020, 1, 31));
-        assertThat(monthendReportForUser.timeWarnings().get(0).getExcessWorkTime())
+        assertThat(monthendReportForUser.getTimeWarnings().get(0).getExcessWorkTime())
                 .isEqualTo(1d);
-        assertThat(monthendReportForUser.timeWarnings().get(0).getMissingBreakTime())
+        assertThat(monthendReportForUser.getTimeWarnings().get(0).getMissingBreakTime())
                 .isEqualTo(0.5d);
     }
 
