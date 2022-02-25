@@ -129,7 +129,7 @@ public class ManagementResourceImpl implements ManagementResource {
 
         for (ProjectEmployees currentProject : projectEmployees) {
             List<ManagementEntryDto> entries = createManagementEntriesForProject(currentProject, employees, from, to);
-            List<ProjectEntry> projectEntries = projectEntryService.findByNameAndDate(currentProject.projectId(), from, to);
+            List<ProjectEntry> projectEntries = projectEntryService.findByNameAndDate(currentProject.getProjectId(), from, to);
 
             if (!entries.isEmpty() && !projectEntries.isEmpty()) {
 
@@ -142,7 +142,7 @@ public class ManagementResourceImpl implements ManagementResource {
                         .collect(Collectors.toList()));
 
                 projectManagementEntries.add(ProjectManagementEntryDto.builder()
-                        .projectName(currentProject.projectId())
+                        .projectName(currentProject.getProjectId())
                         .controlProjectState(ProjectState.byName(getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_PROJECT).getState().name()))
                         .controlBillingState(ProjectState.byName((getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_BILLING).getState().name())))
                         .presetControlProjectState(getProjectEntryForProjectStep(projectEntries, ProjectStep.CONTROL_PROJECT).isPreset())
@@ -192,15 +192,15 @@ public class ManagementResourceImpl implements ManagementResource {
 
         List<ManagementEntryDto> entries = new ArrayList<>();
 
-        for (String userId : projectEmployees.employees()) {
+        for (String userId : projectEmployees.getEmployees()) {
 
             if (employees.containsKey(userId)) {
                 Employee employee = employees.get(userId);
                 List<StepEntry> stepEntries = stepEntryService.findAllStepEntriesForEmployeeAndProject(
-                        employee, projectEmployees.projectId(), Objects.requireNonNull(userContext.user()).email(), from, to
+                        employee, projectEmployees.getProjectId(), Objects.requireNonNull(userContext.user()).email(), from, to
                 );
 
-                ManagementEntryDto entry = createManagementEntryForEmployee(employee, projectEmployees.projectId(), stepEntries, from, to, null);
+                ManagementEntryDto entry = createManagementEntryForEmployee(employee, projectEmployees.getProjectId(), stepEntries, from, to, null);
 
                 if (entry != null) {
                     entries.add(entry);
