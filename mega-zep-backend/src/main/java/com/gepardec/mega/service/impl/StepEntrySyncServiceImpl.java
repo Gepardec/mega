@@ -93,7 +93,7 @@ public class StepEntrySyncServiceImpl implements StepEntrySyncService {
         final List<StepEntry> toBeCreatedStepEntries = new ArrayList<>();
 
         for (Step step : steps) {
-            switch (step.role()) {
+            switch (step.getRole()) {
                 case EMPLOYEE:
                     toBeCreatedStepEntries.addAll(createStepEntriesForUsers(date, step, activeUsers));
                     break;

@@ -68,7 +68,7 @@ public class StepEntryServiceImpl implements StepEntryService {
         ownerDb.setId(stepEntry.owner().dbId());
 
         final Step stepDb = new Step();
-        stepDb.setId(stepEntry.step().dbId());
+        stepDb.setId(stepEntry.step().getDbId());
 
         final User assigneeDb = new User();
         assigneeDb.setId(stepEntry.assignee().dbId());
