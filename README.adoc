@@ -96,6 +96,7 @@ The frontend will take some time to come up which is due to the compilation proc
 
 === Secrets
 
+==== Backend
 The following file ``./mega-zep-backend/.env`` contains the secret values and has to be added manually by the developers.
 
 ./mega-zep-backend/.env
@@ -115,6 +116,22 @@ DB_HOST=***
 ----
 
 IMPORTANT: Without this file the backend won't start.
+
+==== Frontend
+The following file ``./mega-zep-frontend/src/main/angular/frontend/.env`` contains the secret values and has to be added manually by the developers.
+
+./mega-zep-frontend/src/main/angular/frontend/.env
+[source,properties]
+----
+# The client id of the mega test automation user
+MEGA_APP_GOOGLE_CLIENTID=***
+# The secret of the mega test automation user
+MEGA_APP_GOOGLE_CLIENT_SECRET=***
+# The refresh token to poll or refresh the access token
+GOOGLE_REFRESH_TOKEN=***
+----
+
+IMPORTANT: Without this file it's not possible to run End-To-End tests with cypress.
 
 === Prepare Test-ZEP for a new team member
 * Add the team member's email address to application.yaml (%dev.mega.mail.reminder.om) to grant office management rights
