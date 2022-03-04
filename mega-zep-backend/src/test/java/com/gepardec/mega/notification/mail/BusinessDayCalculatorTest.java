@@ -138,6 +138,18 @@ class BusinessDayCalculatorTest {
         );
     }
 
+    @Test
+    void removeWorkingDaysFromNextMonth_positiveInt() {
+        LocalDate localDate = businessDayCalculator.removeWorkingdaysFromNextMonth(LocalDate.of(2022, 1, 10), 20);
+        assertThat(localDate).isEqualTo(LocalDate.of(2022, 1, 3));
+    }
+
+    @Test
+    void removeWorkingDaysFromNextMonth_negativeInt() {
+        LocalDate localDate = businessDayCalculator.removeWorkingdaysFromNextMonth(LocalDate.of(2022, 1, 10), -20);
+        assertThat(localDate).isEqualTo(LocalDate.of(2022, 1, 3));
+    }
+
     private void assertReminderEmpty(Optional<Mail> actualReminder) {
         assertThat(actualReminder).isEmpty();
     }

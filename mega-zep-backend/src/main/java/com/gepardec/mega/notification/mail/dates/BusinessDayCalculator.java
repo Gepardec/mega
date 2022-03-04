@@ -6,14 +6,16 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static com.gepardec.mega.notification.mail.dates.OfficeCalendarUtil.isWorkingDay;
 import static java.time.temporal.ChronoField.DAY_OF_MONTH;
 
 @ApplicationScoped
@@ -86,24 +88,11 @@ public class BusinessDayCalculator {
         return resultDate;
     }
 
-    private LocalDate removeWorkingdaysFromNextMonth(LocalDate date, int workingdaysToRemove) {
-        if (workingdaysToRemove < 0) {
-            workingdaysToRemove *= -1;
-        }
-        LocalDate resultDate = date.with(TemporalAdjusters.firstDayOfNextMonth());
-        int removedDays = 0;
-        while (removedDays < workingdaysToRemove) {
-            resultDate = resultDate.minusDays(1);
-            if (isWorkingDay(resultDate)) {
-                ++removedDays;
-            }
-        }
-        return resultDate;
-    }
-
-    public static boolean isWorkingDay(LocalDate date) {
-        return date.getDayOfWeek() != DayOfWeek.SATURDAY
-                && date.getDayOfWeek() != DayOfWeek.SUNDAY
-                && !AustrianHolidays.isHoliday(date);
+    public LocalDate removeWorkingdaysFromNextMonth(LocalDate date, int workingdaysToRemove) {
+        workingdaysToRemove = Math.abs(workingdaysToRemove);
+        List<LocalDate> daysWithoutWorkingDays = date.minusDays(workingdaysToRemove).datesUntil(date.with(TemporalAdjusters.firstDayOfNextMonth()))
+                .filter(OfficeCalendarUtil::isWorkingDay)
+                .collect(Collectors.toList());
+        return daysWithoutWorkingDays.get(daysWithoutWorkingDays.size() - workingdaysToRemove);
     }
 }

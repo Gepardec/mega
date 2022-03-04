@@ -10,7 +10,7 @@ import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntryWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.utils.DateUtils;
-import com.gepardec.mega.notification.mail.dates.BusinessDayCalculator;
+import com.gepardec.mega.notification.mail.dates.OfficeCalendarUtil;
 import com.gepardec.mega.rest.model.PmProgress;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -66,11 +67,12 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     }
 
     private boolean checkReleaseDate(String releaseDate) {
-        // checks for the correct format (YYYY-mm-dd) for LocalDate.parse to avoid Exception
-        if (releaseDate.matches("^\\d\\d\\d\\d-{1}\\d\\d-{1}\\d\\d$")) {
+        try {
+            LocalDate.parse(releaseDate);
             return true;
+        } catch (DateTimeParseException ex) {
+            return false;
         }
-        return false;
     }
 
     @Override
@@ -150,15 +152,15 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                 .filter(fzt -> fzt.getFehlgrund().equals(absenceType))
                 .filter(FehlzeitType::isGenehmigt)
                 .map(this::trimDurationToCurrentMonth)
-                .flatMap(ftl -> LocalDate.parse(ftl.getStartdatum()).datesUntil(LocalDate.parse(ftl.getEnddatum()).plusDays(1)))// add missing day because datesUntil() does not include the given endDate
-                .filter(BusinessDayCalculator::isWorkingDay)
-                .count();
+                .mapToLong(ftl -> OfficeCalendarUtil.getWorkingDaysBetween(LocalDate.parse(ftl.getStartdatum()), LocalDate.parse(ftl.getEnddatum())).size())
+                .sum();
     }
 
     private FehlzeitType trimDurationToCurrentMonth(FehlzeitType fehlzeit) {
         if (LocalDate.parse(fehlzeit.getEnddatum()).getMonthValue() > currentMonthYear.getMonthValue()) {
             fehlzeit.setEnddatum(currentMonthYear.with(TemporalAdjusters.lastDayOfMonth()).toString());
-        } else if (LocalDate.parse(fehlzeit.getStartdatum()).getMonthValue() < currentMonthYear.getMonthValue()) {
+        }
+        if (LocalDate.parse(fehlzeit.getStartdatum()).getMonthValue() < currentMonthYear.getMonthValue()) {
             fehlzeit.setStartdatum(currentMonthYear.with(TemporalAdjusters.firstDayOfMonth()).toString());
         }
         return fehlzeit;
