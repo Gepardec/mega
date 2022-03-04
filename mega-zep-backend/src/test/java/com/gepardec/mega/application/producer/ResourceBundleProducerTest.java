@@ -1,28 +1,24 @@
 package com.gepardec.mega.application.producer;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.inject.Inject;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-@ExtendWith(MockitoExtension.class)
+import static org.assertj.core.api.Assertions.assertThat;
+
+@QuarkusTest
 class ResourceBundleProducerTest {
 
-    private ResourceBundleProducer producer;
-
-    @BeforeEach
-    void beforeEach() {
-        producer = new ResourceBundleProducer();
-    }
+    @Inject
+    ResourceBundleProducer producer;
 
     @Test
     void init_whenCalled_thenInitializesResourceBundle() {
         final ResourceBundle bundle = producer.getResourceBundle(Locale.GERMAN);
 
-        Assertions.assertNotNull(bundle);
+        assertThat(bundle).isNotNull();
     }
 }

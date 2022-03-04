@@ -20,8 +20,7 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class ConstraintViolationExceptionMapperTest {
@@ -49,7 +48,7 @@ class ConstraintViolationExceptionMapperTest {
         final Response response = mapper.toResponse(new ConstraintViolationException(null));
         List<ValidationViolation> actual = (List<ValidationViolation>) response.getEntity();
 
-        assertTrue(actual.isEmpty());
+        assertThat(actual).isEmpty();
     }
 
     @Test
@@ -57,7 +56,7 @@ class ConstraintViolationExceptionMapperTest {
         final Response response = mapper.toResponse(new ConstraintViolationException(Set.of()));
         List<ValidationViolation> actual = (List<ValidationViolation>) response.getEntity();
 
-        assertTrue(actual.isEmpty());
+        assertThat(actual).isEmpty();
     }
 
     @Test
@@ -66,10 +65,10 @@ class ConstraintViolationExceptionMapperTest {
         final Response response = mapper.toResponse(new ConstraintViolationException(violations));
         List<ValidationViolation> actual = (List<ValidationViolation>) response.getEntity();
 
-        assertEquals(2, actual.size());
-        assertTrue(actual.containsAll(List.of(
+        assertThat(actual).hasSize(2);
+        assertThat(actual).containsExactlyInAnyOrder(
                 ValidationViolation.builder().property("name").message("must not be null").build(),
-                ValidationViolation.builder().property("email").message("must not be null").build())));
+                ValidationViolation.builder().property("email").message("must not be null").build());
     }
 
     public static class Model {

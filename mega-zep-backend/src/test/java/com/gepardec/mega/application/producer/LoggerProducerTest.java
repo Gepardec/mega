@@ -1,5 +1,6 @@
 package com.gepardec.mega.application.producer;
 
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,28 +11,30 @@ import org.slf4j.Logger;
 
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.inject.Inject;
 import java.lang.reflect.Member;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 class LoggerProducerTest {
 
-    @Mock
     private InjectionPoint ip;
 
-    @Mock
     private Bean<?> bean;
 
-    @Mock
     private Member member;
 
-    private LoggerProducer producer;
+    @Inject
+    LoggerProducer producer;
 
     @BeforeEach
     void beforeEach() {
-        producer = new LoggerProducer();
+        ip = spy(InjectionPoint.class);
+        bean = spy(Bean.class);
+        member = spy(Member.class);
     }
 
     @Test
@@ -44,7 +47,7 @@ class LoggerProducerTest {
 
         final Logger logger = producer.createLogger(ip);
 
-        assertEquals(Object.class.getName(), logger.getName());
+        assertThat(logger.getName()).isEqualTo(Object.class.getName());
     }
 
     @Test
@@ -56,7 +59,7 @@ class LoggerProducerTest {
 
         final Logger logger = producer.createLogger(ip);
 
-        assertEquals(Object.class.getName(), logger.getName());
+        assertThat(logger.getName()).isEqualTo(Object.class.getName());
     }
 
     @Test
@@ -66,6 +69,6 @@ class LoggerProducerTest {
 
         final Logger logger = producer.createLogger(ip);
 
-        assertEquals("default", logger.getName());
+        assertThat(logger.getName()).isEqualTo("default");
     }
 }

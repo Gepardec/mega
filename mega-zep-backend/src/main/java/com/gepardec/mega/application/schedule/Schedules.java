@@ -18,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 @Dependent
 public class Schedules {
 
+    // Documentation: https://docs.oracle.com/cd/E12058_01/doc/doc.1014/e12030/cron_expressions.htm
+
     @Inject
     SyncService syncService;
 
@@ -33,7 +35,7 @@ public class Schedules {
     @Inject
     ReminderEmailSender reminderEmailSender;
 
-    @Scheduled(identity = "Sync ZEP-Employees with Users in the database",
+    @Scheduled(identity = "Sync ZEP-Employees with Users in the database every 30 minutes",
             every = "PT30M",
             delay = 15, delayUnit = TimeUnit.SECONDS)
         // We need to wait for liquibase to finish, but is executed in parallel

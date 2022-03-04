@@ -1,0 +1,62 @@
+@import 'src/styles/colors.scss';
+
+table {
+  width: 100%;
+}
+
+th, td {
+  font-size: 17px;
+}
+
+td.times-col-left {
+  text-align: right;
+  min-width: 50px;
+  white-space: nowrap;
+}
+
+td.times-col-center {
+  text-align: right;
+  min-width: 10px;
+}
+
+td.times-col-right {
+  text-align: right;
+  min-width: 40px;
+  width: 1%;
+  white-space: nowrap;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: $mega-success-green;
+}
+
+.headers-align .mat-expansion-panel-header-title,
+.headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+mat-panel-title {
+  flex-grow: 0.5;
+}
+
+mat-panel-description {
+  flex-grow: 0.4;
+}
+
+.headers-align mat-expansion-panel-header {
+  margin-left: 10px;
+}
+
+.headers-align .mat-expansion-panel-header-description,
+.headers-align .mat-expansion-panel-header-title {
+  align-items: center;
+}
+
+mat-icon.billable {
+  color: $gepardec-yellow;
+}

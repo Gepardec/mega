@@ -2,15 +2,14 @@ package com.gepardec.mega.db.repository;
 
 import com.gepardec.mega.db.entity.project.Project;
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @QuarkusTest
 class ProjectRepositoryTest {
@@ -34,9 +33,9 @@ class ProjectRepositoryTest {
     void givenFindById_whenFound_thenSuccess() {
         Project p = projectRepository.findById(project.getId());
 
-        Assertions.assertAll(
-                () -> assertNotNull(p),
-                () -> assertEquals(project.getName(), p.getName())
+        assertAll(
+                () -> assertThat(p).isNotNull(),
+                () -> assertThat(p.getName()).isEqualTo(project.getName())
         );
     }
 }

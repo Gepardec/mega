@@ -1,13 +1,10 @@
 package com.gepardec.mega.notification.mail;
 
 import com.gepardec.mega.notification.mail.dates.BusinessDayCalculator;
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -18,17 +15,14 @@ import static com.gepardec.mega.notification.mail.Mail.OM_CONTROL_PROJECTTIMES;
 import static com.gepardec.mega.notification.mail.Mail.OM_RELEASE;
 import static com.gepardec.mega.notification.mail.Mail.OM_SALARY;
 import static com.gepardec.mega.notification.mail.Mail.PL_PROJECT_CONTROLLING;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 class BusinessDayCalculatorTest {
 
-    @Mock
-    private Logger log;
-
-    @InjectMocks
-    private BusinessDayCalculator businessDayCalculator;
+    @Inject
+    BusinessDayCalculator businessDayCalculator;
 
     @Test
     void getEventForDate_firstDayOfMonthBusinessDay_shouldReturnUserCheckprojecttimes() {
@@ -145,10 +139,10 @@ class BusinessDayCalculatorTest {
     }
 
     private void assertReminderEmpty(Optional<Mail> actualReminder) {
-        assertEquals(Optional.empty(), actualReminder);
+        assertThat(actualReminder).isEmpty();
     }
 
     private void assertReminderEquals(Mail expectedMail, Optional<Mail> actualReminder) {
-        assertEquals(expectedMail, actualReminder.get());
+        assertThat(actualReminder).get().isEqualTo(expectedMail);
     }
 }

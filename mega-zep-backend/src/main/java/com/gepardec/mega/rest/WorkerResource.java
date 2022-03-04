@@ -14,6 +14,7 @@ import com.gepardec.mega.service.api.stepentry.StepEntryService;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -37,7 +38,9 @@ public class WorkerResource implements WorkerResourceAPI {
     @Override
     public MonthlyReport monthlyReport() {
         Employee employee = employeeService.getEmployee(Objects.requireNonNull(userContext.user()).userId());
-        return monthlyReportService.getMonthendReportForUser(Objects.requireNonNull(employee.userId()));
+
+        LocalDate date = LocalDate.parse(employee.releaseDate()).with(TemporalAdjusters.firstDayOfNextMonth());
+        return monthlyReport(date.getYear(), date.getMonthValue());
     }
 
     @Override

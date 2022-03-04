@@ -28,9 +28,6 @@ import { GeneralInfoComponent } from './components/general-info/general-info.com
     TranslateModule.forRoot(),
     FlexLayoutModule,
     SharedModule
-  ],
-  entryComponents: [
-    PmProgressComponent
   ]
 })
 export class MonthlyReportModule {

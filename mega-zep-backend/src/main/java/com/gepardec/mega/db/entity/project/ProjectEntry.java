@@ -23,7 +23,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Table(name = "project_entry")
@@ -231,40 +230,14 @@ public class ProjectEntry {
         if (this == o) {
             return true;
         }
+
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
         ProjectEntry that = (ProjectEntry) o;
 
-        if (preset != that.preset) {
-            return false;
-        }
-        if (!Objects.equals(id, that.id)) {
-            return false;
-        }
-        if (!Objects.equals(name, that.name)) {
-            return false;
-        }
-        if (!Objects.equals(creationDate, that.creationDate)) {
-            return false;
-        }
-        if (!Objects.equals(updatedDate, that.updatedDate)) {
-            return false;
-        }
-        if (!Objects.equals(date, that.date)) {
-            return false;
-        }
-        if (!Objects.equals(owner, that.owner)) {
-            return false;
-        }
-        if (!Objects.equals(assignee, that.assignee)) {
-            return false;
-        }
-        if (!Objects.equals(project, that.project)) {
-            return false;
-        }
-        if (state != that.state) {
+        if (id != null ? !id.equals(that.id) : that.id != null) {
             return false;
         }
         return step == that.step;
@@ -273,16 +246,7 @@ public class ProjectEntry {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
-        result = 31 * result + (updatedDate != null ? updatedDate.hashCode() : 0);
-        result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (owner != null ? owner.hashCode() : 0);
-        result = 31 * result + (assignee != null ? assignee.hashCode() : 0);
-        result = 31 * result + (project != null ? project.hashCode() : 0);
-        result = 31 * result + (preset ? 1 : 0);
-        result = 31 * result + (state != null ? state.hashCode() : 0);
-        result = 31 * result + (step != null ? step.hashCode() : 0);
+        result = 31 * result + step.hashCode();
         return result;
     }
 }

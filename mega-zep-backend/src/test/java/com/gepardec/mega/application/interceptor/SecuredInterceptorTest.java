@@ -10,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.interceptor.InvocationContext;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -29,13 +29,13 @@ class SecuredInterceptorTest {
 
     @Test
     void invoke_withNotLogged_throwUnauthorizedException() {
-        assertThrows(UnauthorizedException.class, () -> securedInterceptor.invoke(invocationContext));
+        assertThatThrownBy(() -> securedInterceptor.invoke(invocationContext)).isInstanceOf(UnauthorizedException.class);
     }
 
     @Test
     void invoke_tokenInvalid_throwUnauthorizedException() {
         when(securityContext.email()).thenReturn(null);
-        assertThrows(UnauthorizedException.class, () -> securedInterceptor.invoke(invocationContext));
+        assertThatThrownBy(() -> securedInterceptor.invoke(invocationContext)).isInstanceOf(UnauthorizedException.class);
     }
 
     @Test

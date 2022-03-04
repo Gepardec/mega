@@ -6,29 +6,29 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import org.junit.jupiter.api.Assertions;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.inject.Inject;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 class GoogleVerifierProducerTest {
 
-    @Mock
-    private OAuthConfig oAuthConfig;
+    @InjectMock
+    OAuthConfig oAuthConfig;
 
-    @InjectMocks
-    private GoogleVerifierProducer producer;
+    @Inject
+    GoogleVerifierProducer producer;
 
     @Test
     void createHttpTransport_whenCalled_thenReturnsHttpTransportInstance() {
         final HttpTransport transport = producer.createHttpTransport();
 
-        Assertions.assertNotNull(transport);
+        assertThat(transport).isNotNull();
     }
 
     @Test
@@ -36,14 +36,14 @@ class GoogleVerifierProducerTest {
         final HttpTransport transport1 = producer.createHttpTransport();
         final HttpTransport transport2 = producer.createHttpTransport();
 
-        Assertions.assertNotEquals(transport1, transport2);
+        assertThat(transport2).isNotEqualTo(transport1);
     }
 
     @Test
     void createJsonFactory_whenCalled_thenReturnsJacksonJsonFactory() {
         final JsonFactory factory = producer.createJsonFactory();
 
-        Assertions.assertNotNull(factory);
+        assertThat(factory).isNotNull();
     }
 
     @Test
@@ -51,7 +51,7 @@ class GoogleVerifierProducerTest {
         final JsonFactory factory1 = producer.createJsonFactory();
         final JsonFactory factory2 = producer.createJsonFactory();
 
-        Assertions.assertNotEquals(factory1, factory2);
+        assertThat(factory2).isNotEqualTo(factory1);
     }
 
     @Test
@@ -63,9 +63,9 @@ class GoogleVerifierProducerTest {
 
         final GoogleIdTokenVerifier verifier = producer.createGoogleTokenVerifier(expectedHttpTransport, expectedJsonFactory);
 
-        Assertions.assertEquals("client-id", verifier.getAudience().iterator().next());
-        Assertions.assertEquals("issuer", verifier.getIssuer());
-        Assertions.assertEquals(expectedHttpTransport, verifier.getTransport());
-        Assertions.assertEquals(expectedJsonFactory, verifier.getJsonFactory());
+        assertThat(verifier.getAudience().iterator().next()).isEqualTo("client-id");
+        assertThat(verifier.getIssuer()).isEqualTo("issuer");
+        assertThat(verifier.getTransport()).isEqualTo(expectedHttpTransport);
+        assertThat(verifier.getJsonFactory()).isEqualTo(expectedJsonFactory);
     }
 }

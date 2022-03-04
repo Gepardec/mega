@@ -116,6 +116,12 @@ DB_HOST=***
 
 IMPORTANT: Without this file the backend won't start.
 
+=== Prepare Test-ZEP for a new team member
+* Add the team member's email address to application.yaml (%dev.mega.mail.reminder.om) to grant office management rights
+* Open the employee administration and make sure that the team member has the following attributes set:
+** email address
+** release date
+
 == Database
 
 MEGA uses a database to store persistent data whereby the database is managed by link:https://www.liquibase.org/[liquibase]. +

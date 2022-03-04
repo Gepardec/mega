@@ -14,6 +14,7 @@ quarkus:
       ~: true
       access-control-allow-credentials: true
     root-path: "/"
+    non-application-root-path: "/"
     port: 8080
 
   log:
@@ -51,6 +52,9 @@ quarkus:
   default-locale: "de"
   locales: 'en,de'
 
+  transaction-manager:
+    default-transaction-timeout: "240s"
+
 mega:
   info:
     build:
@@ -71,7 +75,7 @@ mega:
   excel-url: "https://docs.google.com/spreadsheets/d/1u1G_hNW8ePZqthzWJOEh3qOHc6Fy_R2TQwn5wCMsTt0/"
 
   # URL zum Planrechnung-Excel
-  budget-calculation-excel-url: "https://docs.google.com/spreadsheets/d/1Da3XrY9WuBrftJc0oBVySx58Ms1LWWhNkb3gfpZ4anA/"
+  budget-calculation-excel-url: "https://docs.google.com/spreadsheets/d/12T9Iiy0WRuinN5Zdw1AfeXYABPsxoVwL17sJKfky5JA"
 
   oauth:
     issuer: "https://accounts.google.com"
@@ -109,6 +113,7 @@ mega:
           - "thomas.herzog@gepardec.com"
           - "werner.bruckmueller@gepardec.com"
           - "christoph.ruhsam@gepardec.com"
+          - "andreas.mayer@gepardec.com"
           - "armin.lang@gepardec.com"
           - "manuel.vilim@gepardec.com"
           - "philipp.wurm@gepardec.com"
@@ -116,7 +121,10 @@ mega:
           - "patrick.holzer@gepardec.com"
           - "robin.fischer@gepardec.com"
           - "alexandra.stummer@gepardec.com"
-          - "michael.leitner@gepardec.com"
+          - "sandra.kepplinger@gepardec.com"
+          - "johannes.riegler@gepardec.com"
+          - "daniel.rasztovich@gepardec.com"
+          - "theresa.mueller@gepardec.com"
 
 ## TEST Properties
 "%test":
@@ -158,6 +166,7 @@ mega:
           - "philipp.wurm@gepardec.com"
           - "werner.bruckmueller@gepardec.com"
 
+
 # PROD Properties
 "%prod":
   quarkus:
@@ -198,6 +207,7 @@ mega:
           - "thomas.herzog@gepardec.com"
           - "werner.bruckmueller@gepardec.com"
           - "christoph.ruhsam@gepardec.com"
+          - "andreas.mayer@gepardec.com"
           - "armin.lang@gepardec.com"
           - "manuel.vilim@gepardec.com"
           - "philipp.wurm@gepardec.com"
@@ -205,6 +215,7 @@ mega:
           - "patrick.holzer@gepardec.com"
           - "robin.fischer@gepardec.com"
           - "alexandra.stummer@gepardec.com"
+          - "sandra.kepplinger@gepardec.com"
 
 # TEST-STAGE Properties
 "%teststage":
@@ -236,6 +247,9 @@ mega:
           - "manuel.vilim@gepardec.com"
           - "armin.lang@gepardec.com"
           - "alexandra.stummer@gepardec.com"
+          - "sandra.kepplinger@gepardec.com"
+
+
 
 # PROD-STAGE Properties
 "%prodstage":
@@ -265,3 +279,4 @@ mega:
           - "manuel.vilim@gepardec.com"
           - "alexandra.stummer@gepardec.com"
           - "armin.lang@gepardec.com"
+          - "sandra.kepplinger@gepardec.com"
