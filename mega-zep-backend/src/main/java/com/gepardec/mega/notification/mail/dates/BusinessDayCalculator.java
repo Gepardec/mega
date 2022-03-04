@@ -101,9 +101,9 @@ public class BusinessDayCalculator {
         return resultDate;
     }
 
-    private boolean isWorkingDay(LocalDate date) {
+    public static boolean isWorkingDay(LocalDate date) {
         return date.getDayOfWeek() != DayOfWeek.SATURDAY
                 && date.getDayOfWeek() != DayOfWeek.SUNDAY
-                && !AustrianHolidays.getHolidates().contains(date);
+                && !AustrianHolidays.isHoliday(date);
     }
 }

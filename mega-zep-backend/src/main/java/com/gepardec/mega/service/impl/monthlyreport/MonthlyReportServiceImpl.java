@@ -9,6 +9,7 @@ import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.utils.DateUtils;
+import com.gepardec.mega.notification.mail.dates.BusinessDayCalculator;
 import com.gepardec.mega.rest.model.PmProgress;
 import com.gepardec.mega.service.api.comment.CommentService;
 import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
@@ -21,7 +22,6 @@ import javax.annotation.Nonnull;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
@@ -129,14 +129,13 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     }
 
     private int getAbsenceTimesForEmployee(@Nonnull List<FehlzeitType> fehlZeitTypeList, String absenceType) {
-        return fehlZeitTypeList.stream()
+        return (int) fehlZeitTypeList.stream()
                 .filter(fzt -> fzt.getFehlgrund().equals(absenceType))
                 .filter(FehlzeitType::isGenehmigt)
                 .map(this::trimDurationToCurrentMonth)
-                .map(ftl -> (Period.between(LocalDate.parse(ftl.getStartdatum()), LocalDate.parse(ftl.getEnddatum()))))
-                .mapToInt(Period::getDays)
-                .map(days -> days + 1) // add missing day because Period.between() does not include the given endDate
-                .sum();
+                .flatMap(ftl -> LocalDate.parse(ftl.getStartdatum()).datesUntil(LocalDate.parse(ftl.getEnddatum()).plusDays(1)))// add missing day because datesUntil() does not include the given endDate
+                .filter(BusinessDayCalculator::isWorkingDay)
+                .count();
     }
 
     private FehlzeitType trimDurationToCurrentMonth(FehlzeitType fehlzeit) {
