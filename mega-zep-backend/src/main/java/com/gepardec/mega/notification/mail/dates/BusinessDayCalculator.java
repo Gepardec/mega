@@ -9,14 +9,14 @@ import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.gepardec.mega.notification.mail.dates.OfficeCalendarUtil.isWorkingDay;
-import static java.time.temporal.ChronoField.DAY_OF_MONTH;
+import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 
 @ApplicationScoped
 public class BusinessDayCalculator {
@@ -25,7 +25,6 @@ public class BusinessDayCalculator {
     Logger logger;
 
     public Optional<Mail> getEventForDate(LocalDate actualDate) {
-
         logger.info("starting getEventForDate with date {}", actualDate);
 
         Map<LocalDate, Mail> reminderByDate = new HashMap<>(0);
@@ -64,35 +63,35 @@ public class BusinessDayCalculator {
     }
 
     private LocalDate calcFirstWorkingDayOfMonthForDate(LocalDate date) {
-
-        LocalDate firstWorkingDayOfMonth = date.with(DAY_OF_MONTH, 1);
-
-        while (!isWorkingDay(firstWorkingDayOfMonth)) {
-            firstWorkingDayOfMonth = firstWorkingDayOfMonth.plusDays(1);
-        }
-        return firstWorkingDayOfMonth;
+        LocalDate firstDayOfMonth = date.with(TemporalAdjusters.firstDayOfMonth());
+        return Stream.iterate(firstDayOfMonth, theDate -> theDate.plusDays(1))
+                .dropWhile(theDate -> !isWorkingDay(theDate))
+                .findFirst()
+                .orElse(firstDayOfMonth);
     }
 
-    private LocalDate addWorkingdays(LocalDate date, int workdaysToAdd) {
+    LocalDate addWorkingdays(LocalDate date, int workdaysToAdd) {
         if (workdaysToAdd < 1) {
             return date;
         }
-        LocalDate resultDate = date;
-        int addedDays = 0;
-        while (addedDays < workdaysToAdd) {
-            resultDate = resultDate.plusDays(1);
-            if (isWorkingDay(resultDate)) {
-                ++addedDays;
-            }
-        }
-        return resultDate;
+
+        // has to be the next day of the given date, because we want to ignore the given date
+        LocalDate result = date.plusDays(1);
+        return Stream.iterate(result, d -> d.plusDays(1))
+                .filter(OfficeCalendarUtil::isWorkingDay)
+                .limit(workdaysToAdd)
+                .max(Comparator.naturalOrder())
+                .orElse(result);
     }
 
-    public LocalDate removeWorkingdaysFromNextMonth(LocalDate date, int workingdaysToRemove) {
+    LocalDate removeWorkingdaysFromNextMonth(LocalDate date, int workingdaysToRemove) {
+        // has to be the last day of given month, because we want to ignore the "seed" value of the stream
+        LocalDate result = date.with(lastDayOfMonth());
         workingdaysToRemove = Math.abs(workingdaysToRemove);
-        List<LocalDate> daysWithoutWorkingDays = date.minusDays(workingdaysToRemove).datesUntil(date.with(TemporalAdjusters.firstDayOfNextMonth()))
+        return Stream.iterate(result, d -> d.minusDays(1))
                 .filter(OfficeCalendarUtil::isWorkingDay)
-                .collect(Collectors.toList());
-        return daysWithoutWorkingDays.get(daysWithoutWorkingDays.size() - workingdaysToRemove);
+                .limit(workingdaysToRemove)
+                .min(Comparator.naturalOrder())
+                .orElse(result);
     }
 }
