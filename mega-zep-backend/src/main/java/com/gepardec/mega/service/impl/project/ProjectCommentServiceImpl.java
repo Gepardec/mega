@@ -37,8 +37,8 @@ public class ProjectCommentServiceImpl implements ProjectCommentService {
 
     @Override
     public ProjectCommentDto findForProjectNameWithCurrentYearMonth(String projectName, String currentYearMonth) {
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(currentYearMonth));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(currentYearMonth));
+        LocalDate from = DateUtils.getFirstDayOfCurrentMonth(currentYearMonth);
+        LocalDate to = DateUtils.getLastDayOfCurrentMonth(currentYearMonth);
         List<ProjectCommentDto> projectComments = this.findForProjectNameInRange(projectName, from, to);
         return projectComments.isEmpty() ? null : projectComments.get(0);
     }

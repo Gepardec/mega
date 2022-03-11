@@ -23,16 +23,16 @@ public class StepEntryResource implements StepEntryResourceAPI {
 
     @Override
     public boolean close(final EmployeeStep employeeStep) {
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employeeStep.currentMonthYear()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employeeStep.currentMonthYear()));
+        LocalDate from = DateUtils.getFirstDayOfFollowingMonth(employeeStep.currentMonthYear());
+        LocalDate to = DateUtils.getLastDayOfFollowingMonth(employeeStep.currentMonthYear());
 
         return stepEntryService.setOpenAndAssignedStepEntriesDone(employeeStep.employee(), employeeStep.stepId(), from, to);
     }
 
     @Override
     public boolean closeForOffice(final EmployeeStep employeeStep) {
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(employeeStep.currentMonthYear()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(employeeStep.currentMonthYear()));
+        LocalDate from = DateUtils.getFirstDayOfCurrentMonth(employeeStep.currentMonthYear());
+        LocalDate to = DateUtils.getLastDayOfCurrentMonth(employeeStep.currentMonthYear());
 
         return stepEntryService.setOpenAndAssignedStepEntriesDone(employeeStep.employee(), employeeStep.stepId(), from, to);
     }

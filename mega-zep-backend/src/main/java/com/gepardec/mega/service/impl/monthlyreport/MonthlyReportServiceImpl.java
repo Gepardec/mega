@@ -23,6 +23,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -32,7 +33,11 @@ import java.util.Optional;
 @RequestScoped
 public class MonthlyReportServiceImpl implements MonthlyReportService {
 
-    private static final String BILLABLE_TIME_FORMAT = "HH:mm";
+    public static final String COMPENSATORY_DAYS = "FA";
+    public static final String HOME_OFFICE_DAYS = "HO";
+    public static final String VACATION_DAYS = "UB";
+
+    private LocalDate currentMonthYear;
 
     @Inject
     ZepService zepService;
@@ -48,24 +53,22 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
 
     @Override
     public MonthlyReport getMonthendReportForUser(final String userId) {
-        Employee employee = zepService.getEmployee(userId);
-        final LocalDate date;
+        final LocalDate date = Optional.ofNullable(zepService.getEmployee(userId))
+                .flatMap(emp -> Optional.ofNullable(emp.releaseDate()))
+                .filter(this::checkReleaseDate)
+                .map(releaseDate -> LocalDate.parse(Objects.requireNonNull(releaseDate)).plusMonths(1))
+                .orElse(null);
 
-        if ((employee != null) && (employee.releaseDate() != null) && checkReleaseDate(Objects.requireNonNull(employee.releaseDate()))) {
-            date = LocalDate.parse(Objects.requireNonNull(employee.releaseDate())).plusMonths(1);
-
-        } else {
-            date = null;
-        }
         return getMonthendReportForUser(userId, date);
     }
 
     private boolean checkReleaseDate(String releaseDate) {
-        // checks for the correct format (YYYY-mm-dd) for LocalDate.parse to avoid Exception
-        if (releaseDate.matches("^\\d\\d\\d\\d-{1}\\d\\d-{1}\\d\\d$")) {
+        try {
+            LocalDate.parse(Objects.requireNonNull(releaseDate));
             return true;
+        } catch (DateTimeParseException ex) {
+            return false;
         }
-        return false;
     }
 
     @Override
@@ -77,8 +80,8 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
 
     @Override
     public boolean setOpenAndUnassignedStepEntriesDone(Employee employee, Long stepId) {
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate from = DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate());
+        LocalDate to = DateUtils.getLastDayOfFollowingMonth(employee.releaseDate());
 
         return stepEntryService.setOpenAndAssignedStepEntriesDone(employee, stepId, from, to);
     }
@@ -94,8 +97,8 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         if (employee != null) {
 
             if (checkReleaseDate(employee.releaseDate())) {
-                LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-                LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+                LocalDate fromDate = DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate());
+                LocalDate toDate = DateUtils.getLastDayOfFollowingMonth(employee.releaseDate());
                 comments.addAll(commentService.findCommentsForEmployee(employee, fromDate, toDate));
             }
 
@@ -127,7 +130,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                 .isAssigned(isAssigned)
                 .employeeProgresses(pmProgresses)
                 .otherChecksDone(otherChecksDone)
-                .billableTime(zepService.getBillableTimesForEmployee(billableEntries, employee, true))
+                .billableTime(zepService.getBillableTimesForEmployee(billableEntries, employee))
                 .totalWorkingTime(zepService.getTotalWorkingTimeForEmployee(billableEntries, employee))
                 .compensatoryDays(getAbsenceTimesForEmployee(absenceEntries, employee, "FA"))
                 .homeofficeDays(getAbsenceTimesForEmployee(absenceEntries, employee, "HO"))
