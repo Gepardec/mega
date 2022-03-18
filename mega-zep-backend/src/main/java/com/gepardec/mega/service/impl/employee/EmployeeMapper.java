@@ -23,11 +23,15 @@ public class EmployeeMapper {
                 .firstname(mitarbeiterType.getVorname())
                 .lastname(mitarbeiterType.getNachname())
                 .salutation(mitarbeiterType.getAnrede())
-                .releaseDate(mitarbeiterType.getFreigabedatum())
+                .releaseDate(nullStringToNull(mitarbeiterType.getFreigabedatum()))
                 .workDescription(mitarbeiterType.getPreisgruppe())
                 .language(mitarbeiterType.getSprache())
                 .active(hasEmployeeAndActiveEmployment(mitarbeiterType))
                 .build();
+    }
+
+    private String nullStringToNull(String str) {
+        return "null".equalsIgnoreCase(str) ? null : str;
     }
 
     private boolean hasEmployeeAndActiveEmployment(final MitarbeiterType employee) {

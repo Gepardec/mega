@@ -26,8 +26,8 @@ public class CommentResource implements CommentResourceAPI {
 
     @Override
     public List<Comment> getAllCommentsForEmployee(String employeeEmail, String currentMonthYear) {
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(currentMonthYear));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(currentMonthYear));
+        LocalDate from = DateUtils.getFirstDayOfCurrentMonth(currentMonthYear);
+        LocalDate to = DateUtils.getLastDayOfCurrentMonth(currentMonthYear);
         return commentService.findCommentsForEmployee(Employee.builder().email(employeeEmail).build(), from, to);
     }
 
