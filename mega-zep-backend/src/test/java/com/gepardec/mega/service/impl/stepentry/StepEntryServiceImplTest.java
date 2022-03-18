@@ -107,8 +107,8 @@ class StepEntryServiceImplTest {
                 .thenReturn(0);
 
         Employee employee = createEmployee();
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate from = DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate());
+        LocalDate to = DateUtils.getLastDayOfFollowingMonth(employee.releaseDate());
         boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(employee, 0L, from, to);
         assertThat(updated).isFalse();
     }
@@ -120,8 +120,8 @@ class StepEntryServiceImplTest {
                 .thenReturn(1);
 
         Employee employee = createEmployee();
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate from = DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate());
+        LocalDate to = DateUtils.getLastDayOfFollowingMonth(employee.releaseDate());
 
         boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(employee, 1L, from, to);
 
@@ -144,12 +144,12 @@ class StepEntryServiceImplTest {
         )).thenReturn(List.of(createStepEntry(1L)));
 
         Employee empl = createEmployee();
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(empl.releaseDate()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(empl.releaseDate()));
+        LocalDate from = DateUtils.getFirstDayOfFollowingMonth(empl.releaseDate());
+        LocalDate to = DateUtils.getLastDayOfFollowingMonth(empl.releaseDate());
         List<StepEntry> result = stepEntryService.findAllStepEntriesForEmployee(empl, from, to);
         verify(stepEntryRepository, times(1)).findAllOwnedStepEntriesInRange(
-                LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(empl.releaseDate())),
-                LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(empl.releaseDate())),
+                DateUtils.getFirstDayOfFollowingMonth(empl.releaseDate()),
+                DateUtils.getLastDayOfFollowingMonth(empl.releaseDate()),
                 empl.email()
         );
 

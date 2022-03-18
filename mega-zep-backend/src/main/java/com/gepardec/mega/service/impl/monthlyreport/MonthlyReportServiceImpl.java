@@ -54,21 +54,18 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
 
     @Override
     public MonthlyReport getMonthendReportForUser(final String userId) {
-        Employee employee = zepService.getEmployee(userId);
-        final LocalDate date;
+        final LocalDate date = Optional.ofNullable(zepService.getEmployee(userId))
+                .flatMap(emp -> Optional.ofNullable(emp.releaseDate()))
+                .filter(this::checkReleaseDate)
+                .map(releaseDate -> LocalDate.parse(Objects.requireNonNull(releaseDate)).plusMonths(1))
+                .orElse(null);
 
-        if ((employee != null) && (employee.releaseDate() != null) && checkReleaseDate(Objects.requireNonNull(employee.releaseDate()))) {
-            date = LocalDate.parse(Objects.requireNonNull(employee.releaseDate())).plusMonths(1);
-
-        } else {
-            date = null;
-        }
         return getMonthendReportForUser(userId, date);
     }
 
     private boolean checkReleaseDate(String releaseDate) {
         try {
-            LocalDate.parse(releaseDate);
+            LocalDate.parse(Objects.requireNonNull(releaseDate));
             return true;
         } catch (DateTimeParseException ex) {
             return false;
@@ -89,8 +86,8 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
 
     @Override
     public boolean setOpenAndUnassignedStepEntriesDone(Employee employee, Long stepId) {
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate from = DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate());
+        LocalDate to = DateUtils.getLastDayOfFollowingMonth(employee.releaseDate());
 
         return stepEntryService.setOpenAndAssignedStepEntriesDone(employee, stepId, from, to);
     }
@@ -106,8 +103,8 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         if (employee != null) {
 
             if (checkReleaseDate(employee.releaseDate())) {
-                LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-                LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+                LocalDate fromDate = DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate());
+                LocalDate toDate = DateUtils.getLastDayOfFollowingMonth(employee.releaseDate());
                 comments.addAll(commentService.findCommentsForEmployee(employee, fromDate, toDate));
             }
 
@@ -139,7 +136,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                 .isAssigned(isAssigned)
                 .employeeProgresses(pmProgresses)
                 .otherChecksDone(otherChecksDone)
-                .billableTime(zepService.getBillableTimesForEmployee(billableEntries, employee, true))
+                .billableTime(zepService.getBillableTimesForEmployee(billableEntries, employee))
                 .totalWorkingTime(zepService.getTotalWorkingTimeForEmployee(billableEntries, employee))
                 .compensatoryDays(getAbsenceTimesForEmployee(absenceEntries, COMPENSATORY_DAYS))
                 .homeofficeDays(getAbsenceTimesForEmployee(absenceEntries, HOME_OFFICE_DAYS))
