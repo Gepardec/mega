@@ -8,7 +8,6 @@ import com.gepardec.mega.domain.model.SecurityContext;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.rest.mapper.MapperManager;
-import com.gepardec.mega.rest.model.CommentDto;
 import com.gepardec.mega.rest.model.NewCommentEntryDto;
 import com.gepardec.mega.service.api.CommentService;
 import io.quarkus.test.junit.QuarkusTest;
@@ -151,7 +150,7 @@ class CommentResourceTest {
         when(commentService.findCommentsForEmployee(ArgumentMatchers.any(Employee.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
                 .thenReturn(List.of(comment));
 
-        List<CommentDto> comments = given().contentType(ContentType.JSON)
+        List<com.gepardec.mega.rest.model.CommentDto> comments = given().contentType(ContentType.JSON)
                 .queryParam("email", "no-reply@gmx.at")
                 .queryParam("date", "2020-10-01")
                 .get("/comments/getallcommentsforemployee")
@@ -159,7 +158,7 @@ class CommentResourceTest {
                 });
 
         assertThat(comments).hasSize(1);
-        assertThat(comments.get(0)).isEqualTo(mapper.map(comment, CommentDto.class));
+        assertThat(comments.get(0)).isEqualTo(mapper.map(comment, com.gepardec.mega.rest.model.CommentDto.class));
     }
 
     @Test
@@ -203,10 +202,10 @@ class CommentResourceTest {
                 .currentMonthYear("2020-10-01")
                 .project("")
                 .build();
-        CommentDto createdComment = given().contentType(ContentType.JSON)
+        com.gepardec.mega.rest.model.CommentDto createdComment = given().contentType(ContentType.JSON)
                 .body(newCommentEntryDto)
                 .post("/comments")
-                .as(CommentDto.class);
+                .as(com.gepardec.mega.rest.model.CommentDto.class);
 
         assertThat(createdComment).isNotNull();
         assertThat(createdComment.getMessage()).isEqualTo(newCommentEntryDto.comment());
@@ -270,12 +269,12 @@ class CommentResourceTest {
         when(commentService.updateComment(ArgumentMatchers.anyLong(), ArgumentMatchers.anyString()))
                 .thenReturn(comment);
 
-        CommentDto updatedComment = given().contentType(ContentType.JSON)
+        com.gepardec.mega.rest.model.CommentDto updatedComment = given().contentType(ContentType.JSON)
                 .body(comment)
                 .put("/comments")
-                .as(CommentDto.class);
+                .as(com.gepardec.mega.rest.model.CommentDto.class);
 
-        assertThat(updatedComment).isEqualTo(mapper.map(comment, CommentDto.class));
+        assertThat(updatedComment).isEqualTo(mapper.map(comment, com.gepardec.mega.rest.model.CommentDto.class));
     }
 
     private com.gepardec.mega.domain.model.User createUserForRole(final Role role) {

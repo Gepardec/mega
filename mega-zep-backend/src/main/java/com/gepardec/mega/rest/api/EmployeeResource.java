@@ -1,6 +1,6 @@
 package com.gepardec.mega.rest.api;
 
-import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.rest.model.EmployeeDto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.ws.rs.Consumes;
@@ -21,5 +21,5 @@ public interface EmployeeResource {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    Response update(@NotEmpty(message = "{workerResource.employees.notEmpty}") List<Employee> employees);
+    Response update(@NotEmpty(message = "{workerResource.employees.notEmpty}") List<EmployeeDto> employeesDto);
 }

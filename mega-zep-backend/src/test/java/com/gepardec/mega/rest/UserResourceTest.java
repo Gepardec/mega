@@ -48,13 +48,13 @@ class UserResourceTest {
         final User user = createUserForRole(Role.EMPLOYEE);
         when(securityContext.getEmail()).thenReturn(user.getEmail());
         when(userContext.getUser()).thenReturn(user);
-
         final User actual = given()
                 .get("/user")
                 .then().assertThat().statusCode(HttpStatus.SC_OK)
                 .extract().as(User.class);
 
-        assertThat(actual).isEqualTo(user);
+        assertThat(actual.getUserId()).isEqualTo(user.getUserId());
+        assertThat(actual.getEmail()).isEqualTo(user.getEmail());
     }
 
     private User createUserForRole(final Role role) {

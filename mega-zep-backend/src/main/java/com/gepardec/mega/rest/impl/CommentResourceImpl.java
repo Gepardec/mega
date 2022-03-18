@@ -27,8 +27,8 @@ public class CommentResourceImpl implements CommentResource {
     CommentService commentService;
 
     @Override
-    public Response setDone(final Comment comment) {
-        return Response.ok(commentService.setDone(comment)).build();
+    public Response setDone(final CommentDto commentDto) {
+        return Response.ok(commentService.setDone(mapper.map(commentDto, com.gepardec.mega.domain.model.Comment.class))).build();
     }
 
     @Override
@@ -37,7 +37,7 @@ public class CommentResourceImpl implements CommentResource {
         LocalDate to = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(currentMonthYear));
 
         List<Comment> commentsForEmployee = commentService.findCommentsForEmployee(Employee.builder().email(employeeEmail).build(), from, to);
-        return Response.ok(mapper.mapAsList(commentsForEmployee, Comment.class, CommentDto.class)).build();
+        return Response.ok(mapper.mapAsList(commentsForEmployee, CommentDto.class, CommentDto.class)).build();
     }
 
     @Override

@@ -7,8 +7,10 @@ import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
@@ -16,7 +18,10 @@ import java.util.List;
 @Jacksonized
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
+
 public class MonthlyReportDto {
     @JsonProperty
     private Employee employee;

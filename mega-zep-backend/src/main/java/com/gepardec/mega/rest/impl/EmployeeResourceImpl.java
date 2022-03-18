@@ -32,8 +32,7 @@ public class EmployeeResourceImpl implements EmployeeResource {
     }
 
     @Override
-    //TODO ask why List<String>
-    public Response update(final List<Employee> employees) {
-        return Response.ok(employeeService.updateEmployeesReleaseDate(employees)).build();
+    public Response update(final List<EmployeeDto> employeesDto) {
+        return Response.ok(employeeService.updateEmployeesReleaseDate(mapper.mapAsList(employeesDto, EmployeeDto.class, Employee.class))).build();
     }
 }

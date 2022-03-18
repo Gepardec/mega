@@ -1,11 +1,11 @@
 package com.gepardec.mega.service.impl.comment;
 
-import com.gepardec.mega.db.entity.employee.Comment;
 import com.gepardec.mega.db.entity.employee.EmployeeState;
 import com.gepardec.mega.db.entity.employee.StepEntry;
 import com.gepardec.mega.db.entity.employee.User;
 import com.gepardec.mega.db.repository.CommentRepository;
 import com.gepardec.mega.domain.mapper.CommentMapper;
+import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.FinishedAndTotalComments;
 import com.gepardec.mega.domain.utils.DateUtils;
@@ -61,7 +61,7 @@ class CommentServiceImplTest {
         Employee employee = createEmployee();
         LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate()));
         LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate()));
-        List<com.gepardec.mega.domain.model.Comment> domainComments = commentService.findCommentsForEmployee(
+        List<Comment> domainComments = commentService.findCommentsForEmployee(
                 employee, fromDate, toDate
         );
         assertThat(domainComments).hasSize(1);
@@ -190,10 +190,10 @@ class CommentServiceImplTest {
 
         doAnswer(invocation -> {
             Object[] args = invocation.getArguments();
-            ((Comment) args[0]).setUpdatedDate(LocalDateTime.now());
-            ((Comment) args[0]).setState(EmployeeState.OPEN);
+            ((com.gepardec.mega.db.entity.employee.Comment) args[0]).setUpdatedDate(LocalDateTime.now());
+            ((com.gepardec.mega.db.entity.employee.Comment) args[0]).setState(EmployeeState.OPEN);
             return args[0];
-        }).when(commentRepository).save(ArgumentMatchers.any(Comment.class));
+        }).when(commentRepository).save(ArgumentMatchers.any(com.gepardec.mega.db.entity.employee.Comment.class));
 
         doNothing().when(mailSender).send(
                 ArgumentMatchers.any(Mail.class),
@@ -206,7 +206,7 @@ class CommentServiceImplTest {
 
         Employee employee = createEmployee();
         String newComment = "My new comment!";
-        com.gepardec.mega.domain.model.Comment createdComment = commentService.createNewCommentForEmployee(
+        Comment createdComment = commentService.createNewCommentForEmployee(
                 2L, employee, newComment, "", null, LocalDate.now().toString()
         );
 
@@ -238,17 +238,17 @@ class CommentServiceImplTest {
 
     @Test
     void updateComment_whenValid_thenReturnUpdatedComment() {
-        Comment originalComment = createComment(1L, EmployeeState.DONE);
+        com.gepardec.mega.db.entity.employee.Comment originalComment = createComment(1L, EmployeeState.DONE);
         when(commentRepository.findById(ArgumentMatchers.anyLong())).thenReturn(originalComment);
-        when(commentRepository.update(ArgumentMatchers.any(Comment.class))).thenReturn(null);
+        when(commentRepository.update(ArgumentMatchers.any(com.gepardec.mega.db.entity.employee.Comment.class))).thenReturn(null);
 
-        com.gepardec.mega.domain.model.Comment updatedComment = commentService.updateComment(1L, "Updated message");
+        Comment updatedComment = commentService.updateComment(1L, "Updated message");
         assertThat(updatedComment).isNotNull();
         assertThat(updatedComment.getMessage()).isEqualTo("Updated message");
     }
 
-    private Comment createComment(Long id, EmployeeState employeeState) {
-        Comment comment = new Comment();
+    private com.gepardec.mega.db.entity.employee.Comment createComment(Long id, EmployeeState employeeState) {
+        com.gepardec.mega.db.entity.employee.Comment comment = new com.gepardec.mega.db.entity.employee.Comment();
         comment.setId(id);
         comment.setCreationDate(LocalDateTime.now());
         comment.setMessage("Reisezeiten eintragen!");
