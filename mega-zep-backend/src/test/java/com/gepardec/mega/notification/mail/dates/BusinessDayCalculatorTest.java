@@ -1,6 +1,6 @@
-package com.gepardec.mega.notification.mail;
+package com.gepardec.mega.notification.mail.dates;
 
-import com.gepardec.mega.notification.mail.dates.BusinessDayCalculator;
+import com.gepardec.mega.notification.mail.Mail;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
@@ -136,6 +136,30 @@ class BusinessDayCalculatorTest {
                 () -> assertReminderEquals(OM_CONTROL_PROJECTTIMES, businessDayCalculator.getEventForDate(LocalDate.of(2020, 2, 28))),
                 () -> assertReminderEmpty(businessDayCalculator.getEventForDate(LocalDate.of(2020, 2, 29)))
         );
+    }
+
+    @Test
+    void removeWorkingDaysFromNextMonth_positiveInt() {
+        LocalDate localDate = businessDayCalculator.removeWorkingdaysFromNextMonth(LocalDate.of(2022, 1, 10), 20);
+        assertThat(localDate).isEqualTo(LocalDate.of(2022, 1, 3));
+    }
+
+    @Test
+    void removeWorkingDaysFromNextMonth_negativeInt() {
+        LocalDate localDate = businessDayCalculator.removeWorkingdaysFromNextMonth(LocalDate.of(2022, 1, 10), -20);
+        assertThat(localDate).isEqualTo(LocalDate.of(2022, 1, 3));
+    }
+
+    @Test
+    void addWorkingDays_0_returnsInputDate() {
+        LocalDate date = businessDayCalculator.addWorkingdays(LocalDate.of(2022, 1, 3), 0);
+        assertThat(date).isEqualTo(LocalDate.of(2022, 1, 3));
+    }
+
+    @Test
+    void addWorkingDays_20_returns20220201() {
+        LocalDate date = businessDayCalculator.addWorkingdays(LocalDate.of(2022, 1, 3), 20);
+        assertThat(date).isEqualTo(LocalDate.of(2022, 2, 1));
     }
 
     private void assertReminderEmpty(Optional<Mail> actualReminder) {

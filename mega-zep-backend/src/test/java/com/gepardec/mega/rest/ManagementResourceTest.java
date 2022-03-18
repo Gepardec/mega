@@ -246,7 +246,7 @@ class ManagementResourceTest {
         )).thenReturn(getProjectTimeTypeList());
 
         when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class))).thenReturn("02:00");
-        when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class), ArgumentMatchers.anyBoolean())).thenReturn("02:00");
+        when(zepService.getInternalTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class))).thenReturn("02:00");
 
         List<ProjectManagementEntryDto> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/10")
@@ -328,8 +328,8 @@ class ManagementResourceTest {
                 ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class)
         )).thenReturn(getProjectTimeTypeList());
 
-        when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class))).thenReturn("01:00");
-        when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class), ArgumentMatchers.eq(true))).thenReturn("02:00");
+        when(zepService.getInternalTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class))).thenReturn("01:00");
+        when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class))).thenReturn("02:00");
 
         List<ProjectManagementEntryDto> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/09")
@@ -416,7 +416,7 @@ class ManagementResourceTest {
         )).thenReturn(getProjectTimeTypeList());
 
         when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class))).thenReturn("00:00");
-        when(zepService.getBillableTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class), ArgumentMatchers.eq(true))).thenReturn("00:00");
+        when(zepService.getInternalTimesForEmployee(ArgumentMatchers.anyList(), ArgumentMatchers.any(Employee.class))).thenReturn("00:00");
 
         List<ProjectManagementEntryDto> result = given().contentType(ContentType.JSON)
                 .get("/management/projectmanagemententries/2020/09")

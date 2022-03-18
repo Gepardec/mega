@@ -107,8 +107,8 @@ class StepEntryServiceImplTest {
                 .thenReturn(0);
 
         Employee employee = createEmployee();
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate()));
+        LocalDate from = DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate());
+        LocalDate to = DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate());
         boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(employee, 0L, from, to);
         assertThat(updated).isFalse();
     }
@@ -120,8 +120,8 @@ class StepEntryServiceImplTest {
                 .thenReturn(1);
 
         Employee employee = createEmployee();
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate()));
+        LocalDate from = DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate());
+        LocalDate to = DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate());
 
         boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(employee, 1L, from, to);
 
@@ -143,14 +143,14 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.anyString()
         )).thenReturn(List.of(createStepEntry(1L)));
 
-        Employee employee = createEmployee();
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate()));
-        List<StepEntry> result = stepEntryService.findAllStepEntriesForEmployee(employee, from, to);
+        Employee empl = createEmployee();
+        LocalDate from = DateUtils.getFirstDayOfFollowingMonth(empl.getReleaseDate());
+        LocalDate to = DateUtils.getLastDayOfFollowingMonth(empl.getReleaseDate());
+        List<StepEntry> result = stepEntryService.findAllStepEntriesForEmployee(empl, from, to);
         verify(stepEntryRepository, times(1)).findAllOwnedStepEntriesInRange(
-                LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate())),
-                LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate())),
-                employee.getEmail()
+                DateUtils.getFirstDayOfFollowingMonth(empl.getReleaseDate()),
+                DateUtils.getLastDayOfFollowingMonth(empl.getReleaseDate()),
+                empl.getEmail()
         );
 
         assertThat(result).hasSize(1);

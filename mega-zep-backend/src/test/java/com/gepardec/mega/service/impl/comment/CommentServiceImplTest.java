@@ -59,8 +59,8 @@ class CommentServiceImplTest {
                 ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString())).thenReturn(List.of(createComment(1L, EmployeeState.OPEN)));
 
         Employee employee = createEmployee();
-        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate()));
-        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate()));
+        LocalDate fromDate = DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate());
+        LocalDate toDate = DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate());
         List<Comment> domainComments = commentService.findCommentsForEmployee(
                 employee, fromDate, toDate
         );
@@ -125,8 +125,8 @@ class CommentServiceImplTest {
         ));
 
         Employee employee = createEmployee();
-        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate()));
-        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate()));
+        LocalDate fromDate = DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate());
+        LocalDate toDate = DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate());
         FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
         assertThat(result).isNotNull();
         assertThat(result.getTotalComments()).isEqualTo(3L);
@@ -146,8 +146,8 @@ class CommentServiceImplTest {
         ));
 
         Employee employee = createEmployee();
-        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate()));
-        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate()));
+        LocalDate fromDate = DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate());
+        LocalDate toDate = DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate());
         FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
         assertThat(result).isNotNull();
         assertThat(result.getTotalComments()).isEqualTo(3L);
@@ -163,8 +163,8 @@ class CommentServiceImplTest {
         )).thenReturn(List.of());
 
         Employee employee = createEmployee();
-        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate()));
-        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate()));
+        LocalDate fromDate = DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate());
+        LocalDate toDate = DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate());
         FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
         assertThat(result).isNotNull();
         assertThat(result.getTotalComments()).isZero();

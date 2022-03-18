@@ -93,8 +93,8 @@ public class StepEntryServiceImpl implements StepEntryService {
 
     @Override
     public boolean closeStepEntryForEmployeeInProject(Employee employee, Long stepId, String project, String assigneeEmail, String currentMonthYear) {
-        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(currentMonthYear));
-        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(currentMonthYear));
+        LocalDate fromDate = DateUtils.getFirstDayOfCurrentMonth(currentMonthYear);
+        LocalDate toDate = DateUtils.getLastDayOfCurrentMonth(currentMonthYear);
 
         return stepEntryRepository.closeAssigned(fromDate, toDate, employee.getEmail(), assigneeEmail, stepId, project) > 0;
     }
@@ -119,8 +119,8 @@ public class StepEntryServiceImpl implements StepEntryService {
     @Override
     public StepEntry findStepEntryForEmployeeAtStep(Long stepId, Employee employee, String assigneeEmail, String currentMonthYear) {
         Objects.requireNonNull(employee, "Employee must not be null!");
-        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(currentMonthYear));
-        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(currentMonthYear));
+        LocalDate fromDate = DateUtils.getFirstDayOfCurrentMonth(currentMonthYear);
+        LocalDate toDate = DateUtils.getLastDayOfCurrentMonth(currentMonthYear);
         Optional<StepEntry> stepEntry = stepEntryRepository.findStepEntryForEmployeeAtStepInRange(
                 fromDate, toDate, employee.getEmail(), stepId, assigneeEmail
         );
@@ -134,8 +134,8 @@ public class StepEntryServiceImpl implements StepEntryService {
     @Override
     public StepEntry findStepEntryForEmployeeAndProjectAtStep(Long stepId, Employee employee, String assigneeEmail, String project, String currentMonthYear) {
         Objects.requireNonNull(employee, "Employee must not be null!");
-        LocalDate fromDate = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(currentMonthYear));
-        LocalDate toDate = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(currentMonthYear));
+        LocalDate fromDate = DateUtils.getFirstDayOfCurrentMonth(currentMonthYear);
+        LocalDate toDate = DateUtils.getLastDayOfCurrentMonth(currentMonthYear);
         Optional<StepEntry> stepEntry = stepEntryRepository.findStepEntryForEmployeeAndProjectAtStepInRange(
                 fromDate, toDate, employee.getEmail(), stepId, assigneeEmail, project
         );
@@ -173,7 +173,7 @@ public class StepEntryServiceImpl implements StepEntryService {
         if (StringUtils.isBlank(releaseDate) || StringUtils.equalsIgnoreCase(releaseDate, "NULL")) {
             entryDate = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
         } else {
-            entryDate = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(releaseDate));
+            entryDate = DateUtils.getFirstDayOfFollowingMonth(releaseDate);
         }
         return entryDate;
     }

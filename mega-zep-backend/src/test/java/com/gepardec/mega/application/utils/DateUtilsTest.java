@@ -24,7 +24,7 @@ class DateUtilsTest {
 
     @Test
     void getLastDayOfFollowingMonth_nullString_throwException() {
-        assertThatThrownBy(() -> DateUtils.getLastDayOfFollowingMonth(null)).isInstanceOf(NullPointerException.class);
+        assertThatThrownBy(() -> DateUtils.getLastDayOfFollowingMonth((String) null)).isInstanceOf(NullPointerException.class);
     }
 
     @Test
@@ -44,7 +44,7 @@ class DateUtilsTest {
 
     @Test
     void getFirstDayOfFollowingMonth_nullString_throwException() {
-        assertThatThrownBy(() -> DateUtils.getFirstDayOfFollowingMonth(null)).isInstanceOf(NullPointerException.class);
+        assertThatThrownBy(() -> DateUtils.getFirstDayOfFollowingMonth((String) null)).isInstanceOf(NullPointerException.class);
     }
 
     @Test

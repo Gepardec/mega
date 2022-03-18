@@ -37,8 +37,10 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @QuarkusTest
 class ZepServiceImplTest {
@@ -115,6 +117,21 @@ class ZepServiceImplTest {
         Mockito.verify(zepSoapPortType).readMitarbeiter(Mockito.argThat(
                 argument -> argument.getReadMitarbeiterSearchCriteria() != null && argument.getReadMitarbeiterSearchCriteria().getUserId().equals("0")
         ));
+    }
+
+    @Test
+    void getEmployee_releaseDateFromZepNullString_releaseDateMappedToNull() {
+        MitarbeiterType mitarbeiter = createMitarbeiterType(0);
+        mitarbeiter.setFreigabedatum("NULL");
+
+        when(zepSoapPortType.readMitarbeiter(any())).thenReturn(createReadMitarbeiterResponseType(
+                List.of(mitarbeiter)
+        ));
+
+        final Employee employee = zepService.getEmployee("0");
+
+        assertThat(employee).isNotNull();
+        assertThat(employee.getReleaseDate()).isNull();
     }
 
     @Test

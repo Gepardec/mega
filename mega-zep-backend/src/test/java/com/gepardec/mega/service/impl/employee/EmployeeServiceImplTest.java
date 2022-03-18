@@ -1,6 +1,5 @@
 package com.gepardec.mega.service.impl.employee;
 
-import com.gepardec.mega.db.repository.UserRepository;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.service.api.EmployeeService;
 import com.gepardec.mega.service.impl.EmployeeServiceImpl;
@@ -35,9 +34,6 @@ class EmployeeServiceImplTest {
     @InjectMock
     ManagedExecutor managedExecutor;
 
-    @InjectMock
-    UserRepository userRepository;
-
     @Inject
     Logger logger;
 
@@ -46,7 +42,7 @@ class EmployeeServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        employeeService = new EmployeeServiceImpl(logger, zepService, managedExecutor, userRepository, 10);
+        employeeService = new EmployeeServiceImpl(logger, zepService, managedExecutor, 10);
     }
 
     @Test

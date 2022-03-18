@@ -15,11 +15,6 @@ public interface WorkerResource {
     Response monthlyReport();
 
     @GET
-    @Path("/getall")
-    @Produces(MediaType.APPLICATION_JSON)
-    Response getAll();
-
-    @GET
     @Path("/monthendreports/{year}/{month}")
     @Produces(MediaType.APPLICATION_JSON)
     Response monthlyReport(@PathParam("year") Integer year, @PathParam("month") Integer month);

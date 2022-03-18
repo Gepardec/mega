@@ -33,8 +33,8 @@ public class CommentResourceImpl implements CommentResource {
 
     @Override
     public Response getAllCommentsForEmployee(String employeeEmail, String currentMonthYear) {
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfCurrentMonth(currentMonthYear));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfCurrentMonth(currentMonthYear));
+        LocalDate from = DateUtils.getFirstDayOfCurrentMonth(currentMonthYear);
+        LocalDate to = DateUtils.getLastDayOfCurrentMonth(currentMonthYear);
 
         List<Comment> commentsForEmployee = commentService.findCommentsForEmployee(Employee.builder().email(employeeEmail).build(), from, to);
         return Response.ok(mapper.mapAsList(commentsForEmployee, CommentDto.class, CommentDto.class)).build();

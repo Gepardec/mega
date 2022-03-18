@@ -1,7 +1,5 @@
 package com.gepardec.mega.service.impl;
 
-import com.gepardec.mega.db.entity.employee.User;
-import com.gepardec.mega.db.repository.UserRepository;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.service.api.EmployeeService;
 import com.gepardec.mega.zep.ZepService;
@@ -32,19 +30,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final Integer employeeUpdateParallelExecutions;
 
-    private final UserRepository userRepository;
-
     @Inject
     public EmployeeServiceImpl(final Logger logger,
                                final ZepService zepService,
                                final ManagedExecutor managedExecutor,
-                               final UserRepository userRepository,
                                @ConfigProperty(name = "mega.employee.update.parallel.executions", defaultValue = "10") final Integer employeeUpdateParallelExecutions) {
         this.logger = logger;
         this.zepService = zepService;
         this.managedExecutor = managedExecutor;
         this.employeeUpdateParallelExecutions = employeeUpdateParallelExecutions;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -94,13 +88,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         });
 
         return failedUserIds;
-    }
-
-    @Override
-    public List<User> getAll() {
-        // TODO
-        // return userRepository.getAll();
-        return null;
     }
 
     private List<String> getUserIds(final List<Employee> employees) {

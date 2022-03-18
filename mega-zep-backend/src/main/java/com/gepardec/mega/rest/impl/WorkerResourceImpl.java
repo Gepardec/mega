@@ -78,10 +78,4 @@ public class WorkerResourceImpl implements WorkerResource {
 
         return Response.ok(mapper.map(monthlyReport, MonthlyReportDto.class)).build();
     }
-
-    @Override
-    public Response getAll() {
-        return Response.ok(employeeService.getAll()).build();
-    }
-
 }

@@ -231,8 +231,8 @@ public class ManagementResourceImpl implements ManagementResource {
                     .finishedComments(finishedAndTotalComments.getFinishedComments())
                     .totalComments(finishedAndTotalComments.getTotalComments())
                     .entryDate(stepEntries.get(0).getDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN)))
-                    .billableTime(zepService.getBillableTimesForEmployee(projektzeitTypes, employee, true))
-                    .nonBillableTime(zepService.getBillableTimesForEmployee(projektzeitTypes, employee))
+                    .billableTime(zepService.getBillableTimesForEmployee(projektzeitTypes, employee))
+                    .nonBillableTime(zepService.getInternalTimesForEmployee(projektzeitTypes, employee))
                     .build();
         }
 
