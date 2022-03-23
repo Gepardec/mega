@@ -24,7 +24,7 @@ describe('UserActionsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        TranslateModule.forRoot(),
+        TranslateModule.forChild(),
         RouterTestingModule.withRoutes(routes),
         AppModule,
         HttpClientTestingModule,

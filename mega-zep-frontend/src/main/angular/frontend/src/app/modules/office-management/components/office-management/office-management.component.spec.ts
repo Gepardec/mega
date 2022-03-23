@@ -13,7 +13,7 @@ describe('OfficeManagementComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [OfficeManagementModule, HttpClientTestingModule, TranslateModule.forRoot(), AngularMaterialModule, RouterTestingModule]
+      imports: [OfficeManagementModule, HttpClientTestingModule, TranslateModule.forChild(), AngularMaterialModule, RouterTestingModule]
     })
       .compileComponents();
   }));

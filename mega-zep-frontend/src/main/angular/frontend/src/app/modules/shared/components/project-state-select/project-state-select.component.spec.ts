@@ -13,7 +13,7 @@ describe('ProjectStateSelectComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ProjectStateSelectComponent],
       imports: [
-        TranslateModule.forRoot(),
+        TranslateModule.forChild(),
         HttpClientTestingModule
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]

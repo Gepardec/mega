@@ -11,7 +11,7 @@ describe('StateSelectComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [StateSelectComponent],
-      imports: [TranslateModule.forRoot()],
+      imports: [TranslateModule.forChild()],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();

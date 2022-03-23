@@ -13,7 +13,7 @@ describe('ErrorComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ErrorComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule, TranslateModule.forRoot()],
+      imports: [HttpClientTestingModule, RouterTestingModule, TranslateModule.forChild()],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
       .compileComponents();

@@ -13,7 +13,7 @@ describe('JourneyCheckComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [JourneyCheckComponent],
-      imports: [TranslateModule.forRoot(), AngularMaterialModule, HttpClientTestingModule],
+      imports: [TranslateModule.forChild(), AngularMaterialModule, HttpClientTestingModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();

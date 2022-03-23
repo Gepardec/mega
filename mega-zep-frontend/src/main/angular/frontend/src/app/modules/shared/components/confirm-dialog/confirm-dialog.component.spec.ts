@@ -17,7 +17,7 @@ describe('ConfirmDialogComponent', () => {
       declarations: [ConfirmDialogComponent],
       imports: [
         AngularMaterialModule,
-        TranslateModule.forRoot(),
+        TranslateModule.forChild(),
         HttpClientTestingModule,
         RouterTestingModule,
         OAuthModule.forRoot()

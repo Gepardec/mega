@@ -16,7 +16,7 @@ describe('EmployeeCheckComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [EmployeeCheckComponent],
-      imports: [TranslateModule.forRoot(), AngularMaterialModule, HttpClientTestingModule, RouterTestingModule, OAuthModule.forRoot()],
+      imports: [TranslateModule.forChild(), AngularMaterialModule, HttpClientTestingModule, RouterTestingModule, OAuthModule.forRoot()],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [CommentService]
     })

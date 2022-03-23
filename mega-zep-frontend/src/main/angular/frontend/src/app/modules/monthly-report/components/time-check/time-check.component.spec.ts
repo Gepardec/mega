@@ -12,7 +12,7 @@ describe('TimeCheckComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [TimeCheckComponent],
-      imports: [TranslateModule.forRoot(), AngularMaterialModule],
+      imports: [TranslateModule.forChild(), AngularMaterialModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();

@@ -14,7 +14,7 @@ describe('ProjectOverviewCardComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        TranslateModule.forRoot(),
+        TranslateModule.forChild(),
         OfficeManagementModule,
         RouterTestingModule]
     })

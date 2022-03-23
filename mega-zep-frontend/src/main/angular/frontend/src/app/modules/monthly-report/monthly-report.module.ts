@@ -25,7 +25,7 @@ import { GeneralInfoComponent } from './components/general-info/general-info.com
   imports: [
     CommonModule,
     AngularMaterialModule,
-    TranslateModule.forRoot(),
+    TranslateModule.forChild(),
     FlexLayoutModule,
     SharedModule
   ]

@@ -27,7 +27,7 @@ describe('LoginComponent', () => {
       declarations: [LoginComponent],
       imports: [
         RouterTestingModule,
-        TranslateModule.forRoot()
+        TranslateModule.forChild()
       ],
       providers: [
         {

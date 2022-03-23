@@ -21,7 +21,7 @@ describe('EmployeeProgressComponent', () => {
         BrowserAnimationsModule,
         SharedModule,
         AngularMaterialModule,
-        TranslateModule.forRoot(),
+        TranslateModule.forChild(),
         HttpClientTestingModule,
         RouterTestingModule
       ],

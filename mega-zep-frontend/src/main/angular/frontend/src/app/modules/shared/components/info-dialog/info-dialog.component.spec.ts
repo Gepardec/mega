@@ -11,7 +11,7 @@ describe('InfoDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, AngularMaterialModule, TranslateModule.forRoot()],
+      imports: [HttpClientTestingModule, AngularMaterialModule, TranslateModule.forChild()],
       declarations: [InfoDialogComponent]
     })
       .compileComponents();

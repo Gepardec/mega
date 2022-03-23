@@ -10,7 +10,7 @@ describe('GeneralInfoComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()],
+      imports: [TranslateModule.forChild()],
       declarations: [ GeneralInfoComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })

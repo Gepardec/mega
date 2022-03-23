@@ -18,7 +18,7 @@ describe('CommentsForEmployeeComponent', () => {
       declarations: [CommentsForEmployeeComponent],
       imports: [
         AngularMaterialModule,
-        TranslateModule.forRoot(),
+        TranslateModule.forChild(),
         HttpClientTestingModule,
         RouterTestingModule,
         OAuthModule.forRoot()

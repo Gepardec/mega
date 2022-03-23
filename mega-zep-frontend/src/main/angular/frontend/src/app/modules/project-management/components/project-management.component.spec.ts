@@ -15,7 +15,7 @@ describe('ProjectManagementComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ProjectManagementComponent],
       imports: [
-        TranslateModule.forRoot(),
+        TranslateModule.forChild(),
         AngularMaterialModule,
         BrowserAnimationsModule,
         HttpClientTestingModule],

@@ -16,7 +16,7 @@ import {BillableTimesFractionComponent} from "./components/billable-times-fracti
     AngularMaterialModule,
     FlexLayoutModule,
     SharedModule,
-    TranslateModule.forRoot(),
+    TranslateModule.forChild(),
     FormsModule
   ]
 })

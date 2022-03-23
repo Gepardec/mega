@@ -16,7 +16,7 @@ describe('DisplayMonthlyReportComponent', () => {
       declarations: [DisplayMonthlyReportComponent],
       imports: [
         AngularMaterialModule,
-        TranslateModule.forRoot(),
+        TranslateModule.forChild(),
         SharedModule
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
