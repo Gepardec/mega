@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {EmployeeCardComponent} from './employee-card.component';
 import {TranslateModule} from '@ngx-translate/core';
@@ -13,7 +13,7 @@ describe('OfficeManagementComponent', () => {
   let component: EmployeeCardComponent;
   let fixture: ComponentFixture<EmployeeCardComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [EmployeeCardComponent],
       imports: [
@@ -24,17 +24,13 @@ describe('OfficeManagementComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule
       ]
-    })
-      .compileComponents();
+    }).compileComponents().then(() => {
+      fixture = TestBed.createComponent(EmployeeCardComponent);
+      component = fixture.componentInstance;
+    });
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(EmployeeCardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
+  it('#should create', () => {
     expect(component).toBeTruthy();
   });
 });
