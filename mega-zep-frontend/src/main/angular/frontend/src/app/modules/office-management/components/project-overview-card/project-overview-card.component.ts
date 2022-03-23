@@ -83,9 +83,7 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.dateSelectionSub) {
-      this.dateSelectionSub.unsubscribe();
-    }
+    this.dateSelectionSub?.unsubscribe();
   }
 
   private getPmEntries() {
