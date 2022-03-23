@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {State} from '../../models/State';
 import {ProjectState} from '../../models/ProjectState';
 
@@ -7,7 +7,8 @@ import {ProjectState} from '../../models/ProjectState';
   templateUrl: './state-indicator.component.html',
   styleUrls: ['./state-indicator.component.scss']
 })
-export class StateIndicatorComponent implements OnInit {
+export class StateIndicatorComponent {
+
   @Input() state: string;
   @Input() size: 'small' | 'medium' | 'large' = 'small';
   State = State;
@@ -15,8 +16,4 @@ export class StateIndicatorComponent implements OnInit {
 
   constructor() {
   }
-
-  ngOnInit(): void {
-  }
-
 }

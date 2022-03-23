@@ -19,10 +19,10 @@
       </mat-form-field>
 
       <span matTooltip="{{'comments-for-employee.characterRangeTooltip' | translate}}"
-            [matTooltipDisabled]="!(newMessage?.value?.length == 0 || newMessage?.value?.length > MAXIMUM_LETTERS)"
+            [matTooltipDisabled]="!(newMessage?.value?.length === 0 || newMessage?.value?.length > MAXIMUM_LETTERS)"
             [matTooltipPosition]="'right'">
         <button
-          [disabled]="newMessage?.value?.length == 0 || newMessage?.value?.length > MAXIMUM_LETTERS"
+          [disabled]="newMessage?.value?.length === 0 || newMessage?.value?.length > MAXIMUM_LETTERS"
           (click)="createCommentForEmployee(newMessage.value);newMessage.value = ''"
           mat-raised-button>
           {{'comments-for-employee.addCommentBtn' | translate}}
@@ -76,7 +76,7 @@
         <td class="mat-cell">
           <ng-container *ngIf="comment.isEditing">
             <button
-              [disabled]="editMessageInput.value.length == 0 || editMessageInput.value.length > MAXIMUM_LETTERS"
+              [disabled]="editMessageInput.value.length === 0 || editMessageInput.value.length > MAXIMUM_LETTERS"
               (click)="comment.message = editMessageInput.value; toggleIsEditing(comment); updateCommentForEmployee(comment);"
               mat-icon-button>
               <mat-icon>done</mat-icon>
