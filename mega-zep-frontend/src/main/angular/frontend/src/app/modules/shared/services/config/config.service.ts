@@ -16,16 +16,16 @@ export class ConfigService {
   }
 
   getConfig(): Observable<Config> {
-    if (sessionStorage.getItem(this.SESSION_STORAGE_KEY)) {
-      return new BehaviorSubject(JSON.parse(sessionStorage.getItem(this.SESSION_STORAGE_KEY)));
+    if (localStorage.getItem(this.SESSION_STORAGE_KEY)) {
+      return new BehaviorSubject(JSON.parse(localStorage.getItem(this.SESSION_STORAGE_KEY)));
     } else {
       return this.httpClient.get<Config>(this.getBackendUrlWithContext('/config'))
-        .pipe(tap((result) => sessionStorage.setItem(this.SESSION_STORAGE_KEY, JSON.stringify(result))));
+        .pipe(tap((result) => localStorage.setItem(this.SESSION_STORAGE_KEY, JSON.stringify(result))));
     }
   }
 
   logOut(): void {
-    sessionStorage.removeItem(this.SESSION_STORAGE_KEY);
+    localStorage.removeItem(this.SESSION_STORAGE_KEY);
   }
 
   getBackendUrl(): string {

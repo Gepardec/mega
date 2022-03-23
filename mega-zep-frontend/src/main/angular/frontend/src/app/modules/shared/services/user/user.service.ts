@@ -50,14 +50,14 @@ export class UserService {
 
   public setStartpageOverride(startpage: string): void {
     if (!startpage) {
-      sessionStorage.removeItem(this.SESSION_STORAGE_KEY_STARTPAGE_OVERRIDE);
+      localStorage.removeItem(this.SESSION_STORAGE_KEY_STARTPAGE_OVERRIDE);
     } else {
-      sessionStorage.setItem(this.SESSION_STORAGE_KEY_STARTPAGE_OVERRIDE, startpage);
+      localStorage.setItem(this.SESSION_STORAGE_KEY_STARTPAGE_OVERRIDE, startpage);
     }
   }
 
   public getStartpageOverride(): string {
-    return sessionStorage.getItem(this.SESSION_STORAGE_KEY_STARTPAGE_OVERRIDE);
+    return localStorage.getItem(this.SESSION_STORAGE_KEY_STARTPAGE_OVERRIDE);
   }
 
   private navigateToStartpage() {

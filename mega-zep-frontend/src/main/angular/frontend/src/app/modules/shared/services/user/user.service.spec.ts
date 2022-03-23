@@ -82,21 +82,21 @@ describe('UserService', () => {
     expect(oAuthService.hasValidAccessToken).toHaveBeenCalledWith();
   });
 
-  it('#setStartpageOverride - should set item in sessionStorage', () => {
+  it('#setStartpageOverride - should set item in localStorage', () => {
     userService.setStartpageOverride(UserMock.startPage);
 
-    expect(sessionStorage.getItem(UserMock.sessionStorageKeyStartpageOverride)).toEqual(UserMock.startPage);
+    expect(localStorage.getItem(UserMock.localStorageKeyStartpageOverride)).toEqual(UserMock.startPage);
   });
 
-  it('#setStartpageOverride - should remove item in sessionStorage', () => {
+  it('#setStartpageOverride - should remove item in localStorage', () => {
     userService.setStartpageOverride(UserMock.startPage);
-    expect(sessionStorage.getItem(UserMock.sessionStorageKeyStartpageOverride)).toEqual(UserMock.startPage);
+    expect(localStorage.getItem(UserMock.localStorageKeyStartpageOverride)).toEqual(UserMock.startPage);
 
     userService.setStartpageOverride(undefined);
-    expect(sessionStorage.getItem(UserMock.sessionStorageKeyStartpageOverride)).not.toBeTruthy();
+    expect(localStorage.getItem(UserMock.localStorageKeyStartpageOverride)).not.toBeTruthy();
   });
 
-  it('#getStartpageOverride - should get item in sessionStorage', () => {
+  it('#getStartpageOverride - should get item in localStorage', () => {
     userService.setStartpageOverride(UserMock.startPage);
     expect(userService.getStartpageOverride()).toEqual(UserMock.startPage);
   });
@@ -116,7 +116,7 @@ describe('UserService', () => {
 
     static startPage: string = 'home';
 
-    static sessionStorageKeyStartpageOverride: string = 'MEGA_USER_STARTPAGE';
+    static localStorageKeyStartpageOverride: string = 'MEGA_USER_STARTPAGE';
 
     static get() {
       return {
@@ -127,6 +127,5 @@ describe('UserService', () => {
         roles: [Role.EMPLOYEE]
       }
     }
-
   }
 });

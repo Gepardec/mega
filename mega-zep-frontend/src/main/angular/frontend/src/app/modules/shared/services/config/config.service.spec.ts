@@ -19,18 +19,18 @@ describe('ConfigService', () => {
     configService = TestBed.inject(ConfigService);
     httpTestingController = TestBed.inject(HttpTestingController);
 
-    sessionStorage.removeItem(ConfigMock.sessionStorageKey);
+    localStorage.removeItem(ConfigMock.localStorageKey);
   });
 
   it('#should be created', () => {
     expect(configService).toBeTruthy();
   });
 
-  it('#getConfig - should do http call and return config and set in sessionStorage', (done) => {
+  it('#getConfig - should do http call and return config and set in localStorage', (done) => {
     configService.getConfig()
       .subscribe(config => {
         expect(config).toEqual(ConfigMock.config);
-        expect(sessionStorage.getItem(ConfigMock.sessionStorageKey)).toEqual(JSON.stringify(config));
+        expect(localStorage.getItem(ConfigMock.localStorageKey)).toEqual(JSON.stringify(config));
 
         done();
       });
@@ -40,12 +40,12 @@ describe('ConfigService', () => {
   });
 
   it('#getConfig - should return config without http call', (done) => {
-    sessionStorage.setItem(ConfigMock.sessionStorageKey, JSON.stringify(ConfigMock.config));
+    localStorage.setItem(ConfigMock.localStorageKey, JSON.stringify(ConfigMock.config));
 
     configService.getConfig()
       .subscribe(config => {
         expect(config).toEqual(ConfigMock.config);
-        expect(sessionStorage.getItem(ConfigMock.sessionStorageKey)).toEqual(JSON.stringify(config));
+        expect(localStorage.getItem(ConfigMock.localStorageKey)).toEqual(JSON.stringify(config));
 
         done();
       });
@@ -53,12 +53,12 @@ describe('ConfigService', () => {
     httpTestingController.expectNone(configService.getBackendUrlWithContext('/config'));
   });
 
-  it('#logOut - should remove sessionStorage item', () => {
-    sessionStorage.setItem(ConfigMock.sessionStorageKey, JSON.stringify(ConfigMock.config));
-    expect(sessionStorage.getItem(ConfigMock.sessionStorageKey)).toBeTruthy();
+  it('#logOut - should remove localStorage item', () => {
+    localStorage.setItem(ConfigMock.localStorageKey, JSON.stringify(ConfigMock.config));
+    expect(localStorage.getItem(ConfigMock.localStorageKey)).toBeTruthy();
 
     configService.logOut();
-    expect(sessionStorage.getItem(ConfigMock.sessionStorageKey)).not.toBeTruthy();
+    expect(localStorage.getItem(ConfigMock.localStorageKey)).not.toBeTruthy();
   });
 
   it('#getBackendUrl - should return backend url', () => {
@@ -71,7 +71,7 @@ describe('ConfigService', () => {
 
   class ConfigMock {
 
-    static sessionStorageKey: string = 'MEGA_CONFIG';
+    static localStorageKey: string = 'MEGA_CONFIG';
     static frontendOriginSegment: number = 9876;
     static context: string = '/context/employee'
 
