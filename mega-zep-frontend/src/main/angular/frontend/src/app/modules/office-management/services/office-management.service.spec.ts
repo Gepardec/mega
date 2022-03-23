@@ -7,6 +7,7 @@ import {ManagementEntry} from "../../shared/models/ManagementEntry";
 import {State} from "../../shared/models/State";
 import {Employee} from "../../shared/models/Employee";
 import {PmProgress} from "../../monthly-report/models/PmProgress";
+import {HttpStatusCode} from "@angular/common/http";
 
 describe('OfficeManagementService', () => {
 
@@ -43,14 +44,14 @@ describe('OfficeManagementService', () => {
   it('#updateEmployees - should return response', (done) => {
     officeManagementService.updateEmployees([OfficeManagementMock.employee])
       .subscribe(response => {
-        expect(response.status).toEqual(OfficeManagementMock.responseStatus);
+        expect(response.status).toEqual(HttpStatusCode.Ok);
         done();
       });
 
     const testRequest = httpTestingController.expectOne(
       configService.getBackendUrlWithContext('/employees'));
     testRequest.flush({
-      status: OfficeManagementMock.responseStatus
+      status: HttpStatusCode.Ok
     });
   });
 
@@ -62,8 +63,6 @@ describe('OfficeManagementService', () => {
 
     static year: number = 2021;
     static month: number = 10;
-
-    static responseStatus: number = 200;
 
     static employee: Employee = {
       email: OfficeManagementMock.email,

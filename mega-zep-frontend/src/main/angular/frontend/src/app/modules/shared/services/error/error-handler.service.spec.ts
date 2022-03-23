@@ -8,6 +8,7 @@ import {LoggingService} from '../logging/logging.service';
 import {ErrorService} from "./error.service";
 import {configuration} from "../../constants/configuration";
 import {Router} from "@angular/router";
+import {HttpStatusCode} from "@angular/common/http";
 
 describe('ErrorHandlerService', () => {
 
@@ -51,7 +52,7 @@ describe('ErrorHandlerService', () => {
 
     const error: ErrorMock = {
       name: ErrorHandlerMock.name,
-      status: ErrorHandlerMock.httpStatusNotFound,
+      status: HttpStatusCode.NotFound,
       message: ErrorHandlerMock.message
     }
 
@@ -94,8 +95,5 @@ describe('ErrorHandlerService', () => {
   class ErrorHandlerMock {
 
     static message: string = 'message';
-    static httpStatusUnauthorized: number = 401;
-    static httpStatusNotFound: number = 404;
-
   }
 });

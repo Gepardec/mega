@@ -64,8 +64,6 @@ describe('ProjectManagementService', () => {
     static year: number = 2021;
     static month: number = 10;
 
-    static responseStatus: number = 200;
-
     static employee: Employee = {
       email: ProjectManagementMock.email,
       active: true,
