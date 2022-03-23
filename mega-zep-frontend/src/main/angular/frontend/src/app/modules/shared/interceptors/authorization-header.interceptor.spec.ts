@@ -1,10 +1,9 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {TestBed, waitForAsync} from '@angular/core/testing';
 
 import {AuthorizationHeaderInterceptor} from './authorization-header.interceptor';
 import {OAuthStorage} from 'angular-oauth2-oidc';
 import {ConfigService} from '../services/config/config.service';
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {GlobalHttpInterceptorService} from "./global-http-interceptor.service";
 import {HttpHandler} from "@angular/common/http";
 import {InfoService} from "../services/info/info.service";
 import {Info} from "../models/Info";
@@ -15,7 +14,6 @@ const moment = _moment;
 
 describe('AuthorizationHeaderInterceptor', () => {
 
-  let fixture: ComponentFixture<AuthorizationHeaderInterceptor>;
   let component: AuthorizationHeaderInterceptor;
 
   let httpTestingController: HttpTestingController;
