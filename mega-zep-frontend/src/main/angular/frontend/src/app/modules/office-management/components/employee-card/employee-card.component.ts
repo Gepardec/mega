@@ -9,7 +9,6 @@ import {OfficeManagementService} from '../../services/office-management.service'
 import {NotificationService} from '../../../shared/services/notification/notification.service';
 import {TranslateService} from '@ngx-translate/core';
 import {CommentService} from '../../../shared/services/comment/comment.service';
-import {Comment} from '../../../shared/models/Comment';
 import {CommentsForEmployeeComponent} from '../../../shared/components/comments-for-employee/comments-for-employee.component';
 import {StepentriesService} from '../../../shared/services/stepentries/stepentries.service';
 import {Step} from '../../../shared/models/Step';
@@ -20,7 +19,7 @@ import {PmProgressComponent} from '../../../shared/components/pm-progress/pm-pro
 import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import {ConfigService} from '../../../shared/services/config/config.service';
 import {Config} from '../../../shared/models/Config';
-import {Subscription, zip} from 'rxjs';
+import {firstValueFrom, Subscription, zip} from 'rxjs';
 import {tap} from 'rxjs/operators';
 
 const moment = _moment;
@@ -86,7 +85,7 @@ export class EmployeeCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      this.dateSelectionSub?.unsubscribe();
+    this.dateSelectionSub?.unsubscribe();
   }
 
   dateChanged(date: Moment) {
@@ -103,25 +102,22 @@ export class EmployeeCardComponent implements OnInit, OnDestroy {
     this.areAllSelected() ? this.omSelectionModel.clear() : this.omEntries.forEach(row => this.omSelectionModel.select(row));
   }
 
-  openDialog(omEntry: ManagementEntry): void {
-    this.commentService
-      .getCommentsForEmployee(omEntry.employee.email, this.getFormattedDate())
-      .subscribe((comments: Array<Comment>) => {
-        const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
-          {
-            width: '100%',
-            autoFocus: false
-          }
-        );
+  async openDialog(omEntry: ManagementEntry): Promise<void> {
+    const comments = await firstValueFrom(this.commentService.getCommentsForEmployee(omEntry.employee.email, this.getFormattedDate()));
 
-        dialogRef.componentInstance.employee = omEntry.employee;
-        dialogRef.componentInstance.comments = comments;
-        dialogRef.componentInstance.step = Step.CONTROL_INTERNAL_TIMES;
-        dialogRef.componentInstance.currentMonthYear = this.getFormattedDate();
-
-        dialogRef.disableClose = true;
-        dialogRef.componentInstance.commentHasChanged.subscribe(() => this.getOmEntries());
+    const dialogRef = this.dialog.open(CommentsForEmployeeComponent,
+      {
+        width: '100%',
+        autoFocus: false
       });
+
+    dialogRef.componentInstance.employee = omEntry.employee;
+    dialogRef.componentInstance.comments = comments;
+    dialogRef.componentInstance.step = Step.CONTROL_INTERNAL_TIMES;
+    dialogRef.componentInstance.currentMonthYear = this.getFormattedDate();
+
+    dialogRef.disableClose = true;
+    dialogRef.componentInstance.commentHasChanged.subscribe(() => this.getOmEntries());
   }
 
   changeDate(emittedDate: string): void {
@@ -175,18 +171,18 @@ export class EmployeeCardComponent implements OnInit, OnDestroy {
     return 'open';
   }
 
-  releaseEmployees() {
+  async releaseEmployees(): Promise<void> {
     const employees = this.omSelectionModel.selected.map(omEntry => {
       omEntry.employee.releaseDate = this.selectedDate;
       return omEntry.employee;
     });
 
-    this.omService.updateEmployees(employees).subscribe(async () => {
-      this.filteredOmEntries = null;
-      this.getOmEntries();
-      const successMessage = await this.translateService.get('notifications.employeesUpdatedSuccess').toPromise();
-      this.notificationService.showSuccess(successMessage);
-    });
+    await firstValueFrom(this.omService.updateEmployees(employees));
+
+    this.filteredOmEntries = null;
+    this.getOmEntries();
+    const successMessage = await firstValueFrom(this.translateService.get('notifications.employeesUpdatedSuccess'));
+    this.notificationService.showSuccess(successMessage);
   }
 
   closeCustomerCheck(omEntry: ManagementEntry) {

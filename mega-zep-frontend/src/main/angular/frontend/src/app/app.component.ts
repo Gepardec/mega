@@ -4,8 +4,7 @@ import {authConfig} from './auth/auth.config';
 import {Router} from '@angular/router';
 import {UserService} from './modules/shared/services/user/user.service';
 import {ConfigService} from './modules/shared/services/config/config.service';
-import {Config} from './modules/shared/models/Config';
-import {Subscription} from 'rxjs';
+import {firstValueFrom, Subscription} from 'rxjs';
 import {JwksValidationHandler} from 'angular-oauth2-oidc-jwks';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -28,22 +27,23 @@ export class AppComponent implements OnInit, OnDestroy {
     translate.setDefaultLang('de');
   }
 
-  ngOnInit(): void {
-    this.configServiceSubscription = this.configService.getConfig().subscribe((config: Config) => {
-      this.oAuthService.configure({
-        clientId: config.clientId,
-        issuer: config.issuer,
-        scope: config.scope,
-        ...authConfig
-      });
-      this.oAuthService.tokenValidationHandler = new JwksValidationHandler();
+  async ngOnInit(): Promise<void> {
+    const config = await firstValueFrom(this.configService.getConfig());
 
-      this.oAuthService.loadDiscoveryDocumentAndTryLogin().then((result: boolean) => {
-        if (this.userService.loggedInWithGoogle()) {
-          this.userService.loginUser();
-        }
-      });
+    this.oAuthService.configure({
+      clientId: config.clientId,
+      issuer: config.issuer,
+      scope: config.scope,
+      ...authConfig
     });
+
+    this.oAuthService.tokenValidationHandler = new JwksValidationHandler();
+
+    await this.oAuthService.loadDiscoveryDocumentAndTryLogin();
+
+    if (this.userService.loggedInWithGoogle()) {
+      this.userService.loginUser();
+    }
   }
 
   ngOnDestroy(): void {
