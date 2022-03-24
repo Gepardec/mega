@@ -4,28 +4,30 @@ import {Config} from '../../models/Config';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {tap} from 'rxjs/operators';
+import {LocalStorageService} from "../local-storage/local-storage.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfigService {
 
-  private SESSION_STORAGE_KEY = 'MEGA_CONFIG';
-
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient,
+              private localStorageService: LocalStorageService) {
   }
 
   getConfig(): Observable<Config> {
-    if (localStorage.getItem(this.SESSION_STORAGE_KEY)) {
-      return new BehaviorSubject(JSON.parse(localStorage.getItem(this.SESSION_STORAGE_KEY)));
+    const config = this.localStorageService.getConfig();
+
+    if (config) {
+      return new BehaviorSubject(config);
     } else {
       return this.httpClient.get<Config>(this.getBackendUrlWithContext('/config'))
-        .pipe(tap((result) => localStorage.setItem(this.SESSION_STORAGE_KEY, JSON.stringify(result))));
+        .pipe(tap(resultConfig => this.localStorageService.saveConfig(resultConfig)));
     }
   }
 
   logOut(): void {
-    localStorage.removeItem(this.SESSION_STORAGE_KEY);
+    this.localStorageService.removeConfig();
   }
 
   getBackendUrl(): string {

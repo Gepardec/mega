@@ -6,6 +6,7 @@ import {User} from '../../models/User';
 import {configuration} from '../../constants/configuration';
 import {Router} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
+import {LocalStorageService} from "../local-storage/local-storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +14,12 @@ import {BehaviorSubject} from 'rxjs';
 export class UserService {
 
   user: BehaviorSubject<User> = new BehaviorSubject(undefined);
-  private SESSION_STORAGE_KEY_STARTPAGE_OVERRIDE = 'MEGA_USER_STARTPAGE';
 
   constructor(private router: Router,
               private httpClient: HttpClient,
               private oAuthService: OAuthService,
-              private configService: ConfigService) {
+              private configService: ConfigService,
+              private localStorageService: LocalStorageService) {
   }
 
   public loginUser(): void {
@@ -49,15 +50,11 @@ export class UserService {
   }
 
   public setStartpageOverride(startpage: string): void {
-    if (!startpage) {
-      localStorage.removeItem(this.SESSION_STORAGE_KEY_STARTPAGE_OVERRIDE);
-    } else {
-      localStorage.setItem(this.SESSION_STORAGE_KEY_STARTPAGE_OVERRIDE, startpage);
-    }
+    !startpage ? this.localStorageService.removeUserStartPage() : this.localStorageService.saveUserStartPage(startpage);
   }
 
   public getStartpageOverride(): string {
-    return localStorage.getItem(this.SESSION_STORAGE_KEY_STARTPAGE_OVERRIDE);
+    return this.localStorageService.getUserStartPage();
   }
 
   private navigateToStartpage() {
