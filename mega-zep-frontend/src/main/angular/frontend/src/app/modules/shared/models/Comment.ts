@@ -1,4 +1,4 @@
-export class Comment {
+export interface Comment {
   id: number;
   message: string;
   authorEmail: string;

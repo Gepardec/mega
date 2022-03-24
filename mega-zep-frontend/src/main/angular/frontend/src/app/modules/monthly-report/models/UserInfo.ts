@@ -1,5 +1,5 @@
 import {Info} from "./Info";
 
-export class UserInfo {
+export interface UserInfo {
   info: Info;
 }

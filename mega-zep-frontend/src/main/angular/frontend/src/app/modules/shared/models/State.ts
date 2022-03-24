@@ -1,3 +1,4 @@
 export enum State {
-  OPEN = 'OPEN', DONE = 'DONE'
+  OPEN = 'OPEN',
+  DONE = 'DONE'
 }
