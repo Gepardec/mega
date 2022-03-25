@@ -1,41 +1,64 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {ConfirmDialogComponent} from './confirm-dialog.component';
-import {TranslateModule} from '@ngx-translate/core';
 import {AngularMaterialModule} from '../../../material/material-module';
 import {MatDialogRef} from '@angular/material/dialog';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {RouterTestingModule} from '@angular/router/testing';
-import {OAuthModule} from 'angular-oauth2-oidc';
+import {TranslateModule} from "@ngx-translate/core";
 
 describe('ConfirmDialogComponent', () => {
+
   let component: ConfirmDialogComponent;
   let fixture: ComponentFixture<ConfirmDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ConfirmDialogComponent],
+      declarations: [
+        ConfirmDialogComponent
+      ],
       imports: [
         AngularMaterialModule,
+        TranslateModule.forRoot()
         TranslateModule.forChild(),
         HttpClientTestingModule,
         RouterTestingModule,
         OAuthModule.forRoot()
       ],
       providers: [
-        {provide: MatDialogRef, useValue: {}}
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
       ]
-    })
-      .compileComponents();
+    }).compileComponents().then(() => {
+      fixture = TestBed.createComponent(ConfirmDialogComponent);
+      component = fixture.componentInstance;
+    });
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ConfirmDialogComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
+  it('#should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('#onConfirm - should call dialogRef.close() with true', () => {
+    fixture.detectChanges();
+
+    spyOn(component.dialogRef, 'close').and.stub();
+
+    component.onConfirm();
+
+    expect(component.dialogRef.close).toHaveBeenCalledOnceWith(true);
+  });
+
+  it('#onDismiss - should call dialogRef.close() with false', () => {
+    fixture.detectChanges();
+
+    spyOn(component.dialogRef, 'close').and.stub();
+
+    component.onDismiss();
+
+    expect(component.dialogRef.close).toHaveBeenCalledOnceWith(false);
+  });
+
+  class MatDialogRefMock {
+
+    close(): void {
+    }
+  }
 });

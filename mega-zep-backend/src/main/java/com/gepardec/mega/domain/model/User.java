@@ -1,47 +1,33 @@
 package com.gepardec.mega.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
-import lombok.extern.jackson.Jacksonized;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.util.Set;
 
 // Represents the logged user in mega.
 
-@Builder(builderClassName = "Builder")
+@Builder
 @Getter
-@ToString
-@EqualsAndHashCode
-@Accessors(fluent = true)
-@JsonIgnoreProperties(ignoreUnknown = true)
-@Jacksonized
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
-    @JsonProperty
-    private final long dbId;
+    private long dbId;
 
-    @JsonProperty
-    private final String userId;
+    private String userId;
 
-    @JsonProperty
-    private final String email;
+    private String email;
 
-    @JsonProperty
-    private final String firstname;
+    private String firstname;
 
-    @JsonProperty
-    private final String lastname;
+    private String lastname;
 
-    @JsonProperty
-    @Nullable
-    private final LocalDate releaseDate;
+    private LocalDate releaseDate;
 
-    @JsonProperty
-    private final Set<Role> roles;
+    private Set<Role> roles;
 }

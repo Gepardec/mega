@@ -9,11 +9,9 @@ import {ProjectState} from '../../models/ProjectState';
 })
 export class StateIndicatorComponent {
 
-  @Input() state: string;
-  @Input() size: 'small' | 'medium' | 'large' = 'small';
   State = State;
   ProjectState = ProjectState;
 
-  constructor() {
-  }
+  @Input() state: string;
+  @Input() size: 'small' | 'medium' | 'large' = 'small';
 }

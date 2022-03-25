@@ -34,13 +34,13 @@ class SecuredInterceptorTest {
 
     @Test
     void invoke_tokenInvalid_throwUnauthorizedException() {
-        when(securityContext.email()).thenReturn(null);
+        when(securityContext.getEmail()).thenReturn(null);
         assertThatThrownBy(() -> securedInterceptor.invoke(invocationContext)).isInstanceOf(UnauthorizedException.class);
     }
 
     @Test
     void invoke_userLoggedAndTokenValid_callsProceed() throws Exception {
-        when(securityContext.email()).thenReturn("test@gepardec.com");
+        when(securityContext.getEmail()).thenReturn("test@gepardec.com");
         securedInterceptor.invoke(invocationContext);
 
         verify(invocationContext, times(1)).proceed();

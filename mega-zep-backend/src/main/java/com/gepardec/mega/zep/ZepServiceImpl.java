@@ -4,7 +4,7 @@ import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.utils.DateUtils;
-import com.gepardec.mega.service.impl.employee.EmployeeMapper;
+import com.gepardec.mega.service.mapper.EmployeeMapper;
 import com.gepardec.mega.zep.mapper.ProjectEntryMapper;
 import de.provantis.zep.FehlzeitType;
 import de.provantis.zep.KategorieListeType;
@@ -186,7 +186,7 @@ public class ZepServiceImpl implements ZepService {
 
     private String getWorkingTimesForEmployee(List<ProjektzeitType> projektzeitTypeList, Employee employee, Predicate<ProjektzeitType> billableFilter) {
         Duration totalBillable = projektzeitTypeList.stream()
-                .filter(pzt -> pzt.getUserId().equals(employee.userId()))
+                .filter(pzt -> pzt.getUserId().equals(employee.getUserId()))
                 .filter(billableFilter)
                 .map(pzt -> LocalTime.parse(pzt.getDauer()))
                 .map(lt -> Duration.between(LocalTime.MIN, lt))
@@ -275,7 +275,7 @@ public class ZepServiceImpl implements ZepService {
         searchCriteria.setBis(getLastDayOfCurrentMonth(date));
 
         UserIdListeType userIdListType = new UserIdListeType();
-        userIdListType.getUserId().add(employee.userId());
+        userIdListType.getUserId().add(employee.getUserId());
         searchCriteria.setUserIdListe(userIdListType);
         return searchCriteria;
     }
@@ -299,7 +299,7 @@ public class ZepServiceImpl implements ZepService {
         searchCriteria.setStartdatum(getFirstDayOfCurrentMonth(date));
         searchCriteria.setEnddatum(getLastDayOfCurrentMonth(date));
 
-        searchCriteria.setUserId(employee.userId());
+        searchCriteria.setUserId(employee.getUserId());
         return searchCriteria;
     }
 
