@@ -38,7 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
       });
       this.oAuthService.tokenValidationHandler = new JwksValidationHandler();
 
-      this.oAuthService.loadDiscoveryDocumentAndTryLogin().then((result: boolean) => {
+      this.oAuthService.loadDiscoveryDocumentAndTryLogin().then(() => {
         if (this.userService.loggedInWithGoogle()) {
           this.userService.loginUser();
         }

@@ -20,11 +20,8 @@ class DisplayedEmployees {
 })
 export class PmProgressComponent implements OnInit {
 
-
   pmProgresses: Array<PmProgress>;
-
   displayedEmployees: Array<DisplayedEmployees>;
-
   displayedColumns = ['email', 'checked']
 
   constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: any) {
@@ -40,14 +37,14 @@ export class PmProgressComponent implements OnInit {
       } else {
         map.set(name, new Array<State>(pmProgress.state))
       }
-    })
+    });
     this.displayedEmployees = new Array<DisplayedEmployees>();
     map.forEach(((value, key) => {
       let allDone: boolean = value.every(state => state === State.DONE);
       this.displayedEmployees.push(new DisplayedEmployees(
         key,
         allDone ? State.DONE : State.OPEN
-      ))
-    }))
+      ));
+    }));
   }
 }
