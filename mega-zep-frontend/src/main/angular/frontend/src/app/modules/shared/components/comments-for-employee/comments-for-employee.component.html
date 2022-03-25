@@ -22,6 +22,7 @@
             [matTooltipDisabled]="!(newMessage?.value?.length == 0 || newMessage?.value?.length > MAXIMUM_LETTERS)"
             [matTooltipPosition]="'right'">
         <button
+          data-cy="add-comment"
           [disabled]="newMessage?.value?.length == 0 || newMessage?.value?.length > MAXIMUM_LETTERS"
           (click)="createCommentForEmployee(newMessage.value);newMessage.value = ''"
           mat-raised-button>
@@ -104,6 +105,6 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button (click)="close()" mat-raised-button>{{'comments-for-employee.close' | translate}}</button>
+    <button data-cy="close" (click)="close()" mat-raised-button>{{'comments-for-employee.close' | translate}}</button>
   </mat-dialog-actions>
 </ng-container>

@@ -40,7 +40,7 @@
             </span>
                 </td>
                 <td>
-                  <app-project-state-select #controlProjectStateSelect
+                  <app-project-state-select data-cy="project-controlling" #controlProjectStateSelect
                                             [value]="pmEntry.controlProjectState"
                                             (selectionChange)="onChangeControlProjectState($event, pmEntry, controlProjectStateSelect)"></app-project-state-select>
                   <mat-checkbox [(ngModel)]="pmEntry.presetControlProjectState"
@@ -61,7 +61,7 @@
             </span>
                 </td>
                 <td class="states">
-                  <app-project-state-select #controlBillingStateSelect
+                  <app-project-state-select data-cy="billing" #controlBillingStateSelect
                                             [value]="pmEntry.controlBillingState"
                                             (selectionChange)="onChangeControlBillingState($event, pmEntry, controlBillingStateSelect)"></app-project-state-select>
                   <mat-checkbox [(ngModel)]="pmEntry.presetControlBillingState"
@@ -137,7 +137,7 @@
               >{{'project-management.table.projectCheckState' | translate}}</mat-header-cell>
               <mat-cell *matCellDef="let row" class="text-center">
                 <span class="mobile-label">{{'project-management.table.projectCheckState' | translate}}</span>
-                <app-state-select [value]="row.projectCheckState"
+                <app-state-select data-cy="project-state" [value]="row.projectCheckState"
                                   (selectionChange)="closeProjectCheck(pmEntry.projectName, row)"></app-state-select>
               </mat-cell>
               <mat-footer-cell *matFooterCellDef></mat-footer-cell>
@@ -148,7 +148,7 @@
               >{{'project-management.table.employeeCheckState' | translate}}</mat-header-cell>
               <mat-cell *matCellDef="let row" class="text-center">
                 <span class="mobile-label">{{'project-management.table.employeeCheckState' | translate}}</span>
-                <app-state-indicator [state]="row.employeeCheckState"></app-state-indicator>
+                <app-state-indicator data-cy="employee-check" [state]="row.employeeCheckState"></app-state-indicator>
               </mat-cell>
               <mat-footer-cell *matFooterCellDef></mat-footer-cell>
             </ng-container>
@@ -158,7 +158,7 @@
               >{{'project-management.table.internalCheckState' | translate}}</mat-header-cell>
               <mat-cell *matCellDef="let row" class="text-center">
                 <span class="mobile-label">{{'project-management.table.internalCheckState' | translate}}</span>
-                <app-state-indicator [state]="row.internalCheckState"></app-state-indicator>
+                <app-state-indicator data-cy="internal-check" [state]="row.internalCheckState"></app-state-indicator>
               </mat-cell>
               <mat-footer-cell *matFooterCellDef></mat-footer-cell>
             </ng-container>
@@ -168,7 +168,7 @@
               >{{'project-management.table.customerCheckState' | translate}}</mat-header-cell>
               <mat-cell *matCellDef="let row" class="text-center">
                 <span class="mobile-label">{{'project-management.table.customerCheckState' | translate}}</span>
-                <app-state-indicator [state]="row.customerCheckState"></app-state-indicator>
+                <app-state-indicator data-cy="customer-check" [state]="row.customerCheckState"></app-state-indicator>
               </mat-cell>
               <mat-footer-cell *matFooterCellDef></mat-footer-cell>
             </ng-container>
@@ -178,7 +178,7 @@
                                class="text-center">{{'project-management.table.comments' | translate}}</mat-header-cell>
               <mat-cell *matCellDef="let row" class="text-center">
                 <span class="mobile-label">{{'project-management.table.comments' | translate}}</span>
-                <button (click)="openDialog(row.employee, pmEntry.projectName)" mat-button>
+                <button data-cy="open-comments" (click)="openDialog(row.employee, pmEntry.projectName)" mat-button>
                   <mat-icon>comment</mat-icon>
                   <app-done-comments-indicator [totalComments]="row.totalComments"
                                                [finishedComments]="row.finishedComments"></app-done-comments-indicator>

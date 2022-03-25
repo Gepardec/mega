@@ -22,7 +22,7 @@ describe('Mein Mega', () => {
     // @ts-ignore
     cy.loginByGoogleApi();
     cy.visit('/');
-    cy.wait(['@getInfo', '@getMonthendreports', '@getUser', '@getConfig']);
+    cy.wait(['@getInfo', '@getMonthendreports', '@getUser']);
   });
 
 
