@@ -19,15 +19,18 @@ const moment = _moment;
 })
 export class DisplayMonthlyReportComponent implements OnInit {
 
+  readonly State = State;
+
+  @Input() monthlyReport: MonthlyReport;
+  @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>();
+
+  maxMonthDate: number = 0;
+
   selectedYear: number;
   selectedMonth: number;
   dateSelectionSub: Subscription;
-  maxMonthDate: number = 0;
 
-  readonly State = State;
   employeeFunctions;
-  @Input() monthlyReport: MonthlyReport;
-  @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(private translateService: TranslateService,
               private omService: OfficeManagementService,

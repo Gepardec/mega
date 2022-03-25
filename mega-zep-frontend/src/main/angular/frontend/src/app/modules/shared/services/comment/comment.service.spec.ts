@@ -8,6 +8,7 @@ import * as _moment from 'moment';
 import {ConfigService} from "../config/config.service";
 import {Employee} from "../../models/Employee";
 import {Step} from "../../models/Step";
+import {configuration} from "../../constants/configuration";
 
 const moment = _moment;
 
@@ -116,7 +117,7 @@ describe('CommentService', () => {
 
   class CommentsMock {
 
-    static dateFormat: string = 'yyyy-MM-DD';
+    static dateFormat: string = configuration.dateFormat;
 
     static get(): Array<Comment> {
       return [

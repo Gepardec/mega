@@ -1,10 +1,10 @@
 package com.gepardec.mega.application.schedule;
 
 import com.gepardec.mega.notification.mail.ReminderEmailSender;
-import com.gepardec.mega.service.api.init.EnterpriseSyncService;
-import com.gepardec.mega.service.api.init.ProjectSyncService;
-import com.gepardec.mega.service.api.init.StepEntrySyncService;
-import com.gepardec.mega.service.api.init.SyncService;
+import com.gepardec.mega.service.api.EnterpriseSyncService;
+import com.gepardec.mega.service.api.ProjectSyncService;
+import com.gepardec.mega.service.api.StepEntrySyncService;
+import com.gepardec.mega.service.api.SyncService;
 import io.quarkus.scheduler.Scheduled;
 
 import javax.enterprise.context.Dependent;

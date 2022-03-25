@@ -10,7 +10,7 @@ export const configuration = {
   OFFICE_MANAGEMENT_SEGMENT: `view/index.php?menu=MitarbeiterVerwaltungMgr&
   modelContentMenu=true&mgr=MitarbeiterProjektzeitMgr&contentModelId=`,
 
-  dateFormat: 'yyyy-MM-dd',
+  dateFormat: 'YYYY-MM-DD',
 
   LogLevel: {
     All: 0,

@@ -127,6 +127,5 @@ describe('UserService', () => {
         roles: [Role.EMPLOYEE]
       }
     }
-
   }
 });

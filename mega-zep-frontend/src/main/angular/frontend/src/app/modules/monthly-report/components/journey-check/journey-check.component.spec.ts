@@ -1,8 +1,7 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {JourneyCheckComponent} from './journey-check.component';
 import {TranslateModule} from '@ngx-translate/core';
-import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {AngularMaterialModule} from '../../../material/material-module';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 
@@ -10,22 +9,37 @@ describe('JourneyCheckComponent', () => {
   let component: JourneyCheckComponent;
   let fixture: ComponentFixture<JourneyCheckComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [JourneyCheckComponent],
-      imports: [TranslateModule.forRoot(), AngularMaterialModule, HttpClientTestingModule],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
-      .compileComponents();
+      declarations: [
+        JourneyCheckComponent
+      ],
+      imports: [
+        TranslateModule.forRoot(),
+        AngularMaterialModule,
+        HttpClientTestingModule
+      ]
+    }).compileComponents().then(() => {
+      fixture = TestBed.createComponent(JourneyCheckComponent);
+      component = fixture.componentInstance;
+    });
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(JourneyCheckComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
+  it('#should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('#getJourneyWarningString - should set warnings', () => {
+    fixture.detectChanges();
+
+    const warnings: string = component.getJourneyWarningString(WarningsMock.warnings);
+
+    WarningsMock.warnings.forEach(warning => {
+      expect(warnings).toContain(warning);
+    })
+  });
+
+  class WarningsMock {
+    static warnings: Array<string> = ['do', 'something'];
+  }
 });

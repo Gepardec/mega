@@ -1,22 +1,19 @@
 package com.gepardec.mega.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.experimental.Accessors;
-import lombok.extern.jackson.Jacksonized;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@EqualsAndHashCode
-@Jacksonized
-@Accessors(fluent = true)
+@Builder
 @Getter
-@Builder(builderClassName = "Builder")
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ValidationViolation {
 
-    @JsonProperty("property")
-    private final String property;
+    private String property;
 
-    @JsonProperty("message")
-    private final String message;
+    private String message;
 }

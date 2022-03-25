@@ -2,7 +2,7 @@
   <mat-sidenav #sidenav fxHide.gt-md="true" mode="over" opened="false">
     <mat-nav-list *ngIf="user">
       <a mat-list-item>
-        <app-user-actions (logout)="onLogout($event); sidenav.close()" [user]="user"></app-user-actions>
+        <app-user-actions (logout)="onLogout(); sidenav.close()" [user]="user"></app-user-actions>
       </a>
       <ng-container *ngFor="let link of links">
         <a (click)="sidenav.close()"
@@ -52,7 +52,7 @@
           </a>
 
           <div *ngIf="user">
-            <app-user-actions (logout)="onLogout($event)" [user]="user"></app-user-actions>
+            <app-user-actions (logout)="onLogout()" [user]="user"></app-user-actions>
           </div>
         </div>
       </div>
