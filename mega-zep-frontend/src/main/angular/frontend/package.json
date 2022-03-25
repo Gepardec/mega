@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && gzipper ./dist",
     "test": "ng test",
     "test headless": "ng test --browsers ChromeHeadlessNoSandbox",
     "lint": "ng lint",
@@ -54,6 +54,7 @@
     "@typescript-eslint/parser": "5.11.0",
     "codelyzer": "^6.0.2",
     "eslint": "^8.2.0",
+    "gzipper": "^7.0.0",
     "jasmine-core": "~4.0.0",
     "jasmine-spec-reporter": "~7.0.0",
     "karma": "~6.3.16",
