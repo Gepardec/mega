@@ -21,7 +21,7 @@ describe('LoginComponent', () => {
       ],
       imports: [
         RouterTestingModule,
-        TranslateModule.forChild()
+        TranslateModule.forRoot()
       ],
       providers: [
         {provide: OAuthService, useClass: OAuthServiceMock},

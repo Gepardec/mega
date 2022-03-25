@@ -103,6 +103,7 @@ describe('ProjectManagementService', () => {
       }
     ];
 
+
     static projectManagementEntries: Array<ProjectManagementEntry> = [
       {
         entries: ProjectManagementMock.managementEntries,

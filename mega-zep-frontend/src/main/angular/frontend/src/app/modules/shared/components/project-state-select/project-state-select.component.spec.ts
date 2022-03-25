@@ -4,7 +4,6 @@ import {ProjectStateSelectComponent} from './project-state-select.component';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ProjectState} from '../../models/ProjectState';
 import {AngularMaterialModule} from '../../../material/material-module';
-import {PmProgressComponent} from "../pm-progress/pm-progress.component";
 
 const PROJECT_STATES_LENGTH = Object.keys(ProjectState).length;
 const STATE_PREFIX = 'STATE.';
@@ -22,7 +21,7 @@ describe('ProjectStateSelectComponent', () => {
         ProjectStateSelectComponent
       ],
       imports: [
-        TranslateModule.forChild(),
+        TranslateModule.forRoot(),
         AngularMaterialModule
       ]
     }).compileComponents().then(() => {

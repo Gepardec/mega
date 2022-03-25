@@ -100,11 +100,11 @@ describe('GeneralInfoComponent', () => {
   function assertMonthlyReportRow(rowNumber: number, expectedHeader: string, expectedDays: string, expectedIdentifier: string) {
     const tr = fixture.debugElement.query(By.css(`tr:nth-of-type(${rowNumber})`));
 
-    const header = tr.query(By.css('.headers')).nativeElement.innerHTML;
-    expect(header).toEqual(expectedHeader);
-    const days = tr.query(By.css('.infovalue')).nativeElement.innerHTML;
-    expect(days).toEqual(expectedDays);
-    const identifier = tr.query(By.css('.identifier')).nativeElement.innerHTML;
-    expect(identifier).toEqual(expectedIdentifier);
+    const header = tr.query(By.css('.headers')).nativeElement.innerHTML.trim();
+    expect(header).toEqual(expectedHeader.trim());
+    const days = tr.query(By.css('.infovalue')).nativeElement.innerHTML.trim();
+    expect(days).toEqual(expectedDays.trim());
+    const identifier = tr.query(By.css('.identifier')).nativeElement.innerHTML.trim();
+    expect(identifier).toEqual(expectedIdentifier.trim());
   }
 });

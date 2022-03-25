@@ -24,7 +24,7 @@ describe('InfoDialogComponent', () => {
       imports: [
         HttpClientTestingModule,
         AngularMaterialModule,
-        TranslateModule.forChild()
+        TranslateModule.forRoot()
       ]
     }).compileComponents().then(() => {
       fixture = TestBed.createComponent(InfoDialogComponent);

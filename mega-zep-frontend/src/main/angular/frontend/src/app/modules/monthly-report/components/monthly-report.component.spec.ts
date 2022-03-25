@@ -16,9 +16,7 @@ import {StateIndicatorComponent} from '../../shared/components/state-indicator/s
 import {EmployeeCheckComponent} from './employee-check/employee-check.component';
 import {GeneralInfoComponent} from './general-info/general-info.component';
 import {TimeCheckComponent} from './time-check/time-check.component';
-import {
-  DatepickerMonthYearComponent
-} from '../../shared/components/datepicker-month-year/datepicker-month-year.component';
+import {DatepickerMonthYearComponent} from '../../shared/components/datepicker-month-year/datepicker-month-year.component';
 import {ReactiveFormsModule} from '@angular/forms';
 
 describe('MonthlyReportComponent', () => {

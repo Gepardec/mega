@@ -67,7 +67,7 @@ export class EnterpriseCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      this.dateSelectionSub?.unsubscribe();
+    this.dateSelectionSub?.unsubscribe();
   }
 
   dateChanged(date: Moment) {

@@ -16,7 +16,7 @@ import {of} from "rxjs";
 import {MonthlyReport} from "../../models/MonthlyReport";
 import {StepentriesService} from "../../../shared/services/stepentries/stepentries.service";
 import {Employee} from "../../../shared/models/Employee";
-import {MatBottomSheet, MatBottomSheetRef} from "@angular/material/bottom-sheet";
+import {MatBottomSheet} from "@angular/material/bottom-sheet";
 
 const moment = _moment;
 const DATE_FORMAT: string = configuration.dateFormat;
@@ -36,7 +36,7 @@ describe('EmployeeCheckComponent', () => {
         EmployeeCheckComponent
       ],
       imports: [
-        TranslateModule.forChild(),
+        TranslateModule.forRoot(),
         AngularMaterialModule,
         HttpClientTestingModule,
         RouterTestingModule,

@@ -16,7 +16,7 @@ import {TranslateService} from '@ngx-translate/core';
 
 export class AppComponent implements OnInit, OnDestroy {
 
-  private configServiceSubscription: Subscription;
+  configServiceSubscription: Subscription;
 
   constructor(private router: Router,
               private oAuthService: OAuthService,

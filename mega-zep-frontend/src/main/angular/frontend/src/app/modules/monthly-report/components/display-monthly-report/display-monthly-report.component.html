@@ -5,7 +5,7 @@
      fxLayoutGap="10px">
 
   <mat-card class="mat-elevation-z10">
-    <mat-card-subtitle  id="idname">{{employeeFunctions[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
+    <mat-card-subtitle id="idname">{{employeeFunctions[monthlyReport.employee.workDescription]}}</mat-card-subtitle>
     <mat-card-content>
 
       <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -13,7 +13,7 @@
 
         <div id="datediv">
           <b><span>{{'global.selectPayrollMonth' | translate}}</span></b>
-        <span id="datepicker">
+          <span id="datepicker">
           <app-datepicker-month-year (dateChanged)="dateChanged($event)" [date]="date"
                                      [maxMonth]="maxMonthDate"></app-datepicker-month-year>
         </span>

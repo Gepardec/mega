@@ -24,7 +24,7 @@ describe('RolesGuard', () => {
 
   it('#canActivate - should return true', () => {
     spyOn(rolesService, 'isAllowed').and.returnValue(true);
-    
+
     const canActivate = guard.canActivate(createMockRoute("localhost:4020"), null);
 
     expect(rolesService.isAllowed).toHaveBeenCalled();

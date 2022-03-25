@@ -25,11 +25,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   user: User;
   zepUrl: string;
-
-  private userSubscription: Subscription;
-
   isHandset: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(map(result => result.matches));
+  private userSubscription: Subscription;
 
   constructor(private rolesService: RolesService,
               private userService: UserService,

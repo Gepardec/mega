@@ -21,7 +21,7 @@ describe('SnackbarService', () => {
     TestBed.configureTestingModule({
       imports: [
         MatSnackBarModule,
-        TranslateModule.forChild(),
+        TranslateModule.forRoot(),
         BrowserAnimationsModule
       ]
     });

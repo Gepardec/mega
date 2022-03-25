@@ -56,7 +56,7 @@ describe('BillableTimesComponent', () => {
   it('#transformTimeToFractionNumber - should display dollar coin icon on the left side', () => {
     const dollarIcon = fixture.debugElement.query(By.css('.billable'));
     expect(dollarIcon.name).toEqual('mat-icon');
-    expect(dollarIcon.nativeElement.innerHTML).toEqual('monetization_on');
+    expect(dollarIcon.nativeElement.innerHTML.trim()).toEqual('monetization_on');
   });
 
   function billableTimesValue() {

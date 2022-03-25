@@ -1,6 +1,6 @@
 import {State} from "../../shared/models/State";
 
-export interface PmProgress {
+export class PmProgress {
   firstname: string;
   lastname: string;
   state: State;

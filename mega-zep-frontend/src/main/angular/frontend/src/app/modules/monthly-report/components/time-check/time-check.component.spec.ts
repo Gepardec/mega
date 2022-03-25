@@ -23,7 +23,7 @@ describe('TimeCheckComponent', () => {
         EmployeeCheckComponent
       ],
       imports: [
-        TranslateModule.forChild(),
+        TranslateModule.forRoot(),
         AngularMaterialModule
       ]
     }).compileComponents().then(() => {

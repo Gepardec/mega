@@ -27,7 +27,7 @@ describe('PmProgressComponent', () => {
         BrowserAnimationsModule,
         SharedModule,
         AngularMaterialModule,
-        TranslateModule.forChild(),
+        TranslateModule.forRoot(),
         HttpClientTestingModule,
         RouterTestingModule
       ],

@@ -28,7 +28,7 @@ describe('OfficeManagementComponent', () => {
       imports: [
         OfficeManagementModule,
         HttpClientTestingModule,
-        TranslateModule.forChild(),
+        TranslateModule.forRoot(),
         AngularMaterialModule,
         RouterTestingModule
       ]

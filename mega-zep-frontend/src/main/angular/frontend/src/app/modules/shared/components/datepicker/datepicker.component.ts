@@ -3,6 +3,7 @@ import {MatDatepicker, MatDatepickerInputEvent} from '@angular/material/datepick
 import {configuration} from '../../constants/configuration';
 
 import * as _moment from 'moment';
+
 const moment = _moment;
 
 @Component({
@@ -23,7 +24,7 @@ export class DatepickerComponent {
   }
 
   getDateAndEmitEvent(event: MatDatepickerInputEvent<Date>) {
-    const date :string = moment(event.value).format(configuration.dateFormat);
+    const date: string = moment(event.value).format(configuration.dateFormat);
     this.emitEvent(date);
   }
 }

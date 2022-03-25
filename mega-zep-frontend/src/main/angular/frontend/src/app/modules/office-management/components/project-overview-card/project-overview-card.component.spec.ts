@@ -37,7 +37,7 @@ describe('ProjectOverviewCardComponent', () => {
       ],
       imports: [
         HttpClientTestingModule,
-        TranslateModule.forChild(),
+        TranslateModule.forRoot(),
         OfficeManagementModule,
         RouterTestingModule]
     }).compileComponents().then(() => {

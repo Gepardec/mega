@@ -45,7 +45,7 @@ import {InlineTextEditorComponent} from './components/inline-text-editor/inline-
     CommonModule,
     RouterModule,
     AngularMaterialModule,
-    TranslateModule.forChild(),
+    TranslateModule.forRoot(),
     FlexLayoutModule,
     FormsModule,
     HttpClientModule,

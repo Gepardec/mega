@@ -67,19 +67,19 @@ describe('AppComponent', () => {
     expect(authService.loadDiscoveryDocumentAndTryLogin).toHaveBeenCalled();
   }));
 
-  it("#onDestroy - should close subscription", fakeAsync(() => {
+  it("#onDestroy - should close subscription", async () => {
     spyOn(authService, 'configure').and.stub();
     spyOn(authService, 'loadDiscoveryDocumentAndTryLogin').and.returnValue(new Promise(() => Promise.resolve()));
 
     fixture.detectChanges();
-    flush();
+    component.ngOnInit().then(() => {
+      expect(component.configServiceSubscription).toBeTruthy();
+      expect(component.configServiceSubscription.closed).toBeFalse();
+      component.ngOnDestroy();
 
-    expect((component as any).configServiceSubscription).toBeTruthy();
-    expect((component as any).configServiceSubscription.closed).toBeFalse();
-    component.ngOnDestroy();
-
-    expect((component as any).configServiceSubscription.closed).toBeTrue();
-  }));
+      expect((component as any).configServiceSubscription.closed).toBeTrue();
+    });
+  });
 
   class ConfigServiceMock {
     getConfig(): Observable<Config> {

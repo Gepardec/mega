@@ -1,4 +1,4 @@
-import {AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import {State} from '../../models/State';
 import {MatSelectChange} from '@angular/material/select';
 

@@ -58,7 +58,7 @@ describe('ProjectManagementComponent', () => {
         DatepickerMonthYearComponent
       ],
       imports: [
-        TranslateModule.forChild(),
+        TranslateModule.forRoot(),
         AngularMaterialModule,
         BrowserAnimationsModule,
         HttpClientTestingModule,

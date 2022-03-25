@@ -15,7 +15,7 @@ describe('JourneyCheckComponent', () => {
         JourneyCheckComponent
       ],
       imports: [
-        TranslateModule.forChild(),
+        TranslateModule.forRoot(),
         AngularMaterialModule,
         HttpClientTestingModule
       ]

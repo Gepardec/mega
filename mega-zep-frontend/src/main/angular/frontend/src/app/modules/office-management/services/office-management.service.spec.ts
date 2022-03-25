@@ -63,7 +63,6 @@ describe('OfficeManagementService', () => {
 
     static year: number = 2021;
     static month: number = 10;
-
     static employee: Employee = {
       email: OfficeManagementMock.email,
       active: true,
@@ -75,7 +74,6 @@ describe('OfficeManagementService', () => {
       userId: '011-mmuster',
       workDescription: 'Software-Engineer'
     }
-
     static employeeProgresses: Array<PmProgress> = [
       {
         firstname: OfficeManagementMock.firstname,
@@ -86,7 +84,6 @@ describe('OfficeManagementService', () => {
         stepId: 1
       }
     ]
-
     static managementEntries: Array<ManagementEntry> = [
       {
         employee: OfficeManagementMock.employee,
@@ -102,6 +99,5 @@ describe('OfficeManagementService', () => {
         totalComments: 20
       }
     ]
-
   }
 });

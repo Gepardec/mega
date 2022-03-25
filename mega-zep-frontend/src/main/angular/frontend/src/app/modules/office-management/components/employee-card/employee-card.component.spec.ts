@@ -20,7 +20,7 @@ describe('OfficeManagementComponent', () => {
         BrowserAnimationsModule,
         SharedModule,
         AngularMaterialModule,
-        TranslateModule.forChild(),
+        TranslateModule.forRoot(),
         HttpClientTestingModule,
         RouterTestingModule
       ]

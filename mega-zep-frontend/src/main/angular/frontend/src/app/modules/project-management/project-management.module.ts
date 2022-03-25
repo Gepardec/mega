@@ -10,13 +10,13 @@ import {BillableTimesComponent} from './components/billable-times/billable-times
 import {BillableTimesFractionComponent} from "./components/billable-times-fraction/billable-times-fraction.component";
 
 @NgModule({
-  declarations: [ProjectManagementComponent, BillableTimesComponent,BillableTimesFractionComponent],
+  declarations: [ProjectManagementComponent, BillableTimesComponent, BillableTimesFractionComponent],
   imports: [
     CommonModule,
     AngularMaterialModule,
     FlexLayoutModule,
     SharedModule,
-    TranslateModule.forChild(),
+    TranslateModule.forRoot(),
     FormsModule
   ]
 })

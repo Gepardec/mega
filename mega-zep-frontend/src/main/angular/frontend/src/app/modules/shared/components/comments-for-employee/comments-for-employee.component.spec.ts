@@ -38,7 +38,7 @@ describe('CommentsForEmployeeComponent', () => {
       ],
       imports: [
         AngularMaterialModule,
-        TranslateModule.forChild(),
+        TranslateModule.forRoot(),
         HttpClientTestingModule,
         RouterTestingModule,
         OAuthModule.forRoot()

@@ -4,7 +4,7 @@ import {Comment} from '../../shared/models/Comment';
 import {Employee} from '../../shared/models/Employee';
 import {PmProgress} from "./PmProgress";
 
-export interface MonthlyReport {
+export class MonthlyReport {
   comments: Array<Comment>;
   timeWarnings: Array<TimeWarning>;
   journeyWarnings: Array<JourneyWarning>;

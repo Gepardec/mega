@@ -25,7 +25,7 @@ describe('ErrorComponent', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
-        TranslateModule.forChild(),
+        TranslateModule.forRoot(),
         AngularMaterialModule
       ]
     }).compileComponents().then(() => {

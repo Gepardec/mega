@@ -26,7 +26,7 @@ describe('UserActionsComponent', () => {
         UserActionsComponent
       ],
       imports: [
-        TranslateModule.forChild(),
+        TranslateModule.forRoot(),
         AngularMaterialModule
       ],
       providers: [

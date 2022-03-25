@@ -5,9 +5,9 @@
         <app-user-actions (logout)="onLogout(); sidenav.close()" [user]="user"></app-user-actions>
       </a>
       <ng-container *ngFor="let link of links">
-        <a (click)="sidenav.close()"
-           *ngIf="showLink(link)"
+        <a (click)="sidenav.close()" *ngIf="showLink(link)"
            [routerLink]="link.path"
+           href="#"
            mat-list-item
            routerLinkActive>
           {{ link.name }}
@@ -23,7 +23,7 @@
   <mat-sidenav-content>
     <mat-toolbar class="toolbar mat-elevation-z10">
       <div *ngIf="user" fxHide.gt-md="true" fxShow="true">
-        <button (click)="sidenav.toggle()" mat-icon-button>
+        <button (click)="sidenav.toggle()" aria-label="menu" mat-icon-button>
           <mat-icon>menu</mat-icon>
         </button>
       </div>

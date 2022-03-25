@@ -20,7 +20,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     CommonModule,
     BrowserAnimationsModule,
     AngularMaterialModule,
-    TranslateModule.forChild(),
+    TranslateModule.forRoot(),
     SharedModule,
     FlexLayoutModule,
     FormsModule
