@@ -3,11 +3,11 @@ import '../support/commands';
 describe('Menu bar', () => {
 
   beforeEach(() => {
+    cy.server();
+
     cy.fixture('common/info.json').as('infoJSON');
     cy.fixture('common/config.json').as('configJSON');
     cy.fixture('common/monthendreports.json').as('monthendreportsJSON');
-
-    cy.server();
 
     cy.route('http://localhost:8080/info', '@infoJSON').as('info');
     cy.route('http://localhost:8080/config', '@configJSON').as('config');
