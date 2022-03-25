@@ -1,19 +1,19 @@
 package com.gepardec.mega.service.impl.comment;
 
-import com.gepardec.mega.db.entity.employee.Comment;
 import com.gepardec.mega.db.entity.employee.EmployeeState;
 import com.gepardec.mega.db.entity.employee.StepEntry;
 import com.gepardec.mega.db.entity.employee.User;
 import com.gepardec.mega.db.repository.CommentRepository;
 import com.gepardec.mega.domain.mapper.CommentMapper;
+import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.FinishedAndTotalComments;
 import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.notification.mail.Mail;
 import com.gepardec.mega.notification.mail.MailParameter;
 import com.gepardec.mega.notification.mail.MailSender;
-import com.gepardec.mega.service.api.comment.CommentService;
-import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import com.gepardec.mega.service.api.CommentService;
+import com.gepardec.mega.service.api.StepEntryService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Test;
@@ -59,13 +59,13 @@ class CommentServiceImplTest {
                 ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString())).thenReturn(List.of(createComment(1L, EmployeeState.OPEN)));
 
         Employee employee = createEmployee();
-        LocalDate fromDate = DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate());
-        LocalDate toDate = DateUtils.getLastDayOfFollowingMonth(employee.releaseDate());
-        List<com.gepardec.mega.domain.model.Comment> domainComments = commentService.findCommentsForEmployee(
+        LocalDate fromDate = DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate());
+        LocalDate toDate = DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate());
+        List<Comment> domainComments = commentService.findCommentsForEmployee(
                 employee, fromDate, toDate
         );
         assertThat(domainComments).hasSize(1);
-        assertThat(domainComments.get(0).id()).isEqualTo(1);
+        assertThat(domainComments.get(0).getId()).isEqualTo(1);
     }
 
     @Test
@@ -74,7 +74,7 @@ class CommentServiceImplTest {
         when(commentRepository.setStatusDone(ArgumentMatchers.anyLong())).thenReturn(0);
 
         int updatedCount = commentService.setDone(commentMapper.mapDbCommentToDomainComment(createComment(1L, EmployeeState.IN_PROGRESS)));
-        assertThat(updatedCount).isEqualTo(0);
+        assertThat(updatedCount).isZero();
     }
 
     @Test
@@ -86,28 +86,28 @@ class CommentServiceImplTest {
 
     @Test
     void cntFinishedAndTotalCommentsForEmployee_whenFromDateIsNull_thenThrowsException() {
-        Employee empl = Employee.builder()
+        Employee employee = Employee.builder()
                 .userId("1")
                 .email("max.mustermann@gpeardec.com")
                 .releaseDate(null)
                 .firstname("Max")
                 .build();
 
-        assertThatThrownBy(() -> commentService.cntFinishedAndTotalCommentsForEmployee(empl, null, null))
+        assertThatThrownBy(() -> commentService.cntFinishedAndTotalCommentsForEmployee(employee, null, null))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessage("From date must not be null!");
     }
 
     @Test
     void cntFinishedAndTotalCommentsForEmployee_whenToDateIsNull_thenThrowsException() {
-        Employee empl = Employee.builder()
+        Employee employee = Employee.builder()
                 .userId("1")
                 .email("max.mustermann@gpeardec.com")
                 .releaseDate(null)
                 .firstname("Max")
                 .build();
 
-        assertThatThrownBy(() -> commentService.cntFinishedAndTotalCommentsForEmployee(empl, LocalDate.now(), null))
+        assertThatThrownBy(() -> commentService.cntFinishedAndTotalCommentsForEmployee(employee, LocalDate.now(), null))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessage("To date must not be null!");
     }
@@ -125,12 +125,12 @@ class CommentServiceImplTest {
         ));
 
         Employee employee = createEmployee();
-        LocalDate fromDate = DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate());
-        LocalDate toDate = DateUtils.getLastDayOfFollowingMonth(employee.releaseDate());
+        LocalDate fromDate = DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate());
+        LocalDate toDate = DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate());
         FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
         assertThat(result).isNotNull();
-        assertThat(result.totalComments()).isEqualTo(3L);
-        assertThat(result.finishedComments()).isEqualTo(1L);
+        assertThat(result.getTotalComments()).isEqualTo(3L);
+        assertThat(result.getFinishedComments()).isEqualTo(1L);
     }
 
     @Test
@@ -146,12 +146,12 @@ class CommentServiceImplTest {
         ));
 
         Employee employee = createEmployee();
-        LocalDate fromDate = DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate());
-        LocalDate toDate = DateUtils.getLastDayOfFollowingMonth(employee.releaseDate());
+        LocalDate fromDate = DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate());
+        LocalDate toDate = DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate());
         FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
         assertThat(result).isNotNull();
-        assertThat(result.totalComments()).isEqualTo(3L);
-        assertThat(result.finishedComments()).isZero();
+        assertThat(result.getTotalComments()).isEqualTo(3L);
+        assertThat(result.getFinishedComments()).isZero();
     }
 
     @Test
@@ -163,12 +163,12 @@ class CommentServiceImplTest {
         )).thenReturn(List.of());
 
         Employee employee = createEmployee();
-        LocalDate fromDate = DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate());
-        LocalDate toDate = DateUtils.getLastDayOfFollowingMonth(employee.releaseDate());
+        LocalDate fromDate = DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate());
+        LocalDate toDate = DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate());
         FinishedAndTotalComments result = commentService.cntFinishedAndTotalCommentsForEmployee(employee, fromDate, toDate);
         assertThat(result).isNotNull();
-        assertThat(result.totalComments()).isZero();
-        assertThat(result.finishedComments()).isZero();
+        assertThat(result.getTotalComments()).isZero();
+        assertThat(result.getFinishedComments()).isZero();
     }
 
     @Test
@@ -190,10 +190,10 @@ class CommentServiceImplTest {
 
         doAnswer(invocation -> {
             Object[] args = invocation.getArguments();
-            ((Comment) args[0]).setUpdatedDate(LocalDateTime.now());
-            ((Comment) args[0]).setState(EmployeeState.OPEN);
+            ((com.gepardec.mega.db.entity.employee.Comment) args[0]).setUpdatedDate(LocalDateTime.now());
+            ((com.gepardec.mega.db.entity.employee.Comment) args[0]).setState(EmployeeState.OPEN);
             return args[0];
-        }).when(commentRepository).save(ArgumentMatchers.any(Comment.class));
+        }).when(commentRepository).save(ArgumentMatchers.any(com.gepardec.mega.db.entity.employee.Comment.class));
 
         doNothing().when(mailSender).send(
                 ArgumentMatchers.any(Mail.class),
@@ -206,25 +206,25 @@ class CommentServiceImplTest {
 
         Employee employee = createEmployee();
         String newComment = "My new comment!";
-        com.gepardec.mega.domain.model.Comment createdComment = commentService.createNewCommentForEmployee(
+        Comment createdComment = commentService.createNewCommentForEmployee(
                 2L, employee, newComment, "", null, LocalDate.now().toString()
         );
 
         String creator = stepEntry.getAssignee().getFirstname();
         Map<String, String> expectedMailParameter = Map.of(
                 MailParameter.CREATOR, creator,
-                MailParameter.RECIPIENT, employee.firstname(),
+                MailParameter.RECIPIENT, employee.getFirstname(),
                 MailParameter.COMMENT, newComment
         );
 
         verify(mailSender, times(1)).send(
-                Mail.COMMENT_CREATED, employee.email(), employee.firstname(), Locale.GERMAN, expectedMailParameter, List.of(creator)
+                Mail.COMMENT_CREATED, employee.getEmail(), employee.getFirstname(), Locale.GERMAN, expectedMailParameter, List.of(creator)
         );
 
         assertThat(createdComment).isNotNull();
-        assertThat(createdComment.message()).isEqualTo("My new comment!");
-        assertThat(createdComment.authorEmail()).isEqualTo(stepEntry.getAssignee().getEmail());
-        assertThat(createdComment.state()).isEqualTo(EmployeeState.OPEN);
+        assertThat(createdComment.getMessage()).isEqualTo("My new comment!");
+        assertThat(createdComment.getAuthorEmail()).isEqualTo(stepEntry.getAssignee().getEmail());
+        assertThat(createdComment.getState()).isEqualTo(EmployeeState.OPEN);
     }
 
     @Test
@@ -238,17 +238,17 @@ class CommentServiceImplTest {
 
     @Test
     void updateComment_whenValid_thenReturnUpdatedComment() {
-        Comment originalComment = createComment(1L, EmployeeState.DONE);
+        com.gepardec.mega.db.entity.employee.Comment originalComment = createComment(1L, EmployeeState.DONE);
         when(commentRepository.findById(ArgumentMatchers.anyLong())).thenReturn(originalComment);
-        when(commentRepository.update(ArgumentMatchers.any(Comment.class))).thenReturn(null);
+        when(commentRepository.update(ArgumentMatchers.any(com.gepardec.mega.db.entity.employee.Comment.class))).thenReturn(null);
 
-        com.gepardec.mega.domain.model.Comment updatedComment = commentService.updateComment(1L, "Updated message");
+        Comment updatedComment = commentService.updateComment(1L, "Updated message");
         assertThat(updatedComment).isNotNull();
-        assertThat(updatedComment.message()).isEqualTo("Updated message");
+        assertThat(updatedComment.getMessage()).isEqualTo("Updated message");
     }
 
-    private Comment createComment(Long id, EmployeeState employeeState) {
-        Comment comment = new Comment();
+    private com.gepardec.mega.db.entity.employee.Comment createComment(Long id, EmployeeState employeeState) {
+        com.gepardec.mega.db.entity.employee.Comment comment = new com.gepardec.mega.db.entity.employee.Comment();
         comment.setId(id);
         comment.setCreationDate(LocalDateTime.now());
         comment.setMessage("Reisezeiten eintragen!");
