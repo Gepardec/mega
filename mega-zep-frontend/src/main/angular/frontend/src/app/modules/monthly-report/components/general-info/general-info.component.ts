@@ -10,7 +10,6 @@ const moment = _moment;
   templateUrl: './general-info.component.html',
   styleUrls: ['./general-info.component.scss']
 })
-
 export class GeneralInfoComponent implements OnInit {
 
   @Input() monthlyReport: MonthlyReport;

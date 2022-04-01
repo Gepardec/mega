@@ -12,7 +12,7 @@
         <span fxFlex="30">{{monthlyReport.employee.firstname}} {{monthlyReport.employee.lastname}}</span>
 
         <div id="datediv">
-          <b><span>{{'global.selectPayrollMonth' | translate}}</span></b>
+          <strong><span>{{'global.selectPayrollMonth' | translate}}</span></strong>
           <span id="datepicker">
           <app-datepicker-month-year (dateChanged)="dateChanged($event)" [date]="date"
                                      [maxMonth]="maxMonthDate"></app-datepicker-month-year>

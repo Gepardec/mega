@@ -5,14 +5,9 @@ import {Component, Input, OnInit} from '@angular/core';
   templateUrl: './billable-times-fraction.component.html',
   styleUrls: ['./billable-times-fraction.component.scss']
 })
-export class BillableTimesFractionComponent implements OnInit {
+export class BillableTimesFractionComponent {
 
   @Input() billableTimes: number;
   @Input() nonBillableTimes: number;
 
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
 }
