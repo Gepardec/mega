@@ -28,42 +28,26 @@
   "isAssigned": true,
   "employeeProgresses": [
     {
-      "project": "3BankenIT - JBoss",
-      "assigneeEmail": "patrick.holzer@gepardec.com",
-      "firstname": "Patrick",
-      "lastname": "Holzer",
+      "project": "Cash-Cow-Project",
+      "assigneeEmail": "max.mustermann@gepardec.com",
+      "firstname": "Max",
+      "lastname": "Mustermann",
       "state": "OPEN",
       "stepId": 4
     },
     {
-      "project": "3BankenIT - JBoss",
+      "project": "Cash-Cow-Project",
       "assigneeEmail": "johannes.riegler@gepardec.com",
-      "firstname": "Johannes",
-      "lastname": "Riegler",
+      "firstname": "Erika",
+      "lastname": "Musterfrau",
       "state": "OPEN",
       "stepId": 4
     },
     {
-      "project": "3BankenIT - JBoss",
-      "assigneeEmail": "daniel.rasztovich@gepardec.com",
-      "firstname": "Daniel",
-      "lastname": "Rasztovich",
-      "state": "OPEN",
-      "stepId": 4
-    },
-    {
-      "project": "3BankenIT - JBoss",
+      "project": "Cash-Cow-Project",
       "assigneeEmail": "mega.test@gepardec.com",
       "firstname": "Chuck",
       "lastname": "Norris",
-      "state": "OPEN",
-      "stepId": 4
-    },
-    {
-      "project": "3BankenIT - JBoss",
-      "assigneeEmail": "theresa.mueller@gepardec.com",
-      "firstname": "Theresa",
-      "lastname": "Müller",
       "state": "OPEN",
       "stepId": 4
     }

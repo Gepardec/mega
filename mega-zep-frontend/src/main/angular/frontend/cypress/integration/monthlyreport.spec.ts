@@ -23,11 +23,14 @@ describe('Mein Mega', () => {
 
 
   it('Should confirm the bookings for the selected month', () => {
-    cy.fixture('monthlyreport/stepentry-close-true.json').then(jsonData => {
-      cy.route('PUT', 'http://localhost:8080/stepentry/close', jsonData).as('updateEmployeeCheck');
-    });
+    cy.route({
+      method: 'PUT',
+      url: 'http://localhost:8080/stepentry/close',
+      response: true
+    }).as('updateEmployeeCheck');
 
-    cy.fixture('monthlyreport/monthendreports-done.json').then(jsonData => {
+    cy.fixture('common/monthendreports.json').then(jsonData => {
+      jsonData[0].employeeCheckState = 'DONE';
       cy.route('http://localhost:8080/worker/monthendreports/2022/1', jsonData).as('getMonthendreportsDone')
     });
 
