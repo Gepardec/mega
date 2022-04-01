@@ -1,4 +1,7 @@
-<mat-card *ngIf="omEntries && filteredOmEntries" class="mat-elevation-z6" style="margin-top: 10px">
+<mat-card *ngIf="omEntries && filteredOmEntries"
+          class="mat-elevation-z6"
+          style="margin-top: 10px"
+          data-cy="employee-card">
   <mat-card-header>
     <mat-card-title>{{'office-management.table.name' | translate}}</mat-card-title>
   </mat-card-header>
@@ -42,8 +45,10 @@
       </mat-toolbar>
     </div>
     <div class="mat-elevation-z10 table-container">
-      <mat-table *ngIf="filteredOmEntries.length > 0; else noOmEntriesFound" [dataSource]="filteredOmEntries"
-                 style="width: 100%;">
+      <mat-table *ngIf="filteredOmEntries.length > 0; else noOmEntriesFound"
+                 [dataSource]="filteredOmEntries"
+                 style="width: 100%;"
+                 data-cy="employee-table">
         <ng-container matColumnDef="select">
           <mat-header-cell *matHeaderCellDef>
             <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -76,7 +81,8 @@
           <mat-cell *matCellDef="let omEntry">
             <span class="mobile-label">{{'office-management.table.customerCheckState' | translate}}</span>
             <app-state-select (selectionChange)="closeCustomerCheck(omEntry)"
-                              [value]="omEntry.customerCheckState"></app-state-select>
+                              [value]="omEntry.customerCheckState"
+                              data-cy="customer-check"></app-state-select>
           </mat-cell>
         </ng-container>
 
@@ -86,7 +92,8 @@
           <mat-cell *matCellDef="let omEntry">
             <span class="mobile-label">{{'office-management.table.internalCheckState' | translate}}</span>
             <app-state-select (selectionChange)="closeInternalCheck(omEntry)"
-                              [value]="omEntry.internalCheckState"></app-state-select>
+                              [value]="omEntry.internalCheckState"
+                              data-cy="internal-check"></app-state-select>
           </mat-cell>
         </ng-container>
 
@@ -95,7 +102,8 @@
                            class="text-center">{{'office-management.table.employeeCheckState' | translate}}</mat-header-cell>
           <mat-cell *matCellDef="let omEntry" class="text-center">
             <span class="mobile-label">{{'office-management.table.employeeCheckState' | translate}}</span>
-            <app-state-indicator [state]="omEntry.employeeCheckState"></app-state-indicator>
+            <app-state-indicator [state]="omEntry.employeeCheckState"
+                                 data-cy="employee-check"></app-state-indicator>
           </mat-cell>
         </ng-container>
 
@@ -104,8 +112,10 @@
             {{'office-management.table.projectCheckState' | translate}}</mat-header-cell>
           <mat-cell *matCellDef="let omEntry" class="text-center">
             <span class="mobile-label">{{'office-management.table.projectCheckState' | translate}}</span>
-            <app-state-indicator (mouseenter)="openEmployeeProgress(omEntry)" (mouseleave)="closeEmployeeProgress()"
-                                 [state]="omEntry.projectCheckState"></app-state-indicator>
+            <app-state-indicator (mouseenter)="openEmployeeProgress(omEntry)"
+                                 (mouseleave)="closeEmployeeProgress()"
+                                 [state]="omEntry.projectCheckState"
+                                 data-cy="project-check"></app-state-indicator>
           </mat-cell>
         </ng-container>
 
@@ -116,7 +126,8 @@
             <button (click)="openDialog(omEntry)" mat-button>
               <mat-icon>comment</mat-icon>
               <app-done-comments-indicator [finishedComments]="omEntry.finishedComments"
-                                           [totalComments]="omEntry.totalComments"></app-done-comments-indicator>
+                                           [totalComments]="omEntry.totalComments"
+                                           data-cy="comment-indicator"></app-done-comments-indicator>
             </button>
           </mat-cell>
         </ng-container>

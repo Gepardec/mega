@@ -1,11 +1,16 @@
-<mat-card *ngIf="pmEntries" style="margin-top: 10px" class="mat-elevation-z6">
+<mat-card *ngIf="pmEntries"
+          style="margin-top: 10px"
+          class="mat-elevation-z6"
+          data-cy="project-card">
   <mat-card-header>
     <mat-card-title>{{'office-management.projects' | translate}}</mat-card-title>
   </mat-card-header>
   <mat-card-content fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px">
     <div class="mat-elevation-z10 table-container">
-      <mat-table *ngIf="pmEntries.length > 0; else noProjectsFound" style="width: 100%;"
-                 [dataSource]="pmEntries">
+      <mat-table *ngIf="pmEntries.length > 0; else noProjectsFound"
+                 [dataSource]="pmEntries"
+                 style="width: 100%;"
+                 data-cy="project-table">
 
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef>{{'project-management.projectName' | translate}}</mat-header-cell>
@@ -20,7 +25,8 @@
             {{'project-management.employeeDone' | translate}}</mat-header-cell>
           <mat-cell *matCellDef="let pmEntry" class="text-center">
             <span class="mobile-label">{{'project-management.employeeDone' | translate}}</span>
-            <app-state-indicator [state]="isAtLeastOneEmployeeCheckDone(pmEntry)"></app-state-indicator>
+            <app-state-indicator [state]="isAtLeastOneEmployeeCheckDone(pmEntry)"
+                                 data-cy="employees-checked"></app-state-indicator>
           </mat-cell>
         </ng-container>
 
@@ -37,7 +43,8 @@
             <span class="mobile-label">{{'project-management.projectTimeState' | translate}}</span>
             <app-state-indicator [state]="pmEntry.controlProjectState"
                                  [matTooltip]="getTooltipText(pmEntry.controlProjectState)"
-                                 [matTooltipShowDelay]="tooltipShowDelay"></app-state-indicator>
+                                 [matTooltipShowDelay]="tooltipShowDelay"
+                                 data-cy="control-project"></app-state-indicator>
           </mat-cell>
         </ng-container>
 
@@ -54,7 +61,8 @@
             <span class="mobile-label">{{'project-management.billingState' | translate}}</span>
             <app-state-indicator [state]="pmEntry.controlBillingState"
                                  [matTooltip]="getTooltipText(pmEntry.controlBillingState)"
-                                 [matTooltipShowDelay]="tooltipShowDelay"></app-state-indicator>
+                                 [matTooltipShowDelay]="tooltipShowDelay"
+                                 data-cy="project-billing"></app-state-indicator>
           </mat-cell>
         </ng-container>
 
@@ -75,11 +83,6 @@
                     class="btn-addComment">
               <mat-icon>add</mat-icon>
             </button>
-            <!--            TODO: Remove this if the design with button is okay-->
-            <!--            <p *ngIf="!pmEntry.comment && forProjectName !== pmEntry.projectName"-->
-            <!--               (click)="onStartEditing(pmEntry.projectName)"-->
-            <!--               class="action-label"-->
-            <!--               style="opacity: 50%">{{'global.addComment' | translate}}</p>-->
             <app-inline-text-editor *ngIf="showCommentEditor && forProjectName === pmEntry.projectName"
                                     [comment]="pmEntry.projectComment?.comment"
                                     (commentChange)="onCommentChange(pmEntry, $event)"></app-inline-text-editor>
