@@ -88,10 +88,11 @@ class StepEntryRepositoryTest {
 
     @AfterEach
     void tearDown() {
-        //boolean resultStep = stepRepository.deleteById(step.getId());
-        //boolean resultUser = userRepository.deleteById(user.getId());
-        boolean result = stepEntryRepository.deleteById(stepEntry.getId());
-        assertThat(result).isTrue();
+        boolean stepEntryDeleted = stepEntryRepository.deleteById(stepEntry.getId());
+        assertThat(stepEntryDeleted).isTrue();
+        boolean resultStep = stepRepository.deleteById(step.getId());
+
+        boolean resultUser = userRepository.deleteById(user.getId());
     }
 
     @Test

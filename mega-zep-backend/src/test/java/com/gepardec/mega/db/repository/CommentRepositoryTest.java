@@ -97,8 +97,9 @@ class CommentRepositoryTest {
 
     @AfterEach
     void tearDown() {
-        projectRepository.deleteAll();
-        commentRepository.deleteAll();
+        long deletedComments = commentRepository.deleteAll();
+        long deletedProjects = projectRepository.deleteAll();
+        String test = "0";
     }
 
     @Test
