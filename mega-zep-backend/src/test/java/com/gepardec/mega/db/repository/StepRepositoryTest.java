@@ -1,0 +1,69 @@
+package com.gepardec.mega.db.repository;
+
+import com.gepardec.mega.db.entity.employee.Step;
+import com.gepardec.mega.domain.model.Role;
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import javax.inject.Inject;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@QuarkusTest
+class StepRepositoryTest {
+
+    @Inject
+    StepRepository stepRepository;
+
+    private Step step;
+
+    @BeforeEach
+    void init() {
+        step = new Step();
+        step.setName("TestName");
+        step.setRole(Role.EMPLOYEE);
+        step.setOrdinal(1);
+        step.setStepEntries(null);
+
+        stepRepository.persist(step);
+    }
+
+    @AfterEach
+    void tearDown() {
+        boolean deleted = stepRepository.deleteById(step.getId());
+        assertThat(deleted).isTrue();
+    }
+
+    @Test
+    void findAllSteps_whenCalled_thenReturnsCorrectAmountOfSteps() {
+        List<Step> result = stepRepository.findAllSteps();
+        assertThat(result).hasSize(1);
+    }
+
+    @Test
+    void findAllSteps_whenCalled_thenReturnedListContainsCorrectStep() {
+        List<Step> result = stepRepository.findAllSteps();
+        assertThat(result).contains(step);
+    }
+
+    @Test
+    void findAllSteps_whenCalledAndNoStepExists_thenReturnsEmptyListOfSteps() {
+        stepRepository.deleteById(step.getId());
+        List<Step> result = stepRepository.findAllSteps();
+        assertThat(result).isEmpty();
+        createStep();
+    }
+
+    private void createStep() {
+        step = new Step();
+        step.setName("TestName");
+        step.setRole(Role.EMPLOYEE);
+        step.setOrdinal(1);
+        step.setStepEntries(null);
+        stepRepository.persist(step);
+    }
+
+}

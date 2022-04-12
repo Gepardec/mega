@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @ApplicationScoped
+@Transactional //behalten oder gibt es eine lösung? händisch starten statt @transactional?
 public class CommentRepository implements PanacheRepository<Comment> {
 
     @Inject

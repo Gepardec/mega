@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -54,7 +55,7 @@ class UserRepositoryTest {
 
         assertAll(
                 () -> assertThat(userByEmail).isPresent(),
-                () -> assertThat(userByEmail).isPresent().isEqualTo(EMAIL)
+                () -> assertThat(userByEmail.get().getEmail()).isEqualTo(EMAIL)
         );
     }
 
