@@ -7,18 +7,19 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
-
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @QuarkusTest
 class UserRepositoryTest {
-
     private static final String EMAIL = "max.muster@gepardec.com";
 
     @Inject
@@ -27,26 +28,30 @@ class UserRepositoryTest {
     private User user;
     private User persistedUser;
 
-    @BeforeEach
-    void setUp() {
-        user = new User();
-        user.setActive(true);
-        user.setEmail(EMAIL);
-        user.setFirstname("Max");
-        user.setLastname("Muster");
-        user.setLocale(Locale.GERMAN);
-        user.setZepId("026-mmuster");
-        user.setRoles(Set.of(Role.EMPLOYEE));
-        user.setCreationDate(LocalDateTime.of(2021, 1,18, 10, 10));
-        user.setUpdatedDate(LocalDateTime.now());
+    private User initializeUserObject() {
+        User initUser = new User();
+        initUser.setActive(true);
+        initUser.setEmail(EMAIL);
+        initUser.setFirstname("Max");
+        initUser.setLastname("Muster");
+        initUser.setLocale(Locale.GERMAN);
+        initUser.setZepId("026-mmuster");
+        initUser.setRoles(Set.of(Role.EMPLOYEE));
+        initUser.setCreationDate(LocalDateTime.of(2021, 1,18, 10, 10));
+        initUser.setUpdatedDate(LocalDateTime.now());
 
+        return initUser;
+    }
+
+    @BeforeEach
+    void init() {
+        user = initializeUserObject();
         persistedUser = userRepository.persistOrUpdate(user);
     }
 
     @AfterEach
     void tearDown() {
-        boolean deleted = userRepository.deleteById(user.getId());
-        assertThat(deleted).isTrue();
+        assertThat(userRepository.deleteById(user.getId())).isTrue();
     }
 
     @Test

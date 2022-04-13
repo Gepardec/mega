@@ -20,21 +20,25 @@ class StepRepositoryTest {
 
     private Step step;
 
+    private Step initializeStepObject() {
+        Step initStep = new Step();
+        initStep.setName("TestName");
+        initStep.setRole(Role.EMPLOYEE);
+        initStep.setOrdinal(1);
+        initStep.setStepEntries(null);
+
+        return initStep;
+    }
+
     @BeforeEach
     void init() {
-        step = new Step();
-        step.setName("TestName");
-        step.setRole(Role.EMPLOYEE);
-        step.setOrdinal(1);
-        step.setStepEntries(null);
-
+        step = initializeStepObject();
         stepRepository.persist(step);
     }
 
     @AfterEach
     void tearDown() {
-        boolean deleted = stepRepository.deleteById(step.getId());
-        assertThat(deleted).isTrue();
+        assertThat(stepRepository.deleteById(step.getId())).isTrue();
     }
 
     @Test

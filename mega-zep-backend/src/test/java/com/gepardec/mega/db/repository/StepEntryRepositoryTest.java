@@ -42,104 +42,142 @@ class StepEntryRepositoryTest {
     private Step step;
     private Project project;
 
-    private LocalDateTime localDateTime = LocalDateTime.now();
+    private final LocalDateTime localDateTime = LocalDateTime.now();
+
+    private Comment initializeCommentObject() {
+        Comment initComment = new Comment();
+        initComment.setState(EmployeeState.OPEN);
+        initComment.setMessage("Test Message");
+        initComment.setCreationDate(LocalDateTime.of(2021, 1,18, 10, 10));
+        initComment.setUpdatedDate(localDateTime);
+        initComment.setStepEntry(stepEntry);
+
+        return initComment;
+    }
+
+    private Project initializeProjectObject() {
+        Project initProject = new Project();
+        initProject.setName("LIW-Allgemein");
+        initProject.setStartDate(LocalDate.now());
+        initProject.setEndDate(LocalDate.now());
+
+        return initProject;
+    }
+
+    private User initializeUserObject() {
+        User initUser = new User();
+        initUser.setActive(true);
+        initUser.setEmail(EMAIL);
+        initUser.setFirstname("Max");
+        initUser.setLastname("Mustermann");
+        initUser.setLocale(Locale.GERMAN);
+        initUser.setZepId("026-mmuster");
+        initUser.setRoles(Set.of(Role.EMPLOYEE, Role.OFFICE_MANAGEMENT));
+        initUser.setCreationDate(LocalDateTime.of(2021, 1,18, 10, 10));
+        initUser.setUpdatedDate(LocalDateTime.now());
+
+        return initUser;
+    }
+
+    private Step initializeStepObject() {
+        Step initStep = new Step();
+        initStep.setName("TestStep");
+        initStep.setRole(Role.EMPLOYEE);
+        initStep.setOrdinal(1);
+
+        return initStep;
+    }
+
+    private StepEntry initializeStepEntryObject() {
+        StepEntry initStepEntry = new StepEntry();
+        initStepEntry.setCreationDate(localDateTime);
+        initStepEntry.setUpdatedDate(localDateTime);
+        initStepEntry.setDate(LocalDate.now());
+        initStepEntry.setProject(project.getName());
+        initStepEntry.setState(EmployeeState.IN_PROGRESS);
+        initStepEntry.setOwner(user);
+        initStepEntry.setAssignee(user);
+        initStepEntry.setStep(step);
+
+        return initStepEntry;
+    }
+
+    private boolean tearDownStepEntryEntity() {
+        return stepEntryRepository.deleteById(stepEntry.getId());
+    }
+
+    private boolean tearDownStepEntity() {
+        return stepRepository.deleteById(step.getId());
+    }
+
+    private boolean tearDownUserEntity() {
+        return userRepository.deleteById(user.getId());
+    }
+
+    private void initializeSetupObjects() {
+        comment = initializeCommentObject();
+        project = initializeProjectObject();
+        user = initializeUserObject();
+        step = initializeStepObject();
+        stepEntry = initializeStepEntryObject();
+    }
 
     @BeforeEach
     void init() {
-        comment = new Comment();
-        comment.setState(EmployeeState.OPEN);
-        comment.setMessage("Test Message");
-        comment.setCreationDate(LocalDateTime.of(2021, 1,18, 10, 10));
-        comment.setUpdatedDate(localDateTime);
-
-        project = new Project();
-        project.setName("LIW-Allgemein");
-        project.setStartDate(LocalDate.now());
-        project.setEndDate(LocalDate.now());
-
-        user = new User();
-        user.setActive(true);
-        user.setEmail(EMAIL);
-        user.setFirstname("Max");
-        user.setLastname("Mustermann");
-        user.setLocale(Locale.GERMAN);
-        user.setZepId("026-mmuster");
-        user.setRoles(Set.of(Role.EMPLOYEE, Role.OFFICE_MANAGEMENT));
-        user.setCreationDate(LocalDateTime.of(2021, 1,18, 10, 10));
-        user.setUpdatedDate(LocalDateTime.now());
-
-        stepEntry = new StepEntry();
-        stepEntry.setCreationDate(localDateTime);
-        stepEntry.setUpdatedDate(localDateTime);
-        stepEntry.setDate(LocalDate.now());
-        stepEntry.setProject(project.getName());
-        stepEntry.setState(EmployeeState.IN_PROGRESS);
-        stepEntry.setOwner(user);
-        stepEntry.setAssignee(user);
-        comment.setStepEntry(stepEntry);
-
-        step = new Step();
-        step.setName("TestStep");
-        step.setRole(Role.EMPLOYEE);
-        step.setOrdinal(1);
-
-        stepEntry.setStep(step);
+        initializeSetupObjects();
     }
 
     @AfterEach
     void tearDown() {
-        boolean stepEntryDeleted = stepEntryRepository.deleteById(stepEntry.getId());
-        assertThat(stepEntryDeleted).isTrue();
-        boolean resultStep = stepRepository.deleteById(step.getId());
-
-        boolean resultUser = userRepository.deleteById(user.getId());
+        assertThat(tearDownStepEntryEntity()).isTrue();
+        assertThat(tearDownStepEntity()).isTrue();
+        assertThat(tearDownUserEntity()).isTrue();
     }
 
-    @Test
-    void findAllOwnedAndAssignedStepEntriesForEmployee_whenCalled_thenReturnsResultContainingCorrectStepEntry() {
-        createStepEntry();
-        Optional<StepEntry> result = stepEntryRepository.findAllOwnedAndAssignedStepEntriesForEmployee(localDateTime.toLocalDate(), EMAIL);
-        assertThat(result).contains(stepEntry);
+    private void persistEntities() {
+        stepRepository.persist(step);
+        userRepository.persistOrUpdate(user);
+        stepEntryRepository.persist(stepEntry);
     }
 
     @Test
     void findAllOwnedAndAssignedStepEntriesForEmployee_whenNoStepEntriesExist_thenReturnsEmptyObject() {
         Optional<StepEntry> result = stepEntryRepository.findAllOwnedAndAssignedStepEntriesForEmployee(localDateTime.toLocalDate(), EMAIL);
         assertThat(result).isEmpty();
-        createStepEntry();
+        persistEntities();
     }
 
     @Test
     void findAllOwnedAndUnassignedStepEntriesForOtherChecks_whenMethodIsCalledAndNoUnassignedStepEntriesExist_thenReturnsEmptyList() {
-        createStepEntry();
+        persistEntities();
         List<StepEntry> result = stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForOtherChecks(localDateTime.toLocalDate(), EMAIL);
         assertThat(result).isEmpty();
     }
 
     @Test
     void findAllOwnedAndUnassignedStepEntriesForPMProgress_whenMethodIsCalledWithCorrectParameters_thenReturnsEmptyList() {
-        createStepEntry();
+        persistEntities();
         List<StepEntry> result = stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForPMProgress(localDateTime.toLocalDate(), EMAIL);
         assertThat(result).isEmpty();
     }
 
     @Test
     void findAllOwnedAndUnassignedStepEntriesForPMProgress_whenMethodIsCalledWithNullLocalDate_thenReturnsEmptyList() {
-        createStepEntry();
+        persistEntities();
         List<StepEntry> result = stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForPMProgress(null, EMAIL);
         assertThat(result).isEmpty();
     }
 
     @Test
     void findAllOwnedAndUnassignedStepEntriesForPMProgress_whenMethodIsCalledWithNullEmail_thenReturnsEmptyList() {
-        createStepEntry();
+        persistEntities();
         List<StepEntry> result = stepEntryRepository.findAllOwnedAndUnassignedStepEntriesForPMProgress(localDateTime.toLocalDate(), null);
         assertThat(result).isEmpty();
     }
 
     @Test
     void findAllOwnedStepEntriesInRange_whenMethodIsCalledWithCorrectParameters_thenReturnsAllEntriesInRange() {
-        createStepEntry();
+        persistEntities();
         List<StepEntry> result = stepEntryRepository.findAllOwnedStepEntriesInRange(localDateTime.toLocalDate(), localDateTime.toLocalDate(), EMAIL);
         assertAll(
                 () -> assertThat(result).hasSize(1),
@@ -149,7 +187,7 @@ class StepEntryRepositoryTest {
 
     @Test
     void closeAssigned_whenMethodIsCalledWithCorrectParameters_thenClosesAssignedAndReturnsOne() {
-        createStepEntry();
+        persistEntities();
         int result = stepEntryRepository.closeAssigned(localDateTime.toLocalDate(), localDateTime.toLocalDate(), EMAIL, stepEntry.getStep().getId());
         assertAll(
                 () -> assertThat(result).isEqualTo(1)
@@ -158,42 +196,42 @@ class StepEntryRepositoryTest {
 
     @Test
     void closeAssigned_whenMethodIsCalledWithEmailWithNullValue_thenReturnsZeroIntegerAndDoesntCloseAssigned() {
-        createStepEntry();
+        persistEntities();
         int result = stepEntryRepository.closeAssigned(localDateTime.toLocalDate(), localDateTime.toLocalDate(), null, stepEntry.getStep().getId());
         assertThat(result).isZero();
     }
 
     @Test
     void closeAssigned_whenMethodIsCalledWithCorrectParameters_thenClosesAssignedAndReturnsIntegerOne() {
-        createStepEntry();
+        persistEntities();
         int result = stepEntryRepository.closeAssigned(localDateTime.toLocalDate(), localDateTime.toLocalDate(), EMAIL, EMAIL, stepEntry.getStep().getId(), project.getName());
         assertThat(result).isEqualTo(1);
     }
 
     @Test
     void closeAssigned_whenMethodIsCalledWithEmptyProjectParameter_thenReturnsIntegerOne() {
-        createStepEntry();
+        persistEntities();
         int result = stepEntryRepository.closeAssigned(localDateTime.toLocalDate(), localDateTime.toLocalDate(), EMAIL, EMAIL, stepEntry.getStep().getId(), "");
         assertThat(result).isZero();
     }
 
     @Test
     void closeAssigned_whenMethodIsCalledWithEmptyAssigneParameter_thenReturnsIntegerOne() {
-        createStepEntry();
+        persistEntities();
         int result = stepEntryRepository.closeAssigned(localDateTime.toLocalDate(), localDateTime.toLocalDate(), EMAIL, "", stepEntry.getStep().getId(), project.getName());
         assertThat(result).isZero();
     }
 
     @Test
     void closeAssigned_whenMethodIsCalledWithEmptyOwnerParameter_thenReturnsIntegerOne() {
-        createStepEntry();
+        persistEntities();
         int result = stepEntryRepository.closeAssigned(localDateTime.toLocalDate(), localDateTime.toLocalDate(), "", EMAIL, stepEntry.getStep().getId(), project.getName());
         assertThat(result).isZero();
     }
 
     @Test
     void findStepEntryForEmployeeAtStepInRange_whenMethodIsCalledWithCorrectParameters_thenReturnsOptionalOfStepEntry() {
-        createStepEntry();
+        persistEntities();
         Optional<StepEntry> result = stepEntryRepository.findStepEntryForEmployeeAtStepInRange(localDateTime.toLocalDate(), localDateTime.toLocalDate(), EMAIL, stepEntry.getStep().getId(), EMAIL);
         assertAll(
                 () -> assertThat(result).isPresent(),
@@ -203,18 +241,12 @@ class StepEntryRepositoryTest {
 
     @Test
     void findStepEntryForEmployeeAndProjectAtStepInRange_whenMethodIsCalledWithCorrectParameters_thenReturnsOptionalOfStepEntry() {
-        createStepEntry();
+        persistEntities();
         Optional<StepEntry> result = stepEntryRepository.findStepEntryForEmployeeAndProjectAtStepInRange(localDateTime.toLocalDate(), localDateTime.toLocalDate(), EMAIL, stepEntry.getStep().getId(), EMAIL, project.getName());
         assertAll(
                 () -> assertThat(result).isPresent(),
                 () -> assertThat(result).contains(stepEntry)
         );
-    }
-
-    private void createStepEntry() {
-        stepRepository.persist(step);
-        userRepository.persistOrUpdate(user);
-        stepEntryRepository.persist(stepEntry);
     }
 
     private void createStepEntryWithPM() {
