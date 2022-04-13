@@ -4,7 +4,7 @@ import com.gepardec.mega.application.exception.UnauthorizedException;
 import com.gepardec.mega.domain.model.SecurityContext;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.UserContext;
-import com.gepardec.mega.service.api.user.UserService;
+import com.gepardec.mega.service.api.UserService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
@@ -30,8 +30,8 @@ public class UserContextProducer {
     }
 
     private User verifyAndLoadUser() {
-        if (securityContext.email() != null) {
-            return userService.findUserForEmail(securityContext.email());
+        if (securityContext.getEmail() != null) {
+            return userService.findUserForEmail(securityContext.getEmail());
         } else {
             throw new UnauthorizedException("No security context provided");
         }

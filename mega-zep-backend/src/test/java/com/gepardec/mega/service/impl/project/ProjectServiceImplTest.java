@@ -4,6 +4,7 @@ import com.gepardec.mega.domain.model.Project;
 import com.gepardec.mega.domain.model.ProjectFilter;
 import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.User;
+import com.gepardec.mega.service.impl.ProjectServiceImpl;
 import com.gepardec.mega.zep.ZepService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
@@ -28,7 +29,7 @@ class ProjectServiceImplTest {
     @Inject
     ProjectServiceImpl projectService;
 
-    private Project.Builder projectFor(final String id) {
+    private Project.ProjectBuilder projectFor(final String id) {
         return Project.builder()
                 .projectId(id)
                 .description(String.format("Description of Project %s", id));
@@ -85,7 +86,7 @@ class ProjectServiceImplTest {
 
         // Then
         assertThat(projectsForMonthYear).hasSize(1);
-        assertThat(projectsForMonthYear.get(0).projectId()).isEqualTo("Kunde");
+        assertThat(projectsForMonthYear.get(0).getProjectId()).isEqualTo("Kunde");
     }
 
     @Test
@@ -100,7 +101,7 @@ class ProjectServiceImplTest {
                                         .lastname("Gepardec")
                                         .email(String.format("%s%s.%s@gepardec.com", "Gepard", 1, "Gepardec"))
                                         .roles(Set.of(Role.EMPLOYEE)).build())
-                                .stream().map(User::userId).collect(Collectors.toList()))
+                                .stream().map(User::getUserId).collect(Collectors.toList()))
                         .employees(List.of())
                         .categories(List.of())
                         .startDate(LocalDate.now())
@@ -117,6 +118,6 @@ class ProjectServiceImplTest {
 
         // Then
         assertThat(projectsForMonthYear).hasSize(1);
-        assertThat(projectsForMonthYear.get(0).projectId()).isEqualTo("1");
+        assertThat(projectsForMonthYear.get(0).getProjectId()).isEqualTo("1");
     }
 }

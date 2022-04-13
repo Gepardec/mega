@@ -7,7 +7,7 @@ import com.gepardec.mega.db.repository.StepEntryRepository;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.ProjectEmployees;
 import com.gepardec.mega.domain.utils.DateUtils;
-import com.gepardec.mega.service.api.stepentry.StepEntryService;
+import com.gepardec.mega.service.api.StepEntryService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Test;
@@ -107,8 +107,8 @@ class StepEntryServiceImplTest {
                 .thenReturn(0);
 
         Employee employee = createEmployee();
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate from = DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate());
+        LocalDate to = DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate());
         boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(employee, 0L, from, to);
         assertThat(updated).isFalse();
     }
@@ -120,8 +120,8 @@ class StepEntryServiceImplTest {
                 .thenReturn(1);
 
         Employee employee = createEmployee();
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(employee.releaseDate()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(employee.releaseDate()));
+        LocalDate from = DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate());
+        LocalDate to = DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate());
 
         boolean updated = stepEntryService.setOpenAndAssignedStepEntriesDone(employee, 1L, from, to);
 
@@ -144,13 +144,13 @@ class StepEntryServiceImplTest {
         )).thenReturn(List.of(createStepEntry(1L)));
 
         Employee empl = createEmployee();
-        LocalDate from = LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(empl.releaseDate()));
-        LocalDate to = LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(empl.releaseDate()));
+        LocalDate from = DateUtils.getFirstDayOfFollowingMonth(empl.getReleaseDate());
+        LocalDate to = DateUtils.getLastDayOfFollowingMonth(empl.getReleaseDate());
         List<StepEntry> result = stepEntryService.findAllStepEntriesForEmployee(empl, from, to);
         verify(stepEntryRepository, times(1)).findAllOwnedStepEntriesInRange(
-                LocalDate.parse(DateUtils.getFirstDayOfFollowingMonth(empl.releaseDate())),
-                LocalDate.parse(DateUtils.getLastDayOfFollowingMonth(empl.releaseDate())),
-                empl.email()
+                DateUtils.getFirstDayOfFollowingMonth(empl.getReleaseDate()),
+                DateUtils.getLastDayOfFollowingMonth(empl.getReleaseDate()),
+                empl.getEmail()
         );
 
         assertThat(result).hasSize(1);
@@ -174,9 +174,9 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.anyString()
         )).thenReturn(Optional.empty());
 
-        Employee empl = createEmployee();
+        Employee employee = createEmployee();
 
-        assertThatThrownBy(() -> stepEntryService.findStepEntryForEmployeeAtStep(2L, empl, "", empl.releaseDate()))
+        assertThatThrownBy(() -> stepEntryService.findStepEntryForEmployeeAtStep(2L, employee, "", employee.getReleaseDate()))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("No StepEntries found for Employee ");
     }
@@ -191,8 +191,8 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.anyString()
         )).thenReturn(Optional.of(createStepEntry(1L)));
 
-        Employee empl = createEmployee();
-        StepEntry stepEntry = stepEntryService.findStepEntryForEmployeeAtStep(2L, empl, "", empl.releaseDate());
+        Employee employee = createEmployee();
+        StepEntry stepEntry = stepEntryService.findStepEntryForEmployeeAtStep(2L, employee, "", employee.getReleaseDate());
         assertThat(stepEntry).isNotNull();
         assertThat(stepEntry.getId()).isEqualTo(1L);
         assertThat(stepEntry.getProject()).isEqualTo("Liwest-EMS");
@@ -210,8 +210,8 @@ class StepEntryServiceImplTest {
         assertAll(
                 () -> assertThat(projectEmployees).isNotNull(),
                 () -> assertThat(projectEmployees).hasSize(1),
-                () -> assertThat(projectEmployees.get(0).projectId()).isEqualTo("Liwest-EMS"),
-                () -> assertThat(projectEmployees.get(0).employees()).containsExactlyInAnyOrder("008", "010", "012", "020")
+                () -> assertThat(projectEmployees.get(0).getProjectId()).isEqualTo("Liwest-EMS"),
+                () -> assertThat(projectEmployees.get(0).getEmployees()).containsExactlyInAnyOrder("008", "010", "012", "020")
         );
     }
 

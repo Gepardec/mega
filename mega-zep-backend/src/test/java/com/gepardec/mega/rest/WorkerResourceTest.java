@@ -9,8 +9,9 @@ import com.gepardec.mega.domain.model.UserContext;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
-import com.gepardec.mega.service.api.employee.EmployeeService;
-import com.gepardec.mega.service.api.monthlyreport.MonthlyReportService;
+import com.gepardec.mega.rest.model.MonthlyReportDto;
+import com.gepardec.mega.service.api.EmployeeService;
+import com.gepardec.mega.service.api.MonthlyReportService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.http.ContentType;
@@ -50,7 +51,7 @@ public class WorkerResourceTest {
     @Test
     void monthlyReport_whenUserNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         given().get("/worker/monthendreports")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
@@ -59,8 +60,8 @@ public class WorkerResourceTest {
     @Test
     void employeeMonthendReport_withReport_returnsReport() {
         User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.email()).thenReturn(user.email());
-        when(userContext.user()).thenReturn(user);
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
+        when(userContext.getUser()).thenReturn(user);
 
         Employee employee = createEmployeeForUser(user);
         when(employeeService.getEmployee(anyString())).thenReturn(employee);
@@ -92,27 +93,27 @@ public class WorkerResourceTest {
 
         when(monthlyReportService.getMonthendReportForUser(anyString())).thenReturn(expected);
 
-        MonthlyReport actual = given().contentType(ContentType.JSON)
+        MonthlyReportDto actual = given().contentType(ContentType.JSON)
                 .get("/worker/monthendreports")
-                .as(MonthlyReport.class);
+                .as(MonthlyReportDto.class);
 
-        assertThat(actual.employee()).isEqualTo(employee);
-        assertThat(timeWarnings).isEqualTo(actual.timeWarnings());
-        assertThat(journeyWarnings).isEqualTo(actual.journeyWarnings());
-        assertThat(billableTime).isEqualTo(actual.billableTime());
-        assertThat(totalWorkingTime).isEqualTo(actual.totalWorkingTime());
-        assertThat(vacationDays).isEqualTo(actual.vacationDays());
-        assertThat(homeofficeDays).isEqualTo(actual.homeofficeDays());
-        assertThat(compensatoryDays).isEqualTo(actual.compensatoryDays());
+        assertThat(actual.getEmployee()).isEqualTo(employee);
+        assertThat(timeWarnings).isEqualTo(actual.getTimeWarnings());
+        assertThat(journeyWarnings).isEqualTo(actual.getJourneyWarnings());
+        assertThat(billableTime).isEqualTo(actual.getBillableTime());
+        assertThat(totalWorkingTime).isEqualTo(actual.getTotalWorkingTime());
+        assertThat(vacationDays).isEqualTo(actual.getVacationDays());
+        assertThat(homeofficeDays).isEqualTo(actual.getHomeofficeDays());
+        assertThat(compensatoryDays).isEqualTo(actual.getCompensatoryDays());
     }
 
     private Employee createEmployeeForUser(final User user) {
         return Employee.builder()
-                .email(user.email())
-                .firstname(user.firstname())
-                .lastname(user.lastname())
+                .email(user.getEmail())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
                 .title("Ing.")
-                .userId(user.userId())
+                .userId(user.getUserId())
                 .releaseDate("2020-01-01")
                 .active(true)
                 .build();

@@ -1,70 +1,46 @@
 package com.gepardec.mega.domain.model.monthlyreport;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gepardec.mega.db.entity.employee.EmployeeState;
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.rest.model.PmProgress;
+import com.gepardec.mega.rest.model.PmProgressDto;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
-import lombok.extern.jackson.Jacksonized;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 @Builder
 @Getter
-@ToString
-@EqualsAndHashCode
-@Accessors(fluent = true)
-@JsonIgnoreProperties(ignoreUnknown = true)
-@Jacksonized
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MonthlyReport {
-    @Nullable
-    @JsonProperty
-    private final Employee employee;
+    private Employee employee;
 
-    @Nullable
-    @JsonProperty
-    private final List<TimeWarning> timeWarnings;
+    private List<TimeWarning> timeWarnings;
 
-    @Nullable
-    @JsonProperty
-    private final List<JourneyWarning> journeyWarnings;
+    private List<JourneyWarning> journeyWarnings;
 
-    @Nullable
-    @JsonProperty
-    private final List<Comment> comments;
+    private List<Comment> comments;
 
-    @Nullable
-    @JsonProperty
-    private final EmployeeState employeeCheckState;
+    private EmployeeState employeeCheckState;
 
-    @JsonProperty
-    private final boolean isAssigned;
+    private boolean isAssigned;
 
-    @JsonProperty
-    private final List<PmProgress> employeeProgresses;
+    private List<PmProgressDto> employeeProgresses;
 
-    @JsonProperty
-    private final boolean otherChecksDone;
+    private boolean otherChecksDone;
 
-    @JsonProperty
-    private final int vacationDays;
+    private int vacationDays;
 
-    @JsonProperty
-    private final int homeofficeDays;
+    private int homeofficeDays;
 
-    @JsonProperty
-    private final int compensatoryDays;
+    private int compensatoryDays;
 
-    @JsonProperty
-    private final String billableTime;
+    private String billableTime;
 
-    @JsonProperty
-    private final String totalWorkingTime;
+    private String totalWorkingTime;
 }
