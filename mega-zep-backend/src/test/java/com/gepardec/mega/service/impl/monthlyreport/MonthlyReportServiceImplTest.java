@@ -8,12 +8,12 @@ import com.gepardec.mega.domain.model.monthlyreport.Task;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarningType;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
-import com.gepardec.mega.service.impl.MonthlyReportServiceImpl;
 import com.gepardec.mega.service.helper.WarningCalculator;
+import com.gepardec.mega.service.impl.MonthlyReportServiceImpl;
 import com.gepardec.mega.zep.ZepService;
+import de.provantis.zep.FehlzeitType;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
@@ -39,17 +39,6 @@ class MonthlyReportServiceImplTest {
 
     @Inject
     MonthlyReportServiceImpl monthlyReportService;
-
-    @Test
-    @Disabled
-        // FIXME ask andreas for purpose
-    void testGetMonthendReportForUser_MitarbeiterNull() {
-        when(zepService.getEmployee(Mockito.any())).thenReturn(null);
-        when(warningCalculator.determineNoTimeEntries(Mockito.anyList(), Mockito.anyList())).thenReturn(new ArrayList<>());
-
-        assertThat(monthlyReportService.getMonthendReportForUser("0"))
-                .isNotNull();
-    }
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid() {
@@ -114,6 +103,34 @@ class MonthlyReportServiceImplTest {
                 .isEqualTo(1d);
         assertThat(monthendReportForUser.getTimeWarnings().get(0).getMissingBreakTime())
                 .isEqualTo(0.5d);
+    }
+
+    @Test
+    void getMonthendReportForUser_isUserIsValidAndHasNursingAbsenceDays_thenReturnsReportWithCorrectNursingDays() {
+        final Employee employee = createEmployee(0);
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjektzeitenResponseType(18));
+        List<FehlzeitType> absenceList = new ArrayList<>();
+        FehlzeitType nursingDay = new FehlzeitType();
+        nursingDay.setFehlgrund("PU");
+        nursingDay.setGenehmigt(true);
+        nursingDay.setEnddatum(LocalDate.of(2020, 2, 29).toString());
+        nursingDay.setStartdatum(LocalDate.of(2020, 2, 27).toString());
+        absenceList.add(nursingDay);
+        when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(absenceList);
+        when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(new ArrayList<>());
+
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
+
+        assertThat(monthendReportForUser)
+                .isNotNull();
+        assertThat(monthendReportForUser.getEmployee().getEmail())
+                .isEqualTo("Max_0@gepardec.com");
+        assertThat(monthendReportForUser.getTimeWarnings())
+                .isNotNull();
+        assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()).isEmpty())
+                .isTrue();
+        assertThat(monthendReportForUser.getNursingDays()).isEqualTo(2);
     }
 
     private List<TimeWarning> createTimeWarningList() {

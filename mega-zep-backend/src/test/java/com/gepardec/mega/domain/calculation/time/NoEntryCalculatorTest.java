@@ -90,6 +90,13 @@ class NoEntryCalculatorTest {
         assertThat(result).isEmpty();
     }
 
+    @Test
+    void calculate_whenNursingDays_thenReturnsNoWarning() {
+        List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryListForNovember(), createAbsenceListFromPUType());
+
+        assertThat(result).isEmpty();
+    }
+
     private List<FehlzeitType> createAbsenceListFromUBType() {
         List<FehlzeitType> fehlzeiten = new ArrayList<>();
         FehlzeitType fehlzeitType = new FehlzeitType();
@@ -124,6 +131,19 @@ class NoEntryCalculatorTest {
         fehlzeitType.setStartdatum(startDate);
         fehlzeitType.setEnddatum(endDate);
         fehlzeitType.setFehlgrund(AbsenteeType.SICKNESS_DAYS.getType());
+        fehlzeiten.add(fehlzeitType);
+
+        return fehlzeiten;
+    }
+
+    private List<FehlzeitType> createAbsenceListFromPUType() {
+        List<FehlzeitType> fehlzeiten = new ArrayList<>();
+        FehlzeitType fehlzeitType = new FehlzeitType();
+        String startDate = LocalDate.of(2021, 2, 25).toString();
+        String endDate = LocalDate.of(2021, 2, 26).toString();
+        fehlzeitType.setStartdatum(startDate);
+        fehlzeitType.setEnddatum(endDate);
+        fehlzeitType.setFehlgrund(AbsenteeType.NURSING_DAYS.getType());
         fehlzeiten.add(fehlzeitType);
 
         return fehlzeiten;
