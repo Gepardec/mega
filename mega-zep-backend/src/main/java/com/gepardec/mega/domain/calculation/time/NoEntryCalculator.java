@@ -32,6 +32,7 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
         List<LocalDate> compensatoryDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.COMPENSATORY_DAYS.getType(), absenceEntries);
         List<LocalDate> vacationDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.VACATION_DAYS.getType(), absenceEntries);
         List<LocalDate> sicknessDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.SICKNESS_DAYS.getType(), absenceEntries);
+        List<LocalDate> nursingDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.NURSING_DAYS.getType(), absenceEntries);
         List<LocalDate> bookedDays = projectEntries.stream()
                 .map(ProjectEntry::getDate)
                 .collect(Collectors.toList());
@@ -41,6 +42,7 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
                 .filter(date -> !vacationDays.contains(date))
                 .filter(date -> !sicknessDays.contains(date))
                 .filter(date -> !bookedDays.contains(date))
+                .filter(date -> !nursingDays.contains(date))
                 .map(this::createTimeWarning)
                 .distinct()
                 .collect(Collectors.toList());
