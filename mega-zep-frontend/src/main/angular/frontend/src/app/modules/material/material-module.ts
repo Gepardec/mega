@@ -21,7 +21,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSelectModule} from '@angular/material/select';
 import {MatExpansionModule} from '@angular/material/expansion';
-import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
+import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({

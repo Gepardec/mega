@@ -8,8 +8,8 @@ import {TranslateService} from '@ngx-translate/core';
 import {configuration} from '../../constants/configuration';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {map} from 'rxjs/operators';
-import {ConfigService} from "../../services/config/config.service";
-import {Config} from "../../models/Config";
+import {ConfigService} from '../../services/config/config.service';
+import {Config} from '../../models/Config';
 
 @Component({
   selector: 'app-header',
@@ -25,11 +25,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   user: User;
   zepUrl: string;
-
-  private userSubscription: Subscription;
-
   isHandset: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(map(result => result.matches));
+  private userSubscription: Subscription;
 
   constructor(private rolesService: RolesService,
               private userService: UserService,

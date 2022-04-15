@@ -3,12 +3,12 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {TimeCheckComponent} from './time-check.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {AngularMaterialModule} from '../../../material/material-module';
-import {TimeWarning} from "../../models/TimeWarning";
-import {configuration} from "../../../shared/constants/configuration";
+import {TimeWarning} from '../../models/TimeWarning';
+import {configuration} from '../../../shared/constants/configuration';
 
 import * as _moment from 'moment';
-import {expect} from "@angular/flex-layout/_private-utils/testing";
-import {EmployeeCheckComponent} from "../employee-check/employee-check.component";
+import {expect} from '@angular/flex-layout/_private-utils/testing';
+import {EmployeeCheckComponent} from '../employee-check/employee-check.component';
 
 const moment = _moment;
 
@@ -67,7 +67,7 @@ describe('TimeCheckComponent', () => {
       date: moment().format(configuration.dateFormat),
       excessWorkTime: 12,
       missingBreakTime: 1,
-      warnings: ["hey", "you", "do", "something"],
+      warnings: ['hey', 'you', 'do', 'something'],
       missingRestTime: 2
     }
   }

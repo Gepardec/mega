@@ -18,12 +18,12 @@
         <mat-hint align="end">{{newMessage.value.length}} / {{MAXIMUM_LETTERS}}</mat-hint>
       </mat-form-field>
 
-      <span matTooltip="{{'comments-for-employee.characterRangeTooltip' | translate}}"
-            [matTooltipDisabled]="!(newMessage?.value?.length == 0 || newMessage?.value?.length > MAXIMUM_LETTERS)"
-            [matTooltipPosition]="'right'">
+      <span [matTooltipDisabled]="!(newMessage?.value?.length === 0 || newMessage?.value?.length > MAXIMUM_LETTERS)"
+            [matTooltipPosition]="'right'"
+            matTooltip="{{'comments-for-employee.characterRangeTooltip' | translate}}">
         <button
-          [disabled]="newMessage?.value?.length == 0 || newMessage?.value?.length > MAXIMUM_LETTERS"
           (click)="createCommentForEmployee(newMessage.value);newMessage.value = ''"
+          [disabled]="newMessage?.value?.length === 0 || newMessage?.value?.length > MAXIMUM_LETTERS"
           mat-raised-button>
           {{'comments-for-employee.addCommentBtn' | translate}}
         </button>
@@ -32,12 +32,13 @@
     <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table">
 
       <tr class="mat-header-row">
-        <th class="mat-header-cell text-center">{{'comments-for-employee.table.lastChanged' | translate}}</th>
-        <th class="mat-header-cell text-center">{{'comments-for-employee.table.author' | translate}}</th>
-        <th class="mat-header-cell text-center">{{'comments-for-employee.table.done' | translate}}</th>
-        <th class="mat-header-cell">{{'comments-for-employee.table.comment' | translate}}</th>
-        <th class="mat-header-cell">{{'comments-for-employee.table.edit' | translate}}</th>
-        <th class="mat-header-cell">{{'comments-for-employee.table.delete' | translate}}</th>
+        <th class="mat-header-cell text-center"
+            scope="col">{{'comments-for-employee.table.lastChanged' | translate}}</th>
+        <th class="mat-header-cell text-center" scope="col">{{'comments-for-employee.table.author' | translate}}</th>
+        <th class="mat-header-cell text-center" scope="col">{{'comments-for-employee.table.done' | translate}}</th>
+        <th class="mat-header-cell" scope="col">{{'comments-for-employee.table.comment' | translate}}</th>
+        <th class="mat-header-cell" scope="col">{{'comments-for-employee.table.edit' | translate}}</th>
+        <th class="mat-header-cell" scope="col">{{'comments-for-employee.table.delete' | translate}}</th>
       </tr>
 
       <tr *ngFor="let comment of comments" class="mat-row">
@@ -76,22 +77,26 @@
         <td class="mat-cell">
           <ng-container *ngIf="comment.isEditing">
             <button
-              [disabled]="editMessageInput.value.length == 0 || editMessageInput.value.length > MAXIMUM_LETTERS"
               (click)="comment.message = editMessageInput.value; toggleIsEditing(comment); updateCommentForEmployee(comment);"
+              [disabled]="editMessageInput.value.length === 0 || editMessageInput.value.length > MAXIMUM_LETTERS"
+              aria-label="done"
               mat-icon-button>
               <mat-icon>done</mat-icon>
             </button>
-            <button (click)="editMessageInput.value = comment.message; toggleIsEditing(comment);" mat-icon-button>
+            <button (click)="editMessageInput.value = comment.message; toggleIsEditing(comment);" aria-label="clear"
+                    mat-icon-button>
               <mat-icon>clear</mat-icon>
             </button>
           </ng-container>
-          <button (click)="toggleIsEditing(comment)" *ngIf="editCommentBtnVisible(comment)" mat-icon-button>
+          <button (click)="toggleIsEditing(comment)" *ngIf="editCommentBtnVisible(comment)" aria-label="edit"
+                  mat-icon-button>
             <mat-icon>edit</mat-icon>
           </button>
         </td>
 
         <td class="mat-cell">
-          <button (click)="deleteCommentOfEmployee(comment)" *ngIf="editCommentBtnVisible(comment)" mat-icon-button>
+          <button (click)="deleteCommentOfEmployee(comment)" *ngIf="editCommentBtnVisible(comment)" aria-label="delete"
+                  mat-icon-button>
             <mat-icon>delete</mat-icon>
           </button>
         </td>

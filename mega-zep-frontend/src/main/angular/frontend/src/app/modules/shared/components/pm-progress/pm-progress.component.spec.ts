@@ -1,17 +1,17 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {PmProgressComponent} from './pm-progress.component';
-import {AngularMaterialModule} from "../../../material/material-module";
-import {TranslateModule} from "@ngx-translate/core";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {SharedModule} from "../../shared.module";
-import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {RouterTestingModule} from "@angular/router/testing";
-import {MatDialogRef} from "@angular/material/dialog";
-import {MAT_BOTTOM_SHEET_DATA} from "@angular/material/bottom-sheet";
-import {PmProgress} from "../../../monthly-report/models/PmProgress";
-import {State} from "../../models/State";
-import {expect} from "@angular/flex-layout/_private-utils/testing";
+import {AngularMaterialModule} from '../../../material/material-module';
+import {TranslateModule} from '@ngx-translate/core';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {SharedModule} from '../../shared.module';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {MatDialogRef} from '@angular/material/dialog';
+import {MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
+import {PmProgress} from '../../../monthly-report/models/PmProgress';
+import {State} from '../../models/State';
+import {expect} from '@angular/flex-layout/_private-utils/testing';
 
 describe('PmProgressComponent', () => {
 

@@ -13,7 +13,7 @@ export class ProjectManagementService {
   }
 
   getEntries(year: number, month: number, all: boolean): Observable<Array<ProjectManagementEntry>> {
-    const params: HttpParams = new HttpParams().append("all", `${all}`);
+    const params: HttpParams = new HttpParams().append('all', `${all}`);
 
     return this.httpClient.get<Array<ProjectManagementEntry>>(
       this.configService.getBackendUrlWithContext('/management/projectmanagemententries/' + year + '/' + month),

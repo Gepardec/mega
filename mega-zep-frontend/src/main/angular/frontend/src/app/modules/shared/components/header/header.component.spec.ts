@@ -2,16 +2,16 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {HeaderComponent} from './header.component';
 import {AppModule} from '../../../../app.module';
-import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {RolesService} from "../../services/roles/roles.service";
-import {UserService} from "../../services/user/user.service";
-import {TranslateService} from "@ngx-translate/core";
-import {BreakpointObserver} from "@angular/cdk/layout";
-import {ConfigService} from "../../services/config/config.service";
-import {expect} from "@angular/flex-layout/_private-utils/testing";
-import {of, Subscription} from "rxjs";
-import {Config} from "../../models/Config";
-import {Link} from "../../models/Link";
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {RolesService} from '../../services/roles/roles.service';
+import {UserService} from '../../services/user/user.service';
+import {TranslateService} from '@ngx-translate/core';
+import {BreakpointObserver} from '@angular/cdk/layout';
+import {ConfigService} from '../../services/config/config.service';
+import {expect} from '@angular/flex-layout/_private-utils/testing';
+import {of, Subscription} from 'rxjs';
+import {Config} from '../../models/Config';
+import {Link} from '../../models/Link';
 
 describe('HeaderComponent', () => {
 
@@ -119,8 +119,8 @@ describe('HeaderComponent', () => {
 
     static getLink(): Link {
       return {
-        name: "name",
-        path: "localhost:8080"
+        name: 'name',
+        path: 'localhost:8080'
       }
     }
   }

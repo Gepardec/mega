@@ -4,14 +4,14 @@ import {DisplayMonthlyReportComponent} from './display-monthly-report.component'
 import {State} from '../../../shared/models/State';
 import {TranslateModule} from '@ngx-translate/core';
 import {AngularMaterialModule} from '../../../material/material-module';
-import {SharedModule} from "../../../shared/shared.module";
-import {expect} from "@angular/flex-layout/_private-utils/testing";
+import {SharedModule} from '../../../shared/shared.module';
+import {expect} from '@angular/flex-layout/_private-utils/testing';
 
 import * as _moment from 'moment';
-import {MonthlyReportService} from "../../services/monthly-report.service";
-import {MonthlyReportModule} from "../../monthly-report.module";
-import {RouterTestingModule} from "@angular/router/testing";
-import {OAuthModule} from "angular-oauth2-oidc";
+import {MonthlyReportService} from '../../services/monthly-report.service';
+import {MonthlyReportModule} from '../../monthly-report.module';
+import {RouterTestingModule} from '@angular/router/testing';
+import {OAuthModule} from 'angular-oauth2-oidc';
 
 const moment = _moment;
 

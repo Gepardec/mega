@@ -1,17 +1,17 @@
-<mat-card *ngIf="pmEntries" style="margin-top: 10px" class="mat-elevation-z6">
+<mat-card *ngIf="pmEntries" class="mat-elevation-z6" style="margin-top: 10px">
   <mat-card-header>
     <mat-card-title>{{'office-management.projects' | translate}}</mat-card-title>
   </mat-card-header>
   <mat-card-content fxFlexAlign="center" fxFlexFill fxLayout="column" fxLayoutGap="10px">
     <div class="mat-elevation-z10 table-container">
-      <mat-table *ngIf="pmEntries.length > 0; else noProjectsFound" style="width: 100%;"
-                 [dataSource]="pmEntries">
+      <mat-table *ngIf="pmEntries.length > 0; else noProjectsFound" [dataSource]="pmEntries"
+                 style="width: 100%;">
 
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef>{{'project-management.projectName' | translate}}</mat-header-cell>
           <mat-cell *matCellDef="let pmEntry" class="font-weight-bold">
             <span class="mobile-label">{{'project-management.projectName' | translate}}</span>
-            <b>{{pmEntry.projectName}}</b>
+            <strong>{{pmEntry.projectName}}</strong>
           </mat-cell>
         </ng-container>
 
@@ -35,9 +35,9 @@
           </mat-header-cell>
           <mat-cell *matCellDef="let pmEntry" class="text-center">
             <span class="mobile-label">{{'project-management.projectTimeState' | translate}}</span>
-            <app-state-indicator [state]="pmEntry.controlProjectState"
+            <app-state-indicator [matTooltipShowDelay]="tooltipShowDelay"
                                  [matTooltip]="getTooltipText(pmEntry.controlProjectState)"
-                                 [matTooltipShowDelay]="tooltipShowDelay"></app-state-indicator>
+                                 [state]="pmEntry.controlProjectState"></app-state-indicator>
           </mat-cell>
         </ng-container>
 
@@ -52,9 +52,9 @@
           </mat-header-cell>
           <mat-cell *matCellDef="let pmEntry" class="text-center">
             <span class="mobile-label">{{'project-management.billingState' | translate}}</span>
-            <app-state-indicator [state]="pmEntry.controlBillingState"
+            <app-state-indicator [matTooltipShowDelay]="tooltipShowDelay"
                                  [matTooltip]="getTooltipText(pmEntry.controlBillingState)"
-                                 [matTooltipShowDelay]="tooltipShowDelay"></app-state-indicator>
+                                 [state]="pmEntry.controlBillingState"></app-state-indicator>
           </mat-cell>
         </ng-container>
 
@@ -63,21 +63,22 @@
             {{'comments-for-employee.table.comment' | translate}}</mat-header-cell>
           <mat-cell *matCellDef="let pmEntry">
             <span class="mobile-label">{{'comments-for-employee.table.comment' | translate}}</span>
-            <p *ngIf="pmEntry.projectComment?.comment && forProjectName !== pmEntry.projectName"
-               (click)="onStartEditing(pmEntry.projectName)"
+            <p (click)="onStartEditing(pmEntry.projectName)"
+               *ngIf="pmEntry.projectComment?.comment && forProjectName !== pmEntry.projectName"
                class="action-label"
                style="max-width: 850px">{{ pmEntry.projectComment?.comment }}</p>
-            <button mat-icon-button
-                    matTooltip="{{'global.addComment' | translate}}"
-                    matTooltipShowDelay="1000"
+            <button (click)="onStartEditing(pmEntry.projectName)"
                     *ngIf="!pmEntry.projectComment?.comment && forProjectName !== pmEntry.projectName"
-                    (click)="onStartEditing(pmEntry.projectName)"
-                    class="btn-addComment">
+                    [attr.aria-label]="'global.addComment' | translate"
+                    class="btn-addComment"
+                    mat-icon-button
+                    matTooltip="{{'global.addComment' | translate}}"
+                    matTooltipShowDelay="1000">
               <mat-icon>add</mat-icon>
             </button>
-            <app-inline-text-editor *ngIf="showCommentEditor && forProjectName === pmEntry.projectName"
-                                    [comment]="pmEntry.projectComment?.comment"
-                                    (commentChange)="onCommentChange(pmEntry, $event)"></app-inline-text-editor>
+            <app-inline-text-editor (commentChange)="onCommentChange(pmEntry, $event)"
+                                    *ngIf="showCommentEditor && forProjectName === pmEntry.projectName"
+                                    [comment]="pmEntry.projectComment?.comment"></app-inline-text-editor>
           </mat-cell>
         </ng-container>
 

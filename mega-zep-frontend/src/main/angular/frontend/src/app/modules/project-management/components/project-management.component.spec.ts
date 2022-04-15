@@ -4,33 +4,33 @@ import {ProjectManagementComponent} from './project-management.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {AngularMaterialModule} from '../../material/material-module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {expect} from "@angular/flex-layout/_private-utils/testing";
-import * as _moment from "moment";
-import {ConfigService} from "../../shared/services/config/config.service";
-import {of} from "rxjs";
-import {ProjectManagementService} from "../services/project-management.service";
-import {Employee} from "../../shared/models/Employee";
-import {PmProgress} from "../../monthly-report/models/PmProgress";
-import {State} from "../../shared/models/State";
-import {ManagementEntry} from "../../shared/models/ManagementEntry";
-import {ProjectManagementEntry} from "../models/ProjectManagementEntry";
-import {ProjectState} from "../../shared/models/ProjectState";
-import {SelectionModel} from "@angular/cdk/collections";
-import {CommentService} from "../../shared/services/comment/comment.service";
-import {Comment} from "../../shared/models/Comment";
-import {MatDialog} from "@angular/material/dialog";
-import {RouterTestingModule} from "@angular/router/testing";
-import {OAuthModule} from "angular-oauth2-oidc";
-import {StepentriesService} from "../../shared/services/stepentries/stepentries.service";
-import {MatSelectChange} from "@angular/material/select";
-import {ProjectEntriesService} from "../../shared/services/projectentries/project-entries.service";
-import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
-import {ProjectStateSelectComponent} from "../../shared/components/project-state-select/project-state-select.component";
-import {MatCheckboxChange} from "@angular/material/checkbox";
-import {ProjectCommentService} from "../../shared/services/project-comment/project-comment.service";
-import {ProjectComment} from "../../shared/models/ProjectComment";
-import {configuration} from "../../shared/constants/configuration";
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {expect} from '@angular/flex-layout/_private-utils/testing';
+import * as _moment from 'moment';
+import {ConfigService} from '../../shared/services/config/config.service';
+import {of} from 'rxjs';
+import {ProjectManagementService} from '../services/project-management.service';
+import {Employee} from '../../shared/models/Employee';
+import {PmProgress} from '../../monthly-report/models/PmProgress';
+import {State} from '../../shared/models/State';
+import {ManagementEntry} from '../../shared/models/ManagementEntry';
+import {ProjectManagementEntry} from '../models/ProjectManagementEntry';
+import {ProjectState} from '../../shared/models/ProjectState';
+import {SelectionModel} from '@angular/cdk/collections';
+import {CommentService} from '../../shared/services/comment/comment.service';
+import {Comment} from '../../shared/models/Comment';
+import {MatDialog} from '@angular/material/dialog';
+import {RouterTestingModule} from '@angular/router/testing';
+import {OAuthModule} from 'angular-oauth2-oidc';
+import {StepentriesService} from '../../shared/services/stepentries/stepentries.service';
+import {MatSelectChange} from '@angular/material/select';
+import {ProjectEntriesService} from '../../shared/services/projectentries/project-entries.service';
+import {SnackbarService} from '../../shared/services/snackbar/snackbar.service';
+import {ProjectStateSelectComponent} from '../../shared/components/project-state-select/project-state-select.component';
+import {MatCheckboxChange} from '@angular/material/checkbox';
+import {ProjectCommentService} from '../../shared/services/project-comment/project-comment.service';
+import {ProjectComment} from '../../shared/models/ProjectComment';
+import {configuration} from '../../shared/constants/configuration';
 import {DatepickerMonthYearComponent} from '../../shared/components/datepicker-month-year/datepicker-month-year.component';
 import {ReactiveFormsModule} from '@angular/forms';
 
@@ -407,7 +407,7 @@ describe('ProjectManagementComponent', () => {
         {
           id: 1,
           projectName: ProjectManagementMock.project,
-          comment: "this is a comment",
+          comment: 'this is a comment',
           date: moment().format(DATE_FORMAT)
         }
       ]
@@ -424,7 +424,7 @@ describe('ProjectManagementComponent', () => {
           authorEmail: 'max@gepardec.com',
           authorName: 'max',
           id: 1,
-          message: "text",
+          message: 'text',
           isEditing: false,
           state: State.DONE,
           updateDate: moment.now().toString()
@@ -433,7 +433,7 @@ describe('ProjectManagementComponent', () => {
           authorEmail: 'susi@gepardec.com',
           authorName: 'susi',
           id: 2,
-          message: "text",
+          message: 'text',
           isEditing: false,
           state: State.DONE,
           updateDate: moment.now().toString()
@@ -442,7 +442,7 @@ describe('ProjectManagementComponent', () => {
           authorEmail: 'franz@gepardec.com',
           authorName: 'franz',
           id: 3,
-          message: "text",
+          message: 'text',
           isEditing: false,
           state: State.OPEN,
           updateDate: moment.now().toString()

@@ -2,11 +2,12 @@ import {TestBed} from '@angular/core/testing';
 
 import {OfficeManagementService} from './office-management.service';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {ConfigService} from "../../shared/services/config/config.service";
-import {ManagementEntry} from "../../shared/models/ManagementEntry";
-import {State} from "../../shared/models/State";
-import {Employee} from "../../shared/models/Employee";
-import {PmProgress} from "../../monthly-report/models/PmProgress";
+import {ConfigService} from '../../shared/services/config/config.service';
+import {ManagementEntry} from '../../shared/models/ManagementEntry';
+import {State} from '../../shared/models/State';
+import {Employee} from '../../shared/models/Employee';
+import {PmProgress} from '../../monthly-report/models/PmProgress';
+import {HttpStatusCode} from '@angular/common/http';
 
 describe('OfficeManagementService', () => {
 
@@ -43,27 +44,25 @@ describe('OfficeManagementService', () => {
   it('#updateEmployees - should return response', (done) => {
     officeManagementService.updateEmployees([OfficeManagementMock.employee])
       .subscribe(response => {
-        expect(response.status).toEqual(OfficeManagementMock.responseStatus);
+        expect(response.status).toEqual(HttpStatusCode.Ok);
         done();
       });
 
     const testRequest = httpTestingController.expectOne(
       configService.getBackendUrlWithContext('/employees'));
     testRequest.flush({
-      status: OfficeManagementMock.responseStatus
+      status: HttpStatusCode.Ok
     });
   });
 
   class OfficeManagementMock {
 
-    private static email: string = 'max.muster@gepardec.com';
-    private static firstname: string = 'Max';
-    private static lastname: string = 'Muster';
-
     static year: number = 2021;
     static month: number = 10;
 
-    static responseStatus: number = 200;
+    private static email: string = 'max.muster@gepardec.com';
+    private static firstname: string = 'Max';
+    private static lastname: string = 'Muster';
 
     static employee: Employee = {
       email: OfficeManagementMock.email,
@@ -103,6 +102,5 @@ describe('OfficeManagementService', () => {
         totalComments: 20
       }
     ]
-
   }
 });

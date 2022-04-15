@@ -4,10 +4,11 @@ import {UserService} from './user.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {OAuthService} from 'angular-oauth2-oidc';
-import {ConfigService} from "../config/config.service";
-import {Role} from "../../models/Role";
-import {HttpClient} from "@angular/common/http";
-import {Router} from "@angular/router";
+import {ConfigService} from '../config/config.service';
+import {Role} from '../../models/Role';
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {LocalStorageService} from '../local-storage/local-storage.service';
 
 describe('UserService', () => {
 
@@ -17,6 +18,7 @@ describe('UserService', () => {
   let httpClient: HttpClient;
   let router: Router;
   let oAuthService: OAuthService;
+  let localStorageService: LocalStorageService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -37,6 +39,7 @@ describe('UserService', () => {
     httpClient = TestBed.inject(HttpClient);
     router = TestBed.inject(Router);
     oAuthService = TestBed.inject(OAuthService);
+    localStorageService = TestBed.inject(LocalStorageService);
   });
 
   it('#should be created', () => {
@@ -82,21 +85,21 @@ describe('UserService', () => {
     expect(oAuthService.hasValidAccessToken).toHaveBeenCalledWith();
   });
 
-  it('#setStartpageOverride - should set item in sessionStorage', () => {
+  it('#setStartpageOverride - should set item in localStorage', () => {
     userService.setStartpageOverride(UserMock.startPage);
 
-    expect(sessionStorage.getItem(UserMock.sessionStorageKeyStartpageOverride)).toEqual(UserMock.startPage);
+    expect(localStorageService.getUserStartPage()).toEqual(UserMock.startPage);
   });
 
-  it('#setStartpageOverride - should remove item in sessionStorage', () => {
+  it('#setStartpageOverride - should remove item in localStorage', () => {
     userService.setStartpageOverride(UserMock.startPage);
-    expect(sessionStorage.getItem(UserMock.sessionStorageKeyStartpageOverride)).toEqual(UserMock.startPage);
+    expect(localStorageService.getUserStartPage()).toEqual(UserMock.startPage);
 
     userService.setStartpageOverride(undefined);
-    expect(sessionStorage.getItem(UserMock.sessionStorageKeyStartpageOverride)).not.toBeTruthy();
+    expect(localStorageService.getUserStartPage()).not.toBeTruthy();
   });
 
-  it('#getStartpageOverride - should get item in sessionStorage', () => {
+  it('#getStartpageOverride - should get item in localStorage', () => {
     userService.setStartpageOverride(UserMock.startPage);
     expect(userService.getStartpageOverride()).toEqual(UserMock.startPage);
   });
@@ -115,8 +118,6 @@ describe('UserService', () => {
   class UserMock {
 
     static startPage: string = 'home';
-
-    static sessionStorageKeyStartpageOverride: string = 'MEGA_USER_STARTPAGE';
 
     static get() {
       return {

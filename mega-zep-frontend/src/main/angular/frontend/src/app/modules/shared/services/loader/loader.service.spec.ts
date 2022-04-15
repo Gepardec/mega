@@ -3,7 +3,7 @@ import {TestBed} from '@angular/core/testing';
 import {LoaderService} from './loader.service';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {OverlayModule} from '@angular/cdk/overlay';
-import {AngularMaterialModule} from "../../../material/material-module";
+import {AngularMaterialModule} from '../../../material/material-module';
 
 describe('LoaderService', () => {
 

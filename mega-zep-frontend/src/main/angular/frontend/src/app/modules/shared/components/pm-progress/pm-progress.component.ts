@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {PmProgress} from "../../../monthly-report/models/PmProgress";
-import {State} from "../../models/State";
-import {MAT_BOTTOM_SHEET_DATA} from "@angular/material/bottom-sheet";
+import {PmProgress} from '../../../monthly-report/models/PmProgress';
+import {State} from '../../models/State';
+import {MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 
 class DisplayedEmployees {
   name: string;
@@ -31,7 +31,7 @@ export class PmProgressComponent implements OnInit {
   ngOnInit(): void {
     let map: Map<string, Array<State>> = new Map<string, Array<State>>();
     this.pmProgresses.forEach(pmProgress => {
-      let name = pmProgress.firstname + " " + pmProgress.lastname;
+      let name = pmProgress.firstname + ' ' + pmProgress.lastname;
       if (map.has(name)) {
         map.get(name).push(pmProgress.state);
       } else {

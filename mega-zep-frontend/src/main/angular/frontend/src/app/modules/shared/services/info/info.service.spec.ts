@@ -2,8 +2,8 @@ import {TestBed} from '@angular/core/testing';
 
 import {InfoService} from './info.service';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {ConfigService} from "../config/config.service";
-import {Info} from "../../models/Info";
+import {ConfigService} from '../config/config.service';
+import {Info} from '../../models/Info';
 import * as _moment from 'moment';
 
 const moment = _moment;

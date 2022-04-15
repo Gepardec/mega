@@ -3,20 +3,20 @@ import {ComponentFixture, fakeAsync, flush, TestBed, waitForAsync} from '@angula
 import {EmployeeCheckComponent} from './employee-check.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {AngularMaterialModule} from '../../../material/material-module';
-import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {RouterTestingModule} from "@angular/router/testing";
-import {OAuthModule} from "angular-oauth2-oidc";
-import {Comment} from "../../../shared/models/Comment";
-import {State} from "../../../shared/models/State";
-import * as _moment from "moment";
-import {configuration} from "../../../shared/constants/configuration";
-import {expect} from "@angular/flex-layout/_private-utils/testing";
-import {CommentService} from "../../../shared/services/comment/comment.service";
-import {of} from "rxjs";
-import {MonthlyReport} from "../../models/MonthlyReport";
-import {StepentriesService} from "../../../shared/services/stepentries/stepentries.service";
-import {Employee} from "../../../shared/models/Employee";
-import {MatBottomSheet, MatBottomSheetRef} from "@angular/material/bottom-sheet";
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {OAuthModule} from 'angular-oauth2-oidc';
+import {Comment} from '../../../shared/models/Comment';
+import {State} from '../../../shared/models/State';
+import * as _moment from 'moment';
+import {configuration} from '../../../shared/constants/configuration';
+import {expect} from '@angular/flex-layout/_private-utils/testing';
+import {CommentService} from '../../../shared/services/comment/comment.service';
+import {of} from 'rxjs';
+import {MonthlyReport} from '../../models/MonthlyReport';
+import {StepentriesService} from '../../../shared/services/stepentries/stepentries.service';
+import {Employee} from '../../../shared/models/Employee';
+import {MatBottomSheet} from '@angular/material/bottom-sheet';
 
 const moment = _moment;
 const DATE_FORMAT: string = configuration.dateFormat;
@@ -120,21 +120,21 @@ describe('EmployeeCheckComponent', () => {
       return [
         {
           id: 1,
-          message: "Hello",
+          message: 'Hello',
           state: State.DONE,
-          authorEmail: "max.mustermann@gepardec.com",
+          authorEmail: 'max.mustermann@gepardec.com',
           updateDate: moment().format(DATE_FORMAT),
           isEditing: true,
-          authorName: "Max Mustermann"
+          authorName: 'Max Mustermann'
         },
         {
           id: 1,
-          message: "World",
+          message: 'World',
           state: State.DONE,
-          authorEmail: "max.mustermann@gepardec.com",
+          authorEmail: 'max.mustermann@gepardec.com',
           updateDate: moment().format(DATE_FORMAT),
           isEditing: true,
-          authorName: "Max Mustermann"
+          authorName: 'Max Mustermann'
         }
       ]
     }
@@ -142,7 +142,7 @@ describe('EmployeeCheckComponent', () => {
 
   class EmployeeMock {
     static employee: Employee = {
-      email: "LIW-Microservices",
+      email: 'LIW-Microservices',
       active: true,
       firstname: 'Max',
       lastname: 'Muster',

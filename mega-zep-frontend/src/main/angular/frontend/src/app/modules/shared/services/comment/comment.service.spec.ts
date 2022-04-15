@@ -2,13 +2,13 @@ import {TestBed} from '@angular/core/testing';
 
 import {CommentService} from './comment.service';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {Comment} from "../../models/Comment";
-import {State} from "../../models/State";
+import {Comment} from '../../models/Comment';
+import {State} from '../../models/State';
 import * as _moment from 'moment';
-import {ConfigService} from "../config/config.service";
-import {Employee} from "../../models/Employee";
-import {Step} from "../../models/Step";
-import {configuration} from "../../constants/configuration";
+import {ConfigService} from '../config/config.service';
+import {Employee} from '../../models/Employee';
+import {Step} from '../../models/Step';
+import {configuration} from '../../constants/configuration';
 
 const moment = _moment;
 
@@ -87,7 +87,7 @@ describe('CommentService', () => {
 
   it('#updateComment - should return updated comment', (done) => {
     const updatedComment = CommentsMock.get().find(comment => comment.id === 1);
-    updatedComment.message = "new message";
+    updatedComment.message = 'new message';
 
     commentService.updateComment(updatedComment)
       .subscribe((comment: Comment) => {
@@ -125,7 +125,7 @@ describe('CommentService', () => {
           authorEmail: 'max@gepardec.com',
           authorName: 'max',
           id: 1,
-          message: "text",
+          message: 'text',
           isEditing: false,
           state: State.DONE,
           updateDate: moment.now().toString()
@@ -134,7 +134,7 @@ describe('CommentService', () => {
           authorEmail: 'susi@gepardec.com',
           authorName: 'susi',
           id: 2,
-          message: "text",
+          message: 'text',
           isEditing: false,
           state: State.DONE,
           updateDate: moment.now().toString()
@@ -143,7 +143,7 @@ describe('CommentService', () => {
           authorEmail: 'franz@gepardec.com',
           authorName: 'franz',
           id: 3,
-          message: "text",
+          message: 'text',
           isEditing: false,
           state: State.OPEN,
           updateDate: moment.now().toString()
@@ -156,7 +156,7 @@ describe('CommentService', () => {
         authorEmail: 'fredi@gepardec.com',
         authorName: 'fredi',
         id: 4,
-        message: "text",
+        message: 'text',
         isEditing: false,
         state: State.DONE,
         updateDate: moment.now().toString()

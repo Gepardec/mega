@@ -1,23 +1,23 @@
 import {ComponentFixture, fakeAsync, flush, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {ProjectOverviewCardComponent} from './project-overview-card.component';
-import {TranslateModule, TranslateService} from "@ngx-translate/core";
-import {OfficeManagementModule} from "../../office-management.module";
-import {RouterTestingModule} from "@angular/router/testing";
-import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {ProjectManagementService} from "../../../project-management/services/project-management.service";
-import {ConfigService} from "../../../shared/services/config/config.service";
-import {ProjectCommentService} from "../../../shared/services/project-comment/project-comment.service";
-import {Config} from "../../../shared/models/Config";
-import {of} from "rxjs";
-import {ManagementEntry} from "../../../shared/models/ManagementEntry";
-import {State} from "../../../shared/models/State";
-import {Employee} from "../../../shared/models/Employee";
-import {ProjectManagementEntry} from "../../../project-management/models/ProjectManagementEntry";
-import {ProjectState} from "../../../shared/models/ProjectState";
-import {ProjectComment} from "../../../shared/models/ProjectComment";
-import {expect} from "@angular/flex-layout/_private-utils/testing";
-import {SnackbarService} from "../../../shared/services/snackbar/snackbar.service";
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {OfficeManagementModule} from '../../office-management.module';
+import {RouterTestingModule} from '@angular/router/testing';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {ProjectManagementService} from '../../../project-management/services/project-management.service';
+import {ConfigService} from '../../../shared/services/config/config.service';
+import {ProjectCommentService} from '../../../shared/services/project-comment/project-comment.service';
+import {Config} from '../../../shared/models/Config';
+import {of} from 'rxjs';
+import {ManagementEntry} from '../../../shared/models/ManagementEntry';
+import {State} from '../../../shared/models/State';
+import {Employee} from '../../../shared/models/Employee';
+import {ProjectManagementEntry} from '../../../project-management/models/ProjectManagementEntry';
+import {ProjectState} from '../../../shared/models/ProjectState';
+import {ProjectComment} from '../../../shared/models/ProjectComment';
+import {expect} from '@angular/flex-layout/_private-utils/testing';
+import {SnackbarService} from '../../../shared/services/snackbar/snackbar.service';
 
 describe('ProjectOverviewCardComponent', () => {
 
@@ -181,7 +181,7 @@ describe('ProjectOverviewCardComponent', () => {
 
   class EmployeeMock {
     static employee: Employee = {
-      email: "LIW-Microservices",
+      email: 'LIW-Microservices',
       active: true,
       firstname: 'Max',
       lastname: 'Muster',

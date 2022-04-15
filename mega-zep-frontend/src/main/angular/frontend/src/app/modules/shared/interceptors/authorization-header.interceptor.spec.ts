@@ -3,12 +3,12 @@ import {TestBed, waitForAsync} from '@angular/core/testing';
 import {AuthorizationHeaderInterceptor} from './authorization-header.interceptor';
 import {OAuthStorage} from 'angular-oauth2-oidc';
 import {ConfigService} from '../services/config/config.service';
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {HttpHandler} from "@angular/common/http";
-import {InfoService} from "../services/info/info.service";
-import {Info} from "../models/Info";
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {HttpHandler} from '@angular/common/http';
+import {InfoService} from '../services/info/info.service';
+import {Info} from '../models/Info';
 import * as _moment from 'moment';
-import {expect} from "@angular/flex-layout/_private-utils/testing";
+import {expect} from '@angular/flex-layout/_private-utils/testing';
 
 const moment = _moment;
 

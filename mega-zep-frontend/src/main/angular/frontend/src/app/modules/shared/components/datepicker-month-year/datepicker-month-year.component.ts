@@ -7,7 +7,7 @@ import {MatDatepicker} from '@angular/material/datepicker';
 
 import * as _moment from 'moment';
 import {Moment} from 'moment';
-import {configuration} from "../../constants/configuration";
+import {configuration} from '../../constants/configuration';
 
 const moment = _moment;
 

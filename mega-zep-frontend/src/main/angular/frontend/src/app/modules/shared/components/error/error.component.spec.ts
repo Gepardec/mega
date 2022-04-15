@@ -3,11 +3,11 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {ErrorComponent} from './error.component';
 import {RouterTestingModule} from '@angular/router/testing';
 import {TranslateModule} from '@ngx-translate/core';
-import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {ErrorService} from "../../services/error/error.service";
-import {expect} from "@angular/flex-layout/_private-utils/testing";
-import {Router} from "@angular/router";
-import {AngularMaterialModule} from "../../../material/material-module";
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {ErrorService} from '../../services/error/error.service';
+import {expect} from '@angular/flex-layout/_private-utils/testing';
+import {Router} from '@angular/router';
+import {AngularMaterialModule} from '../../../material/material-module';
 
 describe('ErrorComponent', () => {
 

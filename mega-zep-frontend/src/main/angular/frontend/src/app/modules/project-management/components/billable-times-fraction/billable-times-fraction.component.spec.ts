@@ -3,7 +3,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BillableTimesFractionComponent} from './billable-times-fraction.component';
 import {By} from '@angular/platform-browser';
 import {expect} from '@angular/flex-layout/_private-utils/testing';
-import {AngularMaterialModule} from "../../../material/material-module";
+import {AngularMaterialModule} from '../../../material/material-module';
 
 describe('BillableTimesFractionComponent', () => {
 
@@ -56,7 +56,7 @@ describe('BillableTimesFractionComponent', () => {
   it('#afterInit - should display dollar coin icon on the left side', () => {
     const dollarIcon = fixture.debugElement.query(By.css('.billable'));
     expect(dollarIcon.name).toEqual('mat-icon');
-    expect(dollarIcon.nativeElement.innerHTML).toEqual('monetization_on');
+    expect(dollarIcon.nativeElement.innerHTML.trim()).toEqual('monetization_on');
   });
 
   function billableTimesValue() {

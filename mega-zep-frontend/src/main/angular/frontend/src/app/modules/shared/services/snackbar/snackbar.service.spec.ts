@@ -8,8 +8,8 @@ import {
   MatSnackBarModule,
   MatSnackBarVerticalPosition
 } from '@angular/material/snack-bar';
-import {configuration} from "../../constants/configuration";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {configuration} from '../../constants/configuration';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('SnackbarService', () => {
 

@@ -2,9 +2,9 @@ import {TestBed} from '@angular/core/testing';
 
 import {MonthlyReportService} from './monthly-report.service';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {MonthlyReport} from "../models/MonthlyReport";
-import {Employee} from "../../shared/models/Employee";
-import {ConfigService} from "../../shared/services/config/config.service";
+import {MonthlyReport} from '../models/MonthlyReport';
+import {Employee} from '../../shared/models/Employee';
+import {ConfigService} from '../../shared/services/config/config.service';
 
 describe('MonthlyReportService', () => {
 

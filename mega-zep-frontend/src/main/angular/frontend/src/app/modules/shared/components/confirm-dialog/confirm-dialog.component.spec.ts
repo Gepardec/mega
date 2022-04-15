@@ -3,7 +3,10 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {ConfirmDialogComponent} from './confirm-dialog.component';
 import {AngularMaterialModule} from '../../../material/material-module';
 import {MatDialogRef} from '@angular/material/dialog';
-import {TranslateModule} from "@ngx-translate/core";
+import {TranslateModule} from '@ngx-translate/core';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {OAuthModule} from 'angular-oauth2-oidc';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('ConfirmDialogComponent', () => {
 
@@ -17,7 +20,10 @@ describe('ConfirmDialogComponent', () => {
       ],
       imports: [
         AngularMaterialModule,
-        TranslateModule.forRoot()
+        TranslateModule.forRoot(),
+        HttpClientTestingModule,
+        RouterTestingModule,
+        OAuthModule.forRoot()
       ],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},

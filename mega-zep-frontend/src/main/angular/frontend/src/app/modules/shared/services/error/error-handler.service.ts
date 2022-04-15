@@ -4,14 +4,12 @@ import {ErrorService} from './error.service';
 import {configuration} from '../../constants/configuration';
 import {Router} from '@angular/router';
 import {UserService} from '../user/user.service';
+import {HttpStatusCode} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ErrorHandlerService implements ErrorHandler {
-
-  private readonly HTTP_STATUS_UNAUTHORIZED: number = 401;
-  private readonly HTTP_STATUS_FORBIDDEN: number = 403;
 
   constructor(
     private errorService: ErrorService,
@@ -26,7 +24,7 @@ export class ErrorHandlerService implements ErrorHandler {
     const message = this.errorService.getErrorMessage(error);
     this.loggingService.writeToLog(message, configuration.LogLevel.Debug);
 
-    const logout = error.status === this.HTTP_STATUS_UNAUTHORIZED || error.status === this.HTTP_STATUS_FORBIDDEN;
+    const logout = error.status === HttpStatusCode.Unauthorized || error.status === HttpStatusCode.Forbidden;
 
     this.showErrorPage(message, logout);
   }

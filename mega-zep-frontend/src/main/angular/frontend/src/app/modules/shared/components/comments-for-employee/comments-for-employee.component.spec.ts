@@ -7,18 +7,18 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {OAuthModule} from 'angular-oauth2-oidc';
 import {MatDialogRef} from '@angular/material/dialog';
-import {Comment} from "../../models/Comment";
-import {State} from "../../models/State";
+import {Comment} from '../../models/Comment';
+import {State} from '../../models/State';
 
-import * as _moment from "moment";
-import {UserService} from "../../services/user/user.service";
-import {User} from "../../models/User";
-import {expect} from "@angular/flex-layout/_private-utils/testing";
-import {CommentService} from "../../services/comment/comment.service";
-import {of} from "rxjs";
-import {Employee} from "../../models/Employee";
-import {ElementRef} from "@angular/core";
-import {configuration} from "../../constants/configuration";
+import * as _moment from 'moment';
+import {UserService} from '../../services/user/user.service';
+import {User} from '../../models/User';
+import {expect} from '@angular/flex-layout/_private-utils/testing';
+import {CommentService} from '../../services/comment/comment.service';
+import {of} from 'rxjs';
+import {Employee} from '../../models/Employee';
+import {ElementRef} from '@angular/core';
+import {configuration} from '../../constants/configuration';
 
 const moment = _moment;
 const DATE_FORMAT: string = configuration.dateFormat;
@@ -238,21 +238,21 @@ describe('CommentsForEmployeeComponent', () => {
       return [
         {
           id: 1,
-          message: "Hello",
+          message: 'Hello',
           state: State.OPEN,
-          authorEmail: "max.mustermann@gepardec.com",
+          authorEmail: 'max.mustermann@gepardec.com',
           updateDate: moment().format(DATE_FORMAT),
           isEditing: true,
-          authorName: "Max Mustermann"
+          authorName: 'Max Mustermann'
         },
         {
           id: 1,
-          message: "World",
+          message: 'World',
           state: State.OPEN,
-          authorEmail: "max.mustermann@gepardec.com",
+          authorEmail: 'max.mustermann@gepardec.com',
           updateDate: moment().format(DATE_FORMAT),
           isEditing: true,
-          authorName: "Max Mustermann"
+          authorName: 'Max Mustermann'
         }
       ]
     }
