@@ -58,6 +58,35 @@ describe('ProjectManagementService', () => {
 
     static year: number = 2021;
     static month: number = 10;
+
+    private static email: string = 'max.muster@gepardec.com';
+    private static firstname: string = 'Max';
+    private static lastname: string = 'Muster';
+    private static project: string = 'LIW-Microservices';
+
+    static employeeProgresses: Array<PmProgress> = [
+      {
+        firstname: ProjectManagementMock.firstname,
+        lastname: ProjectManagementMock.lastname,
+        state: State.DONE,
+        assigneeEmail: ProjectManagementMock.email,
+        project: ProjectManagementMock.project,
+        stepId: 1
+      }
+    ];
+
+    static employee: Employee = {
+      email: ProjectManagementMock.email,
+      active: true,
+      firstname: ProjectManagementMock.firstname,
+      lastname: ProjectManagementMock.lastname,
+      releaseDate: '2021-10-01',
+      salutation: 'Herr',
+      title: 'MSc',
+      userId: '011-mmuster',
+      workDescription: 'Software-Engineer'
+    };
+
     static managementEntries: Array<ManagementEntry> = [
       {
         employee: ProjectManagementMock.employee,
@@ -73,31 +102,7 @@ describe('ProjectManagementService', () => {
         totalComments: 20
       }
     ];
-    private static email: string = 'max.muster@gepardec.com';
-    private static firstname: string = 'Max';
-    private static lastname: string = 'Muster';
-    static employee: Employee = {
-      email: ProjectManagementMock.email,
-      active: true,
-      firstname: ProjectManagementMock.firstname,
-      lastname: ProjectManagementMock.lastname,
-      releaseDate: '2021-10-01',
-      salutation: 'Herr',
-      title: 'MSc',
-      userId: '011-mmuster',
-      workDescription: 'Software-Engineer'
-    };
-    private static project: string = 'LIW-Microservices';
-    static employeeProgresses: Array<PmProgress> = [
-      {
-        firstname: ProjectManagementMock.firstname,
-        lastname: ProjectManagementMock.lastname,
-        state: State.DONE,
-        assigneeEmail: ProjectManagementMock.email,
-        project: ProjectManagementMock.project,
-        stepId: 1
-      }
-    ];
+
     static projectManagementEntries: Array<ProjectManagementEntry> = [
       {
         entries: ProjectManagementMock.managementEntries,
