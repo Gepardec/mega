@@ -1,6 +1,6 @@
 import {TestBed, waitForAsync} from '@angular/core/testing';
 import {RolesGuard} from './roles.guard';
-import {RolesService} from "../services/roles/roles.service";
+import {RolesService} from '../services/roles/roles.service';
 
 describe('RolesGuard', () => {
 
@@ -25,7 +25,7 @@ describe('RolesGuard', () => {
   it('#canActivate - should return true', () => {
     spyOn(rolesService, 'isAllowed').and.returnValue(true);
 
-    const canActivate = guard.canActivate(createMockRoute("localhost:4020"), null);
+    const canActivate = guard.canActivate(createMockRoute('localhost:4020'), null);
 
     expect(rolesService.isAllowed).toHaveBeenCalled();
     expect(canActivate).toBeTrue();

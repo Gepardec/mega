@@ -7,10 +7,10 @@ import {UserService} from './modules/shared/services/user/user.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Config} from './modules/shared/models/Config';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {expect} from "@angular/flex-layout/_private-utils/testing";
-import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {NoopAnimationsModule} from "@angular/platform-browser/animations";
-import {NO_ERRORS_SCHEMA} from "@angular/core";
+import {expect} from '@angular/flex-layout/_private-utils/testing';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 
 const LANG_DE = 'de';
 
@@ -56,7 +56,7 @@ describe('AppComponent', () => {
     expect(translateService.get(LANG_DE)).toBeTruthy();
   });
 
-  it("#afterInit - should call authService.configure and should call oAuthService.loadDiscoveryDocumentAndTryLogin", fakeAsync(() => {
+  it('#afterInit - should call authService.configure and should call oAuthService.loadDiscoveryDocumentAndTryLogin', fakeAsync(() => {
     spyOn(authService, 'configure').and.stub();
     spyOn(authService, 'loadDiscoveryDocumentAndTryLogin').and.returnValue(new Promise(() => Promise.resolve()));
 
@@ -67,7 +67,7 @@ describe('AppComponent', () => {
     expect(authService.loadDiscoveryDocumentAndTryLogin).toHaveBeenCalled();
   }));
 
-  it("#onDestroy - should close subscription", async () => {
+  it('#onDestroy - should close subscription', async () => {
     spyOn(authService, 'configure').and.stub();
     spyOn(authService, 'loadDiscoveryDocumentAndTryLogin').and.returnValue(new Promise(() => Promise.resolve()));
 

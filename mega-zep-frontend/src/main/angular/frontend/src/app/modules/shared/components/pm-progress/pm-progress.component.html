@@ -1,11 +1,11 @@
 <table [dataSource]="displayedEmployees" class="mat-elevation-z8" mat-table style="width: 100%">
   <ng-container matColumnDef="email">
-    <th scope="col" *matHeaderCellDef mat-header-cell>Projektleiter</th>
+    <th *matHeaderCellDef mat-header-cell scope="col">Projektleiter</th>
     <td *matCellDef="let element" mat-cell style="padding-right: 20px;"> {{element.name}} </td>
   </ng-container>
 
   <ng-container matColumnDef="checked">
-    <th scope="col" *matHeaderCellDef mat-header-cell>Fertig</th>
+    <th *matHeaderCellDef mat-header-cell scope="col">Fertig</th>
     <td *matCellDef="let element" mat-cell>
       <app-state-indicator [state]="element.state" size="small"></app-state-indicator>
     </td>

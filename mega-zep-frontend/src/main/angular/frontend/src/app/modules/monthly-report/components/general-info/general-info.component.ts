@@ -28,8 +28,8 @@ export class GeneralInfoComponent implements OnInit {
   }
 
   calculateBillingPercentage(totalWorkingTime: string, billableTime: string): number {
-    let spTotalWorkingTime: string[] = totalWorkingTime.split(":");
-    let spBillableTime: string[] = billableTime.split(":");
+    let spTotalWorkingTime: string[] = totalWorkingTime.split(':');
+    let spBillableTime: string[] = billableTime.split(':');
 
     // if split is not possible return 0
     if (spTotalWorkingTime.length <= 1 || spBillableTime.length <= 1) {
@@ -49,7 +49,7 @@ export class GeneralInfoComponent implements OnInit {
 
   month(number: number): string {
     moment.locale('de');
-    return moment().month(number).format("MMMM");
+    return moment().month(number).format('MMMM');
   }
 
   private calculateDynamicValue() {

@@ -1,25 +1,25 @@
 import {ComponentFixture, fakeAsync, flush, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {EnterpriseCardComponent} from './enterprise-card.component';
-import {OfficeManagementModule} from "../../office-management.module";
-import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {expect} from "@angular/flex-layout/_private-utils/testing";
+import {OfficeManagementModule} from '../../office-management.module';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {expect} from '@angular/flex-layout/_private-utils/testing';
 
 import * as _moment from 'moment';
-import {of} from "rxjs";
-import {Config} from "../../../shared/models/Config";
-import {OfficeManagementService} from "../../services/office-management.service";
-import {EnterpriseEntriesService} from "../../services/enterprise-entries/enterprise-entries.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {ConfigService} from "../../../shared/services/config/config.service";
-import {TranslateService} from "@ngx-translate/core";
-import {EnterpriseEntry} from "../../models/EnterpriseEntry";
-import {ProjectState} from "../../../shared/models/ProjectState";
-import {configuration} from "../../../shared/constants/configuration";
-import {MatSelectChange} from "@angular/material/select";
-import {EnterpriseStep} from "../../models/EnterpriseStep";
-import {ProjectStateSelectComponent} from "../../../shared/components/project-state-select/project-state-select.component";
-import {ChangeDetectorRef} from "@angular/core";
+import {of} from 'rxjs';
+import {Config} from '../../../shared/models/Config';
+import {OfficeManagementService} from '../../services/office-management.service';
+import {EnterpriseEntriesService} from '../../services/enterprise-entries/enterprise-entries.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ConfigService} from '../../../shared/services/config/config.service';
+import {TranslateService} from '@ngx-translate/core';
+import {EnterpriseEntry} from '../../models/EnterpriseEntry';
+import {ProjectState} from '../../../shared/models/ProjectState';
+import {configuration} from '../../../shared/constants/configuration';
+import {MatSelectChange} from '@angular/material/select';
+import {EnterpriseStep} from '../../models/EnterpriseStep';
+import {ProjectStateSelectComponent} from '../../../shared/components/project-state-select/project-state-select.component';
+import {ChangeDetectorRef} from '@angular/core';
 
 const moment = _moment;
 

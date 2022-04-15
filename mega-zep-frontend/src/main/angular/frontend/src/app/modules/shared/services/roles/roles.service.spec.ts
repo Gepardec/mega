@@ -9,9 +9,9 @@ import {routes} from '../../../../app-routing.module';
 import {MonthlyReportModule} from '../../../monthly-report/monthly-report.module';
 import {OfficeManagementModule} from '../../../office-management/office-management.module';
 import {ProjectManagementModule} from '../../../project-management/project-management.module';
-import {Router} from "@angular/router";
-import {User} from "../../models/User";
-import {BehaviorSubject} from "rxjs";
+import {Router} from '@angular/router';
+import {User} from '../../models/User';
+import {BehaviorSubject} from 'rxjs';
 
 describe('RolesService', () => {
 

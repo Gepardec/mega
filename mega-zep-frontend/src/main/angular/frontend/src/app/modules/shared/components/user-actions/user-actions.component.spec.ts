@@ -4,14 +4,14 @@ import {UserActionsComponent} from './user-actions.component';
 import {User} from '../../models/User';
 import {OAuthService} from 'angular-oauth2-oidc';
 import {UserInfo} from 'angular-oauth2-oidc/types';
-import {MatDialog} from "@angular/material/dialog";
-import {AngularMaterialModule} from "../../../material/material-module";
-import {TranslateModule} from "@ngx-translate/core";
-import {expect} from "@angular/flex-layout/_private-utils/testing";
-import {By} from "@angular/platform-browser";
-import {MatButton} from "@angular/material/button";
-import {click} from "../../../../testing/click-simulator";
-import {MatMenuItem} from "@angular/material/menu";
+import {MatDialog} from '@angular/material/dialog';
+import {AngularMaterialModule} from '../../../material/material-module';
+import {TranslateModule} from '@ngx-translate/core';
+import {expect} from '@angular/flex-layout/_private-utils/testing';
+import {By} from '@angular/platform-browser';
+import {MatButton} from '@angular/material/button';
+import {click} from '../../../../testing/click-simulator';
+import {MatMenuItem} from '@angular/material/menu';
 
 describe('UserActionsComponent', () => {
 

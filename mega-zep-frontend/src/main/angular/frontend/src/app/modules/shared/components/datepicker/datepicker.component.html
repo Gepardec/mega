@@ -1,5 +1,6 @@
 <mat-form-field appearance="standard" style="font-size: 18px">
-  <input (dateChange)="getDateAndEmitEvent($event)" [matDatepicker]="picker" [max]="today" [value]="selectedDate" disabled
+  <input (dateChange)="getDateAndEmitEvent($event)" [matDatepicker]="picker" [max]="today" [value]="selectedDate"
+         disabled
          matInput>
   <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
   <mat-datepicker #picker disabled="false"></mat-datepicker>

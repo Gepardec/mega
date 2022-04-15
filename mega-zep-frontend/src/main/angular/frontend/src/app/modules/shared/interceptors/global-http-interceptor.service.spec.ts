@@ -5,10 +5,10 @@ import {ErrorHandlerService} from '../services/error/error-handler.service';
 import {ConfigService} from '../services/config/config.service';
 import {UserService} from '../services/user/user.service';
 import {LoaderService} from '../services/loader/loader.service';
-import {InfoService} from "../services/info/info.service";
-import {HttpHandler} from "@angular/common/http";
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {Info} from "../models/Info";
+import {InfoService} from '../services/info/info.service';
+import {HttpHandler} from '@angular/common/http';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {Info} from '../models/Info';
 import * as _moment from 'moment';
 
 const moment = _moment;

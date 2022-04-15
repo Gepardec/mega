@@ -2,12 +2,12 @@ import {TestBed} from '@angular/core/testing';
 
 import {OfficeManagementService} from './office-management.service';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {ConfigService} from "../../shared/services/config/config.service";
-import {ManagementEntry} from "../../shared/models/ManagementEntry";
-import {State} from "../../shared/models/State";
-import {Employee} from "../../shared/models/Employee";
-import {PmProgress} from "../../monthly-report/models/PmProgress";
-import {HttpStatusCode} from "@angular/common/http";
+import {ConfigService} from '../../shared/services/config/config.service';
+import {ManagementEntry} from '../../shared/models/ManagementEntry';
+import {State} from '../../shared/models/State';
+import {Employee} from '../../shared/models/Employee';
+import {PmProgress} from '../../monthly-report/models/PmProgress';
+import {HttpStatusCode} from '@angular/common/http';
 
 describe('OfficeManagementService', () => {
 
@@ -57,12 +57,26 @@ describe('OfficeManagementService', () => {
 
   class OfficeManagementMock {
 
+    static year: number = 2021;
+    static month: number = 10;
+    static managementEntries: Array<ManagementEntry> = [
+      {
+        employee: OfficeManagementMock.employee,
+        internalCheckState: State.DONE,
+        employeeCheckState: State.DONE,
+        projectCheckState: State.DONE,
+        customerCheckState: State.DONE,
+        billableTime: '14',
+        employeeProgresses: OfficeManagementMock.employeeProgresses,
+        entryDate: '2021-10-01',
+        finishedComments: 10,
+        nonBillableTime: '14',
+        totalComments: 20
+      }
+    ]
     private static email: string = 'max.muster@gepardec.com';
     private static firstname: string = 'Max';
     private static lastname: string = 'Muster';
-
-    static year: number = 2021;
-    static month: number = 10;
     static employee: Employee = {
       email: OfficeManagementMock.email,
       active: true,
@@ -82,21 +96,6 @@ describe('OfficeManagementService', () => {
         assigneeEmail: OfficeManagementMock.email,
         project: 'Liw-Microservices',
         stepId: 1
-      }
-    ]
-    static managementEntries: Array<ManagementEntry> = [
-      {
-        employee: OfficeManagementMock.employee,
-        internalCheckState: State.DONE,
-        employeeCheckState: State.DONE,
-        projectCheckState: State.DONE,
-        customerCheckState: State.DONE,
-        billableTime: '14',
-        employeeProgresses: OfficeManagementMock.employeeProgresses,
-        entryDate: '2021-10-01',
-        finishedComments: 10,
-        nonBillableTime: '14',
-        totalComments: 20
       }
     ]
   }

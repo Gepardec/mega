@@ -8,8 +8,8 @@ import {TranslateService} from '@ngx-translate/core';
 import {configuration} from '../../constants/configuration';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {map} from 'rxjs/operators';
-import {ConfigService} from "../../services/config/config.service";
-import {Config} from "../../models/Config";
+import {ConfigService} from '../../services/config/config.service';
+import {Config} from '../../models/Config';
 
 @Component({
   selector: 'app-header',

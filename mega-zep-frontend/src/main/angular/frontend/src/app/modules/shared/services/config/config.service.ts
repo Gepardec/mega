@@ -4,7 +4,7 @@ import {Config} from '../../models/Config';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {tap} from 'rxjs/operators';
-import {LocalStorageService} from "../local-storage/local-storage.service";
+import {LocalStorageService} from '../local-storage/local-storage.service';
 
 @Injectable({
   providedIn: 'root'

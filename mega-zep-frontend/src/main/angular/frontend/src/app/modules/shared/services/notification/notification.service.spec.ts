@@ -3,7 +3,7 @@ import {TestBed} from '@angular/core/testing';
 import {NotificationService} from './notification.service';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {RouterTestingModule} from '@angular/router/testing';
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('NotificationService', () => {
 
@@ -30,7 +30,7 @@ describe('NotificationService', () => {
   it('#showSuccess - should call MatSnackBar::open with success', () => {
     const snackBarSpy = spyOn(snackBar, 'open');
 
-    notificationSerice.showSuccess("message");
+    notificationSerice.showSuccess('message');
 
     expect(snackBarSpy).toHaveBeenCalledWith(NotificationsMock.message, NotificationsMock.actionOk, {duration: 3000});
   });

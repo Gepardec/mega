@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {MonthlyReport} from '../../models/MonthlyReport';
 import {State} from '../../../shared/models/State';
-import {TimeWarning} from "../../models/TimeWarning";
+import {TimeWarning} from '../../models/TimeWarning';
 
 @Component({
   selector: 'app-time-check',
@@ -20,7 +20,7 @@ export class TimeCheckComponent {
     if (timeWarning.warnings == null || timeWarning.warnings.length == 0) {
       return null;
     } else {
-      return timeWarning.warnings.join("<br>");
+      return timeWarning.warnings.join('<br>');
     }
   }
 }

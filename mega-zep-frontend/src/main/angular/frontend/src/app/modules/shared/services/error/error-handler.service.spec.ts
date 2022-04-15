@@ -5,10 +5,10 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {OAuthLogger, OAuthModule, OAuthService, UrlHelperService} from 'angular-oauth2-oidc';
 import {UserService} from '../user/user.service';
 import {LoggingService} from '../logging/logging.service';
-import {ErrorService} from "./error.service";
-import {configuration} from "../../constants/configuration";
-import {Router} from "@angular/router";
-import {HttpStatusCode} from "@angular/common/http";
+import {ErrorService} from './error.service';
+import {configuration} from '../../constants/configuration';
+import {Router} from '@angular/router';
+import {HttpStatusCode} from '@angular/common/http';
 
 describe('ErrorHandlerService', () => {
 

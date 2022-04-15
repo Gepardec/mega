@@ -2,8 +2,8 @@ import {TestBed} from '@angular/core/testing';
 
 import {ConfigService} from './config.service';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {Config} from "../../models/Config";
-import {LocalStorageService} from "../local-storage/local-storage.service";
+import {Config} from '../../models/Config';
+import {LocalStorageService} from '../local-storage/local-storage.service';
 
 describe('ConfigService', () => {
 

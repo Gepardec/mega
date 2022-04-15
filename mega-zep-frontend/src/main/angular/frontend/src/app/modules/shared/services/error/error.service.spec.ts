@@ -1,8 +1,8 @@
 import {TestBed} from '@angular/core/testing';
 
 import {ErrorService} from './error.service';
-import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {HttpErrorResponse} from "@angular/common/http";
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {HttpErrorResponse} from '@angular/common/http';
 
 describe('ErrorService', () => {
 

@@ -3,7 +3,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {JourneyCheckComponent} from './journey-check.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {AngularMaterialModule} from '../../../material/material-module';
-import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('JourneyCheckComponent', () => {
   let component: JourneyCheckComponent;

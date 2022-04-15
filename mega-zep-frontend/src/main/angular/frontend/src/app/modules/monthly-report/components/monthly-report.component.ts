@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {MonthlyReport} from '../models/MonthlyReport';
 import {Subscription} from 'rxjs';
 import {MonthlyReportService} from '../services/monthly-report.service';
-import {GeneralInfoComponent} from "./general-info/general-info.component";
+import {GeneralInfoComponent} from './general-info/general-info.component';
 
 @Component({
   selector: 'app-monthly-report',
@@ -35,7 +35,7 @@ export class MonthlyReportComponent implements OnInit {
     this.monthlyReportSubscription = this.monthlyReportService.getAll().subscribe((monthlyReport: MonthlyReport) => {
       if (monthlyReport) {
         this.monthlyReport = monthlyReport;
-        const splitReleaseDate = this.monthlyReport.employee.releaseDate.split("-");
+        const splitReleaseDate = this.monthlyReport.employee.releaseDate.split('-');
         this.monthlyReportService.selectedYear.next(+splitReleaseDate[0]);
         this.monthlyReportService.selectedMonth.next(+splitReleaseDate[1]);
       }

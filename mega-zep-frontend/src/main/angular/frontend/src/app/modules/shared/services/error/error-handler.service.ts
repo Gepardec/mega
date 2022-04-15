@@ -4,7 +4,7 @@ import {ErrorService} from './error.service';
 import {configuration} from '../../constants/configuration';
 import {Router} from '@angular/router';
 import {UserService} from '../user/user.service';
-import {HttpStatusCode} from "@angular/common/http";
+import {HttpStatusCode} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'

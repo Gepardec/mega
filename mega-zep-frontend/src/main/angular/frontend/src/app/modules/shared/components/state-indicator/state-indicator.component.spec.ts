@@ -2,9 +2,9 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {StateIndicatorComponent} from './state-indicator.component';
 import {AngularMaterialModule} from '../../../material/material-module';
-import {State} from "../../models/State";
-import {By} from "@angular/platform-browser";
-import {expect} from "@angular/flex-layout/_private-utils/testing";
+import {State} from '../../models/State';
+import {By} from '@angular/platform-browser';
+import {expect} from '@angular/flex-layout/_private-utils/testing';
 
 describe('StateIndicatorComponent', () => {
 
@@ -42,7 +42,7 @@ describe('StateIndicatorComponent', () => {
   it('#stateUnknown - should show error icon', () => {
     fixture.detectChanges();
 
-    component.state = "unknown";
+    component.state = 'unknown';
     fixture.detectChanges();
 
     const matIcon = fixture.debugElement.query(By.css('.yellow'));

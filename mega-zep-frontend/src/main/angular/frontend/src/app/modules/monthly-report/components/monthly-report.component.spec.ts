@@ -2,14 +2,14 @@ import {ComponentFixture, fakeAsync, flush, TestBed, waitForAsync} from '@angula
 
 import {MonthlyReportComponent} from './monthly-report.component';
 import {MonthlyReportService} from '../services/monthly-report.service';
-import {MonthlyReport} from "../models/MonthlyReport";
-import {of} from "rxjs";
-import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {Employee} from "../../shared/models/Employee";
-import {TranslateModule} from "@ngx-translate/core";
-import {AngularMaterialModule} from "../../material/material-module";
-import {RouterTestingModule} from "@angular/router/testing";
-import {OAuthModule} from "angular-oauth2-oidc";
+import {MonthlyReport} from '../models/MonthlyReport';
+import {of} from 'rxjs';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {Employee} from '../../shared/models/Employee';
+import {TranslateModule} from '@ngx-translate/core';
+import {AngularMaterialModule} from '../../material/material-module';
+import {RouterTestingModule} from '@angular/router/testing';
+import {OAuthModule} from 'angular-oauth2-oidc';
 import {DisplayMonthlyReportComponent} from './display-monthly-report/display-monthly-report.component';
 import {JourneyCheckComponent} from './journey-check/journey-check.component';
 import {StateIndicatorComponent} from '../../shared/components/state-indicator/state-indicator.component';
@@ -105,7 +105,7 @@ describe('MonthlyReportComponent', () => {
 
   class EmployeeMock {
     static employee: Employee = {
-      email: "LIW-Microservices",
+      email: 'LIW-Microservices',
       active: true,
       firstname: 'Max',
       lastname: 'Muster',
@@ -121,15 +121,15 @@ describe('MonthlyReportComponent', () => {
 
     static monthlyReport: MonthlyReport = {
       vacationDays: 1,
-      totalWorkingTime: "08:00",
+      totalWorkingTime: '08:00',
       timeWarnings: [],
       otherChecksDone: true,
       journeyWarnings: [],
       homeofficeDays: 2,
       employeeProgresses: [],
-      employeeCheckState: "",
+      employeeCheckState: '',
       employee: EmployeeMock.employee,
-      billableTime: "",
+      billableTime: '',
       compensatoryDays: 5,
       comments: [],
       assigned: true

@@ -4,11 +4,11 @@ import {UserService} from './user.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {OAuthService} from 'angular-oauth2-oidc';
-import {ConfigService} from "../config/config.service";
-import {Role} from "../../models/Role";
-import {HttpClient} from "@angular/common/http";
-import {Router} from "@angular/router";
-import {LocalStorageService} from "../local-storage/local-storage.service";
+import {ConfigService} from '../config/config.service';
+import {Role} from '../../models/Role';
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {LocalStorageService} from '../local-storage/local-storage.service';
 
 describe('UserService', () => {
 

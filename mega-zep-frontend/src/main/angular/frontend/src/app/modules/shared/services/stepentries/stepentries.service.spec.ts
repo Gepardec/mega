@@ -1,11 +1,11 @@
 import {TestBed} from '@angular/core/testing';
 
 import {StepentriesService} from './stepentries.service';
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {ConfigService} from "../config/config.service";
-import {Employee} from "../../models/Employee";
-import {Step} from "../../models/Step";
-import {HttpResponse} from "@angular/common/http";
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {ConfigService} from '../config/config.service';
+import {Employee} from '../../models/Employee';
+import {Step} from '../../models/Step';
+import {HttpResponse} from '@angular/common/http';
 
 describe('StepentriesService', () => {
 
