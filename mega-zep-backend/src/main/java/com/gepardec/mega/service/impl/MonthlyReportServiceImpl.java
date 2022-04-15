@@ -38,6 +38,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     public static final String COMPENSATORY_DAYS = "FA";
     public static final String HOME_OFFICE_DAYS = "HO";
     public static final String VACATION_DAYS = "UB";
+    public static final String NURSING_DAYS = "PU";
 
     private LocalDate currentMonthYear;
 
@@ -142,6 +143,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                 .compensatoryDays(getAbsenceTimesForEmployee(absenceEntries, COMPENSATORY_DAYS))
                 .homeofficeDays(getAbsenceTimesForEmployee(absenceEntries, HOME_OFFICE_DAYS))
                 .vacationDays(getAbsenceTimesForEmployee(absenceEntries, VACATION_DAYS))
+                .nursingDays(getAbsenceTimesForEmployee(absenceEntries, NURSING_DAYS))
                 .build();
     }
 
