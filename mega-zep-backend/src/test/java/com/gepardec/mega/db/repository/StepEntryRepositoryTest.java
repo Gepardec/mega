@@ -1,6 +1,5 @@
 package com.gepardec.mega.db.repository;
 
-import com.gepardec.mega.db.entity.employee.Comment;
 import com.gepardec.mega.db.entity.employee.EmployeeState;
 import com.gepardec.mega.db.entity.employee.Step;
 import com.gepardec.mega.db.entity.employee.StepEntry;
@@ -37,90 +36,11 @@ class StepEntryRepositoryTest {
     StepEntryRepository stepEntryRepository;
 
     private StepEntry stepEntry;
-    private Comment comment;
     private User user;
     private Step step;
     private Project project;
 
     private final LocalDateTime localDateTime = LocalDateTime.now();
-
-    private Comment initializeCommentObject() {
-        Comment initComment = new Comment();
-        initComment.setState(EmployeeState.OPEN);
-        initComment.setMessage("Test Message");
-        initComment.setCreationDate(LocalDateTime.of(2021, 1,18, 10, 10));
-        initComment.setUpdatedDate(localDateTime);
-        initComment.setStepEntry(stepEntry);
-
-        return initComment;
-    }
-
-    private Project initializeProjectObject() {
-        Project initProject = new Project();
-        initProject.setName("LIW-Allgemein");
-        initProject.setStartDate(LocalDate.now());
-        initProject.setEndDate(LocalDate.now());
-
-        return initProject;
-    }
-
-    private User initializeUserObject() {
-        User initUser = new User();
-        initUser.setActive(true);
-        initUser.setEmail(EMAIL);
-        initUser.setFirstname("Max");
-        initUser.setLastname("Mustermann");
-        initUser.setLocale(Locale.GERMAN);
-        initUser.setZepId("026-mmuster");
-        initUser.setRoles(Set.of(Role.EMPLOYEE, Role.OFFICE_MANAGEMENT));
-        initUser.setCreationDate(LocalDateTime.of(2021, 1,18, 10, 10));
-        initUser.setUpdatedDate(LocalDateTime.now());
-
-        return initUser;
-    }
-
-    private Step initializeStepObject() {
-        Step initStep = new Step();
-        initStep.setName("TestStep");
-        initStep.setRole(Role.EMPLOYEE);
-        initStep.setOrdinal(1);
-
-        return initStep;
-    }
-
-    private StepEntry initializeStepEntryObject() {
-        StepEntry initStepEntry = new StepEntry();
-        initStepEntry.setCreationDate(localDateTime);
-        initStepEntry.setUpdatedDate(localDateTime);
-        initStepEntry.setDate(LocalDate.now());
-        initStepEntry.setProject(project.getName());
-        initStepEntry.setState(EmployeeState.IN_PROGRESS);
-        initStepEntry.setOwner(user);
-        initStepEntry.setAssignee(user);
-        initStepEntry.setStep(step);
-
-        return initStepEntry;
-    }
-
-    private boolean tearDownStepEntryEntity() {
-        return stepEntryRepository.deleteById(stepEntry.getId());
-    }
-
-    private boolean tearDownStepEntity() {
-        return stepRepository.deleteById(step.getId());
-    }
-
-    private boolean tearDownUserEntity() {
-        return userRepository.deleteById(user.getId());
-    }
-
-    private void initializeSetupObjects() {
-        comment = initializeCommentObject();
-        project = initializeProjectObject();
-        user = initializeUserObject();
-        step = initializeStepObject();
-        stepEntry = initializeStepEntryObject();
-    }
 
     @BeforeEach
     void init() {
@@ -180,8 +100,8 @@ class StepEntryRepositoryTest {
         persistEntities();
         List<StepEntry> result = stepEntryRepository.findAllOwnedStepEntriesInRange(localDateTime.toLocalDate(), localDateTime.toLocalDate(), EMAIL);
         assertAll(
-                () -> assertThat(result).hasSize(1),
-                () -> assertThat(result).contains(stepEntry)
+            () -> assertThat(result).hasSize(1),
+            () -> assertThat(result).contains(stepEntry)
         );
     }
 
@@ -190,7 +110,7 @@ class StepEntryRepositoryTest {
         persistEntities();
         int result = stepEntryRepository.closeAssigned(localDateTime.toLocalDate(), localDateTime.toLocalDate(), EMAIL, stepEntry.getStep().getId());
         assertAll(
-                () -> assertThat(result).isEqualTo(1)
+            () -> assertThat(result).isEqualTo(1)
         );
     }
 
@@ -234,8 +154,8 @@ class StepEntryRepositoryTest {
         persistEntities();
         Optional<StepEntry> result = stepEntryRepository.findStepEntryForEmployeeAtStepInRange(localDateTime.toLocalDate(), localDateTime.toLocalDate(), EMAIL, stepEntry.getStep().getId(), EMAIL);
         assertAll(
-                () -> assertThat(result).isPresent(),
-                () -> assertThat(result).contains(stepEntry)
+            () -> assertThat(result).isPresent(),
+            () -> assertThat(result).contains(stepEntry)
         );
     }
 
@@ -244,15 +164,74 @@ class StepEntryRepositoryTest {
         persistEntities();
         Optional<StepEntry> result = stepEntryRepository.findStepEntryForEmployeeAndProjectAtStepInRange(localDateTime.toLocalDate(), localDateTime.toLocalDate(), EMAIL, stepEntry.getStep().getId(), EMAIL, project.getName());
         assertAll(
-                () -> assertThat(result).isPresent(),
-                () -> assertThat(result).contains(stepEntry)
+            () -> assertThat(result).isPresent(),
+            () -> assertThat(result).contains(stepEntry)
         );
     }
 
-    private void createStepEntryWithPM() {
-        stepRepository.persist(step);
-        step.setRole(Role.OFFICE_MANAGEMENT);
-        userRepository.persistOrUpdate(user);
-        stepEntryRepository.persist(stepEntry);
+    private Project initializeProjectObject() {
+        Project initProject = new Project();
+        initProject.setName("LIW-Allgemein");
+        initProject.setStartDate(LocalDate.now());
+        initProject.setEndDate(LocalDate.now());
+
+        return initProject;
+    }
+
+    private User initializeUserObject() {
+        User initUser = new User();
+        initUser.setActive(true);
+        initUser.setEmail(EMAIL);
+        initUser.setFirstname("Max");
+        initUser.setLastname("Mustermann");
+        initUser.setLocale(Locale.GERMAN);
+        initUser.setZepId("026-mmuster");
+        initUser.setRoles(Set.of(Role.EMPLOYEE, Role.OFFICE_MANAGEMENT));
+        initUser.setCreationDate(LocalDateTime.of(2021, 1, 18, 10, 10));
+        initUser.setUpdatedDate(LocalDateTime.now());
+
+        return initUser;
+    }
+
+    private Step initializeStepObject() {
+        Step initStep = new Step();
+        initStep.setName("TestStep");
+        initStep.setRole(Role.EMPLOYEE);
+        initStep.setOrdinal(1);
+
+        return initStep;
+    }
+
+    private StepEntry initializeStepEntryObject() {
+        StepEntry initStepEntry = new StepEntry();
+        initStepEntry.setCreationDate(localDateTime);
+        initStepEntry.setUpdatedDate(localDateTime);
+        initStepEntry.setDate(LocalDate.now());
+        initStepEntry.setProject(project.getName());
+        initStepEntry.setState(EmployeeState.IN_PROGRESS);
+        initStepEntry.setOwner(user);
+        initStepEntry.setAssignee(user);
+        initStepEntry.setStep(step);
+
+        return initStepEntry;
+    }
+
+    private boolean tearDownStepEntryEntity() {
+        return stepEntryRepository.deleteById(stepEntry.getId());
+    }
+
+    private boolean tearDownStepEntity() {
+        return stepRepository.deleteById(step.getId());
+    }
+
+    private boolean tearDownUserEntity() {
+        return userRepository.deleteById(user.getId());
+    }
+
+    private void initializeSetupObjects() {
+        project = initializeProjectObject();
+        user = initializeUserObject();
+        step = initializeStepObject();
+        stepEntry = initializeStepEntryObject();
     }
 }

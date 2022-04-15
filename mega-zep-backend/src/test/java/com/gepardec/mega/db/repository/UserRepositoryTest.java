@@ -28,21 +28,6 @@ class UserRepositoryTest {
     private User user;
     private User persistedUser;
 
-    private User initializeUserObject() {
-        User initUser = new User();
-        initUser.setActive(true);
-        initUser.setEmail(EMAIL);
-        initUser.setFirstname("Max");
-        initUser.setLastname("Muster");
-        initUser.setLocale(Locale.GERMAN);
-        initUser.setZepId("026-mmuster");
-        initUser.setRoles(Set.of(Role.EMPLOYEE));
-        initUser.setCreationDate(LocalDateTime.of(2021, 1,18, 10, 10));
-        initUser.setUpdatedDate(LocalDateTime.now());
-
-        return initUser;
-    }
-
     @BeforeEach
     void init() {
         user = initializeUserObject();
@@ -59,8 +44,8 @@ class UserRepositoryTest {
         Optional<User> userByEmail = userRepository.findActiveByEmail(persistedUser.getEmail());
 
         assertAll(
-                () -> assertThat(userByEmail).isPresent(),
-                () -> assertThat(userByEmail.get().getEmail()).isEqualTo(EMAIL)
+            () -> assertThat(userByEmail).isPresent(),
+            () -> assertThat(userByEmail.get().getEmail()).isEqualTo(EMAIL)
         );
     }
 
@@ -69,9 +54,9 @@ class UserRepositoryTest {
         List<User> activeUsers = userRepository.findActive();
 
         assertAll(
-                () -> assertThat(activeUsers.get(0)).isNotNull(),
-                () -> assertThat(activeUsers.get(0).getActive()).isTrue(),
-                () -> assertThat(activeUsers.get(0).getEmail()).isEqualTo(EMAIL)
+            () -> assertThat(activeUsers.get(0)).isNotNull(),
+            () -> assertThat(activeUsers.get(0).getActive()).isTrue(),
+            () -> assertThat(activeUsers.get(0).getEmail()).isEqualTo(EMAIL)
         );
     }
 
@@ -86,16 +71,16 @@ class UserRepositoryTest {
         List<User> usersByRoles = userRepository.findByRoles(roles);
 
         assertAll(
-                () -> assertThat(usersByRoles.get(0)).isNotNull(),
-                () -> assertThat(usersByRoles.get(0).getEmail()).isEqualTo(EMAIL)
+            () -> assertThat(usersByRoles.get(0)).isNotNull(),
+            () -> assertThat(usersByRoles.get(0).getEmail()).isEqualTo(EMAIL)
         );
     }
 
     @Test
     void persistOrUpdate() {
         assertAll(
-                () -> assertThat(persistedUser).isNotNull(),
-                () -> assertThat(persistedUser.getEmail()).isEqualTo(EMAIL)
+            () -> assertThat(persistedUser).isNotNull(),
+            () -> assertThat(persistedUser.getEmail()).isEqualTo(EMAIL)
         );
     }
 
@@ -105,9 +90,24 @@ class UserRepositoryTest {
         userRepository.update(user);
 
         assertAll(
-                () -> assertThat(user).isNotNull(),
-                () -> assertThat(user.getActive()).isFalse(),
-                () -> assertThat(user.getEmail()).isEqualTo(EMAIL)
+            () -> assertThat(user).isNotNull(),
+            () -> assertThat(user.getActive()).isFalse(),
+            () -> assertThat(user.getEmail()).isEqualTo(EMAIL)
         );
+    }
+
+    private User initializeUserObject() {
+        User initUser = new User();
+        initUser.setActive(true);
+        initUser.setEmail(EMAIL);
+        initUser.setFirstname("Max");
+        initUser.setLastname("Muster");
+        initUser.setLocale(Locale.GERMAN);
+        initUser.setZepId("026-mmuster");
+        initUser.setRoles(Set.of(Role.EMPLOYEE));
+        initUser.setCreationDate(LocalDateTime.of(2021, 1, 18, 10, 10));
+        initUser.setUpdatedDate(LocalDateTime.now());
+
+        return initUser;
     }
 }

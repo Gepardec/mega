@@ -20,16 +20,6 @@ class StepRepositoryTest {
 
     private Step step;
 
-    private Step initializeStepObject() {
-        Step initStep = new Step();
-        initStep.setName("TestName");
-        initStep.setRole(Role.EMPLOYEE);
-        initStep.setOrdinal(1);
-        initStep.setStepEntries(null);
-
-        return initStep;
-    }
-
     @BeforeEach
     void init() {
         step = initializeStepObject();
@@ -70,4 +60,13 @@ class StepRepositoryTest {
         stepRepository.persist(step);
     }
 
+    private Step initializeStepObject() {
+        Step initStep = new Step();
+        initStep.setName("TestName");
+        initStep.setRole(Role.EMPLOYEE);
+        initStep.setOrdinal(1);
+        initStep.setStepEntries(null);
+
+        return initStep;
+    }
 }

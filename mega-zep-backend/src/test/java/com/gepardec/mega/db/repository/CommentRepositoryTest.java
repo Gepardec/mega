@@ -23,9 +23,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
 class CommentRepositoryTest {
+
     private static final String EMAIL = "max.muster@gepardec.com";
     private final LocalDateTime LOCALDATETIME = LocalDateTime.now();
-    private final LocalDate LOCAL_DATE = LocalDate.now();
 
     @Inject
     CommentRepository commentRepository;
@@ -48,6 +48,93 @@ class CommentRepositoryTest {
     private Step step;
     private User user;
 
+    @BeforeEach
+    void init() {
+        initializeSetupObjects();
+    }
+
+    private void persistEntities() {
+        stepRepository.persist(step);
+        userRepository.persistOrUpdate(user);
+        stepEntryRepository.persist(stepEntry);
+        projectRepository.persist(project);
+        commentRepository.persist(comment);
+    }
+
+    @AfterEach
+    void tearDown() {
+        tearDownCommentEntity();
+        assertThat(tearDownProjectEntity()).isTrue();
+        assertThat(tearDownStepEntryEntity()).isTrue();
+        assertThat(tearDownUserEntity()).isTrue();
+        assertThat(tearDownStepEntity()).isTrue();
+    }
+
+    @Test
+    void findAllComments_whenNoCommentsExist_thenReturnsEmptyList() {
+        persistEntities();
+        commentRepository.deleteAll();
+        assertThat(commentRepository.findAll().list()).isEmpty();
+
+        List<Comment> result = commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(comment.getCreationDate().toLocalDate(), LocalDate.now(), EMAIL);
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void findAllComments_whenCommentExist_thenReturnsListWithCorrectComment() {
+        persistEntities();
+
+        List<Comment> result = commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(comment.getCreationDate().toLocalDate(), LocalDate.now(), EMAIL);
+
+        assertThat(result).hasSize(1);
+    }
+
+    @Test
+    void setStatusDone_whenCommentExists_thenSetsStatusToDone() {
+        persistEntities();
+
+        int result = commentRepository.setStatusDone(comment.getId());
+
+        assertThat(result).isEqualTo(1);
+    }
+
+    @Test
+    void setStatusDone_whenCommentExistsAndHasStatusDone_thenSetsStatusDone() {
+        persistEntities();
+
+        int result = commentRepository.setStatusDone(comment.getId());
+
+        assertThat(result).isEqualTo(1);
+    }
+
+    @Test
+    void update_whenCorrectCommentAndIsChanged_thenUpdatesComment() {
+        persistEntities();
+
+        Comment result = commentRepository.update(comment);
+
+        assertThat(result).isEqualTo(comment);
+    }
+
+    @Test
+    void deleteComment_whenCommentIsPersistedAndDeleteCommentIsCalled_thenDeletesComment() {
+        persistEntities();
+
+        boolean result = commentRepository.deleteComment(comment.getId());
+
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void deleteComment_whenCommentIsntPersisted_thenReturnsFalse() {
+        persistEntities();
+
+        boolean result = commentRepository.deleteComment(comment.getId());
+
+        assertThat(result).isTrue();
+    }
+
     private Project initializeProjectObject() {
         Project initProject = new Project();
         initProject.setName("LIW-Allgemein");
@@ -66,7 +153,7 @@ class CommentRepositoryTest {
         initUser.setLocale(Locale.GERMAN);
         initUser.setZepId("026-mmuster");
         initUser.setRoles(Set.of(Role.EMPLOYEE, Role.OFFICE_MANAGEMENT));
-        initUser.setCreationDate(LocalDateTime.of(2021, 1,18, 10, 10));
+        initUser.setCreationDate(LocalDateTime.of(2021, 1, 18, 10, 10));
         initUser.setUpdatedDate(LocalDateTime.now());
 
         return initUser;
@@ -90,7 +177,7 @@ class CommentRepositoryTest {
         Comment initComment = new Comment();
         initComment.setState(EmployeeState.OPEN);
         initComment.setMessage("Test Message");
-        initComment.setCreationDate(LocalDateTime.of(2021, 1,18, 10, 10));
+        initComment.setCreationDate(LocalDateTime.of(2021, 1, 18, 10, 10));
         initComment.setUpdatedDate(LOCALDATETIME);
         initComment.setStepEntry(stepEntry);
 
@@ -132,88 +219,5 @@ class CommentRepositoryTest {
 
     private boolean tearDownStepEntity() {
         return stepRepository.deleteById(step.getId());
-    }
-
-    @BeforeEach
-    void init() {
-        initializeSetupObjects();
-    }
-
-    private void persistEntities() {
-        stepRepository.persist(step);
-        userRepository.persistOrUpdate(user);
-        stepEntryRepository.persist(stepEntry);
-        projectRepository.persist(project);
-        commentRepository.persist(comment);
-    }
-
-    @AfterEach
-    void tearDown() {
-        tearDownCommentEntity();
-        assertThat(tearDownProjectEntity()).isTrue();
-        assertThat(tearDownStepEntryEntity()).isTrue();
-        assertThat(tearDownUserEntity()).isTrue();
-        assertThat(tearDownStepEntity()).isTrue();
-    }
-
-    @Test
-    void findAllComments_whenNoCommentsExist_thenReturnsEmptyList() {
-        persistEntities();
-        projectRepository.deleteAll();
-        commentRepository.deleteAll();
-        List<Comment> result = commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(comment.getCreationDate().toLocalDate(), LocalDate.now(), EMAIL);
-        assertThat(result).isEmpty();
-        setup();
-    }
-
-    @Test
-    void findAllComments_whenCommentExist_thenReturnsListWithCorrectComment() {
-        persistEntities();
-        List<Comment> result = commentRepository.findAllCommentsBetweenStartDateAndEndDateAndAllOpenCommentsBeforeStartDateForEmail(comment.getCreationDate().toLocalDate(), LocalDate.now(), EMAIL);
-        assertThat(result).hasSize(1);
-    }
-
-    @Test
-    void setStatusDone_whenCommentExists_thenSetsStatusToDone() {
-        persistEntities();
-        int result = commentRepository.setStatusDone(comment.getId());
-        assertThat(result).isEqualTo(1);
-    }
-
-    @Test
-    void setStatusDone_whenCommentExistsAndHasStatusDone_thenSetsStatusDone() {
-        persistEntities();
-        int result = commentRepository.setStatusDone(comment.getId());
-        assertThat(result).isEqualTo(1);
-    }
-
-    @Test
-    void update_whenCorrectCommentAndIsChanged_thenUpdatesComment() {
-        persistEntities();
-        Comment result = commentRepository.update(comment);
-        assertThat(result).isEqualTo(comment);
-    }
-
-    @Test
-    void deleteComment_whenCommentIsPersistedAndDeleteCommentIsCalled_thenDeletesComment() {
-        persistEntities();
-        boolean result = commentRepository.deleteComment(comment.getId());
-        assertThat(result).isTrue();
-    }
-
-    @Test
-    void deleteComment_whenCommentIsntPersisted_thenReturnsFalse() {
-        persistEntities();
-        boolean result = commentRepository.deleteComment(comment.getId());
-        assertThat(result).isTrue();
-    }
-
-    private void setup() {
-        project = new Project();
-        project.setName("LIW-Allgemein");
-        project.setStartDate(LocalDate.now());
-        project.setEndDate(LocalDate.now());
-
-        projectRepository.persist(project);
     }
 }
