@@ -13,7 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
+@Transactional
 public class StepEntryRepository implements PanacheRepository<StepEntry> {
+
+
 
     public Optional<StepEntry> findAllOwnedAndAssignedStepEntriesForEmployee(LocalDate entryDate, String ownerAndAssigneeEmail) {
         return find("#StepEntry.findAllOwnedAndAssignedStepEntriesForEmployee",

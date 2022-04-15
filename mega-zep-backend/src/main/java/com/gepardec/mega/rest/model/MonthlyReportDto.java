@@ -57,6 +57,9 @@ public class MonthlyReportDto {
     private int compensatoryDays;
 
     @JsonProperty
+    private int nursingDays;
+
+    @JsonProperty
     private String billableTime;
 
     @JsonProperty

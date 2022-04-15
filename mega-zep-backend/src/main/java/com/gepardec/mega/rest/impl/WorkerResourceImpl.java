@@ -73,6 +73,7 @@ public class WorkerResourceImpl implements WorkerResource {
                     .compensatoryDays(0)
                     .homeofficeDays(0)
                     .vacationDays(0)
+                    .nursingDays(0)
                     .build();
         }
 

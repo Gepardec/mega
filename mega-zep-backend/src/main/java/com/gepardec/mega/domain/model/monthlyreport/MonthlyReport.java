@@ -40,6 +40,8 @@ public class MonthlyReport {
 
     private int compensatoryDays;
 
+    private int nursingDays;
+
     private String billableTime;
 
     private String totalWorkingTime;

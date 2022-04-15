@@ -72,6 +72,7 @@ public class WorkerResourceTest {
         int vacationDays = 0;
         int homeofficeDays = 0;
         int compensatoryDays = 0;
+        int nursingDays = 0;
         String billableTime = "00:00";
         String totalWorkingTime = "00:00";
 
@@ -89,6 +90,7 @@ public class WorkerResourceTest {
                 .compensatoryDays(compensatoryDays)
                 .homeofficeDays(homeofficeDays)
                 .vacationDays(vacationDays)
+                .nursingDays(nursingDays)
                 .build();
 
         when(monthlyReportService.getMonthendReportForUser(anyString())).thenReturn(expected);
@@ -105,6 +107,7 @@ public class WorkerResourceTest {
         assertThat(vacationDays).isEqualTo(actual.getVacationDays());
         assertThat(homeofficeDays).isEqualTo(actual.getHomeofficeDays());
         assertThat(compensatoryDays).isEqualTo(actual.getCompensatoryDays());
+        assertThat(nursingDays).isEqualTo(actual.getNursingDays());
     }
 
     private Employee createEmployeeForUser(final User user) {
