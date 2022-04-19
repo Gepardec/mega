@@ -73,6 +73,13 @@ public class WorkerResourceTest {
         int homeofficeDays = 0;
         int compensatoryDays = 0;
         int nursingDays = 0;
+        int maternityLeaveDays = 0;
+        int externalTrainingDays = 0;
+        int conferenceDays = 0;
+        int maternityProtectionDays = 0;
+        int fatherMonthDays = 0;
+        int paidSpecialLeaveDays = 0;
+        int nonVacationDays = 0;
         String billableTime = "00:00";
         String totalWorkingTime = "00:00";
 
@@ -91,6 +98,13 @@ public class WorkerResourceTest {
                 .homeofficeDays(homeofficeDays)
                 .vacationDays(vacationDays)
                 .nursingDays(nursingDays)
+                .maternityLeaveDays(maternityLeaveDays)
+                .externalTrainingDays(externalTrainingDays)
+                .conferenceDays(conferenceDays)
+                .maternityProtectionDays(maternityProtectionDays)
+                .fatherMonthDays(fatherMonthDays)
+                .paidSpecialLeaveDays(paidSpecialLeaveDays)
+                .nonPaidVacationDays(nonVacationDays)
                 .build();
 
         when(monthlyReportService.getMonthendReportForUser(anyString())).thenReturn(expected);
@@ -108,6 +122,13 @@ public class WorkerResourceTest {
         assertThat(homeofficeDays).isEqualTo(actual.getHomeofficeDays());
         assertThat(compensatoryDays).isEqualTo(actual.getCompensatoryDays());
         assertThat(nursingDays).isEqualTo(actual.getNursingDays());
+        assertThat(maternityLeaveDays).isEqualTo(actual.getMaternityLeaveDays());
+        assertThat(externalTrainingDays).isEqualTo(actual.getExternalTrainingDays());
+        assertThat(conferenceDays).isEqualTo(actual.getConferenceDays());
+        assertThat(maternityProtectionDays).isEqualTo(actual.getMaternityProtectionDays());
+        assertThat(fatherMonthDays).isEqualTo(actual.getFatherMonthDays());
+        assertThat(paidSpecialLeaveDays).isEqualTo(actual.getPaidSpecialLeaveDays());
+        assertThat(nonVacationDays).isEqualTo(actual.getNonPaidVacationDays());
     }
 
     private Employee createEmployeeForUser(final User user) {

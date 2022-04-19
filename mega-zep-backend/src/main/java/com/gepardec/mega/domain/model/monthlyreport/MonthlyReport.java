@@ -42,6 +42,20 @@ public class MonthlyReport {
 
     private int nursingDays;
 
+    private int maternityLeaveDays;
+
+    private int externalTrainingDays;
+
+    private int conferenceDays;
+
+    private int maternityProtectionDays;
+
+    private int fatherMonthDays;
+
+    private int paidSpecialLeaveDays;
+
+    private int nonPaidVacationDays;
+
     private String billableTime;
 
     private String totalWorkingTime;

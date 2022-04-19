@@ -1,7 +1,6 @@
 package com.gepardec.mega.domain.calculation;
 
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
-import com.gepardec.mega.domain.model.monthlyreport.Task;
 
 import java.time.LocalDate;
 import java.util.Comparator;

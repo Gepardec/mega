@@ -10,12 +10,12 @@ import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntryWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.utils.DateUtils;
+import com.gepardec.mega.notification.mail.dates.OfficeCalendarUtil;
 import com.gepardec.mega.rest.model.PmProgressDto;
 import com.gepardec.mega.service.api.CommentService;
 import com.gepardec.mega.service.api.MonthlyReportService;
 import com.gepardec.mega.service.api.StepEntryService;
 import com.gepardec.mega.service.helper.WarningCalculator;
-import com.gepardec.mega.notification.mail.dates.OfficeCalendarUtil;
 import com.gepardec.mega.zep.ZepService;
 import de.provantis.zep.FehlzeitType;
 import de.provantis.zep.ProjektzeitType;
@@ -39,6 +39,13 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
     public static final String HOME_OFFICE_DAYS = "HO";
     public static final String VACATION_DAYS = "UB";
     public static final String NURSING_DAYS = "PU";
+    public static final String MATERNITY_LEAVE_DAYS = "KA";
+    public static final String EXTERNAL_TRAINING_DAYS = "EW";
+    public static final String CONFERENCE_DAYS = "KO";
+    public static final String MATERNITY_PROTECTION_DAYS = "MU";
+    public static final String FATHER_MONTH_DAYS = "PA";
+    public static final String PAID_SPECIAL_LEAVE_DAYS = "SU";
+    public static final String NON_PAID_VACATION_DAYS = "UU";
 
     private LocalDate currentMonthYear;
 
@@ -144,6 +151,13 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                 .homeofficeDays(getAbsenceTimesForEmployee(absenceEntries, HOME_OFFICE_DAYS))
                 .vacationDays(getAbsenceTimesForEmployee(absenceEntries, VACATION_DAYS))
                 .nursingDays(getAbsenceTimesForEmployee(absenceEntries, NURSING_DAYS))
+                .maternityLeaveDays(getAbsenceTimesForEmployee(absenceEntries, MATERNITY_LEAVE_DAYS))
+                .externalTrainingDays(getAbsenceTimesForEmployee(absenceEntries, EXTERNAL_TRAINING_DAYS))
+                .conferenceDays(getAbsenceTimesForEmployee(absenceEntries, CONFERENCE_DAYS))
+                .maternityProtectionDays(getAbsenceTimesForEmployee(absenceEntries, MATERNITY_PROTECTION_DAYS))
+                .fatherMonthDays(getAbsenceTimesForEmployee(absenceEntries, FATHER_MONTH_DAYS))
+                .paidSpecialLeaveDays(getAbsenceTimesForEmployee(absenceEntries, PAID_SPECIAL_LEAVE_DAYS))
+                .nonPaidVacationDays(getAbsenceTimesForEmployee(absenceEntries, NON_PAID_VACATION_DAYS))
                 .build();
     }
 

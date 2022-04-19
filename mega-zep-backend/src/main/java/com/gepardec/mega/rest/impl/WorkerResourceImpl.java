@@ -74,6 +74,13 @@ public class WorkerResourceImpl implements WorkerResource {
                     .homeofficeDays(0)
                     .vacationDays(0)
                     .nursingDays(0)
+                    .maternityLeaveDays(0)
+                    .externalTrainingDays(0)
+                    .conferenceDays(0)
+                    .maternityProtectionDays(0)
+                    .fatherMonthDays(0)
+                    .paidSpecialLeaveDays(0)
+                    .nonPaidVacationDays(0)
                     .build();
         }
 
