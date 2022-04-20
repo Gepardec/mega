@@ -18,14 +18,14 @@ import static org.mockito.Mockito.when;
 @QuarkusTest
 class LoggerProducerTest {
 
+    @Inject
+    LoggerProducer producer;
+
     private InjectionPoint ip;
 
     private Bean<?> bean;
 
     private Member member;
-
-    @Inject
-    LoggerProducer producer;
 
     @BeforeEach
     void beforeEach() {

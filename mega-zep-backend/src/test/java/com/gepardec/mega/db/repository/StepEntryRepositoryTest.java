@@ -26,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class StepEntryRepositoryTest {
     private static final String EMAIL = "max.muster@gepardec.com";
 
+    private final LocalDateTime localDateTime = LocalDateTime.now();
+
     @Inject
     UserRepository userRepository;
 
@@ -36,11 +38,12 @@ class StepEntryRepositoryTest {
     StepEntryRepository stepEntryRepository;
 
     private StepEntry stepEntry;
-    private User user;
-    private Step step;
-    private Project project;
 
-    private final LocalDateTime localDateTime = LocalDateTime.now();
+    private User user;
+
+    private Step step;
+
+    private Project project;
 
     @BeforeEach
     void init() {
@@ -100,8 +103,8 @@ class StepEntryRepositoryTest {
         persistEntities();
         List<StepEntry> result = stepEntryRepository.findAllOwnedStepEntriesInRange(localDateTime.toLocalDate(), localDateTime.toLocalDate(), EMAIL);
         assertAll(
-            () -> assertThat(result).hasSize(1),
-            () -> assertThat(result).contains(stepEntry)
+                () -> assertThat(result).hasSize(1),
+                () -> assertThat(result).contains(stepEntry)
         );
     }
 
@@ -110,7 +113,7 @@ class StepEntryRepositoryTest {
         persistEntities();
         int result = stepEntryRepository.closeAssigned(localDateTime.toLocalDate(), localDateTime.toLocalDate(), EMAIL, stepEntry.getStep().getId());
         assertAll(
-            () -> assertThat(result).isEqualTo(1)
+                () -> assertThat(result).isEqualTo(1)
         );
     }
 
@@ -154,8 +157,8 @@ class StepEntryRepositoryTest {
         persistEntities();
         Optional<StepEntry> result = stepEntryRepository.findStepEntryForEmployeeAtStepInRange(localDateTime.toLocalDate(), localDateTime.toLocalDate(), EMAIL, stepEntry.getStep().getId(), EMAIL);
         assertAll(
-            () -> assertThat(result).isPresent(),
-            () -> assertThat(result).contains(stepEntry)
+                () -> assertThat(result).isPresent(),
+                () -> assertThat(result).contains(stepEntry)
         );
     }
 
@@ -164,8 +167,8 @@ class StepEntryRepositoryTest {
         persistEntities();
         Optional<StepEntry> result = stepEntryRepository.findStepEntryForEmployeeAndProjectAtStepInRange(localDateTime.toLocalDate(), localDateTime.toLocalDate(), EMAIL, stepEntry.getStep().getId(), EMAIL, project.getName());
         assertAll(
-            () -> assertThat(result).isPresent(),
-            () -> assertThat(result).contains(stepEntry)
+                () -> assertThat(result).isPresent(),
+                () -> assertThat(result).contains(stepEntry)
         );
     }
 

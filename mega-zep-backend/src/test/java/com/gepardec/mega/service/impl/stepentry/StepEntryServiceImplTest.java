@@ -33,7 +33,7 @@ class StepEntryServiceImplTest {
     StepEntryService stepEntryService;
 
     @InjectMock
-    private StepEntryRepository stepEntryRepository;
+    StepEntryRepository stepEntryRepository;
 
     @Test
     void findEmployeeCheckState_whenValidStepEntries_thenValidState() {
@@ -44,8 +44,11 @@ class StepEntryServiceImplTest {
                 ArgumentMatchers.anyString())).thenReturn(stepEntries);
 
         Optional<EmployeeState> states = stepEntryService.findEmployeeCheckState(createEmployee());
-        assertThat(states).isPresent();
-        assertThat(states).get().isEqualTo(EmployeeState.IN_PROGRESS);
+
+        assertAll(
+                () -> assertThat(states).isPresent(),
+                () -> assertThat(states).get().isEqualTo(EmployeeState.IN_PROGRESS)
+        );
     }
 
     @Test

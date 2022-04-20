@@ -126,9 +126,9 @@ class MonthlyReportServiceImplTest {
         assertAll(
                 () -> assertThat(monthendReportForUser)
                         .isNotNull(),
-                () ->assertThat(monthendReportForUser.getEmployee().getEmail())
+                () -> assertThat(monthendReportForUser.getEmployee().getEmail())
                         .isEqualTo("Max_0@gepardec.com"),
-                () ->assertThat(monthendReportForUser.getTimeWarnings())
+                () -> assertThat(monthendReportForUser.getTimeWarnings())
                         .isNotNull(),
                 () -> assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()).isEmpty())
                         .isTrue(),
@@ -156,9 +156,9 @@ class MonthlyReportServiceImplTest {
         assertAll(
                 () -> assertThat(monthendReportForUser)
                         .isNotNull(),
-                () ->assertThat(monthendReportForUser.getEmployee().getEmail())
+                () -> assertThat(monthendReportForUser.getEmployee().getEmail())
                         .isEqualTo("Max_0@gepardec.com"),
-                () ->assertThat(monthendReportForUser.getTimeWarnings())
+                () -> assertThat(monthendReportForUser.getTimeWarnings())
                         .isNotNull(),
                 () -> assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()))
                         .isEmpty(),
@@ -186,9 +186,9 @@ class MonthlyReportServiceImplTest {
         assertAll(
                 () -> assertThat(monthendReportForUser)
                         .isNotNull(),
-                () ->assertThat(monthendReportForUser.getEmployee().getEmail())
+                () -> assertThat(monthendReportForUser.getEmployee().getEmail())
                         .isEqualTo("Max_0@gepardec.com"),
-                () ->assertThat(monthendReportForUser.getTimeWarnings())
+                () -> assertThat(monthendReportForUser.getTimeWarnings())
                         .isNotNull(),
                 () -> assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()))
                         .isEmpty(),
@@ -216,9 +216,9 @@ class MonthlyReportServiceImplTest {
         assertAll(
                 () -> assertThat(monthendReportForUser)
                         .isNotNull(),
-                () ->assertThat(monthendReportForUser.getEmployee().getEmail())
+                () -> assertThat(monthendReportForUser.getEmployee().getEmail())
                         .isEqualTo("Max_0@gepardec.com"),
-                () ->assertThat(monthendReportForUser.getTimeWarnings())
+                () -> assertThat(monthendReportForUser.getTimeWarnings())
                         .isNotNull(),
                 () -> assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()))
                         .isEmpty(),
@@ -246,9 +246,9 @@ class MonthlyReportServiceImplTest {
         assertAll(
                 () -> assertThat(monthendReportForUser)
                         .isNotNull(),
-                () ->assertThat(monthendReportForUser.getEmployee().getEmail())
+                () -> assertThat(monthendReportForUser.getEmployee().getEmail())
                         .isEqualTo("Max_0@gepardec.com"),
-                () ->assertThat(monthendReportForUser.getTimeWarnings())
+                () -> assertThat(monthendReportForUser.getTimeWarnings())
                         .isNotNull(),
                 () -> assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()))
                         .isEmpty(),
@@ -276,9 +276,9 @@ class MonthlyReportServiceImplTest {
         assertAll(
                 () -> assertThat(monthendReportForUser)
                         .isNotNull(),
-                () ->assertThat(monthendReportForUser.getEmployee().getEmail())
+                () -> assertThat(monthendReportForUser.getEmployee().getEmail())
                         .isEqualTo("Max_0@gepardec.com"),
-                () ->assertThat(monthendReportForUser.getTimeWarnings())
+                () -> assertThat(monthendReportForUser.getTimeWarnings())
                         .isNotNull(),
                 () -> assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()))
                         .isEmpty(),
@@ -306,9 +306,9 @@ class MonthlyReportServiceImplTest {
         assertAll(
                 () -> assertThat(monthendReportForUser)
                         .isNotNull(),
-                () ->assertThat(monthendReportForUser.getEmployee().getEmail())
+                () -> assertThat(monthendReportForUser.getEmployee().getEmail())
                         .isEqualTo("Max_0@gepardec.com"),
-                () ->assertThat(monthendReportForUser.getTimeWarnings())
+                () -> assertThat(monthendReportForUser.getTimeWarnings())
                         .isNotNull(),
                 () -> assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()))
                         .isEmpty(),
@@ -336,9 +336,9 @@ class MonthlyReportServiceImplTest {
         assertAll(
                 () -> assertThat(monthendReportForUser)
                         .isNotNull(),
-                () ->assertThat(monthendReportForUser.getEmployee().getEmail())
+                () -> assertThat(monthendReportForUser.getEmployee().getEmail())
                         .isEqualTo("Max_0@gepardec.com"),
-                () ->assertThat(monthendReportForUser.getTimeWarnings())
+                () -> assertThat(monthendReportForUser.getTimeWarnings())
                         .isNotNull(),
                 () -> assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()))
                         .isEmpty(),

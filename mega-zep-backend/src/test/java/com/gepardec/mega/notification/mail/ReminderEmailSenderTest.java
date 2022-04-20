@@ -32,7 +32,7 @@ class ReminderEmailSenderTest {
     boolean mailMockSetting;
 
     @InjectMock
-    private UserService userService;
+    UserService userService;
 
     @BeforeEach
     void init() {

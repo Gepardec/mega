@@ -34,8 +34,8 @@ class ProjectRepositoryTest {
         Project p = projectRepository.findById(project.getId());
 
         assertAll(
-            () -> assertThat(p).isNotNull(),
-            () -> assertThat(p.getName()).isEqualTo(project.getName())
+                () -> assertThat(p).isNotNull(),
+                () -> assertThat(p.getName()).isEqualTo(project.getName())
         );
     }
 }

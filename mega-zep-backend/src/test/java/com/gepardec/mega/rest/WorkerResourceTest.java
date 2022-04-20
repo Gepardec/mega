@@ -27,19 +27,19 @@ import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-public class WorkerResourceTest {
+class WorkerResourceTest {
 
     @InjectMock
     MonthlyReportService monthlyReportService;
 
     @InjectMock
-    private EmployeeService employeeService;
+    EmployeeService employeeService;
 
     @InjectMock
-    private SecurityContext securityContext;
+    SecurityContext securityContext;
 
     @InjectMock
-    private UserContext userContext;
+    UserContext userContext;
 
     @Test
     void monthlyReport_whenPOST_thenReturnsHttpStatusMETHOD_NOT_ALLOWED() {
