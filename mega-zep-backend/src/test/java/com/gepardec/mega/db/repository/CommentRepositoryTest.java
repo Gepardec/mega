@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CommentRepositoryTest {
 
     private static final String EMAIL = "max.muster@gepardec.com";
+
     private final LocalDateTime LOCALDATETIME = LocalDateTime.now();
 
     @Inject
@@ -43,9 +44,13 @@ class CommentRepositoryTest {
     StepRepository stepRepository;
 
     private Comment comment;
+
     private Project project;
+
     private StepEntry stepEntry;
+
     private Step step;
+
     private User user;
 
     @BeforeEach

@@ -26,6 +26,7 @@ class UserRepositoryTest {
     UserRepository userRepository;
 
     private User user;
+
     private User persistedUser;
 
     @BeforeEach
@@ -44,8 +45,8 @@ class UserRepositoryTest {
         Optional<User> userByEmail = userRepository.findActiveByEmail(persistedUser.getEmail());
 
         assertAll(
-            () -> assertThat(userByEmail).isPresent(),
-            () -> assertThat(userByEmail.get().getEmail()).isEqualTo(EMAIL)
+                () -> assertThat(userByEmail).isPresent(),
+                () -> assertThat(userByEmail.get().getEmail()).isEqualTo(EMAIL)
         );
     }
 
@@ -54,9 +55,9 @@ class UserRepositoryTest {
         List<User> activeUsers = userRepository.findActive();
 
         assertAll(
-            () -> assertThat(activeUsers.get(0)).isNotNull(),
-            () -> assertThat(activeUsers.get(0).getActive()).isTrue(),
-            () -> assertThat(activeUsers.get(0).getEmail()).isEqualTo(EMAIL)
+                () -> assertThat(activeUsers.get(0)).isNotNull(),
+                () -> assertThat(activeUsers.get(0).getActive()).isTrue(),
+                () -> assertThat(activeUsers.get(0).getEmail()).isEqualTo(EMAIL)
         );
     }
 
@@ -71,16 +72,16 @@ class UserRepositoryTest {
         List<User> usersByRoles = userRepository.findByRoles(roles);
 
         assertAll(
-            () -> assertThat(usersByRoles.get(0)).isNotNull(),
-            () -> assertThat(usersByRoles.get(0).getEmail()).isEqualTo(EMAIL)
+                () -> assertThat(usersByRoles.get(0)).isNotNull(),
+                () -> assertThat(usersByRoles.get(0).getEmail()).isEqualTo(EMAIL)
         );
     }
 
     @Test
     void persistOrUpdate() {
         assertAll(
-            () -> assertThat(persistedUser).isNotNull(),
-            () -> assertThat(persistedUser.getEmail()).isEqualTo(EMAIL)
+                () -> assertThat(persistedUser).isNotNull(),
+                () -> assertThat(persistedUser.getEmail()).isEqualTo(EMAIL)
         );
     }
 
@@ -90,9 +91,9 @@ class UserRepositoryTest {
         userRepository.update(user);
 
         assertAll(
-            () -> assertThat(user).isNotNull(),
-            () -> assertThat(user.getActive()).isFalse(),
-            () -> assertThat(user.getEmail()).isEqualTo(EMAIL)
+                () -> assertThat(user).isNotNull(),
+                () -> assertThat(user.getActive()).isFalse(),
+                () -> assertThat(user.getEmail()).isEqualTo(EMAIL)
         );
     }
 

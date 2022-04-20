@@ -33,6 +33,13 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
         List<LocalDate> vacationDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.VACATION_DAYS.getType(), absenceEntries);
         List<LocalDate> sicknessDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.SICKNESS_DAYS.getType(), absenceEntries);
         List<LocalDate> nursingDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.NURSING_DAYS.getType(), absenceEntries);
+        List<LocalDate> maternityLeaveDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.MATERNITY_LEAVE_DAYS.getType(), absenceEntries);
+        List<LocalDate> externalTrainingDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.EXTERNAL_TRAINING_DAYS.getType(), absenceEntries);
+        List<LocalDate> conferenceDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.CONFERENCE_DAYS.getType(), absenceEntries);
+        List<LocalDate> maternityProtectionDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.MATERNITY_PROTECTION_DAYS.getType(), absenceEntries);
+        List<LocalDate> fatherMonthDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.FATHER_MONTH_DAYS.getType(), absenceEntries);
+        List<LocalDate> paidSpecialLeaveDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.PAID_SPECIAL_LEAVE_DAYS.getType(), absenceEntries);
+        List<LocalDate> nonPaidVacationDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.NON_PAID_VACATION_DAYS.getType(), absenceEntries);
         List<LocalDate> bookedDays = projectEntries.stream()
                 .map(ProjectEntry::getDate)
                 .collect(Collectors.toList());
@@ -43,6 +50,13 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
                 .filter(date -> !sicknessDays.contains(date))
                 .filter(date -> !bookedDays.contains(date))
                 .filter(date -> !nursingDays.contains(date))
+                .filter(date -> !maternityLeaveDays.contains(date))
+                .filter(date -> !externalTrainingDays.contains(date))
+                .filter(date -> !conferenceDays.contains(date))
+                .filter(date -> !maternityProtectionDays.contains(date))
+                .filter(date -> !fatherMonthDays.contains(date))
+                .filter(date -> !paidSpecialLeaveDays.contains(date))
+                .filter(date -> !nonPaidVacationDays.contains(date))
                 .map(this::createTimeWarning)
                 .distinct()
                 .collect(Collectors.toList());

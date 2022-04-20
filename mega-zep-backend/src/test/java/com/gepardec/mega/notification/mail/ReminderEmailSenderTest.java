@@ -17,7 +17,6 @@ import java.util.Set;
 import static com.gepardec.mega.notification.mail.Mail.OM_RELEASE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -33,7 +32,7 @@ class ReminderEmailSenderTest {
     boolean mailMockSetting;
 
     @InjectMock
-    private UserService userService;
+    UserService userService;
 
     @BeforeEach
     void init() {

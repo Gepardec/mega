@@ -7,8 +7,8 @@ import com.gepardec.mega.domain.model.Step;
 import com.gepardec.mega.domain.model.StepEntry;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.service.api.ProjectService;
-import com.gepardec.mega.service.api.StepService;
 import com.gepardec.mega.service.api.StepEntryService;
+import com.gepardec.mega.service.api.StepService;
 import com.gepardec.mega.service.api.UserService;
 import com.gepardec.mega.service.impl.StepEntrySyncServiceImpl;
 import io.quarkus.test.junit.QuarkusTest;
@@ -73,9 +73,9 @@ class StepEntrySyncServiceImplTest {
                                         .stream().map(User::getUserId).collect(Collectors.toList()))
                         .employees(
                                 List.of(userForProjectLead(1),
-                                        userForEmployee(4),
-                                        userForEmployee(5),
-                                        userForEmployee(6))
+                                                userForEmployee(4),
+                                                userForEmployee(5),
+                                                userForEmployee(6))
                                         .stream().map(User::getUserId).collect(Collectors.toList()))
                         .startDate(LocalDate.now())
                         .build(),
@@ -85,8 +85,8 @@ class StepEntrySyncServiceImplTest {
                                         .stream().map(User::getUserId).collect(Collectors.toList()))
                         .employees(
                                 List.of(userForProjectLead(2),
-                                        userForEmployee(5),
-                                        userForEmployee(6))
+                                                userForEmployee(5),
+                                                userForEmployee(6))
                                         .stream().map(User::getUserId).collect(Collectors.toList()))
                         .startDate(LocalDate.now())
                         .build(),
@@ -96,8 +96,8 @@ class StepEntrySyncServiceImplTest {
                                         .stream().map(User::getUserId).collect(Collectors.toList()))
                         .employees(
                                 List.of(userForProjectLead(1),
-                                        userForEmployee(5),
-                                        userForEmployee(6))
+                                                userForEmployee(5),
+                                                userForEmployee(6))
                                         .stream().map(User::getUserId).collect(Collectors.toList()))
                         .startDate(LocalDate.now())
                         .build()
@@ -200,9 +200,9 @@ class StepEntrySyncServiceImplTest {
                                 .stream().map(User::getUserId).collect(Collectors.toList()))
                 .employees(
                         List.of(userForProjectLead(1),
-                                userForEmployee(4),
-                                userForEmployee(5),
-                                userForEmployee(6))
+                                        userForEmployee(4),
+                                        userForEmployee(5),
+                                        userForEmployee(6))
                                 .stream().map(User::getUserId).collect(Collectors.toList()))
                 .startDate(LocalDate.now())
                 .build()));

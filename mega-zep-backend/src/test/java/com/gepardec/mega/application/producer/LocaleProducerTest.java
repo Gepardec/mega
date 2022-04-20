@@ -20,10 +20,10 @@ class LocaleProducerTest {
 
     private static final Locale DEFAULT_LOCALE = Locale.GERMAN;
 
-    private HttpServletRequest requestSpy;
-
     @Inject
     LocaleProducer producer;
+
+    private HttpServletRequest requestSpy;
 
     @BeforeEach
     void beforeEach() {

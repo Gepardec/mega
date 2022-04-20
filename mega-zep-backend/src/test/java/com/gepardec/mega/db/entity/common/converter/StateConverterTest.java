@@ -10,8 +10,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class StateConverterTest {
 
     private static final int DONE_STATE_ID = 2;
+
     private static final int WORK_IN_PROGRESS_ID = 1;
+
     private static final int OPEN_ID = 0;
+
     private static final int NOT_RELEVANT_ID = 3;
 
     private StateConverter converter;

@@ -18,7 +18,6 @@ import com.gepardec.mega.rest.model.ManagementEntryDto;
 import com.gepardec.mega.rest.model.ProjectManagementEntryDto;
 import com.gepardec.mega.service.api.CommentService;
 import com.gepardec.mega.service.api.EmployeeService;
-import com.gepardec.mega.service.api.ProjectService;
 import com.gepardec.mega.service.api.ProjectEntryService;
 import com.gepardec.mega.service.api.StepEntryService;
 import com.gepardec.mega.zep.ZepService;
@@ -56,19 +55,16 @@ class ManagementResourceTest {
     CommentService commentService;
 
     @InjectMock
-    ProjectService projectService;
-
-    @InjectMock
     ProjectEntryService projectEntryService;
 
     @InjectMock
     ZepService zepService;
 
     @InjectMock
-    private SecurityContext securityContext;
+    SecurityContext securityContext;
 
     @InjectMock
-    private UserContext userContext;
+    UserContext userContext;
 
     @Test
     void getAllOfficeManagementEntries_whenNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
@@ -209,7 +205,6 @@ class ManagementResourceTest {
         Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
 
         List<String> employees = List.of(employee1.getUserId(), employee2.getUserId());
-        List<String> leads = List.of("005");
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
         ProjectEmployees rgkkwc = createProject("ÖGK-RGKK2WC-2020", employees);
         when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
@@ -292,7 +287,6 @@ class ManagementResourceTest {
         Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
 
         List<String> employees = List.of(employee1.getUserId(), employee2.getUserId());
-        List<String> leads = List.of("005");
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
         ProjectEmployees rgkkwc = createProject("ÖGK-RGKK2WC-2020", employees);
         when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
@@ -379,7 +373,6 @@ class ManagementResourceTest {
         Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
 
         List<String> employees = List.of(employee1.getUserId(), employee2.getUserId());
-        List<String> leads = List.of("005");
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
         ProjectEmployees rgkkwc = createProject("ÖGK-RGKK2WC-2020", employees);
         when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))
@@ -466,7 +459,6 @@ class ManagementResourceTest {
         Employee employee2 = createEmployee("030", "no-reply@gepardec.com", "Max", "Mustermann");
 
         List<String> employees = List.of(employee1.getUserId(), employee2.getUserId());
-        List<String> leads = List.of("005");
         ProjectEmployees rgkkcc = createProject("ÖGK-RGKKCC-2020", employees);
         ProjectEmployees rgkkwc = createProject("ÖGK-RGKK2WC-2020", employees);
         when(stepEntryService.getProjectEmployeesForPM(ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.anyString()))

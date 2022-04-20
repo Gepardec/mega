@@ -10,7 +10,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class ProjectStepConverterTest {
 
     private static final int CONTROL_PROJECT_ID = 0;
+
     private static final int CONTROL_BILLING_ID = 1;
+
     private static final int CREATE_COMPANY_CONTROLLING_ID = 2;
 
     private ProjectStepConverter converter;

@@ -18,14 +18,14 @@ class NotificationHelperTest {
 
     private final Locale locale = Locale.GERMAN;
 
+    @Inject
+    NotificationHelper notificationHelper;
+
     @InjectMock(returnsDeepMocks = true)
     private NotificationConfig notificationConfig;
 
     @InjectMock(returnsDeepMocks = true)
     private ResourceBundleProducer resourceBundleProducer;
-
-    @Inject
-    NotificationHelper notificationHelper;
 
     @Test
     void whenReminderEMPLOYEE_CHECK_PROJECTTIME_thenEmailPathReturned() {

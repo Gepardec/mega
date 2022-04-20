@@ -60,6 +60,27 @@ public class MonthlyReportDto {
     private int nursingDays;
 
     @JsonProperty
+    private int maternityLeaveDays;
+
+    @JsonProperty
+    private int externalTrainingDays;
+
+    @JsonProperty
+    private int conferenceDays;
+
+    @JsonProperty
+    private int maternityProtectionDays;
+
+    @JsonProperty
+    private int fatherMonthDays;
+
+    @JsonProperty
+    private int paidSpecialLeaveDays;
+
+    @JsonProperty
+    private int nonPaidVacationDays;
+
+    @JsonProperty
     private String billableTime;
 
     @JsonProperty
