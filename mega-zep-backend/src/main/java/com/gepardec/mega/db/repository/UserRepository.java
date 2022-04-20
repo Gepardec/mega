@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
+@Transactional
 public class UserRepository implements PanacheRepository<User> {
 
     @Inject
@@ -30,7 +31,6 @@ public class UserRepository implements PanacheRepository<User> {
         return find("#User.findByRoles", Parameters.with("roles", roles)).list();
     }
 
-    @Transactional
     public User persistOrUpdate(final User user) {
         if (user.getId() == null) {
             persist(user);
@@ -40,7 +40,6 @@ public class UserRepository implements PanacheRepository<User> {
         }
     }
 
-    @Transactional
     public User update(final User user) {
         return em.merge(user);
     }
