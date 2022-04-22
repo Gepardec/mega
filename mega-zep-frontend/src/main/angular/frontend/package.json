@@ -11,9 +11,9 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "sonar": "sonar-scanner",
-    "start:prod": "http-server ./dist/frontend -a localhost -p 4200",
+    "start:prod": "lite-server --baseDir=\"dist/frontend\"",
     "deploy:prod": "npm run start:prod",
-    "e2e-cy": "npm run deploy:prod http://localhost:4200 & npm run cypress:run"
+    "e2e-cy": "npm run deploy:prod & npm run cy:run"
   },
   "private": true,
   "dependencies": {
@@ -62,6 +62,7 @@
     "karma-coverage-istanbul-reporter": "~3.0.3",
     "karma-jasmine": "~4.0.1",
     "karma-jasmine-html-reporter": "^1.7.0",
+    "lite-server": "^2.6.1",
     "sonar-scanner": "^3.1.0",
     "ts-node": "~7.0.0",
     "tslint": "~6.1.3",

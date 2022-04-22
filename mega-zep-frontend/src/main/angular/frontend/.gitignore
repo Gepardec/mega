@@ -10,6 +10,10 @@ tmp/
 app/**/*.js
 app/**/*.js.map
 
+# cypress
+screenshots
+videos
+
 # dependencies
 node_modules/
 bower_components/

@@ -39,6 +39,10 @@ describe('Office Management (Mitarbeiter)', () => {
       cy.route('http://localhost:8080/user', jsonData).as('getUser');
     });
 
+    cy.fixture('common/config.json').then(jsonData => {
+      cy.route('http://localhost:8080/config', jsonData).as('getConfig');
+    });
+
     // @ts-ignore
     cy.loginByGoogleApi();
   });
