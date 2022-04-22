@@ -57,7 +57,6 @@ describe('Projekt Management', () => {
     cy.fixture('project-management/projectmanagemententries.json').then(jsonData => {
       jsonData[0].controlProjectState = 'OPEN';
       jsonData[0].controlBillingState = 'OPEN';
-      // TODO project-state
       cy.route('http://localhost:8080/management/projectmanagemententries/**/**?all=false', jsonData).as('getProjectmanagemententries');
     });
 
@@ -72,7 +71,6 @@ describe('Projekt Management', () => {
     cy.fixture('project-management/projectmanagemententries.json').then(jsonData => {
       jsonData[0].controlProjectState = 'DONE';
       jsonData[0].controlBillingState = 'DONE';
-      // TODO project-state
       cy.route('http://localhost:8080/management/projectmanagemententries/**/**?all=false', jsonData).as('getProjectmanagemententries');
     });
 
@@ -80,8 +78,6 @@ describe('Projekt Management', () => {
 
     assertDropdownContent('project-controlling', 'Fertig');
     assertDropdownContent('billing', 'Fertig');
-    // TODO project-state
-    // assertDropdownContent('project-state', 'Fertig');
   });
 
   it('should display user comments and can add new ones', () => {
@@ -96,7 +92,7 @@ describe('Projekt Management', () => {
 
     visitAndWaitForRequests();
 
-    // TODO assert -/- displayed
+    cy.get('app-done-comments-indicator').should('contain.text', '− / −');
 
     cy.get('[data-cy="open-comments"]').click();
     cy.wait('@employee-comments-empty');
@@ -115,11 +111,11 @@ describe('Projekt Management', () => {
     cy.wait('@employee-comments');
     cy.wait('@getProjectmanagemententriesWithComments');
 
-    // TODO assert comment content
+    cy.get('[data-cy="employee-comments"] td:nth-child(4)').should('contain.text', 'Hallo Chuck Norris!');
 
     cy.get('[data-cy="close"]').click();
 
-    // TODO assert 0/1 displayed
+    cy.get('app-done-comments-indicator').should('contain.text', '0 / 1');
   });
 
 

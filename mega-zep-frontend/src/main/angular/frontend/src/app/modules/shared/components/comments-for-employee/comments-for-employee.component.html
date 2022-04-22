@@ -30,7 +30,7 @@
         </button>
       </span>
     </div>
-    <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table">
+    <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table" data-cy="employee-comments">
 
       <tr class="mat-header-row">
         <th class="mat-header-cell text-center">{{'comments-for-employee.table.lastChanged' | translate}}</th>
