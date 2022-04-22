@@ -117,7 +117,7 @@ describe('Office Management (Mitarbeiter)', () => {
 
   it('should display that the employee confirmed his bookings', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
-      jsonData[0].employeeCheckState = 'DONE'
+      jsonData[0].employeeCheckState = 'DONE';
       cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
@@ -127,7 +127,7 @@ describe('Office Management (Mitarbeiter)', () => {
 
   it('should display that the project lead confirmed the employees bookings', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
-      jsonData[0].projectCheckState = 'DONE'
+      jsonData[0].projectCheckState = 'DONE';
       cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
@@ -137,10 +137,10 @@ describe('Office Management (Mitarbeiter)', () => {
 
   it('should display all employee checks done when checks in response are set to "done"', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
-      jsonData[0].customerCheckState = 'DONE'
-      jsonData[0].internalCheckState = 'DONE'
-      jsonData[0].employeeCheckState = 'DONE'
-      jsonData[0].projectCheckState = 'DONE'
+      jsonData[0].customerCheckState = 'DONE';
+      jsonData[0].internalCheckState = 'DONE';
+      jsonData[0].employeeCheckState = 'DONE';
+      jsonData[0].projectCheckState = 'DONE';
       cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
@@ -153,7 +153,7 @@ describe('Office Management (Mitarbeiter)', () => {
 
   it('should indicate that there is one comment present for the employee', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
-      jsonData[0].totalComments = 1
+      jsonData[0].totalComments = 1;
       cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
@@ -167,8 +167,8 @@ describe('Office Management (Mitarbeiter)', () => {
 
   it('should indicate that there is one resolved comment out of one for the employee', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
-      jsonData[0].totalComments = 1
-      jsonData[0].finishedComments = 1
+      jsonData[0].totalComments = 1;
+      jsonData[0].finishedComments = 1;
       cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 

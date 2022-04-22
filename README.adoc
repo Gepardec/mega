@@ -91,6 +91,8 @@ The frontend project is located at `./mega-zep-frontend`.
 `npx ng serve`
 . Test the frontend +
 `npx ng test`
+. Test the frontend with cypress +
+`npx cypress open`
 
 The frontend will take some time to come up which is due to the compilation process which takes some time.
 

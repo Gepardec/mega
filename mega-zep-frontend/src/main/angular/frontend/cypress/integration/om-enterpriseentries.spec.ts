@@ -165,10 +165,10 @@ describe('Office Management (Unternehmen)', () => {
 
   it('should display all enterprise entries done when checks in response are set to "done"', () => {
     cy.fixture('officemanagement/enterpriseentries.json').then(jsonData => {
-      jsonData.zepTimesReleased = 'DONE'
-      jsonData.chargeabilityExternalEmployeesRecorded = 'DONE'
-      jsonData.payrollAccountingSent = 'DONE'
-      jsonData.zepMonthlyReportDone = 'DONE'
+      jsonData.zepTimesReleased = 'DONE';
+      jsonData.chargeabilityExternalEmployeesRecorded = 'DONE';
+      jsonData.payrollAccountingSent = 'DONE';
+      jsonData.zepMonthlyReportDone = 'DONE';
       cy.route('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
     });
 

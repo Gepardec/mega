@@ -36,7 +36,7 @@ describe('Mein Mega', () => {
     cy.fixture('common/monthendreports.json').then(jsonData => {
       cy.log(jsonData);
       jsonData.employeeCheckState = 'DONE';
-      cy.route('http://localhost:8080/worker/monthendreports/*/*', jsonData).as('getMonthendreportsDone')
+      cy.route('http://localhost:8080/worker/monthendreports/*/*', jsonData).as('getMonthendreportsDone');
     });
 
     cy.get('app-employee-check .mat-card')
@@ -51,6 +51,6 @@ describe('Mein Mega', () => {
     cy.wait('@getMonthendreportsDone');
 
     cy.get('app-employee-check .mat-card mat-card-content button')
-      .should('not.exist')
+      .should('not.exist');
   });
 });
