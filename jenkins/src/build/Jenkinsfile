@@ -54,6 +54,18 @@ pipeline {
                                 }
                             }
                         }
+                        stage('Cypress Tests') {
+                            steps {
+                                script {
+                                    container('nodejs') {
+                                        dir('mega-zep-frontend/src/main/angular/frontend') {
+                                            sh "node ${NODE_RESOURCE_LIMITS} \
+                                                     ./node_modules/@angular/cli/bin/npm run e2e-cy"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         stage('Build Image') {
                             steps {
                                 script {
