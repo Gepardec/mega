@@ -2,23 +2,33 @@ import '../support/commands';
 
 describe('Menu bar', () => {
 
+  const suiteFixtures = [
+    '@getInfo',
+    '@getUser'
+  ];
+
   beforeEach(() => {
     cy.server();
 
-    cy.fixture('common/info.json').as('infoJSON');
-    cy.fixture('common/config.json').as('configJSON');
-    cy.fixture('common/monthendreports.json').as('monthendreportsJSON');
+    cy.fixture('common/info.json').then(jsonData => {
+      cy.route('http://localhost:8080/info', jsonData).as('getInfo');
+    });
 
-    cy.route('http://localhost:8080/info', '@infoJSON').as('info');
-    cy.route('http://localhost:8080/config', '@configJSON').as('config');
-    cy.route('http://localhost:8080/worker/monthendreports', '@monthendreportsJSON').as('monthendreports');
+    cy.fixture('common/config.json').then(jsonData => {
+      cy.route('http://localhost:8080/config', jsonData).as('getConfig');
+    });
+
+    cy.fixture('common/monthendreports.json').then(jsonData => {
+      cy.route('http://localhost:8080/worker/monthendreports', jsonData).as('getMonthendreports');
+    });
 
     // @ts-ignore
     cy.loginByGoogleApi();
   });
 
   it('should display all tabs for all roles', () => {
-    mockUserJsonAndVisit('common/user.json');
+    mockUserJson('common/user.json');
+    visitAndWaitForRequests();
 
     const tabs = cy.get('.mat-tab-links div');
 
@@ -29,44 +39,49 @@ describe('Menu bar', () => {
   });
 
   it('should display "Mein MEGA" tab for role employee', () => {
-    mockUserJsonAndVisit('menu-bar/user-employee.json');
+    mockUserJson('menu-bar/user-employee.json');
+    visitAndWaitForRequests();
 
     assertSingleTabShown(' Mein MEGA ');
   });
 
   it('should display "Office Management" tab for role office management', () => {
-    mockUserJsonAndVisit('menu-bar/user-office-management.json');
+    mockUserJson('menu-bar/user-office-management.json');
+    visitAndWaitForRequests();
 
     assertSingleTabShown(' Office Management ');
   });
 
   it('should display "Projekt Management" tab for role project lead', () => {
-    mockUserJsonAndVisit('menu-bar/user-project-lead.json');
+    mockUserJson('menu-bar/user-project-lead.json');
+    visitAndWaitForRequests();
 
     assertSingleTabShown(' Projekt Management ');
   });
 
   it('should display no tab for no role', () => {
-    mockUserJsonAndVisit('menu-bar/user-no-role.json');
+    mockUserJson('menu-bar/user-no-role.json');
+    visitAndWaitForRequests();
 
     const tabs = cy.get('.mat-tab-links div');
 
     tabs.should('have.length', 0);
   });
 
+  function visitAndWaitForRequests(fixtures?: string[]) {
+    cy.visit('/');
+    cy.wait(fixtures ? fixtures : suiteFixtures);
+  }
+
+  function mockUserJson(path: string) {
+    cy.fixture(path).then(jsonData => {
+      cy.route('http://localhost:8080/user', jsonData).as('getUser')
+    });
+  }
+
+  function assertSingleTabShown(text: string) {
+    const tabs = cy.get('.mat-tab-links div');
+    tabs.should('have.length', 1)
+      .first().should('have.text', text);
+  }
 });
-
-function mockUserJsonAndVisit(path: string) {
-  cy.fixture(path).as('userJSON');
-  cy.route('http://localhost:8080/user', '@userJSON').as('user');
-
-  cy.visit('/');
-
-  cy.wait(['@user', '@info']);
-}
-
-function assertSingleTabShown(text: string) {
-  const tabs = cy.get('.mat-tab-links div');
-  tabs.should('have.length', 1)
-    .first().should('have.text', text);
-}
