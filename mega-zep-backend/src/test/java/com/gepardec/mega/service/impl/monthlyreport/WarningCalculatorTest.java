@@ -10,6 +10,7 @@ import com.gepardec.mega.domain.model.monthlyreport.Task;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.Vehicle;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
+import com.gepardec.mega.service.helper.WarningCalculator;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,14 @@ class WarningCalculatorTest {
 
     @InjectMocks
     WarningCalculator calculator;
+
+    static Stream<Integer> holidaysStream() {
+        return Stream.of(HOLIDAYS);
+    }
+
+    static Stream<Integer> weekendDaysStream() {
+        return Stream.of(WEEKEND_DAYS);
+    }
 
     private ProjectTimeEntry projectTimeEntryFor(final int startHour, final int endHour) {
         return projectTimeEntryFor(2, startHour, 0, 1, endHour, 0, WorkingLocation.MAIN);
@@ -474,14 +483,6 @@ class WarningCalculatorTest {
                 .isEqualTo(1);
         assertThat(result.get(0).getDate())
                 .isEqualTo(entryOne.getDate());
-    }
-
-    static Stream<Integer> holidaysStream() {
-        return Stream.of(HOLIDAYS);
-    }
-
-    static Stream<Integer> weekendDaysStream() {
-        return Stream.of(WEEKEND_DAYS);
     }
 
     private ProjectTimeEntry getProjectTimeEntry(int day) {

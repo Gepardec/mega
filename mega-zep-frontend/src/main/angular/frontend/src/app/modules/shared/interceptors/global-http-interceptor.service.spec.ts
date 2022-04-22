@@ -1,14 +1,14 @@
-import {TestBed} from '@angular/core/testing';
+import {TestBed, waitForAsync} from '@angular/core/testing';
 
 import {GlobalHttpInterceptorService} from './global-http-interceptor.service';
 import {ErrorHandlerService} from '../services/error/error-handler.service';
 import {ConfigService} from '../services/config/config.service';
 import {UserService} from '../services/user/user.service';
 import {LoaderService} from '../services/loader/loader.service';
-import {InfoService} from "../services/info/info.service";
-import {HttpHandler} from "@angular/common/http";
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {Info} from "../models/Info";
+import {InfoService} from '../services/info/info.service';
+import {HttpHandler} from '@angular/common/http';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {Info} from '../models/Info';
 import * as _moment from 'moment';
 
 const moment = _moment;
@@ -22,31 +22,25 @@ describe('GlobalHttpInterceptorService', () => {
   let httpHandler: HttpHandler;
   let loaderService: LoaderService;
 
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        {
-          provide: ErrorHandlerService, useClass: ErrorHandlerServiceMock
-        },
-        {
-          provide: UserService, useClass: UserServiceMock
-        },
-        {
-          provide: LoaderService, useClass: LoaderServiceMock
-        }
+        {provide: ErrorHandlerService, useClass: ErrorHandlerServiceMock},
+        {provide: UserService, useClass: UserServiceMock},
+        {provide: LoaderService, useClass: LoaderServiceMock}
       ]
+    }).compileComponents().then(() => {
+      globalHttpInterceptorService = TestBed.inject(GlobalHttpInterceptorService);
+      httpTestingController = TestBed.inject(HttpTestingController);
+      configService = TestBed.inject(ConfigService);
+      infoService = TestBed.inject(InfoService);
+      httpHandler = TestBed.inject(HttpHandler);
+      loaderService = TestBed.inject(LoaderService);
     });
+  }));
 
-    globalHttpInterceptorService = TestBed.inject(GlobalHttpInterceptorService);
-    httpTestingController = TestBed.inject(HttpTestingController);
-    configService = TestBed.inject(ConfigService);
-    infoService = TestBed.inject(InfoService);
-    httpHandler = TestBed.inject(HttpHandler);
-    loaderService = TestBed.inject(LoaderService);
-  });
-
-  it('#should be created', () => {
+  it('#should create', () => {
     expect(globalHttpInterceptorService).toBeTruthy();
   });
 
@@ -64,15 +58,15 @@ describe('GlobalHttpInterceptorService', () => {
     const httpRequest = httpTestingController.expectOne(configService.getBackendUrlWithContext('/info'));
     httpRequest.flush(InfoMock.info);
     expect(httpHandler.handle).toHaveBeenCalled();
-    expect(httpRequest.request.urlWithParams).toEqual(GlobalHttpInterceptorMock.urlWithContext);
+    expect(httpRequest.request.urlWithParams).toContain(GlobalHttpInterceptorMock.context);
     expect(loaderService.showSpinner).not.toHaveBeenCalled();
     expect(loaderService.stopSpinner).not.toHaveBeenCalled();
   });
 
   class GlobalHttpInterceptorMock {
 
-    static urlWithContext: string = 'http://localhost:9876/info';
     static url: string = 'http://localhost:9876';
+    static context: string = '/info';
   }
 
   class InfoMock {
@@ -89,21 +83,17 @@ describe('GlobalHttpInterceptorService', () => {
   }
 
   class ErrorHandlerServiceMock {
-
   }
 
   class UserServiceMock {
-
   }
 
   class LoaderServiceMock {
 
     showSpinner(): void {
-
     }
 
     stopSpinner(): void {
-
     }
   }
 });

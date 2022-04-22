@@ -5,20 +5,14 @@ import com.gepardec.mega.domain.model.monthlyreport.AbsenteeType;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarningType;
-import de.jollyday.HolidayCalendar;
-import de.jollyday.HolidayManager;
+import com.gepardec.mega.notification.mail.dates.OfficeCalendarUtil;
 import de.provantis.zep.FehlzeitType;
 
 import javax.validation.constraints.NotNull;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,52 +28,45 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
             return timeWarnings;
         }
 
-        Set<TimeWarning> warnings = new HashSet<>();
-        List<LocalDate> datesWithBookings = new ArrayList<>();
-
         List<LocalDate> businessDays = getBusinessDaysOfMonth(projectEntries.get(0).getDate().getYear(), projectEntries.get(0).getDate().getMonth().getValue());
         List<LocalDate> compensatoryDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.COMPENSATORY_DAYS.getType(), absenceEntries);
         List<LocalDate> vacationDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.VACATION_DAYS.getType(), absenceEntries);
         List<LocalDate> sicknessDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.SICKNESS_DAYS.getType(), absenceEntries);
+        List<LocalDate> nursingDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.NURSING_DAYS.getType(), absenceEntries);
+        List<LocalDate> maternityLeaveDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.MATERNITY_LEAVE_DAYS.getType(), absenceEntries);
+        List<LocalDate> externalTrainingDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.EXTERNAL_TRAINING_DAYS.getType(), absenceEntries);
+        List<LocalDate> conferenceDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.CONFERENCE_DAYS.getType(), absenceEntries);
+        List<LocalDate> maternityProtectionDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.MATERNITY_PROTECTION_DAYS.getType(), absenceEntries);
+        List<LocalDate> fatherMonthDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.FATHER_MONTH_DAYS.getType(), absenceEntries);
+        List<LocalDate> paidSpecialLeaveDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.PAID_SPECIAL_LEAVE_DAYS.getType(), absenceEntries);
+        List<LocalDate> nonPaidVacationDays = filterAbsenceTypesAndCompileLocalDateList(AbsenteeType.NON_PAID_VACATION_DAYS.getType(), absenceEntries);
+        List<LocalDate> bookedDays = projectEntries.stream()
+                .map(ProjectEntry::getDate)
+                .collect(Collectors.toList());
 
-        businessDays.removeAll(compensatoryDays);
-        businessDays.removeAll(vacationDays);
-        businessDays.removeAll(sicknessDays);
-
-        projectEntries.forEach(projectTimeEntry ->
-                businessDays.forEach(date -> {
-                    if (date.equals(projectTimeEntry.getDate())) {
-                        datesWithBookings.add(date);
-                    }
-                })
-        );
-
-        businessDays.removeAll(datesWithBookings);
-        businessDays.forEach(date -> warnings.add(createTimeWarning(date)));
-
-        return new ArrayList<>(warnings);
+        return businessDays.stream()
+                .filter(date -> !compensatoryDays.contains(date))
+                .filter(date -> !vacationDays.contains(date))
+                .filter(date -> !sicknessDays.contains(date))
+                .filter(date -> !bookedDays.contains(date))
+                .filter(date -> !nursingDays.contains(date))
+                .filter(date -> !maternityLeaveDays.contains(date))
+                .filter(date -> !externalTrainingDays.contains(date))
+                .filter(date -> !conferenceDays.contains(date))
+                .filter(date -> !maternityProtectionDays.contains(date))
+                .filter(date -> !fatherMonthDays.contains(date))
+                .filter(date -> !paidSpecialLeaveDays.contains(date))
+                .filter(date -> !nonPaidVacationDays.contains(date))
+                .map(this::createTimeWarning)
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     private List<LocalDate> getBusinessDaysOfMonth(int year, int month) {
         YearMonth yearMonth = YearMonth.of(year, month);
-        int daysInMonth = yearMonth.lengthOfMonth();
-        LocalDate startDate = LocalDate.of(year, month, 1);
-        LocalDate endDate = LocalDate.of(year, month, daysInMonth);
-        return getBusinessDays(startDate, endDate);
-    }
-
-    private List<LocalDate> getBusinessDays(LocalDate startDate, LocalDate endDate) {
-        Predicate<LocalDate> isWeekend = date -> date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY;
-        Predicate<LocalDate> isHoliday = this::isHoliday;
-        endDate = endDate.plusDays(1);
-        return startDate.datesUntil(endDate)
-                .filter(isWeekend.or(isHoliday).negate())
-                .collect(Collectors.toList());
-    }
-
-    private boolean isHoliday(LocalDate date) {
-        HolidayManager holidayManager = HolidayManager.getInstance(HolidayCalendar.AUSTRIA);
-        return holidayManager.isHoliday(date);
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+        return OfficeCalendarUtil.getWorkingDaysBetween(startDate, endDate);
     }
 
     private TimeWarning createTimeWarning(final LocalDate date) {
@@ -91,28 +78,13 @@ public class NoEntryCalculator extends AbstractTimeWarningCalculationStrategy {
     }
 
     private List<LocalDate> filterAbsenceTypesAndCompileLocalDateList(String type, List<FehlzeitType> absenceEntries) {
-        List<LocalDate> compensatoryDays = new ArrayList<>();
+        return absenceEntries.stream()
+                .filter(fzt -> fzt.getFehlgrund().equals(type))
+                .flatMap(this::extractFehlzeitenDateRange)
+                .collect(Collectors.toList());
+    }
 
-        if (!absenceEntries.isEmpty()) {
-            absenceEntries.stream()
-                    .filter(fzt -> fzt.getFehlgrund().equals(type))
-                    .forEach(fzt -> {
-                        if (fzt.getStartdatum().equals(fzt.getEnddatum())) {
-                            LocalDate date = LocalDate.parse(fzt.getStartdatum());
-                            compensatoryDays.add(date);
-                        } else {
-                            LocalDate startDate = LocalDate.parse(fzt.getStartdatum());
-                            LocalDate endDate = LocalDate.parse(fzt.getEnddatum());
-                            List<LocalDate> datesBetweenStartAndEnd = Stream.iterate(startDate, date -> date.plusDays(1))
-                                    .limit(ChronoUnit.DAYS.between(startDate, endDate))
-                                    .collect(Collectors.toList());
-                            compensatoryDays.add(startDate);
-                            compensatoryDays.addAll(datesBetweenStartAndEnd);
-                            compensatoryDays.add(endDate);
-                        }
-                    });
-        }
-
-        return compensatoryDays;
+    private Stream<LocalDate> extractFehlzeitenDateRange(FehlzeitType fzt) {
+        return LocalDate.parse(fzt.getStartdatum()).datesUntil(LocalDate.parse(fzt.getEnddatum()).plusDays(1));
     }
 }

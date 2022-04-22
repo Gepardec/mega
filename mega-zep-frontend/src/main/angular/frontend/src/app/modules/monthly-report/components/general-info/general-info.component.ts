@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MonthlyReport} from '../../models/MonthlyReport';
-import {MonthlyReportService} from "../../services/monthly-report.service";
+import {MonthlyReportService} from '../../services/monthly-report.service';
 import * as _moment from 'moment';
 
 const moment = _moment;
@@ -10,23 +10,16 @@ const moment = _moment;
   templateUrl: './general-info.component.html',
   styleUrls: ['./general-info.component.scss']
 })
-
 export class GeneralInfoComponent implements OnInit {
 
   @Input() monthlyReport: MonthlyReport;
-  @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>();
-
-
-  identifiers: string[] = [
-    'Gesamte Arbeitszeit',
-    'Fakturierbare Stunden',
-    'Chargeability',
-    'Urlaub',
-    'Zeitausgleich',
-    'Homeoffice'
-  ];
+  @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>(); // TODO mit Oli abklären, ob dieses Event notwendig ist. Es wird nie gefeuert
 
   constructor(public monthlyReportService: MonthlyReportService) {
+  }
+
+  ngOnInit(): void {
+    this.calculateDynamicValue();
   }
 
   update(monthlyReport: MonthlyReport) {
@@ -34,16 +27,12 @@ export class GeneralInfoComponent implements OnInit {
     this.ngOnInit();
   }
 
-  ngOnInit(): void {
-    this.monthlyReportService.billablePercentage = this.calculateBillingPercentage(this.monthlyReport.totalWorkingTime, this.monthlyReport.billableTime);
-  }
-
   calculateBillingPercentage(totalWorkingTime: string, billableTime: string): number {
-    let spTotalWorkingTime: string[] = totalWorkingTime.split(":");
-    let spBillableTime: string[] = billableTime.split(":");
+    let spTotalWorkingTime: string[] = totalWorkingTime.split(':');
+    let spBillableTime: string[] = billableTime.split(':');
 
     // if split is not possible return 0
-    if (spTotalWorkingTime.length < 1 || spBillableTime.length < 1) {
+    if (spTotalWorkingTime.length <= 1 || spBillableTime.length <= 1) {
       return 0;
     }
 
@@ -58,8 +47,14 @@ export class GeneralInfoComponent implements OnInit {
     return (this.monthlyReportService.billableTimeHours / this.monthlyReportService.totalWorkingTimeHours) * 100;
   }
 
-  month(number: number): string{
+  month(number: number): string {
     moment.locale('de');
-    return moment().month(number).format("MMMM");
+    return moment().month(number).format('MMMM');
+  }
+
+  private calculateDynamicValue() {
+    if (this.monthlyReport) {
+      this.monthlyReportService.billablePercentage = this.calculateBillingPercentage(this.monthlyReport.totalWorkingTime, this.monthlyReport.billableTime);
+    }
   }
 }

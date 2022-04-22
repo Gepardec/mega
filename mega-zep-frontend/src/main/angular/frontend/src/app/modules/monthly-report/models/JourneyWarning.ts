@@ -1,4 +1,4 @@
-export class JourneyWarning {
+export interface JourneyWarning {
   date: string;
   warnings: Array<string>;
 }

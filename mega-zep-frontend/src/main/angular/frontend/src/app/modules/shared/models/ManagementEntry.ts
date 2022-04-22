@@ -1,8 +1,9 @@
 import {Employee} from './Employee';
 import {State} from './State';
-import {PmProgress} from "../../monthly-report/models/PmProgress";
+import {PmProgress} from '../../monthly-report/models/PmProgress';
 
-export class ManagementEntry {
+export interface ManagementEntry {
+
   employee: Employee;
   employeeCheckState: State;
   customerCheckState: State;
@@ -14,5 +15,4 @@ export class ManagementEntry {
   entryDate: string;
   billableTime: string;
   nonBillableTime: string;
-
 }

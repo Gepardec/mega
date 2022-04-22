@@ -1,4 +1,4 @@
-export class Config {
+export interface Config {
   clientId: string;
   issuer: string;
   scope: string;

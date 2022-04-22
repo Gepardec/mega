@@ -1,31 +1,63 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import {ErrorComponent} from './error.component';
-import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {RouterTestingModule} from '@angular/router/testing';
 import {TranslateModule} from '@ngx-translate/core';
-import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {ErrorService} from '../../services/error/error.service';
+import {expect} from '@angular/flex-layout/_private-utils/testing';
+import {Router} from '@angular/router';
+import {AngularMaterialModule} from '../../../material/material-module';
 
 describe('ErrorComponent', () => {
+
   let component: ErrorComponent;
   let fixture: ComponentFixture<ErrorComponent>;
 
-  beforeEach(async(() => {
+  let errorService: ErrorService;
+  let router: Router;
+
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ErrorComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule, TranslateModule.forRoot()],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
-      .compileComponents();
+      declarations: [
+        ErrorComponent
+      ],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        TranslateModule.forRoot(),
+        AngularMaterialModule
+      ]
+    }).compileComponents().then(() => {
+      fixture = TestBed.createComponent(ErrorComponent);
+      component = fixture.componentInstance;
+
+      errorService = TestBed.inject(ErrorService);
+      router = TestBed.inject(Router);
+    });
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ErrorComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  it('#should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('#afterInit - should call errorService.removeLastErrorData()', () => {
+    fixture.detectChanges();
+
+    spyOn(errorService, 'removeLastErrorData').and.stub();
+
+    component.ngOnInit();
+
+    expect(errorService.removeLastErrorData).toHaveBeenCalled();
+  });
+
+  it('#navigatePreviousPage - should call router.navigate()', () => {
+    fixture.detectChanges();
+
+    spyOn(router, 'navigate').and.stub();
+
+    component.navigatePreviousPage();
+
+    expect(router.navigate).toHaveBeenCalled();
   });
 });

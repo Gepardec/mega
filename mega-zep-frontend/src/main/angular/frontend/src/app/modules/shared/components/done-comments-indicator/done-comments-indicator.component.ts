@@ -1,5 +1,4 @@
 import {Component, Input} from '@angular/core';
-import {CommentService} from '../../services/comment/comment.service';
 
 @Component({
   selector: 'app-done-comments-indicator',
@@ -7,9 +6,8 @@ import {CommentService} from '../../services/comment/comment.service';
   styleUrls: ['./done-comments-indicator.component.scss']
 })
 export class DoneCommentsIndicatorComponent {
+
   @Input() totalComments: number;
   @Input() finishedComments: number;
 
-  constructor(private commentService: CommentService) {
-  }
 }

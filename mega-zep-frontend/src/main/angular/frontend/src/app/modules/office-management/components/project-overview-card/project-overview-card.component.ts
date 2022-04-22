@@ -83,21 +83,7 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.dateSelectionSub) {
-      this.dateSelectionSub.unsubscribe();
-    }
-  }
-
-  private getPmEntries() {
-    this.pmService.getEntries(this.selectedYear, this.selectedMonth, true).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
-      this.pmEntries = pmEntries;
-      this.pmEntries.forEach(pmEntry => {
-        this.projectCommentService.get(this.getFormattedDate(), pmEntry.projectName)
-          .subscribe(projectComment => {
-            pmEntry.projectComment = projectComment;
-          });
-      });
-    });
+    this.dateSelectionSub?.unsubscribe();
   }
 
   isAtLeastOneEmployeeCheckDone(pmEntry: ProjectManagementEntry): ProjectState {
@@ -151,11 +137,23 @@ export class ProjectOverviewCardComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getFormattedDate() {
-    return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format('yyyy-MM-DD');
+  getTooltipText(projectState: ProjectState): string {
+    return this.translate.instant('STATE.' + projectState);
   }
 
-  getTooltipText(projectState: ProjectState) {
-    return this.translate.instant('STATE.' + projectState);
+  private getFormattedDate() {
+    return moment().year(this.selectedYear).month(this.selectedMonth - 1).date(1).format(configuration.dateFormat);
+  }
+
+  private getPmEntries() {
+    this.pmService.getEntries(this.selectedYear, this.selectedMonth, true).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
+      this.pmEntries = pmEntries;
+      this.pmEntries.forEach(pmEntry => {
+        this.projectCommentService.get(this.getFormattedDate(), pmEntry.projectName)
+          .subscribe(projectComment => {
+            pmEntry.projectComment = projectComment;
+          });
+      });
+    });
   }
 }

@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {ConfigService} from "../config/config.service";
-import {Observable} from "rxjs";
-import {ProjectEntry, ProjectStepQualifier} from "../../../project-management/models/ProjectEntry";
-import {ProjectState} from "../../models/ProjectState";
+import {HttpClient} from '@angular/common/http';
+import {ConfigService} from '../config/config.service';
+import {Observable} from 'rxjs';
+import {ProjectEntry, ProjectStepQualifier} from '../../../project-management/models/ProjectEntry';
+import {ProjectState} from '../../models/ProjectState';
 
 @Injectable({
   providedIn: 'root'

@@ -2,7 +2,7 @@ import {TimeWarning} from './TimeWarning';
 import {JourneyWarning} from './JourneyWarning';
 import {Comment} from '../../shared/models/Comment';
 import {Employee} from '../../shared/models/Employee';
-import {PmProgress} from "./PmProgress";
+import {PmProgress} from './PmProgress';
 
 export class MonthlyReport {
   comments: Array<Comment>;

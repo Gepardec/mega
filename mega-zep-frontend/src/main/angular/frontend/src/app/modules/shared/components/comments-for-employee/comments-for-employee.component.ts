@@ -15,17 +15,20 @@ import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component
   styleUrls: ['./comments-for-employee.component.scss']
 })
 export class CommentsForEmployeeComponent implements OnInit {
-  MAXIMUM_LETTERS = 500;
+
+  @Output() commentHasChanged: EventEmitter<void> = new EventEmitter<void>();
+  @ViewChild('newMessage') newCommentTextarea;
+
   State = State;
+
+  MAXIMUM_LETTERS: number = 500;
+
   employee: Employee;
   user: User;
   comments: Array<Comment>;
   step: Step;
-  project = '';
+  project: string = '';
   currentMonthYear: string;
-  @Output() commentHasChanged: EventEmitter<void> = new EventEmitter<void>();
-
-  @ViewChild('newMessage') newCommentTextarea;
 
   constructor(private commentService: CommentService,
               private userService: UserService,
@@ -44,11 +47,11 @@ export class CommentsForEmployeeComponent implements OnInit {
     });
   }
 
-  toggleIsEditing(comment: Comment) {
+  toggleIsEditing(comment: Comment): void {
     comment.isEditing = !comment.isEditing;
   }
 
-  editCommentBtnVisible(comment: Comment) {
+  editCommentBtnVisible(comment: Comment): boolean {
     return !comment.isEditing && this.user.email === comment.authorEmail && comment.state !== State.DONE;
   }
 
@@ -60,18 +63,13 @@ export class CommentsForEmployeeComponent implements OnInit {
   }
 
   parseAnchorTags(plainText): string {
-    let replacedText;
-    let startingWithHttpHttpsOrFtpPattern;
-    let startingWithWwwPattern;
-    let emailAddressPattern;
+    let startingWithHttpHttpsOrFtpPattern = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+    let replacedText = plainText.replace(startingWithHttpHttpsOrFtpPattern, '<a href="$1" target="_blank">$1</a>');
 
-    startingWithHttpHttpsOrFtpPattern = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
-    replacedText = plainText.replace(startingWithHttpHttpsOrFtpPattern, '<a href="$1" target="_blank">$1</a>');
-
-    startingWithWwwPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+    let startingWithWwwPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
     replacedText = replacedText.replace(startingWithWwwPattern, '$1<a href="http://$2" target="_blank">$2</a>');
 
-    emailAddressPattern = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
+    let emailAddressPattern = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
     replacedText = replacedText.replace(emailAddressPattern, '<a href="mailto:$1">$1</a>');
 
     return replacedText;
@@ -90,8 +88,8 @@ export class CommentsForEmployeeComponent implements OnInit {
 
   updateCommentForEmployee(comment: Comment): void {
     this.commentService.updateComment(comment).subscribe(() => {
+      this.commentHasChanged.emit();
     });
-    this.commentHasChanged.emit();
   }
 
   deleteCommentOfEmployee(commentToRemove: Comment): void {
