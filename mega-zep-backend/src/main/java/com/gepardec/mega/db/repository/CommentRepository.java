@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @ApplicationScoped
+@Transactional
 public class CommentRepository implements PanacheRepository<Comment> {
 
     @Inject

@@ -3,9 +3,6 @@ package com.gepardec.mega.application.producer;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.OngoingStubbing;
 import org.slf4j.Logger;
 
@@ -21,14 +18,14 @@ import static org.mockito.Mockito.when;
 @QuarkusTest
 class LoggerProducerTest {
 
+    @Inject
+    LoggerProducer producer;
+
     private InjectionPoint ip;
 
     private Bean<?> bean;
 
     private Member member;
-
-    @Inject
-    LoggerProducer producer;
 
     @BeforeEach
     void beforeEach() {

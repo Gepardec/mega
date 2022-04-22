@@ -1,60 +1,37 @@
 package com.gepardec.mega.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
-import lombok.extern.jackson.Jacksonized;
-
-import javax.annotation.Nullable;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Builder
 @Getter
-@ToString
+@Setter
 @EqualsAndHashCode
-@Accessors(fluent = true)
-@JsonIgnoreProperties(ignoreUnknown = true)
-@Jacksonized
+@NoArgsConstructor
+@AllArgsConstructor
 public class Employee {
-    @Nullable
-    @JsonProperty
-    private final String userId;
 
-    @Nullable
-    @JsonProperty
-    private final String email;
+    private String userId;
 
-    @Nullable
-    @JsonProperty
-    private final String title;
+    private String email;
 
-    @Nullable
-    @JsonProperty
-    private final String firstname;
+    private String title;
 
-    @Nullable
-    @JsonProperty
-    private final String lastname;
+    private String firstname;
 
-    @Nullable
-    @JsonProperty
-    private final String salutation;
+    private String lastname;
 
-    @Nullable
-    @JsonProperty
-    private final String releaseDate;
+    private String salutation;
 
-    @Nullable
-    @JsonProperty
-    private final String workDescription;
+    private String releaseDate;
 
-    @Nullable
-    @JsonProperty
-    private final String language;
+    private String workDescription;
 
-    @JsonProperty
-    private final boolean active;
+    private String language;
+
+    private boolean active;
 }

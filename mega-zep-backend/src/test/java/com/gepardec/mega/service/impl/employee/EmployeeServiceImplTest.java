@@ -1,8 +1,8 @@
 package com.gepardec.mega.service.impl.employee;
 
-import com.gepardec.mega.db.repository.UserRepository;
 import com.gepardec.mega.domain.model.Employee;
-import com.gepardec.mega.service.api.employee.EmployeeService;
+import com.gepardec.mega.service.api.EmployeeService;
+import com.gepardec.mega.service.impl.EmployeeServiceImpl;
 import com.gepardec.mega.zep.ZepService;
 import com.gepardec.mega.zep.ZepServiceException;
 import io.quarkus.test.junit.QuarkusTest;
@@ -34,9 +34,6 @@ class EmployeeServiceImplTest {
     @InjectMock
     ManagedExecutor managedExecutor;
 
-    @InjectMock
-    UserRepository userRepository;
-
     @Inject
     Logger logger;
 
@@ -45,7 +42,7 @@ class EmployeeServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        employeeService = new EmployeeServiceImpl(logger, zepService, managedExecutor, userRepository, 10);
+        employeeService = new EmployeeServiceImpl(logger, zepService, managedExecutor, 10);
     }
 
     @Test
@@ -54,8 +51,8 @@ class EmployeeServiceImplTest {
 
         final Employee employee = employeeService.getEmployee("someuserid");
         assertThat(employee).isNotNull();
-        assertThat(employee.userId()).isEqualTo("0");
-        assertThat(employee.firstname()).isEqualTo("Max_0");
+        assertThat(employee.getUserId()).isEqualTo("0");
+        assertThat(employee.getFirstname()).isEqualTo("Max_0");
     }
 
     @Test
@@ -70,8 +67,8 @@ class EmployeeServiceImplTest {
         assertAll(
                 () -> assertThat(employees).isNotNull(),
                 () -> assertThat(employees).hasSize(1),
-                () -> assertThat(employees.get(0).userId()).isEqualTo("0"),
-                () -> assertThat(employees.get(0).firstname()).isEqualTo("Max_0")
+                () -> assertThat(employees.get(0).getUserId()).isEqualTo("0"),
+                () -> assertThat(employees.get(0).getFirstname()).isEqualTo("Max_0")
         );
     }
 

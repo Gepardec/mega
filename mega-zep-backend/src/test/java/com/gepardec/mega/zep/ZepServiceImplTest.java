@@ -2,7 +2,7 @@ package com.gepardec.mega.zep;
 
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.Project;
-import com.gepardec.mega.service.impl.employee.EmployeeMapper;
+import com.gepardec.mega.service.mapper.EmployeeMapper;
 import com.gepardec.mega.zep.mapper.ProjectEntryMapper;
 import de.provantis.zep.MitarbeiterListeType;
 import de.provantis.zep.MitarbeiterType;
@@ -37,8 +37,10 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @QuarkusTest
 class ZepServiceImplTest {
@@ -110,11 +112,26 @@ class ZepServiceImplTest {
 
         final Employee employee = zepService.getEmployee("0");
         assertThat(employee).isNotNull();
-        assertThat(employee.userId()).isEqualTo("0");
+        assertThat(employee.getUserId()).isEqualTo("0");
 
         Mockito.verify(zepSoapPortType).readMitarbeiter(Mockito.argThat(
                 argument -> argument.getReadMitarbeiterSearchCriteria() != null && argument.getReadMitarbeiterSearchCriteria().getUserId().equals("0")
         ));
+    }
+
+    @Test
+    void getEmployee_releaseDateFromZepNullString_releaseDateMappedToNull() {
+        MitarbeiterType mitarbeiter = createMitarbeiterType(0);
+        mitarbeiter.setFreigabedatum("NULL");
+
+        when(zepSoapPortType.readMitarbeiter(any())).thenReturn(createReadMitarbeiterResponseType(
+                List.of(mitarbeiter)
+        ));
+
+        final Employee employee = zepService.getEmployee("0");
+
+        assertThat(employee).isNotNull();
+        assertThat(employee.getReleaseDate()).isNull();
     }
 
     @Test
@@ -271,8 +288,8 @@ class ZepServiceImplTest {
 
         // Then
         assertThat(projectsForMonthYear).hasSize(1);
-        assertThat(projectsForMonthYear.get(0).employees()).hasSize(1);
-        assertThat(projectsForMonthYear.get(0).leads()).hasSize(1);
+        assertThat(projectsForMonthYear.get(0).getEmployees()).hasSize(1);
+        assertThat(projectsForMonthYear.get(0).getLeads()).hasSize(1);
     }
 
     @ParameterizedTest
@@ -291,8 +308,8 @@ class ZepServiceImplTest {
 
         // Then
         assertThat(projectsForMonthYear).hasSize(1);
-        assertThat(projectsForMonthYear.get(0).employees()).isEmpty();
-        assertThat(projectsForMonthYear.get(0).leads()).isEmpty();
+        assertThat(projectsForMonthYear.get(0).getEmployees()).isEmpty();
+        assertThat(projectsForMonthYear.get(0).getLeads()).isEmpty();
     }
 
     @Test
@@ -316,8 +333,8 @@ class ZepServiceImplTest {
 
         // Then
         assertThat(projectsForMonthYear).hasSize(1);
-        assertThat(projectsForMonthYear.get(0).employees()).hasSize(1);
-        assertThat(projectsForMonthYear.get(0).leads()).hasSize(1);
+        assertThat(projectsForMonthYear.get(0).getEmployees()).hasSize(1);
+        assertThat(projectsForMonthYear.get(0).getLeads()).hasSize(1);
     }
 
     @Test
@@ -341,7 +358,7 @@ class ZepServiceImplTest {
 
         // Then
         assertThat(projectsForMonthYear).hasSize(1);
-        assertThat(projectsForMonthYear.get(0).employees()).isEmpty();
-        assertThat(projectsForMonthYear.get(0).leads()).isEmpty();
+        assertThat(projectsForMonthYear.get(0).getEmployees()).isEmpty();
+        assertThat(projectsForMonthYear.get(0).getLeads()).isEmpty();
     }
 }

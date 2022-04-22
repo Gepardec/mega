@@ -1,29 +1,26 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {MonthlyReport} from '../../models/MonthlyReport';
 import {State} from '../../../shared/models/State';
-import {TimeWarning} from "../../models/TimeWarning";
+import {TimeWarning} from '../../models/TimeWarning';
 
 @Component({
   selector: 'app-time-check',
   templateUrl: './time-check.component.html',
   styleUrls: ['./time-check.component.scss']
 })
-export class TimeCheckComponent implements OnInit {
-  @Input() monthlyReport: MonthlyReport;
-  displayedColumns = ['warning', 'dateTime', 'restTime', 'breakTime', 'workingTime'];
+export class TimeCheckComponent {
+
   State = State;
 
-  constructor() {
-  }
+  @Input() monthlyReport: MonthlyReport;
 
-  ngOnInit(): void {
-  }
+  displayedColumns = ['warning', 'dateTime', 'restTime', 'breakTime', 'workingTime'];
 
-  displayWarningsTooltip(timeWarning: TimeWarning) {
+  displayWarningsTooltip(timeWarning: TimeWarning): string {
     if (timeWarning.warnings == null || timeWarning.warnings.length == 0) {
       return null;
     } else {
-      return timeWarning.warnings.join("<br>");
+      return timeWarning.warnings.join('<br>');
     }
   }
 }

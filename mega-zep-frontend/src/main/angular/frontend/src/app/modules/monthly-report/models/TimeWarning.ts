@@ -1,4 +1,4 @@
-export class TimeWarning {
+export interface TimeWarning {
   date: string;
   missingRestTime: number;
   missingBreakTime: number;

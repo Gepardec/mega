@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {MonthlyReport} from '../models/MonthlyReport';
 import {Subscription} from 'rxjs';
 import {MonthlyReportService} from '../services/monthly-report.service';
-import {GeneralInfoComponent} from "./general-info/general-info.component";
+import {GeneralInfoComponent} from './general-info/general-info.component';
 
 @Component({
   selector: 'app-monthly-report',
@@ -10,15 +10,20 @@ import {GeneralInfoComponent} from "./general-info/general-info.component";
 })
 export class MonthlyReportComponent implements OnInit {
 
-  public monthlyReport: MonthlyReport;
   generalInfoComponent: GeneralInfoComponent = new GeneralInfoComponent(this.monthlyReportService);
+
+  public monthlyReport: MonthlyReport;
   private monthlyReportSubscription: Subscription;
 
   constructor(private monthlyReportService: MonthlyReportService,
               private cd: ChangeDetectorRef) {
   }
 
-  getAllTimeEntriesByDate(year: number, month: number) {
+  ngOnInit(): void {
+    this.getAllTimeEntries();
+  }
+
+  getAllTimeEntriesByDate(year: number, month: number): void {
     this.monthlyReportSubscription = this.monthlyReportService.getAllByDate(year, month).subscribe((monthlyReport: MonthlyReport) => {
       this.monthlyReport = monthlyReport;
       this.generalInfoComponent.update(monthlyReport);
@@ -26,25 +31,18 @@ export class MonthlyReportComponent implements OnInit {
     });
   }
 
-  getAllTimeEntries() {
+  getAllTimeEntries(): void {
     this.monthlyReportSubscription = this.monthlyReportService.getAll().subscribe((monthlyReport: MonthlyReport) => {
       if (monthlyReport) {
         this.monthlyReport = monthlyReport;
-        const splitReleaseDate = this.monthlyReport.employee.releaseDate.split("-");
+        const splitReleaseDate = this.monthlyReport.employee.releaseDate.split('-');
         this.monthlyReportService.selectedYear.next(+splitReleaseDate[0]);
         this.monthlyReportService.selectedMonth.next(+splitReleaseDate[1]);
-      } else {
-        console.log("MonthlyReport should only be undefined for the tests!");
       }
-
     });
   }
 
-  ngOnInit(): void {
-    this.getAllTimeEntries();
-  }
-
-  refreshMonthlyReport() {
+  refreshMonthlyReport(): void {
     this.getAllTimeEntriesByDate(this.monthlyReportService.selectedYear.getValue(), this.monthlyReportService.selectedMonth.getValue());
   }
 }

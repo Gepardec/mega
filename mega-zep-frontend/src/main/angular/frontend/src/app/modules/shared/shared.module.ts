@@ -18,7 +18,7 @@ import {StateSelectComponent} from './components/state-select/state-select.compo
 import {DoneCommentsIndicatorComponent} from './components/done-comments-indicator/done-comments-indicator.component';
 import {StateIndicatorComponent} from './components/state-indicator/state-indicator.component';
 import {DatepickerMonthYearComponent} from './components/datepicker-month-year/datepicker-month-year.component';
-import {ConfirmDialogComponent} from "./components/confirm-dialog/confirm-dialog.component";
+import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
 import {ProjectStateSelectComponent} from './components/project-state-select/project-state-select.component';
 import {InlineTextEditorComponent} from './components/inline-text-editor/inline-text-editor.component';
 

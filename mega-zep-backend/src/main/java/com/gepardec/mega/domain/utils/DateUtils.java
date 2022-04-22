@@ -5,16 +5,17 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
-import java.time.temporal.TemporalAdjusters;
 import java.util.Locale;
 import java.util.Objects;
 
-public class DateUtils {
+import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
+import static java.time.temporal.TemporalAdjusters.firstDayOfNextMonth;
+import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
+
+public final class DateUtils {
 
     private static final DateTimeFormatter DEFAULT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault());
-
     private static final DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-ddHH:mm", Locale.getDefault());
-
     private static final Locale GERMAN_LOCALE = Locale.GERMANY;
 
     private DateUtils() {
@@ -41,33 +42,44 @@ public class DateUtils {
         return LocalDate.now();
     }
 
-    public static String getFirstDayOfFollowingMonth(String dateAsString) {
+    public static LocalDate getFirstDayOfFollowingMonth(String dateAsString) {
         Objects.requireNonNull(dateAsString, "Date must not be null!");
-        return formatDate(
-                parseDate(dateAsString)
-                        .with(TemporalAdjusters.firstDayOfNextMonth()));
+        return parseDate(dateAsString).with(firstDayOfNextMonth());
     }
 
-    public static String getFirstDayOfCurrentMonth(String dateAsString) {
-        Objects.requireNonNull(dateAsString, "Date must not be null!");
-        return formatDate(
-                parseDate(dateAsString)
-                        .with(TemporalAdjusters.firstDayOfMonth()));
+    public static String getFirstDayOfFollowingMonth(LocalDate date) {
+        Objects.requireNonNull(date, "Date must not be null!");
+        return formatDate(date.with(firstDayOfNextMonth()));
     }
 
-    public static String getLastDayOfFollowingMonth(String dateAsString) {
+    public static LocalDate getFirstDayOfCurrentMonth(String dateAsString) {
         Objects.requireNonNull(dateAsString, "Date must not be null!");
-        return formatDate(
-                parseDate(dateAsString)
-                        .plusMonths(1)
-                        .with(TemporalAdjusters.lastDayOfMonth()));
+        return parseDate(dateAsString).with(firstDayOfMonth());
     }
 
-    public static String getLastDayOfCurrentMonth(String dateAsString) {
+    public static String getFirstDayOfCurrentMonth(LocalDate date) {
+        Objects.requireNonNull(date, "Date must not be null!");
+        return formatDate(date.with(firstDayOfMonth()));
+    }
+
+    public static LocalDate getLastDayOfFollowingMonth(String dateAsString) {
         Objects.requireNonNull(dateAsString, "Date must not be null!");
-        return formatDate(
-                parseDate(dateAsString)
-                        .with(TemporalAdjusters.lastDayOfMonth()));
+        return parseDate(dateAsString).plusMonths(1).with(lastDayOfMonth());
+    }
+
+    public static String getLastDayOfFollowingMonth(LocalDate date) {
+        Objects.requireNonNull(date, "Date must not be null!");
+        return formatDate(date.plusMonths(1).with(lastDayOfMonth()));
+    }
+
+    public static LocalDate getLastDayOfCurrentMonth(String dateAsString) {
+        Objects.requireNonNull(dateAsString, "Date must not be null!");
+        return parseDate(dateAsString).with(lastDayOfMonth());
+    }
+
+    public static String getLastDayOfCurrentMonth(LocalDate date) {
+        Objects.requireNonNull(date, "Date must not be null!");
+        return formatDate(date.with(lastDayOfMonth()));
     }
 
     public static double calcDiffInHours(LocalDateTime from, LocalDateTime to) {

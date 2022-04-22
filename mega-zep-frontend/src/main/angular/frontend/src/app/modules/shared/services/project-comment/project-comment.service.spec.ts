@@ -2,9 +2,9 @@ import {TestBed} from '@angular/core/testing';
 
 import {ProjectCommentService} from './project-comment.service';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {ConfigService} from "../config/config.service";
-import {ProjectComment} from "../../models/ProjectComment";
-import {HttpResponse} from "@angular/common/http";
+import {ConfigService} from '../config/config.service';
+import {ProjectComment} from '../../models/ProjectComment';
+import {HttpResponse} from '@angular/common/http';
 
 describe('ProjectCommentService', () => {
 

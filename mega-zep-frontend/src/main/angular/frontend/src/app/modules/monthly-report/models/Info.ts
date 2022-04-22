@@ -1,4 +1,4 @@
-export class Info {
+export interface Info {
   at_hash: string;
   aud: string;
   azp: string;

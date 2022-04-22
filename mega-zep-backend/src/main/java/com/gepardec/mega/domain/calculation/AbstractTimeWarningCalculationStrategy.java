@@ -1,7 +1,6 @@
 package com.gepardec.mega.domain.calculation;
 
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
-import com.gepardec.mega.domain.model.monthlyreport.Task;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -16,7 +15,7 @@ public abstract class AbstractTimeWarningCalculationStrategy {
 
     protected Map<LocalDate, List<ProjectEntry>> groupProjectEntriesByFromDate(final List<ProjectEntry> projectTimeList, List<Predicate<ProjectEntry>> filters) {
         Stream<ProjectEntry> projectEntryStream = projectTimeList.stream();
-        if (filters != null && filters.size() > 0) {
+        if (filters != null && !filters.isEmpty()) {
             for (final Predicate<ProjectEntry> predicate : filters) {
                 projectEntryStream = projectEntryStream.filter(predicate);
             }

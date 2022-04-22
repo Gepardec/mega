@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {MonthlyReport} from '../../models/MonthlyReport';
 import {CommentService} from '../../../shared/services/comment/comment.service';
 import {State} from '../../../shared/models/State';
@@ -14,11 +14,12 @@ import {PmProgressComponent} from '../../../shared/components/pm-progress/pm-pro
   templateUrl: './employee-check.component.html',
   styleUrls: ['./employee-check.component.scss']
 })
-export class EmployeeCheckComponent implements OnInit {
+export class EmployeeCheckComponent {
+
+  State = State;
 
   @Input() monthlyReport: MonthlyReport;
   @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>();
-  State = State;
 
   employeeProgressRef: MatBottomSheetRef;
 
@@ -29,13 +30,10 @@ export class EmployeeCheckComponent implements OnInit {
     private _bottomSheet: MatBottomSheet) {
   }
 
-  ngOnInit(): void {
-  }
-
   selectionChange(change: MatSelectionListChange): void {
-    const comment = change.option.value;
+    const comment = change.options[0].value;
 
-    this.commentService.setStatusDone(comment).subscribe((updated: number) => {
+    this.commentService.setStatusDone(comment).subscribe(() => {
       const updatedComment = this.monthlyReport.comments.find(value => value.id === comment.id);
       updatedComment.state = State.DONE;
 
@@ -46,19 +44,19 @@ export class EmployeeCheckComponent implements OnInit {
     });
   }
 
-  setOpenAndUnassignedStepEntriesDone() {
+  setOpenAndUnassignedStepEntriesDone(): void {
     this.stepentriesService
       .close(this.monthlyReport.employee, Step.CONTROL_TIMES, this.monthlyReport.employee.releaseDate)
-      .subscribe((success: boolean) => {
+      .subscribe(() => {
         this.emitRefreshMonthlyReport();
       });
   }
 
-  emitRefreshMonthlyReport() {
+  emitRefreshMonthlyReport(): void {
     this.refreshMonthlyReport.emit();
   }
 
-  openEmployeeProgress() {
+  openEmployeeProgress(): void {
     this.employeeProgressRef = this._bottomSheet.open(PmProgressComponent, {
       data: {employeeProgresses: this.monthlyReport.employeeProgresses},
       autoFocus: false,
@@ -66,11 +64,11 @@ export class EmployeeCheckComponent implements OnInit {
     });
   }
 
-  closeEmployeeProgress() {
+  closeEmployeeProgress(): void {
     this.employeeProgressRef.dismiss();
   }
 
-  parseBody(body: string) {
+  parseBody(body: string): string {
     const urlPattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/igm;
     return body.replace(urlPattern, '<a href=\$& target="_blank"\>$&</a>');
   }

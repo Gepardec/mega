@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {MonthlyReport} from '../../models/MonthlyReport';
 import {State} from '../../../shared/models/State';
 
@@ -7,21 +7,19 @@ import {State} from '../../../shared/models/State';
   templateUrl: './journey-check.component.html',
   styleUrls: ['./journey-check.component.scss']
 })
-export class JourneyCheckComponent implements OnInit {
-  @Input() monthlyReport: MonthlyReport;
-  displayedColumns = ['dateJourney', 'warningJourney'];
+export class JourneyCheckComponent {
+
   State = State;
 
-  constructor() {
-  }
+  @Input() monthlyReport: MonthlyReport;
 
-  ngOnInit(): void {
-  }
+  displayedColumns = ['dateJourney', 'warningJourney'];
 
   getJourneyWarningString(warnings: Array<string>): string {
     let warningString = '';
+
     warnings.forEach((value) => warningString += value + '. ');
+
     return warningString;
   }
-
 }

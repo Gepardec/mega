@@ -9,7 +9,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatProgressSpinnerModule, MatSpinner} from '@angular/material/progress-spinner';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
@@ -21,8 +21,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSelectModule} from '@angular/material/select';
 import {MatExpansionModule} from '@angular/material/expansion';
-import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
@@ -73,7 +73,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatToolbarModule,
     MatTooltipModule,
     MatBottomSheetModule,
-    OverlayModule,
+    OverlayModule
   ]
 })
 export class AngularMaterialModule {

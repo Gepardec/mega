@@ -1,13 +1,4 @@
-import {
-  AfterContentChecked, AfterViewChecked,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import {AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {MatSelect, MatSelectChange} from '@angular/material/select';
 import {ProjectState} from '../../models/ProjectState';
 
@@ -16,12 +7,13 @@ import {ProjectState} from '../../models/ProjectState';
   templateUrl: './project-state-select.component.html',
   styleUrls: ['./project-state-select.component.scss']
 })
-export class ProjectStateSelectComponent implements OnInit, AfterViewChecked {
+export class ProjectStateSelectComponent implements AfterViewChecked {
 
-  @ViewChild('select') select: MatSelect;
   ProjectState = ProjectState;
-  @Input() value
+
+  @Input() value: ProjectState;
   @Output() selectionChange = new EventEmitter<MatSelectChange>();
+  @ViewChild('select') select: MatSelect;
 
   constructor(private cdr: ChangeDetectorRef) {
   }
@@ -36,9 +28,6 @@ export class ProjectStateSelectComponent implements OnInit, AfterViewChecked {
 
   get isDoneSelected(): boolean {
     return this.value === ProjectState.DONE;
-  }
-
-  ngOnInit(): void {
   }
 
   ngAfterViewChecked() {

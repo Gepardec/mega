@@ -8,10 +8,12 @@ import io.quarkus.panache.common.Parameters;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
+@Transactional
 public class UserRepository implements PanacheRepository<User> {
 
     @Inject

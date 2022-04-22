@@ -125,7 +125,7 @@ public class User {
 
     @NotNull
     @Size(min = 1)
-    @ElementCollection(targetClass = Role.class)
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "employee_user_roles",
             joinColumns = @JoinColumn(name = "id", referencedColumnName = "id"))
     @Enumerated(EnumType.STRING)

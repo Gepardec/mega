@@ -8,10 +8,12 @@ import com.gepardec.mega.domain.model.monthlyreport.Task;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarningType;
 import com.gepardec.mega.domain.model.monthlyreport.WorkingLocation;
+import com.gepardec.mega.service.helper.WarningCalculator;
+import com.gepardec.mega.service.impl.MonthlyReportServiceImpl;
 import com.gepardec.mega.zep.ZepService;
+import de.provantis.zep.FehlzeitType;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -37,17 +40,6 @@ class MonthlyReportServiceImplTest {
 
     @Inject
     MonthlyReportServiceImpl monthlyReportService;
-
-    @Test
-    @Disabled
-        // FIXME ask andreas for purpose
-    void testGetMonthendReportForUser_MitarbeiterNull() {
-        when(zepService.getEmployee(Mockito.any())).thenReturn(null);
-        when(warningCalculator.determineNoTimeEntries(Mockito.anyList(), Mockito.anyList())).thenReturn(new ArrayList<>());
-
-        assertThat(monthlyReportService.getMonthendReportForUser("0"))
-                .isNotNull();
-    }
 
     @Test
     void testGetMonthendReportForUser_MitarbeiterValid() {
@@ -80,11 +72,11 @@ class MonthlyReportServiceImplTest {
 
         assertThat(monthendReportForUser)
                 .isNotNull();
-        assertThat(monthendReportForUser.employee().email())
+        assertThat(monthendReportForUser.getEmployee().getEmail())
                 .isEqualTo("Max_0@gepardec.com");
-        assertThat(monthendReportForUser.timeWarnings())
+        assertThat(monthendReportForUser.getTimeWarnings())
                 .isNotNull();
-        assertThat(monthendReportForUser.timeWarnings().isEmpty())
+        assertThat(monthendReportForUser.getTimeWarnings().isEmpty())
                 .isTrue();
     }
 
@@ -100,18 +92,258 @@ class MonthlyReportServiceImplTest {
 
         assertThat(monthendReportForUser)
                 .isNotNull();
-        assertThat(monthendReportForUser.employee().email())
+        assertThat(monthendReportForUser.getEmployee().getEmail())
                 .isEqualTo("Max_0@gepardec.com");
-        assertThat(monthendReportForUser.timeWarnings())
+        assertThat(monthendReportForUser.getTimeWarnings())
                 .isNotNull();
-        assertThat(Objects.requireNonNull(monthendReportForUser.timeWarnings()).isEmpty())
+        assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()).isEmpty())
                 .isFalse();
-        assertThat(monthendReportForUser.timeWarnings().get(0).getDate())
+        assertThat(monthendReportForUser.getTimeWarnings().get(0).getDate())
                 .isEqualTo(LocalDate.of(2020, 1, 31));
-        assertThat(monthendReportForUser.timeWarnings().get(0).getExcessWorkTime())
+        assertThat(monthendReportForUser.getTimeWarnings().get(0).getExcessWorkTime())
                 .isEqualTo(1d);
-        assertThat(monthendReportForUser.timeWarnings().get(0).getMissingBreakTime())
+        assertThat(monthendReportForUser.getTimeWarnings().get(0).getMissingBreakTime())
                 .isEqualTo(0.5d);
+    }
+
+    @Test
+    void getMonthendReportForUser_isUserIsValidAndHasNursingAbsenceDays_thenReturnsReportWithCorrectNursingDays() {
+        final Employee employee = createEmployee(0);
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjektzeitenResponseType(18));
+        List<FehlzeitType> absenceList = new ArrayList<>();
+        FehlzeitType nursingDay = new FehlzeitType();
+        nursingDay.setFehlgrund("PU");
+        nursingDay.setGenehmigt(true);
+        nursingDay.setEnddatum(LocalDate.of(2020, 2, 29).toString());
+        nursingDay.setStartdatum(LocalDate.of(2020, 2, 27).toString());
+        absenceList.add(nursingDay);
+        when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(absenceList);
+        when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(new ArrayList<>());
+
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
+
+        assertAll(
+                () -> assertThat(monthendReportForUser)
+                        .isNotNull(),
+                () -> assertThat(monthendReportForUser.getEmployee().getEmail())
+                        .isEqualTo("Max_0@gepardec.com"),
+                () -> assertThat(monthendReportForUser.getTimeWarnings())
+                        .isNotNull(),
+                () -> assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()).isEmpty())
+                        .isTrue(),
+                () -> assertThat(monthendReportForUser.getNursingDays()).isEqualTo(2)
+        );
+    }
+
+    @Test
+    void getMonthendReportForUser_isUserIsValidAndHasMaternityLeaveAbsenceDays_thenReturnsReportWithCorrectAmountOfMaternityLeaveDays() {
+        final Employee employee = createEmployee(0);
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjektzeitenResponseType(18));
+        List<FehlzeitType> absenceList = new ArrayList<>();
+        FehlzeitType maternityLeaveDay = new FehlzeitType();
+        maternityLeaveDay.setFehlgrund("KA");
+        maternityLeaveDay.setGenehmigt(true);
+        maternityLeaveDay.setEnddatum(LocalDate.of(2020, 2, 29).toString());
+        maternityLeaveDay.setStartdatum(LocalDate.of(2020, 2, 27).toString());
+        absenceList.add(maternityLeaveDay);
+        when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(absenceList);
+        when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(new ArrayList<>());
+
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
+
+        assertAll(
+                () -> assertThat(monthendReportForUser)
+                        .isNotNull(),
+                () -> assertThat(monthendReportForUser.getEmployee().getEmail())
+                        .isEqualTo("Max_0@gepardec.com"),
+                () -> assertThat(monthendReportForUser.getTimeWarnings())
+                        .isNotNull(),
+                () -> assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()))
+                        .isEmpty(),
+                () -> assertThat(monthendReportForUser.getMaternityLeaveDays()).isEqualTo(2)
+        );
+    }
+
+    @Test
+    void getMonthendReportForUser_isUserIsValidAndHasExternalTrainingAbsenceDays_thenReturnsReportWithCorrectAmountOfExternalTrainingDays() {
+        final Employee employee = createEmployee(0);
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjektzeitenResponseType(18));
+        List<FehlzeitType> absenceList = new ArrayList<>();
+        FehlzeitType externalTrainingAbsence = new FehlzeitType();
+        externalTrainingAbsence.setFehlgrund("EW");
+        externalTrainingAbsence.setGenehmigt(true);
+        externalTrainingAbsence.setEnddatum(LocalDate.of(2020, 2, 29).toString());
+        externalTrainingAbsence.setStartdatum(LocalDate.of(2020, 2, 27).toString());
+        absenceList.add(externalTrainingAbsence);
+        when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(absenceList);
+        when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(new ArrayList<>());
+
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
+
+        assertAll(
+                () -> assertThat(monthendReportForUser)
+                        .isNotNull(),
+                () -> assertThat(monthendReportForUser.getEmployee().getEmail())
+                        .isEqualTo("Max_0@gepardec.com"),
+                () -> assertThat(monthendReportForUser.getTimeWarnings())
+                        .isNotNull(),
+                () -> assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()))
+                        .isEmpty(),
+                () -> assertThat(monthendReportForUser.getExternalTrainingDays()).isEqualTo(2)
+        );
+    }
+
+    @Test
+    void getMonthendReportForUser_isUserIsValidAndHasConferenceAbsenceDays_thenReturnsReportWithCorrectAmountOfConferenceDays() {
+        final Employee employee = createEmployee(0);
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjektzeitenResponseType(18));
+        List<FehlzeitType> absenceList = new ArrayList<>();
+        FehlzeitType conferenceDaysAbsence = new FehlzeitType();
+        conferenceDaysAbsence.setFehlgrund("KO");
+        conferenceDaysAbsence.setGenehmigt(true);
+        conferenceDaysAbsence.setEnddatum(LocalDate.of(2020, 2, 29).toString());
+        conferenceDaysAbsence.setStartdatum(LocalDate.of(2020, 2, 27).toString());
+        absenceList.add(conferenceDaysAbsence);
+        when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(absenceList);
+        when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(new ArrayList<>());
+
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
+
+        assertAll(
+                () -> assertThat(monthendReportForUser)
+                        .isNotNull(),
+                () -> assertThat(monthendReportForUser.getEmployee().getEmail())
+                        .isEqualTo("Max_0@gepardec.com"),
+                () -> assertThat(monthendReportForUser.getTimeWarnings())
+                        .isNotNull(),
+                () -> assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()))
+                        .isEmpty(),
+                () -> assertThat(monthendReportForUser.getConferenceDays()).isEqualTo(2)
+        );
+    }
+
+    @Test
+    void getMonthendReportForUser_isUserIsValidAndHasMaternityProtectionAbsenceDays_thenReturnsReportWithCorrectAmountOfMaternityProtectionDays() {
+        final Employee employee = createEmployee(0);
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjektzeitenResponseType(18));
+        List<FehlzeitType> absenceList = new ArrayList<>();
+        FehlzeitType maternityProtectionDaysAbsence = new FehlzeitType();
+        maternityProtectionDaysAbsence.setFehlgrund("MU");
+        maternityProtectionDaysAbsence.setGenehmigt(true);
+        maternityProtectionDaysAbsence.setEnddatum(LocalDate.of(2020, 2, 29).toString());
+        maternityProtectionDaysAbsence.setStartdatum(LocalDate.of(2020, 2, 27).toString());
+        absenceList.add(maternityProtectionDaysAbsence);
+        when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(absenceList);
+        when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(new ArrayList<>());
+
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
+
+        assertAll(
+                () -> assertThat(monthendReportForUser)
+                        .isNotNull(),
+                () -> assertThat(monthendReportForUser.getEmployee().getEmail())
+                        .isEqualTo("Max_0@gepardec.com"),
+                () -> assertThat(monthendReportForUser.getTimeWarnings())
+                        .isNotNull(),
+                () -> assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()))
+                        .isEmpty(),
+                () -> assertThat(monthendReportForUser.getMaternityProtectionDays()).isEqualTo(2)
+        );
+    }
+
+    @Test
+    void getMonthendReportForUser_isUserIsValidAndHasFatherMonthAbsenceDays_thenReturnsReportWithCorrectAmountOfFatherMonthDays() {
+        final Employee employee = createEmployee(0);
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjektzeitenResponseType(18));
+        List<FehlzeitType> absenceList = new ArrayList<>();
+        FehlzeitType fatherMonthDaysAbsence = new FehlzeitType();
+        fatherMonthDaysAbsence.setFehlgrund("PA");
+        fatherMonthDaysAbsence.setGenehmigt(true);
+        fatherMonthDaysAbsence.setEnddatum(LocalDate.of(2020, 2, 29).toString());
+        fatherMonthDaysAbsence.setStartdatum(LocalDate.of(2020, 2, 27).toString());
+        absenceList.add(fatherMonthDaysAbsence);
+        when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(absenceList);
+        when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(new ArrayList<>());
+
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
+
+        assertAll(
+                () -> assertThat(monthendReportForUser)
+                        .isNotNull(),
+                () -> assertThat(monthendReportForUser.getEmployee().getEmail())
+                        .isEqualTo("Max_0@gepardec.com"),
+                () -> assertThat(monthendReportForUser.getTimeWarnings())
+                        .isNotNull(),
+                () -> assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()))
+                        .isEmpty(),
+                () -> assertThat(monthendReportForUser.getFatherMonthDays()).isEqualTo(2)
+        );
+    }
+
+    @Test
+    void getMonthendReportForUser_isUserIsValidAndHasPaidSpecialLeaveAbsenceDays_thenReturnsReportWithCorrectAmountOfPaidSpecialLeaveDays() {
+        final Employee employee = createEmployee(0);
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjektzeitenResponseType(18));
+        List<FehlzeitType> absenceList = new ArrayList<>();
+        FehlzeitType paidSpecialLeaveDaysAbsence = new FehlzeitType();
+        paidSpecialLeaveDaysAbsence.setFehlgrund("SU");
+        paidSpecialLeaveDaysAbsence.setGenehmigt(true);
+        paidSpecialLeaveDaysAbsence.setEnddatum(LocalDate.of(2020, 2, 29).toString());
+        paidSpecialLeaveDaysAbsence.setStartdatum(LocalDate.of(2020, 2, 27).toString());
+        absenceList.add(paidSpecialLeaveDaysAbsence);
+        when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(absenceList);
+        when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(new ArrayList<>());
+
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
+
+        assertAll(
+                () -> assertThat(monthendReportForUser)
+                        .isNotNull(),
+                () -> assertThat(monthendReportForUser.getEmployee().getEmail())
+                        .isEqualTo("Max_0@gepardec.com"),
+                () -> assertThat(monthendReportForUser.getTimeWarnings())
+                        .isNotNull(),
+                () -> assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()))
+                        .isEmpty(),
+                () -> assertThat(monthendReportForUser.getPaidSpecialLeaveDays()).isEqualTo(2)
+        );
+    }
+
+    @Test
+    void getMonthendReportForUser_isUserIsValidAndHasNonPaidVacationAbsenceDays_thenReturnsReportWithCorrectAmountOfNonPaidVacationDays() {
+        final Employee employee = createEmployee(0);
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjektzeitenResponseType(18));
+        List<FehlzeitType> absenceList = new ArrayList<>();
+        FehlzeitType nonPaidVacationDaysAbsence = new FehlzeitType();
+        nonPaidVacationDaysAbsence.setFehlgrund("UU");
+        nonPaidVacationDaysAbsence.setGenehmigt(true);
+        nonPaidVacationDaysAbsence.setEnddatum(LocalDate.of(2020, 2, 29).toString());
+        nonPaidVacationDaysAbsence.setStartdatum(LocalDate.of(2020, 2, 27).toString());
+        absenceList.add(nonPaidVacationDaysAbsence);
+        when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(absenceList);
+        when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(new ArrayList<>());
+
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
+
+        assertAll(
+                () -> assertThat(monthendReportForUser)
+                        .isNotNull(),
+                () -> assertThat(monthendReportForUser.getEmployee().getEmail())
+                        .isEqualTo("Max_0@gepardec.com"),
+                () -> assertThat(monthendReportForUser.getTimeWarnings())
+                        .isNotNull(),
+                () -> assertThat(Objects.requireNonNull(monthendReportForUser.getTimeWarnings()))
+                        .isEmpty(),
+                () -> assertThat(monthendReportForUser.getNonPaidVacationDays()).isEqualTo(2)
+        );
     }
 
     private List<TimeWarning> createTimeWarningList() {

@@ -1,4 +1,4 @@
-import {State} from "../../shared/models/State";
+import {State} from '../../shared/models/State';
 
 export class PmProgress {
   firstname: string;

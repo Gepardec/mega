@@ -1,11 +1,11 @@
 import {TestBed} from '@angular/core/testing';
 
 import {EnterpriseEntriesService} from './enterprise-entries.service';
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {ConfigService} from "../../../shared/services/config/config.service";
-import {EnterpriseEntry} from "../../models/EnterpriseEntry";
-import {ProjectState} from "../../../shared/models/ProjectState";
-import {HttpResponse} from "@angular/common/http";
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {ConfigService} from '../../../shared/services/config/config.service';
+import {EnterpriseEntry} from '../../models/EnterpriseEntry';
+import {ProjectState} from '../../../shared/models/ProjectState';
+import {HttpResponse} from '@angular/common/http';
 
 describe('EnterpriseEntriesService', () => {
 

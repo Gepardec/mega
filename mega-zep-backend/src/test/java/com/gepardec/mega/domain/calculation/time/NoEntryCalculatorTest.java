@@ -90,6 +90,62 @@ class NoEntryCalculatorTest {
         assertThat(result).isEmpty();
     }
 
+    @Test
+    void calculate_whenNursingDays_thenReturnsNoWarning() {
+        List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryListForNovember(), createAbsenceListFromPUType());
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void calculate_whenMaternityLeaveDays_thenReturnsNoWarning() {
+        List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryListForNovember(), createAbsenceListFromKAType());
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void calculate_whenExternalTrainingDays_thenReturnsNoWarning() {
+        List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryListForNovember(), createAbsenceListFromEWType());
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void calculate_whenConferenceDays_thenReturnsNoWarning() {
+        List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryListForNovember(), createAbsenceListFromKOType());
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void calculate_whenMaternityProtectionDays_thenReturnsNoWarning() {
+        List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryListForNovember(), createAbsenceListFromMUType());
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void calculate_whenFatherMonthDays_thenReturnsNoWarning() {
+        List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryListForNovember(), createAbsenceListFromPAType());
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void calculate_whenPaidSpecialLeaveDays_thenReturnsNoWarning() {
+        List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryListForNovember(), createAbsenceListFromSUType());
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void calculate_whenNonPaidVacationDays_thenReturnsNoWarning() {
+        List<TimeWarning> result = noEntryCalculator.calculate(createProjectEntryListForNovember(), createAbsenceListFromUUType());
+
+        assertThat(result).isEmpty();
+    }
+
     private List<FehlzeitType> createAbsenceListFromUBType() {
         List<FehlzeitType> fehlzeiten = new ArrayList<>();
         FehlzeitType fehlzeitType = new FehlzeitType();
@@ -124,6 +180,110 @@ class NoEntryCalculatorTest {
         fehlzeitType.setStartdatum(startDate);
         fehlzeitType.setEnddatum(endDate);
         fehlzeitType.setFehlgrund(AbsenteeType.SICKNESS_DAYS.getType());
+        fehlzeiten.add(fehlzeitType);
+
+        return fehlzeiten;
+    }
+
+    private List<FehlzeitType> createAbsenceListFromPUType() {
+        List<FehlzeitType> fehlzeiten = new ArrayList<>();
+        FehlzeitType fehlzeitType = new FehlzeitType();
+        String startDate = LocalDate.of(2021, 2, 25).toString();
+        String endDate = LocalDate.of(2021, 2, 26).toString();
+        fehlzeitType.setStartdatum(startDate);
+        fehlzeitType.setEnddatum(endDate);
+        fehlzeitType.setFehlgrund(AbsenteeType.NURSING_DAYS.getType());
+        fehlzeiten.add(fehlzeitType);
+
+        return fehlzeiten;
+    }
+
+    private List<FehlzeitType> createAbsenceListFromKAType() {
+        List<FehlzeitType> fehlzeiten = new ArrayList<>();
+        FehlzeitType fehlzeitType = new FehlzeitType();
+        String startDate = LocalDate.of(2021, 2, 25).toString();
+        String endDate = LocalDate.of(2021, 2, 26).toString();
+        fehlzeitType.setStartdatum(startDate);
+        fehlzeitType.setEnddatum(endDate);
+        fehlzeitType.setFehlgrund(AbsenteeType.MATERNITY_LEAVE_DAYS.getType());
+        fehlzeiten.add(fehlzeitType);
+
+        return fehlzeiten;
+    }
+
+    private List<FehlzeitType> createAbsenceListFromEWType() {
+        List<FehlzeitType> fehlzeiten = new ArrayList<>();
+        FehlzeitType fehlzeitType = new FehlzeitType();
+        String startDate = LocalDate.of(2021, 2, 25).toString();
+        String endDate = LocalDate.of(2021, 2, 26).toString();
+        fehlzeitType.setStartdatum(startDate);
+        fehlzeitType.setEnddatum(endDate);
+        fehlzeitType.setFehlgrund(AbsenteeType.EXTERNAL_TRAINING_DAYS.getType());
+        fehlzeiten.add(fehlzeitType);
+
+        return fehlzeiten;
+    }
+
+    private List<FehlzeitType> createAbsenceListFromKOType() {
+        List<FehlzeitType> fehlzeiten = new ArrayList<>();
+        FehlzeitType fehlzeitType = new FehlzeitType();
+        String startDate = LocalDate.of(2021, 2, 25).toString();
+        String endDate = LocalDate.of(2021, 2, 26).toString();
+        fehlzeitType.setStartdatum(startDate);
+        fehlzeitType.setEnddatum(endDate);
+        fehlzeitType.setFehlgrund(AbsenteeType.CONFERENCE_DAYS.getType());
+        fehlzeiten.add(fehlzeitType);
+
+        return fehlzeiten;
+    }
+
+    private List<FehlzeitType> createAbsenceListFromMUType() {
+        List<FehlzeitType> fehlzeiten = new ArrayList<>();
+        FehlzeitType fehlzeitType = new FehlzeitType();
+        String startDate = LocalDate.of(2021, 2, 25).toString();
+        String endDate = LocalDate.of(2021, 2, 26).toString();
+        fehlzeitType.setStartdatum(startDate);
+        fehlzeitType.setEnddatum(endDate);
+        fehlzeitType.setFehlgrund(AbsenteeType.MATERNITY_PROTECTION_DAYS.getType());
+        fehlzeiten.add(fehlzeitType);
+
+        return fehlzeiten;
+    }
+
+    private List<FehlzeitType> createAbsenceListFromPAType() {
+        List<FehlzeitType> fehlzeiten = new ArrayList<>();
+        FehlzeitType fehlzeitType = new FehlzeitType();
+        String startDate = LocalDate.of(2021, 2, 25).toString();
+        String endDate = LocalDate.of(2021, 2, 26).toString();
+        fehlzeitType.setStartdatum(startDate);
+        fehlzeitType.setEnddatum(endDate);
+        fehlzeitType.setFehlgrund(AbsenteeType.FATHER_MONTH_DAYS.getType());
+        fehlzeiten.add(fehlzeitType);
+
+        return fehlzeiten;
+    }
+
+    private List<FehlzeitType> createAbsenceListFromSUType() {
+        List<FehlzeitType> fehlzeiten = new ArrayList<>();
+        FehlzeitType fehlzeitType = new FehlzeitType();
+        String startDate = LocalDate.of(2021, 2, 25).toString();
+        String endDate = LocalDate.of(2021, 2, 26).toString();
+        fehlzeitType.setStartdatum(startDate);
+        fehlzeitType.setEnddatum(endDate);
+        fehlzeitType.setFehlgrund(AbsenteeType.PAID_SPECIAL_LEAVE_DAYS.getType());
+        fehlzeiten.add(fehlzeitType);
+
+        return fehlzeiten;
+    }
+
+    private List<FehlzeitType> createAbsenceListFromUUType() {
+        List<FehlzeitType> fehlzeiten = new ArrayList<>();
+        FehlzeitType fehlzeitType = new FehlzeitType();
+        String startDate = LocalDate.of(2021, 2, 25).toString();
+        String endDate = LocalDate.of(2021, 2, 26).toString();
+        fehlzeitType.setStartdatum(startDate);
+        fehlzeitType.setEnddatum(endDate);
+        fehlzeitType.setFehlgrund(AbsenteeType.NON_PAID_VACATION_DAYS.getType());
         fehlzeiten.add(fehlzeitType);
 
         return fehlzeiten;
