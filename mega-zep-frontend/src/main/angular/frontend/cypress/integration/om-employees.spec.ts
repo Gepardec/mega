@@ -20,15 +20,15 @@ describe('Office Management (Mitarbeiter)', () => {
     });
 
     cy.fixture('officemanagement/enterpriseentries.json').then(jsonData => {
-      cy.route('http://localhost:8080/enterprise/entriesformonthyear/2022/2', jsonData).as('getEnterpriseEntries');
+      cy.route('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
     });
 
     cy.fixture('officemanagement/projectmanagemententries.json').then(jsonData => {
-      cy.route('http://localhost:8080/management/projectmanagemententries/2022/2?all=true', jsonData).as('getProjectManagementEntries');
+      cy.route('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
     });
 
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
-      cy.route('http://localhost:8080/management/officemanagemententries/2022/2', jsonData).as('getOfficeManagementEntries');
+      cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     cy.fixture('officemanagement/projectcomments.json').then(jsonData => {
@@ -78,7 +78,7 @@ describe('Office Management (Mitarbeiter)', () => {
 
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].customerCheckState = 'DONE';
-      cy.route('http://localhost:8080/management/officemanagemententries/2022/2', jsonData).as('getOfficeManagementEntries');
+      cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -107,7 +107,7 @@ describe('Office Management (Mitarbeiter)', () => {
 
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].internalCheckState = 'DONE';
-      cy.route('http://localhost:8080/management/officemanagemententries/2022/2', jsonData).as('getOfficeManagementEntries');
+      cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -118,7 +118,7 @@ describe('Office Management (Mitarbeiter)', () => {
   it('Should display that the employee confirmed his bookings', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].employeeCheckState = 'DONE'
-      cy.route('http://localhost:8080/management/officemanagemententries/2022/2', jsonData).as('getOfficeManagementEntries');
+      cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -128,7 +128,7 @@ describe('Office Management (Mitarbeiter)', () => {
   it('Should display that the project lead confirmed the employees bookings', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].projectCheckState = 'DONE'
-      cy.route('http://localhost:8080/management/officemanagemententries/2022/2', jsonData).as('getOfficeManagementEntries');
+      cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -141,7 +141,7 @@ describe('Office Management (Mitarbeiter)', () => {
       jsonData[0].internalCheckState = 'DONE'
       jsonData[0].employeeCheckState = 'DONE'
       jsonData[0].projectCheckState = 'DONE'
-      cy.route('http://localhost:8080/management/officemanagemententries/2022/2', jsonData).as('getOfficeManagementEntries');
+      cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -154,7 +154,7 @@ describe('Office Management (Mitarbeiter)', () => {
   it('Should indicate that there is one comment present for the employee', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].totalComments = 1
-      cy.route('http://localhost:8080/management/officemanagemententries/2022/2', jsonData).as('getOfficeManagementEntries');
+      cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -169,7 +169,7 @@ describe('Office Management (Mitarbeiter)', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].totalComments = 1
       jsonData[0].finishedComments = 1
-      cy.route('http://localhost:8080/management/officemanagemententries/2022/2', jsonData).as('getOfficeManagementEntries');
+      cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');

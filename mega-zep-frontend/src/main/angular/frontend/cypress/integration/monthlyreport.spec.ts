@@ -30,8 +30,9 @@ describe('Mein Mega', () => {
     }).as('updateEmployeeCheck');
 
     cy.fixture('common/monthendreports.json').then(jsonData => {
-      jsonData[0].employeeCheckState = 'DONE';
-      cy.route('http://localhost:8080/worker/monthendreports/2022/1', jsonData).as('getMonthendreportsDone')
+      cy.log(jsonData);
+      jsonData.employeeCheckState = 'DONE';
+      cy.route('http://localhost:8080/worker/monthendreports/*/*', jsonData).as('getMonthendreportsDone')
     });
 
     cy.get('app-employee-check .mat-card')

@@ -20,15 +20,15 @@ describe('Office Management (Unternehmen)', () => {
     });
 
     cy.fixture('officemanagement/enterpriseentries.json').then(jsonData => {
-      cy.route('http://localhost:8080/enterprise/entriesformonthyear/2022/2', jsonData).as('getEnterpriseEntries');
+      cy.route('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
     });
 
     cy.fixture('officemanagement/projectmanagemententries.json').then(jsonData => {
-      cy.route('http://localhost:8080/management/projectmanagemententries/2022/2?all=true', jsonData).as('getProjectManagementEntries');
+      cy.route('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
     });
 
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
-      cy.route('http://localhost:8080/management/officemanagemententries/2022/2', jsonData).as('getOfficeManagementEntries');
+      cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     cy.fixture('officemanagement/projectcomments.json').then(jsonData => {
@@ -59,7 +59,7 @@ describe('Office Management (Unternehmen)', () => {
   it('Should display all employees checked "done"', () => {
     cy.fixture('officemanagement/projectmanagemententries.json').then(jsonData => {
       jsonData[0].entries[0].projectCheckState = 'DONE';
-      cy.route('http://localhost:8080/management/projectmanagemententries/2022/2?all=true', jsonData).as('getProjectManagementEntries');
+      cy.route('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
     });
     visitAndWaitForRequests('/officeManagement');
     assertCheck('employees-checked', 'check_circle');
@@ -68,7 +68,7 @@ describe('Office Management (Unternehmen)', () => {
   it('Should display control project "done"', () => {
     cy.fixture('officemanagement/projectmanagemententries.json').then(jsonData => {
       jsonData[0].controlProjectState = 'DONE';
-      cy.route('http://localhost:8080/management/projectmanagemententries/2022/2?all=true', jsonData).as('getProjectManagementEntries');
+      cy.route('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
     });
     visitAndWaitForRequests('/officeManagement');
     assertCheck('control-project', 'check_circle');
@@ -77,7 +77,7 @@ describe('Office Management (Unternehmen)', () => {
   it('Should display project billing "done"', () => {
     cy.fixture('officemanagement/projectmanagemententries.json').then(jsonData => {
       jsonData[0].controlBillingState = 'DONE';
-      cy.route('http://localhost:8080/management/projectmanagemententries/2022/2?all=true', jsonData).as('getProjectManagementEntries');
+      cy.route('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
     });
     visitAndWaitForRequests('/officeManagement');
     assertCheck('project-billing', 'check_circle');
@@ -88,7 +88,7 @@ describe('Office Management (Unternehmen)', () => {
       jsonData[0].entries[0].projectCheckState = 'DONE';
       jsonData[0].controlProjectState = 'DONE';
       jsonData[0].controlBillingState = 'DONE';
-      cy.route('http://localhost:8080/management/projectmanagemententries/2022/2?all=true', jsonData).as('getProjectManagementEntries');
+      cy.route('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
