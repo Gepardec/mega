@@ -43,13 +43,13 @@ describe('Office Management (Mitarbeiter)', () => {
     cy.loginByGoogleApi();
   });
 
-  it('Should contain one element in employee table in card with title "Mitarbeiter"', () => {
+  it('should contain one element in employee table in card with title "Mitarbeiter"', () => {
     visitAndWaitForRequests('/officeManagement');
     cy.get('[data-cy="employee-card"] mat-card-title').should('have.text', 'Mitarbeiter');
     cy.get('[data-cy="employee-table"]').should('have.length', 1);
   });
 
-  it('Should display all employee checks "open"', () => {
+  it('should display all employee checks "open"', () => {
     visitAndWaitForRequests('/officeManagement');
     assertSelect('customer-check', 'Offen');
     assertSelect('internal-check', 'Offen');
@@ -57,7 +57,7 @@ describe('Office Management (Mitarbeiter)', () => {
     assertCheck('project-check', 'cancel');
   });
 
-  it('Should change the status of "Kundenzeiten" when "Fertig" gets selected', () => {
+  it('should change the status of "Kundenzeiten" when "Fertig" gets selected', () => {
     visitAndWaitForRequests('/officeManagement');
     assertSelect('customer-check', 'Offen');
 
@@ -86,7 +86,7 @@ describe('Office Management (Mitarbeiter)', () => {
     assertSelect('customer-check', 'Fertig');
   });
 
-  it('Should change the status of "Interne Zeiten" when "Fertig" gets selected', () => {
+  it('should change the status of "Interne Zeiten" when "Fertig" gets selected', () => {
     visitAndWaitForRequests('/officeManagement');
     assertSelect('internal-check', 'Offen');
 
@@ -115,7 +115,7 @@ describe('Office Management (Mitarbeiter)', () => {
     assertSelect('internal-check', 'Fertig');
   });
 
-  it('Should display that the employee confirmed his bookings', () => {
+  it('should display that the employee confirmed his bookings', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].employeeCheckState = 'DONE'
       cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
@@ -125,7 +125,7 @@ describe('Office Management (Mitarbeiter)', () => {
     assertCheck('employee-check', 'check_circle');
   });
 
-  it('Should display that the project lead confirmed the employees bookings', () => {
+  it('should display that the project lead confirmed the employees bookings', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].projectCheckState = 'DONE'
       cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
@@ -135,7 +135,7 @@ describe('Office Management (Mitarbeiter)', () => {
     assertCheck('project-check', 'check_circle');
   });
 
-  it('Should display all employee checks done when checks in response are set to "done"', () => {
+  it('should display all employee checks done when checks in response are set to "done"', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].customerCheckState = 'DONE'
       jsonData[0].internalCheckState = 'DONE'
@@ -151,7 +151,7 @@ describe('Office Management (Mitarbeiter)', () => {
     assertCheck('project-check', 'check_circle');
   });
 
-  it('Should indicate that there is one comment present for the employee', () => {
+  it('should indicate that there is one comment present for the employee', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].totalComments = 1
       cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
@@ -165,7 +165,7 @@ describe('Office Management (Mitarbeiter)', () => {
       .should('have.class', 'red');
   });
 
-  it('Should indicate that there is one resolved comment out of one for the employee', () => {
+  it('should indicate that there is one resolved comment out of one for the employee', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].totalComments = 1
       jsonData[0].finishedComments = 1

@@ -43,7 +43,7 @@ describe('Office Management (Unternehmen)', () => {
     cy.loginByGoogleApi();
   });
 
-  it('Should display all enterprise entries open', () => {
+  it('should display all enterprise entries open', () => {
     visitAndWaitForRequests('/officeManagement');
     assertSelect('zep-times-released', 'Offen');
     assertSelect('chargeability-external-employees', 'Offen');
@@ -51,7 +51,7 @@ describe('Office Management (Unternehmen)', () => {
     assertSelect('zep-monthly-report', 'Offen');
   });
 
-  it('Should display zep times release date done when state "done" gets selected', () => {
+  it('should display zep times release date done when state "done" gets selected', () => {
     visitAndWaitForRequests('/officeManagement');
     assertSelect('zep-times-released', 'Offen');
 
@@ -80,7 +80,7 @@ describe('Office Management (Unternehmen)', () => {
       .should('have.class', 'mat-select-disabled');
   });
 
-  it('Should display chargeability of external employees in progress when state "in progress" gets selected', () => {
+  it('should display chargeability of external employees in progress when state "in progress" gets selected', () => {
     visitAndWaitForRequests('/officeManagement');
     assertSelect('chargeability-external-employees', 'Offen');
 
@@ -107,7 +107,7 @@ describe('Office Management (Unternehmen)', () => {
     assertSelect('chargeability-external-employees', 'In Arbeit');
   });
 
-  it('Should display payroll accounting sent not relevant when "not relevant" gets selected', () => {
+  it('should display payroll accounting sent not relevant when "not relevant" gets selected', () => {
     visitAndWaitForRequests('/officeManagement');
     assertSelect('payroll-accounting-sent', 'Offen');
 
@@ -134,7 +134,7 @@ describe('Office Management (Unternehmen)', () => {
     assertSelect('payroll-accounting-sent', 'Nicht relevant');
   });
 
-  it('Should display zep monthly report done', () => {
+  it('should display zep monthly report done', () => {
     visitAndWaitForRequests('/officeManagement');
     assertSelect('zep-monthly-report', 'Offen');
 
@@ -163,7 +163,7 @@ describe('Office Management (Unternehmen)', () => {
       .should('have.class', 'mat-select-disabled');
   });
 
-  it('Should display all enterprise entries done when checks in response are set to "done"', () => {
+  it('should display all enterprise entries done when checks in response are set to "done"', () => {
     cy.fixture('officemanagement/enterpriseentries.json').then(jsonData => {
       jsonData.zepTimesReleased = 'DONE'
       jsonData.chargeabilityExternalEmployeesRecorded = 'DONE'

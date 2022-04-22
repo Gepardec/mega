@@ -1,7 +1,7 @@
 // @ts-ignore
 import employee from '../fixtures/officemanagement/officemanagemententries.json';
 
-describe('Office Management (Unternehmen)', () => {
+describe('Office Management (Projekte)', () => {
 
   const suiteFixtures = [
     '@getInfo',
@@ -43,20 +43,20 @@ describe('Office Management (Unternehmen)', () => {
     cy.loginByGoogleApi();
   });
 
-  it('Should contain one element in project table in card with title "Projekte"', () => {
+  it('should contain one element in project table in card with title "Projekte"', () => {
     visitAndWaitForRequests('/officeManagement');
     cy.get('[data-cy="project-card"] mat-card-title').should('have.text', 'Projekte');
     cy.get('[data-cy="project-table"]').should('have.length', 1);
   });
 
-  it('Should display all project checks "open"', () => {
+  it('should display all project checks "open"', () => {
     visitAndWaitForRequests('/officeManagement');
     assertCheck('employees-checked', 'cancel');
     assertCheck('control-project', 'cancel');
     assertCheck('project-billing', 'cancel');
   });
 
-  it('Should display all employees checked "done"', () => {
+  it('should display all employees checked "done"', () => {
     cy.fixture('officemanagement/projectmanagemententries.json').then(jsonData => {
       jsonData[0].entries[0].projectCheckState = 'DONE';
       cy.route('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
@@ -65,7 +65,7 @@ describe('Office Management (Unternehmen)', () => {
     assertCheck('employees-checked', 'check_circle');
   });
 
-  it('Should display control project "done"', () => {
+  it('should display control project "done"', () => {
     cy.fixture('officemanagement/projectmanagemententries.json').then(jsonData => {
       jsonData[0].controlProjectState = 'DONE';
       cy.route('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
@@ -74,7 +74,7 @@ describe('Office Management (Unternehmen)', () => {
     assertCheck('control-project', 'check_circle');
   });
 
-  it('Should display project billing "done"', () => {
+  it('should display project billing "done"', () => {
     cy.fixture('officemanagement/projectmanagemententries.json').then(jsonData => {
       jsonData[0].controlBillingState = 'DONE';
       cy.route('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
@@ -83,7 +83,7 @@ describe('Office Management (Unternehmen)', () => {
     assertCheck('project-billing', 'check_circle');
   });
 
-  it('Should display all project checks "done"', () => {
+  it('should display all project checks "done"', () => {
     cy.fixture('officemanagement/projectmanagemententries.json').then(jsonData => {
       jsonData[0].entries[0].projectCheckState = 'DONE';
       jsonData[0].controlProjectState = 'DONE';

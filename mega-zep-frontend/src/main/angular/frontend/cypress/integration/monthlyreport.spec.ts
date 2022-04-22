@@ -26,7 +26,7 @@ describe('Mein Mega', () => {
   });
 
 
-  it('Should confirm the bookings for the selected month', () => {
+  it('should confirm the bookings for the selected month', () => {
     cy.route({
       method: 'PUT',
       url: 'http://localhost:8080/stepentry/close',
