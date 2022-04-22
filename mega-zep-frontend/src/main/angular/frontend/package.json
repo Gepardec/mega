@@ -31,7 +31,7 @@
     "angular-oauth2-oidc": "^13.0.1",
     "angular-oauth2-oidc-jwks": "^13.0.1",
     "coverage-istanbul": "^1.1.2",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "rxjs": "^7.5.2",
     "serialize-javascript": "^6.0.0",
     "tslib": "^2.3.1",
