@@ -10,7 +10,10 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "sonar": "sonar-scanner"
+    "sonar": "sonar-scanner",
+    "start:prod": "http-server ./dist/frontend -a localhost -p 4200",
+    "deploy:prod": "npm run start:prod",
+    "e2e-cy": "npm run deploy:prod http://localhost:4200 & npm run cypress:run"
   },
   "private": true,
   "dependencies": {
