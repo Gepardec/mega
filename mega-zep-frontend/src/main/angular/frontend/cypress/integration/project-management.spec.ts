@@ -83,12 +83,12 @@ describe('Projekt Management', () => {
   it('should display user comments and can add new ones', () => {
     cy.intercept('http://localhost:8080/management/projectmanagemententries/**/**?all=false',
       { fixture: 'project-management/projectmanagemententries.json' }
-    ).as('getProjectmanagemententries')
+    ).as('getProjectmanagemententries');
     cy.fixture('project-management/create-employee-comment.json').then(jsonData => {
       cy.route('POST', 'http://localhost:8080/comments', jsonData).as('create-employee-comment');
     });
     cy.intercept('http://localhost:8080/comments/getallcommentsforemployee?email=**&date=**', []
-    ).as('employee-comments-empty')
+    ).as('employee-comments-empty');
 
     visitAndWaitForRequests();
 
@@ -100,11 +100,11 @@ describe('Projekt Management', () => {
     // getallcommentsforemployee will return comments for further requests
     cy.intercept('http://localhost:8080/comments/getallcommentsforemployee?email=**&date=**',
       { fixture: 'project-management/employee-comments.json' }
-    ).as('employee-comments')
+    ).as('employee-comments');
     // projectmanagemententries will contain comments for further requests
     cy.intercept('http://localhost:8080/management/projectmanagemententries/**/**?all=false',
       { fixture: 'project-management/projectmanagemententries-with-comments.json' }
-    ).as('getProjectmanagemententriesWithComments')
+    ).as('getProjectmanagemententriesWithComments');
 
     cy.get('app-comments-for-employee textarea').type('Hallo Chuck Norris!');
     cy.get('app-comments-for-employee [data-cy="add-comment"]').click();
@@ -136,4 +136,3 @@ describe('Projekt Management', () => {
       .should('have.text', content);
   }
 });
-
