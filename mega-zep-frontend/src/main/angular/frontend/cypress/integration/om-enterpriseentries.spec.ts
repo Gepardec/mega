@@ -13,34 +13,32 @@ describe('Office Management (Unternehmen)', () => {
   ];
 
   beforeEach(() => {
-    cy.server();
-
     cy.fixture('common/info.json').then(jsonData => {
-      cy.route('http://localhost:8080/info', jsonData).as('getInfo');
+      cy.intercept('http://localhost:8080/info', jsonData).as('getInfo');
     });
 
     cy.fixture('officemanagement/enterpriseentries.json').then(jsonData => {
-      cy.route('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
+      cy.intercept('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
     });
 
     cy.fixture('officemanagement/projectmanagemententries.json').then(jsonData => {
-      cy.route('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
+      cy.intercept('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
     });
 
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
-      cy.route('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
+      cy.intercept('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     cy.fixture('officemanagement/projectcomments.json').then(jsonData => {
-      cy.route('http://localhost:8080/projectcomments?date=**-**-**&projectName=Cash-Cow-Project', jsonData).as('getProjectComments');
+      cy.intercept('http://localhost:8080/projectcomments?date=**-**-**&projectName=Cash-Cow-Project', jsonData).as('getProjectComments');
     });
 
     cy.fixture('common/user.json').then(jsonData => {
-      cy.route('http://localhost:8080/user', jsonData).as('getUser');
+      cy.intercept('http://localhost:8080/user', jsonData).as('getUser');
     });
 
     cy.fixture('common/config.json').then(jsonData => {
-      cy.route('http://localhost:8080/config', jsonData).as('getConfig');
+      cy.intercept('http://localhost:8080/config', jsonData).as('getConfig');
     });
 
     // @ts-ignore
@@ -59,10 +57,8 @@ describe('Office Management (Unternehmen)', () => {
     visitAndWaitForRequests('/officeManagement');
     assertSelect('zep-times-released', 'Offen');
 
-    cy.route({
-      method: 'PUT',
-      url: 'http://localhost:8080/enterprise/entry/*/*',
-      response: true
+    cy.intercept('PUT', 'http://localhost:8080/enterprise/entry/*/*', {
+      body: true
     }).as('updateEnterpriseEntry');
 
     cy.get('[data-cy="zep-times-released"]').click().get('[data-cy="option-done"]').click();
@@ -74,7 +70,7 @@ describe('Office Management (Unternehmen)', () => {
 
     cy.fixture('officemanagement/enterpriseentries.json').then(jsonData => {
       jsonData.zepTimesReleased = 'DONE';
-      cy.route('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
+      cy.intercept('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -88,10 +84,8 @@ describe('Office Management (Unternehmen)', () => {
     visitAndWaitForRequests('/officeManagement');
     assertSelect('chargeability-external-employees', 'Offen');
 
-    cy.route({
-      method: 'PUT',
-      url: 'http://localhost:8080/enterprise/entry/*/*',
-      response: true
+    cy.intercept('PUT', 'http://localhost:8080/enterprise/entry/*/*', {
+      body: true
     }).as('updateEnterpriseEntry');
 
     cy.get('[data-cy="chargeability-external-employees"]').click().get('[data-cy="option-in-progress"]').click();
@@ -103,7 +97,7 @@ describe('Office Management (Unternehmen)', () => {
 
     cy.fixture('officemanagement/enterpriseentries.json').then(jsonData => {
       jsonData.chargeabilityExternalEmployeesRecorded = 'WORK_IN_PROGRESS';
-      cy.route('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
+      cy.intercept('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -115,10 +109,8 @@ describe('Office Management (Unternehmen)', () => {
     visitAndWaitForRequests('/officeManagement');
     assertSelect('payroll-accounting-sent', 'Offen');
 
-    cy.route({
-      method: 'PUT',
-      url: 'http://localhost:8080/enterprise/entry/*/*',
-      response: true
+    cy.intercept('PUT', 'http://localhost:8080/enterprise/entry/*/*', {
+      body: true
     }).as('updateEnterpriseEntry');
 
     cy.get('[data-cy="payroll-accounting-sent"]').click().get('[data-cy="option-not-relevant"]').click();
@@ -130,7 +122,7 @@ describe('Office Management (Unternehmen)', () => {
 
     cy.fixture('officemanagement/enterpriseentries.json').then(jsonData => {
       jsonData.payrollAccountingSent = 'NOT_RELEVANT';
-      cy.route('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
+      cy.intercept('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -142,10 +134,8 @@ describe('Office Management (Unternehmen)', () => {
     visitAndWaitForRequests('/officeManagement');
     assertSelect('zep-monthly-report', 'Offen');
 
-    cy.route({
-      method: 'PUT',
-      url: 'http://localhost:8080/enterprise/entry/*/*',
-      response: true
+    cy.intercept('PUT', 'http://localhost:8080/enterprise/entry/*/*', {
+      body: true
     }).as('updateEnterpriseEntry');
 
     cy.get('[data-cy="zep-monthly-report"]').click().get('[data-cy="option-done"]').click();
@@ -157,7 +147,7 @@ describe('Office Management (Unternehmen)', () => {
 
     cy.fixture('officemanagement/enterpriseentries.json').then(jsonData => {
       jsonData.zepMonthlyReportDone = 'DONE';
-      cy.route('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
+      cy.intercept('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -173,7 +163,7 @@ describe('Office Management (Unternehmen)', () => {
       jsonData.chargeabilityExternalEmployeesRecorded = 'DONE';
       jsonData.payrollAccountingSent = 'DONE';
       jsonData.zepMonthlyReportDone = 'DONE';
-      cy.route('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
+      cy.intercept('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');

@@ -8,18 +8,16 @@ describe('Menu bar', () => {
   ];
 
   beforeEach(() => {
-    cy.server();
-
     cy.fixture('common/info.json').then(jsonData => {
-      cy.route('http://localhost:8080/info', jsonData).as('getInfo');
+      cy.intercept('http://localhost:8080/info', jsonData).as('getInfo');
     });
 
     cy.fixture('common/config.json').then(jsonData => {
-      cy.route('http://localhost:8080/config', jsonData).as('getConfig');
+      cy.intercept('http://localhost:8080/config', jsonData).as('getConfig');
     });
 
     cy.fixture('common/monthendreports.json').then(jsonData => {
-      cy.route('http://localhost:8080/worker/monthendreports', jsonData).as('getMonthendreports');
+      cy.intercept('http://localhost:8080/worker/monthendreports', jsonData).as('getMonthendreports');
     });
 
     // @ts-ignore
@@ -75,7 +73,7 @@ describe('Menu bar', () => {
 
   function mockUserJson(path: string) {
     cy.fixture(path).then(jsonData => {
-      cy.route('http://localhost:8080/user', jsonData).as('getUser')
+      cy.intercept('http://localhost:8080/user', jsonData).as('getUser')
     });
   }
 
