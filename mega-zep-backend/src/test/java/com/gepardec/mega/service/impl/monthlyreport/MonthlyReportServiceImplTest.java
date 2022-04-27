@@ -1,6 +1,7 @@
 package com.gepardec.mega.service.impl.monthlyreport;
 
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.monthlyreport.AbsenteeType;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
@@ -357,8 +358,7 @@ class MonthlyReportServiceImplTest {
         final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
 
         assertAll(
-                () -> assertThat(monthendReportForUser)
-                        .isNotNull(),
+                () -> assertThat(monthendReportForUser).isNotNull(),
                 () -> assertThat(monthendReportForUser.getVacationDays()).isEqualTo(5)
         );
     }
@@ -374,8 +374,7 @@ class MonthlyReportServiceImplTest {
         final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
 
         assertAll(
-                () -> assertThat(monthendReportForUser)
-                        .isNotNull(),
+                () -> assertThat(monthendReportForUser).isNotNull(),
                 () -> assertThat(monthendReportForUser.getVacationDays()).isEqualTo(5)
         );
     }
@@ -391,8 +390,7 @@ class MonthlyReportServiceImplTest {
         final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
 
         assertAll(
-                () -> assertThat(monthendReportForUser)
-                        .isNotNull(),
+                () -> assertThat(monthendReportForUser).isNotNull(),
                 () -> assertThat(monthendReportForUser.getHomeofficeDays()).isEqualTo(5),
                 () -> assertThat(monthendReportForUser.getTimeWarnings()).isEmpty()
         );
@@ -409,8 +407,7 @@ class MonthlyReportServiceImplTest {
         final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
 
         assertAll(
-                () -> assertThat(monthendReportForUser)
-                        .isNotNull(),
+                () -> assertThat(monthendReportForUser).isNotNull(),
                 () -> assertThat(monthendReportForUser.getHomeofficeDays()).isEqualTo(5),
                 () -> assertThat(monthendReportForUser.getTimeWarnings()).isEmpty()
         );
@@ -427,8 +424,7 @@ class MonthlyReportServiceImplTest {
         final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
 
         assertAll(
-                () -> assertThat(monthendReportForUser)
-                        .isNotNull(),
+                () -> assertThat(monthendReportForUser).isNotNull(),
                 () -> assertThat(monthendReportForUser.getCompensatoryDays()).isEqualTo(5),
                 () -> assertThat(monthendReportForUser.getTimeWarnings()).isEmpty()
         );
@@ -445,8 +441,7 @@ class MonthlyReportServiceImplTest {
         final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
 
         assertAll(
-                () -> assertThat(monthendReportForUser)
-                        .isNotNull(),
+                () -> assertThat(monthendReportForUser).isNotNull(),
                 () -> assertThat(monthendReportForUser.getCompensatoryDays()).isEqualTo(5),
                 () -> assertThat(monthendReportForUser.getTimeWarnings()).isEmpty()
         );
@@ -495,7 +490,7 @@ class MonthlyReportServiceImplTest {
         List<FehlzeitType> absenceList = new ArrayList<>();
 
         FehlzeitType vacationDaysAbsence = new FehlzeitType();
-        vacationDaysAbsence.setFehlgrund("FA");
+        vacationDaysAbsence.setFehlgrund(AbsenteeType.COMPENSATORY_DAYS.getType());
         vacationDaysAbsence.setGenehmigt(true);
         vacationDaysAbsence.setEnddatum(LocalDate.of(2022, 4, 29).toString());
         vacationDaysAbsence.setStartdatum(LocalDate.of(2022, 4, 25).toString());
@@ -508,7 +503,7 @@ class MonthlyReportServiceImplTest {
         List<FehlzeitType> absenceList = new ArrayList<>();
 
         FehlzeitType vacationDaysAbsence = new FehlzeitType();
-        vacationDaysAbsence.setFehlgrund("FA");
+        vacationDaysAbsence.setFehlgrund(AbsenteeType.COMPENSATORY_DAYS.getType());
         vacationDaysAbsence.setGenehmigt(true);
         vacationDaysAbsence.setEnddatum(LocalDate.of(2022, 5, 3).toString());
         vacationDaysAbsence.setStartdatum(LocalDate.of(2022, 4, 25).toString());
@@ -521,7 +516,7 @@ class MonthlyReportServiceImplTest {
         List<FehlzeitType> absenceList = new ArrayList<>();
 
         FehlzeitType vacationDaysAbsence = new FehlzeitType();
-        vacationDaysAbsence.setFehlgrund("UB");
+        vacationDaysAbsence.setFehlgrund(AbsenteeType.VACATION_DAYS.getType());
         vacationDaysAbsence.setGenehmigt(true);
         vacationDaysAbsence.setEnddatum(LocalDate.of(2022, 5, 3).toString());
         vacationDaysAbsence.setStartdatum(LocalDate.of(2022, 4, 25).toString());
@@ -533,8 +528,9 @@ class MonthlyReportServiceImplTest {
     private List<ProjectEntry> createReadProjectTimesResponseTypeForCorrectVacationDays() {
         List<Integer> weekEndDays = List.of(2, 3, 9, 10, 16, 17, 18, 19, 20);
         List<ProjectEntry> projectTimeEntryList = new ArrayList<>();
-        for(int i = 1; i <= 22; i++) {
-            if(!weekEndDays.contains(i)) {
+
+        for (int i = 1; i <= 22; i++) {
+            if (!weekEndDays.contains(i)) {
                 projectTimeEntryList.add(ProjectTimeEntry.builder()
                         .fromTime(LocalDateTime.of(2022, 4, i, 8, 0))
                         .toTime(LocalDateTime.of(2022, 4, i, 16, 30))
@@ -542,6 +538,7 @@ class MonthlyReportServiceImplTest {
                         .workingLocation(WorkingLocation.MAIN).build());
             }
         }
+
         return projectTimeEntryList;
     }
 
