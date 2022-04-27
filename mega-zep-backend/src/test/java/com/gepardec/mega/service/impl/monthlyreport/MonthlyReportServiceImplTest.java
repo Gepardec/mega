@@ -1,6 +1,7 @@
 package com.gepardec.mega.service.impl.monthlyreport;
 
 import com.gepardec.mega.domain.model.Employee;
+import com.gepardec.mega.domain.model.monthlyreport.AbsenteeType;
 import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectTimeEntry;
@@ -346,6 +347,201 @@ class MonthlyReportServiceImplTest {
         );
     }
 
+    @Test
+    void getMonthendReportForUser_isUserValidAndHasPaidVacationOverWeekend_thenReturnsReportWithOnlyVacationDaysOnWorkdays() {
+        final Employee employee = createEmployeeForVacationTests(0);
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjectTimesResponseTypeForCorrectVacationDays());
+        when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createVacationAbsenceList());
+        when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(new ArrayList<>());
+
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
+
+        assertAll(
+                () -> assertThat(monthendReportForUser).isNotNull(),
+                () -> assertThat(monthendReportForUser.getVacationDays()).isEqualTo(5)
+        );
+    }
+
+    @Test
+    void getMonthendReportForUser_isUserValidAndHasPaidVacationOverWeekendWhichExtendsOverMonthEnd_thenReturnsReportWithOnlyVacationDaysOnWorkdays() {
+        final Employee employee = createEmployeeForVacationTests(0);
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjectTimesResponseTypeForCorrectVacationDays());
+        when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createVacationAbsenceListWhichExtendsOverMonthEnd());
+        when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(new ArrayList<>());
+
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
+
+        assertAll(
+                () -> assertThat(monthendReportForUser).isNotNull(),
+                () -> assertThat(monthendReportForUser.getVacationDays()).isEqualTo(5)
+        );
+    }
+
+    @Test
+    void getMonthendReportForUser_isUserValidAndHasHomeofficeOverWeekend_thenReturnsReportWithHomeOfficeOnWorkdays() {
+        final Employee employee = createEmployeeForVacationTests(0);
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjectTimesResponseTypeForCorrectVacationDays());
+        when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createHomeOfficeListWhichExtendsOverWeekend());
+        when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(new ArrayList<>());
+
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
+
+        assertAll(
+                () -> assertThat(monthendReportForUser).isNotNull(),
+                () -> assertThat(monthendReportForUser.getHomeofficeDays()).isEqualTo(5),
+                () -> assertThat(monthendReportForUser.getTimeWarnings()).isEmpty()
+        );
+    }
+
+    @Test
+    void getMonthendReportForUser_isUserValidAndHasHomeofficeOverWeekendAndExtendsOverMonth_thenReturnsReportWithHomeOfficeOnWorkdays() {
+        final Employee employee = createEmployeeForVacationTests(0);
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjectTimesResponseTypeForCorrectVacationDays());
+        when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createHomeOfficeListWhichExtendsOverMonth());
+        when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(new ArrayList<>());
+
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
+
+        assertAll(
+                () -> assertThat(monthendReportForUser).isNotNull(),
+                () -> assertThat(monthendReportForUser.getHomeofficeDays()).isEqualTo(5),
+                () -> assertThat(monthendReportForUser.getTimeWarnings()).isEmpty()
+        );
+    }
+
+    @Test
+    void getMonthendReportForUser_isUserValidAndHasTimeCompensationOverWeekend_thenReturnsReportWithCorrectTimeCompensationOnWorkdays() {
+        final Employee employee = createEmployeeForVacationTests(0);
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjectTimesResponseTypeForCorrectVacationDays());
+        when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createTimeCompensationWhichExtendsOverWeekend());
+        when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(new ArrayList<>());
+
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
+
+        assertAll(
+                () -> assertThat(monthendReportForUser).isNotNull(),
+                () -> assertThat(monthendReportForUser.getCompensatoryDays()).isEqualTo(5),
+                () -> assertThat(monthendReportForUser.getTimeWarnings()).isEmpty()
+        );
+    }
+
+    @Test
+    void getMonthendReportForUser_isUserValidAndHasTimeCompensationOverWeekendAndExtendsOverMonth_thenReturnsReportWithCorrectTimeCompensationOnWorkdays() {
+        final Employee employee = createEmployeeForVacationTests(0);
+        when(zepService.getEmployee(Mockito.anyString())).thenReturn(employee);
+        when(zepService.getProjectTimes(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createReadProjectTimesResponseTypeForCorrectVacationDays());
+        when(zepService.getAbsenceForEmployee(Mockito.any(Employee.class), Mockito.any(LocalDate.class))).thenReturn(createTimeCompensationWhichExtendsOverWeekendAndMonth());
+        when(warningCalculator.determineTimeWarnings(Mockito.anyList())).thenReturn(new ArrayList<>());
+
+        final MonthlyReport monthendReportForUser = monthlyReportService.getMonthendReportForUser("0");
+
+        assertAll(
+                () -> assertThat(monthendReportForUser).isNotNull(),
+                () -> assertThat(monthendReportForUser.getCompensatoryDays()).isEqualTo(5),
+                () -> assertThat(monthendReportForUser.getTimeWarnings()).isEmpty()
+        );
+    }
+
+    private List<FehlzeitType> createVacationAbsenceList() {
+        List<FehlzeitType> absenceList = new ArrayList<>();
+
+        FehlzeitType vacationDaysAbsence = new FehlzeitType();
+        vacationDaysAbsence.setFehlgrund("UB");
+        vacationDaysAbsence.setGenehmigt(true);
+        vacationDaysAbsence.setEnddatum(LocalDate.of(2022, 4, 29).toString());
+        vacationDaysAbsence.setStartdatum(LocalDate.of(2022, 4, 25).toString());
+        absenceList.add(vacationDaysAbsence);
+
+        return absenceList;
+    }
+
+    private List<FehlzeitType> createHomeOfficeListWhichExtendsOverWeekend() {
+        List<FehlzeitType> absenceList = new ArrayList<>();
+
+        FehlzeitType vacationDaysAbsence = new FehlzeitType();
+        vacationDaysAbsence.setFehlgrund("HO");
+        vacationDaysAbsence.setGenehmigt(true);
+        vacationDaysAbsence.setEnddatum(LocalDate.of(2022, 4, 29).toString());
+        vacationDaysAbsence.setStartdatum(LocalDate.of(2022, 4, 25).toString());
+        absenceList.add(vacationDaysAbsence);
+
+        return absenceList;
+    }
+
+    private List<FehlzeitType> createHomeOfficeListWhichExtendsOverMonth() {
+        List<FehlzeitType> absenceList = new ArrayList<>();
+
+        FehlzeitType vacationDaysAbsence = new FehlzeitType();
+        vacationDaysAbsence.setFehlgrund("HO");
+        vacationDaysAbsence.setGenehmigt(true);
+        vacationDaysAbsence.setEnddatum(LocalDate.of(2022, 5, 3).toString());
+        vacationDaysAbsence.setStartdatum(LocalDate.of(2022, 4, 25).toString());
+        absenceList.add(vacationDaysAbsence);
+
+        return absenceList;
+    }
+
+    private List<FehlzeitType> createTimeCompensationWhichExtendsOverWeekend() {
+        List<FehlzeitType> absenceList = new ArrayList<>();
+
+        FehlzeitType vacationDaysAbsence = new FehlzeitType();
+        vacationDaysAbsence.setFehlgrund(AbsenteeType.COMPENSATORY_DAYS.getType());
+        vacationDaysAbsence.setGenehmigt(true);
+        vacationDaysAbsence.setEnddatum(LocalDate.of(2022, 4, 29).toString());
+        vacationDaysAbsence.setStartdatum(LocalDate.of(2022, 4, 25).toString());
+        absenceList.add(vacationDaysAbsence);
+
+        return absenceList;
+    }
+
+    private List<FehlzeitType> createTimeCompensationWhichExtendsOverWeekendAndMonth() {
+        List<FehlzeitType> absenceList = new ArrayList<>();
+
+        FehlzeitType vacationDaysAbsence = new FehlzeitType();
+        vacationDaysAbsence.setFehlgrund(AbsenteeType.COMPENSATORY_DAYS.getType());
+        vacationDaysAbsence.setGenehmigt(true);
+        vacationDaysAbsence.setEnddatum(LocalDate.of(2022, 5, 3).toString());
+        vacationDaysAbsence.setStartdatum(LocalDate.of(2022, 4, 25).toString());
+        absenceList.add(vacationDaysAbsence);
+
+        return absenceList;
+    }
+
+    private List<FehlzeitType> createVacationAbsenceListWhichExtendsOverMonthEnd() {
+        List<FehlzeitType> absenceList = new ArrayList<>();
+
+        FehlzeitType vacationDaysAbsence = new FehlzeitType();
+        vacationDaysAbsence.setFehlgrund(AbsenteeType.VACATION_DAYS.getType());
+        vacationDaysAbsence.setGenehmigt(true);
+        vacationDaysAbsence.setEnddatum(LocalDate.of(2022, 5, 3).toString());
+        vacationDaysAbsence.setStartdatum(LocalDate.of(2022, 4, 25).toString());
+        absenceList.add(vacationDaysAbsence);
+
+        return absenceList;
+    }
+
+    private List<ProjectEntry> createReadProjectTimesResponseTypeForCorrectVacationDays() {
+        List<Integer> weekEndDays = List.of(2, 3, 9, 10, 16, 17, 18, 19, 20);
+        List<ProjectEntry> projectTimeEntryList = new ArrayList<>();
+
+        for (int i = 1; i <= 22; i++) {
+            if (!weekEndDays.contains(i)) {
+                projectTimeEntryList.add(ProjectTimeEntry.builder()
+                        .fromTime(LocalDateTime.of(2022, 4, i, 8, 0))
+                        .toTime(LocalDateTime.of(2022, 4, i, 16, 30))
+                        .task(Task.BEARBEITEN)
+                        .workingLocation(WorkingLocation.MAIN).build());
+            }
+        }
+
+        return projectTimeEntryList;
+    }
+
     private List<TimeWarning> createTimeWarningList() {
         TimeWarning timewarning = new TimeWarning();
         timewarning.setDate(LocalDate.of(2020, 1, 31));
@@ -376,6 +572,10 @@ class MonthlyReportServiceImplTest {
 
     private Employee createEmployee(final int userId) {
         return createEmployeeWithReleaseDate(userId, "2020-01-01");
+    }
+
+    private Employee createEmployeeForVacationTests(final int userId) {
+        return createEmployeeWithReleaseDate(userId, "2022-03-01");
     }
 
     private Employee createEmployeeWithReleaseDate(final int userId, String releaseDate) {
