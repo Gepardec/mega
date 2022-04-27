@@ -78,7 +78,7 @@ describe('Projekt Management', () => {
     assertDropdownContent('billing', 'Fertig');
   });
 
-  it.only('should display user comments and can add new ones', () => {
+  it('should display user comments and can add new ones', () => {
     cy.fixture('project-management/projectmanagemententries.json').then(jsonData => {
       cy.intercept('http://localhost:8080/management/projectmanagemententries/**/**?all=false', jsonData);
     }).as('getProjectmanagemententries');
