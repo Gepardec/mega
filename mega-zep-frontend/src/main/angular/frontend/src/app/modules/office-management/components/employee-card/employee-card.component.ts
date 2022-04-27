@@ -19,7 +19,7 @@ import {PmProgressComponent} from '../../../shared/components/pm-progress/pm-pro
 import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import {ConfigService} from '../../../shared/services/config/config.service';
 import {Config} from '../../../shared/models/Config';
-import {firstValueFrom, Subscription, zip} from 'rxjs';
+import {firstValueFrom, Subscription, switchMap, zip} from 'rxjs';
 import {tap} from 'rxjs/operators';
 
 const moment = _moment;
@@ -78,9 +78,15 @@ export class EmployeeCardComponent implements OnInit, OnDestroy {
         tap(value => {
           this.selectedYear = value[0];
           this.selectedMonth = value[1];
-        })
-      ).subscribe(() => {
-        this.getOmEntries();
+        }),
+        tap(() => {
+          this.omEntries = null;
+          this.filteredOmEntries = null;
+        }),
+        switchMap(() => this.getOmEntries())
+      ).subscribe(omEntries => {
+        this.omEntries = omEntries;
+        this.sortOmEntries();
       });
   }
 
@@ -218,10 +224,7 @@ export class EmployeeCardComponent implements OnInit, OnDestroy {
   }
 
   private getOmEntries() {
-    this.omService.getEntries(this.selectedYear, this.selectedMonth).subscribe((omEntries: Array<ManagementEntry>) => {
-      this.omEntries = omEntries;
-      this.sortOmEntries();
-    });
+    return this.omService.getEntries(this.selectedYear, this.selectedMonth);
   }
 
   private sortOmEntries(): void {

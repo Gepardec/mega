@@ -3,54 +3,60 @@
     <mat-card-title>{{'office-management.enterprise' | translate}}</mat-card-title>
   </mat-card-header>
   <mat-card-content fxFlexAlign="center" fxLayout="column" fxLayoutGap="10px">
-    <div class="mat-elevation-z10">
-      <div *ngIf="enterpriseEntry; else noEnterpriseEntriesFound"
-           class="controls-container"
-           fxLayout="row"
-           fxLayoutAlign="space-between center">
-        <div>
-          <strong [matTooltipPosition]="tooltipPosition"
-                  [matTooltipShowDelay]="tooltipShowDelay"
-                  matTooltip="{{'office-management.global-check.tooltips.zepTimesReleased' | translate}}"
-                  matTooltipClass="om-tooltip">{{ 'office-management.global-check.labels.zepTimesReleased' | translate }}</strong>
-          <app-project-state-select #zepTimesReleasedSelect
-                                    (selectionChange)="onChangeEnterpriseState($event, EnterpriseStep.ZEP_TIMES_RELEASED, zepTimesReleasedSelect)"
-                                    [value]="enterpriseEntry?.zepTimesReleased"
-                                    data-cy="zep-times-released"></app-project-state-select>
-        </div>
-        <div>
-          <strong
-            [matTooltipPosition]="tooltipPosition"
-            [matTooltipShowDelay]="tooltipShowDelay"
-            matTooltip="{{'office-management.global-check.tooltips.chargeabilityExternalEmployeesRecorded' | translate}}"
-            matTooltipClass="om-tooltip">{{ 'office-management.global-check.labels.chargeabilityExternalEmployeesRecorded' | translate }}</strong>
-          <app-project-state-select #chargeabilityExternalEmployeesRecordedSelect
-                                    (selectionChange)="onChangeEnterpriseState($event, EnterpriseStep.CHARGEABILITY_EXTERNAL_EMPLOYEES_RECORDED, chargeabilityExternalEmployeesRecordedSelect)"
-                                    [value]="enterpriseEntry?.chargeabilityExternalEmployeesRecorded"
-                                    data-cy="chargeability-external-employees"></app-project-state-select>
-        </div>
-        <div>
-          <strong [matTooltipPosition]="tooltipPosition"
-                  [matTooltipShowDelay]="tooltipShowDelay"
-                  matTooltip="{{'office-management.global-check.tooltips.payrollAccountingSent' | translate}}"
-                  matTooltipClass="om-tooltip">{{ 'office-management.global-check.labels.payrollAccountingSent' | translate }}</strong>
-          <app-project-state-select #payrollAccountingSentSelect
-                                    (selectionChange)="onChangeEnterpriseState($event, EnterpriseStep.PAYROLL_ACCOUNTING_SENT, payrollAccountingSentSelect)"
-                                    [value]="enterpriseEntry?.payrollAccountingSent"
-                                    data-cy="payroll-accounting-sent"></app-project-state-select>
-        </div>
-        <div>
-          <strong [matTooltipPosition]="tooltipPosition"
-                  [matTooltipShowDelay]="tooltipShowDelay"
-                  matTooltip="{{'office-management.global-check.tooltips.zepMonthlyReportDone' | translate}}"
-                  matTooltipClass="om-tooltip">{{ 'office-management.global-check.labels.zepMonthlyReportDone' | translate }}</strong>
-          <app-project-state-select #zepMonthlyReportDoneSelect
-                                    (selectionChange)="onChangeEnterpriseState($event, EnterpriseStep.ZEP_MONTHLY_REPORT_DONE, zepMonthlyReportDoneSelect)"
-                                    [value]="enterpriseEntry?.zepMonthlyReportDone"
-                                    data-cy="zep-monthly-report"></app-project-state-select>
+    <ngx-skeleton-loader *ngIf="!enterpriseEntry && fetchingData; else datatable"
+                         [theme]="{ height: '100px' }"
+                         appearance="line"></ngx-skeleton-loader>
+
+    <ng-template #datatable>
+      <div class="mat-elevation-z10">
+        <div *ngIf="enterpriseEntry; else noEnterpriseEntriesFound"
+             class="controls-container"
+             fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div>
+            <strong [matTooltipPosition]="tooltipPosition"
+                    [matTooltipShowDelay]="tooltipShowDelay"
+                    matTooltip="{{'office-management.global-check.tooltips.zepTimesReleased' | translate}}"
+                    matTooltipClass="om-tooltip">{{ 'office-management.global-check.labels.zepTimesReleased' | translate }}</strong>
+            <app-project-state-select #zepTimesReleasedSelect
+                                      (selectionChange)="onChangeEnterpriseState($event, EnterpriseStep.ZEP_TIMES_RELEASED, zepTimesReleasedSelect)"
+                                      [value]="enterpriseEntry?.zepTimesReleased"
+                                      data-cy="zep-times-released"></app-project-state-select>
+          </div>
+          <div>
+            <strong
+              [matTooltipPosition]="tooltipPosition"
+              [matTooltipShowDelay]="tooltipShowDelay"
+              matTooltip="{{'office-management.global-check.tooltips.chargeabilityExternalEmployeesRecorded' | translate}}"
+              matTooltipClass="om-tooltip">{{ 'office-management.global-check.labels.chargeabilityExternalEmployeesRecorded' | translate }}</strong>
+            <app-project-state-select #chargeabilityExternalEmployeesRecordedSelect
+                                      (selectionChange)="onChangeEnterpriseState($event, EnterpriseStep.CHARGEABILITY_EXTERNAL_EMPLOYEES_RECORDED, chargeabilityExternalEmployeesRecordedSelect)"
+                                      [value]="enterpriseEntry?.chargeabilityExternalEmployeesRecorded"
+                                      data-cy="chargeability-external-employees"></app-project-state-select>
+          </div>
+          <div>
+            <strong [matTooltipPosition]="tooltipPosition"
+                    [matTooltipShowDelay]="tooltipShowDelay"
+                    matTooltip="{{'office-management.global-check.tooltips.payrollAccountingSent' | translate}}"
+                    matTooltipClass="om-tooltip">{{ 'office-management.global-check.labels.payrollAccountingSent' | translate }}</strong>
+            <app-project-state-select #payrollAccountingSentSelect
+                                      (selectionChange)="onChangeEnterpriseState($event, EnterpriseStep.PAYROLL_ACCOUNTING_SENT, payrollAccountingSentSelect)"
+                                      [value]="enterpriseEntry?.payrollAccountingSent"
+                                      data-cy="payroll-accounting-sent"></app-project-state-select>
+          </div>
+          <div>
+            <strong [matTooltipPosition]="tooltipPosition"
+                    [matTooltipShowDelay]="tooltipShowDelay"
+                    matTooltip="{{'office-management.global-check.tooltips.zepMonthlyReportDone' | translate}}"
+                    matTooltipClass="om-tooltip">{{ 'office-management.global-check.labels.zepMonthlyReportDone' | translate }}</strong>
+            <app-project-state-select #zepMonthlyReportDoneSelect
+                                      (selectionChange)="onChangeEnterpriseState($event, EnterpriseStep.ZEP_MONTHLY_REPORT_DONE, zepMonthlyReportDoneSelect)"
+                                      [value]="enterpriseEntry?.zepMonthlyReportDone"
+                                      data-cy="zep-monthly-report"></app-project-state-select>
+          </div>
         </div>
       </div>
-    </div>
+    </ng-template>
 
     <ng-template #noEnterpriseEntriesFound>
       <mat-card>{{'office-management.noOmEntriesFound' | translate}}</mat-card>

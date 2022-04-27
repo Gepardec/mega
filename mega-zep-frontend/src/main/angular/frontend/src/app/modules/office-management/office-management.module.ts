@@ -10,6 +10,7 @@ import {OfficeManagementComponent} from './components/office-management/office-m
 import {ProjectOverviewCardComponent} from './components/project-overview-card/project-overview-card.component';
 import {EnterpriseCardComponent} from './components/enterprise-card/enterprise-card.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 
 @NgModule({
   declarations: [EmployeeCardComponent, OfficeManagementComponent, ProjectOverviewCardComponent, EnterpriseCardComponent],
@@ -23,7 +24,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     TranslateModule.forRoot(),
     SharedModule,
     FlexLayoutModule,
-    FormsModule
+    FormsModule,
+    NgxSkeletonLoaderModule
   ]
 })
 export class OfficeManagementModule {
