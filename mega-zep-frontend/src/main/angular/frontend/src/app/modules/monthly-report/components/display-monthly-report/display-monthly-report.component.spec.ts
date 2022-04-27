@@ -12,6 +12,7 @@ import {MonthlyReportService} from '../../services/monthly-report.service';
 import {MonthlyReportModule} from '../../monthly-report.module';
 import {RouterTestingModule} from '@angular/router/testing';
 import {OAuthModule} from 'angular-oauth2-oidc';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 
 const moment = _moment;
 
@@ -31,7 +32,8 @@ describe('DisplayMonthlyReportComponent', () => {
         OAuthModule.forRoot(),
         SharedModule,
         MonthlyReportModule,
-        RouterTestingModule
+        RouterTestingModule,
+        NgxSkeletonLoaderModule
       ]
     }).compileComponents().then(() => {
       fixture = TestBed.createComponent(DisplayMonthlyReportComponent);

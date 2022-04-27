@@ -7,6 +7,7 @@ import {SharedModule} from '../../../shared/shared.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 
 describe('OfficeManagementComponent', () => {
 
@@ -22,7 +23,8 @@ describe('OfficeManagementComponent', () => {
         AngularMaterialModule,
         TranslateModule.forRoot(),
         HttpClientTestingModule,
-        RouterTestingModule
+        RouterTestingModule,
+        NgxSkeletonLoaderModule
       ]
     }).compileComponents().then(() => {
       fixture = TestBed.createComponent(EmployeeCardComponent);

@@ -17,6 +17,7 @@ import {MonthlyReport} from '../../models/MonthlyReport';
 import {StepentriesService} from '../../../shared/services/stepentries/stepentries.service';
 import {Employee} from '../../../shared/models/Employee';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 
 const moment = _moment;
 const DATE_FORMAT: string = configuration.dateFormat;
@@ -40,7 +41,8 @@ describe('EmployeeCheckComponent', () => {
         AngularMaterialModule,
         HttpClientTestingModule,
         RouterTestingModule,
-        OAuthModule.forRoot()
+        OAuthModule.forRoot(),
+        NgxSkeletonLoaderModule
       ],
     }).compileComponents().then(() => {
       fixture = TestBed.createComponent(EmployeeCheckComponent);

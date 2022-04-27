@@ -4,6 +4,7 @@ import {JourneyCheckComponent} from './journey-check.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {AngularMaterialModule} from '../../../material/material-module';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 
 describe('JourneyCheckComponent', () => {
   let component: JourneyCheckComponent;
@@ -17,7 +18,8 @@ describe('JourneyCheckComponent', () => {
       imports: [
         TranslateModule.forRoot(),
         AngularMaterialModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        NgxSkeletonLoaderModule
       ]
     }).compileComponents().then(() => {
       fixture = TestBed.createComponent(JourneyCheckComponent);

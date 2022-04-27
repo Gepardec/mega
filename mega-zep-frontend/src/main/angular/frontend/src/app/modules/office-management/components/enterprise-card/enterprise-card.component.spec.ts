@@ -20,6 +20,7 @@ import {MatSelectChange} from '@angular/material/select';
 import {EnterpriseStep} from '../../models/EnterpriseStep';
 import {ProjectStateSelectComponent} from '../../../shared/components/project-state-select/project-state-select.component';
 import {ChangeDetectorRef} from '@angular/core';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 
 const moment = _moment;
 
@@ -41,7 +42,8 @@ describe('EnterpriseCardComponent', () => {
       ],
       imports: [
         OfficeManagementModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        NgxSkeletonLoaderModule
       ]
     }).compileComponents().then(() => {
       fixture = TestBed.createComponent(EnterpriseCardComponent);
@@ -152,9 +154,5 @@ describe('EnterpriseCardComponent', () => {
       version: 'version',
       zepOrigin: 'zepOrigin'
     }
-  }
-
-  class ProjectStateSelectComponentMock {
-    value: string;
   }
 });
