@@ -2,6 +2,8 @@
   "name": "frontend",
   "version": "0.0.0",
   "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build && gzipper ./dist",
@@ -9,7 +11,10 @@
     "test headless": "ng test --browsers ChromeHeadlessNoSandbox",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "sonar": "sonar-scanner"
+    "sonar": "sonar-scanner",
+    "start:prod": "lite-server --baseDir=\"dist/frontend\"",
+    "deploy:prod": "npm run start:prod",
+    "e2e-cy": "npm run deploy:prod & npm run cy:run"
   },
   "private": true,
   "dependencies": {
@@ -31,7 +36,9 @@
     "angular-oauth2-oidc": "^13.0.1",
     "angular-oauth2-oidc-jwks": "^13.0.1",
     "coverage-istanbul": "^1.1.2",
+    "dotenv": "^16.0.0",
     "moment": "^2.29.2",
+    "ngx-skeleton-loader": "^5.0.0",
     "rxjs": "^7.5.2",
     "serialize-javascript": "^6.0.0",
     "tslib": "^2.3.1",
@@ -53,6 +60,7 @@
     "@typescript-eslint/eslint-plugin": "5.11.0",
     "@typescript-eslint/parser": "5.11.0",
     "codelyzer": "^6.0.2",
+    "cypress": "^9.6.0",
     "eslint": "^8.2.0",
     "gzipper": "^7.0.0",
     "jasmine-core": "~4.0.0",
@@ -63,6 +71,7 @@
     "karma-coverage-istanbul-reporter": "~3.0.3",
     "karma-jasmine": "~4.0.1",
     "karma-jasmine-html-reporter": "^1.7.0",
+    "lite-server": "^2.6.1",
     "ngx-translate-testing": "^6.0.1",
     "protractor": "~7.0.0",
     "sonar-scanner": "^3.1.0",

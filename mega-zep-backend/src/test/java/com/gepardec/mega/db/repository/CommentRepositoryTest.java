@@ -7,8 +7,8 @@ import com.gepardec.mega.db.entity.employee.StepEntry;
 import com.gepardec.mega.db.entity.employee.User;
 import com.gepardec.mega.db.entity.project.Project;
 import com.gepardec.mega.domain.model.Role;
+import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,6 +22,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
+@TestTransaction
 class CommentRepositoryTest {
 
     private static final String EMAIL = "max.muster@gepardec.com";
@@ -56,23 +57,6 @@ class CommentRepositoryTest {
     @BeforeEach
     void init() {
         initializeSetupObjects();
-    }
-
-    private void persistEntities() {
-        stepRepository.persist(step);
-        userRepository.persistOrUpdate(user);
-        stepEntryRepository.persist(stepEntry);
-        projectRepository.persist(project);
-        commentRepository.persist(comment);
-    }
-
-    @AfterEach
-    void tearDown() {
-        tearDownCommentEntity();
-        assertThat(tearDownProjectEntity()).isTrue();
-        assertThat(tearDownStepEntryEntity()).isTrue();
-        assertThat(tearDownUserEntity()).isTrue();
-        assertThat(tearDownStepEntity()).isTrue();
     }
 
     @Test
@@ -206,23 +190,11 @@ class CommentRepositoryTest {
         comment = initializeCommentObject();
     }
 
-    private void tearDownCommentEntity() {
-        commentRepository.deleteAll();
-    }
-
-    private boolean tearDownProjectEntity() {
-        return projectRepository.deleteById(project.getId());
-    }
-
-    private boolean tearDownStepEntryEntity() {
-        return stepEntryRepository.deleteById(stepEntry.getId());
-    }
-
-    private boolean tearDownUserEntity() {
-        return userRepository.deleteById(user.getId());
-    }
-
-    private boolean tearDownStepEntity() {
-        return stepRepository.deleteById(step.getId());
+    private void persistEntities() {
+        stepRepository.persist(step);
+        userRepository.persistOrUpdate(user);
+        stepEntryRepository.persist(stepEntry);
+        projectRepository.persist(project);
+        commentRepository.persist(comment);
     }
 }

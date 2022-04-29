@@ -1,8 +1,19 @@
-<mat-card *ngIf="monthlyReport" class="mat-elevation-z10">
+<mat-card class="mat-elevation-z10">
   <mat-card-title>
-    {{'monthly-report.title.general-info' | translate}} {{month(monthlyReportService.selectedMonth.getValue())}} {{monthlyReportService.selectedYear.getValue()}}
+    <ngx-skeleton-loader *ngIf="!monthlyReport else title"
+                         [theme]="{ height: '30px', width: '250px' }"
+                         appearance="line"></ngx-skeleton-loader>
+
+    <ng-template #title>
+      {{'monthly-report.title.general-info' | translate}} {{month(monthlyReportService.selectedMonth.getValue())}} {{monthlyReportService.selectedYear.getValue()}}
+    </ng-template>
   </mat-card-title>
-  <table>
+
+  <ngx-skeleton-loader *ngIf="!monthlyReport"
+                       count="6"
+                       appearance="line"></ngx-skeleton-loader>
+
+  <table *ngIf="monthlyReport">
     <tr>
       <td class="headers">{{'monthly-report.generalInfo.workingTime' | translate}}</td>
       <td class="infovalue">{{monthlyReportService.totalWorkingTimeHours | number: '1.2-2': 'de-AT'}}</td>
@@ -50,6 +61,5 @@
       <td *ngIf="monthlyReport.homeofficeDays > 1 || monthlyReport.homeofficeDays === 0" class="identifier">Tage</td>
     </tr>
   </table>
-
 </mat-card>
 

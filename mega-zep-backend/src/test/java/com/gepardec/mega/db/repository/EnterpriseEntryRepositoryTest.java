@@ -2,6 +2,7 @@ package com.gepardec.mega.db.repository;
 
 import com.gepardec.mega.db.entity.common.State;
 import com.gepardec.mega.db.entity.enterprise.EnterpriseEntry;
+import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
@@ -11,8 +12,10 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @QuarkusTest
+@TestTransaction
 class EnterpriseEntryRepositoryTest {
 
     @Inject
@@ -31,7 +34,10 @@ class EnterpriseEntryRepositoryTest {
         enterpriseEntryRepository.persist(enterpriseEntry);
 
         Optional<EnterpriseEntry> enterpriseEntryValue = enterpriseEntryRepository.findByDate(LocalDate.now());
-        assertThat(enterpriseEntryValue).isPresent();
-        assertThat(enterpriseEntryValue.get().getZepTimesReleased()).isEqualTo(State.OPEN);
+
+        assertAll(
+                () -> assertThat(enterpriseEntryValue).isPresent(),
+                () -> assertThat(enterpriseEntryValue.get().getZepTimesReleased()).isEqualTo(State.OPEN)
+        );
     }
 }

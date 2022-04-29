@@ -18,6 +18,7 @@ import {ProjectState} from '../../../shared/models/ProjectState';
 import {ProjectComment} from '../../../shared/models/ProjectComment';
 import {expect} from '@angular/flex-layout/_private-utils/testing';
 import {SnackbarService} from '../../../shared/services/snackbar/snackbar.service';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 
 describe('ProjectOverviewCardComponent', () => {
 
@@ -39,7 +40,9 @@ describe('ProjectOverviewCardComponent', () => {
         HttpClientTestingModule,
         TranslateModule.forRoot(),
         OfficeManagementModule,
-        RouterTestingModule]
+        RouterTestingModule,
+        NgxSkeletonLoaderModule
+      ]
     }).compileComponents().then(() => {
       fixture = TestBed.createComponent(ProjectOverviewCardComponent);
       component = fixture.componentInstance;

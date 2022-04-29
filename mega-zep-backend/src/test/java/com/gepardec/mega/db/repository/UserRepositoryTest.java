@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @QuarkusTest
 class UserRepositoryTest {
+
     private static final String EMAIL = "max.muster@gepardec.com";
 
     @Inject

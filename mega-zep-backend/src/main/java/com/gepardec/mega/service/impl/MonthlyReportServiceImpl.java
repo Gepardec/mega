@@ -1,7 +1,6 @@
 package com.gepardec.mega.service.impl;
 
 import com.gepardec.mega.db.entity.employee.EmployeeState;
-import com.gepardec.mega.db.entity.employee.StepEntry;
 import com.gepardec.mega.domain.model.Comment;
 import com.gepardec.mega.domain.model.Employee;
 import com.gepardec.mega.domain.model.monthlyreport.JourneyWarning;
@@ -9,7 +8,6 @@ import com.gepardec.mega.domain.model.monthlyreport.MonthlyReport;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntry;
 import com.gepardec.mega.domain.model.monthlyreport.ProjectEntryWarning;
 import com.gepardec.mega.domain.model.monthlyreport.TimeWarning;
-import com.gepardec.mega.domain.utils.DateUtils;
 import com.gepardec.mega.notification.mail.dates.OfficeCalendarUtil;
 import com.gepardec.mega.rest.model.PmProgressDto;
 import com.gepardec.mega.service.api.CommentService;
@@ -19,6 +17,7 @@ import com.gepardec.mega.service.helper.WarningCalculator;
 import com.gepardec.mega.zep.ZepService;
 import de.provantis.zep.FehlzeitType;
 import de.provantis.zep.ProjektzeitType;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import javax.enterprise.context.RequestScoped;
@@ -26,11 +25,14 @@ import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.gepardec.mega.domain.utils.DateUtils.*;
 
 @RequestScoped
 public class MonthlyReportServiceImpl implements MonthlyReportService {
@@ -95,8 +97,8 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
 
     @Override
     public boolean setOpenAndUnassignedStepEntriesDone(Employee employee, Long stepId) {
-        LocalDate from = DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate());
-        LocalDate to = DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate());
+        LocalDate from = getFirstDayOfFollowingMonth(employee.getReleaseDate());
+        LocalDate to = getLastDayOfFollowingMonth(employee.getReleaseDate());
 
         return stepEntryService.setOpenAndAssignedStepEntriesDone(employee, stepId, from, to);
     }
@@ -107,34 +109,23 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
         timeWarnings.addAll(warningCalculator.determineNoTimeEntries(projectEntries, absenceEntries));
         timeWarnings.sort(Comparator.comparing(ProjectEntryWarning::getDate));
 
-        final List<Comment> comments = new ArrayList<>();
-        List<PmProgressDto> pmProgressDtos = new ArrayList<>();
-        if (employee != null) {
+        final List<Comment> comments = Optional.ofNullable(employee)
+                .map(Employee::getReleaseDate)
+                .filter(this::checkReleaseDate)
+                .map(date -> Pair.of(getFirstDayOfFollowingMonth(date), getLastDayOfFollowingMonth(date)))
+                .map(pair -> commentService.findCommentsForEmployee(employee, pair.getLeft(), pair.getRight()))
+                .orElse(Collections.emptyList());
 
-            if (checkReleaseDate(employee.getReleaseDate())) {
-                LocalDate fromDate = DateUtils.getFirstDayOfFollowingMonth(employee.getReleaseDate());
-                LocalDate toDate = DateUtils.getLastDayOfFollowingMonth(employee.getReleaseDate());
-                comments.addAll(commentService.findCommentsForEmployee(employee, fromDate, toDate));
-            }
+        final List<PmProgressDto> pmProgressDtos = Optional.ofNullable(employee)
+                .map(empl -> stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(empl.getEmail(), empl.getReleaseDate()))
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(PmProgressDto::ofStepEntry)
+                .collect(Collectors.toList());
 
-            final List<StepEntry> allOwnedStepEntriesForPMProgress = stepEntryService.findAllOwnedAndUnassignedStepEntriesForPMProgress(employee.getEmail(), employee.getReleaseDate());
-            allOwnedStepEntriesForPMProgress
-                    .forEach(stepEntry -> pmProgressDtos.add(
-                            PmProgressDto.builder()
-                                    .project(stepEntry.getProject())
-                                    .assigneeEmail(stepEntry.getAssignee().getEmail())
-                                    .firstname(stepEntry.getAssignee().getFirstname())
-                                    .lastname(stepEntry.getAssignee().getLastname())
-                                    .state(stepEntry.getState())
-                                    .stepId(stepEntry.getStep().getId())
-                                    .build()
-                    ));
-        }
-
-        final boolean isAssigned = employeeCheckState.isPresent();
-
-        final List<StepEntry> allOwnedAndAssignedStepEntries = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(employee);
-        final boolean otherChecksDone = allOwnedAndAssignedStepEntries.stream().allMatch(stepEntry -> stepEntry.getState() == EmployeeState.DONE);
+        final boolean otherChecksDone = stepEntryService.findAllOwnedAndUnassignedStepEntriesForOtherChecks(employee)
+                                                        .stream()
+                                                        .allMatch(stepEntry -> stepEntry.getState() == EmployeeState.DONE);
 
         return MonthlyReport.builder()
                 .employee(employee)
@@ -142,7 +133,7 @@ public class MonthlyReportServiceImpl implements MonthlyReportService {
                 .journeyWarnings(journeyWarnings)
                 .comments(comments)
                 .employeeCheckState(employeeCheckState.orElse(EmployeeState.OPEN))
-                .isAssigned(isAssigned)
+                .isAssigned(employeeCheckState.isPresent())
                 .employeeProgresses(pmProgressDtos)
                 .otherChecksDone(otherChecksDone)
                 .billableTime(zepService.getBillableTimesForEmployee(billableEntries, employee))

@@ -8,6 +8,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {FormsModule} from '@angular/forms';
 import {BillableTimesComponent} from './components/billable-times/billable-times.component';
 import {BillableTimesFractionComponent} from './components/billable-times-fraction/billable-times-fraction.component';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 
 @NgModule({
   declarations: [ProjectManagementComponent, BillableTimesComponent, BillableTimesFractionComponent],
@@ -17,7 +18,8 @@ import {BillableTimesFractionComponent} from './components/billable-times-fracti
     FlexLayoutModule,
     SharedModule,
     TranslateModule.forRoot(),
-    FormsModule
+    FormsModule,
+    NgxSkeletonLoaderModule
   ]
 })
 export class ProjectManagementModule {

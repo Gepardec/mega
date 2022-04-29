@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProjectManagementEntry} from '../models/ProjectManagementEntry';
 import {MatDialog} from '@angular/material/dialog';
 import {CommentsForEmployeeComponent} from '../../shared/components/comments-for-employee/comments-for-employee.component';
@@ -26,6 +26,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {ProjectStateSelectComponent} from '../../shared/components/project-state-select/project-state-select.component';
 import {ProjectCommentService} from '../../shared/services/project-comment/project-comment.service';
 import {SnackbarService} from '../../shared/services/snackbar/snackbar.service';
+import {mergeMap, Subscription, switchMap, tap, zip} from 'rxjs';
 
 const moment = _moment;
 
@@ -34,7 +35,7 @@ const moment = _moment;
   templateUrl: './project-management.component.html',
   styleUrls: ['./project-management.component.scss']
 })
-export class ProjectManagementComponent implements OnInit {
+export class ProjectManagementComponent implements OnInit, OnDestroy {
 
   pmEntries: Array<ProjectManagementEntry>;
   displayedColumns = [
@@ -51,13 +52,14 @@ export class ProjectManagementComponent implements OnInit {
   officeManagementUrl: string;
   pmSelectionModels: Map<string, SelectionModel<ManagementEntry>>;
   environment = environment;
-  selectedYear = moment().subtract(1, 'month').year();
-  selectedMonth = moment().subtract(1, 'month').month() + 1; // months 0 - 11
+  selectedYear: number;
+  selectedMonth: number;
   showCommentEditor = false;
   forProjectName: string;
   tooltipShowDelay = 500;
   tooltipPosition = 'above';
   maxMonthDate: number = 1;
+  dateSelectionSub: Subscription;
 
   constructor(private dialog: MatDialog,
               private pmService: ProjectManagementService,
@@ -82,13 +84,54 @@ export class ProjectManagementComponent implements OnInit {
     this.configService.getConfig().subscribe((config: Config) => {
       this.officeManagementUrl = config.zepOrigin + '/' + configuration.OFFICE_MANAGEMENT_SEGMENT;
     });
-    this.getPmEntries();
+
+    this.dateSelectionSub = zip(this.pmService.selectedYear, this.pmService.selectedMonth)
+      .pipe(
+        tap(value => {
+          this.selectedYear = value[0];
+          this.selectedMonth = value[1];
+        }),
+        tap(() => {
+          this.pmEntries = null
+        }),
+        switchMap(() => this.getPmEntries())
+      ).subscribe(this.processPmEntries());
+  }
+
+  ngOnDestroy(): void {
+    this.pmService.selectedYear.next(moment().subtract(1, 'month').year());
+    this.pmService.selectedMonth.next(moment().subtract(1, 'month').month() + 1);
+
+    this.dateSelectionSub?.unsubscribe();
+  }
+
+  private processPmEntries() {
+    return pmEntries => {
+      this.pmEntries = pmEntries;
+      this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
+      this.pmEntries.sort((a, b) => a.projectName.localeCompare(b.projectName));
+      this.pmEntries.forEach(pmEntry => {
+          this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []));
+
+          const allDone = this.getFilteredAndSortedPmEntries(pmEntry, State.DONE, State.DONE, State.DONE, State.DONE);
+          const notAllDone = pmEntry.entries.filter(entry => !allDone.find(done => done.employee.email === entry.employee.email))
+            .sort((a, b) => a.employee.lastname.concat(a.employee.firstname)
+              .localeCompare(b.employee.lastname.concat(b.employee.firstname)));
+
+          pmEntry.entries = notAllDone.concat(allDone);
+
+          this.projectCommentService.get(this.getFormattedDate(), pmEntry.projectName)
+            .subscribe(projectComment => {
+              pmEntry.projectComment = projectComment;
+            });
+        }
+      );
+    };
   }
 
   dateChanged(date: Moment): void {
-    this.selectedYear = moment(date).year();
-    this.selectedMonth = moment(date).month() + 1;
-    this.getPmEntries();
+    this.pmService.selectedYear.next(moment(date).year());
+    this.pmService.selectedMonth.next(moment(date).month() + 1);
   }
 
   areAllSelected(projectName: string): boolean {
@@ -118,7 +161,14 @@ export class ProjectManagementComponent implements OnInit {
         dialogRef.componentInstance.currentMonthYear = this.getFormattedDate();
 
         dialogRef.disableClose = true;
-        dialogRef.componentInstance.commentHasChanged.subscribe(() => this.getPmEntries())
+        dialogRef.componentInstance.commentHasChanged.pipe(
+          tap(() => {
+            this.pmEntries = null;
+          }),
+          mergeMap(() => {
+            return this.getPmEntries();
+          })
+        ).subscribe(this.processPmEntries());
       });
   }
 
@@ -262,27 +312,7 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   private getPmEntries() {
-    this.pmService.getEntries(this.selectedYear, this.selectedMonth, false).subscribe((pmEntries: Array<ProjectManagementEntry>) => {
-      this.pmEntries = pmEntries;
-      this.pmSelectionModels = new Map<string, SelectionModel<ManagementEntry>>();
-      this.pmEntries.sort((a, b) => a.projectName.localeCompare(b.projectName));
-      this.pmEntries.forEach(pmEntry => {
-          this.pmSelectionModels.set(pmEntry.projectName, new SelectionModel<ManagementEntry>(true, []));
-
-          const allDone = this.getFilteredAndSortedPmEntries(pmEntry, State.DONE, State.DONE, State.DONE, State.DONE);
-          const notAllDone = pmEntry.entries.filter(entry => !allDone.find(done => done.employee.email === entry.employee.email))
-            .sort((a, b) => a.employee.lastname.concat(a.employee.firstname)
-              .localeCompare(b.employee.lastname.concat(b.employee.firstname)));
-
-          pmEntry.entries = notAllDone.concat(allDone);
-
-          this.projectCommentService.get(this.getFormattedDate(), pmEntry.projectName)
-            .subscribe(projectComment => {
-              pmEntry.projectComment = projectComment;
-            });
-        }
-      );
-    });
+    return this.pmService.getEntries(this.selectedYear, this.selectedMonth, false);
   }
 
   private findEntriesForProject(projectName: string) {

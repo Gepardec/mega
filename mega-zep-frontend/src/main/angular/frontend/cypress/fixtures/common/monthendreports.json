@@ -1,0 +1,62 @@
+{
+  "employee": {
+    "userId": "1337-chuck-norris",
+    "email": "mega.test@gepardec.com",
+    "title": "DSc",
+    "firstname": "Chuck",
+    "lastname": "Norris",
+    "salutation": "Herr",
+    "releaseDate": "2021-12-31",
+    "workDescription": "02",
+    "language": "de",
+    "active": true
+  },
+  "timeWarnings": [
+    {
+      "date": null,
+      "missingRestTime": null,
+      "missingBreakTime": null,
+      "excessWorkTime": null,
+      "warnings": [
+        "Keine Buchung oder Abwesenheit für dieses Monat vorhanden"
+      ]
+    }
+  ],
+  "journeyWarnings": [],
+  "comments": [],
+  "employeeCheckState": "OPEN",
+  "isAssigned": true,
+  "employeeProgresses": [
+    {
+      "project": "Cash-Cow-Project",
+      "assigneeEmail": "max.mustermann@gepardec.com",
+      "firstname": "Max",
+      "lastname": "Mustermann",
+      "state": "OPEN",
+      "stepId": 4
+    },
+    {
+      "project": "Cash-Cow-Project",
+      "assigneeEmail": "johannes.riegler@gepardec.com",
+      "firstname": "Erika",
+      "lastname": "Musterfrau",
+      "state": "OPEN",
+      "stepId": 4
+    },
+    {
+      "project": "Cash-Cow-Project",
+      "assigneeEmail": "mega.test@gepardec.com",
+      "firstname": "Chuck",
+      "lastname": "Norris",
+      "state": "OPEN",
+      "stepId": 4
+    }
+  ],
+  "otherChecksDone": false,
+  "vacationDays": 0,
+  "homeofficeDays": 0,
+  "compensatoryDays": 0,
+  "billableTime": "00:00",
+  "totalWorkingTime": "00:00",
+  "assigned": true
+}

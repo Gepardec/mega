@@ -65,6 +65,7 @@ import {InlineTextEditorComponent} from './components/inline-text-editor/inline-
     StateIndicatorComponent,
     DatepickerMonthYearComponent,
     InlineTextEditorComponent,
+    TranslateModule
   ]
 })
 export class SharedModule {

@@ -41,14 +41,28 @@ pipeline {
                             steps {
                                 script {
                                     container('nodejs') {
+                                        withCredentials([file(credentialsId: 'jenkins-mega-cypress', variable: 'FILE')]) {
+                                            dir('mega-zep-frontend/src/main/angular/frontend') {
+                                                sh "cp -f ${FILE} ./.env"
+                                                sh "npm install"
+                                                sh "node ${NODE_RESOURCE_LIMITS} \
+                                                    ./node_modules/@angular/cli/bin/ng \
+                                                    test --browsers=ChromeHeadlessNoSandbox --watch=false"
+                                                sh "node ${NODE_RESOURCE_LIMITS} \
+                                                    ./node_modules/@angular/cli/bin/ng build \
+                                                    --configuration=production"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        stage('Cypress Tests') {
+                            steps {
+                                script {
+                                    container('nodejs') {
                                         dir('mega-zep-frontend/src/main/angular/frontend') {
-                                            sh "npm install"
-                                            sh "node ${NODE_RESOURCE_LIMITS} \
-                                                     ./node_modules/@angular/cli/bin/ng \
-                                                     test --browsers=ChromeHeadlessNoSandbox --watch=false"
-                                            sh "node ${NODE_RESOURCE_LIMITS} \
-                                                     ./node_modules/@angular/cli/bin/ng build \
-                                                     --configuration=production"
+                                            sh "npm run e2e-cy"
                                         }
                                     }
                                 }

@@ -1,13 +1,19 @@
 import {Injectable} from '@angular/core';
 import {ConfigService} from '../../shared/services/config/config.service';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {ProjectManagementEntry} from '../models/ProjectManagementEntry';
+import * as _moment from 'moment';
+
+const moment = _moment;
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectManagementService {
+
+  selectedYear = new BehaviorSubject<number>(moment().subtract(1, 'month').year());
+  selectedMonth = new BehaviorSubject<number>(moment().subtract(1, 'month').month() + 1);
 
   constructor(private configService: ConfigService, private httpClient: HttpClient) {
   }

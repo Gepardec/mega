@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {OAuthService} from 'angular-oauth2-oidc';
-import {authConfig} from './auth/auth.config';
+import {authConfig, cypressAuthConfig} from './auth/auth.config';
 import {Router} from '@angular/router';
 import {UserService} from './modules/shared/services/user/user.service';
 import {ConfigService} from './modules/shared/services/config/config.service';
@@ -34,9 +34,9 @@ export class AppComponent implements OnInit, OnDestroy {
       clientId: config.clientId,
       issuer: config.issuer,
       scope: config.scope,
-      ...authConfig
+      // @ts-ignore
+      ...(window.Cypress ? cypressAuthConfig : authConfig)
     });
-
     this.oAuthService.tokenValidationHandler = new JwksValidationHandler();
 
     await this.oAuthService.loadDiscoveryDocumentAndTryLogin();

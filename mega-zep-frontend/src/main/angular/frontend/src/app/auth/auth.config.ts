@@ -6,3 +6,8 @@ export const authConfig: AuthConfig = {
   showDebugInformation: false,
   sessionChecksEnabled: false
 };
+
+export const cypressAuthConfig: AuthConfig = {
+  ...authConfig,
+  oidc: false
+};

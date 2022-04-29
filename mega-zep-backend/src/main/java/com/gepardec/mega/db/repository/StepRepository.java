@@ -8,7 +8,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @ApplicationScoped
-@Transactional
 public class StepRepository implements PanacheRepository<Step> {
 
     public List<Step> findAllSteps() {

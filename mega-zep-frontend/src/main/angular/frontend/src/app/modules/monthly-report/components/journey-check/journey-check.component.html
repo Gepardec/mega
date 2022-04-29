@@ -1,17 +1,22 @@
-<mat-card *ngIf="monthlyReport" class="mat-elevation-z10">
+<mat-card class="mat-elevation-z10">
   <mat-card-title>
     {{'monthly-report.title.journey' | translate}}
   </mat-card-title>
 
-  <mat-card-content
-    *ngIf="monthlyReport.journeyWarnings.length === 0; else journeyContent"
-    fxLayout="column" fxLayoutAlign="center center">
+  <mat-card-content *ngIf="!monthlyReport"
+                    fxLayout="column" fxLayoutAlign="center center">
+    <ngx-skeleton-loader [theme]="{ height: '80px', width: '80px' }" appearance="circle"></ngx-skeleton-loader>
+    <ngx-skeleton-loader [theme]="{ width: '250px', 'margin-top': '20px' }" appearance="line"></ngx-skeleton-loader>
+  </mat-card-content>
+
+  <mat-card-content *ngIf="monthlyReport?.journeyWarnings.length === 0; else journeyContent"
+                    fxLayout="column" fxLayoutAlign="center center">
     <app-state-indicator [state]="State.DONE" size="large"></app-state-indicator>
     <p>{{'monthly-report.ok' | translate}}</p>
   </mat-card-content>
 
   <ng-template #journeyContent>
-    <mat-card-content>
+    <mat-card-content *ngIf="monthlyReport">
       <mat-table [dataSource]="monthlyReport.journeyWarnings">
         <ng-container matColumnDef="dateJourney">
           <mat-header-cell *matHeaderCellDef>

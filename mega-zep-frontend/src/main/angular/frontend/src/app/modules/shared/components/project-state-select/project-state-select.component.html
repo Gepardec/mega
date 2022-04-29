@@ -1,16 +1,19 @@
-<mat-select
-  #select
-  (selectionChange)="onSelectionChange($event)"
-  [(value)]="value"
-  [class.select-green]="select.value === ProjectState.DONE || select.value === ProjectState.NOT_RELEVANT"
-  [class.select-red]="select.value === ProjectState.OPEN"
-  [class.select-yellow]="select.value === ProjectState.WORK_IN_PROGRESS"
-  [disabled]="isDoneSelected">
+<mat-select #select
+            (selectionChange)="onSelectionChange($event)"
+            [(value)]="value"
+            [class.select-green]="select.value === ProjectState.DONE || select.value === ProjectState.NOT_RELEVANT"
+            [class.select-red]="select.value === ProjectState.OPEN"
+            [class.select-yellow]="select.value === ProjectState.WORK_IN_PROGRESS"
+            [disabled]="isDoneSelected">
   <mat-option [disabled]="isInProgressSelected"
-              [value]="ProjectState.OPEN">{{'STATE.OPEN' | translate}}</mat-option>
+              [value]="ProjectState.OPEN"
+              data-cy="option-open">{{'STATE.OPEN' | translate}}</mat-option>
   <mat-option [disabled]="isNotRelevantSelected"
-              [value]="ProjectState.WORK_IN_PROGRESS">{{'STATE.WORK_IN_PROGRESS' | translate}}</mat-option>
+              [value]="ProjectState.WORK_IN_PROGRESS"
+              data-cy="option-in-progress">{{'STATE.WORK_IN_PROGRESS' | translate}}</mat-option>
   <mat-option [disabled]="isNotRelevantSelected"
-              [value]="ProjectState.DONE">{{'STATE.DONE' | translate}}</mat-option>
-  <mat-option [value]="ProjectState.NOT_RELEVANT">{{'STATE.NOT_RELEVANT' | translate}}</mat-option>
+              [value]="ProjectState.DONE"
+              data-cy="option-done">{{'STATE.DONE' | translate}}</mat-option>
+  <mat-option [value]="ProjectState.NOT_RELEVANT"
+              data-cy="option-not-relevant">{{'STATE.NOT_RELEVANT' | translate}}</mat-option>
 </mat-select>

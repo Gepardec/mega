@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import * as _moment from 'moment';
 import {Moment} from 'moment';
-import {Subscription, zip} from 'rxjs';
+import {Subscription, switchMap, zip} from 'rxjs';
 import {OfficeManagementService} from '../../services/office-management.service';
 import {tap} from 'rxjs/operators';
 import {MatSelectChange} from '@angular/material/select';
@@ -32,6 +32,7 @@ export class EnterpriseCardComponent implements OnInit, OnDestroy {
   dateSelectionSub: Subscription;
   officeManagementUrl: string;
   enterpriseEntry: EnterpriseEntry;
+  fetchingData: boolean;
 
   tooltipShowDelay = 500;
   tooltipPosition = 'above';
@@ -60,9 +61,15 @@ export class EnterpriseCardComponent implements OnInit, OnDestroy {
         tap(value => {
           this.selectedYear = value[0];
           this.selectedMonth = value[1];
-        })
-      ).subscribe(() => {
-        this.getEnterpriseEntry();
+        }),
+        tap(() => {
+          this.enterpriseEntry = null;
+          this.fetchingData = true;
+        }),
+        switchMap(() => this.getEnterpriseEntry())
+      ).subscribe(enterpriseEntry => {
+        this.enterpriseEntry = enterpriseEntry;
+        this.fetchingData = false;
       });
   }
 
@@ -90,10 +97,7 @@ export class EnterpriseCardComponent implements OnInit, OnDestroy {
   }
 
   private getEnterpriseEntry() {
-    this.eeService.getEnterpriseEntry(this.selectedYear, this.selectedMonth)
-      .subscribe((enterpriseEntry) => {
-        this.enterpriseEntry = enterpriseEntry;
-      });
+    return this.eeService.getEnterpriseEntry(this.selectedYear, this.selectedMonth);
   }
 
   private showErrorSnackbar() {

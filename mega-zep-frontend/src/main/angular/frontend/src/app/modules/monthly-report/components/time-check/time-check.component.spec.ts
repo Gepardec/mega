@@ -9,6 +9,7 @@ import {configuration} from '../../../shared/constants/configuration';
 import * as _moment from 'moment';
 import {expect} from '@angular/flex-layout/_private-utils/testing';
 import {EmployeeCheckComponent} from '../employee-check/employee-check.component';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 
 const moment = _moment;
 
@@ -20,11 +21,12 @@ describe('TimeCheckComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        EmployeeCheckComponent
+        TimeCheckComponent
       ],
       imports: [
         TranslateModule.forRoot(),
-        AngularMaterialModule
+        AngularMaterialModule,
+        NgxSkeletonLoaderModule
       ]
     }).compileComponents().then(() => {
       fixture = TestBed.createComponent(TimeCheckComponent);

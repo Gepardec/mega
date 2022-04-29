@@ -11,6 +11,7 @@ import {JourneyCheckComponent} from './components/journey-check/journey-check.co
 import {EmployeeCheckComponent} from './components/employee-check/employee-check.component';
 import {PmProgressComponent} from '../shared/components/pm-progress/pm-progress.component';
 import {GeneralInfoComponent} from './components/general-info/general-info.component';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,11 @@ import {GeneralInfoComponent} from './components/general-info/general-info.compo
     AngularMaterialModule,
     TranslateModule.forRoot(),
     FlexLayoutModule,
-    SharedModule
+    SharedModule,
+    NgxSkeletonLoaderModule
+  ],
+  exports: [
+    TranslateModule
   ]
 })
 export class MonthlyReportModule {

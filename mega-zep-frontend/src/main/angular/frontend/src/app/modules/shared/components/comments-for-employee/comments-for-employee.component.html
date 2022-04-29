@@ -22,6 +22,7 @@
             [matTooltipPosition]="'right'"
             matTooltip="{{'comments-for-employee.characterRangeTooltip' | translate}}">
         <button
+          data-cy="add-comment"
           (click)="createCommentForEmployee(newMessage.value);newMessage.value = ''"
           [disabled]="newMessage?.value?.length === 0 || newMessage?.value?.length > MAXIMUM_LETTERS"
           mat-raised-button>
@@ -29,7 +30,7 @@
         </button>
       </span>
     </div>
-    <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table">
+    <table *ngIf="comments.length > 0; else noCommentsFound" class="mat-table" data-cy="employee-comments">
 
       <tr class="mat-header-row">
         <th class="mat-header-cell text-center"
@@ -109,6 +110,6 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button (click)="close()" mat-raised-button>{{'comments-for-employee.close' | translate}}</button>
+    <button data-cy="close" (click)="close()" mat-raised-button>{{'comments-for-employee.close' | translate}}</button>
   </mat-dialog-actions>
 </ng-container>

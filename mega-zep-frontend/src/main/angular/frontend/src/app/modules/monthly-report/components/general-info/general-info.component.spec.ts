@@ -7,6 +7,7 @@ import {By} from '@angular/platform-browser';
 import {expect} from '@angular/flex-layout/_private-utils/testing';
 import {TranslateTestingModule} from 'ngx-translate-testing';
 import {MatCardModule} from '@angular/material/card';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 
 describe('GeneralInfoComponent', () => {
 
@@ -21,7 +22,8 @@ describe('GeneralInfoComponent', () => {
       imports: [
         TranslateTestingModule.withTranslations({de: require('src/assets/i18n/de.json')}),
         HttpClientTestingModule,
-        MatCardModule
+        MatCardModule,
+        NgxSkeletonLoaderModule
       ]
     }).compileComponents().then(() => {
       fixture = TestBed.createComponent(GeneralInfoComponent);

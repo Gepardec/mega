@@ -33,6 +33,7 @@ import {ProjectComment} from '../../shared/models/ProjectComment';
 import {configuration} from '../../shared/constants/configuration';
 import {DatepickerMonthYearComponent} from '../../shared/components/datepicker-month-year/datepicker-month-year.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 
 const moment = _moment;
 const DATE_FORMAT: string = configuration.dateFormat;
@@ -64,7 +65,8 @@ describe('ProjectManagementComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         OAuthModule.forRoot(),
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NgxSkeletonLoaderModule
       ],
     }).compileComponents().then(() => {
       fixture = TestBed.createComponent(ProjectManagementComponent);
