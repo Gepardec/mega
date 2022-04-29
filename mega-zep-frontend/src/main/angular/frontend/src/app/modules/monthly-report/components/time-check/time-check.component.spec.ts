@@ -21,7 +21,7 @@ describe('TimeCheckComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        EmployeeCheckComponent
+        TimeCheckComponent
       ],
       imports: [
         TranslateModule.forRoot(),

@@ -9,9 +9,9 @@ Cypress.Commands.add('loginByGoogleApi', () => {
     url: 'https://www.googleapis.com/oauth2/v4/token',
     body: {
       grant_type: 'refresh_token',
+      refresh_token: Cypress.env('googleRefreshToken'),
       client_id: Cypress.env('googleClientId'),
       client_secret: Cypress.env('googleClientSecret'),
-      refresh_token: Cypress.env('googleRefreshToken'),
     },
   }).then(({body}) => {
     const {access_token, id_token} = body;

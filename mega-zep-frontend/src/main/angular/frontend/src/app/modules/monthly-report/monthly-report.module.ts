@@ -30,6 +30,9 @@ import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
     FlexLayoutModule,
     SharedModule,
     NgxSkeletonLoaderModule
+  ],
+  exports: [
+    TranslateModule
   ]
 })
 export class MonthlyReportModule {
