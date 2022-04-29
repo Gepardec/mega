@@ -19,7 +19,7 @@ import {PmProgressComponent} from '../../../shared/components/pm-progress/pm-pro
 import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import {ConfigService} from '../../../shared/services/config/config.service';
 import {Config} from '../../../shared/models/Config';
-import {firstValueFrom, Subscription, switchMap, zip} from 'rxjs';
+import {firstValueFrom, mergeMap, Subscription, switchMap, zip} from 'rxjs';
 import {tap} from 'rxjs/operators';
 
 const moment = _moment;
@@ -123,7 +123,18 @@ export class EmployeeCardComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.currentMonthYear = this.getFormattedDate();
 
     dialogRef.disableClose = true;
-    dialogRef.componentInstance.commentHasChanged.subscribe(() => this.getOmEntries());
+    dialogRef.componentInstance.commentHasChanged.pipe(
+      tap(() => {
+        this.omEntries = null;
+        this.filteredOmEntries = null;
+      }),
+      mergeMap(() => {
+        return this.getOmEntries();
+      })
+    ).subscribe(omEntries => {
+      this.omEntries = omEntries;
+      this.sortOmEntries();
+    });
   }
 
   changeDate(emittedDate: string): void {

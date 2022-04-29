@@ -178,6 +178,48 @@ describe('Office Management (Mitarbeiter)', () => {
       .should('have.class', 'green');
   });
 
+  it('should display user comments and can add new ones', () => {
+    cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
+      cy.intercept('http://localhost:8080/management/officemanagemententries/*/*', jsonData);
+    }).as('getOfficeManagementEntries');
+
+    cy.fixture('common/create-employee-comment.json').then(jsonData => {
+      cy.intercept('POST', 'http://localhost:8080/comments', jsonData).as('create-employee-comment');
+    });
+
+    cy.intercept('http://localhost:8080/comments/getallcommentsforemployee?email=**&date=**', []
+    ).as('employee-comments-empty');
+
+    visitAndWaitForRequests('/officeManagement');
+
+    cy.get('app-done-comments-indicator').should('contain.text', '− / −');
+
+    cy.get('[data-cy="open-comments"]').click();
+    cy.wait('@employee-comments-empty');
+
+    // getallcommentsforemployee will return comments for further requests
+    cy.fixture('common/employee-comments.json').then(jsonData => {
+      cy.intercept('http://localhost:8080/comments/getallcommentsforemployee?email=**&date=**', jsonData);
+    }).as('employee-comments');
+
+    // officemanagemententries will contain comments for further requests
+    cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
+      jsonData[0].totalComments = 1;
+      cy.intercept('http://localhost:8080/management/officemanagemententries/*/*', jsonData);
+    }).as('getOfficemanagemententriesWithComments');
+
+    cy.get('app-comments-for-employee textarea').type('Hallo Chuck Norris!');
+    cy.get('app-comments-for-employee [data-cy="add-comment"]').click();
+    cy.wait('@employee-comments');
+    cy.wait('@getOfficemanagemententriesWithComments');
+
+    cy.get('[data-cy="employee-comments"] td:nth-child(4)').should('contain.text', 'Hallo Chuck Norris!');
+
+    cy.get('[data-cy="close"]').click();
+
+    cy.get('app-done-comments-indicator').should('contain.text', '0 / 1');
+  });
+
   function assertCheck(attribute: 'employee-check' | 'internal-check' | 'customer-check' | 'project-check', icon: 'cancel' | 'check_circle') {
     cy.get('[data-cy="' + attribute + '"] mat-icon')
       .should('be.visible')

@@ -83,7 +83,7 @@ describe('Projekt Management', () => {
       cy.intercept('http://localhost:8080/management/projectmanagemententries/**/**?all=false', jsonData);
     }).as('getProjectmanagemententries');
 
-    cy.fixture('project-management/create-employee-comment.json').then(jsonData => {
+    cy.fixture('common/create-employee-comment.json').then(jsonData => {
       cy.intercept('POST', 'http://localhost:8080/comments', jsonData).as('create-employee-comment');
     });
 
@@ -98,12 +98,13 @@ describe('Projekt Management', () => {
     cy.wait('@employee-comments-empty');
 
     // getallcommentsforemployee will return comments for further requests
-    cy.fixture('project-management/employee-comments.json').then(jsonData => {
+    cy.fixture('common/employee-comments.json').then(jsonData => {
       cy.intercept('http://localhost:8080/comments/getallcommentsforemployee?email=**&date=**', jsonData);
     }).as('employee-comments');
 
     // projectmanagemententries will contain comments for further requests
-    cy.fixture('project-management/projectmanagemententries-with-comments.json').then(jsonData => {
+    cy.fixture('project-management/projectmanagemententries.json').then(jsonData => {
+      jsonData[0].entries[0].totalComments = 1;
       cy.intercept('http://localhost:8080/management/projectmanagemententries/**/**?all=false', jsonData);
     }).as('getProjectmanagemententriesWithComments');
 
