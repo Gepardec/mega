@@ -14,31 +14,31 @@ describe('Office Management (Projekte)', () => {
 
   beforeEach(() => {
     cy.fixture('common/info.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/info', jsonData).as('getInfo');
+      cy.intercept('http://localhost:*/info', jsonData).as('getInfo');
     });
 
     cy.fixture('officemanagement/enterpriseentries.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
+      cy.intercept('http://localhost:*/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
     });
 
     cy.fixture('officemanagement/projectmanagemententries.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
+      cy.intercept('http://localhost:*/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
     });
 
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
+      cy.intercept('http://localhost:*/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     cy.fixture('officemanagement/projectcomments.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/projectcomments?date=**-**-**&projectName=Cash-Cow-Project', jsonData).as('getProjectComments');
+      cy.intercept('http://localhost:*/projectcomments?date=**-**-**&projectName=Cash-Cow-Project', jsonData).as('getProjectComments');
     });
 
     cy.fixture('common/user.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/user', jsonData).as('getUser');
+      cy.intercept('http://localhost:*/user', jsonData).as('getUser');
     });
 
     cy.fixture('common/config.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/config', jsonData).as('getConfig');
+      cy.intercept('http://localhost:*/config', jsonData).as('getConfig');
     });
 
     // @ts-ignore
@@ -61,7 +61,7 @@ describe('Office Management (Projekte)', () => {
   it('should display all employees checked "done"', () => {
     cy.fixture('officemanagement/projectmanagemententries.json').then(jsonData => {
       jsonData[0].entries[0].projectCheckState = 'DONE';
-      cy.intercept('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
+      cy.intercept('http://localhost:*/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
     });
     visitAndWaitForRequests('/officeManagement');
     assertCheck('employees-checked', 'check_circle');
@@ -70,7 +70,7 @@ describe('Office Management (Projekte)', () => {
   it('should display control project "done"', () => {
     cy.fixture('officemanagement/projectmanagemententries.json').then(jsonData => {
       jsonData[0].controlProjectState = 'DONE';
-      cy.intercept('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
+      cy.intercept('http://localhost:*/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
     });
     visitAndWaitForRequests('/officeManagement');
     assertCheck('control-project', 'check_circle');
@@ -79,7 +79,7 @@ describe('Office Management (Projekte)', () => {
   it('should display project billing "done"', () => {
     cy.fixture('officemanagement/projectmanagemententries.json').then(jsonData => {
       jsonData[0].controlBillingState = 'DONE';
-      cy.intercept('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
+      cy.intercept('http://localhost:*/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
     });
     visitAndWaitForRequests('/officeManagement');
     assertCheck('project-billing', 'check_circle');
@@ -90,7 +90,7 @@ describe('Office Management (Projekte)', () => {
       jsonData[0].entries[0].projectCheckState = 'DONE';
       jsonData[0].controlProjectState = 'DONE';
       jsonData[0].controlBillingState = 'DONE';
-      cy.intercept('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
+      cy.intercept('http://localhost:*/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');

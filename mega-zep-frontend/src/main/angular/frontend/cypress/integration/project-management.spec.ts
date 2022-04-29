@@ -2,19 +2,19 @@ describe('Projekt Management', () => {
 
   beforeEach(() => {
     cy.fixture('common/info.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/info', jsonData).as('getInfo');
+      cy.intercept('http://localhost:*/info', jsonData).as('getInfo');
     });
 
     cy.fixture('common/user.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/user', jsonData).as('getUser');
+      cy.intercept('http://localhost:*/user', jsonData).as('getUser');
     });
 
     cy.fixture('common/config.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/config', jsonData).as('getConfig');
+      cy.intercept('http://localhost:*/config', jsonData).as('getConfig');
     });
 
     cy.fixture('project-management/projectcomments.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/projectcomments?date=**-**-**&projectName=Cash-Cow-Project', jsonData).as('getProjectcomments');
+      cy.intercept('http://localhost:*/projectcomments?date=**-**-**&projectName=Cash-Cow-Project', jsonData).as('getProjectcomments');
     });
 
     // @ts-ignore
@@ -26,7 +26,7 @@ describe('Projekt Management', () => {
       jsonData[0].entries[0].employeeCheckState = 'OPEN';
       jsonData[0].entries[0].customerCheckState = 'OPEN';
       jsonData[0].entries[0].internalCheckState = 'OPEN';
-      cy.intercept('http://localhost:8080/management/projectmanagemententries/**/**?all=false', jsonData).as('getProjectmanagemententries');
+      cy.intercept('http://localhost:*/management/projectmanagemententries/**/**?all=false', jsonData).as('getProjectmanagemententries');
     });
 
     visitAndWaitForRequests();
@@ -41,7 +41,7 @@ describe('Projekt Management', () => {
       jsonData[0].entries[0].employeeCheckState = 'DONE';
       jsonData[0].entries[0].customerCheckState = 'DONE';
       jsonData[0].entries[0].internalCheckState = 'DONE';
-      cy.intercept('http://localhost:8080/management/projectmanagemententries/**/**?all=false', jsonData).as('getProjectmanagemententries');
+      cy.intercept('http://localhost:*/management/projectmanagemententries/**/**?all=false', jsonData).as('getProjectmanagemententries');
     });
 
     visitAndWaitForRequests();
@@ -55,7 +55,7 @@ describe('Projekt Management', () => {
     cy.fixture('project-management/projectmanagemententries.json').then(jsonData => {
       jsonData[0].controlProjectState = 'OPEN';
       jsonData[0].controlBillingState = 'OPEN';
-      cy.intercept('http://localhost:8080/management/projectmanagemententries/**/**?all=false', jsonData).as('getProjectmanagemententries');
+      cy.intercept('http://localhost:*/management/projectmanagemententries/**/**?all=false', jsonData).as('getProjectmanagemententries');
     });
 
     visitAndWaitForRequests();
@@ -69,7 +69,7 @@ describe('Projekt Management', () => {
     cy.fixture('project-management/projectmanagemententries.json').then(jsonData => {
       jsonData[0].controlProjectState = 'DONE';
       jsonData[0].controlBillingState = 'DONE';
-      cy.intercept('http://localhost:8080/management/projectmanagemententries/**/**?all=false', jsonData).as('getProjectmanagemententries');
+      cy.intercept('http://localhost:*/management/projectmanagemententries/**/**?all=false', jsonData).as('getProjectmanagemententries');
     });
 
     visitAndWaitForRequests();
@@ -80,14 +80,14 @@ describe('Projekt Management', () => {
 
   it('should display user comments and can add new ones', () => {
     cy.fixture('project-management/projectmanagemententries.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/management/projectmanagemententries/**/**?all=false', jsonData);
+      cy.intercept('http://localhost:*/management/projectmanagemententries/**/**?all=false', jsonData);
     }).as('getProjectmanagemententries');
 
     cy.fixture('common/create-employee-comment.json').then(jsonData => {
-      cy.intercept('POST', 'http://localhost:8080/comments', jsonData).as('create-employee-comment');
+      cy.intercept('POST', 'http://localhost:*/comments', jsonData).as('create-employee-comment');
     });
 
-    cy.intercept('http://localhost:8080/comments/getallcommentsforemployee?email=**&date=**', []
+    cy.intercept('http://localhost:*/comments/getallcommentsforemployee?email=**&date=**', []
     ).as('employee-comments-empty');
 
     visitAndWaitForRequests();
@@ -99,13 +99,13 @@ describe('Projekt Management', () => {
 
     // getallcommentsforemployee will return comments for further requests
     cy.fixture('common/employee-comments.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/comments/getallcommentsforemployee?email=**&date=**', jsonData);
+      cy.intercept('http://localhost:*/comments/getallcommentsforemployee?email=**&date=**', jsonData);
     }).as('employee-comments');
 
     // projectmanagemententries will contain comments for further requests
     cy.fixture('project-management/projectmanagemententries.json').then(jsonData => {
       jsonData[0].entries[0].totalComments = 1;
-      cy.intercept('http://localhost:8080/management/projectmanagemententries/**/**?all=false', jsonData);
+      cy.intercept('http://localhost:*/management/projectmanagemententries/**/**?all=false', jsonData);
     }).as('getProjectmanagemententriesWithComments');
 
     cy.get('app-comments-for-employee textarea').type('Hallo Chuck Norris!');

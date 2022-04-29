@@ -14,31 +14,31 @@ describe('Office Management (Mitarbeiter)', () => {
 
   beforeEach(() => {
     cy.fixture('common/info.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/info', jsonData).as('getInfo');
+      cy.intercept('http://localhost:*/info', jsonData).as('getInfo');
     });
 
     cy.fixture('officemanagement/enterpriseentries.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
+      cy.intercept('http://localhost:*/enterprise/entriesformonthyear/*/*', jsonData).as('getEnterpriseEntries');
     });
 
     cy.fixture('officemanagement/projectmanagemententries.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
+      cy.intercept('http://localhost:*/management/projectmanagemententries/*/*?all=true', jsonData).as('getProjectManagementEntries');
     });
 
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
+      cy.intercept('http://localhost:*/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     cy.fixture('officemanagement/projectcomments.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/projectcomments?date=**-**-**&projectName=Cash-Cow-Project', jsonData).as('getProjectComments');
+      cy.intercept('http://localhost:*/projectcomments?date=**-**-**&projectName=Cash-Cow-Project', jsonData).as('getProjectComments');
     });
 
     cy.fixture('common/user.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/user', jsonData).as('getUser');
+      cy.intercept('http://localhost:*/user', jsonData).as('getUser');
     });
 
     cy.fixture('common/config.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/config', jsonData).as('getConfig');
+      cy.intercept('http://localhost:*/config', jsonData).as('getConfig');
     });
 
     // @ts-ignore
@@ -63,7 +63,7 @@ describe('Office Management (Mitarbeiter)', () => {
     visitAndWaitForRequests('/officeManagement');
     assertSelect('customer-check', 'Offen');
 
-    cy.intercept('PUT', 'http://localhost:8080/stepentry/closeforoffice', {
+    cy.intercept('PUT', 'http://localhost:*/stepentry/closeforoffice', {
       body: true
     }).as('closeforoffice');
 
@@ -78,7 +78,7 @@ describe('Office Management (Mitarbeiter)', () => {
 
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].customerCheckState = 'DONE';
-      cy.intercept('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
+      cy.intercept('http://localhost:*/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -90,7 +90,7 @@ describe('Office Management (Mitarbeiter)', () => {
     visitAndWaitForRequests('/officeManagement');
     assertSelect('internal-check', 'Offen');
 
-    cy.intercept('PUT', 'http://localhost:8080/stepentry/closeforoffice', {
+    cy.intercept('PUT', 'http://localhost:*/stepentry/closeforoffice', {
       body: true
     }).as('closeforoffice');
 
@@ -105,7 +105,7 @@ describe('Office Management (Mitarbeiter)', () => {
 
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].internalCheckState = 'DONE';
-      cy.intercept('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
+      cy.intercept('http://localhost:*/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -116,7 +116,7 @@ describe('Office Management (Mitarbeiter)', () => {
   it('should display that the employee confirmed his bookings', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].employeeCheckState = 'DONE';
-      cy.intercept('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
+      cy.intercept('http://localhost:*/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -126,7 +126,7 @@ describe('Office Management (Mitarbeiter)', () => {
   it('should display that the project lead confirmed the employees bookings', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].projectCheckState = 'DONE';
-      cy.intercept('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
+      cy.intercept('http://localhost:*/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -139,7 +139,7 @@ describe('Office Management (Mitarbeiter)', () => {
       jsonData[0].internalCheckState = 'DONE';
       jsonData[0].employeeCheckState = 'DONE';
       jsonData[0].projectCheckState = 'DONE';
-      cy.intercept('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
+      cy.intercept('http://localhost:*/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -152,7 +152,7 @@ describe('Office Management (Mitarbeiter)', () => {
   it('should indicate that there is one comment present for the employee', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].totalComments = 1;
-      cy.intercept('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
+      cy.intercept('http://localhost:*/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -167,7 +167,7 @@ describe('Office Management (Mitarbeiter)', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].totalComments = 1;
       jsonData[0].finishedComments = 1;
-      cy.intercept('http://localhost:8080/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
+      cy.intercept('http://localhost:*/management/officemanagemententries/*/*', jsonData).as('getOfficeManagementEntries');
     });
 
     visitAndWaitForRequests('/officeManagement');
@@ -180,14 +180,14 @@ describe('Office Management (Mitarbeiter)', () => {
 
   it('should display user comments and can add new ones', () => {
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/management/officemanagemententries/*/*', jsonData);
+      cy.intercept('http://localhost:*/management/officemanagemententries/*/*', jsonData);
     }).as('getOfficeManagementEntries');
 
     cy.fixture('common/create-employee-comment.json').then(jsonData => {
-      cy.intercept('POST', 'http://localhost:8080/comments', jsonData).as('create-employee-comment');
+      cy.intercept('POST', 'http://localhost:*/comments', jsonData).as('create-employee-comment');
     });
 
-    cy.intercept('http://localhost:8080/comments/getallcommentsforemployee?email=**&date=**', []
+    cy.intercept('http://localhost:*/comments/getallcommentsforemployee?email=**&date=**', []
     ).as('employee-comments-empty');
 
     visitAndWaitForRequests('/officeManagement');
@@ -199,13 +199,13 @@ describe('Office Management (Mitarbeiter)', () => {
 
     // getallcommentsforemployee will return comments for further requests
     cy.fixture('common/employee-comments.json').then(jsonData => {
-      cy.intercept('http://localhost:8080/comments/getallcommentsforemployee?email=**&date=**', jsonData);
+      cy.intercept('http://localhost:*/comments/getallcommentsforemployee?email=**&date=**', jsonData);
     }).as('employee-comments');
 
     // officemanagemententries will contain comments for further requests
     cy.fixture('officemanagement/officemanagemententries.json').then(jsonData => {
       jsonData[0].totalComments = 1;
-      cy.intercept('http://localhost:8080/management/officemanagemententries/*/*', jsonData);
+      cy.intercept('http://localhost:*/management/officemanagemententries/*/*', jsonData);
     }).as('getOfficemanagemententriesWithComments');
 
     cy.get('app-comments-for-employee textarea').type('Hallo Chuck Norris!');
