@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @QuarkusTest
@@ -43,10 +43,10 @@ class ProjectCommentRepositoryTest {
 
         List<ProjectComment> projectComments = projectCommentRepository.findByProjectNameAndDateBetween(projectComment.getProject().getName(), projectComment.getDate().minusDays(2), projectComment.getDate().plusDays(2));
 
-        assertAll(
-                () -> assertThat(projectComments.isEmpty()).isFalse(),
-                () -> assertThat(projectComments.get(0).getDate()).isEqualTo(projectComment.getDate())
-        );
+        assertThat(projectComments).isNotEmpty()
+                .first()
+                .extracting(ProjectComment::getDate)
+                .isEqualTo(projectComment.getDate());
     }
 
     @Test
