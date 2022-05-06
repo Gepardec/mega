@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 @QuarkusTest
 @TestTransaction
@@ -56,10 +55,10 @@ class ProjectCommentRepositoryTest {
 
         List<ProjectComment> projectComments = projectCommentRepository.findByProjectNameWithDate(projectComment.getProject().getName(), projectComment.getDate());
 
-        assertAll(
-                () -> assertThat(projectComments.isEmpty()).isFalse(),
-                () -> assertThat(projectComments.get(0).getDate()).isEqualTo(projectComment.getDate())
-        );
+        assertThat(projectComments).isNotEmpty()
+                .first()
+                .extracting(ProjectComment::getDate)
+                .isEqualTo(projectComment.getDate());
     }
 
     @Test
@@ -73,10 +72,10 @@ class ProjectCommentRepositoryTest {
 
         List<ProjectComment> newProjectComments = projectCommentRepository.findByProjectNameAndDateBetween(projectComment.getProject().getName(), LocalDate.now().minusDays(2), LocalDate.now().plusDays(2));
 
-        assertAll(
-                () -> assertThat(newProjectComments.isEmpty()).isFalse(),
-                () -> assertThat(newProjectComments.get(0).getComment()).isEqualTo(NEW_COMMENT)
-        );
+        assertThat(newProjectComments).isNotEmpty()
+                .first()
+                .extracting(ProjectComment::getComment)
+                .isEqualTo(NEW_COMMENT);
     }
 
     @Test
@@ -85,7 +84,8 @@ class ProjectCommentRepositoryTest {
         projectCommentRepository.save(projectComment);
 
         List<ProjectComment> projectComments = projectCommentRepository.findByProjectNameAndDateBetween(projectComment.getProject().getName(), LocalDate.now().minusDays(2), LocalDate.now().plusDays(2));
-        assertThat(projectComments.isEmpty()).isFalse();
+
+        assertThat(projectComments).isNotEmpty();
     }
 
     private Project initializeProjectObject() {
