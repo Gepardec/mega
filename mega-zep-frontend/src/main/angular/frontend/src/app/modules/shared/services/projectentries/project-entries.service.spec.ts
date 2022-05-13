@@ -1,11 +1,11 @@
 import {TestBed} from '@angular/core/testing';
 
 import {ProjectEntriesService} from './project-entries.service';
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {ConfigService} from "../config/config.service";
-import {HttpResponse} from "@angular/common/http";
-import {ProjectState} from "../../models/ProjectState";
-import {ProjectStepQualifier} from "../../../project-management/models/ProjectEntry";
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {ConfigService} from '../config/config.service';
+import {HttpResponse} from '@angular/common/http';
+import {ProjectState} from '../../models/ProjectState';
+import {ProjectStepQualifier} from '../../../project-management/models/ProjectEntry';
 
 describe('ProjectEntriesService', () => {
 

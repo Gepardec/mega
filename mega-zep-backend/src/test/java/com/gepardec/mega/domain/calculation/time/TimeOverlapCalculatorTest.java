@@ -61,7 +61,6 @@ class TimeOverlapCalculatorTest {
         ProjectEntry entryThree = projectTimeEntry(8, 8, 0, 12, 0);
         ProjectEntry entryFour = projectTimeEntry(9, 8, 0, 12, 0);
         ProjectEntry entryFive = projectTimeEntry(9, 9, 0, 10, 0);
-        ProjectEntry entrySix = projectTimeEntry(10, 9, 0, 10, 0);
 
         List<ProjectEntry> projectEntries = new ArrayList<>();
         projectEntries.add(entryOne);

@@ -14,6 +14,7 @@ quarkus:
       ~: true
       access-control-allow-credentials: true
     root-path: "/"
+    non-application-root-path: "/"
     port: 8080
 
   log:
@@ -185,6 +186,13 @@ mega:
     mailer:
       mock: true
 
+    datasource:
+      db-kind: "postgresql"
+      username: "${DB_USER}"
+      password: "${DB_PASSWORD}"
+      jdbc:
+        url: "jdbc:postgresql://${DB_HOST}/mega"
+
   mega:
     dash-url: "https://mega-zep-frontend-57-mega-dev.cloud.itandtel.at/index.html"
 
@@ -222,6 +230,13 @@ mega:
     mailer:
       mock: true
 
+    datasource:
+      db-kind: "postgresql"
+      username: "${DB_USER}"
+      password: "${DB_PASSWORD}"
+      jdbc:
+        url: "jdbc:postgresql://${DB_HOST}/mega"
+
   mega:
     dash-url: "https://mega-zep-frontend-57-mega-test.cloud.itandtel.at/index.html"
 
@@ -255,6 +270,13 @@ mega:
   quarkus:
     mailer:
       mock: false
+
+    datasource:
+      db-kind: "postgresql"
+      username: "${DB_USER}"
+      password: "${DB_PASSWORD}"
+      jdbc:
+        url: "jdbc:postgresql://${DB_HOST}/mega"
 
   mega:
     dash-url: "https://mega.gepardec.com/index.html"

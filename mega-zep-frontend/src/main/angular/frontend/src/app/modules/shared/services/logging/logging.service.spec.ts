@@ -1,7 +1,7 @@
 import {TestBed} from '@angular/core/testing';
 
 import {LoggingService} from './logging.service';
-import {configuration} from "../../constants/configuration";
+import {configuration} from '../../constants/configuration';
 
 describe('LoggingService', () => {
 
@@ -33,7 +33,7 @@ describe('LoggingService', () => {
 
   class LoggingMock {
 
-    static message: string = "Hello World";
+    static message: string = 'Hello World';
     static levelDebug: number = configuration.LogLevel.Debug;
     static levelOff: number = configuration.LogLevel.Off;
 

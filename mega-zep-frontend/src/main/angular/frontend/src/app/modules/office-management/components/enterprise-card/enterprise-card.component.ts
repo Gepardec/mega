@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import * as _moment from 'moment';
 import {Moment} from 'moment';
-import {Subscription, zip} from 'rxjs';
+import {Subscription, switchMap, zip} from 'rxjs';
 import {OfficeManagementService} from '../../services/office-management.service';
 import {tap} from 'rxjs/operators';
 import {MatSelectChange} from '@angular/material/select';
@@ -24,12 +24,16 @@ const moment = _moment;
 })
 export class EnterpriseCardComponent implements OnInit, OnDestroy {
 
+  EnterpriseStep = EnterpriseStep;
+
   selectedYear: number;
   selectedMonth: number;
+
   dateSelectionSub: Subscription;
   officeManagementUrl: string;
   enterpriseEntry: EnterpriseEntry;
-  EnterpriseStep = EnterpriseStep;
+  fetchingData: boolean;
+
   tooltipShowDelay = 500;
   tooltipPosition = 'above';
 
@@ -57,16 +61,20 @@ export class EnterpriseCardComponent implements OnInit, OnDestroy {
         tap(value => {
           this.selectedYear = value[0];
           this.selectedMonth = value[1];
-        })
-      ).subscribe(() => {
-        this.getEnterpriseEntry();
+        }),
+        tap(() => {
+          this.enterpriseEntry = null;
+          this.fetchingData = true;
+        }),
+        switchMap(() => this.getEnterpriseEntry())
+      ).subscribe(enterpriseEntry => {
+        this.enterpriseEntry = enterpriseEntry;
+        this.fetchingData = false;
       });
   }
 
   ngOnDestroy(): void {
-    if (this.dateSelectionSub) {
-      this.dateSelectionSub.unsubscribe();
-    }
+    this.dateSelectionSub?.unsubscribe();
   }
 
   dateChanged(date: Moment) {
@@ -78,26 +86,18 @@ export class EnterpriseCardComponent implements OnInit, OnDestroy {
     let oldValue = this.enterpriseEntry[step];
 
     this.enterpriseEntry[step] = $event.value;
-    console.log('Old value: ' + oldValue);
-    console.log('New value: ' + this.enterpriseEntry[step]);
-
     this.eeService.updateEnterpriseEntry(this.enterpriseEntry, this.selectedYear, this.selectedMonth)
       .subscribe((success) => {
-        if (success) {
-        } else {
+        if (!success) {
           this.showErrorSnackbar();
           this.enterpriseEntry[step] = oldValue;
           projectStateSelect.value = this.enterpriseEntry[step];
         }
-        console.log('Current value after update: ' + this.enterpriseEntry[step]);
       });
   }
 
   private getEnterpriseEntry() {
-    this.eeService.getEnterpriseEntry(this.selectedYear, this.selectedMonth)
-      .subscribe((enterpriseEntry) => {
-        this.enterpriseEntry = enterpriseEntry;
-      });
+    return this.eeService.getEnterpriseEntry(this.selectedYear, this.selectedMonth);
   }
 
   private showErrorSnackbar() {

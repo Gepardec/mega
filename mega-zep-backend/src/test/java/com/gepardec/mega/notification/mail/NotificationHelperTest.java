@@ -2,32 +2,30 @@ package com.gepardec.mega.notification.mail;
 
 import com.gepardec.mega.application.configuration.NotificationConfig;
 import com.gepardec.mega.application.producer.ResourceBundleProducer;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Answers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.inject.Inject;
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 class NotificationHelperTest {
 
     private final Locale locale = Locale.GERMAN;
 
-    @Mock
+    @Inject
+    NotificationHelper notificationHelper;
+
+    @InjectMock(returnsDeepMocks = true)
     private NotificationConfig notificationConfig;
 
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+    @InjectMock(returnsDeepMocks = true)
     private ResourceBundleProducer resourceBundleProducer;
-
-    @InjectMocks
-    private NotificationHelper notificationHelper;
 
     @Test
     void whenReminderEMPLOYEE_CHECK_PROJECTTIME_thenEmailPathReturned() {

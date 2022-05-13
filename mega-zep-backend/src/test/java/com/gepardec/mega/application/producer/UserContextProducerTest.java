@@ -5,30 +5,29 @@ import com.gepardec.mega.domain.model.Role;
 import com.gepardec.mega.domain.model.SecurityContext;
 import com.gepardec.mega.domain.model.User;
 import com.gepardec.mega.domain.model.UserContext;
-import com.gepardec.mega.service.api.user.UserService;
+import com.gepardec.mega.service.api.UserService;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.inject.Inject;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 class UserContextProducerTest {
 
-    @Mock
-    private SecurityContext securityContext;
+    @InjectMock
+    SecurityContext securityContext;
 
-    @Mock
-    private UserService userService;
+    @InjectMock
+    UserService userService;
 
-    @InjectMocks
-    private UserContextProducer producer;
+    @Inject
+    UserContextProducer producer;
 
     @Test
     void createUserContext_whenUserVerified_thenUserSetAndLogged() {
@@ -41,15 +40,15 @@ class UserContextProducerTest {
                 .email("no-reply@gepardec.com")
                 .roles(Set.of(Role.EMPLOYEE))
                 .build();
-        when(securityContext.email()).thenReturn("test@gepardec.com");
+        when(securityContext.getEmail()).thenReturn("test@gepardec.com");
         when(userService.findUserForEmail("test@gepardec.com")).thenReturn(user);
 
         // When
         final UserContext userContext = producer.createUserContext();
 
         // Then
-        assertThat(userContext.user()).isNotNull();
-        assertThat(userContext.user()).isEqualTo(user);
+        assertThat(userContext.getUser()).isNotNull();
+        assertThat(userContext.getUser()).isEqualTo(user);
     }
 
     @Test

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import {State} from '../../models/State';
 import {MatSelectChange} from '@angular/material/select';
 
@@ -7,15 +7,18 @@ import {MatSelectChange} from '@angular/material/select';
   templateUrl: './state-select.component.html',
   styleUrls: ['./state-select.component.scss']
 })
-export class StateSelectComponent implements OnInit {
+export class StateSelectComponent implements AfterViewChecked {
+
   State = State;
-  @Input() value;
+
+  @Input() value: State;
   @Output() selectionChange = new EventEmitter<MatSelectChange>();
 
-  constructor() {
+  constructor(private cdr: ChangeDetectorRef) {
   }
 
-  ngOnInit(): void {
+  ngAfterViewChecked() {
+    this.cdr.detectChanges();
   }
 
   onSelectionChange(selectChange: MatSelectChange): void {

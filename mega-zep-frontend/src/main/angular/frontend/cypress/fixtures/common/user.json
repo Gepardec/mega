@@ -1,0 +1,13 @@
+{
+  "dbId": 5,
+  "userId": "1337-chuck-norris",
+  "email": "mega.test@gepardec.com",
+  "firstname": "Chuck",
+  "lastname": "Norris",
+  "releaseDate": "2021-31-12",
+  "roles": [
+    "OFFICE_MANAGEMENT",
+    "EMPLOYEE",
+    "PROJECT_LEAD"
+  ]
+}

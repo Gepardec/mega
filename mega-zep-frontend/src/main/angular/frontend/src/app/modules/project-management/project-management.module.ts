@@ -5,19 +5,21 @@ import {AngularMaterialModule} from '../material/material-module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {SharedModule} from '../shared/shared.module';
 import {TranslateModule} from '@ngx-translate/core';
-import {FormsModule} from "@angular/forms";
+import {FormsModule} from '@angular/forms';
 import {BillableTimesComponent} from './components/billable-times/billable-times.component';
-import {BillableTimesFractionComponent} from "./components/billable-times-fraction/billable-times-fraction.component";
+import {BillableTimesFractionComponent} from './components/billable-times-fraction/billable-times-fraction.component';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 
 @NgModule({
-  declarations: [ProjectManagementComponent, BillableTimesComponent,BillableTimesFractionComponent],
+  declarations: [ProjectManagementComponent, BillableTimesComponent, BillableTimesFractionComponent],
   imports: [
     CommonModule,
     AngularMaterialModule,
     FlexLayoutModule,
     SharedModule,
     TranslateModule.forRoot(),
-    FormsModule
+    FormsModule,
+    NgxSkeletonLoaderModule
   ]
 })
 export class ProjectManagementModule {

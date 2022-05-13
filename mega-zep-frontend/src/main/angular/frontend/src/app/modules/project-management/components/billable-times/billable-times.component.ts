@@ -1,23 +1,21 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-billable-times',
   templateUrl: './billable-times.component.html',
   styleUrls: ['./billable-times.component.scss']
 })
-export class BillableTimesComponent implements OnInit {
+export class BillableTimesComponent {
 
   @Input() billableTimes: string;
   @Input() nonBillableTimes: string;
 
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
-
   transformTimeToFractionNumber(workingTime: string): number {
-    let spWorkingTime: string[] = workingTime.split(":");
+    if (!workingTime) {
+      return undefined;
+    }
+
+    const spWorkingTime: string[] = workingTime.split(':');
 
     if (spWorkingTime.length < 1) {
       return 0;

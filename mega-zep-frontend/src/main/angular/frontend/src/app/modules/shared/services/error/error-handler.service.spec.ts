@@ -2,12 +2,13 @@ import {TestBed} from '@angular/core/testing';
 import {ErrorHandlerService} from './error-handler.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {OAuthLogger, OAuthService, UrlHelperService} from 'angular-oauth2-oidc';
+import {OAuthLogger, OAuthModule, OAuthService, UrlHelperService} from 'angular-oauth2-oidc';
 import {UserService} from '../user/user.service';
 import {LoggingService} from '../logging/logging.service';
-import {ErrorService} from "./error.service";
-import {configuration} from "../../constants/configuration";
-import {Router} from "@angular/router";
+import {ErrorService} from './error.service';
+import {configuration} from '../../constants/configuration';
+import {Router} from '@angular/router';
+import {HttpStatusCode} from '@angular/common/http';
 
 describe('ErrorHandlerService', () => {
 
@@ -19,7 +20,11 @@ describe('ErrorHandlerService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        OAuthModule.forRoot()
+      ],
       providers: [
         ErrorHandlerService,
         OAuthService,
@@ -45,8 +50,9 @@ describe('ErrorHandlerService', () => {
     spyOn(errorService, 'getErrorMessage').and.callThrough();
     spyOn(loggingService, 'writeToLog').and.callThrough();
 
-    const error: ErrrorMock = {
-      status: ErrorHandlerMock.httpStatusNotFound,
+    const error: ErrorMock = {
+      name: ErrorHandlerMock.name,
+      status: HttpStatusCode.NotFound,
       message: ErrorHandlerMock.message
     }
 
@@ -78,8 +84,9 @@ describe('ErrorHandlerService', () => {
     expect(errorService.storeLastErrorData).toHaveBeenCalledWith(ErrorHandlerMock.message, router.url);
   });
 
-  class ErrrorMock {
+  class ErrorMock {
 
+    name: string;
     status: number;
     message: string;
 
@@ -88,8 +95,5 @@ describe('ErrorHandlerService', () => {
   class ErrorHandlerMock {
 
     static message: string = 'message';
-    static httpStatusUnauthorized: number = 401;
-    static httpStatusNotFound: number = 404;
-
   }
 });

@@ -1,37 +1,37 @@
 package com.gepardec.mega.application.producer;
 
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.OngoingStubbing;
 import org.slf4j.Logger;
 
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.inject.Inject;
 import java.lang.reflect.Member;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 class LoggerProducerTest {
 
-    @Mock
+    @Inject
+    LoggerProducer producer;
+
     private InjectionPoint ip;
 
-    @Mock
     private Bean<?> bean;
 
-    @Mock
     private Member member;
-
-    private LoggerProducer producer;
 
     @BeforeEach
     void beforeEach() {
-        producer = new LoggerProducer();
+        ip = spy(InjectionPoint.class);
+        bean = spy(Bean.class);
+        member = spy(Member.class);
     }
 
     @Test

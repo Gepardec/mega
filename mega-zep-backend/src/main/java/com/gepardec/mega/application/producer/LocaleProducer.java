@@ -6,6 +6,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
@@ -18,6 +19,7 @@ public class LocaleProducer {
 
     private Locale currentLocale;
 
+    @Inject
     public LocaleProducer(
             final ApplicationConfig applicationConfig,
             HttpServletRequest request) {

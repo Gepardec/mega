@@ -16,8 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-class
-UserResourceTest {
+class UserResourceTest {
 
     @InjectMock
     private SecurityContext securityContext;
@@ -28,7 +27,7 @@ UserResourceTest {
     @Test
     void get_whenUserNotLogged_thenReturnsHttpStatusUNAUTHORIZED() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(userContext.user()).thenReturn(user);
+        when(userContext.getUser()).thenReturn(user);
 
         given().get("/user")
                 .then().assertThat().statusCode(HttpStatus.SC_UNAUTHORIZED);
@@ -37,8 +36,8 @@ UserResourceTest {
     @Test
     void get_whenUserIsLogged_thenReturnsHttpStatusOK() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.email()).thenReturn(user.email());
-        when(userContext.user()).thenReturn(user);
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
+        when(userContext.getUser()).thenReturn(user);
 
         given().get("/user")
                 .then().assertThat().statusCode(HttpStatus.SC_OK);
@@ -47,15 +46,15 @@ UserResourceTest {
     @Test
     void get_whenUserIsLogged_thenReturnsUser() {
         final User user = createUserForRole(Role.EMPLOYEE);
-        when(securityContext.email()).thenReturn(user.email());
-        when(userContext.user()).thenReturn(user);
-
+        when(securityContext.getEmail()).thenReturn(user.getEmail());
+        when(userContext.getUser()).thenReturn(user);
         final User actual = given()
                 .get("/user")
                 .then().assertThat().statusCode(HttpStatus.SC_OK)
                 .extract().as(User.class);
 
-        assertThat(actual).isEqualTo(user);
+        assertThat(actual.getUserId()).isEqualTo(user.getUserId());
+        assertThat(actual.getEmail()).isEqualTo(user.getEmail());
     }
 
     private User createUserForRole(final Role role) {

@@ -1,7 +1,17 @@
-<mat-card *ngIf="monthlyReport" class="mat-elevation-z10">
+<mat-card class="mat-elevation-z10">
   <mat-card-title>{{'monthly-report.title.emc' | translate}}</mat-card-title>
   <mat-card-content class="text-center" fxLayout="column" fxLayoutAlign="center center">
-    <ng-container>
+    <ng-container *ngIf="!monthlyReport else employeeCheck">
+      <ngx-skeleton-loader [theme]="{ height: '80px', width: '80px' }"
+                           appearance="circle"></ngx-skeleton-loader>
+      <ngx-skeleton-loader [theme]="{ width: '700px', 'margin-top': '20px' }"
+                           appearance="line"></ngx-skeleton-loader>
+      <ngx-skeleton-loader [theme]="{ width: '300px' }"
+                           appearance="line"></ngx-skeleton-loader>
+      <ngx-skeleton-loader [theme]="{ height: '40px', width: '200px', 'margin-top': '15px' }"
+                           appearance="line"></ngx-skeleton-loader>
+    </ng-container>
+    <ng-template #employeeCheck>
       <ng-container [ngSwitch]="monthlyReport.employeeCheckState">
         <ng-container *ngSwitchCase="State.OPEN">
           <ng-container *ngIf="monthlyReport.assigned; else noTimesThisMonth">
@@ -48,6 +58,6 @@
                style="white-space: pre-line"></div>
         </mat-list-option>
       </mat-selection-list>
-    </ng-container>
+    </ng-template>
   </mat-card-content>
 </mat-card>

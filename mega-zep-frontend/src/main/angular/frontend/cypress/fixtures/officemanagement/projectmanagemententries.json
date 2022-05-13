@@ -1,0 +1,37 @@
+[
+  {
+    "projectName": "Cash-Cow-Project",
+    "controlProjectState": "OPEN",
+    "controlBillingState": "OPEN",
+    "presetControlProjectState": false,
+    "presetControlBillingState": false,
+    "entries": [
+      {
+        "employee": {
+          "userId": "1337-chuck-norris",
+          "email": "mega.test@gepardec.com",
+          "title": "DSc",
+          "firstname": "Chuck",
+          "lastname": "Norris",
+          "salutation": "Herr",
+          "releaseDate": "2021-12-31",
+          "workDescription": "02",
+          "language": "de",
+          "active": true
+        },
+        "employeeCheckState": "DONE",
+        "customerCheckState": "OPEN",
+        "internalCheckState": "OPEN",
+        "projectCheckState": "OPEN",
+        "employeeProgresses": null,
+        "totalComments": 0,
+        "finishedComments": 0,
+        "entryDate": "2021-01-01",
+        "billableTime": "00:00",
+        "nonBillableTime": "00:00"
+      }
+    ],
+    "aggregatedBillableWorkTimeInSeconds": 0.0,
+    "aggregatedNonBillableWorkTimeInSeconds": 0.0
+  }
+]

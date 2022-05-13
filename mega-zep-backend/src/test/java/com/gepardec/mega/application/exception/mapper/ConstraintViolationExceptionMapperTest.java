@@ -66,9 +66,8 @@ class ConstraintViolationExceptionMapperTest {
         List<ValidationViolation> actual = (List<ValidationViolation>) response.getEntity();
 
         assertThat(actual).hasSize(2);
-        assertThat(actual).containsExactlyInAnyOrder(
-                ValidationViolation.builder().property("name").message("must not be null").build(),
-                ValidationViolation.builder().property("email").message("must not be null").build());
+        assertThat(actual.get(0).getMessage()).isEqualTo(ValidationViolation.builder().property("name").message("must not be null").build().getMessage());
+        assertThat(actual.get(1).getMessage()).isEqualTo(ValidationViolation.builder().property("email").message("must not be null").build().getMessage());
     }
 
     public static class Model {

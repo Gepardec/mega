@@ -10,6 +10,10 @@ tmp/
 app/**/*.js
 app/**/*.js.map
 
+# cypress
+screenshots
+videos
+
 # dependencies
 node_modules/
 bower_components/
@@ -18,6 +22,7 @@ bower_components/
 .idea/
 
 # misc
+/.angular/cache
 .sass-cache/
 connect.lock/
 coverage/

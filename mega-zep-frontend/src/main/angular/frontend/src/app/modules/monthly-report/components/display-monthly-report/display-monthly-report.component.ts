@@ -2,10 +2,10 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output}
 import {MonthlyReport} from '../../models/MonthlyReport';
 import {State} from '../../../shared/models/State';
 import {TranslateService} from '@ngx-translate/core';
-import {Subscription, zip} from "rxjs";
-import {tap} from "rxjs/operators";
-import * as _moment from "moment";
-import {Moment} from "moment";
+import {Subscription, zip} from 'rxjs';
+import {tap} from 'rxjs/operators';
+import * as _moment from 'moment';
+import {Moment} from 'moment';
 import {OfficeManagementService} from '../../../office-management/services/office-management.service';
 import {MonthlyReportService} from '../../services/monthly-report.service';
 
@@ -19,15 +19,18 @@ const moment = _moment;
 })
 export class DisplayMonthlyReportComponent implements OnInit {
 
+  readonly State = State;
+
+  @Input() monthlyReport: MonthlyReport;
+  @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>();
+
+  maxMonthDate: number = 0;
+
   selectedYear: number;
   selectedMonth: number;
   dateSelectionSub: Subscription;
-  maxMonthDate: number = 0;
 
-  readonly State = State;
   employeeFunctions;
-  @Input() monthlyReport: MonthlyReport;
-  @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(private translateService: TranslateService,
               private omService: OfficeManagementService,
