@@ -149,7 +149,7 @@
             <mat-cell *matCellDef="let omEntry">
               <span class="mobile-label">{{'office-management.table.releaseDate' | translate}}</span>
               <p [ngClass]="getReleaseDateCssClass(omEntry.employee.releaseDate)" class="release">
-                {{omEntry.employee.releaseDate !== 'NULL' ? (omEntry.employee.releaseDate | date: configuration.dateFormat) : 'Nicht verfügbar'}}
+                {{omEntry.employee.releaseDate !== 'NULL' ? (omEntry.employee.releaseDate | date: configuration.dateFormatNg) : 'Nicht verfügbar'}}
               </p>
             </mat-cell>
           </ng-container>

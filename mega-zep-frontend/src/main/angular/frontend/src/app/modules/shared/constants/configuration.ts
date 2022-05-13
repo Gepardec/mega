@@ -11,6 +11,7 @@ export const configuration = {
   modelContentMenu=true&mgr=MitarbeiterProjektzeitMgr&contentModelId=`,
 
   dateFormat: 'YYYY-MM-DD',
+  dateFormatNg: 'yyyy-MM-dd',
 
   LogLevel: {
     All: 0,
