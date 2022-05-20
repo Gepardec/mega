@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {MonthlyReport} from '../../models/MonthlyReport';
 import {MonthlyReportService} from '../../services/monthly-report.service';
 import * as _moment from 'moment';
@@ -10,21 +10,17 @@ const moment = _moment;
   templateUrl: './general-info.component.html',
   styleUrls: ['./general-info.component.scss']
 })
-export class GeneralInfoComponent implements OnInit {
+export class GeneralInfoComponent implements OnChanges {
 
   @Input() monthlyReport: MonthlyReport;
-  @Output() refreshMonthlyReport: EventEmitter<void> = new EventEmitter<void>(); // TODO mit Oli abklären, ob dieses Event notwendig ist. Es wird nie gefeuert
 
   constructor(public monthlyReportService: MonthlyReportService) {
   }
 
-  ngOnInit(): void {
-    this.calculateDynamicValue();
-  }
-
-  update(monthlyReport: MonthlyReport) {
-    this.monthlyReport = monthlyReport;
-    this.ngOnInit();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['monthlyReport']) {
+      this.calculateDynamicValue();
+    }
   }
 
   calculateBillingPercentage(totalWorkingTime: string, billableTime: string): number {
@@ -52,7 +48,7 @@ export class GeneralInfoComponent implements OnInit {
     return moment().month(number).format('MMMM');
   }
 
-  private calculateDynamicValue() {
+  calculateDynamicValue() {
     if (this.monthlyReport) {
       this.monthlyReportService.billablePercentage = this.calculateBillingPercentage(this.monthlyReport.totalWorkingTime, this.monthlyReport.billableTime);
     }
