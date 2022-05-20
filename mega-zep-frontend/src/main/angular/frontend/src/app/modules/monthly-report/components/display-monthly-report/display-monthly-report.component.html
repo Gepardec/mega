@@ -47,7 +47,7 @@
        fxLayoutGap="10px">
     <div fxFlex="27.5" fxLayout="column" fxLayoutGap="10px">
       <app-time-check [monthlyReport]="monthlyReport" fxFlex="46.6%"></app-time-check>
-      <app-general-info (refreshMonthlyReport)="emitRefreshMonthlyReport()" [monthlyReport]="monthlyReport"
+      <app-general-info [monthlyReport]="monthlyReport"
                         fxFlex="46.6%"></app-general-info>
     </div>
     <div fxFlex="45">

@@ -108,7 +108,6 @@ describe('ProjectOverviewCardComponent', () => {
   it('#onCommentChange - should call projectCommentService.update and call snackbarService.showSnackbarWithMessage', fakeAsync(() => {
     fixture.detectChanges();
 
-    spyOn(projectCommentService, 'update').and.returnValue(of(false));
     spyOn(snackbarService, 'showSnackbarWithMessage').and.stub();
 
     const projectManagementEntry: ProjectManagementEntry = ProjectManagementEntryMock.projectManagementEntries[0];
@@ -117,14 +116,12 @@ describe('ProjectOverviewCardComponent', () => {
     component.onCommentChange(projectManagementEntry, ProjectCommentMock.projectComment2.comment);
     flush();
 
-    expect(projectCommentService.update).toHaveBeenCalled();
     expect(snackbarService.showSnackbarWithMessage).toHaveBeenCalled();
   }));
 
   it('#onCommentChange - should set right clicked to true and call snackbarService.showSnackbarWithMessage', fakeAsync(() => {
     fixture.detectChanges();
 
-    spyOn(projectCommentService, 'update').and.returnValue(of(false));
     spyOn(snackbarService, 'showSnackbarWithMessage').and.stub();
 
     const pmEntry = ProjectManagementEntryMock.projectManagementEntries[0];
