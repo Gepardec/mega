@@ -363,6 +363,7 @@ describe('ProjectManagementComponent', () => {
   it('#onCommentChange - should call projectCommentService.update and call snackbarService.showSnackbarWithMessage', fakeAsync(() => {
     fixture.detectChanges();
 
+    spyOn(projectCommentService, 'update').and.returnValue(of(false));
     spyOn(snackbarService, 'showSnackbarWithMessage').and.stub();
 
     const projectManagementEntry: ProjectManagementEntry = ProjectManagementMock.projectManagementEntries[0];
@@ -371,12 +372,14 @@ describe('ProjectManagementComponent', () => {
     component.onCommentChange(projectManagementEntry, CommentsMock.get()[0].message);
     flush();
 
+    expect(projectCommentService.update).toHaveBeenCalled();
     expect(snackbarService.showSnackbarWithMessage).toHaveBeenCalled();
   }));
 
   it('#onCommentChange - should set right clicked to true and call snackbarService.showSnackbarWithMessage', fakeAsync(() => {
     fixture.detectChanges();
 
+    spyOn(projectCommentService, 'update').and.returnValue(of(false));
     spyOn(snackbarService, 'showSnackbarWithMessage').and.stub();
 
     const pmEntry = ProjectManagementMock.projectManagementEntries[0];

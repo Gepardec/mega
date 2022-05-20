@@ -48,7 +48,7 @@ export class GeneralInfoComponent implements OnChanges {
     return moment().month(number).format('MMMM');
   }
 
-  private calculateDynamicValue() {
+  calculateDynamicValue() {
     if (this.monthlyReport) {
       this.monthlyReportService.billablePercentage = this.calculateBillingPercentage(this.monthlyReport.totalWorkingTime, this.monthlyReport.billableTime);
     }

@@ -79,7 +79,7 @@ describe('GeneralInfoComponent', () => {
     monthlyReport.billableTime = '60:00';
 
     component.monthlyReport = monthlyReport;
-    component.ngOnInit();
+    component.calculateDynamicValue();
 
     fixture.detectChanges();
 
