@@ -43,7 +43,7 @@ The following listing shows the technologies used by the project MEGA.
 - link:https://maven.apache.org/[Maven 3.6.3]
 - link:https://nodejs.org/en/[node.js 12.x.x+]
 - link:https://www.npmjs.com/[npm 6+]
-- link:https://www.postgresql.org/[PostgreSQL 10]
+- link:https://www.postgresql.org/[PostgreSQL 15.3]
 - link:https://www.docker.com/[Docker (Development)]
 
 MEGA depends on an Openshift Infrastructure setup with link:https://github.com/Gepardec/mega-infrastructure[mega-infrastructure:2.x].
@@ -67,7 +67,7 @@ You need the following software suitable for your used platform:
 The backend project is located at `./mega-zep-backend`.
 
 - Start local postgres instance +
-`docker run -p 5432:5432 --env POSTGRES_PASSWORD=mega --env POSTGRES_USER=mega --env POSTGRES_DB=mega --name mega-db postgres:10`
+`docker run -p 5432:5432 --env POSTGRES_PASSWORD=mega --env POSTGRES_USER=mega --env POSTGRES_DB=mega --name mega-db postgres:15.3`
 - Go to +
 `cd ./mega-zep-backend`
 - Build the application +
