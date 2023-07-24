@@ -40,7 +40,7 @@ The following listing shows the technologies used by the project MEGA.
 
 - link:https://quarkus.io/[Quarkus 1.6.1.Final]
 - link:https://openjdk.java.net/[OpenJDK 11]
-- link:https://maven.apache.org/[Maven 3.6.3]
+- link:https://maven.apache.org/[Maven 3.8.2] (IntelliJ supports up to Maven 3.8.1 but Quarkus 3 needs Maven 3.8.2 therefore use your local Maven version. IntelliJ will fix this in the 2023.2 release.)
 - link:https://nodejs.org/en/[node.js 12.x.x+]
 - link:https://www.npmjs.com/[npm 6+]
 - link:https://www.postgresql.org/[PostgreSQL 15.3]
@@ -57,7 +57,7 @@ The following sections will explain how a developer can setup the local developm
 You need the following software suitable for your used platform:
 
 . `OpenJDK 11`
-. `Maven 3.6.3`
+. `Maven 3.8.2`
 . `NodeJS 12.x.x`
 . `Npm 6+`
 . `Docker`
