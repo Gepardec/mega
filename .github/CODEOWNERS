@@ -1,9 +1,0 @@
-# Code ownership for the MEGA project
-
-# Each line is a file pattern followed by one or more owners.
-
-# These owners will be the default owners for everything in
-# the repo. Unless a later match takes precedence,
-# @Gepardec/mega-dev will be requested for
-# review when someone opens a pull request.
-* @Gepardec/mega-3-1-dev-team
